@@ -244,154 +244,179 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
     return script
 
 
-# ─── Stage 2: Audio Rendering (MiniMax TTS) ──────────────────────────────────
+# ─── Stage 2: Audio Rendering (Gemini TTS) ───────────────────────────────────
 
-def get_voice_for_speaker(speaker: str) -> str:
-    """Map speaker label to MiniMax voice ID."""
-    return VOICE_A if speaker == "A" else VOICE_B
+GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
+
+# Gemini TTS voices — chosen for analytical discussion tone
+VOICE_SPEAKER_A = "Orus"       # Deep, authoritative male
+VOICE_SPEAKER_B = "Fenrir"     # Distinct second male voice
+
+# Max chars per TTS request (Gemini TTS has token limits)
+TTS_MAX_CHARS = 5000
 
 
-def create_tts_task(text: str, voice_id: str) -> str:
-    """Create an async TTS task on MiniMax. Returns task_id."""
-    url = f"{MINIMAX_API_BASE}/v1/t2a_async_v2"
-    headers = {
-        "Authorization": f"Bearer {MINIMAX_API_KEY}",
-        "Content-Type": "application/json",
-    }
+def format_script_for_tts(script: list[dict]) -> str:
+    """Format a discussion script as speaker-labelled text for Gemini TTS."""
+    lines = []
+    for turn in script:
+        speaker = "Speaker A" if turn['speaker'] == 'A' else "Speaker B"
+        lines.append(f"{speaker}: {turn['text']}")
+    return '\n\n'.join(lines)
+
+
+def chunk_script_for_tts(script: list[dict], max_chars: int = TTS_MAX_CHARS) -> list[list[dict]]:
+    """Split a script into chunks that fit within TTS character limits."""
+    chunks = []
+    current_chunk = []
+    current_len = 0
+
+    for turn in script:
+        turn_len = len(turn['text']) + 20  # overhead for speaker label
+        if current_len + turn_len > max_chars and current_chunk:
+            chunks.append(current_chunk)
+            current_chunk = []
+            current_len = 0
+        current_chunk.append(turn)
+        current_len += turn_len
+
+    if current_chunk:
+        chunks.append(current_chunk)
+
+    return chunks
+
+
+def pcm_to_wav(pcm_data: bytes, sample_rate: int = 24000, channels: int = 1, sample_width: int = 2) -> bytes:
+    """Convert raw PCM audio data to WAV format."""
+    import wave
+    buf = io.BytesIO()
+    with wave.open(buf, 'wb') as wf:
+        wf.setnchannels(channels)
+        wf.setsampwidth(sample_width)
+        wf.setframerate(sample_rate)
+        wf.writeframes(pcm_data)
+    return buf.getvalue()
+
+
+def wav_to_mp3(wav_data: bytes) -> bytes:
+    """Convert WAV to MP3 using ffmpeg (must be installed)."""
+    import subprocess
+    result = subprocess.run(
+        ['ffmpeg', '-y', '-i', 'pipe:0', '-codec:a', 'libmp3lame', '-b:a', '128k', '-f', 'mp3', 'pipe:1'],
+        input=wav_data,
+        capture_output=True,
+        timeout=120,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"ffmpeg error: {result.stderr.decode()[:500]}")
+    return result.stdout
+
+
+def generate_tts_audio(script_chunk: list[dict], max_retries: int = 5) -> bytes:
+    """Generate audio for a script chunk using Gemini TTS. Returns PCM bytes."""
+    text = format_script_for_tts(script_chunk)
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_TTS_MODEL}:generateContent"
+
     payload = {
-        "model": MINIMAX_MODEL,
-        "text": text,
-        "language_boost": "English",
-        "voice_setting": {
-            "voice_id": voice_id,
-            "speed": 0.95,
-            "vol": 1,
-            "pitch": 0,
-            "emotion": "calm",
-        },
-        "audio_setting": {
-            "audio_sample_rate": 32000,
-            "bitrate": 128000,
-            "format": "mp3",
-            "channel": 1,
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": f"Read this discussion between two analysts in a measured, intellectual British tone. Speaker A is the lead analyst, authoritative and calm. Speaker B is the challenger, slightly more animated but still serious.\n\n{text}"}]
+            }
+        ],
+        "generationConfig": {
+            "responseModalities": ["AUDIO"],
+            "speechConfig": {
+                "multiSpeakerVoiceConfig": {
+                    "speakerVoiceConfigs": [
+                        {
+                            "speaker": "Speaker A",
+                            "voiceConfig": {
+                                "prebuiltVoiceConfig": {
+                                    "voiceName": VOICE_SPEAKER_A
+                                }
+                            }
+                        },
+                        {
+                            "speaker": "Speaker B",
+                            "voiceConfig": {
+                                "prebuiltVoiceConfig": {
+                                    "voiceName": VOICE_SPEAKER_B
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
         },
     }
 
-    response = requests.post(url, headers=headers, json=payload, timeout=30)
-    response.raise_for_status()
+    last_error = None
+    for attempt in range(max_retries):
+        api_key = _next_gemini_key()
+        response = requests.post(
+            url,
+            params={"key": api_key},
+            json=payload,
+            timeout=180,
+        )
+
+        if response.status_code == 429:
+            wait = 15 + (attempt * 10)
+            print(f"      TTS rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+            time.sleep(wait)
+            last_error = "Rate limited"
+            continue
+
+        if response.status_code != 200:
+            raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
+
+        break
+    else:
+        raise RuntimeError(f"TTS failed after {max_retries} retries: {last_error}")
+
     data = response.json()
+    candidates = data.get("candidates", [])
+    if not candidates:
+        raise RuntimeError(f"No TTS candidates: {json.dumps(data, indent=2)[:500]}")
 
-    status_code = data.get("base_resp", {}).get("status_code", -1)
-    if status_code != 0:
-        msg = data.get("base_resp", {}).get("status_msg", "Unknown error")
-        raise RuntimeError(f"MiniMax task creation failed ({status_code}): {msg}")
+    inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
+    if not inline_data:
+        raise RuntimeError("No audio data in TTS response")
 
-    task_id = data.get("task_id")
-    if not task_id:
-        raise RuntimeError(f"No task_id in response: {json.dumps(data, indent=2)}")
-
-    return task_id
-
-
-def poll_tts_task(task_id: str) -> str:
-    """Poll async TTS task until done. Returns file_id."""
-    url = f"{MINIMAX_API_BASE}/v1/query/t2a_async_query_v2"
-    headers = {
-        "Authorization": f"Bearer {MINIMAX_API_KEY}",
-        "Content-Type": "application/json",
-    }
-
-    for attempt in range(MINIMAX_MAX_POLL):
-        response = requests.get(url, headers=headers, params={"task_id": task_id}, timeout=30)
-        response.raise_for_status()
-        data = response.json()
-
-        status = data.get("status")
-        if status == "Success":
-            return data.get("file_id")
-        if status == "Failed":
-            raise RuntimeError(f"MiniMax task failed: {json.dumps(data, indent=2)}")
-
-        if attempt % 6 == 0:
-            print(f"      TTS generating... ({attempt * MINIMAX_POLL_INTERVAL}s)")
-        time.sleep(MINIMAX_POLL_INTERVAL)
-
-    raise TimeoutError(f"TTS task {task_id} timed out")
-
-
-def download_tts_audio(file_id: str) -> bytes:
-    """Download generated audio bytes from MiniMax."""
-    import tarfile
-
-    url = f"{MINIMAX_API_BASE}/v1/files/retrieve_content"
-    headers = {"Authorization": f"Bearer {MINIMAX_API_KEY}"}
-
-    response = requests.get(url, headers=headers, params={"file_id": file_id}, timeout=120)
-    response.raise_for_status()
-
-    # MiniMax returns a tar archive containing the MP3
-    try:
-        tar_bytes = io.BytesIO(response.content)
-        with tarfile.open(fileobj=tar_bytes, mode="r") as tar:
-            mp3_members = [m for m in tar.getmembers() if m.name.endswith(".mp3")]
-            if mp3_members:
-                f = tar.extractfile(mp3_members[0])
-                if f:
-                    return f.read()
-    except Exception:
-        pass
-
-    # Fallback: raw content
-    return response.content
+    import base64
+    audio_bytes = base64.b64decode(inline_data.get("data", ""))
+    return audio_bytes
 
 
 def render_script_to_audio(script: list[dict], output_path: Path) -> None:
-    """
-    Render a discussion script to a single MP3 by generating each speaker's
-    lines separately and concatenating them.
-    """
-    # Group consecutive turns by the same speaker to reduce API calls
-    segments = []
-    current_speaker = None
-    current_text = []
+    """Render a discussion script to MP3 using Gemini TTS."""
+    chunks = chunk_script_for_tts(script)
+    print(f"    Rendering {len(chunks)} audio chunk(s) ({sum(len(t['text']) for t in script):,} chars)...")
 
-    for turn in script:
-        speaker = turn['speaker']
-        if speaker != current_speaker:
-            if current_text:
-                segments.append((current_speaker, ' '.join(current_text)))
-            current_speaker = speaker
-            current_text = [turn['text']]
-        else:
-            current_text.append(turn['text'])
+    all_pcm = bytearray()
+    for i, chunk in enumerate(chunks):
+        chars = sum(len(t['text']) for t in chunk)
+        print(f"      [{i+1}/{len(chunks)}] {len(chunk)} turns, {chars:,} chars")
 
-    if current_text:
-        segments.append((current_speaker, ' '.join(current_text)))
+        pcm_data = generate_tts_audio(chunk)
+        all_pcm.extend(pcm_data)
 
-    print(f"    Rendering {len(segments)} audio segments...")
+        # Rate limiting between chunks
+        if i < len(chunks) - 1:
+            time.sleep(4)
 
-    audio_chunks = []
-    for i, (speaker, text) in enumerate(segments):
-        voice = get_voice_for_speaker(speaker)
-        print(f"      [{i+1}/{len(segments)}] Speaker {speaker} ({len(text)} chars)")
+    # Convert PCM → WAV → MP3
+    wav_data = pcm_to_wav(bytes(all_pcm))
+    mp3_data = wav_to_mp3(wav_data)
 
-        task_id = create_tts_task(text, voice)
-        file_id = poll_tts_task(task_id)
-        audio_data = download_tts_audio(file_id)
-        audio_chunks.append(audio_data)
-
-        # Brief pause between segments to avoid rate limiting
-        if i < len(segments) - 1:
-            time.sleep(1)
-
-    # Concatenate MP3 chunks (MP3 is frame-based, simple concatenation works)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, 'wb') as f:
-        for chunk in audio_chunks:
-            f.write(chunk)
+    output_path.write_bytes(mp3_data)
 
-    total_mb = round(sum(len(c) for c in audio_chunks) / (1024 * 1024), 2)
-    print(f"    Saved: {output_path.name} ({total_mb} MB, {len(segments)} segments)")
+    total_mb = round(len(mp3_data) / (1024 * 1024), 2)
+    duration_est = round(len(all_pcm) / (24000 * 2) / 60, 1)  # 24kHz, 16-bit
+    print(f"    Saved: {output_path.name} ({total_mb} MB, ~{duration_est} min)")
 
 
 # ─── Corpus Loading ──────────────────────────────────────────────────────────
@@ -471,9 +496,16 @@ def cmd_scripts(args, corpus: dict):
 
 
 def cmd_audio(args, corpus: dict):
-    """Render discussion scripts to audio."""
-    if not MINIMAX_API_KEY:
-        print("ERROR: MINIMAX_API_KEY not set.")
+    """Render discussion scripts to audio using Gemini TTS."""
+    if not GEMINI_API_KEYS:
+        print("ERROR: GEMINI_API_KEY not set.")
+        print("  export GEMINI_API_KEY=key1,key2")
+        sys.exit(1)
+
+    # Check ffmpeg is available
+    import shutil
+    if not shutil.which('ffmpeg'):
+        print("ERROR: ffmpeg not found. Install with: brew install ffmpeg")
         sys.exit(1)
 
     DISCUSSION_DIR.mkdir(parents=True, exist_ok=True)
@@ -491,7 +523,9 @@ def cmd_audio(args, corpus: dict):
             sys.exit(1)
 
     print(f"Audio rendering: {len(scripts)} scripts")
-    print(f"Voices: {VOICE_A} (A), {VOICE_B} (B)")
+    print(f"TTS Model: {GEMINI_TTS_MODEL}")
+    print(f"Voices: {VOICE_SPEAKER_A} (A), {VOICE_SPEAKER_B} (B)")
+    print(f"Using {len(GEMINI_API_KEYS)} API key(s)")
     print(f"Output: {DISCUSSION_DIR}")
     print()
 
