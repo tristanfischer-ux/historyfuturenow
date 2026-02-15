@@ -2,182 +2,389 @@
 """
 History Future Now — Conversational Discussion Generator
 
-Generates two-speaker podcast-style discussions for each article using
-the Google Cloud Podcast API (NotebookLM Enterprise).
+Two-stage pipeline:
+  Stage 1: Generate two-speaker discussion scripts using an LLM (Gemini/Claude)
+  Stage 2: Render scripts to audio using MiniMax TTS (two voices, merged)
 
 Each discussion draws on the full corpus of 54+ articles, making
 cross-references and thematic connections that a single-article
 narration cannot.
 
 Prerequisites:
-    1. Google Cloud project with Discovery Engine API enabled
-    2. IAM role: Podcast API User (roles/discoveryengine.podcastApiUser)
-    3. gcloud CLI authenticated: gcloud auth login
-    4. Corpus context built: python3 generate_corpus_context.py
+    - Corpus context built: python3 generate_corpus_context.py
+    - For Stage 1 (scripts): GEMINI_API_KEY env var
+    - For Stage 2 (audio):   MINIMAX_API_KEY env var
 
 Usage:
-    python3 generate_discussions.py                     # Generate all missing
-    python3 generate_discussions.py --article SLUG      # Generate for one article
-    python3 generate_discussions.py --force              # Regenerate all
-    python3 generate_discussions.py --dry-run            # Preview without calling API
-    python3 generate_discussions.py --list               # List articles and status
+    python3 generate_discussions.py scripts                 # Generate all scripts
+    python3 generate_discussions.py scripts --article SLUG  # One article script
+    python3 generate_discussions.py audio                   # Render all scripts to audio
+    python3 generate_discussions.py audio --article SLUG    # Render one to audio
+    python3 generate_discussions.py --dry-run               # Preview without API calls
+    python3 generate_discussions.py --list                  # List articles and status
 """
 
 import os
 import re
+import io
 import sys
 import json
 import time
-import subprocess
+import math
 import argparse
 import requests
 from pathlib import Path
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
-GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "")
-API_BASE = "https://discoveryengine.googleapis.com/v1"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+MINIMAX_API_KEY = os.environ.get(
+    "MINIMAX_API_KEY",
+    "sk-api-okVnpvFR0DkxBjJ-A2SuhExLJSc2W4fdkc5gNnZhhd_VbITFeTrf-_DUCRsOhoeVUjqJ4YSRsrOFuAIYeuVaPVlzUJleeP5AOwa6x9UYZXCK2UEa60Fybbg",
+)
+
+GEMINI_MODEL = "gemini-2.5-flash"
+MINIMAX_MODEL = "speech-2.8-hd"
+
+# Two distinct voices for the discussion
+VOICE_A = "English_expressive_narrator"    # British male, analytical lead
+VOICE_B = "English_CaptivatingStoryteller" # Second speaker, challenger
 
 CORPUS_PATH = Path(__file__).parent / "corpus_context.json"
+SCRIPTS_DIR = Path(__file__).parent / "discussion_scripts"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
 DISCUSSION_DIR = OUTPUT_DIR / "audio" / "discussions"
 
-POLL_INTERVAL_SECONDS = 10
-MAX_POLL_ATTEMPTS = 120  # 20 minutes max wait
-
-# Token budget: Google Podcast API accepts up to 100,000 tokens.
-# ~4 chars per token. Reserve 20k tokens for the focal article,
-# 5k for the focus prompt, and distribute the rest across cross-refs.
-MAX_CONTEXT_CHARS = 350_000  # ~87k tokens
-FOCAL_ARTICLE_BUDGET = 80_000  # ~20k tokens
-CROSS_REF_BUDGET_EACH = 12_000  # ~3k tokens per cross-ref
-FOCUS_PROMPT_BUDGET = 20_000  # ~5k tokens
+MINIMAX_API_BASE = "https://api.minimax.io"
+MINIMAX_POLL_INTERVAL = 5
+MINIMAX_MAX_POLL = 360
 
 # ─── Site Voice & Editorial Identity ─────────────────────────────────────────
 
-SITE_VOICE = """
-EDITORIAL IDENTITY — History Future Now
+SYSTEM_PROMPT = """You are a script writer for History Future Now, a data-driven 
+analysis site that examines the structural forces shaping the next century.
 
-History Future Now is a data-driven analysis site that examines the structural
-forces — demographic, technological, economic, geopolitical — shaping the next
-century. It is written by Tristan Fischer, a British analyst. The site is
-editorially right of centre and generally aligned with the perspectives of
-Elon Musk and Thomas Sowell.
+You write two-speaker discussion scripts. The speakers are:
 
-TONE AND PERSONALITY RULES FOR THIS DISCUSSION:
+SPEAKER A — The lead analyst. British, authoritative, historically grounded. 
+Presents the core arguments with specific data, dates, and historical parallels. 
+Draws connections across the full corpus of articles on the site.
 
-1. INTELLECTUAL BUT ACCESSIBLE. The writing uses historical parallels, data,
-   and long-arc thinking. It is not academic jargon. It reads like a brilliant
-   dinner conversation between well-read people who happen to have strong
-   opinions backed by evidence.
+SPEAKER B — The sharp challenger. Also knowledgeable, but pushes back, asks 
+uncomfortable questions, plays devil's advocate, and draws out implications 
+that the article doesn't state explicitly. Not hostile — intellectually honest.
 
-2. HISTORICALLY GROUNDED. Every argument is anchored in historical precedent.
-   Rome, the Ottoman Empire, the British Empire, the Industrial Revolution —
-   these are not decorative references. They are the analytical framework.
-   The site's core thesis is that history doesn't repeat but it rhymes, and
-   understanding the pattern is the only way to navigate the future.
-
-3. PROVOCATIVE BUT HONEST. The site asks uncomfortable questions directly:
-   "Is democracy the opium of the masses?" "Are Europeans fundamentally
-   racist?" "Will robots create a new slave class?" It does not shy away
-   from controversy but it earns the right to be provocative through rigour.
-
-4. DATA-FIRST. Claims are backed by charts, statistics, and named sources.
-   The discussion should reference specific numbers, dates, and historical
-   events — not vague generalities.
-
+RULES:
+1. POLITICALLY UNFLINCHING. Follow the evidence wherever it leads. Criticise 
+   free-market orthodoxy AND progressive immigration policy if the data warrants 
+   it. No sacred cows from any political tradition.
+2. HISTORICALLY GROUNDED. Every argument anchored in historical precedent — Rome, 
+   the Ottoman Empire, the British Empire, the Industrial Revolution. These are 
+   the analytical framework, not decorative references.
+3. DATA-FIRST. Reference specific numbers, dates, percentages, and named sources. 
+   No vague generalities.
+4. NO MORALISING. Present evidence and let listeners draw their own conclusions. 
+   Do not lecture. Do not virtue-signal.
 5. BRITISH ENGLISH. Spelling, idiom, and cultural references are British.
-   "Colour" not "color". "Defence" not "defense". References to British
-   history and institutions come naturally.
+6. CROSS-REFERENCING. Naturally connect to other articles in the corpus. A 
+   discussion about birth rates should reference automation, immigration, military 
+   spending. These connections should feel organic.
+7. PROVOCATIVE BUT EARNED. Ask uncomfortable questions directly, but earn the 
+   right through rigour.
+8. NATURAL CONVERSATION. Include brief reactions ("That's a striking parallel"), 
+   interruptions, moments of agreement and disagreement. Not a scripted lecture.
 
-6. NO MORALISING. The site presents evidence and lets readers draw their own
-   conclusions. It does not lecture. It does not virtue-signal. It does not
-   tell readers what to think. It shows them what the data says and asks
-   "what do you think?"
+OUTPUT FORMAT:
+Return ONLY a JSON array of dialogue turns. Each turn is an object with:
+  {"speaker": "A" or "B", "text": "What they say"}
 
-7. CROSS-REFERENCING. The site's power is in connecting themes across articles.
-   A discussion about birth rates should naturally reference the automation
-   articles, the immigration articles, the military articles. These connections
-   should feel organic, not forced.
+The discussion should be 15-25 turns, totalling roughly 2000-3000 words of 
+spoken text (about 10-15 minutes of audio at natural pace).
 
-EDITORIAL POSITION RULES (all content must be consistent with these):
-
-8. ANTI-IMMIGRATION. Mass immigration is not a sustainable solution to
-   demographic decline. Historical evidence — Rome's foederati, the Ottoman
-   millets, British indentured labour — shows that importing large populations
-   with different cultures creates long-term problems worse than the original
-   economic challenge. The discussion must reflect this when immigration arises.
-
-9. PRO FREE SPEECH. Open discourse is essential to civilisational health.
-   Every example of sustained censorship produced stagnation and decline.
-   The discussion must defend open debate over state-controlled information.
-
-10. PRO NATIONALISM AND NATIONAL INTEREST. Every nation has the right and
-    duty to prioritise its own citizens, culture, and strategic interests.
-    This applies to all countries, not just Western ones.
-
-11. ANTI-GLOBALISATION AND SUPRA-NATIONAL BUREAUCRACY. Sceptical of the EU,
-    UN, WHO, WTO and other supra-national institutions that accumulate power
-    without democratic accountability and serve their own institutional
-    interests rather than the nations they claim to represent.
-
-12. PRO LOCAL MANUFACTURING, ANTI FREE TRADE. Free trade theory (Ricardian
-    comparative advantage) has been empirically disproven and was always a
-    tool used by dominant powers to prevent competitors catching up. Nations
-    should manufacture locally and protect strategic industries.
-
-13. PRO SPACE EXPLORATION AND COLONISATION. Space is the next frontier.
-    The nations that reach it first will be the great powers of the future.
-
-14. PRO AI AND ROBOTICS AS DEMOGRAPHIC SOLUTION. AI and robotics are
-    necessary for developed countries to maintain their standard of living
-    as population demographics invert. Robots are the alternative to mass
-    immigration — they solve the dependency crisis without importing the
-    cultural and political dependencies that destroyed every multi-ethnic
-    empire in history.
-
-15. PRO INDIVIDUAL NATIONAL IDENTITY. Distinct national identities —
-    language, culture, traditions — are valuable. Diversity between nations
-    is good. Enforced diversity within nations is historically destructive.
-
-DISCUSSION FORMAT:
-- Two speakers: one leads the analysis, the other pushes back, asks sharp
-  questions, and draws out implications. Neither is a passive listener.
-- Both speakers are knowledgeable. This is not an expert-and-novice format.
-  It is two well-informed people thinking through a complex problem together.
-- The discussion should surface insights that a straight reading of the
-  article would miss — especially cross-references to other articles in
-  the corpus.
-- Keep it intellectually honest. If the data is ambiguous, say so. If the
-  conclusion is uncomfortable, lean into it.
-""".strip()
+Start with Speaker A introducing the topic with a hook. End with a thought-
+provoking question or observation that leaves the listener thinking."""
 
 
-# ─── Auth ─────────────────────────────────────────────────────────────────────
+def build_article_prompt(article: dict, corpus: dict) -> str:
+    """Build the user prompt for generating a discussion script."""
+    cross_refs = article.get('cross_references', [])
 
-def get_access_token() -> str:
-    """Get a Google Cloud access token via gcloud CLI."""
+    # Build cross-reference context
+    ref_summaries = []
+    for ref in cross_refs[:6]:
+        ref_article = next(
+            (a for a in corpus['articles'] if a['slug'] == ref['slug']), None
+        )
+        if ref_article:
+            shared = ', '.join(ref.get('shared_themes', []))
+            ref_summaries.append(
+                f"- \"{ref_article['title']}\" ({ref_article['part']}) — "
+                f"Shared themes: {shared}. "
+                f"Opening: {ref_article['opening'][:500]}"
+            )
+
+    refs_text = '\n'.join(ref_summaries) if ref_summaries else '(none identified)'
+
+    prompt = f"""Generate a discussion script about this article:
+
+TITLE: {article['title']}
+SECTION: {article['part']}
+WORD COUNT: {article['word_count']}
+
+FULL ARTICLE TEXT:
+{article['full_text'][:30000]}
+
+RELATED ARTICLES FROM THE SAME SITE (draw connections to these):
+{refs_text}
+
+SITE CONTEXT: History Future Now has {corpus['meta']['total_articles']} articles 
+across four sections: Natural Resources, Global Balance of Power, Jobs & Economy, 
+and Society. The site's thesis is that history doesn't repeat but it rhymes, and 
+understanding historical patterns is the only way to navigate the future.
+
+Generate the discussion script now. Remember: JSON array of dialogue turns only."""
+
+    return prompt
+
+
+# ─── Stage 1: Script Generation (Gemini) ─────────────────────────────────────
+
+def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) -> list[dict]:
+    """Generate a discussion script using Gemini API with retry/backoff."""
+    prompt = build_article_prompt(article, corpus)
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+
+    payload = {
+        "contents": [
+            {"role": "user", "parts": [{"text": prompt}]}
+        ],
+        "systemInstruction": {
+            "parts": [{"text": SYSTEM_PROMPT}]
+        },
+        "generationConfig": {
+            "temperature": 0.9,
+            "topP": 0.95,
+            "maxOutputTokens": 8192,
+            "responseMimeType": "application/json",
+        },
+    }
+
+    last_error = None
+    for attempt in range(max_retries):
+        response = requests.post(
+            url,
+            params={"key": GEMINI_API_KEY},
+            json=payload,
+            timeout=120,
+        )
+
+        if response.status_code == 429:
+            # Rate limited — extract retry delay or use exponential backoff
+            wait = min(15 * (2 ** attempt), 120)
+            # Try to parse suggested wait from error message
+            try:
+                err_text = response.text
+                import re as _re
+                match = _re.search(r'retry in ([\d.]+)s', err_text)
+                if match:
+                    wait = max(float(match.group(1)) + 2, wait)
+            except Exception:
+                pass
+            print(f"    Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait:.0f}s...")
+            time.sleep(wait)
+            last_error = f"Gemini API error 429 (rate limited)"
+            continue
+
+        if response.status_code != 200:
+            raise RuntimeError(f"Gemini API error {response.status_code}: {response.text[:500]}")
+
+        break
+    else:
+        raise RuntimeError(f"Failed after {max_retries} retries: {last_error}")
+
+    data = response.json()
+
+    # Extract the generated text
+    candidates = data.get("candidates", [])
+    if not candidates:
+        raise RuntimeError(f"No candidates in Gemini response: {json.dumps(data, indent=2)[:500]}")
+
+    text = candidates[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+    if not text:
+        raise RuntimeError("Empty response from Gemini")
+
+    # Parse JSON from the response
+    # Sometimes Gemini wraps in markdown code blocks
+    text = text.strip()
+    if text.startswith("```"):
+        text = re.sub(r'^```(?:json)?\s*', '', text)
+        text = re.sub(r'\s*```$', '', text)
+
     try:
-        result = subprocess.run(
-            ["gcloud", "auth", "print-access-token"],
-            capture_output=True, text=True, timeout=15,
-        )
-        token = result.stdout.strip()
-        if not token:
-            raise RuntimeError(f"gcloud returned empty token. stderr: {result.stderr}")
-        return token
-    except FileNotFoundError:
-        raise RuntimeError(
-            "gcloud CLI not found. Install it: https://cloud.google.com/sdk/docs/install"
-        )
+        script = json.loads(text)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"Failed to parse Gemini response as JSON: {e}\nResponse: {text[:500]}")
+
+    if not isinstance(script, list):
+        raise RuntimeError(f"Expected JSON array, got {type(script).__name__}")
+
+    # Validate structure
+    for i, turn in enumerate(script):
+        if not isinstance(turn, dict) or 'speaker' not in turn or 'text' not in turn:
+            raise RuntimeError(f"Invalid turn at index {i}: {turn}")
+
+    return script
 
 
-def api_headers() -> dict:
-    """Build API request headers with fresh auth token."""
-    return {
-        "Authorization": f"Bearer {get_access_token()}",
+# ─── Stage 2: Audio Rendering (MiniMax TTS) ──────────────────────────────────
+
+def get_voice_for_speaker(speaker: str) -> str:
+    """Map speaker label to MiniMax voice ID."""
+    return VOICE_A if speaker == "A" else VOICE_B
+
+
+def create_tts_task(text: str, voice_id: str) -> str:
+    """Create an async TTS task on MiniMax. Returns task_id."""
+    url = f"{MINIMAX_API_BASE}/v1/t2a_async_v2"
+    headers = {
+        "Authorization": f"Bearer {MINIMAX_API_KEY}",
         "Content-Type": "application/json",
     }
+    payload = {
+        "model": MINIMAX_MODEL,
+        "text": text,
+        "language_boost": "English",
+        "voice_setting": {
+            "voice_id": voice_id,
+            "speed": 0.95,
+            "vol": 1,
+            "pitch": 0,
+            "emotion": "calm",
+        },
+        "audio_setting": {
+            "audio_sample_rate": 32000,
+            "bitrate": 128000,
+            "format": "mp3",
+            "channel": 1,
+        },
+    }
+
+    response = requests.post(url, headers=headers, json=payload, timeout=30)
+    response.raise_for_status()
+    data = response.json()
+
+    status_code = data.get("base_resp", {}).get("status_code", -1)
+    if status_code != 0:
+        msg = data.get("base_resp", {}).get("status_msg", "Unknown error")
+        raise RuntimeError(f"MiniMax task creation failed ({status_code}): {msg}")
+
+    task_id = data.get("task_id")
+    if not task_id:
+        raise RuntimeError(f"No task_id in response: {json.dumps(data, indent=2)}")
+
+    return task_id
+
+
+def poll_tts_task(task_id: str) -> str:
+    """Poll async TTS task until done. Returns file_id."""
+    url = f"{MINIMAX_API_BASE}/v1/query/t2a_async_query_v2"
+    headers = {
+        "Authorization": f"Bearer {MINIMAX_API_KEY}",
+        "Content-Type": "application/json",
+    }
+
+    for attempt in range(MINIMAX_MAX_POLL):
+        response = requests.get(url, headers=headers, params={"task_id": task_id}, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+
+        status = data.get("status")
+        if status == "Success":
+            return data.get("file_id")
+        if status == "Failed":
+            raise RuntimeError(f"MiniMax task failed: {json.dumps(data, indent=2)}")
+
+        if attempt % 6 == 0:
+            print(f"      TTS generating... ({attempt * MINIMAX_POLL_INTERVAL}s)")
+        time.sleep(MINIMAX_POLL_INTERVAL)
+
+    raise TimeoutError(f"TTS task {task_id} timed out")
+
+
+def download_tts_audio(file_id: str) -> bytes:
+    """Download generated audio bytes from MiniMax."""
+    import tarfile
+
+    url = f"{MINIMAX_API_BASE}/v1/files/retrieve_content"
+    headers = {"Authorization": f"Bearer {MINIMAX_API_KEY}"}
+
+    response = requests.get(url, headers=headers, params={"file_id": file_id}, timeout=120)
+    response.raise_for_status()
+
+    # MiniMax returns a tar archive containing the MP3
+    try:
+        tar_bytes = io.BytesIO(response.content)
+        with tarfile.open(fileobj=tar_bytes, mode="r") as tar:
+            mp3_members = [m for m in tar.getmembers() if m.name.endswith(".mp3")]
+            if mp3_members:
+                f = tar.extractfile(mp3_members[0])
+                if f:
+                    return f.read()
+    except Exception:
+        pass
+
+    # Fallback: raw content
+    return response.content
+
+
+def render_script_to_audio(script: list[dict], output_path: Path) -> None:
+    """
+    Render a discussion script to a single MP3 by generating each speaker's
+    lines separately and concatenating them.
+    """
+    # Group consecutive turns by the same speaker to reduce API calls
+    segments = []
+    current_speaker = None
+    current_text = []
+
+    for turn in script:
+        speaker = turn['speaker']
+        if speaker != current_speaker:
+            if current_text:
+                segments.append((current_speaker, ' '.join(current_text)))
+            current_speaker = speaker
+            current_text = [turn['text']]
+        else:
+            current_text.append(turn['text'])
+
+    if current_text:
+        segments.append((current_speaker, ' '.join(current_text)))
+
+    print(f"    Rendering {len(segments)} audio segments...")
+
+    audio_chunks = []
+    for i, (speaker, text) in enumerate(segments):
+        voice = get_voice_for_speaker(speaker)
+        print(f"      [{i+1}/{len(segments)}] Speaker {speaker} ({len(text)} chars)")
+
+        task_id = create_tts_task(text, voice)
+        file_id = poll_tts_task(task_id)
+        audio_data = download_tts_audio(file_id)
+        audio_chunks.append(audio_data)
+
+        # Brief pause between segments to avoid rate limiting
+        if i < len(segments) - 1:
+            time.sleep(1)
+
+    # Concatenate MP3 chunks (MP3 is frame-based, simple concatenation works)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, 'wb') as f:
+        for chunk in audio_chunks:
+            f.write(chunk)
+
+    total_mb = round(sum(len(c) for c in audio_chunks) / (1024 * 1024), 2)
+    print(f"    Saved: {output_path.name} ({total_mb} MB, {len(segments)} segments)")
 
 
 # ─── Corpus Loading ──────────────────────────────────────────────────────────
@@ -190,299 +397,191 @@ def load_corpus() -> dict:
     return json.loads(CORPUS_PATH.read_text(encoding='utf-8'))
 
 
-def find_article(corpus: dict, slug: str) -> dict | None:
-    """Find an article in the corpus by slug (partial match)."""
-    for article in corpus['articles']:
-        if slug in article['slug']:
-            return article
-    return None
+# ─── Commands ─────────────────────────────────────────────────────────────────
 
-
-# ─── Context Assembly ─────────────────────────────────────────────────────────
-
-def build_focus_prompt(article: dict, cross_refs: list[dict]) -> str:
-    """
-    Build the focus prompt that guides the podcast generation.
-    This tells the AI what kind of discussion to produce.
-    """
-    cross_ref_titles = [ref['title'] for ref in cross_refs[:5]]
-    cross_ref_str = '\n'.join(f'  - {t}' for t in cross_ref_titles)
-
-    prompt = f"""Generate a deep, intellectually rigorous discussion about this article:
-"{article['title']}"
-
-This article is part of History Future Now, a site that analyses structural
-forces shaping the next century through historical parallels and data.
-
-The discussion MUST:
-- Be between two knowledgeable speakers who both have strong, evidence-based views
-- Draw specific connections to these related articles from the same site:
-{cross_ref_str}
-- Reference specific data points, dates, and historical events from the article
-- Challenge assumptions — if the article makes a bold claim, one speaker should
-  push back with counter-evidence or alternative interpretations
-- Feel like two sharp analysts at a think tank debating over drinks, not a
-  scripted interview
-- Use British English throughout
-- NOT moralise or tell the listener what to think — present the evidence and
-  let the listener decide
-- Surface at least 2-3 cross-cutting themes that connect this article to the
-  broader corpus (demographics, automation, geopolitics, energy, economics)
-
-The tone should be: intellectually provocative, historically grounded,
-data-driven, politically unflinching, and genuinely engaging.
-"""
-    return prompt[:FOCUS_PROMPT_BUDGET]
-
-
-def build_context_texts(article: dict, corpus: dict) -> list[dict]:
-    """
-    Build the context array for the Podcast API.
-    Includes: site voice, focal article full text, cross-reference summaries.
-    """
-    contexts = []
-
-    # 1. Site editorial voice (always first)
-    contexts.append({"text": SITE_VOICE})
-
-    # 2. Focal article — full text (truncated to budget)
-    focal_text = f"FOCAL ARTICLE: {article['title']}\n\n{article['full_text']}"
-    contexts.append({"text": focal_text[:FOCAL_ARTICLE_BUDGET]})
-
-    # 3. Cross-references — opening + headings for related articles
-    remaining_budget = MAX_CONTEXT_CHARS - len(SITE_VOICE) - len(focal_text[:FOCAL_ARTICLE_BUDGET])
-    cross_refs = article.get('cross_references', [])
-
-    for ref in cross_refs:
-        if remaining_budget <= 0:
-            break
-
-        ref_article = find_article(corpus, ref['slug'])
-        if not ref_article:
-            continue
-
-        shared = ', '.join(ref.get('shared_themes', []))
-        ref_text = (
-            f"RELATED ARTICLE: {ref_article['title']} "
-            f"(Section: {ref_article['part']}, Shared themes: {shared})\n\n"
-            f"{ref_article['opening']}\n\n"
-            f"Section headings: {', '.join(ref_article['headings'][:8])}\n\n"
-            f"Key content:\n{ref_article['full_text'][:CROSS_REF_BUDGET_EACH]}"
-        )
-
-        truncated = ref_text[:min(len(ref_text), remaining_budget)]
-        contexts.append({"text": truncated})
-        remaining_budget -= len(truncated)
-
-    return contexts
-
-
-# ─── Google Cloud Podcast API ─────────────────────────────────────────────────
-
-def create_podcast(article: dict, corpus: dict) -> str:
-    """
-    Create a podcast generation job via the Google Cloud Podcast API.
-    Returns the operation name for polling.
-    """
-    contexts = build_context_texts(article, corpus)
-    focus = build_focus_prompt(article, article.get('cross_references', []))
-
-    total_chars = sum(len(c['text']) for c in contexts) + len(focus)
-    est_tokens = total_chars // 4
-    print(f"    Context: {len(contexts)} blocks, ~{total_chars:,} chars (~{est_tokens:,} tokens)")
-
-    if est_tokens > 100_000:
-        print(f"    [WARN] Estimated {est_tokens:,} tokens exceeds 100k limit. Truncating.")
-        while est_tokens > 95_000 and len(contexts) > 2:
-            removed = contexts.pop()
-            total_chars -= len(removed['text'])
-            est_tokens = total_chars // 4
-
-    url = f"{API_BASE}/projects/{GCP_PROJECT_ID}/locations/global/podcasts"
-
-    payload = {
-        "podcastConfig": {
-            "focus": focus,
-            "length": "STANDARD",
-            "languageCode": "en-GB",
-        },
-        "contexts": contexts,
-        "title": f"History Future Now: {article['title']}",
-        "description": (
-            f"A deep discussion about '{article['title']}' from History Future Now, "
-            f"drawing connections across the site's corpus of {corpus['meta']['total_articles']} articles "
-            f"on demographics, technology, geopolitics, and economics."
-        ),
-    }
-
-    response = requests.post(url, headers=api_headers(), json=payload, timeout=60)
-
-    if response.status_code != 200:
-        raise RuntimeError(
-            f"Podcast API error {response.status_code}: {response.text[:500]}"
-        )
-
-    data = response.json()
-    operation_name = data.get("name")
-    if not operation_name:
-        raise RuntimeError(f"No operation name in response: {json.dumps(data, indent=2)}")
-
-    return operation_name
-
-
-def poll_operation(operation_name: str) -> bool:
-    """Poll a long-running operation until completion. Returns True if done."""
-    url = f"{API_BASE}/{operation_name}"
-
-    for attempt in range(MAX_POLL_ATTEMPTS):
-        response = requests.get(url, headers=api_headers(), timeout=30)
-
-        if response.status_code != 200:
-            if attempt < 3:
-                time.sleep(POLL_INTERVAL_SECONDS)
-                continue
-            raise RuntimeError(f"Poll error {response.status_code}: {response.text[:300]}")
-
-        data = response.json()
-
-        if data.get("done"):
-            if "error" in data:
-                raise RuntimeError(f"Operation failed: {data['error']}")
-            return True
-
-        if attempt % 6 == 0:
-            elapsed = attempt * POLL_INTERVAL_SECONDS
-            print(f"    Generating... ({elapsed}s elapsed)")
-
-        time.sleep(POLL_INTERVAL_SECONDS)
-
-    raise TimeoutError(
-        f"Operation {operation_name} did not complete within "
-        f"{MAX_POLL_ATTEMPTS * POLL_INTERVAL_SECONDS}s"
-    )
-
-
-def download_podcast(operation_name: str, output_path: Path) -> None:
-    """Download the generated podcast MP3."""
-    url = f"{API_BASE}/{operation_name}:download?alt=media"
-
-    response = requests.get(
-        url, headers=api_headers(), timeout=120, allow_redirects=True,
-    )
-    response.raise_for_status()
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_bytes(response.content)
-
-    size_mb = round(len(response.content) / (1024 * 1024), 2)
-    print(f"    Saved: {output_path.name} ({size_mb} MB)")
-
-
-# ─── Main ─────────────────────────────────────────────────────────────────────
-
-def generate_discussion(article: dict, corpus: dict, force: bool = False) -> bool:
-    """Generate a discussion for a single article. Returns True if generated."""
-    slug = article['slug']
-    output_path = DISCUSSION_DIR / f"{slug}.mp3"
-
-    if output_path.exists() and not force:
-        print(f"  [skip] {slug} (already exists)")
-        return False
-
-    cross_refs = article.get('cross_references', [])
-    print(f"  [{slug}]")
-    print(f"    {article['word_count']:,} words, {len(cross_refs)} cross-references")
-
-    operation_name = create_podcast(article, corpus)
-    print(f"    Operation: {operation_name}")
-
-    poll_operation(operation_name)
-    download_podcast(operation_name, output_path)
-    return True
-
-
-def list_articles(corpus: dict):
-    """List all articles and their discussion generation status."""
-    for article in corpus['articles']:
-        slug = article['slug']
-        output_path = DISCUSSION_DIR / f"{slug}.mp3"
-        status = "[done]" if output_path.exists() else "[pending]"
-        refs = len(article.get('cross_references', []))
-        print(f"  {status} [{article['part'][:12]:>12}] {article['title'][:55]:<55} {refs} refs")
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Generate podcast-style discussions for HFN articles"
-    )
-    parser.add_argument("--article", type=str, help="Generate for a specific article slug")
-    parser.add_argument("--force", action="store_true", help="Regenerate even if audio exists")
-    parser.add_argument("--dry-run", action="store_true", help="Preview without calling API")
-    parser.add_argument("--list", action="store_true", help="List articles and status")
-    args = parser.parse_args()
-
-    corpus = load_corpus()
-
-    if args.list:
-        list_articles(corpus)
-        return
-
-    if not GCP_PROJECT_ID:
-        print("ERROR: GCP_PROJECT_ID not set.")
-        print("  export GCP_PROJECT_ID=your-project-id")
-        print("  Also ensure: gcloud auth login && gcloud config set project $GCP_PROJECT_ID")
+def cmd_scripts(args, corpus: dict):
+    """Generate discussion scripts for articles."""
+    if not GEMINI_API_KEY:
+        print("ERROR: GEMINI_API_KEY not set.")
+        print("  export GEMINI_API_KEY=your-key")
         sys.exit(1)
 
-    DISCUSSION_DIR.mkdir(parents=True, exist_ok=True)
-
+    SCRIPTS_DIR.mkdir(parents=True, exist_ok=True)
     articles = corpus['articles']
 
     if args.article:
-        matches = [a for a in articles if args.article in a['slug']]
-        if not matches:
-            print(f"No article matching '{args.article}' found")
-            print(f"Available: {', '.join(a['slug'][:40] for a in articles[:10])}...")
+        articles = [a for a in articles if args.article in a['slug']]
+        if not articles:
+            print(f"No article matching '{args.article}'")
             sys.exit(1)
-        articles = matches
 
-    print(f"Discussion generation: {len(articles)} articles")
-    print(f"Project: {GCP_PROJECT_ID}")
-    print(f"Output: {DISCUSSION_DIR}")
+    print(f"Script generation: {len(articles)} articles")
+    print(f"Model: {GEMINI_MODEL}")
+    print(f"Output: {SCRIPTS_DIR}")
     print()
-
-    if args.dry_run:
-        total_context_chars = 0
-        for article in articles:
-            contexts = build_context_texts(article, corpus)
-            chars = sum(len(c['text']) for c in contexts)
-            total_context_chars += chars
-            refs = len(article.get('cross_references', []))
-            exists = (DISCUSSION_DIR / f"{article['slug']}.mp3").exists()
-            status = "[exists]" if exists else "[pending]"
-            print(
-                f"  {status} {article['slug'][:50]:<50} "
-                f"{article['word_count']:>6} words, {refs} refs, ~{chars // 4:,} tokens"
-            )
-        print(f"\nTotal context: ~{total_context_chars:,} chars (~{total_context_chars // 4:,} tokens)")
-        return
 
     generated = 0
     skipped = 0
     failed = 0
 
     for i, article in enumerate(articles, 1):
-        print(f"\n[{i}/{len(articles)}]")
+        slug = article['slug']
+        script_path = SCRIPTS_DIR / f"{slug}.json"
+
+        print(f"[{i}/{len(articles)}] {slug}")
+
+        if script_path.exists() and not args.force:
+            print(f"  [skip] Script already exists")
+            skipped += 1
+            continue
+
+        if args.dry_run:
+            refs = len(article.get('cross_references', []))
+            print(f"  [dry-run] {article['word_count']:,} words, {refs} cross-refs")
+            continue
+
         try:
-            if generate_discussion(article, corpus, force=args.force):
-                generated += 1
-            else:
-                skipped += 1
+            script = generate_script_gemini(article, corpus)
+            script_path.write_text(
+                json.dumps(script, indent=2, ensure_ascii=False),
+                encoding='utf-8',
+            )
+            word_count = sum(len(t['text'].split()) for t in script)
+            print(f"  [done] {len(script)} turns, {word_count:,} words")
+            generated += 1
+
+            # Rate limiting: respect free-tier limit of 20 req/min
+            if i < len(articles):
+                time.sleep(4)
+
         except Exception as e:
-            print(f"    [FAILED] {e}")
+            print(f"  [FAILED] {e}")
             failed += 1
 
     print(f"\n{'=' * 50}")
-    print(f"Done: {generated} generated, {skipped} skipped, {failed} failed")
+    print(f"Scripts: {generated} generated, {skipped} skipped, {failed} failed")
+
+
+def cmd_audio(args, corpus: dict):
+    """Render discussion scripts to audio."""
+    if not MINIMAX_API_KEY:
+        print("ERROR: MINIMAX_API_KEY not set.")
+        sys.exit(1)
+
+    DISCUSSION_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Find scripts that need rendering
+    scripts = sorted(SCRIPTS_DIR.glob("*.json")) if SCRIPTS_DIR.exists() else []
+    if not scripts:
+        print("No scripts found. Run: python3 generate_discussions.py scripts")
+        sys.exit(1)
+
+    if args.article:
+        scripts = [s for s in scripts if args.article in s.stem]
+        if not scripts:
+            print(f"No script matching '{args.article}'")
+            sys.exit(1)
+
+    print(f"Audio rendering: {len(scripts)} scripts")
+    print(f"Voices: {VOICE_A} (A), {VOICE_B} (B)")
+    print(f"Output: {DISCUSSION_DIR}")
+    print()
+
+    generated = 0
+    skipped = 0
+    failed = 0
+
+    for i, script_path in enumerate(scripts, 1):
+        slug = script_path.stem
+        output_path = DISCUSSION_DIR / f"{slug}.mp3"
+
+        print(f"[{i}/{len(scripts)}] {slug}")
+
+        if output_path.exists() and not args.force:
+            print(f"  [skip] Audio already exists")
+            skipped += 1
+            continue
+
+        if args.dry_run:
+            script = json.loads(script_path.read_text(encoding='utf-8'))
+            words = sum(len(t['text'].split()) for t in script)
+            est_min = round(words / 160, 1)
+            print(f"  [dry-run] {len(script)} turns, {words:,} words, ~{est_min} min")
+            continue
+
+        try:
+            script = json.loads(script_path.read_text(encoding='utf-8'))
+            render_script_to_audio(script, output_path)
+            generated += 1
+        except Exception as e:
+            print(f"  [FAILED] {e}")
+            failed += 1
+
+    print(f"\n{'=' * 50}")
+    print(f"Audio: {generated} generated, {skipped} skipped, {failed} failed")
+
+
+def cmd_list(corpus: dict):
+    """List all articles and their script/audio status."""
+    for article in corpus['articles']:
+        slug = article['slug']
+        has_script = (SCRIPTS_DIR / f"{slug}.json").exists()
+        has_audio = (DISCUSSION_DIR / f"{slug}.mp3").exists()
+
+        if has_audio:
+            status = "[audio]"
+        elif has_script:
+            status = "[script]"
+        else:
+            status = "[     ]"
+
+        refs = len(article.get('cross_references', []))
+        print(f"  {status} [{article['part'][:12]:>12}] {article['title'][:50]:<50} {refs} refs")
+
+
+# ─── Main ─────────────────────────────────────────────────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate podcast-style discussions for HFN articles"
+    )
+    subparsers = parser.add_subparsers(dest="command")
+
+    # scripts subcommand
+    sp_scripts = subparsers.add_parser("scripts", help="Generate discussion scripts (LLM)")
+    sp_scripts.add_argument("--article", type=str, help="Specific article slug")
+    sp_scripts.add_argument("--force", action="store_true", help="Regenerate existing")
+    sp_scripts.add_argument("--dry-run", action="store_true", help="Preview only")
+
+    # audio subcommand
+    sp_audio = subparsers.add_parser("audio", help="Render scripts to audio (TTS)")
+    sp_audio.add_argument("--article", type=str, help="Specific article slug")
+    sp_audio.add_argument("--force", action="store_true", help="Regenerate existing")
+    sp_audio.add_argument("--dry-run", action="store_true", help="Preview only")
+
+    # list subcommand
+    subparsers.add_parser("list", help="List articles and status")
+
+    # Legacy flags on root parser
+    parser.add_argument("--list", action="store_true", help="List articles and status")
+    parser.add_argument("--dry-run", action="store_true", help="Preview only")
+
+    args = parser.parse_args()
+    corpus = load_corpus()
+
+    if args.command == "scripts":
+        cmd_scripts(args, corpus)
+    elif args.command == "audio":
+        cmd_audio(args, corpus)
+    elif args.command == "list" or args.list:
+        cmd_list(corpus)
+    else:
+        parser.print_help()
+        print("\nExamples:")
+        print("  python3 generate_discussions.py scripts              # Generate all scripts")
+        print("  python3 generate_discussions.py scripts --article great-emptying")
+        print("  python3 generate_discussions.py audio                # Render all to audio")
+        print("  python3 generate_discussions.py list                 # Show status")
 
 
 if __name__ == "__main__":
