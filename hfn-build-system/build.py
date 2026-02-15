@@ -451,7 +451,7 @@ def build_article(essay, all_essays):
       </button>
       <div class="audio-info">
         <div class="audio-label">Listen to this article</div>
-        <div class="audio-meta">{est_listen} min &middot; British narrator</div>
+        <div class="audio-meta">{est_listen} min</div>
       </div>
       <div class="audio-progress-wrap" id="audioProgressWrap">
         <div class="audio-progress-bar" id="audioProgressBar"></div>
