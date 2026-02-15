@@ -1,0 +1,90 @@
+---
+title: "Hinkley Point Decision Is Really About China And Brexit"
+url: "https://www.historyfuturenow.com/part-2-global-balance-of-power/hinkley-point-decision-is-really-about-china-and-brexit"
+image: "/images/hinkley-point-china.png"
+type: "article"
+part: Global Balance of Power
+slug: hinkley-point-decision-is-really-about-china-and-brexit
+excerpt: >-
+  Much ink has been spilled about why Prime Minster May’s new Conservative
+  government should not have approved the £18bn Hinkley Point nuclear power
+  station that is to be built by EDF, from France, with financial support from
+  China. Most of the UK’s major newspapers have come out against it and you can
+  read their arguments on their websites: see The Financial Times , The
+  Telegraph , The Independent , and The Guardian .
+signal: ''
+---
+# Hinkley Point decision is really about China and Brexit
+
+Much ink has been spilled about why Prime Minster May’s new Conservative government should not have approved the £18bn Hinkley Point nuclear power station that is to be built by EDF, from France, with financial support from China. Most of the UK’s major newspapers have come out against it and you can read their arguments on their websites:  see The Financial Times , The Telegraph , The Independent , and The Guardian .
+
+The most positive thing that could be said about the decision was that is was made to prevent a negative: China threatened the UK with serious consequences if the project was scrapped.  The UK's ability to forge a free trade deal with China post Brexit is so important to the Brexiters' argument to leave the EU that anything that could jeopardise that from happening was deemed too great a risk for Prime Minister May.
+
+History Future Now is interested in the immediate controversy and, having spent 20 years in the energy sector, has a some observations on the merits of the project.  However, History Future Now is going to look at this in the context of a wider problem, which is why politicians and senior business leaders make decisions that are not in a country or society's long term interests.
+
+To to this we are going to briefly go back to the 1789 French Revolution, where the concept of Left and Right wing developed, and then to the more modern concepts of Open and Closed societies and finally to the concept of a society split into people who are Beams and Columns.
+
+### Turning away from Left and Right and moving to Open and Closed
+
+Separating political affiliation into "the Left"  and "the Right" came about in 1789, at the beginning of the French Revolution.  Those that were loyal to the church and the king took up positions to the right of the presiding chair in the newly formed National Assembly to avoid being tormented by the working class factions in the Third Estate that opposed them on the left of the chair.
+
+Over the past few decades political parties have tried to stay as close to the centre as possible, where it has been easier to pick up votes.   In the UK, for example, left of centre Blair was deemed the heir to right of centre Thatcher.  His political leanings were so tied to historically right wing policies that it is sometimes hard to remember that he was the leader of the Labour party and not the Conservative party.  Many in the left of the Labour party hate him to this day.  Those in the right of the Labour party love the fact that he made them electable.
+
+But simply putting people into Left and Right wing camps has felt odd for over a decade and the rise of Trump in the US and the vote for Brexit in the UK has created a dilemma for political scientists: these categories no longer seem to make any sense.  In the UK, traditional Left wing working classes were united with traditional Right wing land owners.  Free market liberals were united with nationalists who were anti immigration and international trade agreements.  In the US, much of Trump’s support is linked to similar coalitions of seemingly unconnected voters.
+
+Some commentators have suggested that society is now split into those that are Open and those that are Closed. In this analysis society is split into those who are largely Globalists and Nationalists in their outlooks.  Globalists embrace free trade and an open society.  Nationalists focus on closing themselves off from the interference of outside parties and want to promote what is best for their countries first.
+
+There is a lot of merit in this analysis.  However, there are large contradictions.  For example, in the Brexit camp - who are deemed as Nationalists - many of those who wanted to take back control of their sovereignty from the EU  (Closed) are very much in favour of free trade with everyone (Open), including proposals to drop all trade barriers to the UK unilaterally.  They are aligned with people who are alarmed by the concept of free trade (Closed) as it would signal significant job losses in manufacturing and in agriculture in particular.
+
+### Beams and Columns
+
+An alternative way to look at politics today is to separate people into those who are Beams and those who are Columns.  Beam people are spread out over multiple countries - horizontally aligned - and Column people predominately live and work in their home country - vertically aligned.
+
+Beam people are a supranational group that live throughout the world.  They have, in many respects, more in common with other people of a similar background across countries and continents than they do with their own compatriots.  Most are Western: British with Masters Degrees from American Universities and who now work for Arabian financial institutions in Dubai; Italians with PhDs from Delft University in Holland and who now work for technology start ups in Silicon Valley. However, they are also represented by non Westerners:  Turks who have gone to university in Canada and now live in Holland working for Shell; Ghanaians who went to Harvard University and now are Members of Parliament in the UK; Pakistanis who went to Stanford, worked for Citigroup in London and now work for the World Bank in Washington DC.
+
+Beam people predominantly work in the non physical service sector.  They include bankers, equity traders, lawyers, engineers, management consultants, accountants, scientists, actors, artists, musicians and the media. They all speak English, in addition to their mother tongue. They have similar work ethics, attitudes to education and moral values.  They may be married to a childhood sweetheart from their home country, but will frequently be married to partners of a different nationality.  Sometimes neither partner will be a native English speaker but their common language will be English.  They will wave their national flag at sporting events like the World Cup or the Olympics but they no longer really feel strong ties to their home country; they would be happy living and working in most parts of the world.  While they may consider retiring back in their home country, to be closer to family, they might equally chose to retire somewhere else, with better weather and cheaper wine. They are happy with, and benefit from, the concept of free trade, for people, goods and services, and they are also supporters of large supranational organisations like the EU, UN and WTO, which all impact on the sovereignty of nations.   They worry about how to avoid double taxation and how to reduce their taxes in general to countries that they feel little connection, or loyalty, to.
+
+There is nothing new about Beam people:  the Marquis de Lafayette, who was a major supporter and actor in the American Revolution, was a Beam person, as was Thomas Jefferson, who found himself hosting revolutionary parties with Lafayette in Paris in 1789.
+
+Column people’s lives and outlooks are more restricted to their home countries, mainly due to the type of work, or non work, that they do, which is predominantly linked to a physical place.  There is a socio-economic hierarchy to those that live in Columns, in contrast to a greater level of social equality for those who live a Beam type of existence.
+
+At the bottom are those that have no job or who are semi employed.  They are net beneficiaries of taxes paid by the rest of society, including the supranational Beam people who pay local taxes. Many are stuck, due to family ties and history, to particular locations where there may be few job opportunities.  Once, a generation or two before, those locations might have had thriving economies based on primary resources like coal or iron mining, or secondary industries like steel or manufacturing.
+
+Another chunk of society is involved in specialist manufacturing, potentially for export, as a large percentage of mass manufacturing is now located in the non West. A minority will work in what mass manufacturing there is left, like in the auto sector, but their employers might not be local companies, but foreign companies that have set up manufacturing plants to deal with the region - BMW and Nissan in the UK, for example.
+
+A very large part of the Column population have jobs linked to government funding.  This ranges from those who are directly employed by the government and who work in education, health care, the military and the civil service, to those who are indirectly employed by the government, such as those involved in public infrastructure and all of the companies that provide goods and services to the education, heath, military and civil services. In many parts of the UK outside London and the south east, 70-90% of all employment is linked to government spending.
+
+A small, but vocal, number are involved in agriculture.  Agriculture in the European Union is split between very large, highly productive, intensive farms with thousands of acres, that could possibly compete internationally, and smaller farms that produce food but are primarily guardians of an idealised landscape, for which they receive significant subsidies. In the UK, for example, 53% of farm income is in the form of subsidy.  Without the subsidy they would not be able to survive in their current form.
+
+At the very top are the very wealthy.  They may have strong international connections, and thus could be part of the Beam social network, but by their very nature may have started to accumulate so much wealth that it is concentrated in one country in particular.   They are particularly concerned about things that could curtail their influence and power in their home country and so are particularly against supra national organisations that could impinge on national sovereignty.  They are major donors to political parties and individual politicians and frequently will donate to both candidates in a two party system to ensure their views are heard whichever the outcome of an election.  They are also wealthy enough with enough fingers in enough pies not to worry about being a loser in free trade agreements.
+
+As we have seen from the Brexit vote and the rise of Trump in the US, there is a fundamental difference between those who live in the Beam part of society versus those who live in the Column part of society.  Column people’s opportunities are predominantly tied to their home countries.  Beam people have far greater flexibility; they can either work in different countries or can easily provide services to companies or governments located outside their home countries.   As a result of this difference, Beam people routinely undermine the competitiveness of their home countries, which has a disproportionate impact on Column people.
+
+### Back to the Point
+
+Hinkley Point was conceived by Beam people.  In their minds it all makes a lot of sense.  The UK needs more base load power that does not produce direct carbon emissions and is not intermittent in its production.  That rules out coal and gas power stations from the perspective of carbon emissions and rules out renewables from the perspective of intermittency.  Enter Nuclear.
+
+When Hinkley Point was presented as an option the price looked more reasonable and the technology appeared more reliable.  As time has moved on the price has more than doubled and the technology looks increasingly risky.  In the meantime the price of renewable energy has plummeted thanks to the early subsidies that allowed it to compete against established forms of power such as coal, natural gas and nuclear.  In sunnier parts of the world solar power is already the cheapest form of electricity on the grid. Solar and wind are now significantly cheaper and less risky than nuclear.  That is why Hinkley Point has received such lavish subsidy levels: despite the fact that nuclear power has operated on a commercial basis for over 50 years it is now too expensive and too risky for the private sector.  The irony.
+
+Beam people will all make good money out of Hinkley Point. Politicians may end up being directors of companies involved in the construction; engineers will have over ten years of construction work and a whole career ahead of them operating the plant.  Specialist factories in France will make complex components. Financiers will make huge fees as will the lawyers and accountants who have provided advice to the project.
+
+Many Column people will benefit: they will dig the trenches, pour the concrete and weld the steel.  There will be jobs for years too.
+
+And yet there is a niggle. Ultimately it is Column people who are going to be paying for Hinkley Point via their taxes and loss of benefits from those taxes.  They will be paying for a plant that is being given more than twice the amount of subsidies as renewables are given today for over twice the amount of time.  In ten years time, which is how long Hinkley will take to build, assuming no delays, it is likely that renewables will require no subsidies in the UK at all and battery technology will be able to provide the storage capacity to fix the intermittency issue associated with renewables.  But for another 35 years after that British tax payers will continue to pay for huge subsidies to be sent to France and China.  Those funds could have been used for schools, hospitals, pensions and other things that benefit the majority of the Column population.
+
+Beam people know this.  They are well educated and informed. They are doing something that is in their best short term interest but is not in the best interest of their country and their fellow citizens in the long run.
+
+Column people are not stupid either.  Trump's improbable rise and the UK's crazy decision to leave the EU happened because of a growing feeling amongst Column people that the system is rigged against them.  Hinkley is just another reminder that they are right.
+
+Column people need to behave in a more responsible manner - it is ultimately in their best interest too.
+
+## The Rise Of The West Was Based On Luck. That Has Run Out.
+
+---
+
+## THEN: 
+
+## NOW: 
+
+## NEXT: 
+
