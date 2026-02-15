@@ -37,7 +37,22 @@ from pathlib import Path
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_API_KEYS = [
+    k.strip() for k in
+    os.environ.get("GEMINI_API_KEY", "").split(",")
+    if k.strip()
+]
+_key_index = 0
+
+def _next_gemini_key() -> str:
+    """Rotate through available Gemini API keys."""
+    global _key_index
+    if not GEMINI_API_KEYS:
+        return ""
+    key = GEMINI_API_KEYS[_key_index % len(GEMINI_API_KEYS)]
+    _key_index += 1
+    return key
+
 MINIMAX_API_KEY = os.environ.get(
     "MINIMAX_API_KEY",
     "sk-api-okVnpvFR0DkxBjJ-A2SuhExLJSc2W4fdkc5gNnZhhd_VbITFeTrf-_DUCRsOhoeVUjqJ4YSRsrOFuAIYeuVaPVlzUJleeP5AOwa6x9UYZXCK2UEa60Fybbg",
@@ -172,26 +187,18 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
 
     last_error = None
     for attempt in range(max_retries):
+        api_key = _next_gemini_key()
         response = requests.post(
             url,
-            params={"key": GEMINI_API_KEY},
+            params={"key": api_key},
             json=payload,
             timeout=120,
         )
 
         if response.status_code == 429:
-            # Rate limited — extract retry delay or use exponential backoff
-            wait = min(15 * (2 ** attempt), 120)
-            # Try to parse suggested wait from error message
-            try:
-                err_text = response.text
-                import re as _re
-                match = _re.search(r'retry in ([\d.]+)s', err_text)
-                if match:
-                    wait = max(float(match.group(1)) + 2, wait)
-            except Exception:
-                pass
-            print(f"    Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait:.0f}s...")
+            # Rate limited — use fixed wait that respects free-tier limits
+            wait = 15 + (attempt * 10)  # 15s, 25s, 35s, 45s, 55s
+            print(f"    Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
             time.sleep(wait)
             last_error = f"Gemini API error 429 (rate limited)"
             continue
@@ -401,10 +408,11 @@ def load_corpus() -> dict:
 
 def cmd_scripts(args, corpus: dict):
     """Generate discussion scripts for articles."""
-    if not GEMINI_API_KEY:
+    if not GEMINI_API_KEYS:
         print("ERROR: GEMINI_API_KEY not set.")
-        print("  export GEMINI_API_KEY=your-key")
+        print("  export GEMINI_API_KEY=key1,key2  (comma-separated for rotation)")
         sys.exit(1)
+    print(f"Using {len(GEMINI_API_KEYS)} API key(s) with rotation")
 
     SCRIPTS_DIR.mkdir(parents=True, exist_ok=True)
     articles = corpus['articles']
