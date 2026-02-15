@@ -205,6 +205,62 @@ def inject_pull_quote(body_html, pq):
         return body_html[:pos] + '\n\n' + pq_html + '\n\n' + body_html[pos:]
     return body_html
 
+def make_audio_player_script():
+    """Inline JavaScript for the article audio player."""
+    return '''<script>
+(function(){
+  var audio=document.getElementById('audioElement');
+  if(!audio)return;
+  var btn=document.getElementById('audioPlayBtn');
+  var bar=document.getElementById('audioProgressBar');
+  var wrap=document.getElementById('audioProgressWrap');
+  var timeEl=document.getElementById('audioTime');
+  var speedEl=document.getElementById('audioSpeed');
+  var iconPlay=btn.querySelector('.audio-icon-play');
+  var iconPause=btn.querySelector('.audio-icon-pause');
+  var speeds=[1,1.25,1.5,1.75,2];
+  var si=0;
+
+  function fmt(s){
+    if(isNaN(s))return'0:00';
+    var m=Math.floor(s/60);
+    var sec=Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  btn.onclick=function(){
+    if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+    else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+  };
+
+  audio.ontimeupdate=function(){
+    if(audio.duration){
+      bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+    }
+  };
+
+  audio.onended=function(){
+    iconPlay.style.display='block';iconPause.style.display='none';
+    bar.style.width='0%';
+  };
+
+  wrap.onclick=function(e){
+    if(audio.duration){
+      var rect=wrap.getBoundingClientRect();
+      var pct=(e.clientX-rect.left)/rect.width;
+      audio.currentTime=pct*audio.duration;
+    }
+  };
+
+  speedEl.onclick=function(){
+    si=(si+1)%speeds.length;
+    audio.playbackRate=speeds[si];
+    speedEl.textContent=speeds[si]+'\\u00d7';
+  };
+})();
+</script>'''
+
 ALL_CHARTS = get_all_charts()
 
 def make_chart_html(chart):
@@ -361,6 +417,32 @@ def build_article(essay, all_essays):
 
     chart_badge = f'\n    <div class="article-chart-badge">{chart_count} interactive charts</div>' if chart_count > 0 else ''
 
+    # Audio player (if audio file exists)
+    audio_file = OUTPUT_DIR / "audio" / f"{essay['slug']}.mp3"
+    has_audio = audio_file.exists()
+    est_listen = max(1, round(essay['reading_time'] * 250 / 189))  # reading_time is at 250wpm, voice is ~189wpm
+    audio_player = ''
+    if has_audio:
+        audio_player = f'''
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article</div>
+        <div class="audio-meta">{est_listen} min &middot; British narrator</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-bar" id="audioProgressBar"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/{html_mod.escape(essay['slug'])}.mp3"></audio>
+  </div>'''
+
     # JSON-LD structured data for article
     json_ld = {
         "@context": "https://schema.org",
@@ -394,7 +476,7 @@ def build_article(essay, all_essays):
       <span class="article-reading-time">{essay['reading_time']} min read</span>
     </div>{chart_badge}
   </header>
-
+{audio_player}
   <div class="article-body">
     {body}
   </div>
@@ -407,6 +489,7 @@ def build_article(essay, all_essays):
 
 {make_footer()}
 {chart_script}
+{make_audio_player_script() if has_audio else ''}
 </body>
 </html>'''
 

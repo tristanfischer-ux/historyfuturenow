@@ -1,5 +1,5 @@
 ---
-title: 'Vertical Farming: the electrical convergence power, transport and agriculture'
+title: 'Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture'
 url: >-
   https://www.historyfuturenow.com/part-1-natural-resources/vertical-farming-the-electrical-convergence-power-transport-and-agriculture
 image: "/images/vertical-farming-convergence.png"
@@ -17,7 +17,7 @@ signal: ''
 
 The COP26 climate conference held in November 2021 reiterated the need to reduce global greenhouse gas emissions to net zero by 2050, and to stop the average global temperature from rising above 1.5 degrees compared to pre-industrial levels.
 
-Unfortunately, few people are convinced that that we will meet that target.  Greta Thunburg dismissed the politicians for doing nothing more than saying “bla bla bla” and analysis of the various pledges suggest that a minimum increase of 2.4 degrees above pre-industrial levels is almost a certainty, bringing with it serious climate problems.
+Unfortunately, few people are convinced that we will meet that target.  Greta Thunberg dismissed the politicians for doing nothing more than saying “bla bla bla” and analysis of the various pledges suggest that a minimum increase of 2.4 degrees above pre-industrial levels is almost a certainty, bringing with it serious climate problems.
 
 There is no doubt, the task ahead is huge.  But there is good news,  thanks to an emerging technical convergence which is unifying the power sector, transport sector and agriculture sector into one mega electricity sector that feeds off itself, driving down costs for all.  This article explains this convergence.
 

@@ -8,13 +8,13 @@ slug: keynes-and-hayek-are-both-dead-and-wrong
 excerpt: >-
   Despite the fact that both John Maynard Keynes and Friedrich August Hayek are
   dead, their ideas are very much alive today and form the basis of whether
-  governments chose austerity or stimulus as a way out of our current economic
+  governments choose austerity or stimulus as a way out of our current economic
   crisis.
 signal: ''
 ---
 # Keynes And Hayek Are Both Dead, And Wrong
 
-Despite the fact that both John Maynard Keynes and Friedrich August Hayek are dead, their ideas are very much alive today and form the basis of whether governments chose austerity or stimulus as a way out of our current economic crisis.
+Despite the fact that both John Maynard Keynes and Friedrich August Hayek are dead, their ideas are very much alive today and form the basis of whether governments choose austerity or stimulus as a way out of our current economic crisis.
 
 Both men were brilliant and arguably had people listened to their opinions before the Great Depression that started in 1929, the Depression and the Second World War would not have happened.  Modern politicians are listening to their opinions now in the hope of preventing our Great Recession from turning into a second Great Depression.  This is a mistake.
 

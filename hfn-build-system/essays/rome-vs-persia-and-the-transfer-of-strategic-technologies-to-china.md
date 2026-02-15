@@ -9,14 +9,14 @@ slug: rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china
 excerpt: >-
   China is a master at forcing western companies to hand over critical
   intellectual property in exchange for short term access to the Chinese market.
-  Future, History, Now asks what are the lessons that can be learned from
+  History Future Now asks what are the lessons that can be learned from
   history, what is happening today and what impact could this have on the
   future?
 signal: ''
 ---
 # Rome Vs. Persia And The Transfer Of Strategic Technologies To China
 
-China is a master at forcing western companies to hand over critical intellectual property in exchange for short term access to the Chinese market. Future, History, Now asks what are the lessons that can be learned from history, what is happening today and what impact could this have on the future?
+China is a master at forcing western companies to hand over critical intellectual property in exchange for short term access to the Chinese market. History Future Now asks what are the lessons that can be learned from history, what is happening today and what impact could this have on the future?
 
 First, a loose historical analogy: the Roman and Persian empires had been at loggerheads for centuries and by the late 500s and early 600s AD this battering finally came to its fatal end.  Wars were frequent. Cities and entire territories exchanged sides on a regular basis.  Plagues struck both empires, wiping between a third and a half of their populations, leaving both weak and desperate for manpower and allies.
 

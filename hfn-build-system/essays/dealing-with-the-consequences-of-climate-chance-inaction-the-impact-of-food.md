@@ -1,5 +1,5 @@
 ---
-title: "Dealing With The Consequences Of Climate Chance Inaction: The Impact Of Food"
+title: "Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food"
 url: "https://www.historyfuturenow.com/part-1-natural-resources/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food"
 image: "/images/food-climate-impact.png"
 type: "article"

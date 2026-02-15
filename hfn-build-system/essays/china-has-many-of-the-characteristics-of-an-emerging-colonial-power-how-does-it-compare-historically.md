@@ -7,7 +7,7 @@ part: Global Balance of Power
 slug: >-
   china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically
 excerpt: >-
-  History Future Now. had dinner a few years back with two Kenyans of Indian
+  History Future Now had dinner a few years back with two Kenyans of Indian
   origin. Indian-Kenyans make up less than 1% of the country’s 43 million
   people, but apparently account for 70-80% of the country’s wealth.
   Indian-Kenyans arrived in the country in the late 19th and early 20th century,
@@ -17,11 +17,11 @@ signal: ''
 ---
 # China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?
 
-History Future Now. had dinner a few years back with two Kenyans of Indian origin.  Indian-Kenyans make up less than 1% of the country’s 43 million people, but apparently account for 70-80% of the country’s wealth.  Indian-Kenyans arrived in the country in the late 19th and early 20th century, typically with nothing but the brains in their heads and the clothes on their backs.  This dinner triggered thoughts the new player in Africa: China.
+History Future Now had dinner a few years back with two Kenyans of Indian origin.  Indian-Kenyans make up less than 1% of the country’s 43 million people, but apparently account for 70-80% of the country’s wealth.  Indian-Kenyans arrived in the country in the late 19th and early 20th century, typically with nothing but the brains in their heads and the clothes on their backs.  This dinner triggered thoughts the new player in Africa: China.
 
 China has been accused of being a neocolonial power in Africa.  The country, through semi-governmental organisations is buying up land in countries such as Sudan, Ethiopia, Mozambique, Tanzania, Madagascar and  Zambia and investing heavily in resource extractive industries, whose products are then sent back to China for processing into value added goods.  Much of this feels familiar to a historian.  So is China really an up-and-coming colonial power, or is this something completely new?
 
-History Future Now. first looks back in time for some other examples of colonialism, ranging from the beginnings of recorded history up to the present day.
+History Future Now first looks back in time for some other examples of colonialism, ranging from the beginnings of recorded history up to the present day.
 
 Greeks, city states, Marseilles, Carthage.
 

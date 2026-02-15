@@ -24,6 +24,9 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 """
 
 def get_all_charts():
@@ -89,11 +92,12 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Mal
             'position': 'after_para_42',
             'js': """
 (()=>{const ctx=document.getElementById('warChart4');
-new Chart(ctx,{type:'line',data:{labels:['1900','1910','1920','1930','1940','1943','1945','1950','1960','1970','1980','1990','2000','2020'],
+const yrs=[1900,1910,1920,1930,1940,1943,1945,1950,1960,1970,1980,1990,2000,2020];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('US women in labor force (%)',[20,23,24,24,27,37,34,30,35,43,52,57,60,57],C.purple),
-ds('UK women in labor force (%)',[29,30,28,29,31,46,42,35,38,44,52,58,60,58],C.blue)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:65,title:{display:true,text:'% of women in workforce',color:C.dim}}}}});
+dxy('US women in labor force (%)',yrs,[20,23,24,24,27,37,34,30,35,43,52,57,60,57],C.purple),
+dxy('UK women in labor force (%)',yrs,[29,30,28,29,31,46,42,35,38,44,52,58,60,58],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},scales:{x:linX(1900,2020),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:65,title:{display:true,text:'% of women in workforce',color:C.dim}}}}});
 })();"""
         },
         {
@@ -131,11 +135,12 @@ scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:
             'position': 'after_para_72',
             'js': """
 (()=>{const ctx=document.getElementById('warChart6');
-new Chart(ctx,{type:'line',data:{labels:['1618','1650','1803','1815','1853','1856','1861','1865','1914','1918','1939','1945'],
-datasets:[{label:'Cumulative male dead (millions)',data:[0,8,8,13,13,13.5,13.5,14.2,14.2,24.2,24.2,43.2],
+const yrs=[1618,1650,1803,1815,1853,1856,1861,1865,1914,1918,1939,1945];
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'Cumulative male dead (millions)',data:xy(yrs,[0,8,8,13,13,13.5,13.5,14.2,14.2,24.2,24.2,43.2]),
 borderColor:C.accent,backgroundColor:C.accent+'15',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.accent,borderWidth:3}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'M cumulative deaths'}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,maxRotation:45}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Cumulative deaths (millions)',color:C.dim}}}}});
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.parsed.y+'M cumulative deaths'}}},
+scales:{x:linX(1610,1950,{ticks:{color:C.dim,maxRotation:45}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Cumulative deaths (millions)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -197,11 +202,11 @@ ds('Renewables (modern)',[0,0,0,0,1,1,1,1,3,7,14],C.teal)
             'position': 'after_para_9',
             'js': """
 (()=>{const ctx=document.getElementById('renChart2');
-new Chart(ctx,{type:'line',data:{labels:['1976','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025'],
-datasets:[{label:'$/watt (2023 dollars)',data:[106,30,12,8,5.5,3.5,2.5,1.5,0.5,0.25,0.20],
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'$/watt (2023 dollars)',data:xy([1976,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025],[106,30,12,8,5.5,3.5,2.5,1.5,0.5,0.25,0.20]),
 borderColor:C.amber,backgroundColor:C.amber+'15',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.amber,borderWidth:3}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'/watt'}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'Cost per watt (log scale, 2023$)',color:C.dim}}}}});
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.parsed.y+'/watt'}}},
+scales:{x:linX(1976,2025),y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'Cost per watt (log scale, 2023$)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -274,16 +279,18 @@ ds('Petroleum production (index)',[0,0,5,30,65,85,100],C.accent)
             'position': 'after_para_40',
             'js': """
 (()=>{const ctx=document.getElementById('renChart7');
-new Chart(ctx,{type:'line',data:{labels:['1800','1850','1880','1900','1920','1940','1950','1960','1970','1980','1990','2000','2010','2020','2025'],
+const yrs=[1800,1850,1880,1900,1920,1940,1950,1960,1970,1980,1990,2000,2010,2020,2025];
+const xyF=(d)=>xy(yrs,d);
+new Chart(ctx,{type:'line',data:{
 datasets:[
-{label:'Biomass',data:[95,85,62,50,38,30,25,20,15,12,10,9,8,7,6],borderColor:C.dim,backgroundColor:C.dim+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
-{label:'Coal',data:[5,14,35,45,48,42,38,35,28,27,26,23,27,23,20],borderColor:'#333',backgroundColor:'#33333030',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
-{label:'Oil',data:[0,0,1,3,9,17,23,30,40,38,33,35,31,30,28],borderColor:C.amber,backgroundColor:C.amber+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
-{label:'Gas',data:[0,0,1,1,3,5,7,10,13,17,20,21,22,23,23],borderColor:C.teal,backgroundColor:C.teal+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
-{label:'Nuclear',data:[0,0,0,0,0,0,0,0,1,3,5,6,5,4,4],borderColor:C.purple,backgroundColor:C.purple+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
-{label:'Renewables',data:[0,0,0,0,0,0,0,1,1,2,3,4,6,11,16],borderColor:C.green,backgroundColor:C.green+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{stacked:false,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,title:{display:true,text:'Share of global primary energy (%)',color:C.dim}}}}});
+{label:'Biomass',data:xyF([95,85,62,50,38,30,25,20,15,12,10,9,8,7,6]),borderColor:C.dim,backgroundColor:C.dim+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+{label:'Coal',data:xyF([5,14,35,45,48,42,38,35,28,27,26,23,27,23,20]),borderColor:'#333',backgroundColor:'#33333030',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+{label:'Oil',data:xyF([0,0,1,3,9,17,23,30,40,38,33,35,31,30,28]),borderColor:C.amber,backgroundColor:C.amber+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+{label:'Gas',data:xyF([0,0,1,1,3,5,7,10,13,17,20,21,22,23,23]),borderColor:C.teal,backgroundColor:C.teal+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+{label:'Nuclear',data:xyF([0,0,0,0,0,0,0,0,1,3,5,6,5,4,4]),borderColor:C.purple,backgroundColor:C.purple+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5},
+{label:'Renewables',data:xyF([0,0,0,0,0,0,0,1,1,2,3,4,6,11,16]),borderColor:C.green,backgroundColor:C.green+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
+scales:{x:linX(1800,2025),y:{stacked:false,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,title:{display:true,text:'Share of global primary energy (%)',color:C.dim}}}}});
 })();"""
         },
     ]
@@ -499,12 +506,13 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true
             'position': 'after_para_8',
             'js': """
 (()=>{const ctx=document.getElementById('covChart1');
-new Chart(ctx,{type:'line',data:{labels:['1870','1900','1913','1945','1960','1980','1990','2000','2010','2020','2025'],
+const yrs=[1870,1900,1913,1945,1960,1980,1990,2000,2010,2020,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('West (% of world GDP)',[55,55,58,50,48,42,40,38,33,30,28],C.blue),
-ds('East Asia (% of world GDP)',[18,15,12,8,10,14,18,22,28,32,35],C.accent)
+dxy('West (% of world GDP)',yrs,[55,55,58,50,48,42,40,38,33,30,28],C.blue),
+dxy('East Asia (% of world GDP)',yrs,[18,15,12,8,10,14,18,22,28,32,35],C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
+scales:{x:linX(1870,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -623,11 +631,11 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,maxRotation:45}},y:{type:'loga
             'position': 'after_para_15',
             'js': """
 (()=>{const ctx=document.getElementById('debtChart2');
-new Chart(ctx,{type:'line',data:{labels:['27 BC','14 AD','64 AD','117 AD','193 AD','250 AD','270 AD','295 AD'],
-datasets:[{label:'Silver content (%)',data:[95,93,90,85,65,40,5,2],
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'Silver content (%)',data:xy([-27,14,64,117,193,250,270,295],[95,93,90,85,65,40,5,2]),
 borderColor:C.dim,backgroundColor:C.dim+'15',fill:true,tension:.35,pointRadius:5,pointBackgroundColor:C.dim,borderWidth:3}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% silver content'}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:100,title:{display:true,text:'Silver content of denarius (%)',color:C.dim}}}}});
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.parsed.y+'% silver content'}}},
+scales:{x:linX(-40,310,{ticks:{color:C.dim,callback:v=>v<0?Math.abs(v)+' BC':v===0?'0':v+' AD'}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:100,title:{display:true,text:'Silver content of denarius (%)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -694,12 +702,13 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
             'position': 'after_para_33',
             'js': """
 (()=>{const ctx=document.getElementById('crisisChart1');
-new Chart(ctx,{type:'line',data:{labels:['1500','1600','1700','1800','1850','1900','1950','1980','2000','2010','2025'],
+const yrs=[1500,1600,1700,1800,1850,1900,1950,1980,2000,2010,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Western share of global trade (%)',[15,25,35,45,60,70,55,50,45,38,30],C.blue),
-ds('Financial sector as % of economy',[2,3,3,4,5,7,8,12,18,22,20],C.accent)
+dxy('Western share of global trade (%)',yrs,[15,25,35,45,60,70,55,50,45,38,30],C.blue),
+dxy('Financial sector as % of economy',yrs,[2,3,3,4,5,7,8,12,18,22,20],C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'}}}}});
+scales:{x:linX(1500,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'}}}}});
 })();"""
         },
         {
@@ -710,12 +719,13 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
             'position': 'after_para_67',
             'js': """
 (()=>{const ctx=document.getElementById('crisisChart2');
-new Chart(ctx,{type:'line',data:{labels:['1750','1800','1850','1900','1950','1980','2000','2010','2025'],
+const yrs=[1750,1800,1850,1900,1950,1980,2000,2010,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('China + India',[73,68,40,12,5,8,18,30,42],C.accent),
-ds('Europe + N. America',[22,28,55,82,85,70,62,48,38],C.blue)
+dxy('China + India',yrs,[73,68,40,12,5,8,18,30,42],C.accent),
+dxy('Europe + N. America',yrs,[22,28,55,82,85,70,62,48,38],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global manufacturing (%)',color:C.dim}}}}});
+scales:{x:linX(1750,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global manufacturing (%)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -726,12 +736,13 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
             'position': 'before_end',
             'js': """
 (()=>{const ctx=document.getElementById('crisisChart3');
-new Chart(ctx,{type:'line',data:{labels:['1950','1960','1970','1980','1990','2000','2006','2008','2010','2015','2020'],
+const yrs=[1950,1960,1970,1980,1990,2000,2006,2008,2010,2015,2020];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('UK financial services (% GDP)',[3,4,5,6,8,10,12,10,9,8,7],C.blue),
-ds('US financial services (% GDP)',[3,4,4,5,7,8,9,8,7,7,8],C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of GDP'}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Financial services as % of GDP',color:C.dim},min:0,max:15}}}});
+dxy('UK financial services (% GDP)',yrs,[3,4,5,6,8,10,12,10,9,8,7],C.blue),
+dxy('US financial services (% GDP)',yrs,[3,4,4,5,7,8,9,8,7,7,8],C.accent)
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.parsed.y+'% of GDP'}}},
+scales:{x:linX(1950,2020),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Financial services as % of GDP',color:C.dim},min:0,max:15}}}});
 })();"""
         },
     ]
@@ -746,14 +757,15 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
             'position': 'after_para_8',
             'js': """
 (()=>{const ctx=document.getElementById('luckChart1');
-new Chart(ctx,{type:'line',data:{labels:['1 AD','500','1000','1500','1700','1820','1870','1913','1950','1980','2000','2025'],
+const yrs=[1,500,1000,1500,1700,1820,1870,1913,1950,1980,2000,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('China',[26,23,22,25,22,33,17,9,5,5,12,19],C.accent),
-ds('India',[33,28,28,24,24,16,12,8,4,3,5,8],C.amber),
-ds('Western Europe',[11,12,9,18,22,23,33,33,26,24,20,15],C.blue),
-ds('USA',[0,0,0,0,0.2,2,9,19,27,22,22,16],C.purple)
+dxy('China',yrs,[26,23,22,25,22,33,17,9,5,5,12,19],C.accent),
+dxy('India',yrs,[33,28,28,24,24,16,12,8,4,3,5,8],C.amber),
+dxy('Western Europe',yrs,[11,12,9,18,22,23,33,33,26,24,20,15],C.blue),
+dxy('USA',yrs,[0,0,0,0,0.2,2,9,19,27,22,22,16],C.purple)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
+scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -792,13 +804,14 @@ y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:11,title:{display:true,text
             'position': 'before_end',
             'js': """
 (()=>{const ctx=document.getElementById('luckChart3');
-new Chart(ctx,{type:'line',data:{labels:['1','1000','1500','1600','1700','1820','1870','1913','1950','1973','2000','2025'],
+const yrs=[1,1000,1500,1600,1700,1820,1870,1913,1950,1973,2000,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('West (Europe+US)',[12,12,18,22,24,30,42,50,52,48,42,30],C.blue),
-ds('China',[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
-ds('India',[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
+dxy('West (Europe+US)',yrs,[12,12,18,22,24,30,42,50,52,48,42,30],C.blue),
+dxy('China',yrs,[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
+dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
+scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
 })();"""
         },
     ]
@@ -885,13 +898,14 @@ y1:{grid:{display:false},ticks:{color:C.blue,callback:v=>v+'m/s'},title:{display
             'position': 'after_para_17',
             'js': """
 (()=>{const ctx=document.getElementById('robotChart2');
-new Chart(ctx,{type:'line',data:{labels:['2020','2022','2024','2026','2028','2030','2035'],
+const yrs=[2020,2022,2024,2026,2028,2030,2035];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Robot cost per hour ($)',[12,9,7,5,3.5,2.5,1],C.accent),
-ds('US minimum wage ($/hr)',[7.25,7.25,7.25,8,9,10,12],C.blue,[5,3]),
-ds('China factory wage ($/hr)',[3.5,4,4.5,5,5.5,6,7],C.amber,[3,3])
+dxy('Robot cost per hour ($)',yrs,[12,9,7,5,3.5,2.5,1],C.accent),
+dxy('US minimum wage ($/hr)',yrs,[7.25,7.25,7.25,8,9,10,12],C.blue,[5,3]),
+dxy('China factory wage ($/hr)',yrs,[3.5,4,4.5,5,5.5,6,7],C.amber,[3,3])
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'/hr'},title:{display:true,text:'Cost per working hour ($)',color:C.dim}}}}});
+scales:{x:linX(2020,2035),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'/hr'},title:{display:true,text:'Cost per working hour ($)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -927,13 +941,14 @@ scales:{x:{type:'linear',min:1450,max:2070,grid:{color:C.grid},ticks:{color:C.di
             'position': 'after_para_4',
             'js': """
 (()=>{const ctx=document.getElementById('indChart1');
-new Chart(ctx,{type:'line',data:{labels:['1750','1800','1850','1900','1950','1980','2000','2025'],
+const yrs=[1750,1800,1850,1900,1950,1980,2000,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Agriculture',[75,65,40,25,10,3,2,1.5],C.green),
-ds('Manufacturing',[15,20,35,40,35,25,15,8],C.amber),
-ds('Services',[10,15,25,35,55,72,83,90],C.blue)
+dxy('Agriculture',yrs,[75,65,40,25,10,3,2,1.5],C.green),
+dxy('Manufacturing',yrs,[15,20,35,40,35,25,15,8],C.amber),
+dxy('Services',yrs,[10,15,25,35,55,72,83,90],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of employment (%)',color:C.dim}}}}});
+scales:{x:linX(1750,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of employment (%)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -944,13 +959,14 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
             'position': 'before_end',
             'js': """
 (()=>{const ctx=document.getElementById('jobsHistChart2');
-new Chart(ctx,{type:'line',data:{labels:['1760','1780','1800','1810','1820','1830','1840','1850','1860','1880','1900','1910'],
+const yrs=[1760,1780,1800,1810,1820,1830,1840,1850,1860,1880,1900,1910];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Industrial output (index)',[10,15,22,30,40,55,70,100,130,180,250,300],C.blue),
-ds('Real wages (index)',[100,100,95,90,90,92,95,100,110,130,160,180],C.accent),
-ds('Artisan income (index)',[100,90,70,55,45,40,38,40,50,65,80,90],C.dim,[5,5])
+dxy('Industrial output (index)',yrs,[10,15,22,30,40,55,70,100,130,180,250,300],C.blue),
+dxy('Real wages (index)',yrs,[100,100,95,90,90,92,95,100,110,130,160,180],C.accent),
+dxy('Artisan income (index)',yrs,[100,90,70,55,45,40,38,40,50,65,80,90],C.dim,[5,5])
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1850=100 for output)',color:C.dim}}}}});
+scales:{x:linX(1760,1910),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1850=100 for output)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -961,14 +977,16 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
             'position': 'before_end',
             'js': """
 (()=>{const ctx=document.getElementById('jobsHistChart3');
-new Chart(ctx,{type:'line',data:{labels:['1800','1850','1900','1920','1950','1970','1990','2000','2020','2040?'],
+const yrs=[1800,1850,1900,1920,1950,1970,1990,2000,2020,2040];
+const xyF=(d)=>xy(yrs,d);
+new Chart(ctx,{type:'line',data:{
 datasets:[
-{label:'Agriculture',data:[75,60,40,30,12,4,3,2,2,1],borderColor:C.green,backgroundColor:C.green+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
-{label:'Manufacturing',data:[15,25,35,40,38,35,22,15,10,5],borderColor:C.blue,backgroundColor:C.blue+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
-{label:'Services',data:[10,15,25,28,45,55,65,70,72,60],borderColor:C.purple,backgroundColor:C.purple+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
-{label:'AI & automation?',data:[0,0,0,0,0,0,0,1,5,25],borderColor:C.accent,backgroundColor:C.accent+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2,borderDash:[5,5]}
+{label:'Agriculture',data:xyF([75,60,40,30,12,4,3,2,2,1]),borderColor:C.green,backgroundColor:C.green+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
+{label:'Manufacturing',data:xyF([15,25,35,40,38,35,22,15,10,5]),borderColor:C.blue,backgroundColor:C.blue+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
+{label:'Services',data:xyF([10,15,25,28,45,55,65,70,72,60]),borderColor:C.purple,backgroundColor:C.purple+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
+{label:'AI & automation?',data:xyF([0,0,0,0,0,0,0,1,5,25]),borderColor:C.accent,backgroundColor:C.accent+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2,borderDash:[5,5]}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of workforce',color:C.dim},max:80}}}});
+scales:{x:linX(1800,2040,{ticks:{color:C.dim,callback:v=>v===2040?v+'?':''+v}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of workforce',color:C.dim},max:80}}}});
 })();"""
         },
     ]
@@ -1115,12 +1133,13 @@ y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Conflict te
             'position': 'after_para_8',
             'js': """
 (()=>{const ctx=document.getElementById('econChart1');
-new Chart(ctx,{type:'line',data:{labels:['1980','1985','1990','1995','2000','2005','2008','2010','2015','2020','2025'],
+const yrs=[1980,1985,1990,1995,2000,2005,2008,2010,2015,2020,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('US Federal Funds Rate (%)',[20,8,8,6,6.5,4.25,0.25,0.25,0.5,0.25,4.5],C.blue),
-ds('US House Price Index (rebased)',[40,50,55,60,75,120,100,80,95,130,140],C.accent)
+dxy('US Federal Funds Rate (%)',yrs,[20,8,8,6,6.5,4.25,0.25,0.25,0.5,0.25,4.5],C.blue),
+dxy('US House Price Index (rebased)',yrs,[40,50,55,60,75,120,100,80,95,130,140],C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim}}}}});
+scales:{x:linX(1980,2025),y:{grid:{color:C.grid},ticks:{color:C.dim}}}}});
 })();"""
         },
         {
@@ -1131,12 +1150,13 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
             'position': 'before_end',
             'js': """
 (()=>{const ctx=document.getElementById('keyChart2');
-new Chart(ctx,{type:'line',data:{labels:['1918','1920','1922','1924','1926','1928','1929','1930','1931','1932','1933'],
+const yrs=[1918,1920,1922,1924,1926,1928,1929,1930,1931,1932,1933];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('German unemployment %',[3,4,3,8,10,6,10,15,24,30,25],C.accent),
-ds('Reparations paid (bn gold marks, cumul.)',[0,1,2,4,5,7,8,8,8,8,8],C.blue,[5,5])
+dxy('German unemployment %',yrs,[3,4,3,8,10,6,10,15,24,30,25],C.accent),
+dxy('Reparations paid (bn gold marks, cumul.)',yrs,[0,1,2,4,5,7,8,8,8,8,8],C.blue,[5,5])
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'% / Billion gold marks',color:C.dim}}}}});
+scales:{x:linX(1918,1933),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'% / Billion gold marks',color:C.dim}}}}});
 })();"""
         },
     ]
@@ -1168,12 +1188,13 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{col
             'position': 'before_end',
             'js': """
 (()=>{const ctx=document.getElementById('immChart2');
-new Chart(ctx,{type:'line',data:{labels:['1950','1960','1970','1980','1990','2000','2005','2010','2015','2020'],
+const yrs=[1950,1960,1970,1980,1990,2000,2005,2010,2015,2020];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Foreign-born in EU (millions)',[10,14,18,20,23,33,40,47,54,55],C.accent),
-ds('Foreign-born as % of EU pop.',[3.0,3.5,4.5,5.0,5.5,7.0,8.5,9.5,10.5,11.0],C.blue,[5,5])
+dxy('Foreign-born in EU (millions)',yrs,[10,14,18,20,23,33,40,47,54,55],C.accent),
+dxy('Foreign-born as % of EU pop.',yrs,[3.0,3.5,4.5,5.0,5.5,7.0,8.5,9.5,10.5,11.0],C.blue,[5,5])
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Millions / %',color:C.dim}}}}});
+scales:{x:linX(1950,2020),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Millions / %',color:C.dim}}}}});
 })();"""
         },
         {
@@ -1208,14 +1229,15 @@ y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:
             'position': 'after_para_7',
             'js': """
 (()=>{const ctx=document.getElementById('sexChart1');
-new Chart(ctx,{type:'line',data:{labels:['1960','1970','1980','1990','2000','2010','2020','2025','2050','2100'],
+const yrs=[1960,1970,1980,1990,2000,2010,2020,2025,2050,2100];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('World average',[5.0,4.7,3.7,3.2,2.7,2.5,2.3,2.3,2.1,1.8],C.accent),
-ds('Europe',[2.6,2.3,1.9,1.7,1.4,1.5,1.5,1.4,1.4,1.5],C.blue),
-ds('Sub-Saharan Africa',[6.7,6.8,6.8,6.4,5.8,5.2,4.5,4.2,3.0,2.1],C.amber),
-{label:'Replacement level',data:Array(10).fill(2.1),borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
+dxy('World average',yrs,[5.0,4.7,3.7,3.2,2.7,2.5,2.3,2.3,2.1,1.8],C.accent),
+dxy('Europe',yrs,[2.6,2.3,1.9,1.7,1.4,1.5,1.5,1.4,1.4,1.5],C.blue),
+dxy('Sub-Saharan Africa',yrs,[6.7,6.8,6.8,6.4,5.8,5.2,4.5,4.2,3.0,2.1],C.amber),
+{label:'Replacement level',data:xy(yrs,Array(10).fill(2.1)),borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Children per woman (TFR)',color:C.dim}}}}});
+scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Children per woman (TFR)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -1842,13 +1864,14 @@ y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Arable hect
             'source': 'EH.net, NATO, IISS, Kiel Institute.',
             'position': 'after_para_10',
             'js': """(()=>{const ctx=document.getElementById('rearmChart1');
-new Chart(ctx,{type:'line',data:{labels:['1650','1700','1750','1815','1850','1870','1900','1914','1920','1932','1938','1945','1955','1985','1991','2000','2014','2022','2026'],
-datasets:[{label:'W. Europe avg defence % GDP',data:[8,5,3,2.5,2,3,3.5,4.5,4,1.5,6,45,5,3.2,2.4,1.8,1.4,1.5,2.5],
+const yrs=[1650,1700,1750,1815,1850,1870,1900,1914,1920,1932,1938,1945,1955,1985,1991,2000,2014,2022,2026];
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'W. Europe avg defence % GDP',data:xy(yrs,[8,5,3,2.5,2,3,3.5,4.5,4,1.5,6,45,5,3.2,2.4,1.8,1.4,1.5,2.5]),
 borderColor:C.blue,backgroundColor:C.blue+'22',fill:true,tension:0.3,pointRadius:3}]},
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'400 Years of European Defence Spending: The Cycle Repeats',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% of GDP',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
-x:{grid:{display:false},ticks:{color:C.dim,maxRotation:45,font:{size:9}}}}}});
+x:linX(1650,2030,{grid:{display:false},ticks:{color:C.dim,maxRotation:45,font:{size:9}}})}}});
 })();"""
         },
         {
@@ -1914,15 +1937,16 @@ x:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
             'source': 'Bureau of Labor Statistics, Northwestern Medill Local News Initiative.',
             'position': 'after_para_38',
             'js': """(()=>{const ctx=document.getElementById('pressChart2');
-new Chart(ctx,{type:'line',data:{labels:['1990','1995','2000','2004','2008','2010','2012','2014','2016','2018','2020','2022','2024','2025'],
-datasets:[{label:'Total newspaper jobs (thousands)',data:[458,400,412,380,310,260,230,200,183,160,140,120,92,87],
+const yrs=[1990,1995,2000,2004,2008,2010,2012,2014,2016,2018,2020,2022,2024,2025];
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'Total newspaper jobs (thousands)',data:xy(yrs,[458,400,412,380,310,260,230,200,183,160,140,120,92,87]),
 borderColor:C.accent,backgroundColor:C.accent+'18',fill:true,tension:0.3,pointRadius:2},
-{label:'Newsroom journalists (thousands)',data:[null,null,null,null,71,62,54,47,42,38,34,31,30,29],
+{label:'Newsroom journalists (thousands)',data:xy([2008,2010,2012,2014,2016,2018,2020,2022,2024,2025],[71,62,54,47,42,38,34,31,30,29]),
 borderColor:C.blue,fill:false,tension:0.3,borderDash:[5,5],pointRadius:2}]},
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:C.dim,usePointStyle:true}},
 tooltip:tooltipStyle,title:{display:true,text:'US Newspaper Employment: 80% Decline in 35 Years',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Thousands',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
-x:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
+x:linX(1990,2025,{grid:{display:false},ticks:{color:C.dim,font:{size:9}}})}}});
 })();"""
         },
         {
@@ -1950,15 +1974,16 @@ x:{grid:{display:false},ticks:{color:C.dim},stacked:true}}}});
             'source': 'NYT earnings, WaPo Guild, media reports.',
             'position': 'after_para_62',
             'js': """(()=>{const ctx=document.getElementById('pressChart4');
-new Chart(ctx,{type:'line',data:{labels:['2013','2015','2017','2019','2021','2023','2025','Feb\\n2026'],
-datasets:[{label:'NYT digital subscribers (M)',data:[0.8,1.1,2.6,4.7,8.3,10.4,12.8,12.8],
+const yrs=[2013,2015,2017,2019,2021,2023,2025,2026];
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'NYT digital subscribers (M)',data:xy(yrs,[0.8,1.1,2.6,4.7,8.3,10.4,12.8,12.8]),
 borderColor:C.green,backgroundColor:C.green+'18',fill:true,tension:0.3,pointRadius:3},
-{label:'WaPo est. subscribers (M)',data:[0.5,1.0,1.5,3.0,3.0,2.5,1.8,1.2],
+{label:'WaPo est. subscribers (M)',data:xy(yrs,[0.5,1.0,1.5,3.0,3.0,2.5,1.8,1.2]),
 borderColor:C.accent,fill:false,tension:0.3,borderDash:[5,5],pointRadius:3}]},
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{color:C.dim,usePointStyle:true}},
 tooltip:tooltipStyle,title:{display:true,text:'Digital Subscribers: NYT Soaring vs WaPo Collapsing',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Millions',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
-x:{grid:{display:false},ticks:{color:C.dim}}}}});
+x:linX(2013,2026,{grid:{display:false},ticks:{color:C.dim}})}}});
 })();"""
         },
     ],
@@ -1994,19 +2019,20 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
             'source': 'World Bank, UN Population Division.',
             'position': 'after_para_9',
             'js': """(()=>{const ctx=document.getElementById('emptyChart2');
-new Chart(ctx,{type:'line',data:{labels:['1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2024'],
+const yrs=[1960,1965,1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2024];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('United States',[3.65,2.91,2.48,1.77,1.84,1.84,2.08,2.02,2.06,2.05,1.93,1.84,1.64,1.62],C.blue),
-ds('United Kingdom',[2.72,2.89,2.43,1.81,1.90,1.79,1.83,1.71,1.64,1.78,1.92,1.80,1.56,1.44],C.accent),
-ds('Germany',[2.37,2.50,2.03,1.48,1.56,1.37,1.45,1.25,1.38,1.34,1.39,1.50,1.53,1.36],C.amber),
-ds('Japan',[2.00,2.14,2.13,1.91,1.75,1.76,1.54,1.42,1.36,1.26,1.39,1.45,1.33,1.20],C.green),
-ds('South Korea',[6.00,5.63,4.53,3.47,2.83,1.67,1.59,1.65,1.48,1.09,1.23,1.24,0.84,0.72],C.amber,[5,5]),
-ds('China',[5.76,6.13,5.81,3.57,2.63,2.52,2.51,1.86,1.60,1.62,1.54,1.62,1.28,1.02],C.purple,[5,5])
+dxy('United States',yrs,[3.65,2.91,2.48,1.77,1.84,1.84,2.08,2.02,2.06,2.05,1.93,1.84,1.64,1.62],C.blue),
+dxy('United Kingdom',yrs,[2.72,2.89,2.43,1.81,1.90,1.79,1.83,1.71,1.64,1.78,1.92,1.80,1.56,1.44],C.accent),
+dxy('Germany',yrs,[2.37,2.50,2.03,1.48,1.56,1.37,1.45,1.25,1.38,1.34,1.39,1.50,1.53,1.36],C.amber),
+dxy('Japan',yrs,[2.00,2.14,2.13,1.91,1.75,1.76,1.54,1.42,1.36,1.26,1.39,1.45,1.33,1.20],C.green),
+dxy('South Korea',yrs,[6.00,5.63,4.53,3.47,2.83,1.67,1.59,1.65,1.48,1.09,1.23,1.24,0.84,0.72],C.amber,[5,5]),
+dxy('China',yrs,[5.76,6.13,5.81,3.57,2.63,2.52,2.51,1.86,1.60,1.62,1.54,1.62,1.28,1.02],C.purple,[5,5])
 ]},
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Fertility Rates 1960-2024: The Long Decline',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
-x:{grid:{display:false},ticks:{color:C.dim}}}}});
+x:linX(1960,2024,{grid:{display:false},ticks:{color:C.dim}})}}});
 })();"""
         },
         {
@@ -2037,19 +2063,20 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
             'source': 'Bureau of Labor Statistics, Consumer Price Index.',
             'position': 'after_para_19',
             'js': """(()=>{const ctx=document.getElementById('emptyChart4');
-new Chart(ctx,{type:'line',data:{labels:['2000','2003','2005','2008','2010','2013','2015','2018','2020','2022','2024'],
+const yrs=[2000,2003,2005,2008,2010,2013,2015,2018,2020,2022,2024];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Hospital Services (+230%)',[0,15,25,40,50,70,90,120,160,200,230],C.accent),
-ds('College Tuition (+180%)',[0,20,30,45,55,70,85,110,140,160,180],C.rose),
-ds('Childcare (+142%)',[0,10,18,25,30,40,50,70,100,120,142],C.amber),
-ds('Average Wages (+85%)',[0,8,12,18,22,28,32,42,55,70,85],C.blue,[8,4]),
-ds('Food (+75%)',[0,5,8,15,18,22,25,30,45,60,75],C.green),
-ds('Electronics (-94%)',[0,-15,-30,-40,-55,-65,-75,-82,-88,-92,-94],C.teal,[3,3])
+dxy('Hospital Services (+230%)',yrs,[0,15,25,40,50,70,90,120,160,200,230],C.accent),
+dxy('College Tuition (+180%)',yrs,[0,20,30,45,55,70,85,110,140,160,180],C.rose),
+dxy('Childcare (+142%)',yrs,[0,10,18,25,30,40,50,70,100,120,142],C.amber),
+dxy('Average Wages (+85%)',yrs,[0,8,12,18,22,28,32,42,55,70,85],C.blue,[8,4]),
+dxy('Food (+75%)',yrs,[0,5,8,15,18,22,25,30,45,60,75],C.green),
+dxy('Electronics (-94%)',yrs,[0,-15,-30,-40,-55,-65,-75,-82,-88,-92,-94],C.teal,[3,3])
 ]},
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Cost of Raising Children vs Wages Since 2000',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% Change Since 2000',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}}},
-x:{grid:{display:false},ticks:{color:C.dim}}}}});
+x:linX(2000,2024,{grid:{display:false},ticks:{color:C.dim}})}}});
 })();"""
         },
         {
@@ -2139,13 +2166,13 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
             'source': 'Congressional Research Service.',
             'position': 'after_para_42',
             'js': """(()=>{const ctx=document.getElementById('emptyChart9');
-new Chart(ctx,{type:'line',data:{labels:['1950','1960','1970','1980','1985','1990','2000','2005','2010','2015','2020','2025'],
-datasets:[{label:'% of Congress over 70',data:[8,10,9,6,6,5,8,9,11,14,20,23],
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'% of Congress over 70',data:xy([1950,1960,1970,1980,1985,1990,2000,2005,2010,2015,2020,2025],[8,10,9,6,6,5,8,9,11,14,20,23]),
 borderColor:C.purple,backgroundColor:C.purple+'22',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5}]},
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'The Gerontocracy: % of U.S. Congress Over Age 70',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% Over 70',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}},min:0},
-x:{grid:{display:false},ticks:{color:C.dim}}}}});
+x:linX(1950,2025,{grid:{display:false},ticks:{color:C.dim}})}}});
 })();"""
         },
         {
@@ -2156,18 +2183,19 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
             'source': 'UN Population Division, World Population Prospects (2024 revision).',
             'position': 'after_para_48',
             'js': """(()=>{const ctx=document.getElementById('emptyChart10');
-new Chart(ctx,{type:'line',data:{labels:['2000','2010','2020','2025','2030','2040','2050','2060'],
+const yrs=[2000,2010,2020,2025,2030,2040,2050,2060];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Japan',[25,35,48,51,54,64,70,75],C.accent),
-ds('EU-27',[24,26,32,35,40,48,55,60],C.blue),
-ds('China',[10,12,17,21,26,38,47,55],C.purple,[5,5]),
-ds('United States',[19,20,26,29,33,37,39,42],C.green),
-ds('India',[8,8,10,10,11,15,19,24],C.amber)
+dxy('Japan',yrs,[25,35,48,51,54,64,70,75],C.accent),
+dxy('EU-27',yrs,[24,26,32,35,40,48,55,60],C.blue),
+dxy('China',yrs,[10,12,17,21,26,38,47,55],C.purple,[5,5]),
+dxy('United States',yrs,[19,20,26,29,33,37,39,42],C.green),
+dxy('India',yrs,[8,8,10,10,11,15,19,24],C.amber)
 ]},
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Old-Age Dependency Ratios: Who Will Pay?',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'65+ per 100 Working-Age',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
-x:{grid:{display:false},ticks:{color:C.dim}}}}});
+x:linX(2000,2060,{grid:{display:false},ticks:{color:C.dim}})}}});
 })();"""
         },
     ]

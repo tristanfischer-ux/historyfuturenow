@@ -1,6 +1,6 @@
 ---
 title: >-
-  Lets Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The
+  Let's Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The
   End Of People?
 url: >-
   https://www.historyfuturenow.com/part-4-society/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people

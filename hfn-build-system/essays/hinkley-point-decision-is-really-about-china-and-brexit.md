@@ -6,7 +6,7 @@ type: "article"
 part: Global Balance of Power
 slug: hinkley-point-decision-is-really-about-china-and-brexit
 excerpt: >-
-  Much ink has been spilled about why Prime Minster May’s new Conservative
+  Much ink has been spilled about why Prime Minister May’s new Conservative
   government should not have approved the £18bn Hinkley Point nuclear power
   station that is to be built by EDF, from France, with financial support from
   China. Most of the UK’s major newspapers have come out against it and you can
@@ -16,7 +16,7 @@ signal: ''
 ---
 # Hinkley Point decision is really about China and Brexit
 
-Much ink has been spilled about why Prime Minster May’s new Conservative government should not have approved the £18bn Hinkley Point nuclear power station that is to be built by EDF, from France, with financial support from China. Most of the UK’s major newspapers have come out against it and you can read their arguments on their websites:  see The Financial Times , The Telegraph , The Independent , and The Guardian .
+Much ink has been spilled about why Prime Minister May’s new Conservative government should not have approved the £18bn Hinkley Point nuclear power station that is to be built by EDF, from France, with financial support from China. Most of the UK’s major newspapers have come out against it and you can read their arguments on their websites:  see The Financial Times , The Telegraph , The Independent , and The Guardian .
 
 The most positive thing that could be said about the decision was that is was made to prevent a negative: China threatened the UK with serious consequences if the project was scrapped.  The UK's ability to forge a free trade deal with China post Brexit is so important to the Brexiters' argument to leave the EU that anything that could jeopardise that from happening was deemed too great a risk for Prime Minister May.
 

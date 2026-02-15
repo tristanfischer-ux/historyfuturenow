@@ -9,7 +9,7 @@ slug: what-the-history-of-immigration-teaches-us-about-europes-future
 excerpt: >-
   Immigration is a political hot potato. It is hard to talk about it in the West
   without appearing to be uncaring at best or racist at worst. That is a problem
-  as it is an important subject which does go away by not discussing it. In fact
+  as it is an important subject which doesn't go away by not discussing it. In fact
   when moderates fight shy of facing the problem it leaves the subject open to
   extremist views on the far left and far right. History Future Now has looked
   at emigration before, from the perspective of colonisation in the past. This
@@ -19,7 +19,7 @@ signal: ''
 ---
 # What The History Of Immigration Teaches Us About Europe’s Future
 
-Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst.  That is a problem as it is an important subject which does go away by not discussing it.  In fact when moderates fight shy of facing the problem it leaves the subject open to extremist views on the far left and far right.  History Future Now has looked at emigration before, from the perspective of colonisation in the past.  This time we are going to look at the historical impact of immigration on the indigenous population.
+Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst.  That is a problem as it is an important subject which doesn't go away by not discussing it.  In fact when moderates fight shy of facing the problem it leaves the subject open to extremist views on the far left and far right.  History Future Now has looked at emigration before, from the perspective of colonisation in the past.  This time we are going to look at the historical impact of immigration on the indigenous population.
 
 History Future Now has selected fourteen examples from different time periods and different parts of the world. This selection is to highlight that immigration is not a modern phenomenon, restricted to movements of people from the south to the more affluent north, and that it can be completely disconnected from the issue of race.
 
@@ -119,7 +119,7 @@ In 1066 England was invaded by Harold Hardrada, the King of Norway, and Tostig G
 
 What is interesting is that French-speaking William was actually part Viking. His pagan Norse ancestors had invaded the northern part of the Frankish Kingdom only 150 years previously. They had good Viking names like Hrólfr (Rollo). The invaders had been absorbed by the local population and the fierce sea-faring Norsemen married local women who taught French to their half Norse children. They converted to Christianity and started to give their offspring Christian names such as Robert and William.
 
-After the Norman invasion of Britain a similar integrational process occured. First there was a brief period of French linguistic dominance by the Norman elite at official government levels before they too started to intermarry with the indigenous Anglo Saxon locals. Official documents, previously only written in English, were now written in Latin, which both the English elite and Norman conquerors could read and write. Within a generation, however, English (though by now heavily infused with parallel French loan words- think “pig/pork”, “cow/beef”) resumed it’s place as both the common language and official language.
+After the Norman invasion of Britain a similar integrational process occurred. First there was a brief period of French linguistic dominance by the Norman elite at official government levels before they too started to intermarry with the indigenous Anglo Saxon locals. Official documents, previously only written in English, were now written in Latin, which both the English elite and Norman conquerors could read and write. Within a generation, however, English (though by now heavily infused with parallel French loan words- think “pig/pork”, “cow/beef”) resumed it’s place as both the common language and official language.
 
 From the perspective of the Anglo Saxon ruling elite, who saw most of their lands taken away by Norman supporters loyal to William the Conqueror, the Norman invasion was a disaster.  For many of the common people it was very harsh as well – much of the north of England in particular was “harried” by Norman soldiers and it took generations for them to recover.  But a strong Anglo-Saxon core remained.
 
