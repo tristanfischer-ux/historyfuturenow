@@ -222,7 +222,14 @@ def poll_task(task_id: str) -> str:
 
 
 def download_audio(file_id: str, output_path: Path) -> None:
-    """Download the generated audio file from MiniMax."""
+    """
+    Download the generated audio file from MiniMax.
+    The API returns a tar archive containing the MP3 and metadata files.
+    We extract just the MP3.
+    """
+    import tarfile
+    import io
+
     url = f"{API_BASE}/v1/files/retrieve_content"
 
     response = requests.get(
@@ -234,6 +241,27 @@ def download_audio(file_id: str, output_path: Path) -> None:
     response.raise_for_status()
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # MiniMax returns a tar archive -- extract the MP3 from it
+    content_type = response.headers.get("Content-Type", "")
+    if "tar" in content_type or response.content[:7] != b'\xff\xfb' and not response.content[:3] == b'ID3':
+        try:
+            tar_bytes = io.BytesIO(response.content)
+            with tarfile.open(fileobj=tar_bytes, mode="r") as tar:
+                mp3_members = [m for m in tar.getmembers() if m.name.endswith(".mp3")]
+                if mp3_members:
+                    f = tar.extractfile(mp3_members[0])
+                    if f:
+                        audio_data = f.read()
+                        output_path.write_bytes(audio_data)
+                        size_mb = round(len(audio_data) / (1024 * 1024), 2)
+                        print(f"    Saved: {output_path.name} ({size_mb} MB)")
+                        return
+                raise RuntimeError("No MP3 file found in tar archive")
+        except tarfile.TarError:
+            pass
+
+    # Fallback: write raw content (in case API changes to return raw MP3)
     output_path.write_bytes(response.content)
     size_mb = round(len(response.content) / (1024 * 1024), 2)
     print(f"    Saved: {output_path.name} ({size_mb} MB)")

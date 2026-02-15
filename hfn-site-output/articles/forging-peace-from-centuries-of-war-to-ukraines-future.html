@@ -53,6 +53,24 @@
     </div>
   </header>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article</div>
+        <div class="audio-meta">16 min &middot; British narrator</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-bar" id="audioProgressBar"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/forging-peace-from-centuries-of-war-to-ukraines-future.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>For centuries, war has been a brutal constant in human affairs, with nations locked in cycles of conquest and revenge that have left countless lives shattered. Yet even from the ashes of the most devastating conflicts, lasting peace has managed to emerge through the alchemy of pragmatic diplomacy and difficult compromises.</p>
 <p>As the world watches Russia&rsquo;s invasion of Ukraine with horror, it is all too easy to succumb to a sense of despair – that this conflict, like so many before it, will rage unabated until one side is utterly vanquished. History, however, offers a more nuanced perspective. Time and again, wars that once seemed intractable have eventually found resolutions, however imperfect or painful.</p>
@@ -115,20 +133,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
+        <span class="related-time">10 min read</span>
+      </a>
+      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
+        <span class="related-time">11 min read</span>
+      </a>
       <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
         <span class="related-time">6 min read</span>
-      </a>
-      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
-        <span class="related-time">9 min read</span>
-      </a>
-      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
-        <span class="related-time">5 min read</span>
       </a>
     </div>
   </section>
@@ -149,6 +167,58 @@
 </footer>
 <script src="/js/nav.js"></script>
 
+<script>
+(function(){
+  var audio=document.getElementById('audioElement');
+  if(!audio)return;
+  var btn=document.getElementById('audioPlayBtn');
+  var bar=document.getElementById('audioProgressBar');
+  var wrap=document.getElementById('audioProgressWrap');
+  var timeEl=document.getElementById('audioTime');
+  var speedEl=document.getElementById('audioSpeed');
+  var iconPlay=btn.querySelector('.audio-icon-play');
+  var iconPause=btn.querySelector('.audio-icon-pause');
+  var speeds=[1,1.25,1.5,1.75,2];
+  var si=0;
 
+  function fmt(s){
+    if(isNaN(s))return'0:00';
+    var m=Math.floor(s/60);
+    var sec=Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  btn.onclick=function(){
+    if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+    else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+  };
+
+  audio.ontimeupdate=function(){
+    if(audio.duration){
+      bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+    }
+  };
+
+  audio.onended=function(){
+    iconPlay.style.display='block';iconPause.style.display='none';
+    bar.style.width='0%';
+  };
+
+  wrap.onclick=function(e){
+    if(audio.duration){
+      var rect=wrap.getBoundingClientRect();
+      var pct=(e.clientX-rect.left)/rect.width;
+      audio.currentTime=pct*audio.duration;
+    }
+  };
+
+  speedEl.onclick=function(){
+    si=(si+1)%speeds.length;
+    audio.playbackRate=speeds[si];
+    speedEl.textContent=speeds[si]+'\u00d7';
+  };
+})();
+</script>
 </body>
 </html>

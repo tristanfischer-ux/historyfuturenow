@@ -616,11 +616,13 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?'$'+(v/1000)+'T':'
             'position': 'after_para_9',
             'js': """
 (()=>{const ctx=document.getElementById('debtChart1');
-new Chart(ctx,{type:'line',data:{labels:['Jan 1921','Jul 1921','Jan 1922','Jul 1922','Jan 1923','Apr 1923','Jul 1923','Sep 1923','Oct 1923','Nov 1923'],
-datasets:[{label:'Price of bread (Marks)',data:[1,2,3,10,250,500,100000,2000000,670000000,3000000000],
+const months=[1921.0,1921.5,1922.0,1922.5,1923.0,1923.25,1923.5,1923.67,1923.75,1923.83];
+const labels=['Jan 21','Jul 21','Jan 22','Jul 22','Jan 23','Apr 23','Jul 23','Sep 23','Oct 23','Nov 23'];
+new Chart(ctx,{type:'line',data:{
+datasets:[{label:'Price of bread (Marks)',data:xy(months,[1,2,3,10,250,500,100000,2000000,670000000,3000000000]),
 borderColor:C.accent,backgroundColor:C.accent+'15',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.accent,borderWidth:3}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw;return v>=1e9?(v/1e9).toFixed(0)+'B Marks':v>=1e6?(v/1e6).toFixed(0)+'M Marks':v>=1e3?(v/1e3).toFixed(0)+'K Marks':v+' Marks'}}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,maxRotation:45}},y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>{if(v>=1e9)return(v/1e9)+'B';if(v>=1e6)return(v/1e6)+'M';if(v>=1e3)return(v/1e3)+'K';return v}},title:{display:true,text:'Price of 1 loaf of bread (Marks, log scale)',color:C.dim}}}}});
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:i=>[labels[i[0].dataIndex]],label:i=>{const v=i.parsed.y;return v>=1e9?(v/1e9).toFixed(0)+'B Marks':v>=1e6?(v/1e6).toFixed(0)+'M Marks':v>=1e3?(v/1e3).toFixed(0)+'K Marks':v+' Marks'}}}},
+scales:{x:linX(1921,1924,{grid:{color:C.grid},ticks:{color:C.dim,maxRotation:45,callback:function(v){const m=['Jan','Apr','Jul','Oct'];const yr=Math.floor(v);const frac=v-yr;const mi=Math.round(frac*12);if(mi===0)return'Jan '+yr;if(mi===6)return'Jul '+yr;return''}}}),y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>{if(v>=1e9)return(v/1e9)+'B';if(v>=1e6)return(v/1e6)+'M';if(v>=1e3)return(v/1e3)+'K';return v}},title:{display:true,text:'Price of 1 loaf of bread (Marks, log scale)',color:C.dim}}}}});
 })();"""
         },
         {
