@@ -130,10 +130,14 @@ def parse_essay(filepath):
 
     pull_quote = extract_pull_quote(body_html)
 
+    audio_file = OUTPUT_DIR / "audio" / f"{slug}.mp3"
+    has_audio = audio_file.exists()
+
     return {
         'title': title, 'slug': slug, 'part': part, 'excerpt': excerpt,
         'body_html': body_html, 'reading_time': reading_time,
         'pull_quote': pull_quote, 'filepath': filepath,
+        'has_audio': has_audio,
     }
 
 def get_related(essay, all_essays, n=3):
@@ -417,10 +421,11 @@ def build_article(essay, all_essays):
         cards = ""
         for r in related:
             rp = PARTS[r['part']]
+            audio_tag = ' <span class="related-audio">Audio</span>' if r.get('has_audio') else ''
             cards += f'''      <a href="/articles/{html_mod.escape(r['slug'])}" class="related-card">
         <span class="related-kicker" style="color:{rp['color']}">{rp['label']}</span>
         <span class="related-title">{html_mod.escape(r['title'])}</span>
-        <span class="related-time">{r['reading_time']} min read</span>
+        <span class="related-time">{r['reading_time']} min read{audio_tag}</span>
       </a>\n'''
         rel_html = f'''
   <section class="related-articles">
@@ -516,6 +521,7 @@ def build_section(part_name, essays, new_slugs=None):
     for e in se:
         chart_count = len(ALL_CHARTS.get(e['slug'], []))
         chart_tag = f' <span class="card-charts">&middot; {chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
+        audio_tag = ' <span class="card-audio">&middot; Audio</span>' if e.get('has_audio') else ''
         new_badge = '<span class="card-new-badge">New</span> ' if e['slug'] in new_slugs else ''
         cards += f'''    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
       <div class="card-kicker" style="color:{pi['color']}">{new_badge}{pi['label']}</div>
@@ -523,7 +529,7 @@ def build_section(part_name, essays, new_slugs=None):
       <p>{html_mod.escape(e['excerpt'][:200])}</p>
       <div class="card-meta">
         <span class="card-link" style="color:{pi['color']}">Read article &rarr;</span>
-        <span class="card-time">{e['reading_time']} min{chart_tag}</span>
+        <span class="card-time">{e['reading_time']} min{chart_tag}{audio_tag}</span>
       </div>
     </a>\n'''
 
@@ -591,10 +597,11 @@ def build_homepage(essays, new_essays=None):
         pi = PARTS[e['part']]
         n_charts = len(all_charts.get(e['slug'], []))
         badge = f'<span class="latest-badge">{n_charts} charts</span>' if n_charts else ''
+        audio_badge = '<span class="latest-badge latest-audio-badge">Audio</span>' if e.get('has_audio') else ''
         size_class = "latest-hero" if i == 0 else "latest-secondary"
         new_tag = '<span class="latest-new">New</span> ' if e.get('is_new') else ''
         latest_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
-        <div class="latest-kicker">{new_tag}{pi['label']} &middot; {html_mod.escape(e['part'])} {badge}</div>
+        <div class="latest-kicker">{new_tag}{pi['label']} &middot; {html_mod.escape(e['part'])} {badge} {audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{html_mod.escape(e['excerpt'][:200])}</p>
         <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
@@ -615,13 +622,14 @@ def build_homepage(essays, new_essays=None):
             for e in new_cards_by_part[pn]:
                 n_charts = len(all_charts.get(e['slug'], []))
                 chart_badge = f' <span class="card-charts">&middot; {n_charts} chart{"s" if n_charts != 1 else ""}</span>' if n_charts > 0 else ''
+                audio_badge = ' <span class="card-audio">&middot; Audio</span>' if e.get('has_audio') else ''
                 new_cards_html += f"""    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
       <div class="card-kicker" style="color:{pi['color']}"><span class="card-new-badge">New</span> {pi['label']}</div>
       <h3>{html_mod.escape(e['title'])}</h3>
       <p>{html_mod.escape(e['excerpt'][:160])}</p>
       <div class="card-meta">
         <span class="card-link" style="color:{pi['color']}">Read article &rarr;</span>
-        <span class="card-time">{e['reading_time']} min{chart_badge}</span>
+        <span class="card-time">{e['reading_time']} min{chart_badge}{audio_badge}</span>
       </div>
     </a>\n"""
 
@@ -731,8 +739,9 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
         for e in se[:3]:
             n_charts = len(all_charts.get(e['slug'], []))
             chart_badge = f'<span class="card-charts">{n_charts} charts</span>' if n_charts > 0 else ''
+            audio_badge = ' <span class="card-audio">Audio</span>' if e.get('has_audio') else ''
             cards += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
-        <div class="card-kicker" style="color:{pi['color']}">{pi['label']} {chart_badge}</div>
+        <div class="card-kicker" style="color:{pi['color']}">{pi['label']} {chart_badge}{audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{html_mod.escape(e['excerpt'][:160])}</p>
         <div class="card-meta">
@@ -761,6 +770,37 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
     <div class="cards">
 {cards}    </div>
   </div>\n\n"""
+
+    # ── Listen to History section ──
+    audio_essays = [e for e in essays if e.get('has_audio')]
+    audio_essays.sort(key=lambda e: (PARTS.get(e['part'], {}).get('order', 99), e['title']))
+    narrated_count = len(audio_essays)
+
+    listen_cards_html = ""
+    for ae in audio_essays:
+        pi = PARTS.get(ae['part'], PARTS['Society'])
+        listen_time = max(1, round(ae['reading_time'] * 250 / 189))
+        listen_cards_html += f'''      <a href="/articles/{html_mod.escape(ae['slug'])}" class="listen-card" style="--card-accent:{pi['color']}">
+        <div class="listen-card-top">
+          <svg class="listen-card-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
+          <span class="listen-card-time">{listen_time} min</span>
+        </div>
+        <div class="listen-card-title">{html_mod.escape(ae['title'])}</div>
+        <div class="listen-card-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(ae['part'])}</div>
+      </a>\n'''
+
+    listen_section_html = ""
+    if narrated_count > 0:
+        listen_section_html = f"""
+<div class="listen-wrap">
+  <div class="listen-inner">
+    <h2 class="listen-title">Listen to History</h2>
+    <p class="listen-intro">{narrated_count} articles narrated by a British voice. Press play.</p>
+    <div class="listen-scroll">
+{listen_cards_html}    </div>
+  </div>
+</div>
+"""
 
     # JSON-LD for homepage
     json_ld = {
@@ -820,9 +860,10 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
     <div class="stat"><span class="stat-num">{total_charts}</span><span class="stat-label">Interactive Charts</span></div>
     <div class="stat"><span class="stat-num">{total_hours}+</span><span class="stat-label">Hours of Analysis</span></div>
     <div class="stat"><span class="stat-num">500</span><span class="stat-label">Years of History</span></div>
+    {"" if narrated_count == 0 else f'<div class="stat"><span class="stat-num">{narrated_count}</span><span class="stat-label">Audio Narrations</span></div>'}
   </div>
 </div>
-
+{listen_section_html}
 <div class="data-stories-wrap">
   <div class="data-stories-inner">
     <h2 class="ds-title">Data Stories</h2>
