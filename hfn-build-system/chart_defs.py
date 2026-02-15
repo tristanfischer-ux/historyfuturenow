@@ -2202,6 +2202,136 @@ x:linX(2000,2060,{grid:{display:false},ticks:{color:C.dim}})}}});
         },
     ]
 
+    # ═══════════════════════════════════════════════════════
+    # NEW ARTICLES (Feb 2026)
+    # ═══════════════════════════════════════════════════════
+
+    # ─── THE ROBOT BARGAIN ───
+    charts['the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap'] = [
+        {
+            'id': 'robotBargainChart1', 'figure_num': 1,
+            'title': 'Fertility Rates vs Robot Density: The Two Paths',
+            'desc': 'Nations with the lowest fertility rates are investing most heavily in robots — Japan and South Korea lead both trends',
+            'source': 'UN Population Division (2024); International Federation of Robotics, World Robotics Report 2025',
+            'position': 'after_para_6',
+            'js': """
+(()=>{const ctx=document.getElementById('robotBargainChart1');
+new Chart(ctx,{type:'scatter',data:{
+datasets:[
+{label:'Japan',data:[{x:1.20,y:399}],backgroundColor:C.accent,pointRadius:8,pointHoverRadius:10},
+{label:'South Korea',data:[{x:0.72,y:1012}],backgroundColor:C.purple,pointRadius:8,pointHoverRadius:10},
+{label:'Germany',data:[{x:1.35,y:415}],backgroundColor:C.blue,pointRadius:8,pointHoverRadius:10},
+{label:'United States',data:[{x:1.62,y:285}],backgroundColor:C.green,pointRadius:8,pointHoverRadius:10},
+{label:'China',data:[{x:1.09,y:392}],backgroundColor:C.amber,pointRadius:8,pointHoverRadius:10},
+{label:'France',data:[{x:1.68,y:163}],backgroundColor:C.teal,pointRadius:8,pointHoverRadius:10},
+{label:'UK',data:[{x:1.49,y:111}],backgroundColor:C.cyan,pointRadius:8,pointHoverRadius:10},
+{label:'India',data:[{x:2.00,y:7}],backgroundColor:C.dim,pointRadius:8,pointHoverRadius:10}
+]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},
+tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.dataset.label+': TFR '+i.parsed.x+', '+i.parsed.y+' robots/10k workers'}}}},
+scales:{x:{title:{display:true,text:'Total Fertility Rate (children per woman)',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},reverse:true,min:0.5,max:2.2},
+y:{title:{display:true,text:'Industrial Robots per 10,000 Workers',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE SILENCE OF THE SCRIBES ───
+    charts['the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed'] = [
+        {
+            'id': 'scribesChart1', 'figure_num': 1,
+            'title': 'Government Content Removal Requests to Major Platforms (2024)',
+            'desc': 'India, Turkey, and Russia lead the world in demanding platforms remove content — the modern equivalent of burning books',
+            'source': 'Google Transparency Report 2024; X Transparency Center 2024; Meta Transparency Reports',
+            'position': 'after_para_4',
+            'js': """
+(()=>{const ctx=document.getElementById('scribesChart1');
+new Chart(ctx,{type:'bar',data:{
+labels:['India','Turkey','Russia','South Korea','France','Germany','Brazil','United States','UK','Australia'],
+datasets:[{label:'Content removal requests (thousands)',data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9,4.8,2.1],
+backgroundColor:[C.accent,C.amber,C.purple,C.blue,C.teal,C.blue+'cc',C.green,C.cyan,C.dim,C.emerald],borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K requests'}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},title:{display:true,text:'Requests (thousands)',color:C.dim}},
+y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE SCRAMBLE FOR THE SOLAR SYSTEM ───
+    charts['the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun'] = [
+        {
+            'id': 'solarChart1', 'figure_num': 1,
+            'title': 'Cost to Launch 1 kg to Low Earth Orbit',
+            'desc': 'SpaceX has reduced launch costs by 97% since the Space Shuttle era — and Starship aims to cut them by another 90%',
+            'source': 'NASA, SpaceX public filings, industry estimates. Starship figure is target cost.',
+            'position': 'after_para_16',
+            'js': """
+(()=>{const ctx=document.getElementById('solarChart1');
+new Chart(ctx,{type:'bar',data:{
+labels:['Space Shuttle\\n(1981-2011)','Atlas V\\n(2002-)','Falcon 9\\n(2010-)','Falcon Heavy\\n(2018-)','Starship\\n(target)'],
+datasets:[{label:'Cost per kg to LEO (USD)',data:[54500,13200,2720,1500,200],
+backgroundColor:[C.dim,C.amber,C.blue,C.blue+'cc',C.accent],borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:function(i){return '$'+i.raw.toLocaleString()+' per kg'}}}},
+scales:{y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return '$'+v.toLocaleString()}},
+title:{display:true,text:'USD per kg (log scale)',color:C.dim}},
+x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}}}}});
+})();"""
+        },
+    ]
+
+    # ─── WHO GUARDS THE GUARDS ───
+    charts['who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state'] = [
+        {
+            'id': 'guardsChart1', 'figure_num': 1,
+            'title': 'Growth of the U.S. Code of Federal Regulations',
+            'desc': 'The federal regulatory code has grown 18x since 1950 — from 10,000 pages to over 180,000',
+            'source': 'Federal Register, George Washington University Regulatory Studies Center',
+            'position': 'after_para_24',
+            'js': """
+(()=>{const ctx=document.getElementById('guardsChart1');
+new Chart(ctx,{type:'line',data:{
+datasets:[ds('Pages (thousands)',
+[10,19,22,35,54,71,102,106,128,138,157,175,180],
+C.accent)]},
+labels:['1950','1960','1965','1970','1975','1980','1990','1995','2000','2005','2010','2020','2025']},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K pages'}}},
+title:{display:true,text:'U.S. Code of Federal Regulations (thousands of pages)',color:C.text,font:{size:14}}},
+scales:{y:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},
+title:{display:true,text:'Pages (thousands)',color:C.dim},min:0},
+x:{grid:{display:false},ticks:{color:C.dim}}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE RETURN OF THE STATE FACTORY ───
+    charts['the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering'] = [
+        {
+            'id': 'factoryChart1', 'figure_num': 1,
+            'title': 'Manufacturing as % of GDP: The West vs China',
+            'desc': 'Western nations hollowed out their manufacturing base while China built the largest industrial economy in history',
+            'source': 'World Bank, National Bureau of Statistics of China, OECD',
+            'position': 'after_para_22',
+            'js': """
+(()=>{const ctx=document.getElementById('factoryChart1');
+const yrs=['1970','1980','1990','2000','2005','2010','2015','2020','2025'];
+new Chart(ctx,{type:'line',data:{labels:yrs,
+datasets:[
+ds('United States',[24,21,17,15,13,12,12,11,11],C.blue),
+ds('United Kingdom',[28,22,17,14,11,10,10,9,9],C.teal),
+ds('Germany',[33,29,27,22,21,20,21,19,19],C.amber),
+ds('China',[30,35,33,32,32,32,29,27,28],C.accent),
+ds('Japan',[34,28,26,21,20,20,21,20,20],C.purple)
+]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle},
+scales:{y:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}},
+title:{display:true,text:'Manufacturing % of GDP',color:C.dim},min:5,max:40},
+x:{grid:{display:false},ticks:{color:C.dim}}}}});
+})();"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

@@ -82,6 +82,7 @@
       <span class="meta-sep">&middot;</span>
       <span class="article-reading-time">10 min read</span>
     </div>
+    <div class="article-chart-badge">1 interactive charts</div>
   </header>
 
 
@@ -90,6 +91,15 @@
 <p>In the same month, across the world, the European Union continued to enforce the Digital Services Act — a sweeping regulatory framework that requires platforms to remove &ldquo;illegal content&rdquo; promptly, to maintain detailed records of their content moderation decisions, and to submit to audits by EU regulators. The EU&rsquo;s AI Act adds further layers of oversight for algorithmic systems that influence what people see and read. Together, these regulations give European bureaucrats unprecedented power over the flow of information across an entire continent.</p>
 <p>Meanwhile, Elon Musk&rsquo;s X (formerly Twitter) received 72,703 government requests to remove accounts in 2024. Under Musk&rsquo;s ownership, X has positioned itself as a free speech platform, but the reality is more complex. A 2025 University of Edinburgh study found that censored accounts on X lost 25% of their engagement and 90% of their follower growth. The platform complied with 83% of censorship requests from non-liberal governments in its first year under Musk — up from 50% in 2022. Even the world&rsquo;s most vocal free speech advocate finds it difficult to resist the combined pressure of governments that control market access.</p>
 <p>This is a History Future Now article. So we are going to do what we always do: look at the present through the lens of the past, and then look at where the future is heading. The question is simple. What happens to civilisations that control speech? And what happens to those that do not?</p>
+
+    <div class="chart-figure">
+      <div class="chart-figure-label">Figure 1</div>
+      <h4>Government Content Removal Requests to Major Platforms (2024)</h4>
+      <p class="chart-desc">India, Turkey, and Russia lead the world in demanding platforms remove content — the modern equivalent of burning books</p>
+      <div class="chart-area"><canvas id="scribesChart1"></canvas></div>
+      <p class="chart-source">Source: Google Transparency Report 2024; X Transparency Center 2024; Meta Transparency Reports</p>
+    </div>
+
 
 <aside class="pull-quote"><p>Together, these regulations give European bureaucrats unprecedented power over the flow of information across an entire continent.</p></aside>
 
@@ -143,20 +153,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Long Term Impact of Covid 19</span>
-        <span class="related-time">30 min read</span>
-      </a>
       <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
+      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
-        <span class="related-time">7 min read</span>
+        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
+        <span class="related-time">12 min read</span>
+      </a>
+      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
+        <span class="related-time">10 min read</span>
       </a>
     </div>
   </section>
@@ -222,6 +232,36 @@
 <script src="/js/search.js"></script>
 <script src="/js/queue.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script>
+const C = {
+  accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
+  text:'#1a1815', grid:'#f2eeea'
+};
+const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const noLegend={display:false};
+const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
+
+
+(()=>{const ctx=document.getElementById('scribesChart1');
+new Chart(ctx,{type:'bar',data:{
+labels:['India','Turkey','Russia','South Korea','France','Germany','Brazil','United States','UK','Australia'],
+datasets:[{label:'Content removal requests (thousands)',data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9,4.8,2.1],
+backgroundColor:[C.accent,C.amber,C.purple,C.blue,C.teal,C.blue+'cc',C.green,C.cyan,C.dim,C.emerald],borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K requests'}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},title:{display:true,text:'Requests (thousands)',color:C.dim}},
+y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+})();
+</script>
 
 </body>
 </html>

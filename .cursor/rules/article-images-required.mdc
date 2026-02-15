@@ -1,0 +1,30 @@
+---
+description: Every article must have its own hero image set. Enforced when writing or reviewing essays.
+alwaysApply: true
+---
+
+# Article Image Requirements
+
+Every essay MUST have its own hero image.
+
+## Image System
+
+- Images live in `hfn-site-output/images/articles/{slug}/hero.{ext}`
+- Supported formats: `png`, `webp`, `jpg` (checked in that order)
+- The build system discovers images by slug directory — the frontmatter `image:` field is NOT used
+
+## Requirements
+
+- **Every article must have a hero image** in its own slug directory
+- Images should be editorial illustrations that capture the article's theme
+- Used for: article hero, section listing thumbnails, homepage cards, OG/social sharing
+
+## When Writing a New Article
+
+1. Create the directory: `hfn-site-output/images/articles/{slug}/`
+2. Generate or source an appropriate hero image
+3. Save as `hero.png` (preferred), `hero.webp`, or `hero.jpg`
+
+## When Reviewing Articles
+
+If an article has no hero image directory or no `hero.*` file, flag it as incomplete.

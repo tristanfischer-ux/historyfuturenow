@@ -1,0 +1,32 @@
+---
+description: Every article must include appropriate Chart.js visualizations. Enforced when writing or reviewing essays and chart definitions.
+alwaysApply: true
+---
+
+# Article Chart Requirements
+
+Every essay MUST include at least **1** appropriate chart. The norm is **2-5 charts per article**.
+
+## Guidelines
+
+- **Minimum:** 1 chart per article. No article ships without at least one visualization.
+- **Target range:** 2-5 charts. This is the sweet spot for most essays.
+- **Maximum:** Use judgment. More than 5 is fine if the data warrants it, but don't pad with filler charts.
+
+## What Makes a Chart "Appropriate"
+
+- Directly supports a claim or argument in the text
+- Visualizes data the reader would otherwise have to imagine
+- Uses the correct chart type for the data (bar for comparisons, line for trends, etc.)
+- Includes a clear title, source citation, and descriptive label
+
+## When Adding Charts
+
+1. Charts are defined in `hfn-build-system/chart_defs.py`
+2. Each chart needs: `id`, `figure_num`, `title`, `desc`, `source`, `position`, and `js`
+3. Use the shared `COLORS` theme and helper functions (`ds`, `dxy`, `gridOpts`, etc.)
+4. Position charts near the paragraph or heading that references the data
+
+## When Reviewing Articles
+
+If an article has zero charts, flag it as incomplete. If it has only one, consider whether additional visualizations would strengthen the argument.

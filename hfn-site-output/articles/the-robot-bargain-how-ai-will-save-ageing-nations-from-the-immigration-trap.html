@@ -82,6 +82,7 @@
       <span class="meta-sep">&middot;</span>
       <span class="article-reading-time">12 min read</span>
     </div>
+    <div class="article-chart-badge">1 interactive charts</div>
   </header>
 
 
@@ -96,6 +97,15 @@ The demographic crisis facing the modern West is not unprecedented.</p></aside>
 
 
 <p>The standard response has been mass immigration. The logic is straightforward: if your own citizens will not have enough children, import young workers from countries that still do. This has been the de facto policy of virtually every Western government for the past three decades.</p>
+
+    <div class="chart-figure">
+      <div class="chart-figure-label">Figure 1</div>
+      <h4>Fertility Rates vs Robot Density: The Two Paths</h4>
+      <p class="chart-desc">Nations with the lowest fertility rates are investing most heavily in robots — Japan and South Korea lead both trends</p>
+      <div class="chart-area"><canvas id="robotBargainChart1"></canvas></div>
+      <p class="chart-source">Source: UN Population Division (2024); International Federation of Robotics, World Robotics Report 2025</p>
+    </div>
+
 <p>History Future Now has written extensively about why this does not work. This article takes the argument to its conclusion: there is now an alternative. That alternative is the robot. And the choice between the immigrant and the robot will define the political, economic, and cultural trajectory of every developed nation for the next fifty years.</p>
 <h2>Part 1: Rome&rsquo;s Labour Crisis</h2>
 <p>The demographic crisis facing the modern West is not unprecedented. The Roman Empire faced an almost identical problem two thousand years ago — and its response to that problem ultimately destroyed it.</p>
@@ -153,20 +163,20 @@ The demographic crisis facing the modern West is not unprecedented.</p></aside>
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/robotics-and-slavery" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Robotics And Slavery</span>
-        <span class="related-time">27 min read</span>
-      </a>
-      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
-        <span class="related-time">9 min read</span>
-      </a>
       <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
         <span class="related-time">7 min read</span>
+      </a>
+      <a href="/articles/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">The Perils of Prediction: Lessons from History on Navigating an Uncertain Future</span>
+        <span class="related-time">20 min read</span>
+      </a>
+      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
+        <span class="related-time">10 min read</span>
       </a>
     </div>
   </section>
@@ -232,6 +242,43 @@ The demographic crisis facing the modern West is not unprecedented.</p></aside>
 <script src="/js/search.js"></script>
 <script src="/js/queue.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script>
+const C = {
+  accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
+  text:'#1a1815', grid:'#f2eeea'
+};
+const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const noLegend={display:false};
+const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
+
+
+(()=>{const ctx=document.getElementById('robotBargainChart1');
+new Chart(ctx,{type:'scatter',data:{
+datasets:[
+{label:'Japan',data:[{x:1.20,y:399}],backgroundColor:C.accent,pointRadius:8,pointHoverRadius:10},
+{label:'South Korea',data:[{x:0.72,y:1012}],backgroundColor:C.purple,pointRadius:8,pointHoverRadius:10},
+{label:'Germany',data:[{x:1.35,y:415}],backgroundColor:C.blue,pointRadius:8,pointHoverRadius:10},
+{label:'United States',data:[{x:1.62,y:285}],backgroundColor:C.green,pointRadius:8,pointHoverRadius:10},
+{label:'China',data:[{x:1.09,y:392}],backgroundColor:C.amber,pointRadius:8,pointHoverRadius:10},
+{label:'France',data:[{x:1.68,y:163}],backgroundColor:C.teal,pointRadius:8,pointHoverRadius:10},
+{label:'UK',data:[{x:1.49,y:111}],backgroundColor:C.cyan,pointRadius:8,pointHoverRadius:10},
+{label:'India',data:[{x:2.00,y:7}],backgroundColor:C.dim,pointRadius:8,pointHoverRadius:10}
+]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},
+tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.dataset.label+': TFR '+i.parsed.x+', '+i.parsed.y+' robots/10k workers'}}}},
+scales:{x:{title:{display:true,text:'Total Fertility Rate (children per woman)',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},reverse:true,min:0.5,max:2.2},
+y:{title:{display:true,text:'Industrial Robots per 10,000 Workers',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0}}}});
+})();
+</script>
 
 </body>
 </html>

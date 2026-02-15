@@ -82,6 +82,7 @@
       <span class="meta-sep">&middot;</span>
       <span class="article-reading-time">11 min read</span>
     </div>
+    <div class="article-chart-badge">1 interactive charts</div>
   </header>
 
 
@@ -107,6 +108,15 @@
 <p>The Solar System is not empty. It is extraordinarily rich.</p>
 <p>The Moon contains significant deposits of helium-3, a potential fuel for fusion reactors, as well as water ice at the poles (critical for sustaining human presence and manufacturing rocket fuel), and rare earth elements. Lunar regolith can be processed into building materials. The Moon&rsquo;s low gravity makes it an ideal staging point for deeper space missions — launching from the lunar surface requires roughly one-twentieth the energy of launching from Earth.</p>
 <p>The asteroid belt contains mineral wealth that dwarfs anything on Earth. A single metallic asteroid — 16 Psyche, which NASA is currently studying — is estimated to contain iron, nickel, and gold worth approximately $10,000 quadrillion at current market prices. Even a small metallic asteroid could contain more platinum-group metals than have ever been mined in human history. These are not theoretical resources. They are physical objects with known compositions, orbiting in predictable paths.</p>
+
+    <div class="chart-figure">
+      <div class="chart-figure-label">Figure 1</div>
+      <h4>Cost to Launch 1 kg to Low Earth Orbit</h4>
+      <p class="chart-desc">SpaceX has reduced launch costs by 97% since the Space Shuttle era — and Starship aims to cut them by another 90%</p>
+      <div class="chart-area"><canvas id="solarChart1"></canvas></div>
+      <p class="chart-source">Source: NASA, SpaceX public filings, industry estimates. Starship figure is target cost.</p>
+    </div>
+
 <p>Mars offers something different: land. Mars has almost exactly the same surface area as Earth&rsquo;s landmasses (Earth is larger but mostly covered by oceans). It has water ice, carbon dioxide, nitrogen, and the basic chemical building blocks needed to sustain life with the right technology. It is, in principle, terraformable — not in years or decades, but potentially in centuries.</p>
 <p>The economic parallel with the Age of Exploration is striking. In the fifteenth century, the spice trade was worth fortunes, but the cost of reaching the source was enormous. Ships were expensive, crews died in large numbers, and most voyages lost money. But the ones that succeeded generated returns that justified the entire programme. The same logic applies to space resources. The cost of reaching an asteroid is enormous today. But the potential return — in rare minerals, in fuel, in strategic position — is so large that the investment will eventually be made. The only question is when the cost curve crosses the value curve.</p>
 <p>That crossing point is approaching faster than most people realise. SpaceX has reduced the cost of launching a kilogram to low Earth orbit from approximately $54,000 (Space Shuttle era) to under $2,000 (Falcon 9) and is targeting under $200 with Starship. At $200 per kilogram, the economics of space resource extraction begin to close. At $50 per kilogram — which Musk has suggested is achievable with full Starship reusability — they become compelling.</p>
@@ -151,15 +161,15 @@
         <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
         <span class="related-time">10 min read</span>
       </a>
+      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The North African Threat And Mediterranean Reunification</span>
         <span class="related-time">17 min read</span>
-      </a>
-      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
-        <span class="related-time">11 min read</span>
       </a>
     </div>
   </section>
@@ -225,6 +235,37 @@
 <script src="/js/search.js"></script>
 <script src="/js/queue.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script>
+const C = {
+  accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
+  text:'#1a1815', grid:'#f2eeea'
+};
+const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const noLegend={display:false};
+const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
+
+
+(()=>{const ctx=document.getElementById('solarChart1');
+new Chart(ctx,{type:'bar',data:{
+labels:['Space Shuttle\n(1981-2011)','Atlas V\n(2002-)','Falcon 9\n(2010-)','Falcon Heavy\n(2018-)','Starship\n(target)'],
+datasets:[{label:'Cost per kg to LEO (USD)',data:[54500,13200,2720,1500,200],
+backgroundColor:[C.dim,C.amber,C.blue,C.blue+'cc',C.accent],borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:function(i){return '$'+i.raw.toLocaleString()+' per kg'}}}},
+scales:{y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return '$'+v.toLocaleString()}},
+title:{display:true,text:'USD per kg (log scale)',color:C.dim}},
+x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}}}}});
+})();
+</script>
 
 </body>
 </html>

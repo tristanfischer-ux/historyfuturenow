@@ -1,0 +1,30 @@
+---
+description: Automatically deploy after completing any task. This is a static site — deploying is low risk.
+alwaysApply: true
+---
+
+# Auto-Deploy After Task Completion
+
+This is a static website hosted on GitHub Pages. Deploying is low risk.
+
+## Rule
+
+After completing any task that changes site content or build output:
+
+1. Run the build: `cd hfn-build-system && python build.py`
+2. Stage all changes: `git add .`
+3. Commit with a descriptive message
+4. Push to main: `git push origin main`
+5. GitHub Actions deploys `hfn-site-output/` to GitHub Pages automatically
+
+## Why
+
+- Static HTML — no server, no database, no runtime errors
+- GitHub Pages deployment is atomic and instant-rollback
+- Pushing to `main` triggers the deploy via `.github/workflows/deploy.yml`
+- Don't wait for permission. Just build, commit, push, and verify.
+
+## After Deploying
+
+- Verify the site loads at the production URL
+- Log the deployment to `~/.memory/daily/YYYY-MM-DD.md`
