@@ -145,12 +145,23 @@ def get_related(essay, all_essays, n=3):
     random.seed(hash(essay['slug']))
     return random.sample(same, min(n, len(same)))
 
-def make_head(title, desc="", og_url="", part_color=None, json_ld=None):
+IMAGES_DIR = OUTPUT_DIR / "images" / "articles"
+
+def get_hero_image(slug):
+    """Check if a hero image exists for this article and return its path."""
+    for ext in ['png', 'webp', 'jpg']:
+        img_path = IMAGES_DIR / slug / f"hero.{ext}"
+        if img_path.exists():
+            return f"/images/articles/{slug}/hero.{ext}"
+    return None
+
+def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None):
     te = html_mod.escape(title)
     de = html_mod.escape(desc[:300]) if desc else ""
     tc = part_color or "#c43425"
     canonical = f'<link rel="canonical" href="{SITE_URL}{og_url}">' if og_url else ""
     og = f'<meta property="og:url" content="{SITE_URL}{og_url}">' if og_url else ""
+    og_img = f'<meta property="og:image" content="{SITE_URL}{og_image}">\n<meta name="twitter:image" content="{SITE_URL}{og_image}">' if og_image else ""
     ld = f'<script type="application/ld+json">{json.dumps(json_ld, ensure_ascii=False)}</script>' if json_ld else ""
     return f'''<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -164,6 +175,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None):
 <meta property="og:locale" content="en_GB">
 <meta property="article:author" content="Tristan Fischer">
 {og}
+{og_img}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{te}">
 <meta name="twitter:description" content="{de}">
@@ -185,14 +197,102 @@ def make_nav(active=None):
         li += f'      <li><a href="{href}"{ac}>{label}</a></li>\n'
     return f'''<nav class="site-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/">History Future <span>Now</span></a>
-    <button class="nav-toggle" aria-label="Menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <div class="nav-top-row">
+      <a class="nav-logo" href="/">History Future <span>Now</span></a>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="nav-toggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
     <ul class="nav-links">
 {li}    </ul>
   </div>
 </nav>'''
+
+def make_search_overlay():
+    """Generate the full-screen search overlay HTML."""
+    return '''<div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search articles" aria-hidden="true">
+  <div class="search-overlay-inner">
+    <div class="search-header">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." autocomplete="off" autofocus>
+      </div>
+      <button class="search-close" id="searchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-hint">Type to search across all articles</div>
+    </div>
+  </div>
+</div>'''
+
+def make_breadcrumbs(items):
+    """Generate breadcrumb navigation HTML.
+
+    @param items: list of (label, href) tuples. Last item's href should be None (current page).
+    @returns: breadcrumb nav HTML string.
+    """
+    crumbs = []
+    for i, (label, href) in enumerate(items):
+        if href:
+            crumbs.append(f'<a href="{href}">{html_mod.escape(label)}</a>')
+        else:
+            crumbs.append(f'<span class="breadcrumb-current">{html_mod.escape(label)}</span>')
+    sep = ' <span class="breadcrumb-sep">/</span> '
+    return f'<nav class="breadcrumbs" aria-label="Breadcrumb">{sep.join(crumbs)}</nav>'
+
+def make_queue_bar():
+    """Persistent bottom audio queue bar — appears on every page."""
+    return '''
+<div class="queue-bar" id="queueBar">
+  <div class="queue-bar-inner">
+    <button class="q-nav-btn" id="queuePrev" aria-label="Previous" title="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="q-play-btn" id="queuePlayBtn" aria-label="Play">
+      <svg class="q-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="q-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+    </button>
+    <button class="q-nav-btn" id="queueNext" aria-label="Next" title="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+    <div class="q-track-info">
+      <div class="q-track-title" id="queueTitle">No track loaded</div>
+      <div class="q-track-section" id="queueSection"></div>
+    </div>
+    <div class="q-progress-wrap" id="queueProgressWrap">
+      <div class="q-progress-bar" id="queueProgressBar"></div>
+    </div>
+    <div class="q-time" id="queueTime">0:00</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span class="q-badge" id="queueCount">0</span>
+    </button>
+    <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</div>
+<div class="queue-panel" id="queuePanel">
+  <div class="q-panel-header">
+    <span class="q-panel-title">Queue</span>
+    <div class="q-panel-actions">
+      <button class="q-panel-btn" id="queueClear">Clear all</button>
+      <button class="q-panel-close" id="queuePanelClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="q-list" id="queueList"></div>
+</div>'''
+
 
 def make_footer():
     return '''<footer class="site-footer">
@@ -208,7 +308,10 @@ def make_footer():
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
-<script src="/js/nav.js"></script>'''
+''' + make_queue_bar() + '''
+<script src="/js/nav.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/queue.js"></script>'''
 
 def inject_pull_quote(body_html, pq):
     if not pq: return body_html
@@ -224,58 +327,66 @@ def inject_pull_quote(body_html, pq):
     return body_html
 
 def make_audio_player_script():
-    """Inline JavaScript for the article audio player."""
+    """Inline JavaScript for the article audio player (narration + discussion)."""
     return '''<script>
 (function(){
-  var audio=document.getElementById('audioElement');
-  if(!audio)return;
-  var btn=document.getElementById('audioPlayBtn');
-  var bar=document.getElementById('audioProgressBar');
-  var wrap=document.getElementById('audioProgressWrap');
-  var timeEl=document.getElementById('audioTime');
-  var speedEl=document.getElementById('audioSpeed');
-  var iconPlay=btn.querySelector('.audio-icon-play');
-  var iconPause=btn.querySelector('.audio-icon-pause');
-  var speeds=[1,1.25,1.5,1.75,2];
-  var si=0;
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
-  function fmt(s){
-    if(isNaN(s))return'0:00';
-    var m=Math.floor(s/60);
-    var sec=Math.floor(s%60);
-    return m+':'+(sec<10?'0':'')+sec;
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\\u00d7';
+      };
+    }
   }
 
-  btn.onclick=function(){
-    if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
-    else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
-  };
-
-  audio.ontimeupdate=function(){
-    if(audio.duration){
-      bar.style.width=(audio.currentTime/audio.duration*100)+'%';
-      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
-    }
-  };
-
-  audio.onended=function(){
-    iconPlay.style.display='block';iconPause.style.display='none';
-    bar.style.width='0%';
-  };
-
-  wrap.onclick=function(e){
-    if(audio.duration){
-      var rect=wrap.getBoundingClientRect();
-      var pct=(e.clientX-rect.left)/rect.width;
-      audio.currentTime=pct*audio.duration;
-    }
-  };
-
-  speedEl.onclick=function(){
-    si=(si+1)%speeds.length;
-    audio.playbackRate=speeds[si];
-    speedEl.textContent=speeds[si]+'\\u00d7';
-  };
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
 })();
 </script>'''
 
@@ -442,6 +553,7 @@ def build_article(essay, all_essays):
     est_listen = max(1, round(essay['reading_time'] * 250 / 189))  # reading_time is at 250wpm, voice is ~189wpm
     audio_player = ''
     if has_audio:
+        section_label = f"{pi['label']} · {essay['part']}"
         audio_player = f'''
   <div class="audio-player" id="audioPlayer">
     <div class="audio-player-inner">
@@ -458,8 +570,42 @@ def build_article(essay, all_essays):
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
       <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="{html_mod.escape(essay['slug'])}" data-queue-title="{html_mod.escape(essay['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="/audio/{html_mod.escape(essay['slug'])}.mp3" aria-label="Add to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
     </div>
     <audio id="audioElement" preload="none" src="/audio/{html_mod.escape(essay['slug'])}.mp3"></audio>
+  </div>'''
+
+    # Discussion player (if discussion audio file exists)
+    discussion_file = OUTPUT_DIR / "audio" / "discussions" / f"{essay['slug']}.mp3"
+    has_discussion = discussion_file.exists()
+    discussion_player = ''
+    if has_discussion:
+        discussion_section_label = f"{pi['label']} · {essay['part']}"
+        discussion_player = f'''
+  <div class="discussion-player" id="discussionPlayer">
+    <div class="discussion-player-inner">
+      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="discussion-info">
+        <div class="discussion-label">Listen to the discussion</div>
+        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+      </div>
+      <div class="discussion-progress-wrap" id="discussionProgressWrap">
+        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+      </div>
+      <div class="discussion-time" id="discussionTime">0:00</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="discussion-{html_mod.escape(essay['slug'])}" data-queue-title="Discussion: {html_mod.escape(essay['title'])}" data-queue-section="{html_mod.escape(discussion_section_label)}" data-queue-color="{pi['color']}" data-queue-url="/audio/discussions/{html_mod.escape(essay['slug'])}.mp3" aria-label="Add discussion to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="discussionElement" preload="none" src="/audio/discussions/{html_mod.escape(essay['slug'])}.mp3"></audio>
   </div>'''
 
     # JSON-LD structured data for article
@@ -476,16 +622,41 @@ def build_article(essay, all_essays):
         "inLanguage": "en-GB",
     }
 
+    # Breadcrumbs: Home / Section / Article title (truncated)
+    truncated_title = essay['title'] if len(essay['title']) <= 50 else essay['title'][:47] + '...'
+    breadcrumbs = make_breadcrumbs([
+        ('Home', '/'),
+        (essay['part'], f'/{pi["slug"]}'),
+        (truncated_title, None),
+    ])
+
+    # Hero image injection
+    hero_img = get_hero_image(essay['slug'])
+    hero_img_html = ''
+    if hero_img:
+        hero_img_html = f'''
+  <div class="article-hero-wrap">
+    <img src="{hero_img}" alt="Editorial illustration for {html_mod.escape(essay['title'])}" class="article-hero-img" loading="lazy" width="1200" height="675">
+  </div>'''
+
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head(f"{essay['title']} — History Future Now", essay['excerpt'], f"/articles/{essay['slug']}", pi['color'], json_ld)}
+{make_head(f"{essay['title']} — History Future Now", essay['excerpt'], f"/articles/{essay['slug']}", pi['color'], json_ld, og_image=hero_img)}
 </head>
 <body>
 
 {make_nav(essay['part'])}
+<div class="back-bar" id="backBar" data-section-href="/{pi['slug']}" data-section-label="{html_mod.escape(essay['part'])}" data-section-color="{pi['color']}">
+  <div class="back-bar-inner">
+    <a href="/{pi['slug']}" style="color:{pi['color']}">&larr; {html_mod.escape(essay['part'])}</a>
+  </div>
+</div>
+
+{make_search_overlay()}
 
 <article class="page-container">
+  {breadcrumbs}
   <header class="article-header">
     <div class="article-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(essay['part'])}</div>
     <h1>{te}</h1>
@@ -494,21 +665,23 @@ def build_article(essay, all_essays):
       <span class="meta-sep">&middot;</span>
       <span class="article-reading-time">{essay['reading_time']} min read</span>
     </div>{chart_badge}
-  </header>
+  </header>{hero_img_html}
 {audio_player}
+{discussion_player}
   <div class="article-body">
     {body}
   </div>
 
   <div class="article-footer">
     <a href="/{pi['slug']}" class="back-to-section" style="color:{pi['color']}">&larr; All {html_mod.escape(essay['part'])} articles</a>
+    <a href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">&uarr; Back to top</a>
   </div>
 {rel_html}
 </article>
 
 {make_footer()}
 {chart_script}
-{make_audio_player_script() if has_audio else ''}
+{make_audio_player_script() if (has_audio or has_discussion) else ''}
 </body>
 </html>'''
 
@@ -517,21 +690,35 @@ def build_section(part_name, essays, new_slugs=None):
         new_slugs = set()
     pi = PARTS[part_name]
     se = [e for e in essays if e['part'] == part_name]
-    cards = ""
+
+    # Build newspaper-style article list with thumbnails
+    article_items = ""
     for e in se:
         chart_count = len(ALL_CHARTS.get(e['slug'], []))
-        chart_tag = f' <span class="card-charts">&middot; {chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
-        audio_tag = ' <span class="card-audio">&middot; Audio</span>' if e.get('has_audio') else ''
+        chart_tag = f'<span>{chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
+        audio_tag = '<span>Audio</span>' if e.get('has_audio') else ''
         new_badge = '<span class="card-new-badge">New</span> ' if e['slug'] in new_slugs else ''
-        cards += f'''    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
-      <div class="card-kicker" style="color:{pi['color']}">{new_badge}{pi['label']}</div>
-      <h3>{html_mod.escape(e['title'])}</h3>
-      <p>{html_mod.escape(e['excerpt'][:200])}</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:{pi['color']}">Read article &rarr;</span>
-        <span class="card-time">{e['reading_time']} min{chart_tag}{audio_tag}</span>
+
+        hero_img = get_hero_image(e['slug'])
+        thumb_html = f'<img src="{hero_img}" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">' if hero_img else ''
+
+        article_items += f'''    <a href="/articles/{html_mod.escape(e['slug'])}" class="section-article-item">
+      {thumb_html}
+      <div class="section-article-text">
+        <h3>{new_badge}{html_mod.escape(e['title'])}</h3>
+        <p>{html_mod.escape(e['excerpt'][:180])}</p>
+        <div class="section-article-meta">
+          <span>{e['reading_time']} min read</span>
+          {chart_tag}
+          {audio_tag}
+        </div>
       </div>
     </a>\n'''
+
+    breadcrumbs = make_breadcrumbs([
+        ('Home', '/'),
+        (f'{pi["label"]}: {part_name}', None),
+    ])
 
     return f'''<!DOCTYPE html>
 <html lang="en">
@@ -542,8 +729,11 @@ def build_section(part_name, essays, new_slugs=None):
 
 {make_nav(part_name)}
 
+{make_search_overlay()}
+
 <section class="section-hero" style="--section-color:{pi['color']};--section-soft:{pi['color_soft']}">
   <div class="section-hero-inner">
+    {breadcrumbs}
     <span class="section-icon">{pi['icon']}</span>
     <h1>{pi['label']}: {html_mod.escape(part_name)}</h1>
     <p class="section-hero-desc">{html_mod.escape(pi['desc'])}</p>
@@ -551,10 +741,8 @@ def build_section(part_name, essays, new_slugs=None):
   </div>
 </section>
 
-<div class="section-grid">
-  <div class="cards">
-{cards}  </div>
-</div>
+<div class="section-article-list">
+{article_items}</div>
 
 {make_footer()}
 </body>
@@ -600,7 +788,12 @@ def build_homepage(essays, new_essays=None):
         audio_badge = '<span class="latest-badge latest-audio-badge">Audio</span>' if e.get('has_audio') else ''
         size_class = "latest-hero" if i == 0 else "latest-secondary"
         new_tag = '<span class="latest-new">New</span> ' if e.get('is_new') else ''
+
+        hero_img = get_hero_image(e['slug'])
+        img_html = f'<img src="{hero_img}" alt="" class="latest-card-img" loading="lazy">' if hero_img else ''
+
         latest_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
+        {img_html}
         <div class="latest-kicker">{new_tag}{pi['label']} &middot; {html_mod.escape(e['part'])} {badge} {audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{html_mod.escape(e['excerpt'][:200])}</p>
@@ -777,9 +970,11 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
     narrated_count = len(audio_essays)
 
     listen_cards_html = ""
+    play_all_items = []
     for ae in audio_essays:
         pi = PARTS.get(ae['part'], PARTS['Society'])
         listen_time = max(1, round(ae['reading_time'] * 250 / 189))
+        section_label = f"{pi['label']} · {ae['part']}"
         listen_cards_html += f'''      <a href="/articles/{html_mod.escape(ae['slug'])}" class="listen-card" style="--card-accent:{pi['color']}">
         <div class="listen-card-top">
           <svg class="listen-card-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
@@ -787,15 +982,36 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
         </div>
         <div class="listen-card-title">{html_mod.escape(ae['title'])}</div>
         <div class="listen-card-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(ae['part'])}</div>
+        <button class="q-add-btn" data-queue-slug="{html_mod.escape(ae['slug'])}" data-queue-title="{html_mod.escape(ae['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="/audio/{html_mod.escape(ae['slug'])}.mp3" aria-label="Add to queue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          <span class="q-add-label">Add to Queue</span>
+        </button>
       </a>\n'''
+        play_all_items.append({
+            'slug': ae['slug'],
+            'title': ae['title'],
+            'section': section_label,
+            'color': pi['color'],
+            'url': f"/audio/{ae['slug']}.mp3",
+        })
+
+    play_all_json = html_mod.escape(json.dumps(play_all_items))
 
     listen_section_html = ""
     if narrated_count > 0:
         listen_section_html = f"""
 <div class="listen-wrap">
   <div class="listen-inner">
-    <h2 class="listen-title">Listen to History</h2>
-    <p class="listen-intro">{narrated_count} articles narrated by a British voice. Press play.</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.3rem;">
+      <div>
+        <h2 class="listen-title">Listen to History</h2>
+        <p class="listen-intro" style="margin-bottom:0">{narrated_count} articles available as audio. Queue them up and listen on the go.</p>
+      </div>
+      <button class="q-play-all" id="queueAllBtn" data-items="{play_all_json}">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Queue All
+      </button>
+    </div>
     <div class="listen-scroll">
 {listen_cards_html}    </div>
   </div>
@@ -826,6 +1042,8 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 <body>
 
 {make_nav()}
+
+{make_search_overlay()}
 
 <section class="hero">
   <h1>History Future <em>Now</em></h1>
@@ -877,10 +1095,13 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 
   <div class="featured-banner">
     <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="featured-card">
-      <div class="featured-badge">Featured &middot; 10 interactive charts</div>
-      <h2>The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</h2>
-      <p>No country in human history has recovered from a sustained fertility rate below 1.5. The forces that drive the decline &mdash; urbanisation, education, contraception &mdash; are things we call progress. The clock is already at zero.</p>
-      <span class="featured-cta">Read the full analysis &rarr;</span>
+      {"" if not get_hero_image("the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people") else '<img src="' + get_hero_image("the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people") + '" alt="" class="featured-img" loading="lazy">'}
+      <div class="featured-text">
+        <div class="featured-badge">Featured &middot; 10 interactive charts</div>
+        <h2>The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</h2>
+        <p>No country in human history has recovered from a sustained fertility rate below 1.5. The forces that drive the decline &mdash; urbanisation, education, contraception &mdash; are things we call progress. The clock is already at zero.</p>
+        <span class="featured-cta">Read the full analysis &rarr;</span>
+      </div>
     </a>
   </div>
 
@@ -1024,7 +1245,28 @@ Allow: /
         llms_lines.append("")
 
     (OUTPUT_DIR / "llms.txt").write_text("\n".join(llms_lines), encoding='utf-8')
-    print("  Built sitemap.xml, robots.txt, llms.txt")
+
+    # search-index.json for client-side search
+    search_index = []
+    for e in essays:
+        pi = PARTS[e['part']]
+        n_charts = len(all_charts.get(e['slug'], []))
+        search_index.append({
+            "title": e['title'],
+            "slug": e['slug'],
+            "section": e['part'],
+            "sectionSlug": pi['slug'],
+            "label": pi['label'],
+            "color": pi['color'],
+            "excerpt": e['excerpt'][:200],
+            "readingTime": e['reading_time'],
+            "chartCount": n_charts,
+            "hasAudio": e.get('has_audio', False),
+        })
+    (OUTPUT_DIR / "search-index.json").write_text(
+        json.dumps(search_index, ensure_ascii=False), encoding='utf-8')
+
+    print("  Built sitemap.xml, robots.txt, llms.txt, search-index.json")
 
     total = len(essays) + len(PARTS) + 1
     print(f"\n✅ Site built: {total} HTML pages")

@@ -13,6 +13,8 @@
 <meta property="og:locale" content="en_GB">
 <meta property="article:author" content="Tristan Fischer">
 <meta property="og:url" content="https://www.historyfuturenow.com/articles/forging-peace-from-centuries-of-war-to-ukraines-future">
+<meta property="og:image" content="https://www.historyfuturenow.com/images/articles/forging-peace-from-centuries-of-war-to-ukraines-future/hero.png">
+<meta name="twitter:image" content="https://www.historyfuturenow.com/images/articles/forging-peace-from-centuries-of-war-to-ukraines-future/hero.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Forging Peace: From Centuries of War to Ukraine&#x27;s Future — History Future Now">
 <meta name="twitter:description" content="For centuries, war has been a brutal constant in human affairs, with nations locked in cycles of conquest and revenge that have left countless lives shattered. Yet even from the ashes of the most devastating conflicts, lasting peace has managed to emerge through the alchemy of pragmatic diplomacy an">
@@ -28,10 +30,17 @@
 
 <nav class="site-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/">History Future <span>Now</span></a>
-    <button class="nav-toggle" aria-label="Menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <div class="nav-top-row">
+      <a class="nav-logo" href="/">History Future <span>Now</span></a>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="nav-toggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/natural-resources">Resources</a></li>
@@ -41,8 +50,31 @@
     </ul>
   </div>
 </nav>
+<div class="back-bar" id="backBar" data-section-href="/balance-of-power" data-section-label="Global Balance of Power" data-section-color="#2563eb">
+  <div class="back-bar-inner">
+    <a href="/balance-of-power" style="color:#2563eb">&larr; Global Balance of Power</a>
+  </div>
+</div>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search articles" aria-hidden="true">
+  <div class="search-overlay-inner">
+    <div class="search-header">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." autocomplete="off" autofocus>
+      </div>
+      <button class="search-close" id="searchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-hint">Type to search across all articles</div>
+    </div>
+  </div>
+</div>
 
 <article class="page-container">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span class="breadcrumb-sep">/</span> <a href="/balance-of-power">Global Balance of Power</a> <span class="breadcrumb-sep">/</span> <span class="breadcrumb-current">Forging Peace: From Centuries of War to Ukraine...</span></nav>
   <header class="article-header">
     <div class="article-kicker" style="color:#2563eb">Part 2 &middot; Global Balance of Power</div>
     <h1>Forging Peace: From Centuries of War to Ukraine&#x27;s Future</h1>
@@ -52,6 +84,9 @@
       <span class="article-reading-time">12 min read</span>
     </div>
   </header>
+  <div class="article-hero-wrap">
+    <img src="/images/articles/forging-peace-from-centuries-of-war-to-ukraines-future/hero.png" alt="Editorial illustration for Forging Peace: From Centuries of War to Ukraine&#x27;s Future" class="article-hero-img" loading="lazy" width="1200" height="675">
+  </div>
 
   <div class="audio-player" id="audioPlayer">
     <div class="audio-player-inner">
@@ -68,9 +103,14 @@
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
       <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="forging-peace-from-centuries-of-war-to-ukraines-future" data-queue-title="Forging Peace: From Centuries of War to Ukraine&#x27;s Future" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/forging-peace-from-centuries-of-war-to-ukraines-future.mp3" aria-label="Add to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
     </div>
     <audio id="audioElement" preload="none" src="/audio/forging-peace-from-centuries-of-war-to-ukraines-future.mp3"></audio>
   </div>
+
   <div class="article-body">
     <p>For centuries, war has been a brutal constant in human affairs, with nations locked in cycles of conquest and revenge that have left countless lives shattered. Yet even from the ashes of the most devastating conflicts, lasting peace has managed to emerge through the alchemy of pragmatic diplomacy and difficult compromises.</p>
 <p>As the world watches Russia&rsquo;s invasion of Ukraine with horror, it is all too easy to succumb to a sense of despair – that this conflict, like so many before it, will rage unabated until one side is utterly vanquished. History, however, offers a more nuanced perspective. Time and again, wars that once seemed intractable have eventually found resolutions, however imperfect or painful.</p>
@@ -128,25 +168,26 @@
 
   <div class="article-footer">
     <a href="/balance-of-power" class="back-to-section" style="color:#2563eb">&larr; All Global Balance of Power articles</a>
+    <a href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">&uarr; Back to top</a>
   </div>
 
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
+        <span class="related-time">6 min read</span>
+      </a>
       <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
         <span class="related-time">11 min read</span>
       </a>
-      <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
+      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The North African Threat And Mediterranean Reunification</span>
-        <span class="related-time">17 min read</span>
+        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -165,59 +206,112 @@
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+
+<div class="queue-bar" id="queueBar">
+  <div class="queue-bar-inner">
+    <button class="q-nav-btn" id="queuePrev" aria-label="Previous" title="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="q-play-btn" id="queuePlayBtn" aria-label="Play">
+      <svg class="q-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="q-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+    </button>
+    <button class="q-nav-btn" id="queueNext" aria-label="Next" title="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+    <div class="q-track-info">
+      <div class="q-track-title" id="queueTitle">No track loaded</div>
+      <div class="q-track-section" id="queueSection"></div>
+    </div>
+    <div class="q-progress-wrap" id="queueProgressWrap">
+      <div class="q-progress-bar" id="queueProgressBar"></div>
+    </div>
+    <div class="q-time" id="queueTime">0:00</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span class="q-badge" id="queueCount">0</span>
+    </button>
+    <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</div>
+<div class="queue-panel" id="queuePanel">
+  <div class="q-panel-header">
+    <span class="q-panel-title">Queue</span>
+    <div class="q-panel-actions">
+      <button class="q-panel-btn" id="queueClear">Clear all</button>
+      <button class="q-panel-close" id="queuePanelClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="q-list" id="queueList"></div>
+</div>
 <script src="/js/nav.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/queue.js"></script>
 
 <script>
 (function(){
-  var audio=document.getElementById('audioElement');
-  if(!audio)return;
-  var btn=document.getElementById('audioPlayBtn');
-  var bar=document.getElementById('audioProgressBar');
-  var wrap=document.getElementById('audioProgressWrap');
-  var timeEl=document.getElementById('audioTime');
-  var speedEl=document.getElementById('audioSpeed');
-  var iconPlay=btn.querySelector('.audio-icon-play');
-  var iconPause=btn.querySelector('.audio-icon-pause');
-  var speeds=[1,1.25,1.5,1.75,2];
-  var si=0;
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
-  function fmt(s){
-    if(isNaN(s))return'0:00';
-    var m=Math.floor(s/60);
-    var sec=Math.floor(s%60);
-    return m+':'+(sec<10?'0':'')+sec;
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
   }
 
-  btn.onclick=function(){
-    if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
-    else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
-  };
-
-  audio.ontimeupdate=function(){
-    if(audio.duration){
-      bar.style.width=(audio.currentTime/audio.duration*100)+'%';
-      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
-    }
-  };
-
-  audio.onended=function(){
-    iconPlay.style.display='block';iconPause.style.display='none';
-    bar.style.width='0%';
-  };
-
-  wrap.onclick=function(e){
-    if(audio.duration){
-      var rect=wrap.getBoundingClientRect();
-      var pct=(e.clientX-rect.left)/rect.width;
-      audio.currentTime=pct*audio.duration;
-    }
-  };
-
-  speedEl.onclick=function(){
-    si=(si+1)%speeds.length;
-    audio.playbackRate=speeds[si];
-    speedEl.textContent=speeds[si]+'\u00d7';
-  };
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
 })();
 </script>
 </body>

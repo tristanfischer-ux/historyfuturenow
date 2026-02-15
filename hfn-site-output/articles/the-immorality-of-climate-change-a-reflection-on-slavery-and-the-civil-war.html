@@ -13,6 +13,7 @@
 <meta property="og:locale" content="en_GB">
 <meta property="article:author" content="Tristan Fischer">
 <meta property="og:url" content="https://www.historyfuturenow.com/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war">
+
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The immorality of climate change, a reflection on slavery and the Civil War — History Future Now">
 <meta name="twitter:description" content="Today, few people look back upon African slavery in the Americas as a good thing. There are no rousing speeches defending slave owners rights over their property, or demands not just to maintain the institution of slavery within their own borders but also to expand slavery into neighbouring states. ">
@@ -28,10 +29,17 @@
 
 <nav class="site-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/">History Future <span>Now</span></a>
-    <button class="nav-toggle" aria-label="Menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <div class="nav-top-row">
+      <a class="nav-logo" href="/">History Future <span>Now</span></a>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="nav-toggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/natural-resources" class="active">Resources</a></li>
@@ -41,8 +49,31 @@
     </ul>
   </div>
 </nav>
+<div class="back-bar" id="backBar" data-section-href="/natural-resources" data-section-label="Natural Resources" data-section-color="#0d9a5a">
+  <div class="back-bar-inner">
+    <a href="/natural-resources" style="color:#0d9a5a">&larr; Natural Resources</a>
+  </div>
+</div>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search articles" aria-hidden="true">
+  <div class="search-overlay-inner">
+    <div class="search-header">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." autocomplete="off" autofocus>
+      </div>
+      <button class="search-close" id="searchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-hint">Type to search across all articles</div>
+    </div>
+  </div>
+</div>
 
 <article class="page-container">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span class="breadcrumb-sep">/</span> <a href="/natural-resources">Natural Resources</a> <span class="breadcrumb-sep">/</span> <span class="breadcrumb-current">The immorality of climate change, a reflection ...</span></nav>
   <header class="article-header">
     <div class="article-kicker" style="color:#0d9a5a">Part 1 &middot; Natural Resources</div>
     <h1>The immorality of climate change, a reflection on slavery and the Civil War</h1>
@@ -52,6 +83,7 @@
       <span class="article-reading-time">5 min read</span>
     </div>
   </header>
+
 
   <div class="article-body">
     <p>Today, few people look back upon African slavery in the Americas as a good thing. There are no rousing speeches defending slave owners rights over their property, or demands not just to maintain the institution of slavery within their own borders but also to expand slavery into neighbouring states. There are no armies of poor white men fighting to keep rich white men&rsquo;s dominion over black slaves in the hope that one day, they too might become rich white men lording it over their own field and house negroes. And yet a mere 150 years ago, in the United States, this morality existed and a great Civil War took place between the Northern and the Southern states. 150 years is not a long time. Photography, telegraphs, railroads and huge factories existed. Many of your grand or great grand parents would have been alive.</p>
@@ -71,25 +103,26 @@
 
   <div class="article-footer">
     <a href="/natural-resources" class="back-to-section" style="color:#0d9a5a">&larr; All Natural Resources articles</a>
+    <a href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">&uarr; Back to top</a>
   </div>
 
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
+      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
+        <span class="related-time">25 min read</span>
+      </a>
       <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
         <span class="related-time">10 min read</span>
       </a>
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
-        <span class="related-time">25 min read</span>
+        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
+        <span class="related-time">8 min read</span>
       </a>
     </div>
   </section>
@@ -108,7 +141,52 @@
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+
+<div class="queue-bar" id="queueBar">
+  <div class="queue-bar-inner">
+    <button class="q-nav-btn" id="queuePrev" aria-label="Previous" title="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="q-play-btn" id="queuePlayBtn" aria-label="Play">
+      <svg class="q-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="q-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+    </button>
+    <button class="q-nav-btn" id="queueNext" aria-label="Next" title="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+    <div class="q-track-info">
+      <div class="q-track-title" id="queueTitle">No track loaded</div>
+      <div class="q-track-section" id="queueSection"></div>
+    </div>
+    <div class="q-progress-wrap" id="queueProgressWrap">
+      <div class="q-progress-bar" id="queueProgressBar"></div>
+    </div>
+    <div class="q-time" id="queueTime">0:00</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span class="q-badge" id="queueCount">0</span>
+    </button>
+    <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</div>
+<div class="queue-panel" id="queuePanel">
+  <div class="q-panel-header">
+    <span class="q-panel-title">Queue</span>
+    <div class="q-panel-actions">
+      <button class="q-panel-btn" id="queueClear">Clear all</button>
+      <button class="q-panel-close" id="queuePanelClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="q-list" id="queueList"></div>
+</div>
 <script src="/js/nav.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/queue.js"></script>
 
 
 </body>

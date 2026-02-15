@@ -13,6 +13,7 @@
 <meta property="og:locale" content="en_GB">
 <meta property="article:author" content="Tristan Fischer">
 <meta property="og:url" content="https://www.historyfuturenow.com/articles/dont-confuse-what-is-legal-with-what-is-morally-right">
+
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Don&#x27;t Confuse What Is Legal With What Is Morally Right — History Future Now">
 <meta name="twitter:description" content="Most people think of themselves as being “law abiding” citizens. People admonish those that break the law and feel that it is reasonable that transgressors should pay the consequences of crime. Broadly speaking, this makes sense. In most Western countries there is a strong correlation between what i">
@@ -28,10 +29,17 @@
 
 <nav class="site-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/">History Future <span>Now</span></a>
-    <button class="nav-toggle" aria-label="Menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <div class="nav-top-row">
+      <a class="nav-logo" href="/">History Future <span>Now</span></a>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="nav-toggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/natural-resources">Resources</a></li>
@@ -41,8 +49,31 @@
     </ul>
   </div>
 </nav>
+<div class="back-bar" id="backBar" data-section-href="/society" data-section-label="Society" data-section-color="#7c3aed">
+  <div class="back-bar-inner">
+    <a href="/society" style="color:#7c3aed">&larr; Society</a>
+  </div>
+</div>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search articles" aria-hidden="true">
+  <div class="search-overlay-inner">
+    <div class="search-header">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." autocomplete="off" autofocus>
+      </div>
+      <button class="search-close" id="searchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-hint">Type to search across all articles</div>
+    </div>
+  </div>
+</div>
 
 <article class="page-container">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span class="breadcrumb-sep">/</span> <a href="/society">Society</a> <span class="breadcrumb-sep">/</span> <span class="breadcrumb-current">Don&#x27;t Confuse What Is Legal With What Is Morall...</span></nav>
   <header class="article-header">
     <div class="article-kicker" style="color:#7c3aed">Part 4 &middot; Society</div>
     <h1>Don&#x27;t Confuse What Is Legal With What Is Morally Right</h1>
@@ -52,6 +83,7 @@
       <span class="article-reading-time">4 min read</span>
     </div>
   </header>
+
 
   <div class="article-body">
     <p>Most people think of themselves as being “law abiding” citizens. People admonish those that break the law and feel that it is reasonable that transgressors should pay the consequences of crime. Broadly speaking, this makes sense. In most Western countries there is a strong correlation between what is legal and what is morally right. But make no mistake. What is legal or illegal is not necessarily the same as what is morally right or wrong. Here are three good examples of laws that we now find morally wrong:</p>
@@ -74,25 +106,26 @@
 
   <div class="article-footer">
     <a href="/society" class="back-to-section" style="color:#7c3aed">&larr; All Society articles</a>
+    <a href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">&uarr; Back to top</a>
   </div>
 
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
+      <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
-        <span class="related-time">10 min read</span>
+        <span class="related-title">The 150 Year Life: How Radical Longevity Will Transform Our World</span>
+        <span class="related-time">14 min read</span>
       </a>
-      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
+      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
-        <span class="related-time">25 min read</span>
-      </a>
-      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
+        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
         <span class="related-time">12 min read</span>
+      </a>
+      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -111,7 +144,52 @@
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+
+<div class="queue-bar" id="queueBar">
+  <div class="queue-bar-inner">
+    <button class="q-nav-btn" id="queuePrev" aria-label="Previous" title="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="q-play-btn" id="queuePlayBtn" aria-label="Play">
+      <svg class="q-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="q-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+    </button>
+    <button class="q-nav-btn" id="queueNext" aria-label="Next" title="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+    <div class="q-track-info">
+      <div class="q-track-title" id="queueTitle">No track loaded</div>
+      <div class="q-track-section" id="queueSection"></div>
+    </div>
+    <div class="q-progress-wrap" id="queueProgressWrap">
+      <div class="q-progress-bar" id="queueProgressBar"></div>
+    </div>
+    <div class="q-time" id="queueTime">0:00</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span class="q-badge" id="queueCount">0</span>
+    </button>
+    <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</div>
+<div class="queue-panel" id="queuePanel">
+  <div class="q-panel-header">
+    <span class="q-panel-title">Queue</span>
+    <div class="q-panel-actions">
+      <button class="q-panel-btn" id="queueClear">Clear all</button>
+      <button class="q-panel-close" id="queuePanelClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="q-list" id="queueList"></div>
+</div>
 <script src="/js/nav.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/queue.js"></script>
 
 
 </body>

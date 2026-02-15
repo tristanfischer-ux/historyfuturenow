@@ -13,6 +13,7 @@
 <meta property="og:locale" content="en_GB">
 <meta property="article:author" content="Tristan Fischer">
 <meta property="og:url" content="https://www.historyfuturenow.com/society">
+
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Part 4: Society — History Future Now">
 <meta name="twitter:description" content="Democracy, religion, migration, identity — the human systems that bind us together.">
@@ -28,10 +29,17 @@
 
 <nav class="site-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/">History Future <span>Now</span></a>
-    <button class="nav-toggle" aria-label="Menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <div class="nav-top-row">
+      <a class="nav-logo" href="/">History Future <span>Now</span></a>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="nav-toggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/natural-resources">Resources</a></li>
@@ -42,198 +50,298 @@
   </div>
 </nav>
 
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search articles" aria-hidden="true">
+  <div class="search-overlay-inner">
+    <div class="search-header">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." autocomplete="off" autofocus>
+      </div>
+      <button class="search-close" id="searchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-hint">Type to search across all articles</div>
+    </div>
+  </div>
+</div>
+
 <section class="section-hero" style="--section-color:#7c3aed;--section-soft:#f5f0ff">
   <div class="section-hero-inner">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span class="breadcrumb-sep">/</span> <span class="breadcrumb-current">Part 4: Society</span></nav>
     <span class="section-icon">🏛️</span>
     <h1>Part 4: Society</h1>
     <p class="section-hero-desc">Democracy, religion, migration, identity — the human systems that bind us together.</p>
-    <div class="section-hero-count">20 articles</div>
+    <div class="section-hero-count">22 articles</div>
   </div>
 </section>
 
-<div class="section-grid">
-  <div class="cards">
-    <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>A Frozen Society: The Long Term Implications Of NSA’s Secrets</h3>
-      <p>History Future Now has been considering the historical and future implications of the NSA files that have been leaked bit by bit by Edward Snowden over the past few months. History Future Now is very </p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">3 min <span class="card-audio">&middot; Audio</span></span>
+<div class="section-article-list">
+    <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>A Frozen Society: The Long Term Implications Of NSA’s Secrets</h3>
+        <p>History Future Now has been considering the historical and future implications of the NSA files that have been leaked bit by bit by Edward Snowden over the past few months. History</p>
+        <div class="section-article-meta">
+          <span>3 min read</span>
+          
+          <span>Audio</span>
+        </div>
       </div>
     </a>
-    <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</h3>
-      <p>The history of Western civilization is often told as a grand narrative of progress, a triumphant march from ancient wisdom to modern enlightenment. But beneath this conventional story lies a deeper an</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">51 min <span class="card-audio">&middot; Audio</span></span>
+    <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</h3>
+        <p>The history of Western civilization is often told as a grand narrative of progress, a triumphant march from ancient wisdom to modern enlightenment. But beneath this conventional st</p>
+        <div class="section-article-meta">
+          <span>51 min read</span>
+          
+          <span>Audio</span>
+        </div>
       </div>
     </a>
-    <a href="/articles/emigration-colonies-of-the-mind-and-space" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Emigration: Colonies Of The Mind And Space</h3>
-      <p>Ever since our ancient ancestors walked out of Africa between 125,000 and 60,000 years ago humans have pushed themselves to explore and to emigrate to territories that would have been almost impossibl</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">6 min <span class="card-audio">&middot; Audio</span></span>
+    <a href="/articles/emigration-colonies-of-the-mind-and-space" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Emigration: Colonies Of The Mind And Space</h3>
+        <p>Ever since our ancient ancestors walked out of Africa between 125,000 and 60,000 years ago humans have pushed themselves to explore and to emigrate to territories that would have b</p>
+        <div class="section-article-meta">
+          <span>6 min read</span>
+          
+          <span>Audio</span>
+        </div>
       </div>
     </a>
-    <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>History Is Written By The Winners. And Europeans Are Losing.</h3>
-      <p>There are a lot of people to whom the quote &quot;history is written by the winners&quot; is attributed to. Winston Churchill frequently pops up in the context of a discussion that he had with Stalin on how the</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">6 min <span class="card-charts">&middot; 2 charts</span></span>
+    <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>History Is Written By The Winners. And Europeans Are Losing.</h3>
+        <p>There are a lot of people to whom the quote &quot;history is written by the winners&quot; is attributed to. Winston Churchill frequently pops up in the context of a discussion that he had wi</p>
+        <div class="section-article-meta">
+          <span>6 min read</span>
+          <span>2 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/is-democracy-the-opium-of-the-masses" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Is Democracy The Opium Of The Masses?</h3>
-      <p>Winston Churchill famously quipped that “Democracy is the worst form of government except for all the others that have been tried.” With this statement he was expressing a view that many share: yes, d</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">3 min <span class="card-audio">&middot; Audio</span></span>
+    <a href="/articles/is-democracy-the-opium-of-the-masses" class="section-article-item">
+      <img src="/images/articles/is-democracy-the-opium-of-the-masses/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>Is Democracy The Opium Of The Masses?</h3>
+        <p>Winston Churchill famously quipped that “Democracy is the worst form of government except for all the others that have been tried.” With this statement he was expressing a view tha</p>
+        <div class="section-article-meta">
+          <span>3 min read</span>
+          
+          <span>Audio</span>
+        </div>
       </div>
     </a>
-    <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</h3>
-      <p>Everybody knows that the world’s population has increased dramatically since 1930 – population 2 billion – to today – population 7.7. Most people also know that the fertility rate of women in most of </p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">10 min <span class="card-charts">&middot; 2 charts</span></span>
+    <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</h3>
+        <p>Everybody knows that the world’s population has increased dramatically since 1930 – population 2 billion – to today – population 7.7. Most people also know that the fertility rate </p>
+        <div class="section-article-meta">
+          <span>10 min read</span>
+          <span>2 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Prisons: We Never Used To Have Them. Will They Exist In The Future?</h3>
-      <p>Prisons as we know them are relatively new and we can thank Jeremy Bentham’s philosophy of utilitarianism in the 19th century for the first modern prisons. Previously people had been locked up, in jai</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">3 min</span>
+    <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Prisons: We Never Used To Have Them. Will They Exist In The Future?</h3>
+        <p>Prisons as we know them are relatively new and we can thank Jeremy Bentham’s philosophy of utilitarianism in the 19th century for the first modern prisons. Previously people had be</p>
+        <div class="section-article-meta">
+          <span>3 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/are-europeans-fundamentally-racist" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Are Europeans Fundamentally Racist?</h3>
-      <p>Switzerland has a unique form of democracy which allows for referendums to be held on any issue so long as the proponents gather a minimum of 100,000 certified signatures supporting the referendum. Th</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">18 min</span>
+    <a href="/articles/are-europeans-fundamentally-racist" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Are Europeans Fundamentally Racist?</h3>
+        <p>Switzerland has a unique form of democracy which allows for referendums to be held on any issue so long as the proponents gather a minimum of 100,000 certified signatures supportin</p>
+        <div class="section-article-meta">
+          <span>18 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Don&#x27;t Confuse What Is Legal With What Is Morally Right</h3>
-      <p>Most people think of themselves as being “law abiding” citizens. People admonish those that break the law and feel that it is reasonable that transgressors should pay the consequences of crime. Broadl</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">4 min</span>
+    <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Don&#x27;t Confuse What Is Legal With What Is Morally Right</h3>
+        <p>Most people think of themselves as being “law abiding” citizens. People admonish those that break the law and feel that it is reasonable that transgressors should pay the consequen</p>
+        <div class="section-article-meta">
+          <span>4 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Why The Nuclear Family Needs To Die, In Order For Us To Live</h3>
-      <p>The concept of a nuclear family is relatively recent – it is first mentioned in The Oxford English Dictionary in 1925 – and refers to a household that consists of a mother, father and their children. </p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">7 min</span>
+    <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Why The Nuclear Family Needs To Die, In Order For Us To Live</h3>
+        <p>The concept of a nuclear family is relatively recent – it is first mentioned in The Oxford English Dictionary in 1925 – and refers to a household that consists of a mother, father </p>
+        <div class="section-article-meta">
+          <span>7 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>The 150 Year Life: How Radical Longevity Will Transform Our World</h3>
-      <p>In the quest for immortality, humanity has long dreamed of extending the boundaries of life beyond the confines of our current existence. The tantalizing prospect of living to 150 years or more has ca</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">14 min <span class="card-charts">&middot; 3 charts</span></span>
+    <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>The 150 Year Life: How Radical Longevity Will Transform Our World</h3>
+        <p>In the quest for immortality, humanity has long dreamed of extending the boundaries of life beyond the confines of our current existence. The tantalizing prospect of living to 150 </p>
+        <div class="section-article-meta">
+          <span>14 min read</span>
+          <span>3 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed"><span class="card-new-badge">New</span> Part 4</div>
-      <h3>The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</h3>
-      <p>On February 4th 2026, a Washington Post reporter in a warzone in Ukraine learned by text message that she had been laid off. Nearly half the newsroom was gone in a single day. This is not just a story</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">20 min <span class="card-charts">&middot; 4 charts</span></span>
+    <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="section-article-item">
+      <img src="/images/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3><span class="card-new-badge">New</span> The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</h3>
+        <p>On February 4th 2026, a Washington Post reporter in a warzone in Ukraine learned by text message that she had been laid off. Nearly half the newsroom was gone in a single day. This</p>
+        <div class="section-article-meta">
+          <span>20 min read</span>
+          <span>4 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed"><span class="card-new-badge">New</span> Part 4</div>
-      <h3>The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</h3>
-      <p>In a small town in southern Italy, a school closed last year. Not because of budget cuts. Because there were no children left. That empty classroom is the future of the developed world. No country in </p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">12 min <span class="card-charts">&middot; 10 charts</span></span>
+    <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="section-article-item">
+      <img src="/images/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3><span class="card-new-badge">New</span> The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</h3>
+        <p>In a small town in southern Italy, a school closed last year. Not because of budget cuts. Because there were no children left. That empty classroom is the future of the developed w</p>
+        <div class="section-article-meta">
+          <span>12 min read</span>
+          <span>10 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/the-long-term-impact-of-covid-19" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>The Long Term Impact of Covid 19</h3>
-      <p>The Covid 19 pandemic is a genuinely historical event. Future historians will analyse the period leading up to the outbreak, searching for clues about why it got so bad so quickly, will then investiga</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">30 min <span class="card-charts">&middot; 6 charts</span></span>
+    <a href="/articles/the-long-term-impact-of-covid-19" class="section-article-item">
+      <img src="/images/articles/the-long-term-impact-of-covid-19/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>The Long Term Impact of Covid 19</h3>
+        <p>The Covid 19 pandemic is a genuinely historical event. Future historians will analyse the period leading up to the outbreak, searching for clues about why it got so bad so quickly,</p>
+        <div class="section-article-meta">
+          <span>30 min read</span>
+          <span>6 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>The Unintended Consequences of War: How the Loss of Young Men Transformed Women&#x27;s Roles in Society and ushered in the Welfare State</h3>
-      <p>Throughout history, war has left an indelible mark on society, transforming the lives of those who survive and reshaping the roles of both men and women. While the devastating impact of conflict on th</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">27 min <span class="card-charts">&middot; 7 charts</span></span>
+    <a href="/articles/the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3><span class="card-new-badge">New</span> The Silence Of The Scribes: How Every Civilisation That Controlled Speech Collapsed</h3>
+        <p>In February 2026, India ordered social media platforms to remove content within three hours of a government request. The EU&#x27;s Digital Services Act empowers bureaucrats to police on</p>
+        <div class="section-article-meta">
+          <span>10 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>What Does It Take To Get Europeans To Have A Revolution?</h3>
-      <p>In an online article about the youth unemployment crisis in Europe and Africa HFN asked a question: “What are all these people going to do?” to which a reader responded:</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">48 min <span class="card-charts">&middot; 6 charts</span></span>
+    <a href="/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state" class="section-article-item">
+      <img src="/images/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>The Unintended Consequences of War: How the Loss of Young Men Transformed Women&#x27;s Roles in Society and ushered in the Welfare State</h3>
+        <p>Throughout history, war has left an indelible mark on society, transforming the lives of those who survive and reshaping the roles of both men and women. While the devastating impa</p>
+        <div class="section-article-meta">
+          <span>27 min read</span>
+          <span>7 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>What The History Of Immigration Teaches Us About Europe’s Future</h3>
-      <p>Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst. That is a problem as it is an important subject which doesn&#x27;</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">25 min <span class="card-charts">&middot; 3 charts</span></span>
+    <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>What Does It Take To Get Europeans To Have A Revolution?</h3>
+        <p>In an online article about the youth unemployment crisis in Europe and Africa HFN asked a question: “What are all these people going to do?” to which a reader responded:</p>
+        <div class="section-article-meta">
+          <span>48 min read</span>
+          <span>6 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Who Benefits From Our Increased Social Fragmentation?</h3>
-      <p>Cable television and satellite radio stations have been praised for providing greater choice and criticised for the fragmentation of our societies. New social media apps and websites allow this choice</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">4 min</span>
+    <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="section-article-item">
+      <img src="/images/articles/what-the-history-of-immigration-teaches-us-about-europes-future/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>What The History Of Immigration Teaches Us About Europe’s Future</h3>
+        <p>Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst. That is a problem as it is an important </p>
+        <div class="section-article-meta">
+          <span>25 min read</span>
+          <span>3 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Why God Needs The Government: Multiculturalism Vs Monotheism</h3>
-      <p>HFN looks at the worship of Aton, the first monotheistic religion over 3,350 years ago. We examine how changes in European attitudes towards Christianity today may make Islam more rigid in the future.</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">5 min</span>
+    <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="section-article-item">
+      <img src="/images/articles/who-benefits-from-our-increased-social-fragmentation/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>Who Benefits From Our Increased Social Fragmentation?</h3>
+        <p>Cable television and satellite radio stations have been praised for providing greater choice and criticised for the fragmentation of our societies. New social media apps and websit</p>
+        <div class="section-article-meta">
+          <span>4 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/why-is-bisexuality-becoming-mainstream" class="card" data-section="society">
-      <div class="card-kicker" style="color:#7c3aed">Part 4</div>
-      <h3>Why Is Bisexuality Becoming Mainstream?</h3>
-      <p>Grey’s Anatomy, a TV series set in a Seattle hospital, has a senior female surgeon hopping into bed with a male colleague and then hopping into bed with a female colleague, whom she eventually marries</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#7c3aed">Read article &rarr;</span>
-        <span class="card-time">12 min</span>
+    <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3><span class="card-new-badge">New</span> Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</h3>
+        <p>Elon Musk&#x27;s DOGE initiative has identified $215 billion in US government savings and aims for $2 trillion. The EU&#x27;s regulatory apparatus grows by thousands of pages each year. Ever</p>
+        <div class="section-article-meta">
+          <span>10 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-  </div>
+    <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Why God Needs The Government: Multiculturalism Vs Monotheism</h3>
+        <p>HFN looks at the worship of Aton, the first monotheistic religion over 3,350 years ago. We examine how changes in European attitudes towards Christianity today may make Islam more </p>
+        <div class="section-article-meta">
+          <span>5 min read</span>
+          
+          
+        </div>
+      </div>
+    </a>
+    <a href="/articles/why-is-bisexuality-becoming-mainstream" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Why Is Bisexuality Becoming Mainstream?</h3>
+        <p>Grey’s Anatomy, a TV series set in a Seattle hospital, has a senior female surgeon hopping into bed with a male colleague and then hopping into bed with a female colleague, whom sh</p>
+        <div class="section-article-meta">
+          <span>12 min read</span>
+          
+          
+        </div>
+      </div>
+    </a>
 </div>
 
 <footer class="site-footer">
@@ -249,6 +357,51 @@
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+
+<div class="queue-bar" id="queueBar">
+  <div class="queue-bar-inner">
+    <button class="q-nav-btn" id="queuePrev" aria-label="Previous" title="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="q-play-btn" id="queuePlayBtn" aria-label="Play">
+      <svg class="q-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="q-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+    </button>
+    <button class="q-nav-btn" id="queueNext" aria-label="Next" title="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+    <div class="q-track-info">
+      <div class="q-track-title" id="queueTitle">No track loaded</div>
+      <div class="q-track-section" id="queueSection"></div>
+    </div>
+    <div class="q-progress-wrap" id="queueProgressWrap">
+      <div class="q-progress-bar" id="queueProgressBar"></div>
+    </div>
+    <div class="q-time" id="queueTime">0:00</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span class="q-badge" id="queueCount">0</span>
+    </button>
+    <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</div>
+<div class="queue-panel" id="queuePanel">
+  <div class="q-panel-header">
+    <span class="q-panel-title">Queue</span>
+    <div class="q-panel-actions">
+      <button class="q-panel-btn" id="queueClear">Clear all</button>
+      <button class="q-panel-close" id="queuePanelClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="q-list" id="queueList"></div>
+</div>
 <script src="/js/nav.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/queue.js"></script>
 </body>
 </html>

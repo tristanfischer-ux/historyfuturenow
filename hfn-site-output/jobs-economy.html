@@ -13,6 +13,7 @@
 <meta property="og:locale" content="en_GB">
 <meta property="article:author" content="Tristan Fischer">
 <meta property="og:url" content="https://www.historyfuturenow.com/jobs-economy">
+
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Part 3: Jobs &amp; Economy — History Future Now">
 <meta name="twitter:description" content="Automation, trade, debt, and the future of work in an age of intelligent machines.">
@@ -28,10 +29,17 @@
 
 <nav class="site-nav">
   <div class="nav-inner">
-    <a class="nav-logo" href="/">History Future <span>Now</span></a>
-    <button class="nav-toggle" aria-label="Menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+    <div class="nav-top-row">
+      <a class="nav-logo" href="/">History Future <span>Now</span></a>
+      <div class="nav-right">
+        <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="nav-toggle" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/natural-resources">Resources</a></li>
@@ -42,108 +50,178 @@
   </div>
 </nav>
 
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-label="Search articles" aria-hidden="true">
+  <div class="search-overlay-inner">
+    <div class="search-header">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search articles..." autocomplete="off" autofocus>
+      </div>
+      <button class="search-close" id="searchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-hint">Type to search across all articles</div>
+    </div>
+  </div>
+</div>
+
 <section class="section-hero" style="--section-color:#b8751a;--section-soft:#fef8ee">
   <div class="section-hero-inner">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span class="breadcrumb-sep">/</span> <span class="breadcrumb-current">Part 3: Jobs &amp; Economy</span></nav>
     <span class="section-icon">⚙️</span>
     <h1>Part 3: Jobs &amp; Economy</h1>
     <p class="section-hero-desc">Automation, trade, debt, and the future of work in an age of intelligent machines.</p>
-    <div class="section-hero-count">10 articles</div>
+    <div class="section-hero-count">12 articles</div>
   </div>
 </section>
 
-<div class="section-grid">
-  <div class="cards">
-    <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All</h3>
-      <p>Government debt levels in the United States, the European Union and in Japan are at all time historic highs. After decades of borrowing money to pay for regular annual expenditure and frequent militar</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">6 min <span class="card-charts">&middot; 5 charts</span> <span class="card-audio">&middot; Audio</span></span>
+<div class="section-article-list">
+    <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="section-article-item">
+      <img src="/images/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All</h3>
+        <p>Government debt levels in the United States, the European Union and in Japan are at all time historic highs. After decades of borrowing money to pay for regular annual expenditure </p>
+        <div class="section-article-meta">
+          <span>6 min read</span>
+          <span>5 charts</span>
+          <span>Audio</span>
+        </div>
       </div>
     </a>
-    <a href="/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</h3>
-      <p>Why do so many Western politicians and economists promote a trading system that increases Western unemployment levels and results in a gigantic transfer of wealth to the East every year?</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">9 min <span class="card-charts">&middot; 3 charts</span></span>
+    <a href="/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely" class="section-article-item">
+      <img src="/images/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</h3>
+        <p>Why do so many Western politicians and economists promote a trading system that increases Western unemployment levels and results in a gigantic transfer of wealth to the East every</p>
+        <div class="section-article-meta">
+          <span>9 min read</span>
+          <span>3 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>Keynes And Hayek Are Both Dead, And Wrong</h3>
-      <p>Despite the fact that both John Maynard Keynes and Friedrich August Hayek are dead, their ideas are very much alive today and form the basis of whether governments choose austerity or stimulus as a wa</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">14 min <span class="card-charts">&middot; 2 charts</span></span>
+    <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="section-article-item">
+      <img src="/images/articles/keynes-and-hayek-are-both-dead-and-wrong/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>Keynes And Hayek Are Both Dead, And Wrong</h3>
+        <p>Despite the fact that both John Maynard Keynes and Friedrich August Hayek are dead, their ideas are very much alive today and form the basis of whether governments choose austerity</p>
+        <div class="section-article-meta">
+          <span>14 min read</span>
+          <span>2 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</h3>
-      <p>Platform technologies are the foundational building blocks that serve as springboards for a vast array of new products, services, and industries. These technologies, which include artificial intellige</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">35 min <span class="card-charts">&middot; 3 charts</span></span>
+    <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="section-article-item">
+      <img src="/images/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</h3>
+        <p>Platform technologies are the foundational building blocks that serve as springboards for a vast array of new products, services, and industries. These technologies, which include </p>
+        <div class="section-article-meta">
+          <span>35 min read</span>
+          <span>3 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/robotics-and-slavery" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>Robotics And Slavery</h3>
-      <p>Rapid advancements in humanoid robotics and artificial intelligence are bringing us closer to a reality once confined to the realm of science fiction.</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">27 min <span class="card-charts">&middot; 3 charts</span></span>
+    <a href="/articles/robotics-and-slavery" class="section-article-item">
+      <img src="/images/articles/robotics-and-slavery/hero.png" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">
+      <div class="section-article-text">
+        <h3>Robotics And Slavery</h3>
+        <p>Rapid advancements in humanoid robotics and artificial intelligence are bringing us closer to a reality once confined to the realm of science fiction.</p>
+        <div class="section-article-meta">
+          <span>27 min read</span>
+          <span>3 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</h3>
-      <p>Many years ago HFN spent a wonderful day in the company of a beautiful Russian woman. She had a warm smile and long legs that never seemed to stop. She was also very smart and had a master’s degree in</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">13 min</span>
+    <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</h3>
+        <p>Many years ago HFN spent a wonderful day in the company of a beautiful Russian woman. She had a warm smile and long legs that never seemed to stop. She was also very smart and had </p>
+        <div class="section-article-meta">
+          <span>13 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</h3>
-      <p>Why do so many Western politicians and economists promote a trading system that increases Western unemployment levels and results in a gigantic transfer of wealth to the East every year?</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">9 min <span class="card-charts">&middot; 2 charts</span></span>
+    <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</h3>
+        <p>Why do so many Western politicians and economists promote a trading system that increases Western unemployment levels and results in a gigantic transfer of wealth to the East every</p>
+        <div class="section-article-meta">
+          <span>9 min read</span>
+          <span>2 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>The Paradox of Mass Migration and Robots in the Age of Automation</h3>
-      <p>We stand at a pivotal juncture in human history, facing two seemingly contradictory narratives about the future of work and society. On one side, we hear urgent calls for increased migration to addres</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">13 min <span class="card-charts">&middot; 2 charts</span></span>
+    <a href="/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>The Paradox of Mass Migration and Robots in the Age of Automation</h3>
+        <p>We stand at a pivotal juncture in human history, facing two seemingly contradictory narratives about the future of work and society. On one side, we hear urgent calls for increased</p>
+        <div class="section-article-meta">
+          <span>13 min read</span>
+          <span>2 charts</span>
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>The Perils of Prediction: Lessons from History on Navigating an Uncertain Future</h3>
-      <p>Can we truly predict the future, or are we destined to repeat the mistakes of the past? This question has captivated minds for millennia, from ancient prophets to writers like History Future Now. Desp</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">20 min</span>
+    <a href="/articles/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>The Perils of Prediction: Lessons from History on Navigating an Uncertain Future</h3>
+        <p>Can we truly predict the future, or are we destined to repeat the mistakes of the past? This question has captivated minds for millennia, from ancient prophets to writers like Hist</p>
+        <div class="section-article-meta">
+          <span>20 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-    <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="card" data-section="jobs-economy">
-      <div class="card-kicker" style="color:#b8751a">Part 3</div>
-      <h3>Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</h3>
-      <p>In a world which is seeing a simultaneous increase in the capabilities of robots and artificial intelligence with the capacity to take over many factory and service sector jobs, and a significant incr</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:#b8751a">Read article &rarr;</span>
-        <span class="card-time">7 min <span class="card-charts">&middot; 3 charts</span></span>
+    <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3><span class="card-new-badge">New</span> The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</h3>
+        <p>In February 2026, the United States signed a trade deal with Taiwan that included $250 billion in semiconductor investment pledges. Tariffs are back. Industrial policy is back. Aft</p>
+        <div class="section-article-meta">
+          <span>10 min read</span>
+          
+          
+        </div>
       </div>
     </a>
-  </div>
+    <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3><span class="card-new-badge">New</span> The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</h3>
+        <p>Microsoft&#x27;s AI chief predicts virtually all white-collar tasks will be automated within 18 months. South Korea&#x27;s fertility rate is 0.72. Japan sells more adult nappies than baby na</p>
+        <div class="section-article-meta">
+          <span>12 min read</span>
+          
+          
+        </div>
+      </div>
+    </a>
+    <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="section-article-item">
+      
+      <div class="section-article-text">
+        <h3>Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</h3>
+        <p>In a world which is seeing a simultaneous increase in the capabilities of robots and artificial intelligence with the capacity to take over many factory and service sector jobs, an</p>
+        <div class="section-article-meta">
+          <span>7 min read</span>
+          <span>3 charts</span>
+          
+        </div>
+      </div>
+    </a>
 </div>
 
 <footer class="site-footer">
@@ -159,6 +237,51 @@
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+
+<div class="queue-bar" id="queueBar">
+  <div class="queue-bar-inner">
+    <button class="q-nav-btn" id="queuePrev" aria-label="Previous" title="Previous">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="q-play-btn" id="queuePlayBtn" aria-label="Play">
+      <svg class="q-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="q-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+    </button>
+    <button class="q-nav-btn" id="queueNext" aria-label="Next" title="Next">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+    <div class="q-track-info">
+      <div class="q-track-title" id="queueTitle">No track loaded</div>
+      <div class="q-track-section" id="queueSection"></div>
+    </div>
+    <div class="q-progress-wrap" id="queueProgressWrap">
+      <div class="q-progress-bar" id="queueProgressBar"></div>
+    </div>
+    <div class="q-time" id="queueTime">0:00</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span class="q-badge" id="queueCount">0</span>
+    </button>
+    <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</div>
+<div class="queue-panel" id="queuePanel">
+  <div class="q-panel-header">
+    <span class="q-panel-title">Queue</span>
+    <div class="q-panel-actions">
+      <button class="q-panel-btn" id="queueClear">Clear all</button>
+      <button class="q-panel-close" id="queuePanelClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="q-list" id="queueList"></div>
+</div>
 <script src="/js/nav.js"></script>
+<script src="/js/search.js"></script>
+<script src="/js/queue.js"></script>
 </body>
 </html>
