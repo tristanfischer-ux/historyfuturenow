@@ -54,6 +54,24 @@
     <div class="article-chart-badge">3 interactive charts</div>
   </header>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article</div>
+        <div class="audio-meta">50 min &middot; British narrator</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-bar" id="audioProgressBar"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>Christopher Marlowe’s play Doctor Faustus was written in 1592 and was based on an earlier German work about Dr Faustus, a talented German scholar at Wittenburg University who was frustrated by the limits of human knowledge. Feeling that he understood everything humanly possible, he made a bargain with Lucifer that for 24 years he would have access to knowledge that had hereto been hidden from humanity. In return, he would give his soul to the devil. The devil lived up to his side of the bargain and, 24 years later, comes to claim Faustus’ soul. Faustus, realising his mistake, is horrified and begs for mercy from God and the devil. But it is too late and he is dragged off. His friends later find his body, torn to pieces.</p>
 <p>In 1992 the West signed its own Faustian bargain. Not exactly with the devil, but for a promise of unparalleled wealth and a monopoly of power over the entire world. In return for this bargain we would leave our economies and societies in ruin and usher in the possible end of the West’s dominance over the world that it had enjoyed since the 1500s.</p>
@@ -273,15 +291,15 @@
         <span class="related-title">The North African Threat And Mediterranean Reunification</span>
         <span class="related-time">17 min read</span>
       </a>
-      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
+      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
-        <span class="related-time">9 min read</span>
+        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
+        <span class="related-time">12 min read</span>
       </a>
-      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
-        <span class="related-time">11 min read</span>
+        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
+        <span class="related-time">23 min read</span>
       </a>
     </div>
   </section>
@@ -316,33 +334,92 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('crisisChart1');
-new Chart(ctx,{type:'line',data:{labels:['1500','1600','1700','1800','1850','1900','1950','1980','2000','2010','2025'],
+const yrs=[1500,1600,1700,1800,1850,1900,1950,1980,2000,2010,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Western share of global trade (%)',[15,25,35,45,60,70,55,50,45,38,30],C.blue),
-ds('Financial sector as % of economy',[2,3,3,4,5,7,8,12,18,22,20],C.accent)
+dxy('Western share of global trade (%)',yrs,[15,25,35,45,60,70,55,50,45,38,30],C.blue),
+dxy('Financial sector as % of economy',yrs,[2,3,3,4,5,7,8,12,18,22,20],C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'}}}}});
+scales:{x:linX(1500,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('crisisChart2');
-new Chart(ctx,{type:'line',data:{labels:['1750','1800','1850','1900','1950','1980','2000','2010','2025'],
+const yrs=[1750,1800,1850,1900,1950,1980,2000,2010,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('China + India',[73,68,40,12,5,8,18,30,42],C.accent),
-ds('Europe + N. America',[22,28,55,82,85,70,62,48,38],C.blue)
+dxy('China + India',yrs,[73,68,40,12,5,8,18,30,42],C.accent),
+dxy('Europe + N. America',yrs,[22,28,55,82,85,70,62,48,38],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global manufacturing (%)',color:C.dim}}}}});
+scales:{x:linX(1750,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global manufacturing (%)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('crisisChart3');
-new Chart(ctx,{type:'line',data:{labels:['1950','1960','1970','1980','1990','2000','2006','2008','2010','2015','2020'],
+const yrs=[1950,1960,1970,1980,1990,2000,2006,2008,2010,2015,2020];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('UK financial services (% GDP)',[3,4,5,6,8,10,12,10,9,8,7],C.blue),
-ds('US financial services (% GDP)',[3,4,4,5,7,8,9,8,7,7,8],C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of GDP'}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Financial services as % of GDP',color:C.dim},min:0,max:15}}}});
+dxy('UK financial services (% GDP)',yrs,[3,4,5,6,8,10,12,10,9,8,7],C.blue),
+dxy('US financial services (% GDP)',yrs,[3,4,4,5,7,8,9,8,7,7,8],C.accent)
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.parsed.y+'% of GDP'}}},
+scales:{x:linX(1950,2020),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Financial services as % of GDP',color:C.dim},min:0,max:15}}}});
+})();
+</script>
+<script>
+(function(){
+  var audio=document.getElementById('audioElement');
+  if(!audio)return;
+  var btn=document.getElementById('audioPlayBtn');
+  var bar=document.getElementById('audioProgressBar');
+  var wrap=document.getElementById('audioProgressWrap');
+  var timeEl=document.getElementById('audioTime');
+  var speedEl=document.getElementById('audioSpeed');
+  var iconPlay=btn.querySelector('.audio-icon-play');
+  var iconPause=btn.querySelector('.audio-icon-pause');
+  var speeds=[1,1.25,1.5,1.75,2];
+  var si=0;
+
+  function fmt(s){
+    if(isNaN(s))return'0:00';
+    var m=Math.floor(s/60);
+    var sec=Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  btn.onclick=function(){
+    if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+    else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+  };
+
+  audio.ontimeupdate=function(){
+    if(audio.duration){
+      bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+    }
+  };
+
+  audio.onended=function(){
+    iconPlay.style.display='block';iconPause.style.display='none';
+    bar.style.width='0%';
+  };
+
+  wrap.onclick=function(e){
+    if(audio.duration){
+      var rect=wrap.getBoundingClientRect();
+      var pct=(e.clientX-rect.left)/rect.width;
+      audio.currentTime=pct*audio.duration;
+    }
+  };
+
+  speedEl.onclick=function(){
+    si=(si+1)%speeds.length;
+    audio.playbackRate=speeds[si];
+    speedEl.textContent=speeds[si]+'\u00d7';
+  };
 })();
 </script>
 </body>

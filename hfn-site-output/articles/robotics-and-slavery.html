@@ -238,10 +238,10 @@
         <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
         <span class="related-time">13 min read</span>
       </a>
-      <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
+      <a href="/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</span>
-        <span class="related-time">35 min read</span>
+        <span class="related-title">Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</span>
+        <span class="related-time">9 min read</span>
       </a>
       <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
@@ -281,6 +281,9 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('robotChart1');
@@ -296,13 +299,14 @@ y1:{grid:{display:false},ticks:{color:C.blue,callback:v=>v+'m/s'},title:{display
 })();
 
 (()=>{const ctx=document.getElementById('robotChart2');
-new Chart(ctx,{type:'line',data:{labels:['2020','2022','2024','2026','2028','2030','2035'],
+const yrs=[2020,2022,2024,2026,2028,2030,2035];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Robot cost per hour ($)',[12,9,7,5,3.5,2.5,1],C.accent),
-ds('US minimum wage ($/hr)',[7.25,7.25,7.25,8,9,10,12],C.blue,[5,3]),
-ds('China factory wage ($/hr)',[3.5,4,4.5,5,5.5,6,7],C.amber,[3,3])
+dxy('Robot cost per hour ($)',yrs,[12,9,7,5,3.5,2.5,1],C.accent),
+dxy('US minimum wage ($/hr)',yrs,[7.25,7.25,7.25,8,9,10,12],C.blue,[5,3]),
+dxy('China factory wage ($/hr)',yrs,[3.5,4,4.5,5,5.5,6,7],C.amber,[3,3])
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'/hr'},title:{display:true,text:'Cost per working hour ($)',color:C.dim}}}}});
+scales:{x:linX(2020,2035),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'/hr'},title:{display:true,text:'Cost per working hour ($)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('robotChart3');
@@ -319,5 +323,6 @@ title:i=>[eras[i[0].dataIndex].l],label:i=>{const e=eras[i.dataIndex];return e.s
 scales:{x:{type:'linear',min:1450,max:2070,grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();
 </script>
+
 </body>
 </html>

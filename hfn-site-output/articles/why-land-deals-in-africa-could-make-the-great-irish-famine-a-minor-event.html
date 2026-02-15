@@ -184,10 +184,10 @@
         <span class="related-title">Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition</span>
         <span class="related-time">6 min read</span>
       </a>
-      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
+      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
-        <span class="related-time">10 min read</span>
+        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
+        <span class="related-time">5 min read</span>
       </a>
       <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
@@ -227,6 +227,9 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('landChart1');
@@ -247,5 +250,6 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Arable hectares per capita',color:C.dim}}}}});
 })();
 </script>
+
 </body>
 </html>

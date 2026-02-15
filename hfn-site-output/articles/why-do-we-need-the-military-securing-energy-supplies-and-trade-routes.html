@@ -65,7 +65,7 @@ The military cost of supporting cheap oil, however, is even more extraordinary.<
 
 
 <p>The invasion of Iraq was based on evidence, eventually discovered to be false, that Iraq had both the capacity and intent to strike out against the West. After refusing to hand over the weapons of mass destruction that he did not possess Saddam Hussain found himself in the crosshairs of one of the most sophisticated military operations in history. In theory, once this threat had been eliminated, the military requirement of being in Iraq would disappear.</p>
-<p>The attacks on Libya fail both of these premises. Colonel Gaddafi posed no threat of invasion to any country and he was not threatening to attack any country either. In fact Colonel Gaddafi had recently received a visit from the then UK Prime Minister Blair in the hope of securing oil contracts for British companies.</p>
+<p>The attacks on Libya fail both of these premises. Colonel Gaddafi posed no threat of invasion to any country and he was not threatening to attack any country either. In fact Colonel Gaddafi had recently received a visit from the then UK Prime Minster Blair in the hope of securing oil contracts for British companies.</p>
 <p>Unfortunately, the aftermath of Western attacks on Iraq, Afghanistan and Libya has been chaos. None of the three countries is expected to be able to invade any country any time soon. None of those countries are expected to attack or launch attacks on our country any time soon either. Arguably, the chaos created is so great that these countries could spawn extremist groups that would launch terrorist attacks on the countries that had just invaded them. At the moment, however, they seem to be content to kill their compatriots of other ethnic and religious persuasions or the foreign military forces that remain.</p>
 
     <div class="chart-figure">
@@ -133,15 +133,15 @@ The military cost of supporting cheap oil, however, is even more extraordinary.<
         <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
         <span class="related-time">9 min read</span>
       </a>
+      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
+        <span class="related-time">6 min read</span>
+      </a>
       <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
         <span class="related-time">20 min read</span>
-      </a>
-      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
-        <span class="related-time">5 min read</span>
       </a>
     </div>
   </section>
@@ -176,6 +176,9 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('milChart1');
@@ -203,5 +206,6 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}}
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Oil flow (million bbl/day)',color:C.dim}}}}});
 })();
 </script>
+
 </body>
 </html>

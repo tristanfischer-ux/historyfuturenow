@@ -53,6 +53,24 @@
     </div>
   </header>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article</div>
+        <div class="audio-meta">8 min &middot; British narrator</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-bar" id="audioProgressBar"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/emigration-colonies-of-the-mind-and-space.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>Ever since our ancient ancestors walked out of Africa between 125,000 and 60,000 years ago humans have pushed themselves to explore and to emigrate to territories that would have been almost impossible to reach by the technology at the time. Imagine how hard and dangerous it would be to adapt to living in the frozen tundra of the arctic north or to settle Pacific islands like Easter Island, thousands of miles from the nearest land.</p>
 <p>Recorded history shows that even when the planet was reasonably settled it did not stop peoples from continuing to emigrate from one territory to another, generally uninvited and unwelcome by the people who were already there. Emigration became aggressive, whether you were a Mongol riding across the steppes into Europe or skirting the deserts into China, or a European sailing across the Atlantic to the Americas or a Bantu herding your cattle across the rivers, jungles and deserts into Southern Africa.</p>
@@ -93,20 +111,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
+      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
-        <span class="related-time">3 min read</span>
-      </a>
-      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Let's Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
-        <span class="related-time">10 min read</span>
+        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
+        <span class="related-time">20 min read</span>
       </a>
       <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
         <span class="related-time">7 min read</span>
+      </a>
+      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
+        <span class="related-time">3 min read</span>
       </a>
     </div>
   </section>
@@ -127,5 +145,58 @@
 </footer>
 <script src="/js/nav.js"></script>
 
+<script>
+(function(){
+  var audio=document.getElementById('audioElement');
+  if(!audio)return;
+  var btn=document.getElementById('audioPlayBtn');
+  var bar=document.getElementById('audioProgressBar');
+  var wrap=document.getElementById('audioProgressWrap');
+  var timeEl=document.getElementById('audioTime');
+  var speedEl=document.getElementById('audioSpeed');
+  var iconPlay=btn.querySelector('.audio-icon-play');
+  var iconPause=btn.querySelector('.audio-icon-pause');
+  var speeds=[1,1.25,1.5,1.75,2];
+  var si=0;
+
+  function fmt(s){
+    if(isNaN(s))return'0:00';
+    var m=Math.floor(s/60);
+    var sec=Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  btn.onclick=function(){
+    if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+    else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+  };
+
+  audio.ontimeupdate=function(){
+    if(audio.duration){
+      bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+    }
+  };
+
+  audio.onended=function(){
+    iconPlay.style.display='block';iconPause.style.display='none';
+    bar.style.width='0%';
+  };
+
+  wrap.onclick=function(e){
+    if(audio.duration){
+      var rect=wrap.getBoundingClientRect();
+      var pct=(e.clientX-rect.left)/rect.width;
+      audio.currentTime=pct*audio.duration;
+    }
+  };
+
+  speedEl.onclick=function(){
+    si=(si+1)%speeds.length;
+    audio.playbackRate=speeds[si];
+    speedEl.textContent=speeds[si]+'\u00d7';
+  };
+})();
+</script>
 </body>
 </html>

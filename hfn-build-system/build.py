@@ -12,6 +12,9 @@ from chart_defs import get_all_charts, COLORS as CHART_COLORS
 ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
 ARTICLES_DIR = OUTPUT_DIR / "articles"
+MANIFEST_PATH = Path(__file__).parent / "original_articles.txt"
+
+MAX_NEW_ARTICLES = 10
 
 PARTS = {
     "Natural Resources": {"order": 1, "slug": "natural-resources", "color": "#0d9a5a", "color_soft": "#effaf4", "label": "Part 1", "icon": "🌍", "desc": "Energy, food, water, land — the physical foundations that every civilisation depends on."},
@@ -31,6 +34,17 @@ PART_ALIASES = {
 }
 
 SITE_URL = "https://www.historyfuturenow.com"
+
+def load_original_slugs():
+    """Load the set of original article slugs from the manifest file."""
+    if not MANIFEST_PATH.exists():
+        return set()
+    slugs = set()
+    for line in MANIFEST_PATH.read_text(encoding='utf-8').splitlines():
+        line = line.strip()
+        if line and not line.startswith('#'):
+            slugs.add(line)
+    return slugs
 
 def fix_encoding(text):
     replacements = {
@@ -493,15 +507,18 @@ def build_article(essay, all_essays):
 </body>
 </html>'''
 
-def build_section(part_name, essays):
+def build_section(part_name, essays, new_slugs=None):
+    if new_slugs is None:
+        new_slugs = set()
     pi = PARTS[part_name]
     se = [e for e in essays if e['part'] == part_name]
     cards = ""
     for e in se:
         chart_count = len(ALL_CHARTS.get(e['slug'], []))
         chart_tag = f' <span class="card-charts">&middot; {chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
+        new_badge = '<span class="card-new-badge">New</span> ' if e['slug'] in new_slugs else ''
         cards += f'''    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
-      <div class="card-kicker" style="color:{pi['color']}">{pi['label']}</div>
+      <div class="card-kicker" style="color:{pi['color']}">{new_badge}{pi['label']}</div>
       <h3>{html_mod.escape(e['title'])}</h3>
       <p>{html_mod.escape(e['excerpt'][:200])}</p>
       <div class="card-meta">
@@ -537,7 +554,9 @@ def build_section(part_name, essays):
 </body>
 </html>'''
 
-def build_homepage(essays):
+def build_homepage(essays, new_essays=None):
+    if new_essays is None:
+        new_essays = []
     from chart_defs import get_all_charts, COLORS
     all_charts = get_all_charts()
 
@@ -549,28 +568,75 @@ def build_homepage(essays):
     # Sort essays by file modification time (newest first) for "latest" ordering
     import os
     for e in essays:
-        for f in ESSAYS_DIR.glob("*.md"):
-            if e['slug'] in str(f):
-                e['mtime'] = os.path.getmtime(f)
-                break
-        else:
-            e['mtime'] = 0
-    sorted_essays = sorted(essays, key=lambda x: x['mtime'], reverse=True)
+        if 'mtime' not in e:
+            for f in ESSAYS_DIR.glob("*.md"):
+                if e['slug'] in str(f):
+                    e['mtime'] = os.path.getmtime(f)
+                    break
+            else:
+                e['mtime'] = 0
+    sorted_essays = sorted(essays, key=lambda x: x.get('mtime', 0), reverse=True)
 
     # ── Latest Articles: top 3 newest as hero cards ──
-    latest = sorted_essays[:3]
+    # If new articles exist, the newest new article gets the hero slot
+    if new_essays:
+        hero_essay = new_essays[0]
+        remaining = [e for e in sorted_essays if e['slug'] != hero_essay['slug']]
+        latest = [hero_essay] + remaining[:2]
+    else:
+        latest = sorted_essays[:3]
+
     latest_html = ""
     for i, e in enumerate(latest):
         pi = PARTS[e['part']]
         n_charts = len(all_charts.get(e['slug'], []))
         badge = f'<span class="latest-badge">{n_charts} charts</span>' if n_charts else ''
         size_class = "latest-hero" if i == 0 else "latest-secondary"
+        new_tag = '<span class="latest-new">New</span> ' if e.get('is_new') else ''
         latest_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
-        <div class="latest-kicker"><span class="latest-new">New</span> {pi['label']} &middot; {html_mod.escape(e['part'])} {badge}</div>
+        <div class="latest-kicker">{new_tag}{pi['label']} &middot; {html_mod.escape(e['part'])} {badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{html_mod.escape(e['excerpt'][:200])}</p>
         <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
       </a>\n"""
+
+    # ── New Articles section (grouped by category) ──
+    new_section_html = ""
+    if new_essays:
+        new_cards_by_part = {}
+        for e in new_essays:
+            new_cards_by_part.setdefault(e['part'], []).append(e)
+
+        new_cards_html = ""
+        for pn in sorted(PARTS.keys(), key=lambda p: PARTS[p]['order']):
+            if pn not in new_cards_by_part:
+                continue
+            pi = PARTS[pn]
+            for e in new_cards_by_part[pn]:
+                n_charts = len(all_charts.get(e['slug'], []))
+                chart_badge = f' <span class="card-charts">&middot; {n_charts} chart{"s" if n_charts != 1 else ""}</span>' if n_charts > 0 else ''
+                new_cards_html += f"""    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
+      <div class="card-kicker" style="color:{pi['color']}"><span class="card-new-badge">New</span> {pi['label']}</div>
+      <h3>{html_mod.escape(e['title'])}</h3>
+      <p>{html_mod.escape(e['excerpt'][:160])}</p>
+      <div class="card-meta">
+        <span class="card-link" style="color:{pi['color']}">Read article &rarr;</span>
+        <span class="card-time">{e['reading_time']} min{chart_badge}</span>
+      </div>
+    </a>\n"""
+
+        new_section_html = f"""
+<div class="new-articles-wrap">
+  <div class="new-articles-inner">
+    <div class="new-articles-header">
+      <h2 class="new-articles-title">New Articles</h2>
+      <p class="new-articles-intro">Recently published analysis across all sections.</p>
+    </div>
+    <div class="cards">
+{new_cards_html}    </div>
+  </div>
+</div>
+"""
 
     # ── Data Stories: expanded carousel with 12 stories ──
     data_stories = [
@@ -579,10 +645,10 @@ def build_homepage(essays):
          'js':"""(()=>{const ctx=document.getElementById('heroWar');new Chart(ctx,{type:'bar',data:{labels:['Soviet\\nUnion','Germany','Germany\\n(WW1)','Confederate\\nStates','Russia\\n(WW1)','France\\n(WW1)'],datasets:[{data:[49,45,28,19,18.7,17],backgroundColor:['#c43425','#c43425cc','#7c3aed','#2563eb','#7c3aedcc','#b8751a'],borderRadius:3,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',callback:v=>v+'%',font:{size:9}}},y:{grid:{display:false},ticks:{color:'#8a8479',font:{size:9}}}}}});})();"""},
         {'slug':'the-renewables-and-battery-revolution',
          'chart_id':'heroSolar','headline':'Solar costs fell 99% in 40 years','sub':'The Renewables & Battery Revolution','color':'#0d9a5a',
-         'js':"""(()=>{const ctx=document.getElementById('heroSolar');new Chart(ctx,{type:'line',data:{labels:['1976','1985','1995','2000','2005','2010','2015','2020','2024'],datasets:[{data:[100,25,8,5,4,2,0.6,0.25,0.2],borderColor:'#0d9a5a',backgroundColor:'#0d9a5a18',fill:true,tension:.35,pointRadius:2,pointBackgroundColor:'#0d9a5a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'$'+i.raw+'/watt'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v}}}}});})();"""},
+         'js':"""(()=>{const ctx=document.getElementById('heroSolar');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1976,1985,1995,2000,2005,2010,2015,2020,2024],[100,25,8,5,4,2,0.6,0.25,0.2]),borderColor:'#0d9a5a',backgroundColor:'#0d9a5a18',fill:true,tension:.35,pointRadius:2,pointBackgroundColor:'#0d9a5a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'$'+i.parsed.y+'/watt'}}},scales:{x:{type:'linear',min:1976,max:2024,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v}}}}});})();"""},
         {'slug':'debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all',
          'chart_id':'heroDebt','headline':'A loaf of bread cost 3 billion Marks by 1923','sub':'Debt Jubilees & Hyperinflation','color':'#b8751a',
-         'js':"""(()=>{const ctx=document.getElementById('heroDebt');new Chart(ctx,{type:'line',data:{labels:['Jan 21','Jul 21','Jan 22','Jul 22','Jan 23','Apr 23','Jul 23','Sep 23','Nov 23'],datasets:[{data:[1,2,3,10,250,500,100000,2000000,3000000000],borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.3,pointRadius:2,pointBackgroundColor:'#b8751a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>{const v=i.raw;return v>=1e9?(v/1e9)+'B Marks':v>=1e6?(v/1e6)+'M':v>=1e3?(v/1e3)+'K':v+' Marks'}}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>{if(v>=1e9)return v/1e9+'B';if(v>=1e6)return v/1e6+'M';if(v>=1e3)return v/1e3+'K';return v}}}}}});})();"""},
+         'js':"""(()=>{const ctx=document.getElementById('heroDebt');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1921.0,1921.5,1922.0,1922.5,1923.0,1923.25,1923.5,1923.67,1923.83],[1,2,3,10,250,500,100000,2000000,3000000000]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.3,pointRadius:2,pointBackgroundColor:'#b8751a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>{const v=i.parsed.y;return v>=1e9?(v/1e9)+'B Marks':v>=1e6?(v/1e6)+'M':v>=1e3?(v/1e3)+'K':v+' Marks'}}}},scales:{x:{type:'linear',min:1921,max:1924,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>{const yr=Math.floor(v);const f=v-yr;if(f<0.01)return'Jan '+yr;if(Math.abs(f-0.5)<0.01)return'Jul '+yr;return''}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>{if(v>=1e9)return v/1e9+'B';if(v>=1e6)return v/1e6+'M';if(v>=1e3)return v/1e3+'K';return v}}}}}});})();"""},
         {'slug':'lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people',
          'chart_id':'heroFertility','headline':'South Korea: 0.72 children per woman','sub':'The Separation of Sex & Procreation','color':'#7c3aed',
          'js':"""(()=>{const ctx=document.getElementById('heroFertility');new Chart(ctx,{type:'bar',data:{labels:['S.Korea','China','Italy','Japan','Germany','UK','France','US','India','Nigeria'],datasets:[{data:[0.72,1.09,1.24,1.20,1.35,1.49,1.79,1.62,2.03,5.14],backgroundColor:['#c43425','#c43425','#c43425','#c43425','#c43425','#b8751a','#b8751a','#b8751a','#0d9a5a','#0d9a5a'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+' children per woman'}},annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:'#8a8479',borderDash:[4,3],borderWidth:1}}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8},maxRotation:45}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0,max:5.5}}}});})();"""},
@@ -591,7 +657,7 @@ def build_homepage(essays):
          'js':"""(()=>{const ctx=document.getElementById('heroRev');const ch=[{y:1642,i:3,c:'#2563eb'},{y:1688,i:2,c:'#2563eb'},{y:1775,i:5,c:'#c43425'},{y:1789,i:9,c:'#c43425'},{y:1821,i:3,c:'#7c3aed'},{y:1830,i:4,c:'#b8751a'},{y:1848,i:10,c:'#c43425'},{y:1917,i:8,c:'#c43425'},{y:1989,i:9,c:'#0d9a5a'}];new Chart(ctx,{type:'bubble',data:{datasets:[{data:ch.map(c=>({x:c.y,y:c.i,r:c.i*1.8})),backgroundColor:ch.map(c=>c.c+'55'),borderColor:ch.map(c=>c.c),borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1620,max:2000,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0,max:12}}}});})();"""},
         {'slug':'the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people',
          'chart_id':'heroEmpty','headline':'No country has recovered from sub-1.5 fertility','sub':'The Great Emptying','color':'#c43425',
-         'js':"""(()=>{const ctx=document.getElementById('heroEmpty');new Chart(ctx,{type:'line',data:{labels:['1960','1970','1980','1990','2000','2010','2020','2024'],datasets:[{label:'S. Korea',data:[6.0,4.53,2.83,1.59,1.48,1.23,0.84,0.72],borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'China',data:[5.76,5.81,2.63,2.51,1.60,1.54,1.28,1.02],borderColor:'#7c3aed',fill:false,tension:.3,pointRadius:2,borderWidth:2,borderDash:[5,3]},{label:'US',data:[3.65,2.48,1.84,2.08,2.06,1.93,1.64,1.62],borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0}}}});})();"""},
+         'js':"""(()=>{const ctx=document.getElementById('heroEmpty');const yrs=[1960,1970,1980,1990,2000,2010,2020,2024];new Chart(ctx,{type:'line',data:{datasets:[{label:'S. Korea',data:_xy(yrs,[6.0,4.53,2.83,1.59,1.48,1.23,0.84,0.72]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'China',data:_xy(yrs,[5.76,5.81,2.63,2.51,1.60,1.54,1.28,1.02]),borderColor:'#7c3aed',fill:false,tension:.3,pointRadius:2,borderWidth:2,borderDash:[5,3]},{label:'US',data:_xy(yrs,[3.65,2.48,1.84,2.08,2.06,1.93,1.64,1.62]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1960,max:2024,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0}}}});})();"""},
         {'slug':'europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence',
          'chart_id':'heroRearm','headline':'€800 billion: Europe rearming at unprecedented speed','sub':'Europe Rearms','color':'#2563eb',
          'js':"""(()=>{const ctx=document.getElementById('heroRearm');new Chart(ctx,{type:'bar',data:{labels:['Poland','Estonia','Lithuania','Latvia','Finland','UK','France','Germany','Italy','Spain'],datasets:[{data:[4.2,3.4,3.5,3.2,2.5,2.3,2.1,2.1,1.6,1.3],backgroundColor:function(c){return c.raw>3?'#c43425':c.raw>2?'#2563eb':'#8a847966'},borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of GDP'}},annotation:{annotations:{nato:{type:'line',yMin:2,yMax:2,borderColor:'#8a8479',borderDash:[4,3],borderWidth:1}}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});})();"""},
@@ -600,10 +666,10 @@ def build_homepage(essays):
          'js':"""(()=>{const ctx=document.getElementById('heroPress');new Chart(ctx,{type:'line',data:{labels:['1990','1995','2000','2005','2010','2015','2020','2025'],datasets:[{data:[458,400,412,310,260,183,140,87],borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'k jobs'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'k'},min:0}}}});})();"""},
         {'slug':'the-rise-of-the-west-was-based-on-luck-that-has-run-out',
          'chart_id':'heroWest','headline':'Western dominance was a 200-year anomaly','sub':'The Rise of the West Was Based on Luck','color':'#b8751a',
-         'js':"""(()=>{const ctx=document.getElementById('heroWest');new Chart(ctx,{type:'line',data:{labels:['1','1500','1700','1870','1950','2000','2025'],datasets:[{label:'West',data:[12,18,24,42,52,42,30],borderColor:'#2563eb',fill:false,tension:.35,pointRadius:2,borderWidth:2},{label:'China',data:[26,25,22,17,5,12,20],borderColor:'#c43425',fill:false,tension:.35,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},max:55}}}});})();"""},
+         'js':"""(()=>{const ctx=document.getElementById('heroWest');const yrs=[1,1500,1700,1870,1950,2000,2025];new Chart(ctx,{type:'line',data:{datasets:[{label:'West',data:_xy(yrs,[12,18,24,42,52,42,30]),borderColor:'#2563eb',fill:false,tension:.35,pointRadius:2,borderWidth:2},{label:'China',data:_xy(yrs,[26,25,22,17,5,12,20]),borderColor:'#c43425',fill:false,tension:.35,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},max:55}}}});})();"""},
         {'slug':'robotics-and-slavery',
          'chart_id':'heroRobot','headline':'Robot costs falling below human labour','sub':'Robotics and Slavery','color':'#b8751a',
-         'js':"""(()=>{const ctx=document.getElementById('heroRobot');new Chart(ctx,{type:'line',data:{labels:['2010','2015','2018','2020','2022','2024','2027','2030'],datasets:[{label:'Robot cost/hr',data:[15,10,7,5,3.5,2.5,1.5,1],borderColor:'#b8751a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Human min wage',data:[7.25,7.25,7.25,7.25,7.25,7.25,7.25,7.25],borderColor:'#c43425',fill:false,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v},min:0}}}});})();"""},
+         'js':"""(()=>{const ctx=document.getElementById('heroRobot');const yrs=[2010,2015,2018,2020,2022,2024,2027,2030];new Chart(ctx,{type:'line',data:{datasets:[{label:'Robot cost/hr',data:_xy(yrs,[15,10,7,5,3.5,2.5,1.5,1]),borderColor:'#b8751a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Human min wage',data:_xy(yrs,[7.25,7.25,7.25,7.25,7.25,7.25,7.25,7.25]),borderColor:'#c43425',fill:false,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:2010,max:2030,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v},min:0}}}});})();"""},
         {'slug':'the-long-term-impact-of-covid-19',
          'chart_id':'heroCovid','headline':'COVID accelerated deglobalisation by a decade','sub':'The Long-Term Impact of COVID-19','color':'#c43425',
          'js':"""(()=>{const ctx=document.getElementById('heroCovid');new Chart(ctx,{type:'bar',data:{labels:['Trade','Remote Work','Digital Health','Automation','Debt/GDP','Inequality'],datasets:[{label:'Change (%)',data:[-15,300,180,40,25,18],backgroundColor:function(c){return c.raw<0?'#c43425':'#0d9a5a'},borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>(i.raw>0?'+':'')+i.raw+'%'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>(v>0?'+':'')+v+'%'}}}}});})();"""},
@@ -627,16 +693,18 @@ def build_homepage(essays):
 
     # ── Hero chart: West vs East GDP ──
     hero_chart_js = """
+const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 (()=>{const ctx=document.getElementById('heroChart');
-new Chart(ctx,{type:'line',data:{labels:['1','1000','1500','1600','1700','1820','1870','1913','1950','1973','2000','2025'],
+const yrs=[1,1000,1500,1600,1700,1820,1870,1913,1950,1973,2000,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-{label:'West (Europe + US)',data:[12,12,18,22,24,30,42,50,52,48,42,30],borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#2563eb',borderWidth:2.5},
-{label:'China',data:[26,22,25,29,22,33,17,9,5,5,12,20],borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#c43425',borderWidth:2.5},
-{label:'India',data:[32,28,24,22,24,16,12,8,4,3,5,8],borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#b8751a',borderWidth:2.5}
+{label:'West (Europe + US)',data:_xy(yrs,[12,12,18,22,24,30,42,50,52,48,42,30]),borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#2563eb',borderWidth:2.5},
+{label:'China',data:_xy(yrs,[26,22,25,29,22,33,17,9,5,5,12,20]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#c43425',borderWidth:2.5},
+{label:'India',data:_xy(yrs,[32,28,24,22,24,16,12,8,4,3,5,8]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#b8751a',borderWidth:2.5}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{
 legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11}}},
-tooltip:{backgroundColor:'#1a1815ee',titleFont:{size:12},bodyFont:{size:11},padding:8,cornerRadius:5,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% of world GDP'}}},
-scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10}}},
+tooltip:{backgroundColor:'#1a1815ee',titleFont:{size:12},bodyFont:{size:11},padding:8,cornerRadius:5,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of world GDP'}}},
+scales:{x:{type:'linear',min:1,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10}}},
 y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:'#8a8479',font:{size:11}},max:55}}}});
 })();"""
 
@@ -645,9 +713,9 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
         'Natural Resources': {'slug':'the-renewables-and-battery-revolution','chart_id':'secChart1',
          'js':"""(()=>{const ctx=document.getElementById('secChart1');new Chart(ctx,{type:'line',data:{labels:['2010','2012','2014','2016','2018','2020','2022','2024'],datasets:[{data:[1100,700,500,350,200,140,110,90],borderColor:'#0d9a5a',backgroundColor:'#0d9a5a18',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});})();"""},
         'Global Balance of Power': {'slug':'the-long-term-impact-of-covid-19','chart_id':'secChart2',
-         'js':"""(()=>{const ctx=document.getElementById('secChart2');new Chart(ctx,{type:'line',data:{labels:['1870','1913','1950','1973','2000','2025'],datasets:[{data:[55,58,52,48,42,30],borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:[18,12,5,5,12,35],borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});})();"""},
+         'js':"""(()=>{const ctx=document.getElementById('secChart2');const yrs=[1870,1913,1950,1973,2000,2025];new Chart(ctx,{type:'line',data:{datasets:[{data:_xy(yrs,[55,58,52,48,42,30]),borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:_xy(yrs,[18,12,5,5,12,35]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{type:'linear',display:false},y:{display:false}}}});})();"""},
         'Jobs & Economy': {'slug':'robotics-and-slavery','chart_id':'secChart3',
-         'js':"""(()=>{const ctx=document.getElementById('secChart3');new Chart(ctx,{type:'line',data:{labels:['2020','2022','2024','2026','2028','2030','2032','2035'],datasets:[{data:[15,13,11,8,6,4,3,2],borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:[50,30,18,12,8,5,3,2],borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});})();"""},
+         'js':"""(()=>{const ctx=document.getElementById('secChart3');const yrs=[2020,2022,2024,2026,2028,2030,2032,2035];new Chart(ctx,{type:'line',data:{datasets:[{data:_xy(yrs,[15,13,11,8,6,4,3,2]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:_xy(yrs,[50,30,18,12,8,5,3,2]),borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{type:'linear',display:false},y:{display:false}}}});})();"""},
         'Society': {'slug':'what-does-it-take-to-get-europeans-to-have-a-revolution','chart_id':'secChart4',
          'js':"""(()=>{const ctx=document.getElementById('secChart4');new Chart(ctx,{type:'bar',data:{labels:['1640s','1680s','1770s','1780s','1820s','1840s','1910s','1980s'],datasets:[{data:[1,1,1,2,3,8,4,6],backgroundColor:['#2563eb88','#2563eb88','#c4342588','#c4342588','#7c3aed88','#c4342588','#c4342588','#0d9a5a88'],borderRadius:2,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});})();"""},
     }
@@ -735,7 +803,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 {latest_html}    </div>
   </div>
 </div>
-
+{new_section_html}
 <div class="hero-chart-wrap">
   <div class="hero-chart-inner">
     <div class="hero-chart-label">The Big Picture</div>
@@ -802,6 +870,30 @@ def main():
         c = sum(1 for e in essays if e['part'] == pn)
         print(f"  {PARTS[pn]['label']}: {pn} — {c} articles")
 
+    # ── Classify articles as original vs new ──
+    original_slugs = load_original_slugs()
+    for e in essays:
+        e['is_new'] = e['slug'] not in original_slugs
+
+    # Resolve file mtime for new articles (needed for FIFO ordering)
+    for e in essays:
+        if e['is_new']:
+            e['mtime'] = os.path.getmtime(e['filepath'])
+
+    new_essays = sorted(
+        [e for e in essays if e['is_new']],
+        key=lambda x: x['mtime'],
+        reverse=True
+    )[:MAX_NEW_ARTICLES]
+    new_slugs = {e['slug'] for e in new_essays}
+
+    if new_essays:
+        print(f"\n  🆕 {len(new_essays)} new articles:")
+        for e in new_essays:
+            print(f"     [{e['part']}] {e['title'][:60]}")
+    else:
+        print("\n  No new articles found.")
+
     ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
 
     print("\nBuilding article pages...")
@@ -811,11 +903,11 @@ def main():
 
     print("Building section pages...")
     for pn, pi in PARTS.items():
-        (OUTPUT_DIR / f"{pi['slug']}.html").write_text(build_section(pn, essays), encoding='utf-8')
+        (OUTPUT_DIR / f"{pi['slug']}.html").write_text(build_section(pn, essays, new_slugs), encoding='utf-8')
     print(f"  Built {len(PARTS)} section pages")
 
     print("Building homepage...")
-    (OUTPUT_DIR / "index.html").write_text(build_homepage(essays), encoding='utf-8')
+    (OUTPUT_DIR / "index.html").write_text(build_homepage(essays, new_essays), encoding='utf-8')
     print("  Built homepage")
 
     # ── SEO files ──

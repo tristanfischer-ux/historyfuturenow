@@ -177,20 +177,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
+      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
-        <span class="related-time">38 min read</span>
+        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
+        <span class="related-time">20 min read</span>
       </a>
-      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+      <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
-        <span class="related-time">11 min read</span>
+        <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
+        <span class="related-time">9 min read</span>
       </a>
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
+      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read</span>
+        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
+        <span class="related-time">5 min read</span>
       </a>
     </div>
   </section>
@@ -225,17 +225,21 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('luckChart1');
-new Chart(ctx,{type:'line',data:{labels:['1 AD','500','1000','1500','1700','1820','1870','1913','1950','1980','2000','2025'],
+const yrs=[1,500,1000,1500,1700,1820,1870,1913,1950,1980,2000,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('China',[26,23,22,25,22,33,17,9,5,5,12,19],C.accent),
-ds('India',[33,28,28,24,24,16,12,8,4,3,5,8],C.amber),
-ds('Western Europe',[11,12,9,18,22,23,33,33,26,24,20,15],C.blue),
-ds('USA',[0,0,0,0,0.2,2,9,19,27,22,22,16],C.purple)
+dxy('China',yrs,[26,23,22,25,22,33,17,9,5,5,12,19],C.accent),
+dxy('India',yrs,[33,28,28,24,24,16,12,8,4,3,5,8],C.amber),
+dxy('Western Europe',yrs,[11,12,9,18,22,23,33,33,26,24,20,15],C.blue),
+dxy('USA',yrs,[0,0,0,0,0.2,2,9,19,27,22,22,16],C.purple)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
+scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('luckChart2');
@@ -260,14 +264,16 @@ y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:11,title:{display:true,text
 })();
 
 (()=>{const ctx=document.getElementById('luckChart3');
-new Chart(ctx,{type:'line',data:{labels:['1','1000','1500','1600','1700','1820','1870','1913','1950','1973','2000','2025'],
+const yrs=[1,1000,1500,1600,1700,1820,1870,1913,1950,1973,2000,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('West (Europe+US)',[12,12,18,22,24,30,42,50,52,48,42,30],C.blue),
-ds('China',[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
-ds('India',[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
+dxy('West (Europe+US)',yrs,[12,12,18,22,24,30,42,50,52,48,42,30],C.blue),
+dxy('China',yrs,[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
+dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
+scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
 })();
 </script>
+
 </body>
 </html>

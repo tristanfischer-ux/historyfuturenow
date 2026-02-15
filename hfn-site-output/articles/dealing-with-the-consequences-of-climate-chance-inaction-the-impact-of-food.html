@@ -54,6 +54,24 @@
     <div class="article-chart-badge">4 interactive charts</div>
   </header>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article</div>
+        <div class="audio-meta">9 min &middot; British narrator</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-bar" id="audioProgressBar"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>In a previous article History Future Now admitted defeat: climate change is happening and there is no viable political solution which will enable us to stop it from getting worse. Global average temperatures will rise beyond the 2 degrees that politicians have determined is the absolute maximum that it should be allowed to increase by. We need to stop worrying about how to prevent it from getting worse and start concentrating on what governments need to do to manage this new reality.</p>
 <p>In this article we will look at the impact of global and local food shortages, exacerbated by climate change, and how governments should respond. Since History Future Now is UK based, the article will have a UK focused slant.</p>
@@ -74,7 +92,7 @@
 
 <p>That is the base case for food supply and demand over the next 25 years, and there has been no mention of climate change.</p>
 <p>However, as we have seen this year, where corn and soya bean harvests were 30-40% lower than in a normal year, the “base case” for food supply is optimistic, given the effects of climate change. Climate change is not just about higher global temperatures. It is also about wild swings in weather patterns; some years will be very wet, some will be very dry. If farmers knew that they would just get drier years they could partially compensate by having drought resistant crops. But if the next year they have record rainfall, they really need drought AND flood resistant crops.</p>
-<p>As a result, we should expect chronic food shortages and wild swings in the prices of agricultural crops. This is not good. In the event of food shortages, most governments tend to restrict agricultural crop exports. While many economists think that this is the wrong response to this kind of crisis, it is understandable why politicians react this way. If you were Prime Minister and were confronted with angry rioters parading burning effigies of you, would you be more likely to ban food exports or give a lecture about economic efficiency?</p>
+<p>As a result, we should expect chronic food shortages and wild swings in the prices of agricultural crops. This is not good. In the event of food shortages, most governments tend to restrict agricultural crop exports. While many economists think that this is the wrong response to this kind of crisis, it is understandable why politicians react this way. If you were Prime Minster and were confronted with angry rioters parading burning effigies of you, would you be more likely to ban food exports or give a lecture about economic efficiency?</p>
 <p>These food crop restrictions cause knock on effects. First, a large number of countries are not self sufficient in food. North Africa and much of the Middle East, for example, imports most of its food already. As they are expected to add another 100 million people to the region in the next 20 years, this food deficiency is only going to get worse. If they cannot import food because countries are restricting exports it is likely that these countries will face rapidly rising food prices, famines and starvation.</p>
 
     <div class="chart-figure">
@@ -131,15 +149,15 @@
         <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
         <span class="related-time">13 min read</span>
       </a>
-      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
+      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
-        <span class="related-time">10 min read</span>
-      </a>
-      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
+        <span class="related-title">Establishing A Price Floor For Energy</span>
         <span class="related-time">9 min read</span>
+      </a>
+      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Cassandra: Time To Give Up On Predicting Climate Change?</span>
+        <span class="related-time">4 min read</span>
       </a>
     </div>
   </section>
@@ -174,6 +192,9 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('foodChart1');
@@ -220,6 +241,59 @@ title:i=>[rivers[i[0].dataIndex].l],
 label:i=>{const r=rivers[i.dataIndex];return r.u+' controls flow to '+r.d+' | Tension: '+r.t+'/10'}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Conflict tension (1-10)',color:C.dim},min:0,max:10}}}});
+})();
+</script>
+<script>
+(function(){
+  var audio=document.getElementById('audioElement');
+  if(!audio)return;
+  var btn=document.getElementById('audioPlayBtn');
+  var bar=document.getElementById('audioProgressBar');
+  var wrap=document.getElementById('audioProgressWrap');
+  var timeEl=document.getElementById('audioTime');
+  var speedEl=document.getElementById('audioSpeed');
+  var iconPlay=btn.querySelector('.audio-icon-play');
+  var iconPause=btn.querySelector('.audio-icon-pause');
+  var speeds=[1,1.25,1.5,1.75,2];
+  var si=0;
+
+  function fmt(s){
+    if(isNaN(s))return'0:00';
+    var m=Math.floor(s/60);
+    var sec=Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+  }
+
+  btn.onclick=function(){
+    if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+    else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+  };
+
+  audio.ontimeupdate=function(){
+    if(audio.duration){
+      bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+      timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+    }
+  };
+
+  audio.onended=function(){
+    iconPlay.style.display='block';iconPause.style.display='none';
+    bar.style.width='0%';
+  };
+
+  wrap.onclick=function(e){
+    if(audio.duration){
+      var rect=wrap.getBoundingClientRect();
+      var pct=(e.clientX-rect.left)/rect.width;
+      audio.currentTime=pct*audio.duration;
+    }
+  };
+
+  speedEl.onclick=function(){
+    si=(si+1)%speeds.length;
+    audio.playbackRate=speeds[si];
+    speedEl.textContent=speeds[si]+'\u00d7';
+  };
 })();
 </script>
 </body>

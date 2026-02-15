@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Let's Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People? — History Future Now</title>
+<title>Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People? — History Future Now</title>
 <meta name="description" content="Everybody knows that the world’s population has increased dramatically since 1930 – population 2 billion – to today – population 7.7. Most people also know that the fertility rate of women in most of Europe and parts of East Asia is lower than replacement level. Statistics which would suggest that o">
 <link rel="canonical" href="https://www.historyfuturenow.com/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people">
-<meta property="og:title" content="Let's Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People? — History Future Now">
+<meta property="og:title" content="Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People? — History Future Now">
 <meta property="og:description" content="Everybody knows that the world’s population has increased dramatically since 1930 – population 2 billion – to today – population 7.7. Most people also know that the fertility rate of women in most of Europe and parts of East Asia is lower than replacement level. Statistics which would suggest that o">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="History Future Now">
@@ -14,7 +14,7 @@
 <meta property="article:author" content="Tristan Fischer">
 <meta property="og:url" content="https://www.historyfuturenow.com/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Let's Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People? — History Future Now">
+<meta name="twitter:title" content="Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People? — History Future Now">
 <meta name="twitter:description" content="Everybody knows that the world’s population has increased dramatically since 1930 – population 2 billion – to today – population 7.7. Most people also know that the fertility rate of women in most of Europe and parts of East Asia is lower than replacement level. Statistics which would suggest that o">
 <meta name="theme-color" content="#7c3aed">
 <meta name="robots" content="index, follow">
@@ -45,7 +45,7 @@
 <article class="page-container">
   <header class="article-header">
     <div class="article-kicker" style="color:#7c3aed">Part 4 &middot; Society</div>
-    <h1>Let's Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</h1>
+    <h1>Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</h1>
     <div class="article-meta">
       <span class="article-byline">By <strong>Tristan Fischer</strong></span>
       <span class="meta-sep">&middot;</span>
@@ -117,20 +117,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
+      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
+        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
+        <span class="related-time">3 min read</span>
+      </a>
+      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
+        <span class="related-time">20 min read</span>
+      </a>
+      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
         <span class="related-time">6 min read</span>
-      </a>
-      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
-        <span class="related-time">5 min read</span>
-      </a>
-      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
-        <span class="related-time">7 min read</span>
       </a>
     </div>
   </section>
@@ -165,17 +165,21 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('sexChart1');
-new Chart(ctx,{type:'line',data:{labels:['1960','1970','1980','1990','2000','2010','2020','2025','2050','2100'],
+const yrs=[1960,1970,1980,1990,2000,2010,2020,2025,2050,2100];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('World average',[5.0,4.7,3.7,3.2,2.7,2.5,2.3,2.3,2.1,1.8],C.accent),
-ds('Europe',[2.6,2.3,1.9,1.7,1.4,1.5,1.5,1.4,1.4,1.5],C.blue),
-ds('Sub-Saharan Africa',[6.7,6.8,6.8,6.4,5.8,5.2,4.5,4.2,3.0,2.1],C.amber),
-{label:'Replacement level',data:Array(10).fill(2.1),borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
+dxy('World average',yrs,[5.0,4.7,3.7,3.2,2.7,2.5,2.3,2.3,2.1,1.8],C.accent),
+dxy('Europe',yrs,[2.6,2.3,1.9,1.7,1.4,1.5,1.5,1.4,1.4,1.5],C.blue),
+dxy('Sub-Saharan Africa',yrs,[6.7,6.8,6.8,6.4,5.8,5.2,4.5,4.2,3.0,2.1],C.amber),
+{label:'Replacement level',data:xy(yrs,Array(10).fill(2.1)),borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Children per woman (TFR)',color:C.dim}}}}});
+scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Children per woman (TFR)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('sexChart2');
@@ -189,5 +193,6 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Total Fertility Rate',color:C.dim},min:0,max:5.5}}}});
 })();
 </script>
+
 </body>
 </html>

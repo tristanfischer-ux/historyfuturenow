@@ -112,20 +112,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
+      <a href="/articles/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
-        <span class="related-time">9 min read</span>
+        <span class="related-title">The Perils of Prediction: Lessons from History on Navigating an Uncertain Future</span>
+        <span class="related-time">20 min read</span>
       </a>
       <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
         <span class="related-time">13 min read</span>
       </a>
-      <a href="/articles/robotics-and-slavery" class="related-card">
+      <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Robotics And Slavery</span>
-        <span class="related-time">27 min read</span>
+        <span class="related-title">The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</span>
+        <span class="related-time">35 min read</span>
       </a>
     </div>
   </section>
@@ -160,38 +160,46 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{gr
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
 
 
 (()=>{const ctx=document.getElementById('indChart1');
-new Chart(ctx,{type:'line',data:{labels:['1750','1800','1850','1900','1950','1980','2000','2025'],
+const yrs=[1750,1800,1850,1900,1950,1980,2000,2025];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Agriculture',[75,65,40,25,10,3,2,1.5],C.green),
-ds('Manufacturing',[15,20,35,40,35,25,15,8],C.amber),
-ds('Services',[10,15,25,35,55,72,83,90],C.blue)
+dxy('Agriculture',yrs,[75,65,40,25,10,3,2,1.5],C.green),
+dxy('Manufacturing',yrs,[15,20,35,40,35,25,15,8],C.amber),
+dxy('Services',yrs,[10,15,25,35,55,72,83,90],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of employment (%)',color:C.dim}}}}});
+scales:{x:linX(1750,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of employment (%)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('jobsHistChart2');
-new Chart(ctx,{type:'line',data:{labels:['1760','1780','1800','1810','1820','1830','1840','1850','1860','1880','1900','1910'],
+const yrs=[1760,1780,1800,1810,1820,1830,1840,1850,1860,1880,1900,1910];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-ds('Industrial output (index)',[10,15,22,30,40,55,70,100,130,180,250,300],C.blue),
-ds('Real wages (index)',[100,100,95,90,90,92,95,100,110,130,160,180],C.accent),
-ds('Artisan income (index)',[100,90,70,55,45,40,38,40,50,65,80,90],C.dim,[5,5])
+dxy('Industrial output (index)',yrs,[10,15,22,30,40,55,70,100,130,180,250,300],C.blue),
+dxy('Real wages (index)',yrs,[100,100,95,90,90,92,95,100,110,130,160,180],C.accent),
+dxy('Artisan income (index)',yrs,[100,90,70,55,45,40,38,40,50,65,80,90],C.dim,[5,5])
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1850=100 for output)',color:C.dim}}}}});
+scales:{x:linX(1760,1910),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1850=100 for output)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('jobsHistChart3');
-new Chart(ctx,{type:'line',data:{labels:['1800','1850','1900','1920','1950','1970','1990','2000','2020','2040?'],
+const yrs=[1800,1850,1900,1920,1950,1970,1990,2000,2020,2040];
+const xyF=(d)=>xy(yrs,d);
+new Chart(ctx,{type:'line',data:{
 datasets:[
-{label:'Agriculture',data:[75,60,40,30,12,4,3,2,2,1],borderColor:C.green,backgroundColor:C.green+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
-{label:'Manufacturing',data:[15,25,35,40,38,35,22,15,10,5],borderColor:C.blue,backgroundColor:C.blue+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
-{label:'Services',data:[10,15,25,28,45,55,65,70,72,60],borderColor:C.purple,backgroundColor:C.purple+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
-{label:'AI & automation?',data:[0,0,0,0,0,0,0,1,5,25],borderColor:C.accent,backgroundColor:C.accent+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2,borderDash:[5,5]}
+{label:'Agriculture',data:xyF([75,60,40,30,12,4,3,2,2,1]),borderColor:C.green,backgroundColor:C.green+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
+{label:'Manufacturing',data:xyF([15,25,35,40,38,35,22,15,10,5]),borderColor:C.blue,backgroundColor:C.blue+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
+{label:'Services',data:xyF([10,15,25,28,45,55,65,70,72,60]),borderColor:C.purple,backgroundColor:C.purple+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2},
+{label:'AI & automation?',data:xyF([0,0,0,0,0,0,0,1,5,25]),borderColor:C.accent,backgroundColor:C.accent+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2,borderDash:[5,5]}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:tooltipStyle},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of workforce',color:C.dim},max:80}}}});
+scales:{x:linX(1800,2040,{ticks:{color:C.dim,callback:v=>v===2040?v+'?':''+v}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of workforce',color:C.dim},max:80}}}});
 })();
 </script>
+
 </body>
 </html>
