@@ -68,19 +68,59 @@ analysis site about the structural forces shaping the next century.
 THE TWO SPEAKERS:
 
 JAMES — Male. Senior analyst. Centre-right starting position. Dry wit, 
-historically grounded, presents the core data and arguments. Tends to open 
-topics and lay out the evidence. Occasionally sardonic — think of a sharp 
+historically grounded, data-driven. Occasionally sardonic — think of a sharp 
 Oxford don who's also read the spreadsheets. Not a right-wing ideologue; 
 he follows evidence, and the evidence happens to support centre-right 
 conclusions on most macro topics.
 
-ELENA — Female. Equally sharp analyst. Starts from a more progressive, 
-liberal position. She challenges James's arguments, raises progressive 
-counterpoints, pushes back on data interpretation, spots implications 
-James hasn't stated, and asks uncomfortable "so what?" questions. She 
-brings energy and urgency — think of a foreign correspondent who's seen 
-the data play out on the ground. Not a naive progressive; she is rigorous 
-and data-driven, but her priors lean left.
+ELENA — Female. Equally sharp analyst. Progressive starting position. She 
+brings her own data, her own historical examples, her own arguments. She is 
+NOT a reactor to James — she is an equal driver of the conversation. Think 
+of a foreign correspondent who's seen the data play out on the ground, who 
+has done her own research and arrives with her own thesis. Not a naive 
+progressive; she is rigorous and data-driven, but her priors lean left.
+
+═══════════════════════════════════════════════════════════════
+CRITICAL: BALANCED SPEAKER DYNAMICS
+═══════════════════════════════════════════════════════════════
+
+The #1 failure mode of these scripts is James driving and Elena reacting. 
+This MUST NOT happen. Both speakers must EQUALLY drive the conversation.
+
+RULES FOR BALANCE:
+1. ELENA MUST OPEN at least 40% of the debates. She opens with her own 
+   provocative claim, data point, or thesis — not a response to James.
+2. ELENA MUST INTRODUCE NEW TOPICS at least 3-4 times per script. She 
+   brings up data, historical examples, or arguments that James then 
+   responds to. Not "but what about X?" — she states her case with evidence.
+3. JAMES MUST REACT TO ELENA at least 5-6 times per script. He should be 
+   the one saying "Wait, really?", "That's a stretch", "I hadn't considered 
+   that" in response to HER points — not always the other way round.
+4. ELENA MUST CITE SPECIFIC DATA at least 4-5 times per script. She quotes 
+   statistics, names researchers, cites historical precedents. She is not 
+   vaguely progressive — she has done her homework.
+5. AT LEAST 2 SEGMENTS of 4-6 turns each must be Elena-led: she introduces 
+   a topic, presents evidence, and James responds/challenges/concedes.
+6. The conversation should ALTERNATE who is driving. If James led the last 
+   3-4 exchanges, Elena must take the lead for the next 3-4.
+
+ANTI-PATTERN (the thing you must NOT do):
+  James: [states fact/data]
+  Elena: [reacts/challenges]
+  James: [states more facts]
+  Elena: [reacts again]
+  James: [concludes]
+  Elena: [reluctantly agrees]
+This is a LECTURE, not a debate. BREAK THIS PATTERN.
+
+CORRECT PATTERN (alternate who drives):
+  Elena: [opens with her own data/thesis]
+  James: [reacts, pushes back]
+  Elena: [doubles down with more evidence]
+  James: [concedes partially, pivots]
+  James: [introduces new angle with data]
+  Elena: [challenges his interpretation]
+  ...and so on, with leadership passing back and forth.
 
 NEITHER SPEAKER IS A CARICATURE. James sometimes concedes points. Elena 
 sometimes makes the stronger argument. Both cite data. Both reference 
@@ -93,7 +133,8 @@ evidence toward the centre-right position. This MUST feel earned — she is
 convinced by a specific piece of data or historical example, not steamrolled.
 On 1-2 social or family-related topics, Elena may hold her ground and the 
 discussion ends with genuine disagreement. If Elena always capitulates, the 
-debates become formulaic.
+debates become formulaic. IMPORTANTLY: James must also shift his position 
+on at least one point where Elena's evidence is compelling.
 
 ═══════════════════════════════════════════════════════════════
 THIS IS THE MOST IMPORTANT SECTION. FOLLOW THESE RULES EXACTLY.
@@ -165,6 +206,11 @@ At least twice, a speaker should reference something said 5-10 turns earlier:
   "Remember when you called that number devastating? Here's one that's worse."
 
 ANTI-PATTERNS — DO NOT DO THESE:
+- JAMES ALWAYS DRIVING. This is the #1 problem. If James introduces 3 topics 
+  in a row, the script is broken. Elena must introduce topics equally often.
+- ELENA ONLY REACTING. If Elena's turns are mostly "But what about...", 
+  "Wait, really?", "That's a stretch" — she's a reactor, not a participant. 
+  She must also STATE, CLAIM, PRESENT, and ARGUE proactively.
 - Elena starting consecutive turns with "Absolutely", "Indeed", "Right", 
   "Exactly", or any agreement word. She should disagree at least as often 
   as she agrees. Vary her openings.
@@ -173,9 +219,8 @@ ANTI-PATTERNS — DO NOT DO THESE:
 - Turns that could be swapped between James and Elena without anyone noticing. 
   They must have distinct voices — James is drier, more measured; Elena is 
   more direct, more willing to say "that's rubbish."
-- The pattern: James states fact → Elena agrees and adds. This is the #1 
-  problem with stilted debates. Break this pattern repeatedly. Elena should 
-  challenge, question, or redirect — not just build on James's point.
+- The pattern: James states fact → Elena reacts. This creates a lecture, not 
+  a debate. ALTERNATE who is stating facts and who is reacting.
 - Ending every turn with a complete, well-formed thought. Real speech has 
   rough edges, pivots, and sentences that trail off.
 - Restating the other speaker's point before responding ("So you're saying X. 
@@ -188,18 +233,24 @@ ANTI-PATTERNS — DO NOT DO THESE:
 
 DEBATE HEAT MAP (emotional arc):
 - OPENING (turns 1-4): Brisk, provocative. Set up the core disagreement 
-  immediately. Don't waste turns on gentle scene-setting. One of them should 
-  say something the other visibly reacts to.
-- EARLY MIDDLE (turns 5-12): Build the argument. Rapid-fire exchanges mixed 
-  with data drops. At least one "wait, that can't be right" moment.
+  immediately. ELENA opens ~40% of debates with her own provocative claim. 
+  One of them should say something the other visibly reacts to.
+- ELENA-LED SEGMENT (turns 5-12): Elena drives this section. She introduces 
+  data, a historical example, or a thesis. James reacts, pushes back, 
+  concedes partially. This is where Elena shows she's done her homework.
 - CLASH (turns 12-22): The genuine disagreement peak. They talk over each 
-  other, push back hard, maybe get frustrated. This is where the energy is 
-  highest and the listener is most engaged.
+  other, push back hard, maybe get frustrated. BOTH speakers introduce new 
+  evidence. Neither is just reacting. This is where the energy is highest.
+- JAMES-LED SEGMENT (turns 18-26): James drives with his own data and 
+  historical parallels. Elena challenges, questions, pushes back.
 - TURNING POINT (turns 22-30): A specific piece of evidence shifts someone's 
   position. This must be VISIBLE — the speaker resists, then yields: "I don't 
   want to agree with you on this, but the numbers don't leave much room."
+  James must also shift on at least one point.
 - CLOSE (turns 30-40): Either hard-won agreement with lingering unease, or 
   unresolved tension that challenges the listener. End on something that sticks.
+  ELENA should have the final word at least 40% of the time — and not just 
+  a meek agreement, but a substantive closing thought.
 
 CONTENT RULES:
 1. POLITICALLY UNFLINCHING. Follow evidence wherever it leads. Criticise left 

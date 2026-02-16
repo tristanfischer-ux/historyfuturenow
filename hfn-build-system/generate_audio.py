@@ -49,7 +49,7 @@ def _next_gemini_key() -> str:
 GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
 
 # Two British voices for alternating narration
-VOICE_MALE = "Fenrir"   # Passionate, energetic British male (matches debate voice)
+VOICE_MALE = "Puck"     # Upbeat, lively British male (matches debate voice)
 VOICE_FEMALE = "Kore"   # Clear, engaging British female
 
 ESSAYS_DIR = Path(__file__).parent / "essays"

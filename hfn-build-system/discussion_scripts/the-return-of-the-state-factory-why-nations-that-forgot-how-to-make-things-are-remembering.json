@@ -1,142 +1,150 @@
 [
   {
+    "speaker": "Elena",
+    "text": "So the entire post-war economic order, the one that lifted billions out of poverty, was just a 'forty-year aberration'? That's a rather sweeping dismissal, James."
+  },
+  {
     "speaker": "James",
-    "text": "The US-Taiwan trade deal, February 2026. $250 billion in investment for American chip production. Tariffs at 15%. Unthinkable a decade ago, wouldn't you say?"
+    "text": "[dry] Sweeping, perhaps, but the evidence for its unsustainability became rather stark, wouldn't you say? Especially when you can't make your own surgical masks."
   },
   {
     "speaker": "Elena",
-    "text": "Unthinkable? Perhaps. Necessary? I'm not so sure. It sounds suspiciously like protectionism."
+    "text": "COVID exposed vulnerabilities, absolutely. But what about the geopolitical necessity of binding allies after 1945? That wasn't an 'aberration,' it was a strategic masterstroke."
   },
   {
     "speaker": "James",
-    "text": "[dry] And what's wrong with that, Elena? For five centuries, every powerful nation built its strength on protected manufacturing. Free trade was the aberration."
+    "text": "A masterstroke that ultimately hollowed out your industrial base and left you reliant on rivals. The article calls it a 'strategic subsidy'."
   },
   {
     "speaker": "Elena",
-    "text": "Come on. Globalisation brought cheaper goods, consumer choice. You can't just ditch that for… state factories."
+    "text": "I take your point on dependencies. But the article frames this return as pure mercantilism. Is it really that simple?"
   },
   {
     "speaker": "James",
-    "text": "Cheaper goods, yes. But at what cost? We offshored everything, then discovered we couldn't make a surgical mask during a pandemic."
+    "text": "Hamilton's principles were identical: protect infant industries, secure national sovereignty. The language is different, but the substance is the same."
   },
   {
     "speaker": "Elena",
-    "text": "That was an emergency. Not a reason to rewrite forty years of economic policy."
+    "text": "But Germany's current talk of 'strategic autonomy' or the EU's Chips Act feels defensive, not aggressive like historical mercantilism."
   },
   {
     "speaker": "James",
-    "text": "[emphatic] The article calls it a 'strategic subsidy' — our 'free trade' was a Cold War tactic. We traded manufacturing jobs for military alliances."
+    "text": "[sardonic] Defensive often looks a lot like aggressive when you're on the receiving end. Friedrich List called free trade 'kicking away the ladder' for a reason."
   },
   {
     "speaker": "Elena",
-    "text": "So, it wasn't about economic efficiency at all? Just geopolitics?"
+    "text": "He argued Britain preached free trade only after it had industrialised. So, hypocrisy then?"
   },
   {
     "speaker": "James",
-    "text": "Precisely. And China weaponised that system. They systematically moved up the value chain, backed by state subsidies and IP theft."
+    "text": "Indeed. And China has simply learned from the best. They moved up the value chain precisely by not playing by the rules the West set for everyone else."
   },
   {
     "speaker": "Elena",
-    "text": "That's a convenient reading of the data, James. Many Western companies willingly went to China for cheap labour."
+    "text": "That's a direct link to our 'China Has Many Of The Characteristics Of An Emerging Colonial Power' discussion. They applied mercantilist principles to great effect."
   },
   {
     "speaker": "James",
-    "text": "And now we see the consequences. Remember \"Europe Rearms\"? The EU couldn't deliver a million artillery shells to Ukraine."
+    "text": "Exactly. They didn't stick to cheap toys. Now they dominate everything from solar panels to EVs."
   },
   {
     "speaker": "Elena",
-    "text": "Right. Capacity issues."
+    "text": "The sheer strategic vulnerability is undeniable. Europe pledged a million artillery shells to Ukraine. They couldn't meet the target."
   },
   {
     "speaker": "James",
-    "text": "Exactly. Europe's GDP is ten times Russia's, but it can't produce a fraction of Russia's military output. That's a direct result of deindustrialisation."
+    "text": "[emphatic] Precisely. Europe's GDP is ten times Russia's, but its industrial capacity for defence is a fraction. That's the real cost."
   },
   {
     "speaker": "Elena",
-    "text": "Okay, that's... actually devastating. But you can't just mandate factories into existence."
+    "text": "It's shocking. We discussed it in 'Europe Rearms' – the continent simply forgot how to produce the basics for defence."
   },
   {
     "speaker": "James",
-    "text": "Hamilton did. In 1791. High tariffs, subsidies, infrastructure, recruiting skilled workers. America was the most protectionist economy for 150 years. Look what happened."
+    "text": "And for medicine, during COVID. Basic pharmaceuticals from China. The richest nation dependent on its adversary."
   },
   {
     "speaker": "Elena",
-    "text": "But that was a different era. You can't compare 18th-century America to today's global economy."
+    "text": "Okay, that's a hard point to argue with."
   },
   {
     "speaker": "James",
-    "text": "[amused] Friedrich List said free trade was \"kicking away the ladder\" — Britain did it, then told everyone else ladders were inefficient."
+    "text": "The article suggests technology is also enabling this return. AI and robotics eliminate the labour cost advantage of offshoring."
   },
   {
     "speaker": "Elena",
-    "text": "So you're saying it's all just national self-interest, always has been?"
+    "text": "So the factories return, but not the jobs? That's the 'Robotics and Slavery' paradox right there."
   },
   {
     "speaker": "James",
-    "text": "Mostly. And now, technology is changing the calculus entirely."
+    "text": "Some jobs will change, yes. But manufacturing creates a virtuous cycle: skills, innovation, new industries."
   },
   {
     "speaker": "Elena",
-    "text": "How so?"
+    "text": "I worry about the social cost for communities, though. Those 2.5 million reshored jobs since 2010 are good, but what happens when automation takes over?"
   },
   {
     "speaker": "James",
-    "text": "AI and robotics. The labour cost advantage is disappearing. A robot factory in Ohio costs roughly the same as one in Guangdong."
+    "text": "[thoughtful] That's a valid concern. The transition needs careful management. But the alternative was strategic impotence."
   },
   {
     "speaker": "Elena",
-    "text": "Wait, really? That completely undercuts the whole 'cheap labour' argument for offshoring."
+    "text": "True. The Rome analogy in the article is... actually devastating. Outsourcing military and agriculture led to its fall."
   },
   {
     "speaker": "James",
-    "text": "[thoughtful] It does. If labour costs equalise, then proximity to market, supply chain resilience, and geopolitical stability become the deciding factors. We discussed this in our \"Robotics and Slavery\" piece."
+    "text": "It's not about being poor. It's about control over your essential goods and capabilities. Or lack thereof."
   },
   {
     "speaker": "Elena",
-    "text": "I hadn't thought of it that way. So, the economic case for offshoring just... evaporates?"
+    "text": "[conceding] Okay, fine. I'll give you that. Relying on others for basics is a path to decline. It's a brutal truth."
   },
   {
     "speaker": "James",
-    "text": "Largely. Morgan Stanley predicts 2026 is an inflection point for American manufacturing transformation. Companies are investing in automation now, preparing for greenfield factories at home."
+    "text": "So we're returning to something resembling nineteenth-century industrial policy. Tariffs, subsidies, state-directed investment."
   },
   {
     "speaker": "Elena",
-    "text": "Well... okay, that's harder to argue with than I expected. The pure economics are shifting."
+    "text": "Under new names: 'friend-shoring,' 'resilience,' 'strategic autonomy.' It's still mercantilism."
   },
   {
     "speaker": "James",
-    "text": "It's a return to the historical norm. A virtuous cycle: factories, skilled workers, innovation, new industries."
+    "text": "The language shifts, but the underlying historical forces don't. The rules always applied."
   },
   {
     "speaker": "Elena",
-    "text": "But what about consumer prices? Will we just be paying more for everything?"
+    "text": "I still struggle with the idea that free trade was *purely* an aberration. It did bring global prosperity for a time."
   },
   {
     "speaker": "James",
-    "text": "Perhaps initially. But the 'cheap' Chinese goods had hidden costs: lost jobs, hollowed-out communities, strategic vulnerability. We're now paying those."
+    "text": "[clipped] It brought prosperity for *some* and vulnerability for *others*. The 'Crisis: Or An Explanation On The Origins Of The Decline Of The West' showed the long-term cost."
   },
   {
     "speaker": "Elena",
-    "text": "I suppose so. Like our article on \"Crisis: The Decline of the West\" highlighted, the long-term costs often outweigh the short-term gains."
+    "text": "So the US-Taiwan deal isn't just about semiconductors. It's about rebuilding a specific kind of global order, not just profit."
   },
   {
     "speaker": "James",
-    "text": "Precisely. And nations that fail to rebuild? The article ends with a stark warning: late Rome. Wealthy on paper, dependent on others for everything essential."
+    "text": "Precisely. It's about national sovereignty and security."
   },
   {
     "speaker": "Elena",
-    "text": "Outsourcing its military, its agriculture... becoming strategically vulnerable. It's a chilling parallel."
+    "text": "[thoughtful] I suppose I hadn't fully appreciated the scale of that strategic trade-off. It was a bargain, but the cost has become existential."
   },
   {
     "speaker": "James",
-    "text": "Chilling, but accurate. The factories are coming back. The only question is which nations build them fast enough."
+    "text": "[amused] Like Marlowe's Doctor Faustus. Trading long-term security for short-term gain."
   },
   {
     "speaker": "Elena",
-    "text": "And whether that leads to a new kind of economic rivalry. A less cooperative, more mercantilist world."
+    "text": "Yes, exactly. And the devil is now collecting."
   },
   {
     "speaker": "James",
-    "text": "Or a more resilient one. Perhaps both. History, as ever, rhymes."
+    "text": "The question is, can the West build fast enough?"
+  },
+  {
+    "speaker": "Elena",
+    "text": "I think that's the real challenge. The political will is there, but rebuilding the capacity and skills... that's much harder to just magic back."
   }
 ]

@@ -1,146 +1,138 @@
 [
   {
-    "speaker": "James",
-    "text": "[dry] We're witnessing the Treaty of Tordesillas all over again, Elena. Only this time, the line isn't down the Atlantic, it's drawn across the Solar System."
-  },
-  {
     "speaker": "Elena",
-    "text": "Oh, come on. That's a dramatic overstatement. The Outer Space Treaty specifically prohibits national appropriation."
+    "text": "The Outer Space Treaty of 1967 is dead, James. Or, at best, a historical footnote like the Treaty of Tordesillas."
   },
   {
     "speaker": "James",
-    "text": "And the Treaty of Tordesillas prohibited anyone but Spain and Portugal. How well did that work out?"
+    "text": "[dry] A strong opening, Elena. 'Dead' already? I thought it still had some life support."
   },
   {
     "speaker": "Elena",
-    "text": "It's different now. We have international agreements, a framework for cooperation. It's not the 15th century."
+    "text": "It was written when only two nations could reach space. Now, SpaceX alone has driven launch costs from $54,000 per kilogram to under $2,000. They're targeting $50."
   },
   {
     "speaker": "James",
-    "text": "[emphatic] The framework is already fragmenting. Artemis Accords versus China's unilateral plans. It's a legal vacuum, not a consensus."
+    "text": "[surprised] That's... genuinely shocking. A hundred-fold reduction."
   },
   {
     "speaker": "Elena",
-    "text": "But a scramble? You're framing this like a colonial land grab, which is... morally complicated, to say the least."
+    "text": "Precisely. And the resources? The asteroid 16 Psyche alone is estimated to contain $10,000 quadrillion in minerals."
   },
   {
     "speaker": "James",
-    "text": "History offers a consistent, unflinching answer: unclaimed territory in a competitive system gets claimed. Whether it's Africa or the Moon."
+    "text": "[amused] A cosmic gold rush, then. Potosí scaled up to the solar system."
   },
   {
     "speaker": "Elena",
-    "text": "That's a cynical view. What about scientific exploration, the 'province of all mankind'?"
+    "text": "It's not just gold. We're talking helium-3 for fusion, water ice for rocket fuel, rare earth elements. Critical materials."
   },
   {
     "speaker": "James",
-    "text": "The article's clear: nations colonise for resources, strategic positions, and to pre-empt rivals. The romance is a convenient narrative."
-  },
-  {
-    "speaker": "Elena",
-    "text": "So, you're saying the Moon will be carved up like Africa at the Berlin Conference?"
+    "text": "True. The potential for wealth generation is immense. Beyond anything on Earth."
   },
   {
     "speaker": "James",
-    "text": "The Berlin Conference established 'effective occupation'. The US Commercial Space Launch Competitiveness Act of 2015 is effectively the same principle for private entities."
+    "text": "[thoughtful] This brings back the chartered company model, doesn't it? SpaceX as the new East India Company, effectively."
   },
   {
     "speaker": "Elena",
-    "text": "Wait, really? Private companies can just... own parts of asteroids?"
+    "text": "With private armies soon, I suppose? That's a terrifying prospect for global governance."
   },
   {
     "speaker": "James",
-    "text": "Own and sell resources extracted, yes. The US has made that explicit. And other nations are following suit."
+    "text": "The English East India Company had a private army of over 250,000 men. The Dutch VOC was worth more than Apple, Google, and Amazon combined."
   },
   {
     "speaker": "Elena",
-    "text": "But that completely undermines the spirit of the Outer Space Treaty!"
+    "text": "[frustrated] That's exactly the kind of unconstrained power that led to centuries of exploitation. It's not a model we should be repeating."
   },
   {
     "speaker": "James",
-    "text": "The spirit doesn't launch rockets. SpaceX has reduced the cost per kilogram to orbit from $54,000 to under $2,000. That's the game changer."
+    "text": "But governments historically couldn't fund these ventures alone. Can they now?"
   },
   {
     "speaker": "Elena",
-    "text": "That's impressive, yes. But still, who's going to mine an asteroid? The costs are astronomical."
+    "text": "The US isn't waiting. The Commercial Space Launch Competitiveness Act of 2015 grants private citizens resource rights. The Artemis Accords establish 'safety zones'."
   },
   {
     "speaker": "James",
-    "text": "At $200 a kilogram, the economics begin to close. At $50, they're compelling. Musk is targeting that with Starship."
+    "text": "So, effective occupation, but by corporations under national frameworks."
   },
   {
     "speaker": "Elena",
-    "text": "Fifty dollars? That's... insane."
+    "text": "Precisely. And China hasn't signed the Artemis Accords. Russia and India are doing their own thing. It's a fragmented legal vacuum."
   },
   {
     "speaker": "James",
-    "text": "And 16 Psyche alone is worth $10,000 quadrillion in minerals. The potential returns are simply too vast to ignore."
+    "text": "[emphatic] This is where the 'robots first' point in the article becomes critical. No human mortality, no life support."
   },
   {
     "speaker": "Elena",
-    "text": "[frustrated] This feels like a dystopian sci-fi novel. Mega-corporations carving up the cosmos for profit."
+    "text": "It's still a scramble, James. Just with automatons doing the colonising."
   },
   {
     "speaker": "James",
-    "text": "It's the East India Company, isn't it? As the article points out, private companies with their own capital and objectives. SpaceX is the twenty-first century VOC."
+    "text": "Robots allow speed and scale unheard of in human history. They operate continuously, in conditions that would kill us in minutes. Think of the 'Robotics And Slavery' article."
   },
   {
     "speaker": "Elena",
-    "text": "A private army next? I mean, where does that analogy break down?"
+    "text": "[heated] But the implications for human control and ownership are terrifying. Who decides the ethics of an AI-driven colonial venture?"
   },
   {
     "speaker": "James",
-    "text": "[sardonic] Not yet, no. But the Dutch East India Company had its own navy. They governed territories larger than many European nations. This is history rhyming, as we often say here at HFN."
+    "text": "They're better colonists in almost every practical sense. Cheaper, more resilient, no complaints about the food."
   },
   {
     "speaker": "Elena",
-    "text": "Okay, the historical parallels are certainly... unsettling. I can see the argument for the economic drivers. But the logistics of human colonisation remain immense."
+    "text": "So the nations with the most advanced AI and robotics get to own everything off-world? That's your conclusion?"
   },
   {
     "speaker": "James",
-    "text": "That's the key difference this time. Robots go first. They survey, mine, build habitats. 'Robotics And Slavery' explored this on Earth, now apply it to space."
+    "text": "[thoughtful] The article makes that argument rather compellingly. Those without the advanced robotics will be like the colonised nations of the past. Dependent."
   },
   {
     "speaker": "Elena",
-    "text": "Robots... right. No life support, no food, no return ticket needed. That changes the cost-benefit analysis completely, doesn't it?"
+    "text": "[pushback] That's an unacceptable outcome for global equity. This can't just be a free-for-all for the technologically advanced."
   },
   {
     "speaker": "James",
-    "text": "Massively. A robot is a better colonist than a human. The nations with the most advanced AI and robotics will dominate."
+    "text": "What's the mechanism to prevent it? A global space agency with no enforcement?"
   },
   {
     "speaker": "Elena",
-    "text": "[thoughtful] So, it's less about populations or bravery, and more about technological sovereignty. This feeds into our discussions about 'China Has Many Of The Characteristics Of An Emerging Colonial Power', doesn't it?"
+    "text": "A genuine international framework, not unilateral land grabs and 'safety zones'."
   },
   {
     "speaker": "James",
-    "text": "Exactly. Beijing's lunar plans, their investment in AI. They're not signing the Artemis Accords for a reason. They're playing a different game."
+    "text": "[sardonic] Ha! Good luck with that. History suggests the cannon makes the law, not the treaty."
   },
   {
     "speaker": "Elena",
-    "text": "Well... okay, that's harder to argue with than I expected. The combination of falling launch costs, asteroid wealth, and robotic pioneers... it does make this feel inevitable."
+    "text": "You brought up the Scramble for Africa. That lasted thirty years."
   },
   {
     "speaker": "James",
-    "text": "[conceding] It's not a pretty picture. But the data points in one direction. Possession, as ever, will be nine-tenths of the law."
+    "text": "[conceding] And reshaped the world for a century. This will be different, perhaps less violent, but the divisions more permanent."
   },
   {
     "speaker": "Elena",
-    "text": "And the Outer Space Treaty? Just a piece of paper, like Tordesillas."
+    "text": "The very definition of a new global hierarchy, then. And the scale is almost unimaginable."
   },
   {
     "speaker": "James",
-    "text": "It won't be formally abrogated. It will simply become irrelevant, overtaken by facts on the Moon, and Mars. 'Effective occupation'."
+    "text": "The race has already begun. China, the US, India. All planting flags, or preparing to."
   },
   {
     "speaker": "Elena",
-    "text": "So, the question isn't whether space will be colonised, but by whom, and under whose rules. And the rules will be written by those who get there first."
+    "text": "With very few rules that anyone truly respects."
   },
   {
     "speaker": "James",
-    "text": "Precisely. The scramble has already begun. The great powers of the future will be those who control access to these new frontiers."
+    "text": "Only the rules of capability. And effective occupation."
   },
   {
     "speaker": "Elena",
-    "text": "That's... actually devastating. For the rest of us, anyway."
+    "text": "[clipped] Exactly. And that's what makes it so precarious for humanity."
   }
 ]
