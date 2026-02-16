@@ -2657,13 +2657,84 @@ y1:{grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'%'}
     charts['the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing'] = [
         {
             'id': 'buildersChart1', 'figure_num': 1,
-            'title': 'Total Fertility Rates: The Builder Nations vs. Replacement Level',
-            'desc': 'Every European and East Asian nation is below the 2.1 replacement rate. Most are far below it.',
-            'source': 'Eurostat 2024, Statistics Korea, China NBS, Japan MHLW, World Bank',
-            'position': 'after_heading_The Arithmetic of Extinction',
+            'title': 'The Builder Premium: % of Global Achievements vs. % of World Population',
+            'desc': 'European-heritage and East Asian populations are ~25% of the world but account for 87–95% of major scientific prizes, 71% of manufacturing, and 93% of shipbuilding.',
+            'source': 'Nobel Committee, IMU, ACM, World Bank, Clarksons Research, WIPO — cumulative through 2024',
+            'position': 'after_para_11',
             'tall': True,
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart1');
+const cats=['Nobel Prizes\\n(Sciences)','Fields\\nMedal','Turing\\nAward','Abel\\nPrize','Manufacturing\\nOutput','Ship-\\nbuilding','Patent\\nFilings','Top 100\\nUniversities'];
+const eur=[87,84,88,100,32,5,18,62];
+const eas=[7,6,4,0,39,93,52,15];
+const rest=[6,10,8,0,29,2,30,23];
+new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
+{label:'European-heritage',data:eur,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
+{label:'East Asian',data:eas,backgroundColor:C.accent,borderRadius:3,borderSkipped:false},
+{label:'Rest of world',data:rest,backgroundColor:C.dim,borderRadius:3,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,
+tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
+annotation:{annotations:{
+popEur:{type:'line',yMin:16,yMax:16,borderColor:C.blue,borderWidth:2,borderDash:[6,4],label:{display:true,content:'European-heritage population: 16%',position:'start',backgroundColor:C.blue+'dd',color:'#fff',font:{size:10}}},
+popEA:{type:'line',yMin:25,yMax:25,borderColor:C.accent,borderWidth:2,borderDash:[6,4],label:{display:true,content:'European + East Asian population: 25%',position:'end',backgroundColor:C.accent+'dd',color:'#fff',font:{size:10}}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0},stacked:true},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global total',color:C.dim},stacked:true,min:0,max:100}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart2', 'figure_num': 2,
+            'title': 'Nobel Prizes in Sciences by Civilisational Origin (Cumulative through 2024)',
+            'desc': 'Across physics, chemistry, medicine, and economics, European-heritage laureates dominate every discipline.',
+            'source': 'Nobel Prize Committee — all individual laureates categorised by heritage',
+            'position': 'after_para_14',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart2');
+const cats=['Physics\\n(~230)','Chemistry\\n(~195)','Medicine\\n(~230)','Economics\\n(~95)','All Sciences\\n(~750)'];
+const eur=[88,83,86,91,87];
+const eas=[6,8,4,2,5];
+const rest=[6,9,10,7,8];
+new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
+{label:'European-heritage',data:eur,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
+{label:'East Asian',data:eas,backgroundColor:C.accent,borderRadius:3,borderSkipped:false},
+{label:'Rest of world',data:rest,backgroundColor:C.dim,borderRadius:3,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11},maxRotation:0},stacked:true},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of laureates',color:C.dim},stacked:true,min:0,max:100}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart3', 'figure_num': 3,
+            'title': 'Who Builds the World? Global Manufacturing, Shipbuilding, and Semiconductors',
+            'desc': 'East Asia dominates manufacturing volume and shipbuilding; European-heritage nations lead in pharmaceuticals and aerospace. Together they account for the vast majority.',
+            'source': 'World Bank, Clarksons Research, TrendForce, SIPRI — 2024 data',
+            'position': 'after_para_24',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart3');
+const cats=['Manufacturing\\nvalue added','Shipbuilding\\n(new tonnage)','Semiconductor\\nfabrication','Pharmaceutical\\nR&D spend','Aerospace &\\ndefence output','Automotive\\nproduction'];
+const eur=[32,5,12,55,65,22];
+const eas=[39,93,82,22,18,55];
+const rest=[29,2,6,23,17,23];
+new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
+{label:'European-heritage',data:eur,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
+{label:'East Asian',data:eas,backgroundColor:C.accent,borderRadius:3,borderSkipped:false},
+{label:'Rest of world',data:rest,backgroundColor:C.dim,borderRadius:3,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0},stacked:true},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global total',color:C.dim},stacked:true,min:0,max:100}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart4', 'figure_num': 4,
+            'title': 'Total Fertility Rates: The Builder Nations vs. Replacement Level',
+            'desc': 'Every European and East Asian nation is below the 2.1 replacement rate. Most are far below it.',
+            'source': 'Eurostat, Statistics Korea, China NBS, Japan MHLW, World Bank — 2024',
+            'position': 'after_heading_The Arithmetic of Extinction',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart4');
 const labels=['South Korea','Hong Kong','Taiwan','Singapore','China','Japan','Spain','Italy','Poland','Greece','Germany','UK','France','Replacement'];
 const vals=[0.72,0.77,0.87,0.97,1.02,1.20,1.19,1.24,1.29,1.30,1.35,1.49,1.68,2.1];
 const colors=vals.map((v,i)=>i===labels.length-1?C.green:v<1.0?C.accent:v<1.5?C.amber:C.blue);
@@ -2675,13 +2746,13 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,
 })();"""
         },
         {
-            'id': 'buildersChart2', 'figure_num': 2,
+            'id': 'buildersChart5', 'figure_num': 5,
             'title': 'European and East Asian Share of World Population, 1800–2100',
             'desc': 'The populations that built the modern world are shrinking from over 40% of humanity to under 15%.',
             'source': 'UN Population Division 2024, Maddison Project Database 2020',
-            'position': 'after_para_26',
+            'position': 'after_para_34',
             'js': """
-(()=>{const ctx=document.getElementById('buildersChart2');
+(()=>{const ctx=document.getElementById('buildersChart5');
 const yrs=[1800,1850,1900,1950,1970,2000,2025,2050,2075,2100];
 const europe=[20.5,21.8,24.7,21.6,17.8,12.0,9.2,7.4,6.1,5.1];
 const eastAsia=[28.4,28.0,24.0,24.5,23.9,22.8,20.0,16.2,13.0,10.5];
@@ -2696,13 +2767,13 @@ scales:{x:linX(1800,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
 })();"""
         },
         {
-            'id': 'buildersChart3', 'figure_num': 3,
+            'id': 'buildersChart6', 'figure_num': 6,
             'title': 'Population Trajectories 2025–2100 (Indexed: 2025 = 100)',
-            'desc': 'The scissors: builder populations shrink while sub-Saharan Africa doubles.',
+            'desc': 'The scissors: builder populations shrink while sub-Saharan Africa triples.',
             'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
-            'position': 'after_para_30',
+            'position': 'after_para_38',
             'js': """
-(()=>{const ctx=document.getElementById('buildersChart3');
+(()=>{const ctx=document.getElementById('buildersChart6');
 const yrs=[2025,2035,2050,2065,2080,2100];
 const europe=[100,97,90,82,75,68];
 const china=[100,96,84,70,60,52];
@@ -2721,13 +2792,13 @@ scales:{x:linX(2025,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
 })();"""
         },
         {
-            'id': 'buildersChart4', 'figure_num': 4,
+            'id': 'buildersChart7', 'figure_num': 7,
             'title': 'South Africa: Eskom Load-Shedding Hours per Year, 2007–2024',
             'desc': 'From zero load-shedding to over 6,500 hours — the collapse of a First World power grid.',
             'source': 'CSIR South Africa, Eskom Annual Reports',
-            'position': 'after_para_40',
+            'position': 'after_para_49',
             'js': """
-(()=>{const ctx=document.getElementById('buildersChart4');
+(()=>{const ctx=document.getElementById('buildersChart7');
 const yrs=['2007','2008','2014','2015','2018','2019','2020','2021','2022','2023','2024'];
 const hrs=[0,600,100,850,150,530,860,1100,2500,6600,2900];
 new Chart(ctx,{type:'bar',data:{labels:yrs,datasets:[{label:'Load-shedding hours',data:hrs,
@@ -2737,13 +2808,13 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
 })();"""
         },
         {
-            'id': 'buildersChart5', 'figure_num': 5,
+            'id': 'buildersChart8', 'figure_num': 8,
             'title': 'South Africa: GDP Per Capita (Constant 2015 USD), 1994–2024',
             'desc': 'Thirty years after transition, GDP per capita has declined since 2011.',
             'source': 'World Bank, World Development Indicators',
-            'position': 'after_para_43',
+            'position': 'after_para_52',
             'js': """
-(()=>{const ctx=document.getElementById('buildersChart5');
+(()=>{const ctx=document.getElementById('buildersChart8');
 const yrs=[1994,1996,1998,2000,2002,2004,2006,2008,2010,2011,2012,2014,2016,2018,2020,2022,2024];
 const gdp=[5400,5500,5500,5600,5700,5900,6300,6600,6800,7000,6950,6850,6700,6650,5900,6200,6100];
 new Chart(ctx,{type:'line',data:{datasets:[
