@@ -1,7 +1,7 @@
 ---
 title: >-
-  The Empty Cradle Bargain: Why Your Decision Not to Have
-  Children Is Everyone's Problem
+  The Empty Cradle Bargain: Why Falling Birth Rates Are
+  Everyone's Problem
 date: "2026-02-04"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem
@@ -20,7 +20,7 @@ share_summary: >-
   failed by a society that never told them the truth about fertility.
 signal: ''
 ---
-# The Empty Cradle Bargain: Why Your Decision Not to Have Children Is Everyone's Problem
+# The Empty Cradle Bargain: Why Falling Birth Rates Are Everyone's Problem
 
 Picture a dinner party in any prosperous Western city. London, Sydney, Munich, Toronto — the setting hardly matters. Around the table sit eight adults in their mid-thirties: educated, employed, well-travelled. Between them, they have two children. One couple has a toddler. Another is "thinking about it." Two are happily child-free. And then there is one woman — you might not know which, because she will not volunteer it — who has been trying for three years, has been through two rounds of IVF, and cries in the shower more often than she would ever admit. Nobody at the table talks about this. It is, in many ways, the cruellest silence of the modern age.
 

@@ -174,6 +174,13 @@ def chunk_sections_for_tts(sections: list[str], max_chars: int = TTS_MAX_CHARS) 
     if current_chunk:
         chunks.append(current_chunk)
 
+    # Merge last chunk into previous if it's too short for TTS
+    if len(chunks) >= 2:
+        last_len = sum(len(t) + 30 for _, t in chunks[-1])
+        if last_len < 1000:
+            chunks[-2].extend(chunks[-1])
+            chunks.pop()
+
     return chunks
 
 

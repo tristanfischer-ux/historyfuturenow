@@ -404,7 +404,7 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
 
 # ─── Stage 2: Audio Rendering (Gemini TTS) ───────────────────────────────────
 
-GEMINI_TTS_MODEL = "gemini-2.5-pro-preview-tts"
+GEMINI_TTS_MODEL = "gemini-2.5-pro-tts"
 
 # Gemini TTS voices — male + female for clear distinction
 VOICE_SPEAKER_A = "Puck"       # Upbeat, lively male — James
