@@ -2433,10 +2433,32 @@ scales:{x:linX(1975,2024),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{disp
         },
         {
             'id': 'cradleChart3', 'figure_num': 3,
+            'title': 'Female Fertility Decline by Age',
+            'desc': 'Chance of conception per cycle and IVF live birth rate — the cliff edge after 35',
+            'source': 'ACOG (2014), RCOG (2011), HFEA (2024). Natural conception = per-cycle probability; IVF = live birth rate per cycle.',
+            'position': 'after_heading:The Celebrity Mirage',
+            'js': """
+(()=>{const ctx=document.getElementById('cradleChart3');
+const ages=['20','25','28','30','32','35','37','38','40','42','43','45'];
+const natural=[25,25,22,20,18,15,12,10,5,3,2,1];
+const ivf=[null,33,33,32,30,29,25,20,11,6,4,2];
+new Chart(ctx,{type:'line',data:{labels:ages,
+datasets:[
+{label:'Natural conception (% per cycle)',data:natural,borderColor:C.accent,backgroundColor:C.accent+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.accent,borderWidth:2.5},
+{label:'IVF live birth rate (% per cycle)',data:ivf,borderColor:C.purple,backgroundColor:C.purple+'10',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5,borderDash:[6,3]}
+]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
+annotation:{annotations:{cliff:{type:'line',xMin:'35',xMax:'35',borderColor:C.dim+'80',borderWidth:1.5,borderDash:[4,4],label:{display:true,content:'Sharp decline begins',position:'start',color:C.dim,font:{size:10}}}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:"Woman's age",color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:40,title:{display:true,text:'Probability (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'cradleChart4', 'figure_num': 4,
             'title': 'Share of Global Births: European-Heritage & Chinese Populations',
             'desc': 'From 40% of all births in 1950 to a projected 2% by 2100',
             'source': 'UN Population Division, World Population Prospects 2024. Projected values shown dashed.',
             'position': 'after_heading:The Innovation Collapse',
+            'tall': False,
             'js': """
 (()=>{const ctx=document.getElementById('cradleChart3');
 const yrsH=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
@@ -2453,14 +2475,14 @@ scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid
 })();"""
         },
         {
-            'id': 'cradleChart4', 'figure_num': 4,
+            'id': 'cradleChart5', 'figure_num': 5,
             'title': 'Old-Age Dependency Ratios: 2020 vs 2050',
             'desc': 'Retirees per 100 working-age adults — the fiscal time bomb',
             'source': 'UN Population Division, World Population Prospects 2024; World Bank',
             'position': 'after_heading:Cultural Memory Requires People',
             'tall': True,
             'js': """
-(()=>{const ctx=document.getElementById('cradleChart4');
+(()=>{const ctx=document.getElementById('cradleChart5');
 const countries=['Japan','S. Korea','Italy','Germany','China','UK','France','US'];
 const dep2020=[48,23,37,34,17,30,33,26];
 const dep2050=[70,69,62,55,47,40,43,36];
@@ -2473,14 +2495,14 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{col
 })();"""
         },
         {
-            'id': 'cradleChart5', 'figure_num': 5,
+            'id': 'cradleChart6', 'figure_num': 6,
             'title': 'Pro-Natalist Policy Interventions and Fertility Outcomes',
             'desc': 'Fertility rates before and after major policy packages — ambitious policy moves the needle',
             'source': 'Eurostat, national statistics offices (Hungary KSH, INSEE, SCB, CBS Israel). Before = pre-policy baseline; After = latest available.',
-            'position': 'after_heading:The Employer Dimension',
+            'position': 'after_heading:Fertility Education and Employer Mandates',
             'tall': True,
             'js': """
-(()=>{const ctx=document.getElementById('cradleChart5');
+(()=>{const ctx=document.getElementById('cradleChart6');
 const countries=['Hungary\\n(2010-2024)','France\\n(1995-2024)','Sweden\\n(2005-2024)','Israel\\n(2000-2024)'];
 const before=[1.23,1.73,1.85,2.95];
 const after=[1.53,1.68,1.45,2.90];
