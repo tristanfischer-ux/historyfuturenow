@@ -676,6 +676,35 @@ def build_article(essay, all_essays):
     <img src="{hero_img}" alt="Editorial illustration for {html_mod.escape(essay['title'])}" class="article-hero-img" loading="lazy" width="1200" height="675">
   </div>'''
 
+    # Split body at References heading so we can insert the discussion + share CTA before it
+    import re
+    refs_pattern = re.compile(r'(<h2[^>]*>\s*References\s*</h2>)', re.IGNORECASE)
+    refs_match = refs_pattern.search(body)
+    if refs_match:
+        body_before_refs = body[:refs_match.start()]
+        body_refs = body[refs_match.start():]
+    else:
+        body_before_refs = body
+        body_refs = ''
+
+    # Build end-of-article CTA: discussion player + share prompt
+    share_url = f"{SITE_URL}/articles/{essay['slug']}"
+    share_title = html_mod.escape(essay['title'])
+    share_text = html_mod.escape(essay.get('share_summary', '') or essay['excerpt'][:140])
+    share_cta = f'''
+  <div class="article-end-cta" data-share-url="{share_url}" data-share-title="{share_title}" data-share-text="{share_text}">
+    <p class="cta-prompt">If this changed how you think, share it with someone who should read it.</p>
+    <div class="cta-share-buttons">
+      <button class="share-btn" data-share="x" aria-label="Share on X" title="Share on X">{_SHARE_ICONS['x']}</button>
+      <button class="share-btn" data-share="linkedin" aria-label="Share on LinkedIn" title="Share on LinkedIn">{_SHARE_ICONS['linkedin']}</button>
+      <button class="share-btn" data-share="whatsapp" aria-label="Share on WhatsApp" title="Share on WhatsApp">{_SHARE_ICONS['whatsapp']}</button>
+      <button class="share-btn" data-share="email" aria-label="Share via email" title="Share via email">{_SHARE_ICONS['email']}</button>
+      <button class="share-btn" data-share="copy" aria-label="Copy link" title="Copy link">{_SHARE_ICONS['copy']}</button>
+    </div>
+  </div>'''
+
+    end_of_article_cta = discussion_player + share_cta
+
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -706,9 +735,12 @@ def build_article(essay, all_essays):
 {audio_player}
   {make_share_bar(essay, 'top')}
   <div class="article-body">
-    {body}
+    {body_before_refs}
   </div>
-{discussion_player}
+{end_of_article_cta}
+  <div class="article-references">
+    {body_refs}
+  </div>
   {make_share_bar(essay, 'bottom')}
 
   <div class="article-footer">

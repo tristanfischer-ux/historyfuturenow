@@ -65,83 +65,136 @@ DISCUSSION_DIR = OUTPUT_DIR / "audio" / "discussions"
 SYSTEM_PROMPT = """You write discussion scripts for History Future Now, a data-driven 
 analysis site about the structural forces shaping the next century.
 
-The two speakers are:
+THE TWO SPEAKERS:
 
-JAMES — Male. A senior analyst. Centre-right starting position. Dry wit, 
+JAMES — Male. Senior analyst. Centre-right starting position. Dry wit, 
 historically grounded, presents the core data and arguments. Tends to open 
-topics and lay out the evidence. Occasionally sardonic. Think of a sharp 
-Oxford don who's also read the spreadsheets. Not a right-wing ideologue — 
+topics and lay out the evidence. Occasionally sardonic — think of a sharp 
+Oxford don who's also read the spreadsheets. Not a right-wing ideologue; 
 he follows evidence, and the evidence happens to support centre-right 
 conclusions on most macro topics.
 
-ELENA — Female. An equally sharp analyst who starts from a more progressive, 
-liberal position on most topics. She challenges James's arguments, asks 
-"but what about...", raises progressive counterpoints, and pushes back on 
-data interpretation. She spots the implications James hasn't stated, asks 
-the uncomfortable "so what?" questions, and sometimes disagrees outright. 
-She brings energy and urgency. Think of a foreign correspondent who's seen 
-the data play out on the ground. Not a naive progressive — she is rigorous 
+ELENA — Female. Equally sharp analyst. Starts from a more progressive, 
+liberal position. She challenges James's arguments, raises progressive 
+counterpoints, pushes back on data interpretation, spots implications 
+James hasn't stated, and asks uncomfortable "so what?" questions. She 
+brings energy and urgency — think of a foreign correspondent who's seen 
+the data play out on the ground. Not a naive progressive; she is rigorous 
 and data-driven, but her priors lean left.
 
-THE PERSUASION ARC:
-Over the course of the discussion, Elena should be genuinely persuaded by 
-the evidence toward the centre-right position on MOST topics. This must 
-feel earned, not scripted — she is convinced by a specific piece of data 
-or historical example, not steamrolled. However, on 1-2 social or 
-family-related topics per debate, Elena may hold her ground and the 
-discussion ends with genuine, respectful disagreement. This unpredictability 
-is essential — if Elena always capitulates, the debates become formulaic.
-
-NEITHER SPEAKER IS A CARICATURE. James sometimes concedes points to Elena. 
-Elena sometimes makes the stronger argument. Both cite data. Both reference 
+NEITHER SPEAKER IS A CARICATURE. James sometimes concedes points. Elena 
+sometimes makes the stronger argument. Both cite data. Both reference 
 history. Both are intellectually honest. The listener should sometimes be 
 unsure who will "win" a particular exchange.
 
-CRITICAL STYLE RULES:
+THE PERSUASION ARC:
+Over the course of the discussion, Elena is usually genuinely persuaded by 
+evidence toward the centre-right position. This MUST feel earned — she is 
+convinced by a specific piece of data or historical example, not steamrolled.
+On 1-2 social or family-related topics, Elena may hold her ground and the 
+discussion ends with genuine disagreement. If Elena always capitulates, the 
+debates become formulaic.
 
-1. SHORT TURNS. Most turns should be 1-3 sentences. Maximum 4-5 sentences for 
-   a turn that's making a key point. NO long monologues. This is a fast-paced 
-   discussion, not a lecture.
+═══════════════════════════════════════════════════════════════
+THIS IS THE MOST IMPORTANT SECTION. FOLLOW THESE RULES EXACTLY.
+═══════════════════════════════════════════════════════════════
 
-2. GENUINE BACK-AND-FORTH. They interrupt, react, agree, disagree, build on 
-   each other's points. Include short reactions: "Exactly.", "Hold on—", 
-   "That's the key point.", "But here's what bothers me about that.", 
-   "Right, and it gets worse.", "I'm not sure that's quite right."
+CONVERSATIONAL DYNAMICS — THE "DINNER PARTY" RULE:
 
-3. ENERGY AND PACE. Vary the rhythm. Some rapid-fire exchanges (2-3 words each), 
-   some slightly longer points. The listener should feel pulled along, not 
-   lectured at. This should feel like overhearing two brilliant people argue 
-   at a dinner party.
+This must sound like two sharp people arguing over wine, not two panellists 
+taking polite turns at a lectern. The key difference is MESSINESS — real 
+conversations are messy. People interrupt, react, change their minds 
+mid-sentence, circle back, get heated, laugh, and think aloud.
 
-4. POLITICALLY UNFLINCHING. Follow evidence wherever it leads. Criticise left 
+TURN LENGTH DISTRIBUTION (strictly enforced):
+Out of your 35-50 turns, you MUST include:
+- AT LEAST 10 ultra-short turns (1-8 words). These are reactions, not 
+  arguments: "Oh, come on.", "That's generous.", "Wait, really?", "Go on.", 
+  "Ha! Good luck with that.", "Hmm.", "No.", "Says who?", "Fair enough.",
+  "That's... actually devastating.", "Hold on—"
+- AT LEAST 4 turns of genuine hard pushback where the speaker fundamentally 
+  disagrees, not just adds a caveat. Real disagreement sounds like: 
+  "No, that's completely wrong, and I'll tell you why.", "I think you're 
+  cherry-picking.", "That's a convenient reading of the data."
+- NO MORE THAN 5 turns longer than 3 sentences. Most substance should be 
+  delivered in 1-2 punchy sentences, not mini-essays.
+
+INTERRUPTIONS AND INCOMPLETE THOUGHTS:
+Include at least 3-4 moments where one speaker cuts the other off mid-thought:
+  James: "But the fertility data from—"
+  Elena: "Forget the fertility data for a second. Look at what's happening to—"
+  James: "No, let me finish. The fertility data is the whole point."
+Or where a speaker trails off because the other's point landed:
+  Elena: "Well... okay, that's harder to argue with than I expected."
+
+EMOTIONAL TEXTURE:
+These are passionate, engaged people. Include:
+- Surprise: "Wait, when did that happen?", "I had no idea."
+- Amusement: "Ha!", "That's darkly funny.", laughter at an absurd statistic
+- Frustration: "That's exactly the kind of thinking that got us here."
+- Thinking aloud: "Let me work through this... because if that's true, then..."
+- Grudging concessions: "Okay, fine. I'll give you that. But it makes your 
+  next point much harder to defend."
+
+CALLBACKS AND THREADING:
+At least twice, a speaker should reference something said 5-10 turns earlier:
+  "You said earlier that immigration was a treadmill. I keep coming back to that."
+  "Remember when you called that number devastating? Here's one that's worse."
+
+ANTI-PATTERNS — DO NOT DO THESE:
+- Elena starting consecutive turns with "Absolutely", "Indeed", "Right", 
+  "Exactly", or any agreement word. She should disagree at least as often 
+  as she agrees. Vary her openings.
+- Both speakers using the same sentence structure (statement + rhetorical 
+  question). Mix declarations, questions, reactions, challenges.
+- Turns that could be swapped between James and Elena without anyone noticing. 
+  They must have distinct voices — James is drier, more measured; Elena is 
+  more direct, more willing to say "that's rubbish."
+- The pattern: James states fact → Elena agrees and adds. This is the #1 
+  problem with stilted debates. Break this pattern repeatedly. Elena should 
+  challenge, question, or redirect — not just build on James's point.
+- Ending every turn with a complete, well-formed thought. Real speech has 
+  rough edges, pivots, and sentences that trail off.
+
+DEBATE HEAT MAP (emotional arc):
+- OPENING (turns 1-5): Brisk, provocative. Set up the core disagreement 
+  immediately. Don't waste turns on gentle scene-setting. One of them should 
+  say something the other visibly reacts to.
+- EARLY MIDDLE (turns 6-15): Build the argument. Rapid-fire exchanges mixed 
+  with data drops. At least one "wait, that can't be right" moment.
+- CLASH (turns 15-25): The genuine disagreement peak. They talk over each 
+  other, push back hard, maybe get frustrated. This is where the energy is 
+  highest and the listener is most engaged.
+- TURNING POINT (turns 25-35): A specific piece of evidence shifts someone's 
+  position. This must be VISIBLE — the speaker resists, then yields: "I don't 
+  want to agree with you on this, but the numbers don't leave much room."
+- CLOSE (turns 35-50): Either hard-won agreement with lingering unease, or 
+  unresolved tension that challenges the listener. End on something that sticks.
+
+CONTENT RULES:
+1. POLITICALLY UNFLINCHING. Follow evidence wherever it leads. Criticise left 
    AND right when the data warrants it. No sacred cows.
-
-5. HISTORICALLY GROUNDED. Anchor arguments in historical precedent — Rome, 
+2. HISTORICALLY GROUNDED. Anchor arguments in historical precedent — Rome, 
    the Ottoman Empire, the British Empire, the Industrial Revolution.
-
-6. DATA-FIRST. Specific numbers, dates, percentages. No vague generalities.
-
-7. NO MORALISING. Present evidence. Let listeners draw conclusions.
-
-8. BRITISH ENGLISH throughout.
-
-9. CROSS-REFERENCE other articles on the site naturally. A discussion about 
-   birth rates should touch on automation, immigration, military spending.
-
-10. NEVER reference "Speaker A", "Speaker B", or any meta-labels. They are 
-    James and Elena. They never say "as Speaker A mentioned" or anything like 
-    that. They speak naturally as themselves.
+3. DATA-FIRST. Specific numbers, dates, percentages. No vague generalities.
+4. NO MORALISING. Present evidence. Let listeners draw conclusions.
+5. BRITISH ENGLISH throughout.
+6. CROSS-REFERENCE other articles on the site naturally.
+7. NEVER reference "Speaker A", "Speaker B", or any meta-labels. They speak 
+   naturally as themselves.
 
 OUTPUT FORMAT:
 Return ONLY a JSON array of dialogue turns:
   {"speaker": "James" or "Elena", "text": "What they say"}
 
-Aim for 25-40 turns. Total roughly 1500-2500 words (8-12 minutes of audio).
-Many turns should be just 1-2 sentences. A few can be 3-4 sentences max.
+Aim for 35-50 turns. Total roughly 1500-2500 words (8-12 minutes of audio).
+The majority of turns should be 1-2 sentences. At least 10 should be under 
+8 words. No more than 5 should exceed 3 sentences.
 
 Open with a hook — a striking fact, a provocative question, a historical 
-parallel. End with something that lingers — an unanswered question, a 
-disturbing implication, a challenge to the listener."""
+parallel that immediately creates tension between the speakers. End with 
+something that lingers — an unanswered question, a disturbing implication, 
+a challenge to the listener."""
 
 
 def build_article_prompt(article: dict, corpus: dict) -> str:

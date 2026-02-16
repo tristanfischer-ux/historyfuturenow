@@ -311,6 +311,21 @@ img { max-width: 100%; height: auto; }
 .discussion-speed { font-family: var(--mono); font-size: 0.65rem; color: #5b4fc7; background: #fff; border: 1px solid #d4d0f0; border-radius: 4px; padding: 0.2rem 0.4rem; cursor: pointer; white-space: nowrap; transition: all 0.15s; user-select: none; }
 .discussion-speed:hover { color: #3b2f8a; border-color: #5b4fc7; }
 
+/* END-OF-ARTICLE CTA */
+.article-end-cta { margin: 2.5rem 0 0; padding: 2rem 1.5rem; background: linear-gradient(135deg, #f8f6ff 0%, #f0f4ff 100%); border: 1px solid #d4d0f0; border-radius: 12px; text-align: center; }
+.article-end-cta .discussion-player { margin: 0 0 1.5rem; }
+.article-end-cta .discussion-player-inner { background: rgba(255,255,255,0.6); }
+.cta-prompt { font-family: var(--sans); font-size: 0.95rem; font-weight: 500; color: #3b2f8a; margin: 0 0 1rem; line-height: 1.5; }
+.cta-share-buttons { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.cta-share-buttons .share-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #d4d0f0; background: #fff; color: #5b4fc7; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+.cta-share-buttons .share-btn:hover { background: #5b4fc7; color: #fff; border-color: #5b4fc7; transform: scale(1.08); }
+.cta-share-buttons .share-btn svg { width: 18px; height: 18px; }
+
+/* ARTICLE REFERENCES */
+.article-references { max-width: 680px; margin: 0 auto; }
+.article-references h2 { font-size: 1.2rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--text-dim); }
+.article-references p, .article-references li { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
+
 /* RESPONSIVE */
 @media (max-width: 640px) {
   .page-container { padding: 1.5rem 1rem 2rem; }
@@ -340,6 +355,8 @@ img { max-width: 100%; height: auto; }
   .discussion-play-btn { order: 0; width: 36px; height: 36px; }
   .discussion-progress-wrap { order: 3; flex-basis: 100%; }
   .discussion-meta { max-width: none; }
+  .article-end-cta { padding: 1.25rem 1rem; margin: 1.5rem 0 0; }
+  .cta-prompt { font-size: 0.85rem; }
   .audio-time { order: 2; min-width: auto; }
   .audio-speed { order: 4; }
   .hero-chart-wrap { padding: 0 1rem 1rem; }

@@ -1,0 +1,69 @@
+---
+description: Defines the visual art style for all article hero images. Enforced when generating or reviewing hero images.
+alwaysApply: true
+---
+
+# Article Hero Image Art Style
+
+All hero images across the site must follow a **consistent visual style**. The canonical reference is the style used for "The Robot Bargain" and "The Silence of the Scribes" articles.
+
+## The Style: Flat Geometric Editorial Illustration
+
+Every hero image must be a **flat, geometric, modernist editorial illustration** — think mid-century modern poster art crossed with editorial infographics.
+
+### Required Characteristics
+
+- **Flat shapes and bold silhouettes** — no realistic rendering, no painterly textures, no gradients that simulate 3D depth
+- **Geometric and stylised** — figures, buildings, and objects are reduced to clean geometric forms, not anatomically detailed
+- **Limited, deliberate colour palette** — typically 4–6 colours per image, drawn from warm earth tones (terracotta, ochre, sand, navy, muted teal, cream, charcoal). Avoid neon or saturated primaries.
+- **Strong compositional structure** — clear visual hierarchy, balanced layout, often uses horizontal bands or layered planes
+- **Minimal texture** — flat colour fills, not brushstrokes or photographic texture. Subtle grain is acceptable but not dominant.
+- **Symbolic, not literal** — convey the article's theme through visual metaphor and iconography, not a literal scene
+- **No photorealism** — no realistic faces, no detailed landscapes, no oil-painting aesthetics
+- **Clean lines** — crisp edges between colour areas, not soft or blended
+
+### Colour Guidance
+
+Use the warm, muted editorial palette consistent across the site:
+- Terracotta / burnt orange (#C4704B range)
+- Deep navy / dark blue (#2B3A5C range)
+- Sand / cream (#F5E6D0 range)
+- Muted teal (#5B8A8A range)
+- Warm grey / charcoal (#4A4A4A range)
+- Ochre / gold (#D4A843 range)
+- Dusty rose / muted red (#B85C5C range)
+
+Accent colours are fine but should remain muted and editorial, never garish.
+
+### What to Avoid
+
+| Avoid | Why |
+|-------|-----|
+| Realistic / painterly style | Looks like concept art or AI "fantasy art" — inconsistent with the editorial brand |
+| Detailed faces or anatomy | The style uses simplified, geometric figures |
+| Heavy texture or brushstrokes | Breaks the flat, clean aesthetic |
+| Photographic depth of field | This is graphic design, not photography |
+| Bright saturated colours | The palette is warm and muted, not vivid |
+| Busy, cluttered compositions | Each image should have clear negative space and visual breathing room |
+
+### Prompt Guidance (for AI Image Generation)
+
+When generating hero images, use prompts that include terms like:
+- "flat geometric editorial illustration"
+- "mid-century modern poster style"
+- "bold silhouettes, limited colour palette"
+- "stylised, minimalist, warm earth tones"
+- "editorial infographic illustration"
+- "clean lines, no texture, flat colour"
+
+Explicitly exclude:
+- "realistic", "photorealistic", "detailed", "painterly"
+- "oil painting", "concept art", "fantasy art"
+- "3D render", "photograph"
+
+## When Reviewing Images
+
+- If a hero image uses a realistic or painterly style, flag it for regeneration
+- If the colour palette is too saturated or inconsistent with the site palette, flag it
+- If the image has heavy texture, detailed faces, or photographic qualities, flag it
+- The test: does this image look like it belongs next to "The Robot Bargain" and "The Silence of the Scribes"? If not, regenerate it.
