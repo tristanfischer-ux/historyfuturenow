@@ -2641,8 +2641,8 @@ const sectors=['IT services &\\nsoftware dev','Creative &\\nadvertising','Legal\
 const sizes=[1240,620,380,340,280];
 const automatable=[65,55,45,60,70];
 new Chart(ctx,{type:'bar',data:{labels:sectors,datasets:[
-{label:'Market size ($B)',data:sizes,backgroundColor:C.blue,borderRadius:3,borderSkipped:false,yAxisID:'y'},
-{label:'% automatable by AI',data:automatable,backgroundColor:C.accent+'88',borderColor:C.accent,borderWidth:2,borderRadius:3,borderSkipped:false,yAxisID:'y1',type:'line',tension:.3,pointRadius:5,pointBackgroundColor:C.accent,fill:false}
+{label:'Market size ($B)',data:sizes,backgroundColor:C.blue,borderRadius:3,borderSkipped:false,yAxisID:'y',order:1},
+{label:'% automatable by AI',data:automatable,backgroundColor:C.accent+'88',borderColor:C.accent,borderWidth:2,borderRadius:3,borderSkipped:false,yAxisID:'y1',type:'line',tension:.3,pointRadius:5,pointBackgroundColor:C.accent,fill:false,order:0}
 ]},options:{responsive:true,maintainAspectRatio:false,
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{if(i.datasetIndex===0)return'Market size: $'+i.raw+'B';return'Automatable: '+i.raw+'%'}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
