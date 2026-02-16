@@ -39,6 +39,17 @@ def get_all_slugs() -> list[str]:
     return sorted(p.stem for p in SCRIPTS_DIR.glob("*.json"))
 
 
+def needs_regeneration(slug: str) -> bool:
+    """Check if audio needs regenerating (script is newer than audio)."""
+    script_path = SCRIPTS_DIR / f"{slug}.json"
+    audio_path = DISCUSSION_DIR / f"{slug}.mp3"
+
+    if not audio_path.exists():
+        return True
+
+    return script_path.stat().st_mtime > audio_path.stat().st_mtime
+
+
 def deploy(batch_num: int, count: int) -> bool:
     """Run deploy script."""
     msg = f"feat: regenerate debate audio batch {batch_num} ({count} files)"
@@ -82,13 +93,21 @@ def main():
     DISCUSSION_DIR.mkdir(parents=True, exist_ok=True)
 
     all_slugs = get_all_slugs()
-    total = len(all_slugs)
+    pending_slugs = [s for s in all_slugs if needs_regeneration(s)]
+    skipped = len(all_slugs) - len(pending_slugs)
+    total = len(pending_slugs)
 
-    print(f"Total scripts: {total}")
+    print(f"Total scripts: {len(all_slugs)}")
+    print(f"Already up-to-date: {skipped} (skipping)")
+    print(f"Need regeneration: {total}")
     print(f"Deploy every: {args.deploy_every} completions")
     print(f"API keys: {len(GEMINI_API_KEYS)}")
     print(f"Deploy: {'no' if args.no_deploy else 'yes'}")
     print()
+
+    if total == 0:
+        print("Nothing to do — all audio is up-to-date.")
+        return
 
     done = 0
     failed = 0
@@ -96,7 +115,7 @@ def main():
     batch_num = 0
     since_last_deploy = 0
 
-    for i, slug in enumerate(all_slugs, 1):
+    for i, slug in enumerate(pending_slugs, 1):
         short = slug[:60]
         print(f"[{i}/{total}] {short}")
 
@@ -132,7 +151,7 @@ def main():
             since_last_deploy = 0
 
         # Rate limit gap between articles
-        if i < total and not args.dry_run:
+        if i < len(pending_slugs) and not args.dry_run:
             time.sleep(2)
 
     # Final deploy for remaining
