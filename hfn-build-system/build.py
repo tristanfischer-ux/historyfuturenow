@@ -547,8 +547,8 @@ def inject_charts_into_body(body_html, charts):
     # Build the combined JS for all charts
     all_js = '\n'.join(ch['js'] for ch in charts)
     script_block = f'''
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script src="/js/chart.umd.min.js"></script>
+<script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 {CHART_COLORS}
 {all_js}
@@ -819,8 +819,8 @@ def _build_section_editorial(part_name, pi):
     if chart_js_parts:
         all_js = "\n".join(chart_js_parts)
         chart_script = f'''
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script src="/js/chart.umd.min.js"></script>
+<script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 {CHART_COLORS}
 const _xy=(xs,ys)=>xs.map((x,i)=>({{x:+x,y:ys[i]}}));
@@ -1233,8 +1233,8 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 <html lang="en">
 <head>
 {make_head("History Future Now", home_desc, "/", json_ld=json_ld)}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script src="/js/chart.umd.min.js"></script>
+<script src="/js/chartjs-plugin-annotation.min.js"></script>
 </head>
 <body>
 
