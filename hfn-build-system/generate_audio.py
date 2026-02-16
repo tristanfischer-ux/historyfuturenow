@@ -2,20 +2,29 @@
 """
 History Future Now — Audio Narration Generator
 
-Generates MP3 narrations for all essays using Google Cloud TTS.
+Generates MP3 narrations for all essays using either:
+  - Google Cloud TTS (Neural2 voices) — the original cloud backend
+  - Voicebox (Qwen3-TTS) — local, free, with cloned voices
+
 Two alternating British voices (male + female) read the article straight through,
 switching at section boundaries for a varied listening experience.
 
-Prerequisites:
+Prerequisites (Google Cloud TTS):
     - gcloud CLI authenticated (gcloud auth login)
     - ffmpeg installed (brew install ffmpeg)
     - Cloud TTS API enabled on the GCP project
 
+Prerequisites (Voicebox):
+    - Voicebox server running (https://github.com/jamiepine/voicebox)
+    - ffmpeg installed
+    - Voice profiles created with VOICEBOX_PROFILE_MALE / VOICEBOX_PROFILE_FEMALE set
+
 Usage:
-    python3 generate_audio.py                    # Generate all missing audio
-    python3 generate_audio.py --article SLUG     # Generate for one article
-    python3 generate_audio.py --force            # Regenerate all (overwrite)
-    python3 generate_audio.py --dry-run          # Preview without API calls
+    python3 generate_audio.py                              # Google Cloud TTS (default)
+    python3 generate_audio.py --backend voicebox            # Use Voicebox locally
+    python3 generate_audio.py --backend voicebox --article SLUG
+    python3 generate_audio.py --force                       # Regenerate all (overwrite)
+    python3 generate_audio.py --dry-run                     # Preview without API calls
 """
 
 import os
@@ -271,10 +280,28 @@ def concatenate_mp3_segments(segments: list[bytes]) -> bytes:
             return f.read()
 
 
+# ─── Voicebox TTS Backend ─────────────────────────────────────────────────────
+
+def generate_section_audio_voicebox(text: str, voice: str) -> bytes:
+    """Generate audio for a section using the local Voicebox server.
+    Returns MP3 bytes (converted from Voicebox's WAV output)."""
+    from voicebox_tts import generate_speech_for_narration, wav_to_mp3
+
+    voice_type = "male" if voice == VOICE_MALE else "female"
+    wav_data = generate_speech_for_narration(text, voice=voice_type)
+    return wav_to_mp3(wav_data)
+
+
 # ─── Main Generation ─────────────────────────────────────────────────────────
 
-def generate_article_audio(filepath: Path, force: bool = False) -> bool:
-    """Generate audio narration with alternating male/female voices."""
+def generate_article_audio(filepath: Path, force: bool = False, backend: str = "gcloud") -> bool:
+    """Generate audio narration with alternating male/female voices.
+
+    Args:
+        filepath:  Path to the essay markdown file.
+        force:     Overwrite existing audio.
+        backend:   "gcloud" for Google Cloud TTS, "voicebox" for local Voicebox.
+    """
     title, slug, narration = extract_narration_text(filepath)
     output_path = AUDIO_DIR / f"{slug}.mp3"
 
@@ -307,10 +334,15 @@ def generate_article_audio(filepath: Path, force: bool = False) -> bool:
                 chunk_label += f"({j+1}/{len(sub_chunks)})"
             print(f"{chunk_label} {len(chunk):,} chars ({voice_label})")
 
-            mp3_data = generate_section_audio(chunk, voice)
+            if backend == "voicebox":
+                mp3_data = generate_section_audio_voicebox(chunk, voice)
+            else:
+                mp3_data = generate_section_audio(chunk, voice)
+
             mp3_segments.append(mp3_data)
 
-            if total_tts_calls % 20 == 0:
+            # Rate limiting (only needed for cloud backends)
+            if backend == "gcloud" and total_tts_calls % 20 == 0:
                 time.sleep(2)
 
     final_mp3 = concatenate_mp3_segments(mp3_segments)
@@ -319,8 +351,18 @@ def generate_article_audio(filepath: Path, force: bool = False) -> bool:
     output_path.write_bytes(final_mp3)
 
     total_mb = round(len(final_mp3) / (1024 * 1024), 2)
-    print(f"    Saved: {output_path.name} ({total_mb} MB, {total_tts_calls} API calls)")
+    print(f"    Saved: {output_path.name} ({total_mb} MB, {total_tts_calls} TTS calls)")
     return True
+
+
+def _validate_voicebox_backend():
+    """Validate that Voicebox is available and properly configured."""
+    from voicebox_tts import check_voicebox_ready, VOICEBOX_URL
+    ready, msg = check_voicebox_ready(require_profiles=True)
+    if not ready:
+        print(f"ERROR: {msg}")
+        sys.exit(1)
+    return VOICEBOX_URL
 
 
 def main():
@@ -328,27 +370,38 @@ def main():
     parser.add_argument("--article", type=str, help="Generate for a specific article slug")
     parser.add_argument("--force", action="store_true", help="Regenerate even if audio exists")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be generated")
+    parser.add_argument(
+        "--backend",
+        choices=["gcloud", "voicebox"],
+        default="gcloud",
+        help="TTS backend: 'gcloud' (Google Cloud TTS) or 'voicebox' (local Voicebox server)",
+    )
     args = parser.parse_args()
 
     import shutil
 
-    # Check gcloud
-    if not shutil.which('gcloud'):
-        print("ERROR: gcloud CLI not found. Install from https://cloud.google.com/sdk/docs/install")
-        sys.exit(1)
-
-    # Verify gcloud auth
-    try:
-        _get_gcloud_token()
-    except Exception as e:
-        print(f"ERROR: gcloud authentication failed: {e}")
-        print("  Run: gcloud auth login")
-        sys.exit(1)
-
-    # Check ffmpeg
+    # Check ffmpeg (needed by both backends)
     if not shutil.which('ffmpeg'):
         print("ERROR: ffmpeg not found. Install with: brew install ffmpeg")
         sys.exit(1)
+
+    # Backend-specific validation
+    if args.backend == "voicebox":
+        voicebox_url = _validate_voicebox_backend()
+    else:
+        # Google Cloud TTS checks
+        if not shutil.which('gcloud'):
+            print("ERROR: gcloud CLI not found. Install from https://cloud.google.com/sdk/docs/install")
+            print("  Alternatively, use --backend voicebox for local Voicebox TTS")
+            sys.exit(1)
+
+        try:
+            _get_gcloud_token()
+        except Exception as e:
+            print(f"ERROR: gcloud authentication failed: {e}")
+            print("  Run: gcloud auth login")
+            print("  Or use --backend voicebox for local Voicebox TTS")
+            sys.exit(1)
 
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -365,9 +418,14 @@ def main():
         essays = matches
 
     print(f"Audio generation: {len(essays)} essays")
-    print(f"Voices: {VOICE_MALE} (male) + {VOICE_FEMALE} (female)")
-    print(f"Backend: Google Cloud TTS (Neural2)")
-    print(f"Project: {GCP_PROJECT}")
+    if args.backend == "voicebox":
+        from voicebox_tts import VOICEBOX_URL, VOICEBOX_PROFILE_MALE, VOICEBOX_PROFILE_FEMALE
+        print(f"Backend: Voicebox (Qwen3-TTS) at {VOICEBOX_URL}")
+        print(f"Profiles: male={VOICEBOX_PROFILE_MALE[:12]}... female={VOICEBOX_PROFILE_FEMALE[:12]}...")
+    else:
+        print(f"Voices: {VOICE_MALE} (male) + {VOICE_FEMALE} (female)")
+        print(f"Backend: Google Cloud TTS (Neural2)")
+        print(f"Project: {GCP_PROJECT}")
     print(f"Output: {AUDIO_DIR}")
     print()
 
@@ -390,7 +448,7 @@ def main():
     for i, filepath in enumerate(essays, 1):
         print(f"\n[{i}/{len(essays)}]")
         try:
-            if generate_article_audio(filepath, force=args.force):
+            if generate_article_audio(filepath, force=args.force, backend=args.backend):
                 generated += 1
             else:
                 skipped += 1

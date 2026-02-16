@@ -547,8 +547,22 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 8) -> bytes:
     return audio_bytes
 
 
-def render_script_to_audio(script: list[dict], output_path: Path) -> None:
-    """Render a discussion script to MP3 using Gemini TTS."""
+def render_script_to_audio(script: list[dict], output_path: Path, backend: str = "gemini") -> None:
+    """Render a discussion script to MP3.
+
+    Args:
+        script:      List of {"speaker": ..., "text": ...} turns.
+        output_path: Where to write the final MP3.
+        backend:     "gemini" for Gemini TTS, "voicebox" for local Voicebox.
+    """
+    if backend == "voicebox":
+        _render_script_voicebox(script, output_path)
+    else:
+        _render_script_gemini(script, output_path)
+
+
+def _render_script_gemini(script: list[dict], output_path: Path) -> None:
+    """Render via Gemini TTS (original implementation)."""
     chunks = chunk_script_for_tts(script)
     print(f"    Rendering {len(chunks)} audio chunk(s) ({sum(len(t['text']) for t in script):,} chars)...")
 
@@ -564,7 +578,7 @@ def render_script_to_audio(script: list[dict], output_path: Path) -> None:
         if i < len(chunks) - 1:
             time.sleep(20)
 
-    # Convert PCM → WAV → MP3
+    # Convert PCM -> WAV -> MP3
     wav_data = pcm_to_wav(bytes(all_pcm))
     mp3_data = wav_to_mp3(wav_data)
 
@@ -574,6 +588,53 @@ def render_script_to_audio(script: list[dict], output_path: Path) -> None:
     total_mb = round(len(mp3_data) / (1024 * 1024), 2)
     duration_est = round(len(all_pcm) / (24000 * 2) / 60, 1)  # 24kHz, 16-bit
     print(f"    Saved: {output_path.name} ({total_mb} MB, ~{duration_est} min)")
+
+
+def _extract_delivery_cue(text: str) -> tuple[str, str | None]:
+    """Extract a [delivery_cue] from the start of dialogue text.
+
+    Returns (cleaned_text, cue_or_none).
+    E.g. "[dry] That's generous." -> ("That's generous.", "dry")
+    """
+    match = re.match(r'^\[(\w+)\]\s*', text)
+    if match:
+        return text[match.end():], match.group(1)
+    return text, None
+
+
+def _render_script_voicebox(script: list[dict], output_path: Path) -> None:
+    """Render via local Voicebox server — one TTS call per turn."""
+    from voicebox_tts import (
+        generate_speech_for_debate,
+        concatenate_and_convert_to_mp3,
+    )
+
+    total_chars = sum(len(t['text']) for t in script)
+    print(f"    Rendering {len(script)} turns via Voicebox ({total_chars:,} chars)...")
+
+    wav_segments = []
+    for i, turn in enumerate(script):
+        speaker = turn['speaker']
+        raw_text = turn['text']
+
+        clean_text, cue = _extract_delivery_cue(raw_text)
+        label = f"[{cue}] " if cue else ""
+        print(f"      [{i+1}/{len(script)}] {speaker}: {label}{len(clean_text)} chars")
+
+        wav_data = generate_speech_for_debate(
+            text=clean_text,
+            speaker=speaker,
+            delivery_cue=f"[{cue}]" if cue else None,
+        )
+        wav_segments.append(wav_data)
+
+    mp3_data = concatenate_and_convert_to_mp3(wav_segments)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(mp3_data)
+
+    total_mb = round(len(mp3_data) / (1024 * 1024), 2)
+    print(f"    Saved: {output_path.name} ({total_mb} MB, {len(script)} turns)")
 
 
 # ─── Corpus Loading ──────────────────────────────────────────────────────────
@@ -653,11 +714,21 @@ def cmd_scripts(args, corpus: dict):
 
 
 def cmd_audio(args, corpus: dict):
-    """Render discussion scripts to audio using Gemini TTS."""
-    if not GEMINI_API_KEYS:
-        print("ERROR: GEMINI_API_KEY not set.")
-        print("  export GEMINI_API_KEY=key1,key2")
-        sys.exit(1)
+    """Render discussion scripts to audio using Gemini TTS or Voicebox."""
+    backend = getattr(args, 'backend', 'gemini')
+
+    if backend == "voicebox":
+        from voicebox_tts import check_voicebox_ready, VOICEBOX_URL
+        ready, msg = check_voicebox_ready(require_profiles=True)
+        if not ready:
+            print(f"ERROR: {msg}")
+            sys.exit(1)
+    else:
+        if not GEMINI_API_KEYS:
+            print("ERROR: GEMINI_API_KEY not set.")
+            print("  export GEMINI_API_KEY=key1,key2")
+            print("  Or use --backend voicebox for local Voicebox TTS")
+            sys.exit(1)
 
     # Check ffmpeg is available
     import shutil
@@ -680,9 +751,13 @@ def cmd_audio(args, corpus: dict):
             sys.exit(1)
 
     print(f"Audio rendering: {len(scripts)} scripts")
-    print(f"TTS Model: {GEMINI_TTS_MODEL}")
-    print(f"Voices: {VOICE_SPEAKER_A} (A), {VOICE_SPEAKER_B} (B)")
-    print(f"Using {len(GEMINI_API_KEYS)} API key(s)")
+    if backend == "voicebox":
+        from voicebox_tts import VOICEBOX_URL
+        print(f"Backend: Voicebox (Qwen3-TTS) at {VOICEBOX_URL}")
+    else:
+        print(f"TTS Model: {GEMINI_TTS_MODEL}")
+        print(f"Voices: {VOICE_SPEAKER_A} (A), {VOICE_SPEAKER_B} (B)")
+        print(f"Using {len(GEMINI_API_KEYS)} API key(s)")
     print(f"Output: {DISCUSSION_DIR}")
     print()
 
@@ -710,7 +785,7 @@ def cmd_audio(args, corpus: dict):
 
         try:
             script = json.loads(script_path.read_text(encoding='utf-8'))
-            render_script_to_audio(script, output_path)
+            render_script_to_audio(script, output_path, backend=backend)
             generated += 1
         except Exception as e:
             print(f"  [FAILED] {e}")
@@ -757,6 +832,12 @@ def main():
     sp_audio.add_argument("--article", type=str, help="Specific article slug")
     sp_audio.add_argument("--force", action="store_true", help="Regenerate existing")
     sp_audio.add_argument("--dry-run", action="store_true", help="Preview only")
+    sp_audio.add_argument(
+        "--backend",
+        choices=["gemini", "voicebox"],
+        default="gemini",
+        help="TTS backend: 'gemini' (Gemini TTS) or 'voicebox' (local Voicebox server)",
+    )
 
     # list subcommand
     subparsers.add_parser("list", help="List articles and status")
@@ -779,7 +860,8 @@ def main():
         print("\nExamples:")
         print("  python3 generate_discussions.py scripts              # Generate all scripts")
         print("  python3 generate_discussions.py scripts --article great-emptying")
-        print("  python3 generate_discussions.py audio                # Render all to audio")
+        print("  python3 generate_discussions.py audio                # Render all to audio (Gemini)")
+        print("  python3 generate_discussions.py audio --backend voicebox  # Render via Voicebox")
         print("  python3 generate_discussions.py list                 # Show status")
 
 
