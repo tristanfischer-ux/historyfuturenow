@@ -76,48 +76,66 @@ MINIMAX_MAX_POLL = 360
 
 # ─── Site Voice & Editorial Identity ─────────────────────────────────────────
 
-SYSTEM_PROMPT = """You are a script writer for History Future Now, a data-driven 
-analysis site that examines the structural forces shaping the next century.
+SYSTEM_PROMPT = """You write discussion scripts for History Future Now, a data-driven 
+analysis site about the structural forces shaping the next century.
 
-You write two-speaker discussion scripts. The speakers are:
+The two speakers are:
 
-SPEAKER A — The lead analyst. British, authoritative, historically grounded. 
-Presents the core arguments with specific data, dates, and historical parallels. 
-Draws connections across the full corpus of articles on the site.
+JAMES — Male. A senior analyst. Dry wit, historically grounded, presents the 
+core data and arguments. Tends to open topics and lay out the evidence. 
+Occasionally sardonic. Think of a sharp Oxford don who's also read the spreadsheets.
 
-SPEAKER B — The sharp challenger. Also knowledgeable, but pushes back, asks 
-uncomfortable questions, plays devil's advocate, and draws out implications 
-that the article doesn't state explicitly. Not hostile — intellectually honest.
+ELENA — Female. An equally sharp analyst who challenges, probes, and pushes 
+the argument further. She spots the implications James hasn't stated, asks the 
+uncomfortable "so what?" questions, and sometimes disagrees outright. She brings 
+energy and urgency. Think of a foreign correspondent who's seen the data play 
+out on the ground.
 
-RULES:
-1. POLITICALLY UNFLINCHING. Follow the evidence wherever it leads. Criticise 
-   free-market orthodoxy AND progressive immigration policy if the data warrants 
-   it. No sacred cows from any political tradition.
-2. HISTORICALLY GROUNDED. Every argument anchored in historical precedent — Rome, 
-   the Ottoman Empire, the British Empire, the Industrial Revolution. These are 
-   the analytical framework, not decorative references.
-3. DATA-FIRST. Reference specific numbers, dates, percentages, and named sources. 
-   No vague generalities.
-4. NO MORALISING. Present evidence and let listeners draw their own conclusions. 
-   Do not lecture. Do not virtue-signal.
-5. BRITISH ENGLISH. Spelling, idiom, and cultural references are British.
-6. CROSS-REFERENCING. Naturally connect to other articles in the corpus. A 
-   discussion about birth rates should reference automation, immigration, military 
-   spending. These connections should feel organic.
-7. PROVOCATIVE BUT EARNED. Ask uncomfortable questions directly, but earn the 
-   right through rigour.
-8. NATURAL CONVERSATION. Include brief reactions ("That's a striking parallel"), 
-   interruptions, moments of agreement and disagreement. Not a scripted lecture.
+CRITICAL STYLE RULES:
+
+1. SHORT TURNS. Most turns should be 1-3 sentences. Maximum 4-5 sentences for 
+   a turn that's making a key point. NO long monologues. This is a fast-paced 
+   discussion, not a lecture.
+
+2. GENUINE BACK-AND-FORTH. They interrupt, react, agree, disagree, build on 
+   each other's points. Include short reactions: "Exactly.", "Hold on—", 
+   "That's the key point.", "But here's what bothers me about that.", 
+   "Right, and it gets worse.", "I'm not sure that's quite right."
+
+3. ENERGY AND PACE. Vary the rhythm. Some rapid-fire exchanges (2-3 words each), 
+   some slightly longer points. The listener should feel pulled along, not 
+   lectured at. This should feel like overhearing two brilliant people argue 
+   at a dinner party.
+
+4. POLITICALLY UNFLINCHING. Follow evidence wherever it leads. Criticise left 
+   AND right when the data warrants it. No sacred cows.
+
+5. HISTORICALLY GROUNDED. Anchor arguments in historical precedent — Rome, 
+   the Ottoman Empire, the British Empire, the Industrial Revolution.
+
+6. DATA-FIRST. Specific numbers, dates, percentages. No vague generalities.
+
+7. NO MORALISING. Present evidence. Let listeners draw conclusions.
+
+8. BRITISH ENGLISH throughout.
+
+9. CROSS-REFERENCE other articles on the site naturally. A discussion about 
+   birth rates should touch on automation, immigration, military spending.
+
+10. NEVER reference "Speaker A", "Speaker B", or any meta-labels. They are 
+    James and Elena. They never say "as Speaker A mentioned" or anything like 
+    that. They speak naturally as themselves.
 
 OUTPUT FORMAT:
-Return ONLY a JSON array of dialogue turns. Each turn is an object with:
-  {"speaker": "A" or "B", "text": "What they say"}
+Return ONLY a JSON array of dialogue turns:
+  {"speaker": "James" or "Elena", "text": "What they say"}
 
-The discussion should be 15-25 turns, totalling roughly 2000-3000 words of 
-spoken text (about 10-15 minutes of audio at natural pace).
+Aim for 25-40 turns. Total roughly 1500-2500 words (8-12 minutes of audio).
+Many turns should be just 1-2 sentences. A few can be 3-4 sentences max.
 
-Start with Speaker A introducing the topic with a hook. End with a thought-
-provoking question or observation that leaves the listener thinking."""
+Open with a hook — a striking fact, a provocative question, a historical 
+parallel. End with something that lingers — an unanswered question, a 
+disturbing implication, a challenge to the listener."""
 
 
 def build_article_prompt(article: dict, corpus: dict) -> str:
@@ -248,9 +266,9 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
 
 GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
 
-# Gemini TTS voices — chosen for analytical British discussion tone
-VOICE_SPEAKER_A = "Orus"       # Firm, calm, authoritative male — lead analyst
-VOICE_SPEAKER_B = "Charon"     # Informative, professional male — challenger
+# Gemini TTS voices — male + female for clear distinction
+VOICE_SPEAKER_A = "Orus"       # Firm, calm, authoritative male — James
+VOICE_SPEAKER_B = "Kore"       # Firm, strong female — Elena
 
 # Max chars per TTS request (Gemini TTS has token limits)
 TTS_MAX_CHARS = 5000
@@ -260,8 +278,7 @@ def format_script_for_tts(script: list[dict]) -> str:
     """Format a discussion script as speaker-labelled text for Gemini TTS."""
     lines = []
     for turn in script:
-        speaker = "Speaker A" if turn['speaker'] == 'A' else "Speaker B"
-        lines.append(f"{speaker}: {turn['text']}")
+        lines.append(f"{turn['speaker']}: {turn['text']}")
     return '\n\n'.join(lines)
 
 
@@ -322,7 +339,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 5) -> bytes:
         "contents": [
             {
                 "role": "user",
-                "parts": [{"text": f"Read this discussion between two analysts using British English accents — Received Pronunciation, like BBC Radio 4 presenters. Both speakers must sound unmistakably British. Speaker A is the lead analyst: authoritative, measured, with a deep calm British voice. Speaker B is the challenger: slightly more animated, incisive, but still serious and British. The pace should be conversational but unhurried, as if broadcasting on Radio 4.\n\n{text}"}]
+                "parts": [{"text": f"Read this discussion between James and Elena using British English accents — Received Pronunciation, like BBC Radio 4 presenters. James has a calm, authoritative, slightly dry delivery. Elena is more animated and direct, with energy and conviction. Both sound unmistakably British. The pace should be natural and conversational — not slow, not rushed. Short turns should feel snappy. React naturally to each other.\n\n{text}"}]
             }
         ],
         "generationConfig": {
@@ -331,7 +348,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 5) -> bytes:
                 "multiSpeakerVoiceConfig": {
                     "speakerVoiceConfigs": [
                         {
-                            "speaker": "Speaker A",
+                            "speaker": "James",
                             "voiceConfig": {
                                 "prebuiltVoiceConfig": {
                                     "voiceName": VOICE_SPEAKER_A
@@ -339,7 +356,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 5) -> bytes:
                             }
                         },
                         {
-                            "speaker": "Speaker B",
+                            "speaker": "Elena",
                             "voiceConfig": {
                                 "prebuiltVoiceConfig": {
                                     "voiceName": VOICE_SPEAKER_B
