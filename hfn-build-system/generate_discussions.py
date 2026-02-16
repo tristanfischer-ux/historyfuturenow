@@ -3,8 +3,8 @@
 History Future Now — Conversational Discussion Generator
 
 Two-stage pipeline:
-  Stage 1: Generate two-speaker discussion scripts using an LLM (Gemini/Claude)
-  Stage 2: Render scripts to audio using MiniMax TTS (two voices, merged)
+  Stage 1: Generate two-speaker discussion scripts using Gemini LLM
+  Stage 2: Render scripts to audio using Gemini TTS (two voices)
 
 Each discussion draws on the full corpus of 54+ articles, making
 cross-references and thematic connections that a single-article
@@ -12,8 +12,8 @@ narration cannot.
 
 Prerequisites:
     - Corpus context built: python3 generate_corpus_context.py
-    - For Stage 1 (scripts): GEMINI_API_KEY env var
-    - For Stage 2 (audio):   MINIMAX_API_KEY env var
+    - GEMINI_API_KEY env var (comma-separated for rotation)
+    - ffmpeg installed (brew install ffmpeg)
 
 Usage:
     python3 generate_discussions.py scripts                 # Generate all scripts
@@ -53,26 +53,12 @@ def _next_gemini_key() -> str:
     _key_index += 1
     return key
 
-MINIMAX_API_KEY = os.environ.get(
-    "MINIMAX_API_KEY",
-    "sk-api-okVnpvFR0DkxBjJ-A2SuhExLJSc2W4fdkc5gNnZhhd_VbITFeTrf-_DUCRsOhoeVUjqJ4YSRsrOFuAIYeuVaPVlzUJleeP5AOwa6x9UYZXCK2UEa60Fybbg",
-)
-
 GEMINI_MODEL = "gemini-2.5-flash"
-MINIMAX_MODEL = "speech-2.8-hd"
-
-# Two distinct voices for the discussion
-VOICE_A = "English_expressive_narrator"    # British male, analytical lead
-VOICE_B = "English_CaptivatingStoryteller" # Second speaker, challenger
 
 CORPUS_PATH = Path(__file__).parent / "corpus_context.json"
 SCRIPTS_DIR = Path(__file__).parent / "discussion_scripts"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
 DISCUSSION_DIR = OUTPUT_DIR / "audio" / "discussions"
-
-MINIMAX_API_BASE = "https://api.minimax.io"
-MINIMAX_POLL_INTERVAL = 5
-MINIMAX_MAX_POLL = 360
 
 # ─── Site Voice & Editorial Identity ─────────────────────────────────────────
 
