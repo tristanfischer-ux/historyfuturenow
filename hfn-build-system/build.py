@@ -16,6 +16,12 @@ MANIFEST_PATH = Path(__file__).parent / "original_articles.txt"
 
 MAX_NEW_ARTICLES = 10
 
+def truncate_excerpt(text, max_len):
+    """Truncate text to max_len characters, adding ellipsis if truncated."""
+    if len(text) <= max_len:
+        return html_mod.escape(text)
+    return html_mod.escape(text[:max_len].rstrip()) + '&hellip;'
+
 PARTS = {
     "Natural Resources": {"order": 1, "slug": "natural-resources", "color": "#0d9a5a", "color_soft": "#effaf4", "label": "Part 1", "icon": "🌍", "desc": "Energy, food, water, land — the physical foundations that every civilisation depends on."},
     "Global Balance of Power": {"order": 2, "slug": "balance-of-power", "color": "#2563eb", "color_soft": "#eff4ff", "label": "Part 2", "icon": "⚖️", "desc": "How nations rise, compete, and decline — from colonial empires to modern China."},
@@ -912,7 +918,7 @@ def build_section(part_name, essays, new_slugs=None):
       {thumb_html}
       <div class="section-article-text">
         <h3>{new_badge}{html_mod.escape(e['title'])}</h3>
-        <p>{html_mod.escape(e['excerpt'][:180])}</p>
+        <p>{truncate_excerpt(e['excerpt'], 180)}</p>
         <div class="section-article-meta">
           <span>{e['reading_time']} min read</span>
           {chart_tag}
@@ -1005,7 +1011,7 @@ def build_homepage(essays, new_essays=None):
         {img_html}
         <div class="latest-kicker">{new_tag}{pi['label']} &middot; {html_mod.escape(e['part'])} {badge} {audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
-        <p>{html_mod.escape(e['excerpt'][:200])}</p>
+        <p>{truncate_excerpt(e['excerpt'], 200)}</p>
         <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
       </a>\n"""
 
@@ -1028,7 +1034,7 @@ def build_homepage(essays, new_essays=None):
                 new_cards_html += f"""    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
       <div class="card-kicker" style="color:{pi['color']}"><span class="card-new-badge">New</span> {pi['label']}</div>
       <h3>{html_mod.escape(e['title'])}</h3>
-      <p>{html_mod.escape(e['excerpt'][:160])}</p>
+      <p>{truncate_excerpt(e['excerpt'], 160)}</p>
       <div class="card-meta">
         <span class="card-link" style="color:{pi['color']}">Read article &rarr;</span>
         <span class="card-time">{e['reading_time']} min{chart_badge}{audio_badge}</span>
@@ -1168,9 +1174,9 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
             audio_badge = ' <span class="card-audio">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
             cards += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
         <div class="card-kicker" style="color:{pi['color']}">{pi['label']} {chart_badge}{audio_badge}</div>
-        <h3>{html_mod.escape(e['title'])}</h3>
-        <p>{html_mod.escape(e['excerpt'][:160])}</p>
-        <div class="card-meta">
+      <h3>{html_mod.escape(e['title'])}</h3>
+      <p>{truncate_excerpt(e['excerpt'], 160)}</p>
+      <div class="card-meta">
           <span class="card-link" style="color:{pi['color']}">Read &rarr;</span>
           <span class="card-time">{e['reading_time']} min</span>
         </div>
@@ -1459,9 +1465,7 @@ def build_listen_page(essays):
             type_label = "Discussion"
             audio_type_filter = "discussion"
 
-        excerpt_text = html_mod.escape(ae.get('excerpt', '')[:120])
-        if len(ae.get('excerpt', '')) > 120:
-            excerpt_text += '&hellip;'
+        excerpt_text = truncate_excerpt(ae.get('excerpt', ''), 120)
 
         rows_html += f'''    <a href="/articles/{html_mod.escape(ae['slug'])}" class="lp-row" data-section="{html_mod.escape(pi['slug'])}" data-audio-type="{audio_type_filter}">
       <svg class="lp-row-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
