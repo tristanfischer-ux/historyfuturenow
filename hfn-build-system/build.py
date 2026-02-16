@@ -132,6 +132,8 @@ def parse_essay(filepath):
 
     audio_file = OUTPUT_DIR / "audio" / f"{slug}.mp3"
     has_audio = audio_file.exists()
+    discussion_file = OUTPUT_DIR / "audio" / "discussions" / f"{slug}.mp3"
+    has_discussion = discussion_file.exists()
 
     share_summary = meta.get('share_summary', '')
 
@@ -139,7 +141,8 @@ def parse_essay(filepath):
         'title': title, 'slug': slug, 'part': part, 'excerpt': excerpt,
         'body_html': body_html, 'reading_time': reading_time,
         'pull_quote': pull_quote, 'filepath': filepath,
-        'has_audio': has_audio, 'share_summary': share_summary,
+        'has_audio': has_audio, 'has_discussion': has_discussion,
+        'share_summary': share_summary,
     }
 
 def get_related(essay, all_essays, n=3):
@@ -569,7 +572,7 @@ def build_article(essay, all_essays):
         cards = ""
         for r in related:
             rp = PARTS[r['part']]
-            audio_tag = ' <span class="related-audio">Audio</span>' if r.get('has_audio') else ''
+            audio_tag = ' <span class="related-audio">Audio</span>' if (r.get('has_audio') or r.get('has_discussion')) else ''
             cards += f'''      <a href="/articles/{html_mod.escape(r['slug'])}" class="related-card">
         <span class="related-kicker" style="color:{rp['color']}">{rp['label']}</span>
         <span class="related-title">{html_mod.escape(r['title'])}</span>
@@ -841,7 +844,7 @@ def build_section(part_name, essays, new_slugs=None):
     for e in se:
         chart_count = len(ALL_CHARTS.get(e['slug'], []))
         chart_tag = f'<span>{chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
-        audio_tag = '<span>Audio</span>' if e.get('has_audio') else ''
+        audio_tag = '<span>Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
         new_badge = '<span class="card-new-badge">New</span> ' if e['slug'] in new_slugs else ''
 
         hero_img = get_hero_image(e['slug'])
@@ -933,7 +936,7 @@ def build_homepage(essays, new_essays=None):
         pi = PARTS[e['part']]
         n_charts = len(all_charts.get(e['slug'], []))
         badge = f'<span class="latest-badge">{n_charts} charts</span>' if n_charts else ''
-        audio_badge = '<span class="latest-badge latest-audio-badge">Audio</span>' if e.get('has_audio') else ''
+        audio_badge = '<span class="latest-badge latest-audio-badge">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
         size_class = "latest-hero" if i == 0 else "latest-secondary"
         new_tag = '<span class="latest-new">New</span> ' if e.get('is_new') else ''
 
@@ -963,7 +966,7 @@ def build_homepage(essays, new_essays=None):
             for e in new_cards_by_part[pn]:
                 n_charts = len(all_charts.get(e['slug'], []))
                 chart_badge = f' <span class="card-charts">&middot; {n_charts} chart{"s" if n_charts != 1 else ""}</span>' if n_charts > 0 else ''
-                audio_badge = ' <span class="card-audio">&middot; Audio</span>' if e.get('has_audio') else ''
+                audio_badge = ' <span class="card-audio">&middot; Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
                 new_cards_html += f"""    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
       <div class="card-kicker" style="color:{pi['color']}"><span class="card-new-badge">New</span> {pi['label']}</div>
       <h3>{html_mod.escape(e['title'])}</h3>
@@ -1104,7 +1107,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
         for e in se[:3]:
             n_charts = len(all_charts.get(e['slug'], []))
             chart_badge = f'<span class="card-charts">{n_charts} charts</span>' if n_charts > 0 else ''
-            audio_badge = ' <span class="card-audio">Audio</span>' if e.get('has_audio') else ''
+            audio_badge = ' <span class="card-audio">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
             cards += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
         <div class="card-kicker" style="color:{pi['color']}">{pi['label']} {chart_badge}{audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
@@ -1137,16 +1140,37 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
   </div>\n\n"""
 
     # ── Listen to History section ──
-    audio_essays = [e for e in essays if e.get('has_audio')]
+    # Include any article that has narration OR discussion audio
+    audio_essays = [e for e in essays if e.get('has_audio') or e.get('has_discussion')]
     audio_essays.sort(key=lambda e: (PARTS.get(e['part'], {}).get('order', 99), e['title']))
-    narrated_count = len(audio_essays)
+    audio_article_count = len(audio_essays)
 
     listen_cards_html = ""
     play_all_items = []
     for ae in audio_essays:
         pi = PARTS.get(ae['part'], PARTS['Society'])
-        listen_time = max(1, round(ae['reading_time'] * 250 / 189))
         section_label = f"{pi['label']} · {ae['part']}"
+        has_narration = ae.get('has_audio', False)
+        has_disc = ae.get('has_discussion', False)
+
+        # Determine listen time and audio type label
+        if has_narration:
+            listen_time = max(1, round(ae['reading_time'] * 250 / 189))
+            audio_type = "Narration"
+            queue_url = f"/audio/{ae['slug']}.mp3"
+        else:
+            listen_time = 10  # discussions average ~10 min
+            audio_type = "Discussion"
+            queue_url = f"/audio/discussions/{ae['slug']}.mp3"
+
+        # Badge showing what audio types are available
+        if has_narration and has_disc:
+            type_badge = '<span class="listen-card-type">Narration + Discussion</span>'
+        elif has_narration:
+            type_badge = '<span class="listen-card-type">Narration</span>'
+        else:
+            type_badge = '<span class="listen-card-type">Discussion</span>'
+
         listen_cards_html += f'''      <a href="/articles/{html_mod.escape(ae['slug'])}" class="listen-card" style="--card-accent:{pi['color']}">
         <div class="listen-card-top">
           <svg class="listen-card-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
@@ -1154,7 +1178,8 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
         </div>
         <div class="listen-card-title">{html_mod.escape(ae['title'])}</div>
         <div class="listen-card-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(ae['part'])}</div>
-        <button class="q-add-btn" data-queue-slug="{html_mod.escape(ae['slug'])}" data-queue-title="{html_mod.escape(ae['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="/audio/{html_mod.escape(ae['slug'])}.mp3" aria-label="Add to queue">
+        {type_badge}
+        <button class="q-add-btn" data-queue-slug="{html_mod.escape(ae['slug'])}" data-queue-title="{html_mod.escape(ae['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="{queue_url}" aria-label="Add to queue">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           <span class="q-add-label">Add to Queue</span>
         </button>
@@ -1164,20 +1189,20 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
             'title': ae['title'],
             'section': section_label,
             'color': pi['color'],
-            'url': f"/audio/{ae['slug']}.mp3",
+            'url': queue_url,
         })
 
     play_all_json = html_mod.escape(json.dumps(play_all_items))
 
     listen_section_html = ""
-    if narrated_count > 0:
+    if audio_article_count > 0:
         listen_section_html = f"""
 <div class="listen-wrap">
   <div class="listen-inner">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.3rem;">
       <div>
         <h2 class="listen-title">Listen to History</h2>
-        <p class="listen-intro" style="margin-bottom:0">{narrated_count} articles available as audio. Queue them up and listen on the go.</p>
+        <p class="listen-intro" style="margin-bottom:0">{audio_article_count} articles available as audio. Queue them up and listen on the go.</p>
       </div>
       <button class="q-play-all" id="queueAllBtn" data-items="{play_all_json}">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -1250,7 +1275,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
     <div class="stat"><span class="stat-num">{total_charts}</span><span class="stat-label">Interactive Charts</span></div>
     <div class="stat"><span class="stat-num">{total_hours}+</span><span class="stat-label">Hours of Analysis</span></div>
     <div class="stat"><span class="stat-num">500</span><span class="stat-label">Years of History</span></div>
-    {"" if narrated_count == 0 else f'<div class="stat"><span class="stat-num">{narrated_count}</span><span class="stat-label">Audio Narrations</span></div>'}
+    {"" if audio_article_count == 0 else f'<div class="stat"><span class="stat-num">{audio_article_count}</span><span class="stat-label">Audio Articles</span></div>'}
   </div>
 </div>
 {listen_section_html}
@@ -1433,7 +1458,7 @@ Allow: /
             "excerpt": e['excerpt'][:200],
             "readingTime": e['reading_time'],
             "chartCount": n_charts,
-            "hasAudio": e.get('has_audio', False),
+            "hasAudio": e.get('has_audio', False) or e.get('has_discussion', False),
         })
     (OUTPUT_DIR / "search-index.json").write_text(
         json.dumps(search_index, ensure_ascii=False), encoding='utf-8')

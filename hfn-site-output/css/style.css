@@ -107,6 +107,7 @@ img { max-width: 100%; height: auto; }
 .listen-card-time { font-family: var(--mono); font-size: 0.72rem; color: #a89f91; letter-spacing: 0.04em; }
 .listen-card-title { font-family: var(--serif); font-size: 0.88rem; font-weight: 600; color: #f5f0e8; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .listen-card-kicker { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; margin-top: auto; }
+.listen-card-type { font-family: var(--mono); font-size: 0.55rem; color: #8a8479; letter-spacing: 0.04em; margin-top: 0.15rem; }
 .listen-card .q-add-btn { font-size: 0.55rem; padding: 0.25rem 0.5rem; margin-top: 0.4rem; align-self: flex-start; }
 
 /* DATA STORIES STRIP */
