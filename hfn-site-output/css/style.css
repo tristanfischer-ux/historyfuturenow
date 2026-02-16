@@ -590,13 +590,18 @@ img { max-width: 100%; height: auto; }
 .share-btn { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text-dim); cursor: pointer; transition: all 0.2s; padding: 0; }
 .share-btn:hover { color: var(--text); border-color: var(--text-dim); background: var(--surface); }
 .share-btn svg { width: 16px; height: 16px; }
-.chart-share-btn { position: absolute; top: 0.5rem; right: 0.5rem; width: 28px; height: 28px; border-radius: 6px; opacity: 0; transition: opacity 0.2s; }
-.chart-figure:hover .chart-share-btn { opacity: 1; }
+.chart-share-bar { position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.25rem; opacity: 0; transition: opacity 0.2s; z-index: 10; }
+.chart-figure:hover .chart-share-bar { opacity: 1; }
+.chart-share-bar .chart-share-btn { width: 28px; height: 28px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); opacity: 1; position: static; }
+.chart-share-bar .chart-share-btn:hover { background: var(--surface); border-color: var(--text-dim); color: var(--text); }
 .chart-figure { position: relative; }
 
-/* Copy toast */
+/* Toast notifications */
 .copy-toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(1rem); background: var(--text); color: var(--bg); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em; padding: 0.5rem 1.2rem; border-radius: 8px; opacity: 0; visibility: hidden; transition: all 0.25s; z-index: 300; pointer-events: none; }
 .copy-toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+/* Chart share capture — hide toolbar during screenshot */
+.chart-figure.capturing .chart-share-bar { display: none !important; }
 
 @media (max-width: 640px) {
   .share-bar { gap: 0.35rem; }

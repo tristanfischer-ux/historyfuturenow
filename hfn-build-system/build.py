@@ -453,10 +453,17 @@ def make_chart_html(chart):
     elif n_datasets >= 5 and is_horizontal:
         size_class = ' tall'
     
-    share_icon = _SHARE_ICONS['copy']
+    download_icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+    image_icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>'
     return f'''
-    <div class="chart-figure">
-      <button class="share-btn chart-share-btn" data-share="copy" aria-label="Copy chart link" title="Share chart">{share_icon}</button>
+    <div class="chart-figure" data-chart-title="{html_mod.escape(chart['title'])}" data-chart-source="Source: {html_mod.escape(chart['source'])}">
+      <div class="chart-share-bar">
+        <button class="share-btn chart-share-btn" data-chart-share="download" aria-label="Download chart as image" title="Download image">{download_icon}</button>
+        <button class="share-btn chart-share-btn" data-chart-share="copy-image" aria-label="Copy chart as image" title="Copy image">{image_icon}</button>
+        <button class="share-btn chart-share-btn" data-chart-share="x" aria-label="Share chart on X" title="Share on X">{_SHARE_ICONS['x']}</button>
+        <button class="share-btn chart-share-btn" data-chart-share="linkedin" aria-label="Share chart on LinkedIn" title="Share on LinkedIn">{_SHARE_ICONS['linkedin']}</button>
+        <button class="share-btn chart-share-btn" data-chart-share="whatsapp" aria-label="Share chart on WhatsApp" title="Share on WhatsApp">{_SHARE_ICONS['whatsapp']}</button>
+      </div>
       <div class="chart-figure-label">Figure {chart['figure_num']}</div>
       <h4>{html_mod.escape(chart['title'])}</h4>
       <p class="chart-desc">{html_mod.escape(chart['desc'])}</p>
