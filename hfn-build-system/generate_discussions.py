@@ -248,9 +248,9 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
 
 GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
 
-# Gemini TTS voices — chosen for analytical discussion tone
-VOICE_SPEAKER_A = "Orus"       # Deep, authoritative male
-VOICE_SPEAKER_B = "Fenrir"     # Distinct second male voice
+# Gemini TTS voices — chosen for analytical British discussion tone
+VOICE_SPEAKER_A = "Orus"       # Firm, calm, authoritative male — lead analyst
+VOICE_SPEAKER_B = "Charon"     # Informative, professional male — challenger
 
 # Max chars per TTS request (Gemini TTS has token limits)
 TTS_MAX_CHARS = 5000
@@ -322,7 +322,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 5) -> bytes:
         "contents": [
             {
                 "role": "user",
-                "parts": [{"text": f"Read this discussion between two analysts in a measured, intellectual British tone. Speaker A is the lead analyst, authoritative and calm. Speaker B is the challenger, slightly more animated but still serious.\n\n{text}"}]
+                "parts": [{"text": f"Read this discussion between two analysts using British English accents — Received Pronunciation, like BBC Radio 4 presenters. Both speakers must sound unmistakably British. Speaker A is the lead analyst: authoritative, measured, with a deep calm British voice. Speaker B is the challenger: slightly more animated, incisive, but still serious and British. The pace should be conversational but unhurried, as if broadcasting on Radio 4.\n\n{text}"}]
             }
         ],
         "generationConfig": {
