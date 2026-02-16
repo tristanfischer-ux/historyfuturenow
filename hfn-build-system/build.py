@@ -632,8 +632,36 @@ def make_chart_html(chart):
     </div>
 '''
 
+def _find_article_paragraphs(html):
+    """Find positions of </p> tags that are article content, not inside chart containers.
+
+    Returns a list of end positions (after '</p>') for each article paragraph.
+    """
+    positions = []
+    depth = 0
+    i = 0
+    while i < len(html):
+        if html[i:i+len('<div class="chart-figure')] == '<div class="chart-figure':
+            depth += 1
+            i += 1
+        elif depth > 0 and html[i:i+6] == '</div>':
+            depth -= 1
+            i += 6
+        elif depth == 0 and html[i:i+4] == '</p>':
+            positions.append(i + 4)
+            i += 4
+        else:
+            i += 1
+    return positions
+
+
 def inject_charts_into_body(body_html, charts):
-    """Insert chart figures at appropriate positions in the article body."""
+    """Insert chart figures at appropriate positions in the article body.
+
+    Uses a two-pass approach: first pass inserts placeholder tokens, second pass
+    replaces them with actual chart HTML. This avoids position drift when earlier
+    insertions shift paragraph counts for later ones.
+    """
     if not charts:
         return body_html, ""
 
@@ -647,54 +675,58 @@ def inject_charts_into_body(body_html, charts):
         else:
             positioned.setdefault(pos, []).append(ch)
 
-    # Insert charts after specific headings or paragraphs
+    # Sort position keys so that heading-based insertions come after paragraph-based
+    # ones (headings don't shift paragraph counts, but we process para-based first
+    # to place placeholders before any HTML is modified).
+    # Use placeholders to avoid position drift between insertions.
+    placeholder_map = {}
+    placeholder_insertions = []  # (insert_pos, placeholder_token)
+
     for pos_key, pos_charts in positioned.items():
-        chart_block = '\n'.join(make_chart_html(ch) for ch in pos_charts)
+        token = f'<!--CHART_PLACEHOLDER_{id(pos_charts)}-->'
+        placeholder_map[token] = '\n'.join(make_chart_html(ch) for ch in pos_charts)
 
         if pos_key.startswith('after_heading:'):
             heading_text = pos_key.split(':', 1)[1].strip().lower()
-            # Find heading containing this text (h2 or h3)
-            pattern = re.compile(
-                r'(</h[23]>)',
-                re.IGNORECASE
-            )
+            pattern = re.compile(r'(</h[23]>)', re.IGNORECASE)
             matches = list(pattern.finditer(body_html))
             inserted = False
             for m in matches:
-                # Get the heading text before this closing tag
                 start = body_html.rfind('<h', 0, m.start())
                 if start >= 0:
                     heading_content = re.sub(r'<[^>]+>', '', body_html[start:m.end()]).strip().lower()
                     if heading_text in heading_content:
-                        insert_pos = m.end()
-                        body_html = body_html[:insert_pos] + '\n' + chart_block + body_html[insert_pos:]
+                        placeholder_insertions.append((m.end(), token))
                         inserted = True
                         break
             if not inserted:
-                # Fallback: insert after first few paragraphs
-                count, pos = 0, 0
-                while count < 3:
-                    idx = body_html.find('</p>', pos)
-                    if idx == -1: break
-                    pos = idx + 4
-                    count += 1
-                if count >= 2:
-                    body_html = body_html[:pos] + '\n' + chart_block + body_html[pos:]
+                para_positions = _find_article_paragraphs(body_html)
+                if len(para_positions) >= 3:
+                    placeholder_insertions.append((para_positions[2], token))
                 else:
                     end_charts.extend(pos_charts)
+                    del placeholder_map[token]
 
         elif pos_key.startswith('after_para_'):
             try:
                 para_num = int(pos_key.split('_')[-1])
             except:
                 para_num = 3
-            count, pos = 0, 0
-            while count < para_num:
-                idx = body_html.find('</p>', pos)
-                if idx == -1: break
-                pos = idx + 4
-                count += 1
-            body_html = body_html[:pos] + '\n' + chart_block + body_html[pos:]
+            para_positions = _find_article_paragraphs(body_html)
+            if para_num <= len(para_positions):
+                placeholder_insertions.append((para_positions[para_num - 1], token))
+            else:
+                end_charts.extend(pos_charts)
+                del placeholder_map[token]
+
+    # Insert placeholders in reverse order so earlier positions aren't shifted
+    placeholder_insertions.sort(key=lambda x: x[0], reverse=True)
+    for insert_pos, token in placeholder_insertions:
+        body_html = body_html[:insert_pos] + '\n' + token + body_html[insert_pos:]
+
+    # Replace placeholders with actual chart HTML
+    for token, chart_html in placeholder_map.items():
+        body_html = body_html.replace(token, chart_html)
 
     # Append remaining charts at end
     if end_charts:
