@@ -356,7 +356,7 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
 GEMINI_TTS_MODEL = "gemini-2.5-pro-preview-tts"
 
 # Gemini TTS voices — male + female for clear distinction
-VOICE_SPEAKER_A = "Charon"     # Professional, informative male with tonal range — James
+VOICE_SPEAKER_A = "Puck"       # Upbeat, lively male with pace and energy — James
 VOICE_SPEAKER_B = "Kore"       # Firm, strong female — Elena
 
 # Max chars per TTS request (Gemini TTS has token limits)
@@ -428,7 +428,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 8) -> bytes:
         "contents": [
             {
                 "role": "user",
-                "parts": [{"text": f"Read this discussion between James and Elena as a lively BBC Radio 4 debate.\n\nJames: British RP accent. He is NOT monotone — he varies his delivery deliberately. When presenting a striking statistic, he slows down for emphasis. When making a dry joke, his tone lifts with understated amusement. When pushing back on Elena, he becomes clipped and direct. He sounds like a senior analyst who cares deeply about getting it right — measured but never flat. [emphatic] on key data points. [slightly amused] on sardonic asides.\n\nElena: British RP accent. Animated, direct, with energy and conviction. She reacts audibly — surprise, frustration, grudging agreement. She speeds up when passionate and pauses when reconsidering. She sounds like a sharp foreign correspondent who has seen these numbers play out in the real world.\n\nBoth speakers react naturally to each other. Short turns should feel snappy and quick. Longer turns should have internal variation — not a single droning pace. Pauses between speakers should feel natural, not mechanical.\n\n{text}"}]
+                "parts": [{"text": f"Read this as a fast-paced, lively BBC Radio 4 debate. Both speakers are sharp, quick, and energised.\n\nJames: British accent. Quick and confident. He rattles off statistics with the energy of someone who finds this genuinely exciting. His dry wit is fast, not ponderous — a quick aside, then straight back to the point. When he disagrees, he's direct and clipped. He never drones or pontificates. Think quick-witted journalist, not lecturing professor.\n\nElena: British accent. Animated, direct, punchy. She challenges fast, reacts audibly, and doesn't hold back. She matches James's pace and pushes it higher when she's passionate.\n\nThe overall pace is brisk and energetic. Short turns are rapid-fire. Neither speaker is slow or pompous. This sounds like two sharp people who are genuinely enjoying a fast argument.\n\n{text}"}]
             }
         ],
         "generationConfig": {
