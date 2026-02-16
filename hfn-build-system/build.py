@@ -893,8 +893,6 @@ def build_article(essay, all_essays):
     <div class="article-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(essay['part'])}</div>
     <h1>{te}</h1>
     <div class="article-meta">
-      <span class="article-byline">By <strong>Tristan Fischer</strong></span>
-      <span class="meta-sep">&middot;</span>
       <span class="article-reading-time">{essay['reading_time']} min read</span>
       {f'<span class="meta-sep">&middot;</span><time class="article-date" datetime="{essay["pub_date"]}">{format_date_human(essay["pub_date"])}</time>' if essay.get('pub_date') else ''}
     </div>{chart_badge}
