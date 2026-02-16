@@ -1,146 +1,158 @@
 [
   {
     "speaker": "James",
-    "text": "We're essentially paying ourselves to be unemployed so we can buy cheap plastic tat. That's the rather bleak summary of our current economic model, isn't it?"
+    "text": "[provocative] We talk endlessly about trade deficits, but the real mystery is why Western politicians keep promoting a system that essentially offshores our jobs and wealth."
   },
   {
     "speaker": "Elena",
-    "text": "Oh, come on. 'Bleak' is one word for it, 'hyperbolic' is another. We're talking about a globalised economy that has lifted millions out of poverty in Asia. That's not nothing."
+    "text": "Mystery? It's hardly a mystery, James. Corporations chase profit, consumers want cheaper goods. Supply and demand, right?"
   },
   {
     "speaker": "James",
-    "text": "And the article acknowledges that. But for the West, the 'cheap' product is often an illusion. Like your printer."
+    "text": "Ah, the 'cheap goods' illusion. Remember the article's laser printer example? £100 imported, maybe £115 if made locally."
   },
   {
     "speaker": "Elena",
-    "text": "The printer analogy? Selling the laser printer for a hundred quid then charging the same for ink cartridges? It’s clever, I'll grant you, but are you seriously saying a £100 Chinese-made printer actually costs us more than a £115 EU one?"
+    "text": "Fifteen quid is fifteen quid for someone on a budget. That's a real saving."
   },
   {
     "speaker": "James",
-    "text": "Precisely. The article's maths on the cost of unemployment in the UK is stark. £27,184 per annum for each unemployed person. That's benefits paid out, plus the tax revenue they aren't contributing."
+    "text": "[dry] But is it a saving if you or your neighbour then end up on benefits, funded by everyone else's taxes?"
   },
   {
     "speaker": "Elena",
-    "text": "Hold on. You can't just attribute *all* unemployment to cheap imports. That's far too simplistic. What about automation? Global recessions? Lack of skills, structural issues?"
+    "text": "You're saying outsourcing is the sole cause of unemployment? That's far too simplistic."
   },
   {
     "speaker": "James",
-    "text": "No, not all, of course. But the direct impact is undeniable. The UK's current 7.6% unemployment rate translates to £67 billion a year. That means 35% of an average worker's income tax goes solely to funding the unemployed."
+    "text": "Not sole, no. But the article's numbers are stark. Take the UK: supporting one unemployed person costs the taxpayer £27,184 a year."
   },
   {
     "speaker": "Elena",
-    "text": "£67 billion... that's a chunky number. I mean, it is. But what's the alternative? Protectionism? Tell people to pay 15-20% more for everything? That’s political suicide."
+    "text": "Benefits and lost taxes, yes. That's a social safety net, not a direct cost of outsourcing."
   },
   {
     "speaker": "James",
-    "text": "Or, as the article points out, give them an extra £2,236 a year to spend, which they'd have if that £67 billion didn't need to be spent on benefits."
+    "text": "It's a direct cost if the job that person *could* have had went to Shanghai instead. Thirty-five percent of an average Briton's income tax already covers unemployment. Thirty-five percent!"
   },
   {
     "speaker": "Elena",
-    "text": "That's hypothetical. And assumes zero unemployment, which is never going to happen."
+    "text": "Well... okay, that's a significant chunk. But what about the millions lifted out of poverty in Asia? That has value too."
   },
   {
     "speaker": "James",
-    "text": "True. But what if it gets worse? Look at the Eurozone. Average unemployment rate of 12.1% in 2013 for the EU17. If the UK hit that, the cost would jump to £107 billion. 59% of an average worker's income tax."
+    "text": "[clipped] Value for them, certainly. But we're discussing the West's economic sustainability here."
   },
   {
     "speaker": "Elena",
-    "text": "That's bad, yes. But still, the overall benefit of cheaper goods has to be factored in for the majority who *are* employed. It’s a trade-off."
+    "text": "We can't just seal our borders and expect to compete globally. Comparative advantage—"
   },
   {
     "speaker": "James",
-    "text": "Is it? The real kicker is when you project the rates of places like Greece or Spain. If the UK hit Greece's 27.3% unemployment..."
+    "text": "The article explicitly says Ricardian theory isn't working anymore. Or never did, effectively. Look at Europe."
   },
   {
     "speaker": "Elena",
-    "text": "Greece is an extreme example, James. Their economy is completely different. It's not a fair comparison for the UK."
+    "text": "Europe's a mess for many reasons beyond outsourcing."
   },
   {
     "speaker": "James",
-    "text": "The article's not making a prediction, it's illustrating a point. If the UK's unemployment reached 27.3%, the cost would be £242 billion per year. That's more than the entire defence, education, and health budgets combined."
+    "text": "Indeed. But the EU17 average unemployment rate in 2013 was 12.1%. If the UK had that, 59% of an average worker's income tax would fund unemployment."
   },
   {
     "speaker": "Elena",
-    "text": "Wait, really? £242 billion? That's... actually devastating. More than health *and* education *and* defence?"
+    "text": "Fifty-nine percent? That's... insane."
   },
   {
     "speaker": "James",
-    "text": "Indeed. It makes our earlier discussion on 'Crisis: Or An Explanation On The Origins Of The Decline Of The West' feel rather less theoretical, doesn't it? A society that can't afford its basic services because it's too busy paying people not to work."
+    "text": "It means two months' salary, effectively, to support those without jobs."
   },
   {
     "speaker": "Elena",
-    "text": "So we've essentially made a Faustian bargain, then? Short-term cheap goods for long-term societal decay? I don't want to agree with you on this, but the numbers don't leave much room."
+    "text": "But that's an average. Germany skews it down, right?"
   },
   {
     "speaker": "James",
-    "text": "A Faustian bargain for the consumer, yes. For the multinational corporations, it's just good business. The article highlights they don't care about these 'external costs' – unemployment, pollution, worker conditions. That's for the government to worry about."
+    "text": "Precisely. Now consider Greece. Twenty-seven point three percent unemployment."
   },
   {
     "speaker": "Elena",
-    "text": "But the pollution point is actually a significant one. The article notes cleaner Western factories closed, replaced by dirtier, coal-powered Asian ones. We're outsourcing our environmental footprint too."
+    "text": "Oh, no."
   },
   {
     "speaker": "James",
-    "text": "Precisely. It echoes the themes in our piece on 'The immorality of climate change', doesn't it? A hidden cost, conveniently out of sight."
+    "text": "At that rate, the cost to UK taxpayers would be £10,208 per worker, per year."
   },
   {
     "speaker": "Elena",
-    "text": "Right. So, the question remains: why do Western politicians and economists promote this system? The article calls it a 'mystery'."
+    "text": "Wait, really? How much is that compared to their total tax?"
   },
   {
     "speaker": "James",
-    "text": "Perhaps they genuinely don't grasp the full lifecycle cost. Or they fear the immediate electoral backlash of telling consumers they have to pay more."
+    "text": "More than the average worker's entire income tax contribution. It's equivalent to six months of additional income for every employed person."
   },
   {
     "speaker": "Elena",
-    "text": "Or they're too beholden to corporate interests. It's not a mystery if you follow the money."
+    "text": "[frustrated] Six months? That's completely unsustainable. That's a national collapse."
   },
   {
     "speaker": "James",
-    "text": "That's generous."
+    "text": "Indeed. The article states it would devastate the UK's budget, almost equalling combined spending on defence, education, and health."
   },
   {
     "speaker": "Elena",
-    "text": "No, it's realistic. You mentioned the Faustian bargain. This constant transfer of wealth to the East, the US military spending $137 billion in the Pacific just to secure trade routes for goods that create a $400 billion trade deficit. We wrote about China as an 'emerging colonial power' – it all connects."
+    "text": "I... I don't want to agree with you on this, but the numbers don't leave much room. That's actually devastating."
   },
   {
     "speaker": "James",
-    "text": "It does. That $537 billion annual cost to the US, equivalent to $1,700 per American man, woman, and child, just to facilitate a system that undermines their own employment. It’s a treadmill we can't get off."
+    "text": "And youth unemployment is even higher. It's a ticking time bomb."
   },
   {
     "speaker": "Elena",
-    "text": "It’s a treadmill, and it feels like we're running it faster and faster into a wall. Especially when you see youth unemployment rates so high. That just screams future instability."
+    "text": "So, the 'cheap' goods are actually making us poorer. It's like that printer again, or the credit card interest you don't see."
   },
   {
     "speaker": "James",
-    "text": "Higher unemployment rates over time, permanently overstretched budgets, or cuts to benefits leading to social unrest. The options are grim."
+    "text": "Exactly. The life-cycle cost is what matters. We're externalising the cost onto our own welfare systems."
   },
   {
     "speaker": "Elena",
-    "text": "So, the politicians 'ought to know better', as the article concludes. But knowing isn't doing, is it?"
+    "text": "It reminds me of that article on the immorality of climate change, where we externalise pollution. Same principle, different metric."
   },
   {
     "speaker": "James",
-    "text": "Indeed. A lack of political will to tackle what appears, in the short term, to be a good deal for the consumer."
+    "text": "Precisely. And it gets worse geopolitically. The US spends $137 billion a year securing Pacific trade routes."
   },
   {
     "speaker": "Elena",
-    "text": "But a terrible deal for society. Okay, I'll concede the lifecycle cost argument. It's compelling. Horrifyingly so."
+    "text": "To protect trade with the very countries we have massive deficits against."
   },
   {
     "speaker": "James",
-    "text": "Thank you. Took you long enough."
+    "text": "Four hundred billion in trade deficits annually to Asian countries. Plus the military cost. It's a staggering $537 billion drain for the US."
   },
   {
     "speaker": "Elena",
-    "text": "Ha! Good luck convincing people to buy a £115 EU printer when the £100 Chinese one is right there, though. That's the real challenge."
+    "text": "That's a colossal transfer of wealth. And we're paying for the privilege."
   },
   {
     "speaker": "James",
-    "text": "That's the rub, isn't it? The immediate gratification overriding the long-term societal decay. A very human failing."
+    "text": "An annual transfer equivalent to $1,700 per American. Every man, woman, and child."
   },
   {
     "speaker": "Elena",
-    "text": "Or a failure of political leadership to connect those dots for people. To show them that the true cost of 'cheap' is crippling us."
+    "text": "So, the Decline of the West piece starts to make a lot more sense now. We're actively undermining ourselves."
+  },
+  {
+    "speaker": "James",
+    "text": "Which brings us back to the 'mystery'. Why do politicians promote this?"
+  },
+  {
+    "speaker": "Elena",
+    "text": "Short-term consumer gratification, maybe. Or they genuinely believe the comparative advantage myth. Blindness, perhaps?"
+  },
+  {
+    "speaker": "James",
+    "text": "Perhaps. But the long-term data screams otherwise. It’s not just a problem for society; it’s a cost for every single taxpayer."
   }
 ]

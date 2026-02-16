@@ -2390,6 +2390,110 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>(v>
         },
     ]
 
+    # ─── THE EMPTY CRADLE BARGAIN ───
+    charts['the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem'] = [
+        {
+            'id': 'cradleChart1', 'figure_num': 1,
+            'title': 'The Arithmetic of Extinction',
+            'desc': 'How 1.0 children per couple leads to population halving every generation',
+            'source': 'Mathematical projection: each generation = previous × (fertility rate ÷ 2)',
+            'position': 'after_para_8',
+            'js': """
+(()=>{const ctx=document.getElementById('cradleChart1');
+const gens=['Gen 0\\n(Today)','Gen 1\\n(2055)','Gen 2\\n(2085)','Gen 3\\n(2115)','Gen 4\\n(2145)','Gen 5\\n(2175)'];
+new Chart(ctx,{type:'line',data:{labels:gens,
+datasets:[
+{label:'1.0 children per couple',data:[100,50,25,12.5,6.25,3.1],borderColor:C.accent,backgroundColor:C.accent+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:C.accent,borderWidth:2.5},
+{label:'1.5 children per couple',data:[100,75,56,42,32,24],borderColor:C.amber,backgroundColor:C.amber+'10',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:C.amber,borderWidth:2,borderDash:[6,3]},
+{label:'2.1 (replacement)',data:[100,100,100,100,100,100],borderColor:C.green,backgroundColor:C.green+'08',fill:false,tension:0,pointRadius:0,borderWidth:2,borderDash:[3,3]}
+]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% of original'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:110,title:{display:true,text:'Population (% of starting)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'cradleChart2', 'figure_num': 2,
+            'title': 'The Cost of Raising a Child vs. Median Wages',
+            'desc': 'Housing, childcare, and education costs have surged while real wages flatlined',
+            'source': 'ONS, BLS, OECD, Nationwide Building Society, Coram Family and Childcare (1975-2024)',
+            'position': 'after_heading:The Collapse of the Village',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('cradleChart2');
+const yrs=[1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2024];
+new Chart(ctx,{type:'line',data:{
+datasets:[
+dxy('House price / income ratio (UK)',yrs,[3.6,3.9,3.8,4.4,3.4,4.4,5.8,6.7,7.4,7.9,8.3],C.accent),
+dxy('Childcare cost index',yrs,[100,108,118,132,155,190,240,290,340,380,420],C.purple),
+dxy('Real median wages (index)',yrs,[100,102,108,115,113,125,130,128,126,130,132],C.green)
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;if(l.includes('ratio'))return l+': '+i.raw.toFixed(1)+'x';return l+': '+i.raw}}}},
+scales:{x:linX(1975,2024),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1975 = 100) / Ratio',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'cradleChart3', 'figure_num': 3,
+            'title': 'Share of Global Births: European-Heritage & Chinese Populations',
+            'desc': 'From 40% of all births in 1950 to a projected 2% by 2100',
+            'source': 'UN Population Division, World Population Prospects 2024. Projected values shown dashed.',
+            'position': 'after_heading:The Innovation Collapse',
+            'js': """
+(()=>{const ctx=document.getElementById('cradleChart3');
+const yrsH=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
+const sharesH=[40,36,31,26,21,16,13,10,9];
+const yrsP=[2025,2030,2040,2050,2060,2070,2080,2090,2100];
+const sharesP=[9,7.5,6,4.8,3.8,3.1,2.6,2.2,2.0];
+new Chart(ctx,{type:'line',data:{
+datasets:[
+dxy('Historic share (%)',yrsH,sharesH,C.accent),
+dxy('Projected share (%)',yrsP,sharesP,C.accent,[6,4])
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global births'}},
+annotation:{annotations:{repl:{type:'line',yMin:9,yMax:9,borderColor:C.dim+'60',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 9%',position:'start',color:C.dim,font:{size:10}}}}}},
+scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:45,title:{display:true,text:'Share of global births (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'cradleChart4', 'figure_num': 4,
+            'title': 'Old-Age Dependency Ratios: 2020 vs 2050',
+            'desc': 'Retirees per 100 working-age adults — the fiscal time bomb',
+            'source': 'UN Population Division, World Population Prospects 2024; World Bank',
+            'position': 'after_heading:Cultural Memory Requires People',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('cradleChart4');
+const countries=['Japan','S. Korea','Italy','Germany','China','UK','France','US'];
+const dep2020=[48,23,37,34,17,30,33,26];
+const dep2050=[70,69,62,55,47,40,43,36];
+new Chart(ctx,{type:'bar',data:{labels:countries,
+datasets:[
+{label:'2020',data:dep2020,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
+{label:'2050 (projected)',data:dep2050,backgroundColor:C.accent,borderRadius:3,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+' retirees per 100 workers'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Retirees per 100 working-age adults',color:C.dim},max:80}}}});
+})();"""
+        },
+        {
+            'id': 'cradleChart5', 'figure_num': 5,
+            'title': 'Pro-Natalist Policy Interventions and Fertility Outcomes',
+            'desc': 'Fertility rates before and after major policy packages — ambitious policy moves the needle',
+            'source': 'Eurostat, national statistics offices (Hungary KSH, INSEE, SCB, CBS Israel). Before = pre-policy baseline; After = latest available.',
+            'position': 'after_heading:The Employer Dimension',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('cradleChart5');
+const countries=['Hungary\\n(2010-2024)','France\\n(1995-2024)','Sweden\\n(2005-2024)','Israel\\n(2000-2024)'];
+const before=[1.23,1.73,1.85,2.95];
+const after=[1.53,1.68,1.45,2.90];
+new Chart(ctx,{type:'bar',data:{labels:countries,
+datasets:[
+{label:'Before / baseline',data:before,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
+{label:'After / latest',data:after,backgroundColor:C.accent,borderRadius:3,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(2)+' TFR'}},
+annotation:{annotations:{repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,3],label:{display:true,content:'Replacement (2.1)',position:'end',color:C.green,font:{size:10}}}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total Fertility Rate (TFR)',color:C.dim}}}}});
+})();"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):
