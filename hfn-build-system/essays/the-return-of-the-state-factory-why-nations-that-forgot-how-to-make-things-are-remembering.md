@@ -2,6 +2,7 @@
 title: >-
   The Return of the State Factory: Why Nations That Forgot How To Make Things
   Are Remembering
+date: "2026-02-08"
 url: >-
   https://www.historyfuturenow.com/part-3-jobs-and-the-economy/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering
 image: "/images/state-factory-return.png"

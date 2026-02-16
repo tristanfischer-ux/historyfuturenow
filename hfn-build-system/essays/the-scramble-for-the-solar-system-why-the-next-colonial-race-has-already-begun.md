@@ -2,6 +2,7 @@
 title: >-
   The Scramble For The Solar System: Why The Next Colonial Race
   Has Already Begun
+date: "2026-02-06"
 url: >-
   https://www.historyfuturenow.com/part-2-global-balance-of-power/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun
 image: "/images/scramble-solar-system.png"

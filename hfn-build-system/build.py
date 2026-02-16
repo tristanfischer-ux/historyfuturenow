@@ -231,7 +231,8 @@ def parse_essay(filepath):
 
     share_summary = meta.get('share_summary', '')
 
-    pub_date = ARTICLE_DATES.get(slug, '')
+    # Prefer date from frontmatter, fall back to hardcoded mapping
+    pub_date = meta.get('date', '') or ARTICLE_DATES.get(slug, '')
 
     return {
         'title': title, 'slug': slug, 'part': part, 'excerpt': excerpt,

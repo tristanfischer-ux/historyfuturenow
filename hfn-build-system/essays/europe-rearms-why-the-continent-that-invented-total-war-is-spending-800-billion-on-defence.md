@@ -2,6 +2,7 @@
 title: >-
   Europe Rearms: Why The Continent That Invented Total War Is Spending
   €800 Billion On Defence
+date: "2026-02-10"
 url: >-
   https://www.historyfuturenow.com/part-2-global-balance-of-power/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence
 image: "/images/europe-rearms.png"

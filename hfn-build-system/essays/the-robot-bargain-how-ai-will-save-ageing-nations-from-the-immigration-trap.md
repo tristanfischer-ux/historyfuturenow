@@ -2,6 +2,7 @@
 title: >-
   The Robot Bargain: How AI Will Save Ageing Nations From
   The Immigration Trap
+date: "2026-02-01"
 url: >-
   https://www.historyfuturenow.com/part-3-jobs-and-the-economy/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap
 image: "/images/robot-bargain.png"

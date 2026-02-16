@@ -2,6 +2,7 @@
 title: >-
   The Silence Of The Scribes: How Every Civilisation That Controlled
   Speech Collapsed
+date: "2026-02-05"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed
 image: "/images/silence-of-the-scribes.png"

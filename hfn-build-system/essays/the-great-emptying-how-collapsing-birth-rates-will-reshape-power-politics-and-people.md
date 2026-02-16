@@ -2,6 +2,7 @@
 title: >-
   The Great Emptying: How Collapsing Birth Rates Will Reshape
   Power, Politics And People
+date: "2026-02-03"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people
 image: "/images/great-emptying.png"

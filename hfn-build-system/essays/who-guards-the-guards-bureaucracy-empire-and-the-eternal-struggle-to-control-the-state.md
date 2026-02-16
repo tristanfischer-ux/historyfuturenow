@@ -2,6 +2,7 @@
 title: >-
   Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle
   To Control The State
+date: "2026-02-07"
 url: >-
   https://www.historyfuturenow.com/part-4-society/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state
 image: "/images/who-guards-the-guards.png"
