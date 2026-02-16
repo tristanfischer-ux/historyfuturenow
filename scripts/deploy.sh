@@ -110,6 +110,32 @@ cat >> "$LOG_FILE" << ENTRY
 
 ENTRY
 
+# ─── Step 6: Regenerate section intros in background ─────────────────────────
+if [ -n "$ANTHROPIC_API_KEY" ]; then
+    echo ""
+    echo "▸ Regenerating section intros in background..."
+    (
+        cd "$BUILD_DIR"
+        if python3 generate_section_intros.py 2>&1 | tail -5; then
+            python3 build.py 2>&1 | tail -3
+            cd "$ROOT_DIR"
+            if [ -n "$(git status --porcelain)" ]; then
+                git add . && git commit -m "chore: update section editorial intros" && git push origin "$BRANCH"
+                cd "$OUTPUT_DIR" && vercel --prod --yes 2>&1 | tail -3
+                echo "  ✓ Section intros updated and deployed"
+            else
+                echo "  ✓ Section intros unchanged"
+            fi
+        else
+            echo "  ⚠ Section intro generation failed (non-critical)"
+        fi
+    ) &
+    echo "  (running in background, PID: $!)"
+else
+    echo ""
+    echo "▸ Skipping section intro regeneration (ANTHROPIC_API_KEY not set)"
+fi
+
 echo ""
 echo "═══════════════════════════════════════════════════"
 echo "  Deploy complete"
