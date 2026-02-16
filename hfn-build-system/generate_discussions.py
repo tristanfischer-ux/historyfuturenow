@@ -404,11 +404,11 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
 
 # ─── Stage 2: Audio Rendering (Gemini TTS) ───────────────────────────────────
 
-GEMINI_TTS_MODEL = "gemini-2.5-pro-preview-tts"
+GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
 
 # Gemini TTS voices — male + female for clear distinction
-VOICE_SPEAKER_A = "Puck"       # Upbeat, lively male — James
-VOICE_SPEAKER_B = "Leda"       # Clear, warm female — Elena
+VOICE_SPEAKER_A = "Fenrir"     # Passionate, energetic, excitable male — James
+VOICE_SPEAKER_B = "Kore"       # Firm, strong female — Elena
 
 # Max chars per TTS request (Gemini TTS has token limits)
 TTS_MAX_CHARS = 5000
