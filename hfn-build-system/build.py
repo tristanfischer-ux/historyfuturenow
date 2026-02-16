@@ -685,8 +685,7 @@ def build_article(essay, all_essays):
         <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
       </button>
       <div class="discussion-info">
-        <div class="discussion-label">Listen to the discussion</div>
-        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+        <div class="discussion-label">Listen to the debate about this</div>
       </div>
       <div class="discussion-progress-wrap" id="discussionProgressWrap">
         <div class="discussion-progress-track"><div class="discussion-progress-bar" id="discussionProgressBar"></div></div>
