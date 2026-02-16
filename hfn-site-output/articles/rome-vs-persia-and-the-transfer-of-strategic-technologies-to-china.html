@@ -89,6 +89,28 @@
   </div>
 
 
+  <div class="discussion-player" id="discussionPlayer">
+    <div class="discussion-player-inner">
+      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="discussion-info">
+        <div class="discussion-label">Listen to the discussion</div>
+        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+      </div>
+      <div class="discussion-progress-wrap" id="discussionProgressWrap">
+        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+      </div>
+      <div class="discussion-time" id="discussionTime">0:00</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="discussion-rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" data-queue-title="Discussion: Rome Vs. Persia And The Transfer Of Strategic Technologies To China" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/discussions/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china.mp3" aria-label="Add discussion to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="discussionElement" preload="none" src="/audio/discussions/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>China is a master at forcing western companies to hand over critical intellectual property in exchange for short term access to the Chinese market. History Future Now asks what are the lessons that can be learned from history, what is happening today and what impact could this have on the future?</p>
 <p>First, a loose historical analogy: the Roman and Persian empires had been at loggerheads for centuries and by the late 500s and early 600s AD this battering finally came to its fatal end. Wars were frequent. Cities and entire territories exchanged sides on a regular basis. Plagues struck both empires, wiping between a third and a half of their populations, leaving both weak and desperate for manpower and allies.</p>
@@ -122,15 +144,15 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
-        <span class="related-time">11 min read</span>
+        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
+        <span class="related-time">5 min read</span>
       </a>
-      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
+      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
-        <span class="related-time">23 min read</span>
+        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
+        <span class="related-time">20 min read</span>
       </a>
       <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
@@ -201,6 +223,66 @@
 <script src="/js/search.js"></script>
 <script src="/js/queue.js"></script>
 
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
+})();
+</script>
 </body>
 </html>

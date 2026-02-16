@@ -90,6 +90,28 @@
   </div>
 
 
+  <div class="discussion-player" id="discussionPlayer">
+    <div class="discussion-player-inner">
+      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="discussion-info">
+        <div class="discussion-label">Listen to the discussion</div>
+        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+      </div>
+      <div class="discussion-progress-wrap" id="discussionProgressWrap">
+        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+      </div>
+      <div class="discussion-time" id="discussionTime">0:00</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="discussion-why-china-could-invade-taiwan-and-get-away-with-it" data-queue-title="Discussion: Why China Could Invade Taiwan – And Get Away With It" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/discussions/why-china-could-invade-taiwan-and-get-away-with-it.mp3" aria-label="Add discussion to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="discussionElement" preload="none" src="/audio/discussions/why-china-could-invade-taiwan-and-get-away-with-it.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>The story of how the Republic of China became Taiwan and its relationship with mainland China is fascinating. How many people in the West know that Taiwan was once a Dutch colony and that it only became part of China in 1683? Or that its aboriginal people speak a language that is Austronesian in origin, closer to what was spoken on Easter Island and Madagascar than across the 180 km stretch of water to Mainland China.</p>
 <p>Today, 98% of the population of Taiwan is Mandarin speaking Han Chinese. Their government once was the government of Mainland China and claimed all of the country. Today the reverse is true. The Mainland Chinese People’s Republic of China sees Taiwan as a renegade province that will, eventually, be reunited with the rest of Mainland China. They have stated that if Taiwan declares actual independence from Mainland China, China would keep it by force.</p>
@@ -149,20 +171,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
+        <span class="related-time">5 min read</span>
+      </a>
+      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun</span>
         <span class="related-time">11 min read</span>
-      </a>
-      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
-        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -265,6 +287,66 @@ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bo
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global advanced chips'}}}}});
 })();
 </script>
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
+})();
+</script>
 </body>
 </html>

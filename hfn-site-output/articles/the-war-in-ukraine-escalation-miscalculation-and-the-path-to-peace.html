@@ -89,6 +89,28 @@
   </div>
 
 
+  <div class="discussion-player" id="discussionPlayer">
+    <div class="discussion-player-inner">
+      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="discussion-info">
+        <div class="discussion-label">Listen to the discussion</div>
+        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+      </div>
+      <div class="discussion-progress-wrap" id="discussionProgressWrap">
+        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+      </div>
+      <div class="discussion-time" id="discussionTime">0:00</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="discussion-the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" data-queue-title="Discussion: The War in Ukraine: Escalation, Miscalculation, and the Path to Peace" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/discussions/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace.mp3" aria-label="Add discussion to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="discussionElement" preload="none" src="/audio/discussions/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>The war in Ukraine, which began with Russia&rsquo;s invasion in February 2022, has brought the world to a dangerous crossroads. As the fighting continues, with devastating consequences for the people of Ukraine, the conflict risks escalating into a broader confrontation between Russia and the West, with the potential for catastrophic consequences.</p>
 <p>But how did we get here? What lessons can we learn from history about the dangers of escalation and the unpredictable nature of warfare? History Future Now looks ant past conflicts to shed light on these critical questions.</p>
@@ -172,20 +194,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
+        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
+      <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
-        <span class="related-time">5 min read</span>
-      </a>
-      <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The North African Threat And Mediterranean Reunification</span>
-        <span class="related-time">17 min read</span>
+        <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -251,6 +273,66 @@
 <script src="/js/search.js"></script>
 <script src="/js/queue.js"></script>
 
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
+})();
+</script>
 </body>
 </html>

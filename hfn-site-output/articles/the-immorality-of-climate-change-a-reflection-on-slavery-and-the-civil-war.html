@@ -89,6 +89,28 @@
   </div>
 
 
+  <div class="discussion-player" id="discussionPlayer">
+    <div class="discussion-player-inner">
+      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="discussion-info">
+        <div class="discussion-label">Listen to the discussion</div>
+        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+      </div>
+      <div class="discussion-progress-wrap" id="discussionProgressWrap">
+        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+      </div>
+      <div class="discussion-time" id="discussionTime">0:00</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="discussion-the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" data-queue-title="Discussion: The immorality of climate change, a reflection on slavery and the Civil War" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/discussions/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war.mp3" aria-label="Add discussion to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="discussionElement" preload="none" src="/audio/discussions/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>Today, few people look back upon African slavery in the Americas as a good thing. There are no rousing speeches defending slave owners rights over their property, or demands not just to maintain the institution of slavery within their own borders but also to expand slavery into neighbouring states. There are no armies of poor white men fighting to keep rich white men&rsquo;s dominion over black slaves in the hope that one day, they too might become rich white men lording it over their own field and house negroes. And yet a mere 150 years ago, in the United States, this morality existed and a great Civil War took place between the Northern and the Southern states. 150 years is not a long time. Photography, telegraphs, railroads and huge factories existed. Many of your grand or great grand parents would have been alive.</p>
 <p>The people who lived then were recognisably like ourselves, and yet millions of them did look upon African slavery as a good thing, and did fight to maintain it. This raises two interesting questions. First, how did their sense of morality allow them to think this way and second, if we project ourselves 150 years into the future will our grand and great grand children look back at the way we live in a similar mixture of fascination and horror? Will our management of the environment, global warming, fisheries collapse, species extinctions be equally vilified? African slavery grew gradually but by 1831 there was a widespread belief that the institution would die off as both the British Parliament and the US Congress abolished the international slave trade. With no ability to buy and then trade slaves from the west African coast, the theory went that eventually the slaves that were in circulation would literally die off, leaving even the Southern states slave free. This view became increasingly tenuous as slave owners discovered the financial joys of breeding their own slaves, for personal use and for sale within the southern states, and the rise of the cotton industry in the 1840-1850s. Cotton had previously been difficult to process, but new cotton gins, machinery that allowed the fluffy white part to be separated from its harder skin, meant that cotton rapidly became a cash crop, making planters in the South, where cotton was most viable, incredibly wealthy.</p>
@@ -113,20 +135,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
-        <span class="related-time">8 min read</span>
+        <span class="related-title">Establishing A Price Floor For Energy</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
+      <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event</span>
+        <span class="related-time">9 min read</span>
       </a>
-      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
+      <a href="/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
-        <span class="related-time">10 min read</span>
+        <span class="related-title">Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -192,6 +214,66 @@
 <script src="/js/search.js"></script>
 <script src="/js/queue.js"></script>
 
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
+})();
+</script>
 </body>
 </html>

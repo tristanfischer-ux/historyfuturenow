@@ -90,6 +90,28 @@
   </div>
 
 
+  <div class="discussion-player" id="discussionPlayer">
+    <div class="discussion-player-inner">
+      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="discussion-info">
+        <div class="discussion-label">Listen to the discussion</div>
+        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+      </div>
+      <div class="discussion-progress-wrap" id="discussionProgressWrap">
+        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+      </div>
+      <div class="discussion-time" id="discussionTime">0:00</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="discussion-why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" data-queue-title="Discussion: Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/discussions/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event.mp3" aria-label="Add discussion to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="discussionElement" preload="none" src="/audio/discussions/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event.mp3"></audio>
+  </div>
   <div class="article-body">
     <p>Some of you may have noticed some land deals in Africa being announced in the press over the past few years. The stories invariably include China in the headlines “China Gives Up On Europe, Will Target Africa Instead” or “Chinese acquisitions: China buys up the world” or “Fears of Chinese land grab as Beijing’s billions buy up resources …”</p>
 <p>What is less well known is that these land grabs are part of a wider neo-colonial move on the part of many nations and private sector participants. Some researchers estimate that more than 200m hectares of land – 30 times the size of the Ireland – were sold or leased between 2000 and 2010. While China has purchased over 2.3 million hectares of farmland abroad, it is might not be the biggest player. US investors have purchased over 3.1 million hectares, Malaysian investors 3.1 million hectares, United Arab Emirates investors 2.2 million hectares, Indian investors 1.9 million hectares and Saudi Arabian investors over 1 million hectares. Ireland is 6.9 million hectares by way of comparison.</p>
@@ -216,10 +238,10 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
+      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
-        <span class="related-time">25 min read</span>
+        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
+        <span class="related-time">5 min read</span>
       </a>
       <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
@@ -332,6 +354,66 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Arable hectares per capita',color:C.dim}}}}});
 })();
 </script>
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
+})();
+</script>
 </body>
 </html>
