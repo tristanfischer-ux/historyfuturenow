@@ -1707,24 +1707,11 @@ def build_listen_page(essays):
 
 def build_library():
     """Build the /library page — an intellectual map of the reading behind HFN."""
-    from library_data import THEMES, INTRO_ESSAY, BOOKS, get_books_by_theme, get_library_stats
+    from library_data import THEMES, BOOKS, get_books_by_theme
 
-    stats = get_library_stats()
     by_theme = get_books_by_theme()
 
     breadcrumbs = make_breadcrumbs([('Home', '/'), ('Library', None)])
-
-    # Stats bar
-    stats_html = f'''<span class="lib-stat"><strong>{stats["books"]}</strong> titles shown</span>
-      <span class="lib-stat-sep">&middot;</span>
-      <span class="lib-stat"><strong>{stats["themes"]}</strong> themes</span>
-      <span class="lib-stat-sep">&middot;</span>
-      <span class="lib-stat"><strong>{stats["min_year"]}&ndash;{stats["max_year"]}</strong></span>'''
-
-    # Intro essay paragraphs
-    intro_paras = ""
-    for para in INTRO_ESSAY.strip().split("\n\n"):
-        intro_paras += f'  <p>{html_mod.escape(para)}</p>\n'
 
     # ── Theme cards with books shown by default ──
     theme_cards = ""
@@ -1767,14 +1754,10 @@ def build_library():
     {breadcrumbs}
     <h1 class="lib-hero-title">The Library</h1>
     <p class="lib-hero-desc">The intellectual inputs behind every article on this site.</p>
-    <div class="lib-hero-stats">
-      {stats_html}
-    </div>
   </div>
 </section>
 
 <div class="lib-intro-wrap">
-{intro_paras}
   <p class="lib-disclaimer">Inclusion is not endorsement. A serious reader engages with arguments they find uncomfortable. Understanding a position is not the same as agreeing with it.</p>
 </div>
 
