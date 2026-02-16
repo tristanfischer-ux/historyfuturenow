@@ -704,11 +704,11 @@ def build_article(essay, all_essays):
     </div>{chart_badge}
   </header>{hero_img_html}
 {audio_player}
-{discussion_player}
   {make_share_bar(essay, 'top')}
   <div class="article-body">
     {body}
   </div>
+{discussion_player}
   {make_share_bar(essay, 'bottom')}
 
   <div class="article-footer">
