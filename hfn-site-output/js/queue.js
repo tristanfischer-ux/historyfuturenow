@@ -55,9 +55,10 @@
 
   // ─── DOM References ─────────────────────────────────────────────────────────
   var bar, playBtn, iconPlay, iconPause, titleEl, sectionEl;
-  var progressWrap, progressBar, timeEl, speedBtn;
+  var progressWrap, progressBar, progressThumb, timeEl, speedBtn;
   var prevBtn, nextBtn, queueBtn, queuePanel, queueList, queueCount;
   var closeQueueBtn, clearQueueBtn, barCloseBtn;
+  var qDragging = false;
 
   function initDOM() {
     bar = document.getElementById('queueBar');
@@ -68,6 +69,7 @@
     sectionEl = document.getElementById('queueSection');
     progressWrap = document.getElementById('queueProgressWrap');
     progressBar = document.getElementById('queueProgressBar');
+    progressThumb = document.getElementById('queueThumb');
     timeEl = document.getElementById('queueTime');
     speedBtn = document.getElementById('queueSpeed');
     prevBtn = document.getElementById('queuePrev');
@@ -94,16 +96,65 @@
     barCloseBtn.onclick = closeBar;
     speedBtn.onclick = cycleSpeed;
 
-    progressWrap.onclick = function (e) {
+    function qSeekTo(e) {
       if (!audio.duration) return;
       var rect = progressWrap.getBoundingClientRect();
-      var pct = (e.clientX - rect.left) / rect.width;
+      var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
       audio.currentTime = pct * audio.duration;
-    };
+      qUpdateBar(pct);
+    }
+
+    function qSeekToTouch(e) {
+      if (!audio.duration) return;
+      var rect = progressWrap.getBoundingClientRect();
+      var touch = e.touches[0];
+      var pct = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+      audio.currentTime = pct * audio.duration;
+      qUpdateBar(pct);
+    }
+
+    function qUpdateBar(pct) {
+      var p = (pct * 100) + '%';
+      progressBar.style.width = p;
+      if (progressThumb) progressThumb.style.left = p;
+    }
+
+    progressWrap.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      qDragging = true;
+      progressWrap.classList.add('scrubbing');
+      qSeekTo(e);
+      function onMove(ev) { qSeekTo(ev); }
+      function onUp() {
+        qDragging = false;
+        progressWrap.classList.remove('scrubbing');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+
+    progressWrap.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      qDragging = true;
+      progressWrap.classList.add('scrubbing');
+      qSeekToTouch(e);
+      function onTouchMove(ev) { ev.preventDefault(); qSeekToTouch(ev); }
+      function onTouchEnd() {
+        qDragging = false;
+        progressWrap.classList.remove('scrubbing');
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+      }
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+    });
 
     audio.ontimeupdate = function () {
+      if (qDragging) return;
       if (!audio.duration) return;
-      progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      qUpdateBar(audio.currentTime / audio.duration);
       timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
       save();
     };

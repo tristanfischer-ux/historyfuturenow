@@ -272,7 +272,8 @@ def make_queue_bar():
       <div class="q-track-section" id="queueSection"></div>
     </div>
     <div class="q-progress-wrap" id="queueProgressWrap">
-      <div class="q-progress-bar" id="queueProgressBar"></div>
+      <div class="q-progress-track"><div class="q-progress-bar" id="queueProgressBar"></div></div>
+      <div class="scrub-thumb" id="queueThumb"></div>
     </div>
     <div class="q-time" id="queueTime">0:00</div>
     <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
@@ -335,7 +336,7 @@ def make_audio_player_script():
     """Inline JavaScript for the article audio player (narration + discussion)."""
     return '''<script>
 (function(){
-  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId,thumbId){
     var audio=document.getElementById(audioId);
     if(!audio)return;
     var btn=document.getElementById(btnId);
@@ -343,11 +344,13 @@ def make_audio_player_script():
     var wrap=document.getElementById(wrapId);
     var timeEl=document.getElementById(timeId);
     var speedEl=document.getElementById(speedId);
+    var thumb=document.getElementById(thumbId);
     if(!btn)return;
     var iconPlay=btn.querySelector('.audio-icon-play');
     var iconPause=btn.querySelector('.audio-icon-pause');
     var speeds=[1,1.25,1.5,1.75,2];
     var si=0;
+    var dragging=false;
 
     function fmt(s){
       if(isNaN(s))return'0:00';
@@ -356,30 +359,79 @@ def make_audio_player_script():
       return m+':'+(sec<10?'0':'')+sec;
     }
 
+    function seekTo(e){
+      if(!audio.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+      audio.currentTime=pct*audio.duration;
+      updateBar(pct);
+    }
+
+    function seekToTouch(e){
+      if(!audio.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var touch=e.touches[0];
+      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
+      audio.currentTime=pct*audio.duration;
+      updateBar(pct);
+    }
+
+    function updateBar(pct){
+      var p=(pct*100)+'%';
+      bar.style.width=p;
+      if(thumb)thumb.style.left=p;
+    }
+
     btn.onclick=function(){
       if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
       else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
     };
 
     audio.ontimeupdate=function(){
+      if(dragging)return;
       if(audio.duration){
-        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        var pct=audio.currentTime/audio.duration;
+        updateBar(pct);
         timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
       }
     };
 
     audio.onended=function(){
       iconPlay.style.display='block';iconPause.style.display='none';
-      bar.style.width='0%';
+      updateBar(0);
     };
 
-    wrap.onclick=function(e){
-      if(audio.duration){
-        var rect=wrap.getBoundingClientRect();
-        var pct=(e.clientX-rect.left)/rect.width;
-        audio.currentTime=pct*audio.duration;
+    wrap.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekTo(e);
+      function onMove(ev){seekTo(ev);}
+      function onUp(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('mousemove',onMove);
+        document.removeEventListener('mouseup',onUp);
       }
-    };
+      document.addEventListener('mousemove',onMove);
+      document.addEventListener('mouseup',onUp);
+    });
+
+    wrap.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekToTouch(e);
+      function onTouchMove(ev){ev.preventDefault();seekToTouch(ev);}
+      function onTouchEnd(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('touchmove',onTouchMove);
+        document.removeEventListener('touchend',onTouchEnd);
+      }
+      document.addEventListener('touchmove',onTouchMove,{passive:false});
+      document.addEventListener('touchend',onTouchEnd);
+    });
 
     if(speedEl){
       speedEl.onclick=function(){
@@ -390,8 +442,8 @@ def make_audio_player_script():
     }
   }
 
-  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
-  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');
 })();
 </script>'''
 
@@ -606,7 +658,8 @@ def build_article(essay, all_essays):
         <div class="audio-meta">{est_listen} min</div>
       </div>
       <div class="audio-progress-wrap" id="audioProgressWrap">
-        <div class="audio-progress-bar" id="audioProgressBar"></div>
+        <div class="audio-progress-track"><div class="audio-progress-bar" id="audioProgressBar"></div></div>
+        <div class="scrub-thumb" id="audioThumb"></div>
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
       <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
@@ -636,7 +689,8 @@ def build_article(essay, all_essays):
         <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
       </div>
       <div class="discussion-progress-wrap" id="discussionProgressWrap">
-        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+        <div class="discussion-progress-track"><div class="discussion-progress-bar" id="discussionProgressBar"></div></div>
+        <div class="scrub-thumb" id="discussionThumb"></div>
       </div>
       <div class="discussion-time" id="discussionTime">0:00</div>
       <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
