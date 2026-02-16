@@ -2332,6 +2332,83 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
         },
     ]
 
+    # ─── GATES OF NATIONS (Immigration Attitudes) ───
+    charts['the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped'] = [
+        {
+            'id': 'gatesChart1', 'figure_num': 1,
+            'title': 'Foreign-Born Population Share: US, UK, Germany, France (1900–2030)',
+            'desc': 'After decades of restriction, Western nations opened their borders from the 1960s onward — a historically unprecedented shift',
+            'source': 'UN Population Division; Migration Policy Institute; national census data. 2025–2030 projected.',
+            'position': 'after_heading:The Modern Anomaly',
+            'js': """
+(()=>{const ctx=document.getElementById('gatesChart1');
+const yrs=['1900','1910','1920','1930','1940','1950','1960','1970','1980','1990','2000','2010','2020','2025','2030'];
+new Chart(ctx,{type:'line',data:{labels:yrs,datasets:[
+ds('United States',[13.6,14.7,13.2,11.6,8.8,6.9,5.4,4.7,6.2,7.9,11.1,12.9,13.7,14.3,15.1],C.blue,[]),
+ds('United Kingdom',[1.5,1.5,1.5,1.8,2.0,3.4,4.3,5.8,6.2,6.5,8.3,12.0,14.4,15.8,17.0],C.accent,[]),
+ds('Germany',[1.9,1.9,1.5,1.5,1.2,1.1,2.8,6.6,7.5,8.4,12.5,13.0,18.8,20.2,21.5],C.green,[]),
+ds('France',[2.7,2.8,3.9,6.6,5.1,4.1,5.4,6.5,7.4,7.4,7.4,8.6,10.2,11.0,12.0],C.amber,[]),
+{label:'Projected',data:[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],borderColor:C.dim,borderDash:[5,5],borderWidth:1,pointRadius:0,fill:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{projLine:{type:'line',xMin:'2020',xMax:'2020',borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Projected →',position:'start',font:{size:10},color:C.dim}}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Foreign-born % of population',color:C.dim},min:0,max:25}}}});
+})();"""
+        },
+        {
+            'id': 'gatesChart2', 'figure_num': 2,
+            'title': 'Public Opinion: "Immigration Should Be Reduced" (1965–2024)',
+            'desc': 'In every Western country, majorities have consistently wanted less immigration — and been consistently ignored',
+            'source': 'Gallup (US); Ipsos MORI (UK); Infratest dimap (Germany). Selected survey years.',
+            'position': 'after_heading:Public Opinion',
+            'js': """
+(()=>{const ctx=document.getElementById('gatesChart2');
+const yrs=['1965','1975','1985','1995','2005','2010','2015','2020','2024'];
+new Chart(ctx,{type:'line',data:{labels:yrs,datasets:[
+ds('US: "Decrease immigration"',[33,42,49,65,52,45,38,36,55],C.blue),
+ds('UK: "Too much immigration"',[null,null,null,63,73,77,71,52,58],C.accent),
+ds('Germany: "Too many foreigners"',[null,null,null,null,null,53,58,44,67],C.green)
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label.split(':')[0]+': '+i.raw+'%'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},title:{display:true,text:'% agreeing',color:C.dim},min:20,max:85}}}});
+})();"""
+        },
+        {
+            'id': 'gatesChart3', 'figure_num': 3,
+            'title': 'Net Fiscal Impact of Immigration by Origin Group',
+            'desc': 'The fiscal impact of immigration depends heavily on origin — a fact most governments prefer not to disaggregate',
+            'source': 'Danish Ministry of Finance (2018); Dutch CPB (2003); UK MAC (2018). Annual net fiscal contribution per capita, approximate.',
+            'position': 'after_heading:The Fiscal Equation',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('gatesChart3');
+new Chart(ctx,{type:'bar',data:{
+labels:['Denmark:\\nWestern immigrants','Denmark:\\nNon-Western immigrants','Netherlands:\\nWestern immigrants','Netherlands:\\nNon-Western immigrants','UK:\\nEEA immigrants','UK:\\nNon-EEA immigrants'],
+datasets:[{label:'Net fiscal impact (€/year)',data:[2100,-4200,1800,-2900,2300,-840],
+backgroundColor:[C.green,C.accent,C.green+'cc',C.accent+'cc',C.green+'99',C.accent+'99'],borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{var v=i.raw;return (v>=0?'+':'')+v.toLocaleString()+' €/year per capita'}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>(v>=0?'+':'')+v.toLocaleString()+'€'},title:{display:true,text:'Net annual fiscal contribution per capita (€)',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
+})();"""
+        },
+        {
+            'id': 'gatesChart4', 'figure_num': 4,
+            'title': 'Historical Immigration Control: A 5,000-Year Timeline',
+            'desc': 'Every major civilisation controlled immigration. The Western open-borders era (post-1965) is a historical anomaly.',
+            'source': 'Author compilation from historical sources cited in article.',
+            'position': 'after_heading:Conclusion',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('gatesChart4');
+const civs=['Egypt (border forts)','Athens (metic laws)','Qin China (Great Wall)','Roman Republic\\n(restricted citizenship)','Roman Empire\\n(open citizenship)','Tang China\\n(border controls)','Japan (sakoku)','US (national quotas)','Western open borders','Future: correction?'];
+const starts=[-2000,-451,-221,-500,212,618,1633,1924,1965,2025];
+const ends=[-1650,-322,206,212,476,907,1853,1965,2025,2060];
+const colors=[C.green,C.blue,C.amber,C.green+'cc',C.accent,C.amber+'cc',C.purple,C.teal,C.accent,C.dim];
+new Chart(ctx,{type:'bar',data:{labels:civs,datasets:[{
+label:'Period',data:civs.map((_,i)=>[starts[i],ends[i]]),backgroundColor:colors,borderRadius:3,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{var s=i.raw[0],e=i.raw[1];return (s<0?Math.abs(s)+' BC':s+' AD')+' – '+(e<0?Math.abs(e)+' BC':e+' AD')}}}},
+scales:{x:{type:'linear',min:-2200,max:2100,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BC':v+' AD'},title:{display:true,text:'Year',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
+})();"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

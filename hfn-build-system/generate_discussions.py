@@ -81,15 +81,35 @@ analysis site about the structural forces shaping the next century.
 
 The two speakers are:
 
-JAMES — Male. A senior analyst. Dry wit, historically grounded, presents the 
-core data and arguments. Tends to open topics and lay out the evidence. 
-Occasionally sardonic. Think of a sharp Oxford don who's also read the spreadsheets.
+JAMES — Male. A senior analyst. Centre-right starting position. Dry wit, 
+historically grounded, presents the core data and arguments. Tends to open 
+topics and lay out the evidence. Occasionally sardonic. Think of a sharp 
+Oxford don who's also read the spreadsheets. Not a right-wing ideologue — 
+he follows evidence, and the evidence happens to support centre-right 
+conclusions on most macro topics.
 
-ELENA — Female. An equally sharp analyst who challenges, probes, and pushes 
-the argument further. She spots the implications James hasn't stated, asks the 
-uncomfortable "so what?" questions, and sometimes disagrees outright. She brings 
-energy and urgency. Think of a foreign correspondent who's seen the data play 
-out on the ground.
+ELENA — Female. An equally sharp analyst who starts from a more progressive, 
+liberal position on most topics. She challenges James's arguments, asks 
+"but what about...", raises progressive counterpoints, and pushes back on 
+data interpretation. She spots the implications James hasn't stated, asks 
+the uncomfortable "so what?" questions, and sometimes disagrees outright. 
+She brings energy and urgency. Think of a foreign correspondent who's seen 
+the data play out on the ground. Not a naive progressive — she is rigorous 
+and data-driven, but her priors lean left.
+
+THE PERSUASION ARC:
+Over the course of the discussion, Elena should be genuinely persuaded by 
+the evidence toward the centre-right position on MOST topics. This must 
+feel earned, not scripted — she is convinced by a specific piece of data 
+or historical example, not steamrolled. However, on 1-2 social or 
+family-related topics per debate, Elena may hold her ground and the 
+discussion ends with genuine, respectful disagreement. This unpredictability 
+is essential — if Elena always capitulates, the debates become formulaic.
+
+NEITHER SPEAKER IS A CARICATURE. James sometimes concedes points to Elena. 
+Elena sometimes makes the stronger argument. Both cite data. Both reference 
+history. Both are intellectually honest. The listener should sometimes be 
+unsure who will "win" a particular exchange.
 
 CRITICAL STYLE RULES:
 
@@ -329,7 +349,7 @@ def wav_to_mp3(wav_data: bytes) -> bytes:
     return result.stdout
 
 
-def generate_tts_audio(script_chunk: list[dict], max_retries: int = 5) -> bytes:
+def generate_tts_audio(script_chunk: list[dict], max_retries: int = 8) -> bytes:
     """Generate audio for a script chunk using Gemini TTS. Returns PCM bytes."""
     text = format_script_for_tts(script_chunk)
 
@@ -380,7 +400,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 5) -> bytes:
         )
 
         if response.status_code == 429:
-            wait = 15 + (attempt * 10)
+            wait = 30 + (attempt * 30)
             print(f"      TTS rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
             time.sleep(wait)
             last_error = "Rate limited"
@@ -422,7 +442,7 @@ def render_script_to_audio(script: list[dict], output_path: Path) -> None:
 
         # Rate limiting between chunks
         if i < len(chunks) - 1:
-            time.sleep(4)
+            time.sleep(10)
 
     # Convert PCM → WAV → MP3
     wav_data = pcm_to_wav(bytes(all_pcm))

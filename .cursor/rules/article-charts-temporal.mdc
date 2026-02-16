@@ -1,0 +1,50 @@
+---
+description: Charts must cover historic-present-future arcs and exist in both interactive and static shareable versions. Enforced when creating or reviewing charts.
+alwaysApply: true
+---
+
+# Chart Temporal Coverage and Shareability
+
+Charts are not decorations. They are arguments made visible.
+
+## Temporal Coverage
+
+- **Target:** Every chart should show the full arc — historic, present, and future — so readers see where we came from and where we are heading
+- **Minimum:** Historic + present. No chart should show only a single point in time without context
+- **Future projections:** Include where credible data or reasonable extrapolation exists. Label projections clearly (dashed lines, "projected" annotation)
+- **When future data doesn't exist:** The chart should still contextualise the present within the historical arc. A chart showing 200 years of data with the present at the right edge implicitly asks "what comes next?"
+
+## Two Versions of Every Chart
+
+### 1. Interactive Version (in-article)
+- Chart.js canvas embedded in the article page
+- Hover tooltips, responsive sizing
+- Defined in `hfn-build-system/chart_defs.py` as per existing system
+
+### 2. Static Image Version (for sharing)
+- Pre-rendered PNG export of the chart
+- Must include: title, axis labels, source citation, and the HFN URL watermark
+- Stored at `hfn-site-output/images/articles/{slug}/chart-{id}.png`
+- Must be legible and meaningful without the surrounding article text
+- Optimised for social media dimensions (1200x630 for OG, 1080x1080 for square)
+
+## Standalone Shareability
+
+Each static chart image must work as a standalone piece of content:
+- Clear title that states the insight, not just the topic ("Fertility rates have halved since 1960" not "Fertility rates")
+- Source citation visible in the image
+- One-line contextual caption where needed
+- HFN URL watermark (small, bottom-right)
+
+## Per-Chart Share Button
+
+- Each chart in the article gets a share button
+- The share button opens a dialog offering: X, LinkedIn, WhatsApp, Email, Copy Link
+- Share text includes the article's `share_summary` (140 chars) from frontmatter
+- The shared content includes the static chart image
+
+## When Reviewing Charts
+
+- If a chart shows only the present with no historical context, flag it
+- If no static image version exists, flag it as incomplete
+- If the static image is illegible at social media dimensions, fix it

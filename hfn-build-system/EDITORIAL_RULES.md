@@ -129,3 +129,54 @@ consistent with these positions. They are not suggestions — they are rules.
 20. **NO MORALISING.** The site presents evidence and lets readers draw their
     own conclusions. It does not lecture. It does not virtue-signal. It shows
     the data and asks "what do you think?"
+
+---
+
+## READER EXPERIENCE RULES
+
+21. **DELIGHTFUL ENLIGHTENMENT.** Every article must teach the reader something
+    they genuinely did not know. The historical sections are the primary vehicle.
+    The test: could the reader explain the core argument to a friend at dinner,
+    with at least one historical fact they didn't know before?
+
+22. **THE CHUCKLE HOOK.** Every article must contain at least one moment of
+    unexpected, clever use of language in the first third of the article. Dry
+    wit, a sardonic aside, an unexpected historical parallel phrased memorably.
+    This hooks the reader early and signals the writing has personality.
+
+23. **WORD COUNT.** Target 3,000–5,000 words. Match length to the argument.
+    A tightly argued 3,000-word piece is better than a padded 5,000-word one.
+
+24. **CITATIONS.** Every factual claim, statistic, and historical assertion must
+    have a named source. Use inline citations (Author, Year) with a full
+    references section at the end. No "studies show" or "experts say."
+
+---
+
+## CHART AND SHARING RULES
+
+25. **CHART TEMPORAL COVERAGE.** Charts should show the full arc — historic,
+    present, and future — where credible data permits. Minimum: historic +
+    present. Future projections where reasonable extrapolation exists.
+
+26. **TWO CHART VERSIONS.** Every chart must exist as both an interactive
+    Chart.js canvas (in-article) and a static PNG image (for social sharing).
+    Static versions must include title, source, and HFN watermark.
+
+27. **SHARE INFRASTRUCTURE.** Every article must have share buttons (X, LinkedIn,
+    WhatsApp, Email, Copy Link) at the top and bottom. Every chart gets its own
+    share button. Every article frontmatter must include a `share_summary` field
+    (max 140 characters).
+
+---
+
+## MEDIA SUITE RULES
+
+28. **FULL MEDIA SUITE.** No article is complete until it ships with: hero image,
+    thumbnail images, two-voice audio narration (James and Elena), audio debate
+    (James and Elena, 8–12 minutes), and static chart images for every chart.
+
+29. **DEBATE DYNAMICS.** In audio debates, Elena starts from a more progressive
+    position and is the sceptic. She usually comes round to the centre-right
+    view through genuine persuasion by evidence, but on 1–2 social/family topics
+    per debate she may hold her ground. Neither speaker is a caricature.

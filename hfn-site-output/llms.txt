@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 59
+Total articles: 60
 
 ## Sections
 ### Natural Resources (11 articles)
@@ -18,7 +18,7 @@ Total articles: 59
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (22 articles)
+### Society (23 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -209,6 +209,12 @@ Total articles: 59
 - Section: Society
 - Reading time: 20 min
 - On February 4th 2026, a Washington Post reporter in a warzone in Ukraine learned by text message that she had been laid off. Nearly half the newsroom was gone in a single day. This is not just a story
+
+### The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped
+- Section: Society
+- Reading time: 13 min
+- For five thousand years, every successful civilisation tightly controlled who could enter, settle, and become a citizen. Then, in the space of a single generation, the West decided this was bigotry. T
 
 ### The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People [10 charts]
 - URL: https://www.historyfuturenow.com/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people
