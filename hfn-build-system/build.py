@@ -41,6 +41,86 @@ PART_ALIASES = {
 
 SITE_URL = "https://www.historyfuturenow.com"
 
+# Publication dates inferred from content temporal references (most recent year cited,
+# current-event references, technology mentions, etc.). Author started writing in 2012.
+# Format: slug -> "YYYY-MM-DD" (day is approximate — set to 1st or 15th of estimated month)
+ARTICLE_DATES = {
+    # 2010–2011
+    "green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition": "2011-03-15",
+    "the-north-african-threat-and-mediterranean-reunification": "2012-01-15",
+    # 2012
+    "keynes-and-hayek-are-both-dead-and-wrong": "2012-03-01",
+    "the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war": "2012-04-15",
+    "what-does-it-take-to-get-europeans-to-have-a-revolution": "2012-05-01",
+    "where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain": "2012-06-01",
+    "why-do-we-need-the-military-securing-energy-supplies-and-trade-routes": "2012-07-01",
+    "who-are-the-losers-in-the-energy-revolution": "2012-08-01",
+    "why-the-nuclear-family-needs-to-die-in-order-for-us-to-live": "2012-09-01",
+    "dont-confuse-what-is-legal-with-what-is-morally-right": "2012-10-01",
+    "the-rise-of-the-west-was-based-on-luck-that-has-run-out": "2012-11-01",
+    "roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775": "2012-12-01",
+    "cassandra-time-to-give-up-on-predicting-climate-change": "2012-06-15",
+    "rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china": "2012-10-15",
+    # 2013
+    "what-the-history-of-immigration-teaches-us-about-europes-future": "2013-02-01",
+    "why-is-bisexuality-becoming-mainstream": "2013-03-15",
+    "emigration-colonies-of-the-mind-and-space": "2013-04-01",
+    "crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west": "2013-05-01",
+    "prisons-we-never-used-to-have-them-will-they-exist-in-the-future": "2013-06-01",
+    "jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely": "2013-07-01",
+    "a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story": "2013-08-01",
+    "a-frozen-society-the-long-term-implications-of-nsas-secrets": "2013-09-01",
+    "why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society": "2013-10-01",
+    "debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all": "2013-11-01",
+    # 2014
+    "are-europeans-fundamentally-racist": "2014-02-01",
+    "what-happens-when-china-becomes-the-largest-economy-in-the-world": "2014-04-01",
+    "why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event": "2014-06-01",
+    "is-democracy-the-opium-of-the-masses": "2014-08-01",
+    "lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people": "2014-10-01",
+    "china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically": "2014-11-01",
+    "why-god-needs-the-government-multiculturalism-vs-monotheism": "2014-12-01",
+    # 2015
+    "who-benefits-from-our-increased-social-fragmentation": "2015-03-01",
+    "establishing-a-price-floor-for-energy": "2015-06-01",
+    "clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west": "2015-09-01",
+    "why-china-could-invade-taiwan-and-get-away-with-it": "2015-11-01",
+    # 2016–2017
+    "dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food": "2016-03-01",
+    "hinkley-point-decision-is-really-about-china-and-brexit": "2016-09-01",
+    "history-is-written-by-the-winners-and-europeans-are-losing": "2017-04-01",
+    # 2018
+    "the-renewables-and-battery-revolution": "2018-03-01",
+    "big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do": "2018-06-01",
+    "the-wests-romance-with-free-trade-is-over-why": "2019-01-15",
+    # 2020
+    "the-long-term-impact-of-covid-19": "2020-04-01",
+    "the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state": "2020-06-01",
+    # 2021–2022
+    "the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people": "2021-09-01",
+    "vertical-farming-the-electrical-convergence-power-transport-and-agriculture": "2022-01-15",
+    "forging-peace-from-centuries-of-war-to-ukraines-future": "2022-04-01",
+    "the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace": "2022-10-01",
+    # 2023
+    "the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future": "2023-06-01",
+    # 2024
+    "robotics-and-slavery": "2024-04-01",
+    "the-150-year-life-how-radical-longevity-will-transform-our-world": "2024-06-01",
+    "platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future": "2024-03-01",
+    "the-paradox-of-mass-migration-and-robots-in-the-age-of-automation": "2024-05-01",
+    "the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem": "2024-09-01",
+    "the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped": "2024-11-01",
+    # 2025–2026
+    "the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap": "2026-02-01",
+    "the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed": "2026-02-05",
+    "the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun": "2026-02-06",
+    "who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state": "2026-02-07",
+    "the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering": "2026-02-08",
+    "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth": "2026-02-09",
+    "europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence": "2026-02-10",
+    "the-new-literacy": "2026-02-16",
+}
+
 def load_original_slugs():
     """Load the set of original article slugs from the manifest file."""
     if not MANIFEST_PATH.exists():
@@ -51,6 +131,14 @@ def load_original_slugs():
         if line and not line.startswith('#'):
             slugs.add(line)
     return slugs
+
+def format_date_human(iso_date):
+    """Convert 'YYYY-MM-DD' to a human-readable British date like '1 March 2012'."""
+    if not iso_date:
+        return ''
+    from datetime import datetime
+    dt = datetime.strptime(iso_date, '%Y-%m-%d')
+    return dt.strftime('%-d %B %Y')
 
 def fix_encoding(text):
     replacements = {
@@ -143,12 +231,15 @@ def parse_essay(filepath):
 
     share_summary = meta.get('share_summary', '')
 
+    pub_date = ARTICLE_DATES.get(slug, '')
+
     return {
         'title': title, 'slug': slug, 'part': part, 'excerpt': excerpt,
         'body_html': body_html, 'reading_time': reading_time,
         'pull_quote': pull_quote, 'filepath': filepath,
         'has_audio': has_audio, 'has_discussion': has_discussion,
         'share_summary': share_summary,
+        'pub_date': pub_date,
     }
 
 def get_related(essay, all_essays, n=3):
@@ -166,13 +257,14 @@ def get_hero_image(slug):
             return f"/images/articles/{slug}/hero.{ext}"
     return None
 
-def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None):
+def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None, pub_date=None):
     te = html_mod.escape(title)
     de = html_mod.escape(desc[:300]) if desc else ""
     tc = part_color or "#c43425"
     canonical = f'<link rel="canonical" href="{SITE_URL}{og_url}">' if og_url else ""
     og = f'<meta property="og:url" content="{SITE_URL}{og_url}">' if og_url else ""
     og_img = f'<meta property="og:image" content="{SITE_URL}{og_image}">\n<meta name="twitter:image" content="{SITE_URL}{og_image}">' if og_image else ""
+    og_date = f'\n<meta property="article:published_time" content="{pub_date}">' if pub_date else ""
     ld = f'<script type="application/ld+json">{json.dumps(json_ld, ensure_ascii=False)}</script>' if json_ld else ""
     return f'''<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -184,7 +276,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="History Future Now">
 <meta property="og:locale" content="en_GB">
-<meta property="article:author" content="Tristan Fischer">
+<meta property="article:author" content="Tristan Fischer">{og_date}
 {og}
 {og_img}
 <meta name="twitter:card" content="summary_large_image">
@@ -193,6 +285,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
 <meta name="theme-color" content="{tc}">
 <meta name="robots" content="index, follow">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="History Future Now" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
@@ -712,19 +805,27 @@ def build_article(essay, all_essays):
     <audio id="discussionElement" preload="none" src="/audio/discussions/{html_mod.escape(essay['slug'])}.mp3"></audio>
   </div>'''
 
+    # Hero image injection
+    hero_img = get_hero_image(essay['slug'])
+
     # JSON-LD structured data for article
     json_ld = {
         "@context": "https://schema.org",
         "@type": "Article",
         "headline": essay['title'],
         "description": essay['excerpt'][:300],
-        "author": {"@type": "Person", "name": "Tristan Fischer"},
+        "author": {"@type": "Person", "name": "Tristan Fischer", "url": SITE_URL},
         "publisher": {"@type": "Organization", "name": "History Future Now", "url": SITE_URL},
         "url": f"{SITE_URL}/articles/{essay['slug']}",
         "mainEntityOfPage": f"{SITE_URL}/articles/{essay['slug']}",
         "articleSection": essay['part'],
         "inLanguage": "en-GB",
     }
+    if essay.get('pub_date'):
+        json_ld["datePublished"] = essay['pub_date']
+        json_ld["dateModified"] = essay['pub_date']
+    if hero_img:
+        json_ld["image"] = f"{SITE_URL}{hero_img}"
 
     # Breadcrumbs: Home / Section / Article title (truncated)
     truncated_title = essay['title'] if len(essay['title']) <= 50 else essay['title'][:47] + '...'
@@ -733,9 +834,6 @@ def build_article(essay, all_essays):
         (essay['part'], f'/{pi["slug"]}'),
         (truncated_title, None),
     ])
-
-    # Hero image injection
-    hero_img = get_hero_image(essay['slug'])
     hero_img_html = ''
     if hero_img:
         hero_img_html = f'''
@@ -775,7 +873,7 @@ def build_article(essay, all_essays):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head(f"{essay['title']} — History Future Now", essay['excerpt'], f"/articles/{essay['slug']}", pi['color'], json_ld, og_image=hero_img)}
+{make_head(f"{essay['title']} — History Future Now", essay['excerpt'], f"/articles/{essay['slug']}", pi['color'], json_ld, og_image=hero_img, pub_date=essay.get('pub_date'))}
 </head>
 <body>
 
@@ -797,6 +895,7 @@ def build_article(essay, all_essays):
       <span class="article-byline">By <strong>Tristan Fischer</strong></span>
       <span class="meta-sep">&middot;</span>
       <span class="article-reading-time">{essay['reading_time']} min read</span>
+      {f'<span class="meta-sep">&middot;</span><time class="article-date" datetime="{essay["pub_date"]}">{format_date_human(essay["pub_date"])}</time>' if essay.get('pub_date') else ''}
     </div>{chart_badge}
   </header>{hero_img_html}
 {audio_player}
@@ -1762,7 +1861,8 @@ def main():
     for pi in PARTS.values():
         urls.append(f'  <url><loc>{SITE_URL}/{pi["slug"]}</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     for e in essays:
-        urls.append(f'  <url><loc>{SITE_URL}/articles/{e["slug"]}</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>')
+        lastmod = f'<lastmod>{e["pub_date"]}</lastmod>' if e.get('pub_date') else ''
+        urls.append(f'  <url><loc>{SITE_URL}/articles/{e["slug"]}</loc>{lastmod}<priority>0.7</priority><changefreq>monthly</changefreq></url>')
     sitemap = f'''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {chr(10).join(urls)}
@@ -1821,6 +1921,8 @@ Allow: /
         llms_lines.append(f"### {e['title']}{chart_note}")
         llms_lines.append(f"- URL: {SITE_URL}/articles/{e['slug']}")
         llms_lines.append(f"- Section: {e['part']}")
+        if e.get('pub_date'):
+            llms_lines.append(f"- Published: {e['pub_date']}")
         llms_lines.append(f"- Reading time: {e['reading_time']} min")
         llms_lines.append(f"- {e['excerpt'][:200]}")
         llms_lines.append("")
@@ -1832,7 +1934,7 @@ Allow: /
     for e in essays:
         pi = PARTS[e['part']]
         n_charts = len(all_charts.get(e['slug'], []))
-        search_index.append({
+        entry = {
             "title": e['title'],
             "slug": e['slug'],
             "section": e['part'],
@@ -1843,11 +1945,60 @@ Allow: /
             "readingTime": e['reading_time'],
             "chartCount": n_charts,
             "hasAudio": e.get('has_audio', False) or e.get('has_discussion', False),
-        })
+        }
+        if e.get('pub_date'):
+            entry["pubDate"] = e['pub_date']
+        search_index.append(entry)
     (OUTPUT_DIR / "search-index.json").write_text(
         json.dumps(search_index, ensure_ascii=False), encoding='utf-8')
 
-    print("  Built sitemap.xml, robots.txt, llms.txt, search-index.json")
+    # RSS feed (Atom)
+    from datetime import datetime
+    sorted_by_date = sorted(
+        [e for e in essays if e.get('pub_date')],
+        key=lambda e: e['pub_date'],
+        reverse=True
+    )
+    rss_items = []
+    for e in sorted_by_date[:20]:
+        pi = PARTS[e['part']]
+        pub_dt = datetime.strptime(e['pub_date'], '%Y-%m-%d')
+        rfc822 = pub_dt.strftime('%a, %d %b %Y 00:00:00 +0000')
+        hero_img = get_hero_image(e['slug'])
+        enclosure = f'\n      <enclosure url="{SITE_URL}{hero_img}" type="image/png" />' if hero_img else ''
+        rss_items.append(f'''    <item>
+      <title>{html_mod.escape(e["title"])}</title>
+      <link>{SITE_URL}/articles/{e["slug"]}</link>
+      <guid isPermaLink="true">{SITE_URL}/articles/{e["slug"]}</guid>
+      <pubDate>{rfc822}</pubDate>
+      <description>{html_mod.escape(e["excerpt"][:500])}</description>
+      <category>{html_mod.escape(e["part"])}</category>{enclosure}
+    </item>''')
+
+    latest_date = sorted_by_date[0]['pub_date'] if sorted_by_date else '2026-02-16'
+    latest_dt = datetime.strptime(latest_date, '%Y-%m-%d')
+    latest_rfc822 = latest_dt.strftime('%a, %d %b %Y 00:00:00 +0000')
+
+    rss_xml = f'''<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>History Future Now</title>
+    <link>{SITE_URL}</link>
+    <description>Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.</description>
+    <language>en-gb</language>
+    <lastBuildDate>{latest_rfc822}</lastBuildDate>
+    <atom:link href="{SITE_URL}/feed.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>{SITE_URL}/favicon.svg</url>
+      <title>History Future Now</title>
+      <link>{SITE_URL}</link>
+    </image>
+{chr(10).join(rss_items)}
+  </channel>
+</rss>'''
+    (OUTPUT_DIR / "feed.xml").write_text(rss_xml, encoding='utf-8')
+
+    print("  Built sitemap.xml, robots.txt, llms.txt, search-index.json, feed.xml")
 
     total = len(essays) + len(PARTS) + 1
     print(f"\n✅ Site built: {total} HTML pages")
