@@ -197,10 +197,11 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
 def make_nav(active=None):
     secs = [("Home","/",None),("Resources","/natural-resources","Natural Resources"),
             ("Power","/balance-of-power","Global Balance of Power"),
-            ("Economy","/jobs-economy","Jobs & Economy"),("Society","/society","Society")]
+            ("Economy","/jobs-economy","Jobs & Economy"),("Society","/society","Society"),
+            ("Listen","/listen",None)]
     li = ""
     for label, href, part in secs:
-        ac = ' class="active"' if part and part == active else ''
+        ac = ' class="active"' if (part and part == active) or (label == active) else ''
         li += f'      <li><a href="{href}"{ac}>{label}</a></li>\n'
     return f'''<nav class="site-nav">
   <div class="nav-inner">
@@ -312,6 +313,7 @@ def make_footer():
       <li><a href="/balance-of-power">Power</a></li>
       <li><a href="/jobs-economy">Economy</a></li>
       <li><a href="/society">Society</a></li>
+      <li><a href="/listen">Listen</a></li>
     </ul>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
@@ -1194,31 +1196,40 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 {cards}    </div>
   </div>\n\n"""
 
-    # ── Listen to History section ──
-    # Include any article that has narration OR discussion audio
+    # ── Listen to History teaser (homepage) ──
+    # Show 5 newest audio articles as cards + CTA to /listen
     audio_essays = [e for e in essays if e.get('has_audio') or e.get('has_discussion')]
     audio_essays.sort(key=lambda e: (PARTS.get(e['part'], {}).get('order', 99), e['title']))
     audio_article_count = len(audio_essays)
 
-    listen_cards_html = ""
-    play_all_items = []
+    # Calculate total listen time across all audio articles
+    total_listen_mins = 0
     for ae in audio_essays:
+        if ae.get('has_audio'):
+            total_listen_mins += max(1, round(ae['reading_time'] * 250 / 189))
+        else:
+            total_listen_mins += 10
+    total_listen_hours = round(total_listen_mins / 60)
+
+    # Pick 5 newest audio articles (by mtime) for the teaser
+    audio_by_mtime = sorted(audio_essays, key=lambda e: e.get('mtime', 0), reverse=True)
+    teaser_essays = audio_by_mtime[:5]
+
+    teaser_cards_html = ""
+    teaser_queue_items = []
+    for ae in teaser_essays:
         pi = PARTS.get(ae['part'], PARTS['Society'])
         section_label = f"{pi['label']} · {ae['part']}"
         has_narration = ae.get('has_audio', False)
         has_disc = ae.get('has_discussion', False)
 
-        # Determine listen time and audio type label
         if has_narration:
             listen_time = max(1, round(ae['reading_time'] * 250 / 189))
-            audio_type = "Narration"
             queue_url = f"/audio/{ae['slug']}.mp3"
         else:
-            listen_time = 10  # discussions average ~10 min
-            audio_type = "Discussion"
+            listen_time = 10
             queue_url = f"/audio/discussions/{ae['slug']}.mp3"
 
-        # Badge showing what audio types are available
         if has_narration and has_disc:
             type_badge = '<span class="listen-card-type">Narration + Discussion</span>'
         elif has_narration:
@@ -1226,7 +1237,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
         else:
             type_badge = '<span class="listen-card-type">Discussion</span>'
 
-        listen_cards_html += f'''      <a href="/articles/{html_mod.escape(ae['slug'])}" class="listen-card" style="--card-accent:{pi['color']}">
+        teaser_cards_html += f'''      <a href="/articles/{html_mod.escape(ae['slug'])}" class="listen-card" style="--card-accent:{pi['color']}">
         <div class="listen-card-top">
           <svg class="listen-card-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
           <span class="listen-card-time">{listen_time} min</span>
@@ -1239,7 +1250,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
           <span class="q-add-label">Add to Queue</span>
         </button>
       </a>\n'''
-        play_all_items.append({
+        teaser_queue_items.append({
             'slug': ae['slug'],
             'title': ae['title'],
             'section': section_label,
@@ -1247,7 +1258,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
             'url': queue_url,
         })
 
-    play_all_json = html_mod.escape(json.dumps(play_all_items))
+    teaser_queue_json = html_mod.escape(json.dumps(teaser_queue_items))
 
     listen_section_html = ""
     if audio_article_count > 0:
@@ -1257,15 +1268,21 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.3rem;">
       <div>
         <h2 class="listen-title">Listen to History</h2>
-        <p class="listen-intro" style="margin-bottom:0">{audio_article_count} articles available as audio. Queue them up and listen on the go.</p>
+        <p class="listen-intro" style="margin-bottom:0">Every article, narrated in full. Queue them up and listen on the go.</p>
       </div>
-      <button class="q-play-all" id="queueAllBtn" data-items="{play_all_json}">
+      <button class="q-play-all" id="queueAllBtn" data-items="{teaser_queue_json}">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         Queue All
       </button>
     </div>
     <div class="listen-scroll">
-{listen_cards_html}    </div>
+{teaser_cards_html}    </div>
+    <div class="listen-teaser-cta">
+      <a href="/listen" class="listen-browse-link">
+        <span class="listen-browse-stats">{audio_article_count} articles &middot; {total_listen_hours}+ hours of audio</span>
+        <span class="listen-browse-action">Browse the full collection &rarr;</span>
+      </a>
+    </div>
   </div>
 </div>
 """
@@ -1369,6 +1386,220 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 </body>
 </html>"""
 
+def build_listen_page(essays):
+    """Build the dedicated /listen page with filterable audio catalogue."""
+    audio_essays = [e for e in essays if e.get('has_audio') or e.get('has_discussion')]
+    audio_essays.sort(key=lambda e: (PARTS.get(e['part'], {}).get('order', 99), e['title']))
+    audio_count = len(audio_essays)
+
+    # Calculate total listen time
+    total_mins = 0
+    for ae in audio_essays:
+        if ae.get('has_audio'):
+            total_mins += max(1, round(ae['reading_time'] * 250 / 189))
+        else:
+            total_mins += 10
+    total_hours = round(total_mins / 60)
+
+    # Count by section
+    section_counts = {}
+    for ae in audio_essays:
+        pn = ae['part']
+        section_counts[pn] = section_counts.get(pn, 0) + 1
+
+    # Build queue-all data
+    all_queue_items = []
+    for ae in audio_essays:
+        pi = PARTS.get(ae['part'], PARTS['Society'])
+        section_label = f"{pi['label']} · {ae['part']}"
+        if ae.get('has_audio'):
+            queue_url = f"/audio/{ae['slug']}.mp3"
+        else:
+            queue_url = f"/audio/discussions/{ae['slug']}.mp3"
+        all_queue_items.append({
+            'slug': ae['slug'],
+            'title': ae['title'],
+            'section': section_label,
+            'color': pi['color'],
+            'url': queue_url,
+        })
+    queue_all_json = html_mod.escape(json.dumps(all_queue_items))
+
+    # Build filter tabs
+    filter_tabs = '<button class="lp-tab active" data-filter="all">All</button>\n'
+    for pn in sorted(PARTS.keys(), key=lambda p: PARTS[p]['order']):
+        pi = PARTS[pn]
+        count = section_counts.get(pn, 0)
+        if count > 0:
+            filter_tabs += f'      <button class="lp-tab" data-filter="{html_mod.escape(pi["slug"])}" style="--tab-color:{pi["color"]}">{pi["label"].replace("Part ", "").strip()}: {html_mod.escape(pn)} <span class="lp-tab-count">{count}</span></button>\n'
+
+    # Build list rows
+    rows_html = ""
+    for ae in audio_essays:
+        pi = PARTS.get(ae['part'], PARTS['Society'])
+        section_label = f"{pi['label']} · {ae['part']}"
+        has_narration = ae.get('has_audio', False)
+        has_disc = ae.get('has_discussion', False)
+
+        if has_narration:
+            listen_time = max(1, round(ae['reading_time'] * 250 / 189))
+            queue_url = f"/audio/{ae['slug']}.mp3"
+        else:
+            listen_time = 10
+            queue_url = f"/audio/discussions/{ae['slug']}.mp3"
+
+        if has_narration and has_disc:
+            type_label = "Narration + Discussion"
+            audio_type_filter = "both"
+        elif has_narration:
+            type_label = "Narration"
+            audio_type_filter = "narration"
+        else:
+            type_label = "Discussion"
+            audio_type_filter = "discussion"
+
+        excerpt_text = html_mod.escape(ae.get('excerpt', '')[:120])
+        if len(ae.get('excerpt', '')) > 120:
+            excerpt_text += '&hellip;'
+
+        rows_html += f'''    <a href="/articles/{html_mod.escape(ae['slug'])}" class="lp-row" data-section="{html_mod.escape(pi['slug'])}" data-audio-type="{audio_type_filter}">
+      <svg class="lp-row-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
+      <div class="lp-row-main">
+        <div class="lp-row-title">{html_mod.escape(ae['title'])}</div>
+        <div class="lp-row-excerpt">{excerpt_text}</div>
+      </div>
+      <span class="lp-row-section" style="color:{pi['color']};border-color:{pi['color']}">{html_mod.escape(pi['label'])}</span>
+      <span class="lp-row-duration">{listen_time} min</span>
+      <span class="lp-row-type">{type_label}</span>
+      <button class="q-add-btn" data-queue-slug="{html_mod.escape(ae['slug'])}" data-queue-title="{html_mod.escape(ae['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="{queue_url}" aria-label="Add to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Queue</span>
+      </button>
+    </a>\n'''
+
+    breadcrumbs = make_breadcrumbs([
+        ('Home', '/'),
+        ('Listen', None),
+    ])
+
+    filter_script = '''<script>
+(function(){
+  var tabs = document.querySelectorAll('.lp-tab');
+  var typeBtns = document.querySelectorAll('.lp-type-btn');
+  var rows = document.querySelectorAll('.lp-row');
+  var countEl = document.getElementById('lpVisibleCount');
+  var currentSection = 'all';
+  var currentType = 'all';
+
+  function applyFilters(){
+    var visible = 0;
+    rows.forEach(function(r){
+      var matchSection = currentSection === 'all' || r.dataset.section === currentSection;
+      var matchType = currentType === 'all' || r.dataset.audioType === currentType || (currentType === 'narration' && r.dataset.audioType === 'both') || (currentType === 'discussion' && r.dataset.audioType === 'both');
+      if(matchSection && matchType){ r.style.display = ''; visible++; }
+      else { r.style.display = 'none'; }
+    });
+    if(countEl) countEl.textContent = visible;
+  }
+
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      currentSection = t.dataset.filter;
+      applyFilters();
+      var hash = currentSection === 'all' ? '' : '#' + currentSection;
+      history.replaceState(null, '', '/listen' + hash);
+    });
+  });
+
+  typeBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      typeBtns.forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      currentType = b.dataset.type;
+      applyFilters();
+    });
+  });
+
+  // Restore filter from URL hash
+  var hash = location.hash.replace('#','');
+  if(hash){
+    tabs.forEach(function(t){
+      if(t.dataset.filter === hash){
+        t.click();
+      }
+    });
+  }
+
+  // Stop queue button clicks from navigating to the article
+  document.querySelectorAll('.lp-row .q-add-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); });
+  });
+})();
+</script>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{make_head("Listen to History — History Future Now", f"{audio_count} articles available as audio narration and debate. {total_hours}+ hours of content.", "/listen")}
+</head>
+<body>
+
+{make_nav("Listen")}
+
+{make_search_overlay()}
+
+<section class="lp-hero">
+  <div class="lp-hero-inner">
+    {breadcrumbs}
+    <h1 class="lp-hero-title">Listen to History</h1>
+    <p class="lp-hero-desc">Every article, narrated in full with two alternating British voices &mdash; plus expert debates on the biggest questions. Queue them up and listen on the go.</p>
+    <div class="lp-hero-stats">
+      <span class="lp-stat"><strong>{audio_count}</strong> articles</span>
+      <span class="lp-stat-sep">&middot;</span>
+      <span class="lp-stat"><strong>{total_hours}+</strong> hours</span>
+      <span class="lp-stat-sep">&middot;</span>
+      <span class="lp-stat"><strong>4</strong> sections</span>
+    </div>
+    <button class="q-play-all lp-queue-all" id="queueAllBtn" data-items="{queue_all_json}">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      Queue All {audio_count} Articles
+    </button>
+  </div>
+</section>
+
+<div class="lp-filters">
+  <div class="lp-filters-inner">
+    <div class="lp-filter-group">
+      <span class="lp-filter-label">Section</span>
+      {filter_tabs}
+    </div>
+    <div class="lp-filter-group">
+      <span class="lp-filter-label">Type</span>
+      <button class="lp-type-btn active" data-type="all">All</button>
+      <button class="lp-type-btn" data-type="narration">Narration</button>
+      <button class="lp-type-btn" data-type="discussion">Discussion</button>
+    </div>
+  </div>
+</div>
+
+<div class="lp-list-wrap">
+  <div class="lp-list-inner">
+    <div class="lp-list-header">
+      <span class="lp-showing">Showing <strong id="lpVisibleCount">{audio_count}</strong> articles</span>
+    </div>
+    <div class="lp-list">
+{rows_html}    </div>
+  </div>
+</div>
+
+{make_footer()}
+{filter_script}
+</body>
+</html>'''
+
+
 def main():
     essays = []
     for md in sorted(ESSAYS_DIR.glob("*.md")):
@@ -1424,12 +1655,17 @@ def main():
     (OUTPUT_DIR / "index.html").write_text(build_homepage(essays, new_essays), encoding='utf-8')
     print("  Built homepage")
 
+    print("Building listen page...")
+    (OUTPUT_DIR / "listen.html").write_text(build_listen_page(essays), encoding='utf-8')
+    print("  Built listen page")
+
     # ── SEO files ──
     print("Building SEO files...")
     all_charts = get_all_charts()
 
     # sitemap.xml
     urls = [f'  <url><loc>{SITE_URL}/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>']
+    urls.append(f'  <url><loc>{SITE_URL}/listen</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     for pi in PARTS.values():
         urls.append(f'  <url><loc>{SITE_URL}/{pi["slug"]}</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     for e in essays:
