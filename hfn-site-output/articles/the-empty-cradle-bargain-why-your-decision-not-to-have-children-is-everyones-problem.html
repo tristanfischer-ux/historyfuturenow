@@ -261,6 +261,28 @@
 
   </div>
 
+  <div class="discussion-player" id="discussionPlayer">
+    <div class="discussion-player-inner">
+      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="discussion-info">
+        <div class="discussion-label">Listen to the discussion</div>
+        <div class="discussion-meta">Two analysts discuss this article and its connections across the site</div>
+      </div>
+      <div class="discussion-progress-wrap" id="discussionProgressWrap">
+        <div class="discussion-progress-bar" id="discussionProgressBar"></div>
+      </div>
+      <div class="discussion-time" id="discussionTime">0:00</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="discussion-the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem" data-queue-title="Discussion: The Empty Cradle Bargain: Why Your Decision Not to Have Children Is Everyone&#x27;s Problem" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/discussions/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem.mp3" aria-label="Add discussion to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="discussionElement" preload="none" src="/audio/discussions/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem.mp3"></audio>
+  </div>
   <div class="article-end-cta" data-share-url="https://www.historyfuturenow.com/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem" data-share-title="The Empty Cradle Bargain: Why Your Decision Not to Have Children Is Everyone&#x27;s Problem" data-share-text="Every couple has good reasons not to have children. Multiplied by millions, good reasons produce civilisational collapse.">
     <p class="cta-prompt">If this changed how you think, share it with someone who should read it.</p>
     <div class="cta-share-buttons">
@@ -323,20 +345,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
+      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
         <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
+      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -412,13 +434,14 @@ const C = {
   text:'#1a1815', grid:'#f2eeea'
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
+const yearTick=v=>String(v);
+const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
+const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
 
 
 (()=>{const ctx=document.getElementById('cradleChart1');
@@ -483,7 +506,67 @@ annotation:{annotations:{repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total Fertility Rate (TFR)',color:C.dim}}}}});
 })();
 </script>
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(audio.duration){
+        bar.style.width=(audio.currentTime/audio.duration*100)+'%';
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      bar.style.width='0%';
+    };
+
+    wrap.onclick=function(e){
+      if(audio.duration){
+        var rect=wrap.getBoundingClientRect();
+        var pct=(e.clientX-rect.left)/rect.width;
+        audio.currentTime=pct*audio.duration;
+      }
+    };
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed');
+  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed');
+})();
+</script>
 <script src="/js/share.js"></script>
 </body>
 </html>

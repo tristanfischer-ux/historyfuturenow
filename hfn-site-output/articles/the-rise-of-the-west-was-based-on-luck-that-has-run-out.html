@@ -288,20 +288,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
+        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
+      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -377,13 +377,14 @@ const C = {
   text:'#1a1815', grid:'#f2eeea'
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
+const yearTick=v=>String(v);
+const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
+const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
 
 
 (()=>{const ctx=document.getElementById('luckChart1');
@@ -415,7 +416,7 @@ data:b.map(x=>({x:x.y,y:x.i,r:x.i*2.2})),
 backgroundColor:b.map(x=>x.c+'55'),borderColor:b.map(x=>x.c),borderWidth:2
 }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[b[i[0].dataIndex].l],label:i=>'Year: '+b[i.dataIndex].y+', Impact: '+b[i.dataIndex].i+'/10'}}},
-scales:{x:{type:'linear',min:1300,max:1850,grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Year',color:C.dim}},
+scales:{x:{type:'linear',min:1300,max:1850,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick},title:{display:true,text:'Year',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:11,title:{display:true,text:'Historical impact (1-10)',color:C.dim}}}}});
 })();
 

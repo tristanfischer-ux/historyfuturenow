@@ -246,20 +246,20 @@ We stand at a pivotal juncture in human history, facing two seemingly contradict
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
+      <a href="/articles/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Perils of Prediction: Lessons from History on Navigating an Uncertain Future</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
         <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
+      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -335,13 +335,14 @@ const C = {
   text:'#1a1815', grid:'#f2eeea'
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
+const yearTick=v=>String(v);
+const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
+const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
 
 
 (()=>{const ctx=document.getElementById('paradoxChart1');

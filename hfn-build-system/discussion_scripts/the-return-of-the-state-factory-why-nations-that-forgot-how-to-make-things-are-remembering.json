@@ -1,174 +1,142 @@
 [
   {
     "speaker": "James",
-    "text": "The US-Taiwan deal from 2026. $250 billion in investment, $84 billion in purchases, 15% tariffs. The article calls it a 'mercantilist bargain dressed in free trade language'. And it's absolutely right."
+    "text": "The US-Taiwan trade deal, February 2026. $250 billion in investment for American chip production. Tariffs at 15%. Unthinkable a decade ago, wouldn't you say?"
   },
   {
     "speaker": "Elena",
-    "text": "Mercantilist? That's quite the strong word, James. Isn't it just pragmatic national interest?"
+    "text": "Unthinkable? Perhaps. Necessary? I'm not so sure. It sounds suspiciously like protectionism."
   },
   {
     "speaker": "James",
-    "text": "It is. But it marks the definitive end of an orthodoxy that manufacturing didn't matter. The article argues the whole 'free trade' period, roughly 1980 to 2015, was the aberration. For most of five centuries, nations built power through protectionism."
+    "text": "[dry] And what's wrong with that, Elena? For five centuries, every powerful nation built its strength on protected manufacturing. Free trade was the aberration."
   },
   {
     "speaker": "Elena",
-    "text": "Oh, come on. That's a bit of a convenient re-reading of history, isn't it? Free trade brought unprecedented prosperity for decades."
+    "text": "Come on. Globalisation brought cheaper goods, consumer choice. You can't just ditch that for… state factories."
   },
   {
     "speaker": "James",
-    "text": "Prosperity for some, certainly. But consider the historical foundations. The East India Company, the VOC... they weren't free marketeers. They were state-backed monopolies, using private armies to enforce their 'anti-competitive' trade. Colonies existed to provide cheap raw materials and captive markets."
+    "text": "Cheaper goods, yes. But at what cost? We offshored everything, then discovered we couldn't make a surgical mask during a pandemic."
   },
   {
     "speaker": "Elena",
-    "text": "That was brutal exploitation. A far cry from modern industrial policy."
+    "text": "That was an emergency. Not a reason to rewrite forty years of economic policy."
   },
   {
     "speaker": "James",
-    "text": "The *mechanism* was different, the *intent* similar. Capture value-add from manufacturing. Raw materials are cheap, finished goods are expensive. Alexander Hamilton understood this perfectly."
+    "text": "[emphatic] The article calls it a 'strategic subsidy' — our 'free trade' was a Cold War tactic. We traded manufacturing jobs for military alliances."
   },
   {
     "speaker": "Elena",
-    "text": "Hamilton? You're going back to 1791? He was trying to build a nation from scratch."
+    "text": "So, it wasn't about economic efficiency at all? Just geopolitics?"
   },
   {
     "speaker": "James",
-    "text": "Precisely. And he explicitly rejected Adam Smith. High tariffs, subsidies, infrastructure investment. The US became the most protectionist major economy for 150 years, and it grew into the largest industrial power on Earth. Not a coincidence, was it?"
+    "text": "Precisely. And China weaponised that system. They systematically moved up the value chain, backed by state subsidies and IP theft."
   },
   {
     "speaker": "Elena",
-    "text": "But that's an infant industry argument. You protect them until they're strong enough to compete. You don't make it a permanent state."
+    "text": "That's a convenient reading of the data, James. Many Western companies willingly went to China for cheap labour."
   },
   {
     "speaker": "James",
-    "text": "Friedrich List, who lived in America, saw it differently. He called free trade 'kicking away the ladder'. Britain, he noted, built its empire using protectionism, then advocated free trade once it was unbeatable."
+    "text": "And now we see the consequences. Remember \"Europe Rearms\"? The EU couldn't deliver a million artillery shells to Ukraine."
   },
   {
     "speaker": "Elena",
-    "text": "So, everyone's a hypocrite then. Lovely."
+    "text": "Right. Capacity issues."
   },
   {
     "speaker": "James",
-    "text": "Pragmatists. The article makes a compelling case that the post-war free trade era wasn't about pure economic theory anyway. It was a strategic subsidy."
+    "text": "Exactly. Europe's GDP is ten times Russia's, but it can't produce a fraction of Russia's military output. That's a direct result of deindustrialisation."
   },
   {
     "speaker": "Elena",
-    "text": "A strategic subsidy? For who?"
+    "text": "Okay, that's... actually devastating. But you can't just mandate factories into existence."
   },
   {
     "speaker": "James",
-    "text": "For allies. The US traded manufacturing jobs for military alliances during the Cold War. Kept Western Europe, Japan, South Korea in the bloc. The geopolitical benefits outweighed the economic costs, as long as the Soviet threat existed."
+    "text": "Hamilton did. In 1791. High tariffs, subsidies, infrastructure, recruiting skilled workers. America was the most protectionist economy for 150 years. Look what happened."
   },
   {
     "speaker": "Elena",
-    "text": "Right. And then the Soviet Union collapsed, and everyone just kept going, high on Fukuyama-esque triumphalism."
+    "text": "But that was a different era. You can't compare 18th-century America to today's global economy."
   },
   {
     "speaker": "James",
-    "text": "Exactly. The Washington Consensus. Admitting China to the WTO, believing trade would liberalise its politics. It was a massive miscalculation."
+    "text": "[amused] Friedrich List said free trade was \"kicking away the ladder\" — Britain did it, then told everyone else ladders were inefficient."
   },
   {
     "speaker": "Elena",
-    "text": "You think China weaponised comparative advantage?"
+    "text": "So you're saying it's all just national self-interest, always has been?"
   },
   {
     "speaker": "James",
-    "text": "The article suggests it, and the data supports it. They systematically moved up the value chain, sector by sector, using subsidies, cheap credit, and, let's be frank, stolen IP. They didn't just make cheap toys, did they?"
+    "text": "Mostly. And now, technology is changing the calculus entirely."
   },
   {
     "speaker": "Elena",
-    "text": "No. They didn't. Though Western companies were complicit, rushing in for cheap labour."
+    "text": "How so?"
   },
   {
     "speaker": "James",
-    "text": "Complicit, yes. But the consequences are now unavoidable. Look at 'Europe Rearms', another article on the site. The EU couldn't deliver on its promise of one million artillery shells to Ukraine. Couldn't physically make them."
+    "text": "AI and robotics. The labour cost advantage is disappearing. A robot factory in Ohio costs roughly the same as one in Guangdong."
   },
   {
     "speaker": "Elena",
-    "text": "That was shocking. Europe's combined GDP is ten times Russia's, yet they can't match production."
+    "text": "Wait, really? That completely undercuts the whole 'cheap labour' argument for offshoring."
   },
   {
     "speaker": "James",
-    "text": "Or COVID. The US, the richest nation, couldn't make enough masks or ventilators. Dependent on China for basic medical supplies. In a conflict, that's terrifying."
+    "text": "[thoughtful] It does. If labour costs equalise, then proximity to market, supply chain resilience, and geopolitical stability become the deciding factors. We discussed this in our \"Robotics and Slavery\" piece."
   },
   {
     "speaker": "Elena",
-    "text": "It is. I remember thinking that at the time. The fragility of it all."
+    "text": "I hadn't thought of it that way. So, the economic case for offshoring just... evaporates?"
   },
   {
     "speaker": "James",
-    "text": "Thomas Sowell's point: the real cost of a policy isn't money, but alternatives foregone. The cheap TV from China wasn't free. It cost millions of jobs, hollowed-out communities, lost skills, and strategic vulnerabilities."
+    "text": "Largely. Morgan Stanley predicts 2026 is an inflection point for American manufacturing transformation. Companies are investing in automation now, preparing for greenfield factories at home."
   },
   {
     "speaker": "Elena",
-    "text": "So the 'peace dividend' was actually a colossal disinvestment in our own capabilities."
+    "text": "Well... okay, that's harder to argue with than I expected. The pure economics are shifting."
   },
   {
     "speaker": "James",
-    "text": "Precisely. The article calls it a 'correction', not an experiment. A return to the norm."
+    "text": "It's a return to the historical norm. A virtuous cycle: factories, skilled workers, innovation, new industries."
   },
   {
     "speaker": "Elena",
-    "text": "Okay, fine. I'll give you the historical precedent. But what makes it possible *now*? We can't just wish factories back into existence."
+    "text": "But what about consumer prices? Will we just be paying more for everything?"
   },
   {
     "speaker": "James",
-    "text": "Technology. Automation. AI and robotics are rapidly eliminating the labour cost advantage. A factory staffed by robots costs roughly the same in Ohio as in Guangdong."
+    "text": "Perhaps initially. But the 'cheap' Chinese goods had hidden costs: lost jobs, hollowed-out communities, strategic vulnerability. We're now paying those."
   },
   {
     "speaker": "Elena",
-    "text": "Wait, really? That completely changes the economics, doesn't it?"
+    "text": "I suppose so. Like our article on \"Crisis: The Decline of the West\" highlighted, the long-term costs often outweigh the short-term gains."
   },
   {
     "speaker": "James",
-    "text": "Doesn't it? The 'Robotics and Slavery' article on the site touches on this. If labour costs cease to be a differentiator, then proximity to market, supply chain resilience, and geopolitical stability become paramount."
+    "text": "Precisely. And nations that fail to rebuild? The article ends with a stark warning: late Rome. Wealthy on paper, dependent on others for everything essential."
   },
   {
     "speaker": "Elena",
-    "text": "So the argument for offshoring just... evaporates."
+    "text": "Outsourcing its military, its agriculture... becoming strategically vulnerable. It's a chilling parallel."
   },
   {
     "speaker": "James",
-    "text": "Evaporates. Morgan Stanley predicts 2026 as an inflection point. Automation first, then greenfield factory construction."
+    "text": "Chilling, but accurate. The factories are coming back. The only question is which nations build them fast enough."
   },
   {
     "speaker": "Elena",
-    "text": "That's... actually quite a powerful argument. I don't want to agree with you on this, but the numbers don't leave much room."
+    "text": "And whether that leads to a new kind of economic rivalry. A less cooperative, more mercantilist world."
   },
   {
     "speaker": "James",
-    "text": "No, they don't. And history suggests where this leads: a virtuous cycle. Factories demand skilled workers, which demands education, which creates innovation, which creates new industries."
-  },
-  {
-    "speaker": "Elena",
-    "text": "So the 'knowledge economy' wasn't enough on its own. It needs a base to build from."
-  },
-  {
-    "speaker": "James",
-    "text": "Exactly. It's the cycle that made Britain, America, Germany great. China's been running it for thirty years while we were patting ourselves on the back for our service economy."
-  },
-  {
-    "speaker": "Elena",
-    "text": "Hmm. The article mentions 'Crisis: Or An Explanation On The Origins Of The Decline Of The West' here, which feels apt."
-  },
-  {
-    "speaker": "James",
-    "text": "Indeed. The alternative is the Late Rome analogy: wealthy on paper, dependent on others for everything, strategically vulnerable. Rome outsourced its military, its agriculture..."
-  },
-  {
-    "speaker": "Elena",
-    "text": "And when the system broke, there was nothing underneath. That's a terrifying thought."
-  },
-  {
-    "speaker": "James",
-    "text": "It is. The Ricardian theory of comparative advantage won't disappear from textbooks, but it'll be taught as a historical curiosity. A theory for a brief, unusual period."
-  },
-  {
-    "speaker": "Elena",
-    "text": "So, the factories are coming back. The question isn't whether, but which nations build them fast enough."
-  },
-  {
-    "speaker": "James",
-    "text": "Precisely. The race is on."
+    "text": "Or a more resilient one. Perhaps both. History, as ever, rhymes."
   }
 ]

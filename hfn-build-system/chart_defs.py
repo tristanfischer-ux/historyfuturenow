@@ -20,13 +20,14 @@ COLORS = """const C = {
   text:'#1a1815', grid:'#f2eeea'
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
+const yearTick=v=>String(v);
+const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
-const linX=(min,max,extra)=>({type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},...extra});
+const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
 """
 
 def get_all_charts():
@@ -168,7 +169,7 @@ new Chart(ctx,{type:'bar',data:{labels:items.map(i=>i.l),
 datasets:[{label:'Period',data:items.map(i=>[i.y1,i.y2]),backgroundColor:items.map(i=>i.c+'88'),borderColor:items.map(i=>i.c),borderWidth:1,borderRadius:3,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[items[i[0].dataIndex].l],label:i=>{const d=items[i.dataIndex];return d.y1+' \u2014 '+(d.y2>=2025?'ongoing':d.y2)}}}},
-scales:{x:{type:'linear',min:1600,max:2030,grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
+scales:{x:{type:'linear',min:1600,max:2030,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
         },
     ]
@@ -393,7 +394,7 @@ backgroundColor:ch.map(c=>c.c+'66'),borderColor:ch.map(c=>c.c),borderWidth:2
 }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[ch[i[0].dataIndex].l],
 label:i=>'Year: '+ch[i.dataIndex].y+', Contagion: '+ch[i.dataIndex].i+'/10'}}},
-scales:{x:{type:'linear',min:1630,max:2000,grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Year',color:C.dim}},
+scales:{x:{type:'linear',min:1630,max:2000,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick},title:{display:true,text:'Year',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:12,title:{display:true,text:'Contagion influence',color:C.dim}}}}});
 })();"""
         },
@@ -794,7 +795,7 @@ data:b.map(x=>({x:x.y,y:x.i,r:x.i*2.2})),
 backgroundColor:b.map(x=>x.c+'55'),borderColor:b.map(x=>x.c),borderWidth:2
 }]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[b[i[0].dataIndex].l],label:i=>'Year: '+b[i.dataIndex].y+', Impact: '+b[i.dataIndex].i+'/10'}}},
-scales:{x:{type:'linear',min:1300,max:1850,grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Year',color:C.dim}},
+scales:{x:{type:'linear',min:1300,max:1850,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick},title:{display:true,text:'Year',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:11,title:{display:true,text:'Historical impact (1-10)',color:C.dim}}}}});
 })();"""
         },
@@ -928,7 +929,7 @@ new Chart(ctx,{type:'bar',data:{labels:eras.map(e=>e.l),
 datasets:[{data:eras.map(e=>[e.y1,e.y2]),backgroundColor:eras.map(e=>e.c+'88'),borderColor:eras.map(e=>e.c),borderWidth:1,borderRadius:3,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[eras[i[0].dataIndex].l],label:i=>{const e=eras[i.dataIndex];return e.s+' ('+e.y1+' \u2014 '+(e.y2>2024?'future':e.y2)+')'}}}},
-scales:{x:{type:'linear',min:1450,max:2070,grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
+scales:{x:{type:'linear',min:1450,max:2070,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
         },
     ]
@@ -1583,7 +1584,7 @@ new Chart(ctx,{type:'bar',data:{labels:issues.map(i=>i.l),
 datasets:[{data:issues.map(i=>[i.peak,i.decline]),backgroundColor:issues.map(i=>i.c+'88'),borderColor:issues.map(i=>i.c),borderWidth:1,borderRadius:3,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[issues[i[0].dataIndex].l],label:i=>{const d=issues[i.dataIndex];return 'Peak: '+d.peak+', Decline: '+d.decline+' | Interest: '+d.interest}}}},
-scales:{x:{type:'linear',min:1800,max:2040,grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
+scales:{x:{type:'linear',min:1800,max:2040,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
         },
     ]

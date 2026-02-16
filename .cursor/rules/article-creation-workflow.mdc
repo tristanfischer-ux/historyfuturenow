@@ -1,0 +1,63 @@
+# Article Creation Workflow
+
+When writing a new article (or significantly rewriting an existing one), the agent MUST complete the full pipeline before marking the task as done. No article is finished until every step has been executed.
+
+## The Pipeline (in order)
+
+### 1. Write the Article
+- Create `hfn-build-system/essays/{slug}.md` with full YAML frontmatter
+- Include `share_summary` in frontmatter
+- British English, inline citations, references section
+- At least one chuckle hook in the first third
+- 3,000–5,000 words
+
+### 2. Define Charts
+- Add chart definitions to `hfn-build-system/chart_defs.py`
+- Minimum 1 chart, target 2–5 per article
+- Each chart: interactive (Chart.js) version defined in `chart_defs.py`
+
+### 3. Generate Hero Image
+- Create `hfn-site-output/images/articles/{slug}/hero.png`
+- Flat geometric editorial illustration in the HFN style (see `article-image-style.mdc`)
+
+### 4. Build the Site
+- Run `cd hfn-build-system && python3 build.py`
+- Verify the article HTML is generated correctly
+
+### 5. Generate Discussion Script
+- Run `cd hfn-build-system && python3 generate_discussions.py scripts --article {slug}`
+- This creates `hfn-build-system/discussion_scripts/{slug}.json`
+- If GEMINI_API_KEY is not set, flag this as incomplete and tell the user
+
+### 6. Generate Audio Narration
+- Run `cd hfn-build-system && python3 generate_audio.py --article {slug}`
+- This creates `hfn-site-output/audio/{slug}.mp3`
+- If GEMINI_API_KEY is not set, flag this as incomplete and tell the user
+
+### 7. Generate Discussion Audio
+- Run `cd hfn-build-system && python3 generate_discussions.py audio --article {slug}`
+- This creates `hfn-site-output/audio/discussions/{slug}.mp3`
+- If GEMINI_API_KEY is not set, flag this as incomplete and tell the user
+
+### 8. Deploy
+- Run `./scripts/deploy.sh "feat: add {article title}"`
+- Verify the site is live
+
+## Handling Missing API Keys
+
+If `GEMINI_API_KEY` is not available in the environment, the audio steps (5, 6, 7) will fail. In this case:
+- Complete all other steps (1–4, 8)
+- Clearly tell the user which audio steps are pending
+- Provide the exact commands they need to run once the key is available
+
+## Completeness Check
+
+Before marking an article task as done, verify:
+- [ ] Article markdown exists with full frontmatter
+- [ ] Charts defined in `chart_defs.py`
+- [ ] Hero image in place
+- [ ] Site built successfully
+- [ ] Discussion script generated (or flagged if no API key)
+- [ ] Audio narration generated (or flagged if no API key)
+- [ ] Discussion audio generated (or flagged if no API key)
+- [ ] Deployed and verified live
