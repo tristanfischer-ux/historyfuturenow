@@ -2,62 +2,73 @@
 """
 History Future Now — Audio Narration Generator
 
-Uses MiniMax's async TTS API to generate MP3 narrations for all essays.
-Voice: English_expressive_narrator (British male, ~189 WPM)
-Model: speech-2.8-hd (best quality for long-form narration)
+Generates MP3 narrations for all essays using Gemini TTS.
+Two alternating British voices (male + female) read the article straight through,
+switching at section boundaries for a varied listening experience.
+
+Prerequisites:
+    - GEMINI_API_KEY env var (comma-separated for rotation)
+    - ffmpeg installed (brew install ffmpeg)
 
 Usage:
     python3 generate_audio.py                    # Generate all missing audio
     python3 generate_audio.py --article SLUG     # Generate for one article
     python3 generate_audio.py --force            # Regenerate all (overwrite)
-    python3 generate_audio.py --list-voices      # Preview available voices
+    python3 generate_audio.py --dry-run          # Preview without API calls
 """
 
 import os
 import re
+import io
 import sys
 import json
 import time
 import yaml
 import argparse
 import requests
+import base64
 from pathlib import Path
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
-MINIMAX_API_KEY = os.environ.get(
-    "MINIMAX_API_KEY",
-    "sk-api-okVnpvFR0DkxBjJ-A2SuhExLJSc2W4fdkc5gNnZhhd_VbITFeTrf-_DUCRsOhoeVUjqJ4YSRsrOFuAIYeuVaPVlzUJleeP5AOwa6x9UYZXCK2UEa60Fybbg",
-)
+GEMINI_API_KEYS = [
+    k.strip() for k in
+    os.environ.get("GEMINI_API_KEY", "").split(",")
+    if k.strip()
+]
+_key_index = 0
 
-API_BASE = "https://api.minimax.io"
-VOICE_ID = "English_expressive_narrator"
-MODEL = "speech-2.8-hd"
+def _next_gemini_key() -> str:
+    global _key_index
+    if not GEMINI_API_KEYS:
+        return ""
+    key = GEMINI_API_KEYS[_key_index % len(GEMINI_API_KEYS)]
+    _key_index += 1
+    return key
+
+GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
+
+# Two British voices for alternating narration
+VOICE_MALE = "Orus"     # Calm, authoritative British male
+VOICE_FEMALE = "Kore"   # Clear, engaging British female
 
 ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
 AUDIO_DIR = OUTPUT_DIR / "audio"
 
-# Polling configuration for async tasks
-POLL_INTERVAL_SECONDS = 5
-MAX_POLL_ATTEMPTS = 360  # 30 minutes max wait
-
-HEADERS = {
-    "Authorization": f"Bearer {MINIMAX_API_KEY}",
-    "Content-Type": "application/json",
-}
+# Max chars per TTS request (Gemini TTS has token limits)
+TTS_MAX_CHARS = 4500
 
 
 # ─── Text Extraction ─────────────────────────────────────────────────────────
 
 def fix_encoding(text: str) -> str:
-    """Fix common encoding artifacts from Word/web copy-paste."""
     replacements = {
         '\u2019': "'", '\u2018': "'", '\u201c': '"', '\u201d': '"',
         '\u2013': '-', '\u2014': '--', '\u2026': '...',
         '\xa0': ' ', '\u00a3': 'GBP ', '\u20ac': 'EUR ',
-        'â€™': "'", 'â€˜': "'", 'â€œ': '"', 'â€\x9d': '"',
-        'â€"': '--', 'â€"': '-', 'â€¦': '...', 'Â ': ' ', 'Â': '',
+        'â\x80\x99': "'", 'â\x80\x98': "'", 'â\x80\x9c': '"', 'â\x80\x9d': '"',
+        'â\x80\x93': '--', 'â\x80\x94': '-', 'â\x80\xa6': '...', 'Â ': ' ', 'Â': '',
     }
     for bad, good in replacements.items():
         text = text.replace(bad, good)
@@ -65,16 +76,9 @@ def fix_encoding(text: str) -> str:
 
 
 def extract_narration_text(filepath: Path) -> tuple[str, str, str]:
-    """
-    Extract clean narration text from a markdown essay.
-    Returns (title, slug, narration_text).
-    
-    Strips YAML frontmatter, markdown formatting, and produces
-    natural spoken-word text suitable for TTS.
-    """
+    """Extract clean narration text from a markdown essay."""
     content = filepath.read_text(encoding="utf-8", errors="replace")
 
-    # Parse YAML frontmatter
     meta = {}
     body = content
     if content.startswith("---"):
@@ -95,182 +99,185 @@ def extract_narration_text(filepath: Path) -> tuple[str, str, str]:
     slug = slug.replace("strong", "").replace("nbsp", "").strip("-")
     slug = re.sub(r"-+", "-", slug)
 
-    # Remove the first H1 heading (it's the title, we'll prepend it)
+    # Remove the first H1 heading
     body = re.sub(r"^\s*#\s+[^\n]+\n", "", body, count=1)
-
-    # Remove trailing "THEN:" sections
     body = re.sub(r"\n---\s*\n\s*##\s*THEN:.*$", "", body, flags=re.DOTALL)
 
-    # Convert markdown to plain narration text
+    # Remove references section (not suitable for audio)
+    body = re.sub(r"\n##\s*References\s*\n.*$", "", body, flags=re.DOTALL)
+
     text = body
-
-    # Remove markdown headings but keep text (add pause marker)
     text = re.sub(r"^#{1,6}\s+(.+)$", r"\n\1.\n", text, flags=re.MULTILINE)
-
-    # Remove markdown formatting
-    text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)  # bold
-    text = re.sub(r"\*(.+?)\*", r"\1", text)  # italic
-    text = re.sub(r"_(.+?)_", r"\1", text)  # italic alt
-    text = re.sub(r"`(.+?)`", r"\1", text)  # code
-    text = re.sub(r"\[(.+?)\]\(.+?\)", r"\1", text)  # links
-
-    # Remove HTML tags
+    text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
+    text = re.sub(r"\*(.+?)\*", r"\1", text)
+    text = re.sub(r"_(.+?)_", r"\1", text)
+    text = re.sub(r"`(.+?)`", r"\1", text)
+    text = re.sub(r"\[(.+?)\]\(.+?\)", r"\1", text)
     text = re.sub(r"<[^>]+>", "", text)
-
-    # Remove image references
     text = re.sub(r"!\[.*?\]\(.*?\)", "", text)
-
-    # Clean up whitespace
     text = re.sub(r"\n{3,}", "\n\n", text)
     text = re.sub(r"[ \t]+", " ", text)
     text = text.strip()
 
-    # Prepend title as spoken intro
     narration = f"{title}.\n\nBy Tristan Fischer.\n\n{text}"
-
     return title, slug, narration
 
 
-# ─── MiniMax Async TTS API ───────────────────────────────────────────────────
+# ─── Section Splitting ────────────────────────────────────────────────────────
 
-def create_tts_task(text: str, voice_id: str = VOICE_ID) -> str:
-    """
-    Create an async TTS task on MiniMax.
-    Returns the task_id for polling.
-    """
-    url = f"{API_BASE}/v1/t2a_async_v2"
+def split_into_sections(narration: str) -> list[str]:
+    """Split narration into sections for alternating voices.
+    Splits on paragraph boundaries, merging short chunks."""
+    raw_chunks = re.split(r'\n\n+', narration)
+    raw_chunks = [c.strip() for c in raw_chunks if c.strip()]
+
+    sections = []
+    buffer = ""
+    for chunk in raw_chunks:
+        if buffer:
+            buffer += "\n\n" + chunk
+        else:
+            buffer = chunk
+
+        if len(buffer) >= 300:
+            sections.append(buffer)
+            buffer = ""
+
+    if buffer:
+        if sections:
+            sections[-1] += "\n\n" + buffer
+        else:
+            sections.append(buffer)
+
+    return sections
+
+
+def chunk_sections_for_tts(sections: list[str], max_chars: int = TTS_MAX_CHARS) -> list[list[tuple[str, str]]]:
+    """Group sections into TTS-sized chunks, preserving voice assignment.
+    Returns list of chunks, each chunk is a list of (voice_label, text) tuples."""
+    voices = ["Reader1", "Reader2"]
+    all_assigned = [(voices[i % 2], sec) for i, sec in enumerate(sections)]
+
+    chunks = []
+    current_chunk = []
+    current_len = 0
+
+    for voice, text in all_assigned:
+        entry_len = len(text) + 30
+        if current_len + entry_len > max_chars and current_chunk:
+            chunks.append(current_chunk)
+            current_chunk = []
+            current_len = 0
+        current_chunk.append((voice, text))
+        current_len += entry_len
+
+    if current_chunk:
+        chunks.append(current_chunk)
+
+    return chunks
+
+
+# ─── Gemini TTS ──────────────────────────────────────────────────────────────
+
+def pcm_to_wav(pcm_data: bytes, sample_rate: int = 24000, channels: int = 1, sample_width: int = 2) -> bytes:
+    import wave
+    buf = io.BytesIO()
+    with wave.open(buf, 'wb') as wf:
+        wf.setnchannels(channels)
+        wf.setsampwidth(sample_width)
+        wf.setframerate(sample_rate)
+        wf.writeframes(pcm_data)
+    return buf.getvalue()
+
+
+def wav_to_mp3(wav_data: bytes) -> bytes:
+    import subprocess
+    result = subprocess.run(
+        ['ffmpeg', '-y', '-i', 'pipe:0', '-codec:a', 'libmp3lame', '-b:a', '128k', '-f', 'mp3', 'pipe:1'],
+        input=wav_data, capture_output=True, timeout=120,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"ffmpeg error: {result.stderr.decode()[:500]}")
+    return result.stdout
+
+
+def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 8) -> bytes:
+    """Generate audio for a chunk of sections using Gemini multi-speaker TTS.
+    Returns raw PCM bytes."""
+    # Format as speaker-labelled text
+    lines = []
+    for voice, text in chunk:
+        lines.append(f"{voice}: {text}")
+    formatted = "\n\n".join(lines)
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_TTS_MODEL}:generateContent"
 
     payload = {
-        "model": MODEL,
-        "text": text,
-        "language_boost": "English",
-        "voice_setting": {
-            "voice_id": voice_id,
-            "speed": 0.95,  # Slightly slower for analytical content
-            "vol": 1,
-            "pitch": 0,
-            "emotion": "calm",
-        },
-        "audio_setting": {
-            "audio_sample_rate": 32000,
-            "bitrate": 128000,
-            "format": "mp3",
-            "channel": 1,  # Mono is fine for narration
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": f"Read this article narration aloud using British English accents — Received Pronunciation, like BBC Radio 4. Reader1 is a calm, authoritative male narrator. Reader2 is a clear, engaging female narrator. Both read at a natural, measured pace suitable for a serious analytical article. This is a straight narration, not a conversation — each reader reads their assigned sections smoothly and professionally.\n\n{formatted}"}]
+            }
+        ],
+        "generationConfig": {
+            "responseModalities": ["AUDIO"],
+            "speechConfig": {
+                "multiSpeakerVoiceConfig": {
+                    "speakerVoiceConfigs": [
+                        {
+                            "speaker": "Reader1",
+                            "voiceConfig": {
+                                "prebuiltVoiceConfig": {"voiceName": VOICE_MALE}
+                            }
+                        },
+                        {
+                            "speaker": "Reader2",
+                            "voiceConfig": {
+                                "prebuiltVoiceConfig": {"voiceName": VOICE_FEMALE}
+                            }
+                        }
+                    ]
+                }
+            }
         },
     }
 
-    response = requests.post(url, headers=HEADERS, json=payload, timeout=30)
-    response.raise_for_status()
+    last_error = None
+    for attempt in range(max_retries):
+        api_key = _next_gemini_key()
+        response = requests.post(
+            url, params={"key": api_key}, json=payload, timeout=180,
+        )
+
+        if response.status_code == 429:
+            wait = 30 + (attempt * 30)
+            print(f"      Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+            time.sleep(wait)
+            last_error = "Rate limited"
+            continue
+
+        if response.status_code != 200:
+            raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
+        break
+    else:
+        raise RuntimeError(f"TTS failed after {max_retries} retries: {last_error}")
+
     data = response.json()
+    candidates = data.get("candidates", [])
+    if not candidates:
+        raise RuntimeError(f"No TTS candidates: {json.dumps(data, indent=2)[:500]}")
 
-    if data.get("base_resp", {}).get("status_code", -1) != 0:
-        raise RuntimeError(
-            f"MiniMax task creation failed: {data.get('base_resp', {}).get('status_msg', 'Unknown error')}"
-        )
+    inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
+    if not inline_data:
+        raise RuntimeError("No audio data in TTS response")
 
-    task_id = data.get("task_id")
-    if not task_id:
-        raise RuntimeError(f"No task_id in response: {json.dumps(data, indent=2)}")
-
-    return task_id
+    return base64.b64decode(inline_data.get("data", ""))
 
 
-def poll_task(task_id: str) -> str:
-    """
-    Poll an async TTS task until completion.
-    Returns the file_id of the generated audio.
-    """
-    url = f"{API_BASE}/v1/query/t2a_async_query_v2"
-
-    for attempt in range(MAX_POLL_ATTEMPTS):
-        response = requests.get(
-            url,
-            headers=HEADERS,
-            params={"task_id": task_id},
-            timeout=30,
-        )
-        response.raise_for_status()
-        data = response.json()
-
-        if data.get("base_resp", {}).get("status_code", -1) != 0:
-            raise RuntimeError(
-                f"MiniMax poll error: {data.get('base_resp', {}).get('status_msg', 'Unknown')}"
-            )
-
-        status = data.get("status")
-
-        if status == "Success":
-            file_id = data.get("file_id")
-            extra = data.get("extra_info", {})
-            duration_ms = extra.get("audio_length", 0)
-            duration_min = round(duration_ms / 60000, 1)
-            size_bytes = extra.get("audio_size", 0)
-            size_mb = round(size_bytes / (1024 * 1024), 2)
-            print(f"    Done: {duration_min} min, {size_mb} MB")
-            return file_id
-
-        if status == "Failed":
-            raise RuntimeError(f"MiniMax task failed: {json.dumps(data, indent=2)}")
-
-        # Still processing
-        if attempt % 6 == 0:  # Log every 30 seconds
-            print(f"    Generating... ({attempt * POLL_INTERVAL_SECONDS}s elapsed)")
-
-        time.sleep(POLL_INTERVAL_SECONDS)
-
-    raise TimeoutError(f"Task {task_id} did not complete within {MAX_POLL_ATTEMPTS * POLL_INTERVAL_SECONDS}s")
-
-
-def download_audio(file_id: str, output_path: Path) -> None:
-    """
-    Download the generated audio file from MiniMax.
-    The API returns a tar archive containing the MP3 and metadata files.
-    We extract just the MP3.
-    """
-    import tarfile
-    import io
-
-    url = f"{API_BASE}/v1/files/retrieve_content"
-
-    response = requests.get(
-        url,
-        headers=HEADERS,
-        params={"file_id": file_id},
-        timeout=120,
-    )
-    response.raise_for_status()
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    # MiniMax returns a tar archive -- extract the MP3 from it
-    content_type = response.headers.get("Content-Type", "")
-    if "tar" in content_type or response.content[:7] != b'\xff\xfb' and not response.content[:3] == b'ID3':
-        try:
-            tar_bytes = io.BytesIO(response.content)
-            with tarfile.open(fileobj=tar_bytes, mode="r") as tar:
-                mp3_members = [m for m in tar.getmembers() if m.name.endswith(".mp3")]
-                if mp3_members:
-                    f = tar.extractfile(mp3_members[0])
-                    if f:
-                        audio_data = f.read()
-                        output_path.write_bytes(audio_data)
-                        size_mb = round(len(audio_data) / (1024 * 1024), 2)
-                        print(f"    Saved: {output_path.name} ({size_mb} MB)")
-                        return
-                raise RuntimeError("No MP3 file found in tar archive")
-        except tarfile.TarError:
-            pass
-
-    # Fallback: write raw content (in case API changes to return raw MP3)
-    output_path.write_bytes(response.content)
-    size_mb = round(len(response.content) / (1024 * 1024), 2)
-    print(f"    Saved: {output_path.name} ({size_mb} MB)")
-
-
-# ─── Main ────────────────────────────────────────────────────────────────────
+# ─── Main Generation ─────────────────────────────────────────────────────────
 
 def generate_article_audio(filepath: Path, force: bool = False) -> bool:
-    """Generate audio for a single article. Returns True if generated."""
+    """Generate audio narration with alternating male/female voices."""
     title, slug, narration = extract_narration_text(filepath)
     output_path = AUDIO_DIR / f"{slug}.mp3"
 
@@ -278,26 +285,40 @@ def generate_article_audio(filepath: Path, force: bool = False) -> bool:
         print(f"  [skip] {slug} (already exists)")
         return False
 
-    char_count = len(narration)
     word_count = len(narration.split())
-    est_minutes = round(word_count / 189, 1)  # 189 WPM for this voice
+    char_count = len(narration)
+    est_minutes = round(word_count / 160, 1)
 
     print(f"  [{slug}]")
     print(f"    {word_count:,} words, {char_count:,} chars, ~{est_minutes} min estimated")
 
-    if char_count > 1_000_000:
-        print(f"    [ERROR] Text too long ({char_count:,} chars). Max is 1M. Skipping.")
-        return False
+    sections = split_into_sections(narration)
+    chunks = chunk_sections_for_tts(sections)
+    print(f"    {len(sections)} sections → {len(chunks)} TTS chunk(s)")
 
-    # Create async task
-    task_id = create_tts_task(narration)
-    print(f"    Task created: {task_id}")
+    all_pcm = bytearray()
+    for i, chunk in enumerate(chunks):
+        chunk_chars = sum(len(t) for _, t in chunk)
+        voices_in_chunk = set(v for v, _ in chunk)
+        voice_str = "M+F" if len(voices_in_chunk) > 1 else ("M" if "Reader1" in voices_in_chunk else "F")
+        print(f"    [{i+1}/{len(chunks)}] {len(chunk)} sections, {chunk_chars:,} chars ({voice_str})")
 
-    # Poll until done
-    file_id = poll_task(task_id)
+        pcm_data = generate_tts_chunk(chunk)
+        all_pcm.extend(pcm_data)
 
-    # Download
-    download_audio(file_id, output_path)
+        if i < len(chunks) - 1:
+            time.sleep(10)
+
+    # Convert PCM → WAV → MP3
+    wav_data = pcm_to_wav(bytes(all_pcm))
+    mp3_data = wav_to_mp3(wav_data)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(mp3_data)
+
+    total_mb = round(len(mp3_data) / (1024 * 1024), 2)
+    duration_est = round(len(all_pcm) / (24000 * 2) / 60, 1)
+    print(f"    Saved: {output_path.name} ({total_mb} MB, ~{duration_est} min)")
     return True
 
 
@@ -305,63 +326,51 @@ def main():
     parser = argparse.ArgumentParser(description="Generate audio narrations for HFN essays")
     parser.add_argument("--article", type=str, help="Generate for a specific article slug")
     parser.add_argument("--force", action="store_true", help="Regenerate even if audio exists")
-    parser.add_argument("--list-voices", action="store_true", help="List available English voices")
-    parser.add_argument("--dry-run", action="store_true", help="Show what would be generated without calling API")
+    parser.add_argument("--dry-run", action="store_true", help="Show what would be generated")
     args = parser.parse_args()
 
-    if args.list_voices:
-        print("Recommended English voices for narration:")
-        print("  English_expressive_narrator  - British male, expressive narrator (SELECTED)")
-        print("  English_Trustworth_Man       - Trustworthy male")
-        print("  English_WiseScholar          - Wise scholar")
-        print("  English_Deep-VoicedGentleman - Deep-voiced gentleman")
-        print("  English_magnetic_voiced_man  - Magnetic-voiced male")
-        print("  English_CaptivatingStoryteller - Captivating storyteller")
-        print("  English_Steadymentor         - Reliable male mentor")
-        print("  English_PatientMan           - Patient male")
-        return
+    if not GEMINI_API_KEYS:
+        print("ERROR: GEMINI_API_KEY not set.")
+        print("  export GEMINI_API_KEY=key1,key2")
+        sys.exit(1)
 
-    if not MINIMAX_API_KEY:
-        print("ERROR: MINIMAX_API_KEY not set. Export it or add to .env")
+    # Check ffmpeg
+    import shutil
+    if not shutil.which('ffmpeg'):
+        print("ERROR: ffmpeg not found. Install with: brew install ffmpeg")
         sys.exit(1)
 
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Collect essays
     essays = sorted(ESSAYS_DIR.glob("*.md"))
     if not essays:
         print(f"No essays found in {ESSAYS_DIR}")
         sys.exit(1)
 
     if args.article:
-        # Filter to specific article
         matches = [f for f in essays if args.article in f.stem]
         if not matches:
             print(f"No essay matching '{args.article}' found")
-            print(f"Available: {', '.join(f.stem[:40] for f in essays[:10])}...")
             sys.exit(1)
         essays = matches
 
     print(f"Audio generation: {len(essays)} essays")
-    print(f"Voice: {VOICE_ID} | Model: {MODEL}")
+    print(f"Voices: {VOICE_MALE} (male) + {VOICE_FEMALE} (female)")
+    print(f"Model: {GEMINI_TTS_MODEL}")
+    print(f"Using {len(GEMINI_API_KEYS)} API key(s)")
     print(f"Output: {AUDIO_DIR}")
     print()
 
     if args.dry_run:
-        total_chars = 0
         total_words = 0
         for filepath in essays:
             title, slug, narration = extract_narration_text(filepath)
-            chars = len(narration)
             words = len(narration.split())
-            total_chars += chars
             total_words += words
             exists = (AUDIO_DIR / f"{slug}.mp3").exists()
             status = "[exists]" if exists else "[pending]"
-            print(f"  {status} {slug}: {words:,} words, {chars:,} chars")
-        est_total_min = round(total_words / 189, 1)
-        print(f"\nTotal: {total_words:,} words, {total_chars:,} chars")
-        print(f"Estimated total audio: ~{est_total_min} min (~{round(est_total_min/60, 1)} hours)")
+            print(f"  {status} {slug}: {words:,} words")
+        print(f"\nTotal: {total_words:,} words, ~{round(total_words/160, 1)} min")
         return
 
     generated = 0
