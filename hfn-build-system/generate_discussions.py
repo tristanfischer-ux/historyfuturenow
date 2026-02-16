@@ -562,7 +562,7 @@ def render_script_to_audio(script: list[dict], output_path: Path) -> None:
 
         # Rate limiting between chunks
         if i < len(chunks) - 1:
-            time.sleep(10)
+            time.sleep(20)
 
     # Convert PCM → WAV → MP3
     wav_data = pcm_to_wav(bytes(all_pcm))
