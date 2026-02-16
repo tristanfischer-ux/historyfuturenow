@@ -115,7 +115,7 @@
       <div class="chart-figure-label">Figure 1</div>
       <h4>Government Content Removal Requests to Major Platforms (2024)</h4>
       <p class="chart-desc">India, Turkey, and Russia lead the world in demanding platforms remove content — the modern equivalent of burning books</p>
-      <div class="chart-area"><canvas id="scribesChart1"></canvas></div>
+      <div class="chart-area" style="aspect-ratio:auto;height:260px"><canvas id="scribesChart1"></canvas></div>
       <p class="chart-source">Source: Google Transparency Report 2024; X Transparency Center 2024; Meta Transparency Reports</p>
     </div>
 
@@ -195,20 +195,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
+      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
+        <span class="related-time">10 min read</span>
+      </a>
+      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</span>
         <span class="related-time">10 min read</span>
-      </a>
-      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
-        <span class="related-time">4 min read</span>
       </a>
     </div>
   </section>
@@ -298,7 +298,7 @@ new Chart(ctx,{type:'bar',data:{
 labels:['India','Turkey','Russia','South Korea','France','Germany','Brazil','United States','UK','Australia'],
 datasets:[{label:'Content removal requests (thousands)',data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9,4.8,2.1],
 backgroundColor:[C.accent,C.amber,C.purple,C.blue,C.teal,C.blue+'cc',C.green,C.cyan,C.dim,C.emerald],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K requests'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},title:{display:true,text:'Requests (thousands)',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});

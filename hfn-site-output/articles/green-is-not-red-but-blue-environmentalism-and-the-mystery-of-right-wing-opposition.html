@@ -225,15 +225,15 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
+        <span class="related-time">10 min read</span>
       </a>
-      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
+      <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
-        <span class="related-time">5 min read</span>
+        <span class="related-title">Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event</span>
+        <span class="related-time">9 min read</span>
       </a>
       <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
@@ -346,7 +346,7 @@ const events=[
 ];
 new Chart(ctx,{type:'bar',data:{labels:events.map(e=>e.y),
 datasets:[{data:events.map((_,i)=>i+1),backgroundColor:events.map(e=>e.c+'bb'),borderRadius:4,borderSkipped:false,barPercentage:.6}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[events[i[0].dataIndex].l],label:i=>'Year: '+events[i.dataIndex].y}}},
 scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();

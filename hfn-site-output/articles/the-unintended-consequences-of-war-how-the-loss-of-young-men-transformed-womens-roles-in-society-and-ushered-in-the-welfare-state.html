@@ -172,7 +172,7 @@
       <div class="chart-figure-label">Figure 3</div>
       <h4>Male-to-Female Combat Death Ratio</h4>
       <p class="chart-desc">For every woman killed in combat, this many men died</p>
-      <div class="chart-area"><canvas id="warChart3"></canvas></div>
+      <div class="chart-area" style="aspect-ratio:auto;height:250px"><canvas id="warChart3"></canvas></div>
       <p class="chart-source">Source: Derived from military casualty records and demographic analysis</p>
     </div>
 
@@ -374,20 +374,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
+      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
-        <span class="related-time">6 min read</span>
+        <span class="related-title">The Long Term Impact of Covid 19</span>
+        <span class="related-time">30 min read</span>
       </a>
-      <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="related-card">
+      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</span>
-        <span class="related-time">51 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
+        <span class="related-time">20 min read</span>
       </a>
-      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
+      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
+        <span class="related-time">4 min read</span>
       </a>
     </div>
   </section>
@@ -483,7 +483,7 @@ new Chart(ctx,{type:'bar',data:{
 labels:['Soviet Union\n(WW2)','Germany\n(WW2)','Germany\n(WW1)','Confederate\nStates','Russia\n(WW1)','Russia\n(Crimea)','Union\nStates','France\n(WW1)','Ottoman\n(Crimea)'],
 datasets:[{label:'% killed',data:[49,45,28,19,18.7,7.5,13,17,3.7],
 backgroundColor:[C.accent,C.accent+'cc',C.purple,C.blue,C.purple+'cc',C.teal,C.blue+'cc',C.amber,C.teal+'cc'],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of males aged 18-30',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();
 
@@ -492,7 +492,7 @@ new Chart(ctx,{type:'bar',data:{
 labels:['China (WW2)','Soviet Union (WW2)','Germany (WW2)','Am. Civil War (Union)','Am. Civil War (Confed.)','Crimean War'],
 datasets:[{label:'Male deaths per female death',data:[30,16,12.8,11,6,3.5],
 backgroundColor:[C.accent,C.purple,C.amber,C.blue,C.blue+'99',C.teal],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+':1 male-to-female ratio'}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+':1 male-to-female ratio'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Male deaths per 1 female combat death',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();
 
@@ -520,7 +520,7 @@ const milestones=[
 {y:1948,l:'UK: National Health Service',c:C.purple}
 ];
 new Chart(ctx,{type:'bar',data:{labels:milestones.map(m=>m.y),datasets:[{data:milestones.map((_,i)=>i+1),backgroundColor:milestones.map(m=>m.c),borderRadius:4,borderSkipped:false,barPercentage:.6}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:i=>[milestones[i[0].dataIndex].l],label:i=>'Year: '+milestones[i.dataIndex].y}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:i=>[milestones[i[0].dataIndex].l],label:i=>'Year: '+milestones[i.dataIndex].y}}},
 scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();
 

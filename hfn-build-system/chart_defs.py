@@ -64,7 +64,7 @@ new Chart(ctx,{type:'bar',data:{
 labels:['Soviet Union\\n(WW2)','Germany\\n(WW2)','Germany\\n(WW1)','Confederate\\nStates','Russia\\n(WW1)','Russia\\n(Crimea)','Union\\nStates','France\\n(WW1)','Ottoman\\n(Crimea)'],
 datasets:[{label:'% killed',data:[49,45,28,19,18.7,7.5,13,17,3.7],
 backgroundColor:[C.accent,C.accent+'cc',C.purple,C.blue,C.purple+'cc',C.teal,C.blue+'cc',C.amber,C.teal+'cc'],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of males aged 18-30',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
         },
@@ -80,7 +80,7 @@ new Chart(ctx,{type:'bar',data:{
 labels:['China (WW2)','Soviet Union (WW2)','Germany (WW2)','Am. Civil War (Union)','Am. Civil War (Confed.)','Crimean War'],
 datasets:[{label:'Male deaths per female death',data:[30,16,12.8,11,6,3.5],
 backgroundColor:[C.accent,C.purple,C.amber,C.blue,C.blue+'99',C.teal],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+':1 male-to-female ratio'}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+':1 male-to-female ratio'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Male deaths per 1 female combat death',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();"""
         },
@@ -123,7 +123,7 @@ const milestones=[
 {y:1948,l:'UK: National Health Service',c:C.purple}
 ];
 new Chart(ctx,{type:'bar',data:{labels:milestones.map(m=>m.y),datasets:[{data:milestones.map((_,i)=>i+1),backgroundColor:milestones.map(m=>m.c),borderRadius:4,borderSkipped:false,barPercentage:.6}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:i=>[milestones[i[0].dataIndex].l],label:i=>'Year: '+milestones[i.dataIndex].y}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:i=>[milestones[i[0].dataIndex].l],label:i=>'Year: '+milestones[i.dataIndex].y}}},
 scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();"""
         },
@@ -1702,7 +1702,7 @@ const events=[
 ];
 new Chart(ctx,{type:'bar',data:{labels:events.map(e=>e.y),
 datasets:[{data:events.map((_,i)=>i+1),backgroundColor:events.map(e=>e.c+'bb'),borderRadius:4,borderSkipped:false,barPercentage:.6}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[events[i[0].dataIndex].l],label:i=>'Year: '+events[i.dataIndex].y}}},
 scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();"""
@@ -2249,7 +2249,7 @@ new Chart(ctx,{type:'bar',data:{
 labels:['India','Turkey','Russia','South Korea','France','Germany','Brazil','United States','UK','Australia'],
 datasets:[{label:'Content removal requests (thousands)',data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9,4.8,2.1],
 backgroundColor:[C.accent,C.amber,C.purple,C.blue,C.teal,C.blue+'cc',C.green,C.cyan,C.dim,C.emerald],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K requests'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},title:{display:true,text:'Requests (thousands)',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
@@ -2386,25 +2386,6 @@ datasets:[{label:'Net fiscal impact (€/year)',data:[2100,-4200,1800,-2900,2300
 backgroundColor:[C.green,C.accent,C.green+'cc',C.accent+'cc',C.green+'99',C.accent+'99'],borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{var v=i.raw;return (v>=0?'+':'')+v.toLocaleString()+' €/year per capita'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>(v>=0?'+':'')+v.toLocaleString()+'€'},title:{display:true,text:'Net annual fiscal contribution per capita (€)',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
-})();"""
-        },
-        {
-            'id': 'gatesChart4', 'figure_num': 4,
-            'title': 'Historical Immigration Control: A 5,000-Year Timeline',
-            'desc': 'Every major civilisation controlled immigration. The Western open-borders era (post-1965) is a historical anomaly.',
-            'source': 'Author compilation from historical sources cited in article.',
-            'position': 'after_heading:Conclusion',
-            'tall': True,
-            'js': """
-(()=>{const ctx=document.getElementById('gatesChart4');
-const civs=['Egypt (border forts)','Athens (metic laws)','Qin China (Great Wall)','Roman Republic\\n(restricted citizenship)','Roman Empire\\n(open citizenship)','Tang China\\n(border controls)','Japan (sakoku)','US (national quotas)','Western open borders','Future: correction?'];
-const starts=[-2000,-451,-221,-500,212,618,1633,1924,1965,2025];
-const ends=[-1650,-322,206,212,476,907,1853,1965,2025,2060];
-const colors=[C.green,C.blue,C.amber,C.green+'cc',C.accent,C.amber+'cc',C.purple,C.teal,C.accent,C.dim];
-new Chart(ctx,{type:'bar',data:{labels:civs,datasets:[{
-label:'Period',data:civs.map((_,i)=>[starts[i],ends[i]]),backgroundColor:colors,borderRadius:3,borderSkipped:false}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{var s=i.raw[0],e=i.raw[1];return (s<0?Math.abs(s)+' BC':s+' AD')+' – '+(e<0?Math.abs(e)+' BC':e+' AD')}}}},
-scales:{x:{type:'linear',min:-2200,max:2100,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BC':v+' AD'},title:{display:true,text:'Year',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
 })();"""
         },
     ]

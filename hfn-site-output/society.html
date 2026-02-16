@@ -91,12 +91,6 @@
       <p class="chart-source">Source: World Bank, UN Population Division, national statistics offices (2023-2024).</p>
     </figure>
     <figure class="section-editorial-chart">
-      <h4>Historical Immigration Control: A 5,000-Year Timeline</h4>
-      <p class="chart-desc">Every major civilisation controlled immigration. The Western open-borders era (post-1965) is a historical anomaly.</p>
-      <div class="chart-area"><canvas id="gatesChart4"></canvas></div>
-      <p class="chart-source">Source: Author compilation from historical sources cited in article.</p>
-    </figure>
-    <figure class="section-editorial-chart">
       <h4>Government Content Removal Requests to Major Platforms (2024)</h4>
       <p class="chart-desc">India, Turkey, and Russia lead the world in demanding platforms remove content — the modern equivalent of burning books</p>
       <div class="chart-area"><canvas id="scribesChart1"></canvas></div>
@@ -257,7 +251,7 @@
         <p>For five thousand years, every successful civilisation tightly controlled who could enter, settle, and become a citizen. Then, in the space of a single generation, the West decided</p>
         <div class="section-article-meta">
           <span>13 min read</span>
-          <span>4 charts</span>
+          <span>3 charts</span>
           <span>Audio</span>
         </div>
       </div>
@@ -475,23 +469,12 @@ scales:{x:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{co
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
 })();
 
-(()=>{const ctx=document.getElementById('gatesChart4');
-const civs=['Egypt (border forts)','Athens (metic laws)','Qin China (Great Wall)','Roman Republic\n(restricted citizenship)','Roman Empire\n(open citizenship)','Tang China\n(border controls)','Japan (sakoku)','US (national quotas)','Western open borders','Future: correction?'];
-const starts=[-2000,-451,-221,-500,212,618,1633,1924,1965,2025];
-const ends=[-1650,-322,206,212,476,907,1853,1965,2025,2060];
-const colors=[C.green,C.blue,C.amber,C.green+'cc',C.accent,C.amber+'cc',C.purple,C.teal,C.accent,C.dim];
-new Chart(ctx,{type:'bar',data:{labels:civs,datasets:[{
-label:'Period',data:civs.map((_,i)=>[starts[i],ends[i]]),backgroundColor:colors,borderRadius:3,borderSkipped:false}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{var s=i.raw[0],e=i.raw[1];return (s<0?Math.abs(s)+' BC':s+' AD')+' – '+(e<0?Math.abs(e)+' BC':e+' AD')}}}},
-scales:{x:{type:'linear',min:-2200,max:2100,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BC':v+' AD'},title:{display:true,text:'Year',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
-})();
-
 (()=>{const ctx=document.getElementById('scribesChart1');
 new Chart(ctx,{type:'bar',data:{
 labels:['India','Turkey','Russia','South Korea','France','Germany','Brazil','United States','UK','Australia'],
 datasets:[{label:'Content removal requests (thousands)',data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9,4.8,2.1],
 backgroundColor:[C.accent,C.amber,C.purple,C.blue,C.teal,C.blue+'cc',C.green,C.cyan,C.dim,C.emerald],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K requests'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},title:{display:true,text:'Requests (thousands)',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});

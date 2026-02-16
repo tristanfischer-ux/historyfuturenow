@@ -116,8 +116,9 @@ Out of your 35-50 turns, you MUST include:
   disagrees, not just adds a caveat. Real disagreement sounds like: 
   "No, that's completely wrong, and I'll tell you why.", "I think you're 
   cherry-picking.", "That's a convenient reading of the data."
-- NO MORE THAN 5 turns longer than 3 sentences. Most substance should be 
-  delivered in 1-2 punchy sentences, not mini-essays.
+- NO MORE THAN 3 turns longer than 3 sentences IN THE ENTIRE SCRIPT. 
+  Most substance should be delivered in 1-2 punchy sentences, not mini-essays.
+  If a turn is longer than 30 words, it is probably too long. Break it up.
 
 INTERRUPTIONS AND INCOMPLETE THOUGHTS:
 Include at least 3-4 moments where one speaker cuts the other off mid-thought:
