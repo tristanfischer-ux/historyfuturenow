@@ -1,7 +1,9 @@
 ---
-description: Rules for the James/Elena debate dynamic in audio discussions. Enforced when generating or reviewing discussion scripts.
+description: "PAUSED: Debates are disabled via ENABLE_DISCUSSIONS=False in build.py. Scripts and audio are preserved on disk. Do not generate new debates until re-enabled. Rules below are retained for when debates resume."
 alwaysApply: true
 ---
+
+> **STATUS: PAUSED** — Debates are currently disabled. The feature flag `ENABLE_DISCUSSIONS` in `build.py` is set to `False`. All existing debate scripts (`discussion_scripts/`) and audio files (`audio/discussions/`) are preserved. Do not generate new debates or debate audio until this flag is re-enabled.
 
 # Debate Character Dynamics
 

@@ -180,28 +180,6 @@
 <p>For as History Future Now has continually emphasized, it is only by understanding our past that we can hope to learn, to grow, and to build a better, more sustainable path into the future. On the road out of Ukraine&rsquo;s abyss of violence, the footsteps of those who trod similar paths before may prove to be the vital lodestar in these current darkest hours.</p>
   </div>
 
-  <div class="discussion-player" id="discussionPlayer">
-    <div class="discussion-player-inner">
-      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
-        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
-      </button>
-      <div class="discussion-info">
-        <div class="discussion-label">Listen to the debate about this</div>
-      </div>
-      <div class="discussion-progress-wrap" id="discussionProgressWrap">
-        <div class="discussion-progress-track"><div class="discussion-progress-bar" id="discussionProgressBar"></div></div>
-        <div class="scrub-thumb" id="discussionThumb"></div>
-      </div>
-      <div class="discussion-time" id="discussionTime">0:00</div>
-      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
-      <button class="q-add-btn-light" data-queue-slug="discussion-forging-peace-from-centuries-of-war-to-ukraines-future" data-queue-title="Discussion: Forging Peace: From Centuries of War to Ukraine&#x27;s Future" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/discussions/forging-peace-from-centuries-of-war-to-ukraines-future.mp3" aria-label="Add discussion to queue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
-        <span class="q-add-label">Add to Queue</span>
-      </button>
-    </div>
-    <audio id="discussionElement" preload="none" src="/audio/discussions/forging-peace-from-centuries-of-war-to-ukraines-future.mp3"></audio>
-  </div>
   <div class="article-end-cta" data-share-url="https://www.historyfuturenow.com/articles/forging-peace-from-centuries-of-war-to-ukraines-future" data-share-title="Forging Peace: From Centuries of War to Ukraine&#x27;s Future" data-share-text="For centuries, war has been a brutal constant in human affairs, with nations locked in cycles of conquest and revenge that have left countle">
     <p class="cta-prompt">If this changed how you think, share it with someone who should read it.</p>
     <div class="cta-share-buttons">
@@ -233,20 +211,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-time">9 min read</span>
       </a>
-      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
+      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
-        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
+        <span class="related-time">6 min read</span>
       </a>
-      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
+      <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The North African Threat And Mediterranean Reunification</span>
+        <span class="related-time">17 min read</span>
       </a>
     </div>
   </section>
@@ -424,7 +402,7 @@
   }
 
   initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
-  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');
+  if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
 })();
 </script>
 <script src="/js/share.js"></script>

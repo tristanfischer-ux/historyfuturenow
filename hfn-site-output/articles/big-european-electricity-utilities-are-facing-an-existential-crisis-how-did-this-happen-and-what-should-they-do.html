@@ -233,28 +233,6 @@
 
   </div>
 
-  <div class="discussion-player" id="discussionPlayer">
-    <div class="discussion-player-inner">
-      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
-        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
-      </button>
-      <div class="discussion-info">
-        <div class="discussion-label">Listen to the debate about this</div>
-      </div>
-      <div class="discussion-progress-wrap" id="discussionProgressWrap">
-        <div class="discussion-progress-track"><div class="discussion-progress-bar" id="discussionProgressBar"></div></div>
-        <div class="scrub-thumb" id="discussionThumb"></div>
-      </div>
-      <div class="discussion-time" id="discussionTime">0:00</div>
-      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
-      <button class="q-add-btn-light" data-queue-slug="discussion-big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" data-queue-title="Discussion: Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/discussions/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do.mp3" aria-label="Add discussion to queue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
-        <span class="q-add-label">Add to Queue</span>
-      </button>
-    </div>
-    <audio id="discussionElement" preload="none" src="/audio/discussions/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do.mp3"></audio>
-  </div>
   <div class="article-end-cta" data-share-url="https://www.historyfuturenow.com/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" data-share-title="Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?" data-share-text="For most consumers, the revolution that is taking place in the energy markets has been hidden from view. They still get reliable electricity">
     <p class="cta-prompt">If this changed how you think, share it with someone who should read it.</p>
     <div class="cta-share-buttons">
@@ -286,19 +264,19 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" class="related-card">
+      <a href="/articles/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition</span>
+        <span class="related-time">6 min read</span>
       </a>
-      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
+      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
+        <span class="related-time">25 min read</span>
       </a>
-      <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
+      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event</span>
+        <span class="related-title">Establishing A Price Floor For Energy</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
@@ -522,7 +500,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true
   }
 
   initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
-  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');
+  if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
 })();
 </script>
 <script src="/js/share.js"></script>

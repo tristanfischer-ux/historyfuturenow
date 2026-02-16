@@ -16,6 +16,10 @@ MANIFEST_PATH = Path(__file__).parent / "original_articles.txt"
 
 MAX_NEW_ARTICLES = 10
 
+# Feature flag: set to False to disable debate/discussion players across the site.
+# Discussion scripts and audio files are preserved on disk — just not rendered.
+ENABLE_DISCUSSIONS = False
+
 def truncate_excerpt(text, max_len):
     """Truncate text to max_len characters, adding ellipsis if truncated."""
     if len(text) <= max_len:
@@ -227,7 +231,7 @@ def parse_essay(filepath):
     audio_file = OUTPUT_DIR / "audio" / f"{slug}.mp3"
     has_audio = audio_file.exists()
     discussion_file = OUTPUT_DIR / "audio" / "discussions" / f"{slug}.mp3"
-    has_discussion = discussion_file.exists()
+    has_discussion = discussion_file.exists() and ENABLE_DISCUSSIONS
 
     share_summary = meta.get('share_summary', '')
 
@@ -548,7 +552,7 @@ def make_audio_player_script():
   }
 
   initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
-  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');
+  if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
 })();
 </script>'''
 
@@ -808,9 +812,9 @@ def build_article(essay, all_essays):
     <audio id="audioElement" preload="none" src="/audio/{html_mod.escape(essay['slug'])}.mp3"></audio>
   </div>'''
 
-    # Discussion player (if discussion audio file exists)
+    # Discussion player (if discussion audio file exists and feature is enabled)
     discussion_file = OUTPUT_DIR / "audio" / "discussions" / f"{essay['slug']}.mp3"
-    has_discussion = discussion_file.exists()
+    has_discussion = discussion_file.exists() and ENABLE_DISCUSSIONS
     discussion_player = ''
     if has_discussion:
         discussion_section_label = f"{pi['label']} · {essay['part']}"
@@ -1677,7 +1681,7 @@ def build_listen_page(essays):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head("Listen to History — History Future Now", f"{audio_count} articles available as audio narration and debate. {total_hours}+ hours of content.", "/listen")}
+{make_head("Listen to History — History Future Now", f"{audio_count} articles available as audio narration. {total_hours}+ hours of content.", "/listen")}
 </head>
 <body>
 
@@ -1689,7 +1693,7 @@ def build_listen_page(essays):
   <div class="lp-hero-inner">
     {breadcrumbs}
     <h1 class="lp-hero-title">Listen to History</h1>
-    <p class="lp-hero-desc">Every article, narrated in full with two alternating British voices &mdash; plus expert debates on the biggest questions. Queue them up and listen on the go.</p>
+    <p class="lp-hero-desc">Every article, narrated in full with two alternating British voices. Queue them up and listen on the go.</p>
     <div class="lp-hero-stats">
       <span class="lp-stat"><strong>{audio_count}</strong> articles</span>
       <span class="lp-stat-sep">&middot;</span>
@@ -1710,12 +1714,7 @@ def build_listen_page(essays):
       <span class="lp-filter-label">Section</span>
       {filter_tabs}
     </div>
-    <div class="lp-filter-group">
-      <span class="lp-filter-label">Type</span>
-      <button class="lp-type-btn active" data-type="all">All</button>
-      <button class="lp-type-btn" data-type="narration">Narration</button>
-      <button class="lp-type-btn" data-type="discussion">Discussion</button>
-    </div>
+    {'<div class="lp-filter-group"><span class="lp-filter-label">Type</span><button class="lp-type-btn active" data-type="all">All</button><button class="lp-type-btn" data-type="narration">Narration</button><button class="lp-type-btn" data-type="discussion">Discussion</button></div>' if ENABLE_DISCUSSIONS else ''}
   </div>
 </div>
 

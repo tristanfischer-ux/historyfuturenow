@@ -192,28 +192,6 @@
 
   </div>
 
-  <div class="discussion-player" id="discussionPlayer">
-    <div class="discussion-player-inner">
-      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
-        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
-      </button>
-      <div class="discussion-info">
-        <div class="discussion-label">Listen to the debate about this</div>
-      </div>
-      <div class="discussion-progress-wrap" id="discussionProgressWrap">
-        <div class="discussion-progress-track"><div class="discussion-progress-bar" id="discussionProgressBar"></div></div>
-        <div class="scrub-thumb" id="discussionThumb"></div>
-      </div>
-      <div class="discussion-time" id="discussionTime">0:00</div>
-      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
-      <button class="q-add-btn-light" data-queue-slug="discussion-establishing-a-price-floor-for-energy" data-queue-title="Discussion: Establishing A Price Floor For Energy" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/discussions/establishing-a-price-floor-for-energy.mp3" aria-label="Add discussion to queue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
-        <span class="q-add-label">Add to Queue</span>
-      </button>
-    </div>
-    <audio id="discussionElement" preload="none" src="/audio/discussions/establishing-a-price-floor-for-energy.mp3"></audio>
-  </div>
   <div class="article-end-cta" data-share-url="https://www.historyfuturenow.com/articles/establishing-a-price-floor-for-energy" data-share-title="Establishing A Price Floor For Energy" data-share-text="Capitalism is a wonderful system for providing pricing signals to businesses to produce more or less of a particular product. If demand for ">
     <p class="cta-prompt">If this changed how you think, share it with someone who should read it.</p>
     <div class="cta-share-buttons">
@@ -245,20 +223,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
+      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
+        <span class="related-time">9 min read</span>
+      </a>
+      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
+        <span class="related-time">10 min read</span>
+      </a>
       <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
         <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -475,7 +453,7 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
   }
 
   initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
-  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');
+  if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
 })();
 </script>
 <script src="/js/share.js"></script>

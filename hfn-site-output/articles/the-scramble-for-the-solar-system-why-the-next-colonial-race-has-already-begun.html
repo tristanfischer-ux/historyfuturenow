@@ -172,28 +172,6 @@
 <p>The race has already begun. The question, as always, is who will get there first.</p>
   </div>
 
-  <div class="discussion-player" id="discussionPlayer">
-    <div class="discussion-player-inner">
-      <button class="discussion-play-btn" id="discussionPlayBtn" aria-label="Play article discussion">
-        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
-      </button>
-      <div class="discussion-info">
-        <div class="discussion-label">Listen to the debate about this</div>
-      </div>
-      <div class="discussion-progress-wrap" id="discussionProgressWrap">
-        <div class="discussion-progress-track"><div class="discussion-progress-bar" id="discussionProgressBar"></div></div>
-        <div class="scrub-thumb" id="discussionThumb"></div>
-      </div>
-      <div class="discussion-time" id="discussionTime">0:00</div>
-      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
-      <button class="q-add-btn-light" data-queue-slug="discussion-the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" data-queue-title="Discussion: The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/discussions/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun.mp3" aria-label="Add discussion to queue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
-        <span class="q-add-label">Add to Queue</span>
-      </button>
-    </div>
-    <audio id="discussionElement" preload="none" src="/audio/discussions/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun.mp3"></audio>
-  </div>
   <div class="article-end-cta" data-share-url="https://www.historyfuturenow.com/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" data-share-title="The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun" data-share-text="SpaceX is building Starship production lines at scale. China plans a permanent lunar base by 2030. NASA&#x27;s Artemis programme aims to return A">
     <p class="cta-prompt">If this changed how you think, share it with someone who should read it.</p>
     <div class="cta-share-buttons">
@@ -228,17 +206,17 @@
       <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-time">5 min read</span>
       </a>
       <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
         <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
+      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
+        <span class="related-time">11 min read</span>
       </a>
     </div>
   </section>
@@ -339,118 +317,7 @@ title:{display:true,text:'USD per kg (log scale)',color:C.dim}},
 x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}}}}});
 })();
 </script>
-<script>
-(function(){
-  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId,thumbId){
-    var audio=document.getElementById(audioId);
-    if(!audio)return;
-    var btn=document.getElementById(btnId);
-    var bar=document.getElementById(barId);
-    var wrap=document.getElementById(wrapId);
-    var timeEl=document.getElementById(timeId);
-    var speedEl=document.getElementById(speedId);
-    var thumb=document.getElementById(thumbId);
-    if(!btn)return;
-    var iconPlay=btn.querySelector('.audio-icon-play');
-    var iconPause=btn.querySelector('.audio-icon-pause');
-    var speeds=[1,1.25,1.5,1.75,2];
-    var si=0;
-    var dragging=false;
 
-    function fmt(s){
-      if(isNaN(s))return'0:00';
-      var m=Math.floor(s/60);
-      var sec=Math.floor(s%60);
-      return m+':'+(sec<10?'0':'')+sec;
-    }
-
-    function seekTo(e){
-      if(!audio.duration)return;
-      var rect=wrap.getBoundingClientRect();
-      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-      audio.currentTime=pct*audio.duration;
-      updateBar(pct);
-    }
-
-    function seekToTouch(e){
-      if(!audio.duration)return;
-      var rect=wrap.getBoundingClientRect();
-      var touch=e.touches[0];
-      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
-      audio.currentTime=pct*audio.duration;
-      updateBar(pct);
-    }
-
-    function updateBar(pct){
-      var p=(pct*100)+'%';
-      bar.style.width=p;
-      if(thumb)thumb.style.left=p;
-    }
-
-    btn.onclick=function(){
-      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
-      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
-    };
-
-    audio.ontimeupdate=function(){
-      if(dragging)return;
-      if(audio.duration){
-        var pct=audio.currentTime/audio.duration;
-        updateBar(pct);
-        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
-      }
-    };
-
-    audio.onended=function(){
-      iconPlay.style.display='block';iconPause.style.display='none';
-      updateBar(0);
-    };
-
-    wrap.addEventListener('mousedown',function(e){
-      e.preventDefault();
-      dragging=true;
-      wrap.classList.add('scrubbing');
-      seekTo(e);
-      function onMove(ev){seekTo(ev);}
-      function onUp(){
-        dragging=false;
-        wrap.classList.remove('scrubbing');
-        document.removeEventListener('mousemove',onMove);
-        document.removeEventListener('mouseup',onUp);
-      }
-      document.addEventListener('mousemove',onMove);
-      document.addEventListener('mouseup',onUp);
-    });
-
-    wrap.addEventListener('touchstart',function(e){
-      e.preventDefault();
-      dragging=true;
-      wrap.classList.add('scrubbing');
-      seekToTouch(e);
-      function onTouchMove(ev){ev.preventDefault();seekToTouch(ev);}
-      function onTouchEnd(){
-        dragging=false;
-        wrap.classList.remove('scrubbing');
-        document.removeEventListener('touchmove',onTouchMove);
-        document.removeEventListener('touchend',onTouchEnd);
-      }
-      document.addEventListener('touchmove',onTouchMove,{passive:false});
-      document.addEventListener('touchend',onTouchEnd);
-    });
-
-    if(speedEl){
-      speedEl.onclick=function(){
-        si=(si+1)%speeds.length;
-        audio.playbackRate=speeds[si];
-        speedEl.textContent=speeds[si]+'\u00d7';
-      };
-    }
-  }
-
-  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
-  initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');
-})();
-</script>
 <script src="/js/share.js"></script>
 </body>
 </html>
