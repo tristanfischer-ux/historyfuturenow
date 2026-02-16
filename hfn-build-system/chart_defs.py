@@ -534,18 +534,20 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
         {
             'id': 'covChart3', 'figure_num': 3,
             'title': 'Covid-19 Accelerated Existing Trends',
-            'desc': 'Years of digital adoption compressed into months',
+            'desc': 'Years of digital adoption compressed into months — shown as growth factor from 2019 baseline',
             'source': 'McKinsey Global Survey, Statista, various',
             'position': 'after_para_24',
             'js': """
 (()=>{const ctx=document.getElementById('covChart3');
-new Chart(ctx,{type:'bar',data:{
-labels:['E-commerce\\nshare of retail','Remote\\nworkers %','Streaming\\nsubscriptions','Online\\neducation','Telemedicine\\nvisits'],
+const labels=['E-commerce\\nshare of retail','Remote\\nworkers','Streaming\\nsubscriptions','Online\\neducation','Telemedicine\\nvisits'];
+const pre=[16,5,600,200,10];
+const during=[27,42,1100,400,90];
+const growth=during.map((v,i)=>+(v/pre[i]).toFixed(1));
+new Chart(ctx,{type:'bar',data:{labels,
 datasets:[
-{label:'Pre-Covid (2019)',data:[16,5,600,200,10],backgroundColor:C.blue+'cc',borderRadius:3},
-{label:'During Covid (2020)',data:[27,42,1100,400,90],backgroundColor:C.accent+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index / value (varies by metric)',color:C.dim}}}}});
+{label:'Growth factor (2020 vs 2019)',data:growth,backgroundColor:[C.blue,C.accent,C.purple,C.green,C.amber].map(c=>c+'cc'),borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const idx=i.dataIndex;return labels[idx].replace('\\n',' ')+': '+pre[idx]+' → '+during[idx]+' ('+growth[idx]+'x)'}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'x'},min:0,title:{display:true,text:'Growth factor (2020 vs 2019)',color:C.dim}}}}});
 })();"""
         },
         {
@@ -580,13 +582,14 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:10,title:{display:t
             'position': 'before_end',
             'js': """
 (()=>{const ctx=document.getElementById('covChart5');
-new Chart(ctx,{type:'bar',data:{labels:['South\nKorea','Taiwan','Japan','Germany','France','UK','US'],
+new Chart(ctx,{type:'bar',data:{labels:['South\\nKorea','Taiwan','Japan','Germany','France','UK','US'],
 datasets:[
-{label:'Deaths per 100k (2020)',data:[6,0.3,12,40,90,100,105],backgroundColor:C.accent+'bb',borderRadius:3,borderSkipped:false},
-{label:'GDP decline % (2020)',data:[1.0,0.5,4.6,4.9,8.0,9.8,3.4],backgroundColor:C.blue+'bb',borderRadius:3,borderSkipped:false}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+{label:'Deaths per 100k (2020)',data:[6,0.3,12,40,90,100,105],backgroundColor:C.accent+'bb',borderRadius:3,borderSkipped:false,yAxisID:'y'},
+{label:'GDP decline % (2020)',data:[1.0,0.5,4.6,4.9,8.0,9.8,3.4],backgroundColor:C.blue+'bb',borderRadius:3,borderSkipped:false,yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
-y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Deaths per 100k / GDP decline %',color:C.dim}}}}});
+y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v},min:0,title:{display:true,text:'Deaths per 100k',color:C.accent}},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,callback:v=>v+'%'},min:0,max:12,title:{display:true,text:'GDP decline %',color:C.blue}}}}});
 })();"""
         },
         {
@@ -1139,10 +1142,12 @@ y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Conflict te
 const yrs=[1980,1985,1990,1995,2000,2005,2008,2010,2015,2020,2025];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('US Federal Funds Rate (%)',yrs,[20,8,8,6,6.5,4.25,0.25,0.25,0.5,0.25,4.5],C.blue),
-dxy('US House Price Index (rebased)',yrs,[40,50,55,60,75,120,100,80,95,130,140],C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:linX(1980,2025),y:{grid:{color:C.grid},ticks:{color:C.dim}}}}});
+{...dxy('US Federal Funds Rate (%)',yrs,[20,8,8,6,6.5,4.25,0.25,0.25,0.5,0.25,4.5],C.blue),yAxisID:'y'},
+{...dxy('US House Price Index (rebased)',yrs,[40,50,55,60,75,120,100,80,95,130,140],C.accent),yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;return l.includes('Rate')?l+': '+i.raw+'%':l+': '+i.raw}}}},
+scales:{x:linX(1980,2025),
+y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.blue,callback:v=>v+'%'},min:0,title:{display:true,text:'Federal Funds Rate (%)',color:C.blue}},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.accent},min:0,title:{display:true,text:'House Price Index',color:C.accent}}}}});
 })();"""
         },
         {
@@ -1156,10 +1161,12 @@ scales:{x:linX(1980,2025),y:{grid:{color:C.grid},ticks:{color:C.dim}}}}});
 const yrs=[1918,1920,1922,1924,1926,1928,1929,1930,1931,1932,1933];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('German unemployment %',yrs,[3,4,3,8,10,6,10,15,24,30,25],C.accent),
-dxy('Reparations paid (bn gold marks, cumul.)',yrs,[0,1,2,4,5,7,8,8,8,8,8],C.blue,[5,5])
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:linX(1918,1933),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'% / Billion gold marks',color:C.dim}}}}});
+{...dxy('German unemployment %',yrs,[3,4,3,8,10,6,10,15,24,30,25],C.accent),yAxisID:'y'},
+{...dxy('Reparations paid (bn gold marks, cumul.)',yrs,[0,1,2,4,5,7,8,8,8,8,8],C.blue,[5,5]),yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;return l.includes('unemployment')?l+': '+i.raw+'%':l+': '+i.raw+'bn'}}}},
+scales:{x:linX(1918,1933),
+y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v+'%'},min:0,title:{display:true,text:'Unemployment %',color:C.accent}},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,callback:v=>v+'bn'},min:0,title:{display:true,text:'Reparations (bn gold marks)',color:C.blue}}}}});
 })();"""
         },
     ]
@@ -1185,8 +1192,8 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{col
         },
         {
             'id': 'immChart2', 'figure_num': 2,
-            'title': 'Immigration to Europe: Volume Over Time',
-            'desc': 'From post-war reconstruction labour to the 2015 refugee crisis',
+            'title': 'Immigration to Europe: Volume and Share Over Time',
+            'desc': 'From post-war reconstruction labour to the 2015 refugee crisis — absolute numbers and population share',
             'source': 'UN Migration Data Portal; Eurostat',
             'position': 'before_end',
             'js': """
@@ -1194,10 +1201,12 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{col
 const yrs=[1950,1960,1970,1980,1990,2000,2005,2010,2015,2020];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('Foreign-born in EU (millions)',yrs,[10,14,18,20,23,33,40,47,54,55],C.accent),
-dxy('Foreign-born as % of EU pop.',yrs,[3.0,3.5,4.5,5.0,5.5,7.0,8.5,9.5,10.5,11.0],C.blue,[5,5])
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:linX(1950,2020),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Millions / %',color:C.dim}}}}});
+{...dxy('Foreign-born in EU (millions)',yrs,[10,14,18,20,23,33,40,47,54,55],C.accent),yAxisID:'y'},
+{...dxy('Foreign-born as % of EU pop.',yrs,[3.0,3.5,4.5,5.0,5.5,7.0,8.5,9.5,10.5,11.0],C.blue,[5,5]),yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;return l.includes('millions')?l+': '+i.raw+'M':l+': '+i.raw+'%'}}}},
+scales:{x:linX(1950,2020),
+y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v+'M'},min:0,title:{display:true,text:'Foreign-born (millions)',color:C.accent}},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,callback:v=>v+'%'},min:0,title:{display:true,text:'Share of EU population (%)',color:C.blue}}}}});
 })();"""
         },
         {
@@ -2415,7 +2424,7 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
         {
             'id': 'cradleChart2', 'figure_num': 2,
             'title': 'The Cost of Raising a Child vs. Median Wages',
-            'desc': 'Housing, childcare, and education costs have surged while real wages flatlined',
+            'desc': 'Housing, childcare, and education costs have surged while real wages flatlined — all indexed to 1975 = 100',
             'source': 'ONS, BLS, OECD, Nationwide Building Society, Coram Family and Childcare (1975-2024)',
             'position': 'after_heading:The Collapse of the Village',
             'tall': True,
@@ -2424,11 +2433,11 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
 const yrs=[1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2024];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('House price / income ratio (UK)',yrs,[3.6,3.9,3.8,4.4,3.4,4.4,5.8,6.7,7.4,7.9,8.3],C.accent),
+dxy('House price / income ratio (UK)',yrs,[100,108,106,122,94,122,161,186,206,219,231],C.accent),
 dxy('Childcare cost index',yrs,[100,108,118,132,155,190,240,290,340,380,420],C.purple),
 dxy('Real median wages (index)',yrs,[100,102,108,115,113,125,130,128,126,130,132],C.green)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;if(l.includes('ratio'))return l+': '+i.raw.toFixed(1)+'x';return l+': '+i.raw}}}},
-scales:{x:linX(1975,2024),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1975 = 100) / Ratio',color:C.dim}}}}});
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;if(l.includes('ratio'))return l+': '+i.raw+' ('+[3.6,3.9,3.8,4.4,3.4,4.4,5.8,6.7,7.4,7.9,8.3][i.dataIndex]+'x)';return l+': '+i.raw}}}},
+scales:{x:linX(1975,2024),y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,title:{display:true,text:'Index (1975 = 100)',color:C.dim}}}}});
 })();"""
         },
         {

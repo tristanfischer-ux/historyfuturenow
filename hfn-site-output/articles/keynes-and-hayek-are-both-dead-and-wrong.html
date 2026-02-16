@@ -247,20 +247,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
+      <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</span>
+        <span class="related-time">35 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">The Paradox of Mass Migration and Robots in the Age of Automation</span>
         <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -353,20 +353,24 @@ const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={}
 const yrs=[1980,1985,1990,1995,2000,2005,2008,2010,2015,2020,2025];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('US Federal Funds Rate (%)',yrs,[20,8,8,6,6.5,4.25,0.25,0.25,0.5,0.25,4.5],C.blue),
-dxy('US House Price Index (rebased)',yrs,[40,50,55,60,75,120,100,80,95,130,140],C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:linX(1980,2025),y:{grid:{color:C.grid},ticks:{color:C.dim}}}}});
+{...dxy('US Federal Funds Rate (%)',yrs,[20,8,8,6,6.5,4.25,0.25,0.25,0.5,0.25,4.5],C.blue),yAxisID:'y'},
+{...dxy('US House Price Index (rebased)',yrs,[40,50,55,60,75,120,100,80,95,130,140],C.accent),yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;return l.includes('Rate')?l+': '+i.raw+'%':l+': '+i.raw}}}},
+scales:{x:linX(1980,2025),
+y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.blue,callback:v=>v+'%'},min:0,title:{display:true,text:'Federal Funds Rate (%)',color:C.blue}},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.accent},min:0,title:{display:true,text:'House Price Index',color:C.accent}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('keyChart2');
 const yrs=[1918,1920,1922,1924,1926,1928,1929,1930,1931,1932,1933];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('German unemployment %',yrs,[3,4,3,8,10,6,10,15,24,30,25],C.accent),
-dxy('Reparations paid (bn gold marks, cumul.)',yrs,[0,1,2,4,5,7,8,8,8,8,8],C.blue,[5,5])
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
-scales:{x:linX(1918,1933),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'% / Billion gold marks',color:C.dim}}}}});
+{...dxy('German unemployment %',yrs,[3,4,3,8,10,6,10,15,24,30,25],C.accent),yAxisID:'y'},
+{...dxy('Reparations paid (bn gold marks, cumul.)',yrs,[0,1,2,4,5,7,8,8,8,8,8],C.blue,[5,5]),yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;return l.includes('unemployment')?l+': '+i.raw+'%':l+': '+i.raw+'bn'}}}},
+scales:{x:linX(1918,1933),
+y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v+'%'},min:0,title:{display:true,text:'Unemployment %',color:C.accent}},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,callback:v=>v+'bn'},min:0,title:{display:true,text:'Reparations (bn gold marks)',color:C.blue}}}}});
 })();
 </script>
 <script>

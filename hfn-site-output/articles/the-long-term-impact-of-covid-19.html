@@ -170,7 +170,7 @@
       </div>
       <div class="chart-figure-label">Figure 3</div>
       <h4>Covid-19 Accelerated Existing Trends</h4>
-      <p class="chart-desc">Years of digital adoption compressed into months</p>
+      <p class="chart-desc">Years of digital adoption compressed into months — shown as growth factor from 2019 baseline</p>
       <div class="chart-area"><canvas id="covChart3"></canvas></div>
       <p class="chart-source">Source: McKinsey Global Survey, Statista, various</p>
     </div>
@@ -365,20 +365,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
+      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="related-card">
+      <a href="/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Unintended Consequences of War: How the Loss of Young Men Transformed Women&#x27;s Roles in Society and ushered in the Welfare State</span>
+        <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="related-card">
+      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</span>
-        <span class="related-time">51 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -486,13 +486,15 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
 })();
 
 (()=>{const ctx=document.getElementById('covChart3');
-new Chart(ctx,{type:'bar',data:{
-labels:['E-commerce\nshare of retail','Remote\nworkers %','Streaming\nsubscriptions','Online\neducation','Telemedicine\nvisits'],
+const labels=['E-commerce\nshare of retail','Remote\nworkers','Streaming\nsubscriptions','Online\neducation','Telemedicine\nvisits'];
+const pre=[16,5,600,200,10];
+const during=[27,42,1100,400,90];
+const growth=during.map((v,i)=>+(v/pre[i]).toFixed(1));
+new Chart(ctx,{type:'bar',data:{labels,
 datasets:[
-{label:'Pre-Covid (2019)',data:[16,5,600,200,10],backgroundColor:C.blue+'cc',borderRadius:3},
-{label:'During Covid (2020)',data:[27,42,1100,400,90],backgroundColor:C.accent+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index / value (varies by metric)',color:C.dim}}}}});
+{label:'Growth factor (2020 vs 2019)',data:growth,backgroundColor:[C.blue,C.accent,C.purple,C.green,C.amber].map(c=>c+'cc'),borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const idx=i.dataIndex;return labels[idx].replace('\n',' ')+': '+pre[idx]+' → '+during[idx]+' ('+growth[idx]+'x)'}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'x'},min:0,title:{display:true,text:'Growth factor (2020 vs 2019)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('covChart4');
@@ -512,14 +514,14 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:10,title:{display:t
 })();
 
 (()=>{const ctx=document.getElementById('covChart5');
-new Chart(ctx,{type:'bar',data:{labels:['South
-Korea','Taiwan','Japan','Germany','France','UK','US'],
+new Chart(ctx,{type:'bar',data:{labels:['South\nKorea','Taiwan','Japan','Germany','France','UK','US'],
 datasets:[
-{label:'Deaths per 100k (2020)',data:[6,0.3,12,40,90,100,105],backgroundColor:C.accent+'bb',borderRadius:3,borderSkipped:false},
-{label:'GDP decline % (2020)',data:[1.0,0.5,4.6,4.9,8.0,9.8,3.4],backgroundColor:C.blue+'bb',borderRadius:3,borderSkipped:false}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+{label:'Deaths per 100k (2020)',data:[6,0.3,12,40,90,100,105],backgroundColor:C.accent+'bb',borderRadius:3,borderSkipped:false,yAxisID:'y'},
+{label:'GDP decline % (2020)',data:[1.0,0.5,4.6,4.9,8.0,9.8,3.4],backgroundColor:C.blue+'bb',borderRadius:3,borderSkipped:false,yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
-y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Deaths per 100k / GDP decline %',color:C.dim}}}}});
+y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v},min:0,title:{display:true,text:'Deaths per 100k',color:C.accent}},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,callback:v=>v+'%'},min:0,max:12,title:{display:true,text:'GDP decline %',color:C.blue}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('covChart6');

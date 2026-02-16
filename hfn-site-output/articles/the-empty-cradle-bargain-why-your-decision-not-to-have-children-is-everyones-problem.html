@@ -93,6 +93,29 @@
     <img src="/images/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem/hero.png" alt="Editorial illustration for The Empty Cradle Bargain: Why Your Decision Not to Have Children Is Everyone&#x27;s Problem" class="article-hero-img" loading="lazy" width="1200" height="675">
   </div>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article</div>
+        <div class="audio-meta">32 min</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-track"><div class="audio-progress-bar" id="audioProgressBar"></div></div>
+        <div class="scrub-thumb" id="audioThumb"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem" data-queue-title="The Empty Cradle Bargain: Why Your Decision Not to Have Children Is Everyone&#x27;s Problem" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem.mp3" aria-label="Add to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem.mp3"></audio>
+  </div>
   <div class="share-bar share-bar-top" data-share-url="https://www.historyfuturenow.com/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem" data-share-title="The Empty Cradle Bargain: Why Your Decision Not to Have Children Is Everyone&#x27;s Problem" data-share-text="Millions want children but can&#x27;t have them — priced out, timed out, or failed by a society that never told them the truth about fertility.">
     <span class="share-label">Share</span>
     <button class="share-btn" data-share="x" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></button>
@@ -156,7 +179,7 @@
       </div>
       <div class="chart-figure-label">Figure 2</div>
       <h4>The Cost of Raising a Child vs. Median Wages</h4>
-      <p class="chart-desc">Housing, childcare, and education costs have surged while real wages flatlined</p>
+      <p class="chart-desc">Housing, childcare, and education costs have surged while real wages flatlined — all indexed to 1975 = 100</p>
       <div class="chart-area tall"><canvas id="cradleChart2"></canvas></div>
       <p class="chart-source">Source: ONS, BLS, OECD, Nationwide Building Society, Coram Family and Childcare (1975-2024)</p>
     </div>
@@ -401,20 +424,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
+      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
+        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">The Long Term Impact of Covid 19</span>
+        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
-        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -519,11 +542,11 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
 const yrs=[1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2024];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('House price / income ratio (UK)',yrs,[3.6,3.9,3.8,4.4,3.4,4.4,5.8,6.7,7.4,7.9,8.3],C.accent),
+dxy('House price / income ratio (UK)',yrs,[100,108,106,122,94,122,161,186,206,219,231],C.accent),
 dxy('Childcare cost index',yrs,[100,108,118,132,155,190,240,290,340,380,420],C.purple),
 dxy('Real median wages (index)',yrs,[100,102,108,115,113,125,130,128,126,130,132],C.green)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;if(l.includes('ratio'))return l+': '+i.raw.toFixed(1)+'x';return l+': '+i.raw}}}},
-scales:{x:linX(1975,2024),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1975 = 100) / Ratio',color:C.dim}}}}});
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;if(l.includes('ratio'))return l+': '+i.raw+' ('+[3.6,3.9,3.8,4.4,3.4,4.4,5.8,6.7,7.4,7.9,8.3][i.dataIndex]+'x)';return l+': '+i.raw}}}},
+scales:{x:linX(1975,2024),y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,title:{display:true,text:'Index (1975 = 100)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('cradleChart3');
