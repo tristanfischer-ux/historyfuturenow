@@ -408,7 +408,7 @@ GEMINI_TTS_MODEL = "gemini-2.5-pro-preview-tts"
 
 # Gemini TTS voices — male + female for clear distinction
 VOICE_SPEAKER_A = "Puck"       # Upbeat, lively male — James
-VOICE_SPEAKER_B = "Kore"       # Firm, strong female — Elena
+VOICE_SPEAKER_B = "Leda"       # Clear, warm female — Elena
 
 # Max chars per TTS request (Gemini TTS has token limits)
 TTS_MAX_CHARS = 5000
@@ -479,7 +479,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 8) -> bytes:
         "contents": [
             {
                 "role": "user",
-                "parts": [{"text": f"Read this as a fast-paced, lively BBC Radio 4 debate. Both speakers are sharp, quick, and energised.\n\nJames: British accent. Quick and confident. He rattles off statistics with the energy of someone who finds this genuinely exciting. His dry wit is fast, not ponderous — a quick aside, then straight back to the point. When he disagrees, he's direct and clipped. He never drones or pontificates. Think quick-witted journalist, not lecturing professor.\n\nElena: British accent. Animated, direct, punchy. She challenges fast, reacts audibly, and doesn't hold back. She matches James's pace and pushes it higher when she's passionate.\n\nThe overall pace is brisk and energetic. Short turns are rapid-fire. Neither speaker is slow or pompous. This sounds like two sharp people who are genuinely enjoying a fast argument.\n\n{text}"}]
+                "parts": [{"text": f"Read this as a fast-paced, lively BBC Radio 4 debate between a man and a woman.\n\nJames (male voice): British accent. Quick and confident. He rattles off statistics with the energy of someone who finds this genuinely exciting. His dry wit is fast, not ponderous — a quick aside, then straight back to the point. When he disagrees, he's direct and clipped. He never drones or pontificates. Think quick-witted journalist, not lecturing professor.\n\nElena (female voice): British accent. Animated, direct, punchy. She challenges fast, reacts audibly, and doesn't hold back. She matches James's pace and pushes it higher when she's passionate. Her voice is distinctly female — warm, clear, and confident.\n\nThe overall pace is brisk and energetic. Short turns are rapid-fire. Neither speaker is slow or pompous. This sounds like a man and a woman who are genuinely enjoying a fast argument.\n\n{text}"}]
             }
         ],
         "generationConfig": {

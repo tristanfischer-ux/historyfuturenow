@@ -1718,9 +1718,12 @@ def build_library():
         books = by_theme.get(tid, [])
         book_items = ""
         for b in books:
+            import urllib.parse
+            search_query = urllib.parse.quote_plus(f'{b["title"]} {b["author"]}')
             book_items += f'''      <div class="lib-book-item">
         <span class="lib-book-title">{html_mod.escape(b["title"])}</span>
         <span class="lib-book-author">{html_mod.escape(b["author"])}</span>
+        <a class="lib-book-amazon" href="https://www.amazon.co.uk/s?k={search_query}" data-query="{search_query}" target="_blank" rel="noopener noreferrer">Amazon</a>
       </div>\n'''
 
         theme_cards += f'''    <div class="lib-theme-card" style="--theme-color:{theme["color"]}">
@@ -1765,6 +1768,23 @@ def build_library():
 </div>
 
 {make_footer()}
+
+<script>
+(function() {{
+  var isUK = false;
+  try {{
+    var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    isUK = tz === 'Europe/London' || tz === 'Europe/Belfast' || tz === 'Europe/Guernsey' || tz === 'Europe/Isle_of_Man' || tz === 'Europe/Jersey';
+  }} catch(e) {{}}
+  if (!isUK) {{
+    var links = document.querySelectorAll('.lib-book-amazon');
+    for (var i = 0; i < links.length; i++) {{
+      var q = links[i].getAttribute('data-query');
+      links[i].href = 'https://www.amazon.com/s?k=' + q;
+    }}
+  }}
+}})();
+</script>
 </body>
 </html>'''
 
