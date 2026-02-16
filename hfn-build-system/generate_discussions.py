@@ -107,7 +107,7 @@ conversations are messy. People interrupt, react, change their minds
 mid-sentence, circle back, get heated, laugh, and think aloud.
 
 TURN LENGTH DISTRIBUTION (strictly enforced):
-Out of your 35-50 turns, you MUST include:
+Out of your 30-40 turns, you MUST include:
 - AT LEAST 10 ultra-short turns (1-8 words). These are reactions, not 
   arguments: "Oh, come on.", "That's generous.", "Wait, really?", "Go on.", 
   "Ha! Good luck with that.", "Hmm.", "No.", "Says who?", "Fair enough.",
@@ -116,9 +116,17 @@ Out of your 35-50 turns, you MUST include:
   disagrees, not just adds a caveat. Real disagreement sounds like: 
   "No, that's completely wrong, and I'll tell you why.", "I think you're 
   cherry-picking.", "That's a convenient reading of the data."
-- NO MORE THAN 3 turns longer than 3 sentences IN THE ENTIRE SCRIPT. 
-  Most substance should be delivered in 1-2 punchy sentences, not mini-essays.
-  If a turn is longer than 30 words, it is probably too long. Break it up.
+- NO MORE THAN 1 turn longer than 3 sentences IN THE ENTIRE SCRIPT — 
+  and that turn should be the turning-point moment where someone's position 
+  shifts. Every other turn is 1-2 sentences maximum.
+  If a turn is longer than 25 words, it is probably too long. Break it up.
+- Every turn must earn its length. If a point can be made in fewer words, 
+  it must be.
+
+COMPRESSION RULE:
+Before writing any turn longer than 2 sentences, ask: "What is the ONE point 
+this turn makes?" If you can't state it in 5 words, the turn is trying to do 
+too much. Split it or cut it.
 
 INTERRUPTIONS AND INCOMPLETE THOUGHTS:
 Include at least 3-4 moments where one speaker cuts the other off mid-thought:
@@ -136,6 +144,20 @@ These are passionate, engaged people. Include:
 - Thinking aloud: "Let me work through this... because if that's true, then..."
 - Grudging concessions: "Okay, fine. I'll give you that. But it makes your 
   next point much harder to defend."
+
+DELIVERY CUES (for TTS expressiveness):
+Embed light delivery cues in square brackets at the START of turns to guide 
+vocal performance. Use these sparingly — roughly 8-12 cues across the whole 
+script, weighted toward James (who needs more vocal variation). Examples:
+  James: [dry] "Augustus tried tax breaks for parents. Worked about as well as it does now."
+  James: [emphatic] "Zero point seven two. That's South Korea's fertility rate."
+  James: [conceding] "Fine. I'll give you that one."
+  James: [amused] "That's one way to put it."
+  Elena: [frustrated] "That's exactly the kind of thinking that got us here."
+  Elena: [surprised] "Wait — when did that happen?"
+Valid cues: [dry], [emphatic], [amused], [conceding], [frustrated], [surprised], 
+[sardonic], [heated], [thoughtful], [clipped]. Do NOT use cues on ultra-short 
+reaction turns — those should be raw and snappy.
 
 CALLBACKS AND THREADING:
 At least twice, a speaker should reference something said 5-10 turns earlier:
@@ -156,20 +178,27 @@ ANTI-PATTERNS — DO NOT DO THESE:
   challenge, question, or redirect — not just build on James's point.
 - Ending every turn with a complete, well-formed thought. Real speech has 
   rough edges, pivots, and sentences that trail off.
+- Restating the other speaker's point before responding ("So you're saying X. 
+  Well, I think..."). Just respond directly. The listener heard it already.
+- Throat-clearing openings: "Look,", "Well, the thing is,", "I mean,", 
+  "To be fair,", "The reality is,", "Here's the thing,". Cut straight to 
+  the substance. Every word must earn its place.
+- Summarising at the end of a turn what was just said at the start. 
+  Say it once, say it well.
 
 DEBATE HEAT MAP (emotional arc):
-- OPENING (turns 1-5): Brisk, provocative. Set up the core disagreement 
+- OPENING (turns 1-4): Brisk, provocative. Set up the core disagreement 
   immediately. Don't waste turns on gentle scene-setting. One of them should 
   say something the other visibly reacts to.
-- EARLY MIDDLE (turns 6-15): Build the argument. Rapid-fire exchanges mixed 
+- EARLY MIDDLE (turns 5-12): Build the argument. Rapid-fire exchanges mixed 
   with data drops. At least one "wait, that can't be right" moment.
-- CLASH (turns 15-25): The genuine disagreement peak. They talk over each 
+- CLASH (turns 12-22): The genuine disagreement peak. They talk over each 
   other, push back hard, maybe get frustrated. This is where the energy is 
   highest and the listener is most engaged.
-- TURNING POINT (turns 25-35): A specific piece of evidence shifts someone's 
+- TURNING POINT (turns 22-30): A specific piece of evidence shifts someone's 
   position. This must be VISIBLE — the speaker resists, then yields: "I don't 
   want to agree with you on this, but the numbers don't leave much room."
-- CLOSE (turns 35-50): Either hard-won agreement with lingering unease, or 
+- CLOSE (turns 30-40): Either hard-won agreement with lingering unease, or 
   unresolved tension that challenges the listener. End on something that sticks.
 
 CONTENT RULES:
@@ -188,9 +217,9 @@ OUTPUT FORMAT:
 Return ONLY a JSON array of dialogue turns:
   {"speaker": "James" or "Elena", "text": "What they say"}
 
-Aim for 35-50 turns. Total roughly 1500-2500 words (8-12 minutes of audio).
+Aim for 30-40 turns. Total roughly 1200-1800 words (8-12 minutes of audio).
 The majority of turns should be 1-2 sentences. At least 10 should be under 
-8 words. No more than 5 should exceed 3 sentences.
+8 words. No more than 1 should exceed 3 sentences.
 
 Open with a hook — a striking fact, a provocative question, a historical 
 parallel that immediately creates tension between the speakers. End with 
@@ -324,10 +353,10 @@ def generate_script_gemini(article: dict, corpus: dict, max_retries: int = 5) ->
 
 # ─── Stage 2: Audio Rendering (Gemini TTS) ───────────────────────────────────
 
-GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
+GEMINI_TTS_MODEL = "gemini-2.5-pro-preview-tts"
 
 # Gemini TTS voices — male + female for clear distinction
-VOICE_SPEAKER_A = "Orus"       # Firm, calm, authoritative male — James
+VOICE_SPEAKER_A = "Charon"     # Professional, informative male with tonal range — James
 VOICE_SPEAKER_B = "Kore"       # Firm, strong female — Elena
 
 # Max chars per TTS request (Gemini TTS has token limits)
@@ -399,7 +428,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 8) -> bytes:
         "contents": [
             {
                 "role": "user",
-                "parts": [{"text": f"Read this discussion between James and Elena using British English accents — Received Pronunciation, like BBC Radio 4 presenters. James has a calm, authoritative, slightly dry delivery. Elena is more animated and direct, with energy and conviction. Both sound unmistakably British. The pace should be natural and conversational — not slow, not rushed. Short turns should feel snappy. React naturally to each other.\n\n{text}"}]
+                "parts": [{"text": f"Read this discussion between James and Elena as a lively BBC Radio 4 debate.\n\nJames: British RP accent. He is NOT monotone — he varies his delivery deliberately. When presenting a striking statistic, he slows down for emphasis. When making a dry joke, his tone lifts with understated amusement. When pushing back on Elena, he becomes clipped and direct. He sounds like a senior analyst who cares deeply about getting it right — measured but never flat. [emphatic] on key data points. [slightly amused] on sardonic asides.\n\nElena: British RP accent. Animated, direct, with energy and conviction. She reacts audibly — surprise, frustration, grudging agreement. She speeds up when passionate and pauses when reconsidering. She sounds like a sharp foreign correspondent who has seen these numbers play out in the real world.\n\nBoth speakers react naturally to each other. Short turns should feel snappy and quick. Longer turns should have internal variation — not a single droning pace. Pauses between speakers should feel natural, not mechanical.\n\n{text}"}]
             }
         ],
         "generationConfig": {
@@ -436,7 +465,7 @@ def generate_tts_audio(script_chunk: list[dict], max_retries: int = 8) -> bytes:
             url,
             params={"key": api_key},
             json=payload,
-            timeout=180,
+            timeout=360,
         )
 
         if response.status_code == 429:
