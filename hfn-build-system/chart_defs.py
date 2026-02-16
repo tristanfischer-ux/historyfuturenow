@@ -2653,6 +2653,109 @@ y1:{grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'%'}
         },
     ]
 
+    # ─── THE BUILDERS ARE DYING ───
+    charts['the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing'] = [
+        {
+            'id': 'buildersChart1', 'figure_num': 1,
+            'title': 'Total Fertility Rates: The Builder Nations vs. Replacement Level',
+            'desc': 'Every European and East Asian nation is below the 2.1 replacement rate. Most are far below it.',
+            'source': 'Eurostat 2024, Statistics Korea, China NBS, Japan MHLW, World Bank',
+            'position': 'after_heading_The Arithmetic of Extinction',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart1');
+const labels=['South Korea','Hong Kong','Taiwan','Singapore','China','Japan','Spain','Italy','Poland','Greece','Germany','UK','France','Replacement'];
+const vals=[0.72,0.77,0.87,0.97,1.02,1.20,1.19,1.24,1.29,1.30,1.35,1.49,1.68,2.1];
+const colors=vals.map((v,i)=>i===labels.length-1?C.green:v<1.0?C.accent:v<1.5?C.amber:C.blue);
+new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'TFR',data:vals,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
+annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,4],label:{display:true,content:'Replacement: 2.1',position:'end',backgroundColor:C.green,color:'#fff',font:{size:11}}}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,title:{display:true,text:'Children per woman',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart2', 'figure_num': 2,
+            'title': 'European and East Asian Share of World Population, 1800–2100',
+            'desc': 'The populations that built the modern world are shrinking from over 40% of humanity to under 15%.',
+            'source': 'UN Population Division 2024, Maddison Project Database 2020',
+            'position': 'after_para_26',
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart2');
+const yrs=[1800,1850,1900,1950,1970,2000,2025,2050,2075,2100];
+const europe=[20.5,21.8,24.7,21.6,17.8,12.0,9.2,7.4,6.1,5.1];
+const eastAsia=[28.4,28.0,24.0,24.5,23.9,22.8,20.0,16.2,13.0,10.5];
+const combined=europe.map((v,i)=>v+eastAsia[i]);
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Europe (heritage)',yrs,europe,C.blue),
+dxy('East Asia (China/Japan/Korea)',yrs,eastAsia,C.accent),
+dxy('Combined',yrs,combined,C.purple,[6,4])
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
+annotation:{annotations:{proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}}},
+scales:{x:linX(1800,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of world population',color:C.dim},min:0,max:55}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart3', 'figure_num': 3,
+            'title': 'Population Trajectories 2025–2100 (Indexed: 2025 = 100)',
+            'desc': 'The scissors: builder populations shrink while sub-Saharan Africa doubles.',
+            'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
+            'position': 'after_para_30',
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart3');
+const yrs=[2025,2035,2050,2065,2080,2100];
+const europe=[100,97,90,82,75,68];
+const china=[100,96,84,70,60,52];
+const japan=[100,94,83,72,63,56];
+const skorea=[100,95,80,64,52,42];
+const ssafrica=[100,128,172,222,270,315];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Europe',yrs,europe,C.blue),
+dxy('China',yrs,china,C.accent),
+dxy('Japan',yrs,japan,C.purple),
+dxy('South Korea',yrs,skorea,C.amber),
+dxy('Sub-Saharan Africa',yrs,ssafrica,C.green)
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+' (index)'}},
+annotation:{annotations:{baseline:{type:'line',yMin:100,yMax:100,borderColor:C.dim,borderWidth:1,borderDash:[4,4]}}}},
+scales:{x:linX(2025,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Population index (2025 = 100)',color:C.dim},min:0,max:340}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart4', 'figure_num': 4,
+            'title': 'South Africa: Eskom Load-Shedding Hours per Year, 2007–2024',
+            'desc': 'From zero load-shedding to over 6,500 hours — the collapse of a First World power grid.',
+            'source': 'CSIR South Africa, Eskom Annual Reports',
+            'position': 'after_para_40',
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart4');
+const yrs=['2007','2008','2014','2015','2018','2019','2020','2021','2022','2023','2024'];
+const hrs=[0,600,100,850,150,530,860,1100,2500,6600,2900];
+new Chart(ctx,{type:'bar',data:{labels:yrs,datasets:[{label:'Load-shedding hours',data:hrs,
+backgroundColor:hrs.map(v=>v>2000?C.accent:v>500?C.amber:C.blue),borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw.toLocaleString()+' hours'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v.toLocaleString()+'h'},title:{display:true,text:'Total load-shedding hours',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart5', 'figure_num': 5,
+            'title': 'South Africa: GDP Per Capita (Constant 2015 USD), 1994–2024',
+            'desc': 'Thirty years after transition, GDP per capita has declined since 2011.',
+            'source': 'World Bank, World Development Indicators',
+            'position': 'after_para_43',
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart5');
+const yrs=[1994,1996,1998,2000,2002,2004,2006,2008,2010,2011,2012,2014,2016,2018,2020,2022,2024];
+const gdp=[5400,5500,5500,5600,5700,5900,6300,6600,6800,7000,6950,6850,6700,6650,5900,6200,6100];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('GDP per capita (const. 2015 USD)',yrs,gdp,C.accent)
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.parsed.y.toLocaleString()}},
+annotation:{annotations:{peak:{type:'point',xValue:2011,yValue:7000,backgroundColor:C.accent,radius:6,borderColor:'#fff',borderWidth:2},
+peakLabel:{type:'label',xValue:2011,yValue:7350,content:'Peak: $7,000 (2011)',color:C.accent,font:{size:11,weight:'bold'}}}}},
+scales:{x:linX(1994,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v.toLocaleString()},title:{display:true,text:'GDP per capita (constant 2015 USD)',color:C.dim},min:5000,max:7500}}}});
+})();"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):
