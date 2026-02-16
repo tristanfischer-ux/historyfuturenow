@@ -5,26 +5,39 @@ alwaysApply: true
 
 # Auto-Deploy After Task Completion
 
-This is a static website hosted on GitHub Pages. Deploying is low risk.
+This is a static website hosted on Vercel. Deploying is low risk.
 
 ## Rule
 
 After completing any task that changes site content or build output:
 
+```bash
+./scripts/deploy.sh "feat: description of changes"
+```
+
+This single command: builds the site, commits, pushes to git, deploys to Vercel production, verifies the site, and logs the deployment.
+
+### Manual steps (if not using the script):
+
 1. Run the build: `cd hfn-build-system && python build.py`
 2. Stage all changes: `git add .`
 3. Commit with a descriptive message
 4. Push to main: `git push origin main`
-5. GitHub Actions deploys `hfn-site-output/` to GitHub Pages automatically
+5. Deploy to Vercel: `cd hfn-site-output && vercel --prod --yes`
+
+## Important
+
+- The domain `www.historyfuturenow.com` is served by **Vercel**, not GitHub Pages
+- `git push` alone does NOT deploy to the live site — you MUST run `vercel --prod`
+- The deploy script handles both git push and Vercel deploy
 
 ## Why
 
 - Static HTML — no server, no database, no runtime errors
-- GitHub Pages deployment is atomic and instant-rollback
-- Pushing to `main` triggers the deploy via `.github/workflows/deploy.yml`
-- Don't wait for permission. Just build, commit, push, and verify.
+- Vercel deployment is atomic and instant-rollback
+- Don't wait for permission. Just build, commit, push, deploy, and verify.
 
 ## After Deploying
 
-- Verify the site loads at the production URL
-- Log the deployment to `~/.memory/daily/YYYY-MM-DD.md`
+- Verify the site loads at https://www.historyfuturenow.com
+- The deploy script auto-logs to `~/.memory/daily/YYYY-MM-DD.md`
