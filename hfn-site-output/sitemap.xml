@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.historyfuturenow.com/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://www.historyfuturenow.com/listen</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://www.historyfuturenow.com/library</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://www.historyfuturenow.com/natural-resources</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://www.historyfuturenow.com/balance-of-power</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
   <url><loc>https://www.historyfuturenow.com/jobs-economy</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
