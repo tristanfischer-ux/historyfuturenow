@@ -1,18 +1,18 @@
 ---
 title: >-
-  The Gates of Nations: How Every Civilisation in History Controlled
-  Immigration — Until the West Stopped
+ The Gates of Nations: How Every Civilisation in History Controlled
+ Immigration — Until the West Stopped
 date: "2026-02-16"
 slug: >-
-  the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped
+ the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped
 part: Society
 excerpt: >-
-  For five thousand years, every successful civilisation tightly controlled who
-  could enter, settle, and become a citizen. Then, in the space of a single
-  generation, the West decided this was bigotry. The historical record suggests
-  the experiment will not end well.
+ For five thousand years, every successful civilisation tightly controlled who
+ could enter, settle, and become a citizen. Then, in the space of a single
+ generation, the West decided this was bigotry. The historical record suggests
+ the experiment will not end well.
 share_summary: >-
-  Every civilisation in history controlled immigration. The West's open-borders experiment is historically unprecedented — and the data is not encouraging.
+ Every civilisation in history controlled immigration. The West's open-borders experiment is historically unprecedented — and the data is not encouraging.
 ---
 # The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped
 
@@ -32,29 +32,29 @@ The historical norm is not merely border control. It is active hostility to unco
 
 ### Sumer and Egypt: The First Border States
 
-The earliest civilisations for which we have records — Sumer, Egypt, Akkad — all maintained strict distinctions between citizens and foreigners. The Sumerian city-states (c. 3500–2000 BC) had specific legal categories for non-citizens, who were barred from owning land, holding office, or participating in religious rites (Kramer, 1963). Egypt's Middle Kingdom (c. 2055–1650 BC) maintained a network of fortresses along the Nubian border specifically to control the movement of peoples. The *Semna Dispatches*, administrative documents from these border posts, record the meticulous tracking of every foreigner who crossed — their name, origin, purpose, and expected departure date (Spalinger, 2005).
+The earliest civilisations for which we have records — Sumer, Egypt, Akkad — all maintained strict distinctions between citizens and foreigners. The Sumerian city-states (c. 3500–2000 BC) had specific legal categories for non-citizens, who were barred from owning land, holding office, or participating in religious rites. Egypt's Middle Kingdom (c. 2055–1650 BC) maintained a network of fortresses along the Nubian border specifically to control the movement of peoples. The *Semna Dispatches*, administrative documents from these border posts, record the meticulous tracking of every foreigner who crossed — their name, origin, purpose, and expected departure date.
 
 This was not xenophobia in the modern sense. It was statecraft. These civilisations understood something that modern policymakers have chosen to forget: that the character of a state is determined by the character of its people, and that changing the people changes the state.
 
 ### Athens: Democracy for Athenians Only
 
-Athens, the civilisation most often invoked as the ancestor of Western liberal values, had immigration policies that would make a modern populist blush. Under Pericles' citizenship law of 451 BC, only those born to two Athenian parents could be citizens (Hansen, 1991). Foreigners who lived and worked in Athens — the *metics* — paid a special tax, could not own land, could not vote, could not hold office, and could not marry Athenian citizens without special dispensation. Aristotle, who lived in Athens for most of his adult life, was a metic. So was Hippocrates.
+Athens, the civilisation most often invoked as the ancestor of Western liberal values, had immigration policies that would make a modern populist blush. Under Pericles' citizenship law of 451 BC, only those born to two Athenian parents could be citizens. Foreigners who lived and worked in Athens — the *metics* — paid a special tax, could not own land, could not vote, could not hold office, and could not marry Athenian citizens without special dispensation. Aristotle, who lived in Athens for most of his adult life, was a metic. So was Hippocrates.
 
 The Athenians did not consider this unjust. They considered it obvious. Citizenship was not a right conferred by geography. It was an inheritance conferred by blood and culture. The *polis* was not a service provider. It was a community of shared identity, shared gods, and shared obligations.
 
 ### China: The Wall as National Philosophy
 
-China's approach to immigration is perhaps the most instructive, because it was the most sustained and the most successful. From the Qin Dynasty's first unification of the northern walls (c. 221 BC) through the Ming Dynasty's massive reconstruction (1368–1644), the Great Wall was not merely a military fortification. It was a philosophical statement: civilisation ends here. Beyond this line are barbarians (Waldron, 1990).
+China's approach to immigration is perhaps the most instructive, because it was the most sustained and the most successful. From the Qin Dynasty's first unification of the northern walls (c. 221 BC) through the Ming Dynasty's massive reconstruction (1368–1644), the Great Wall was not merely a military fortification. It was a philosophical statement: civilisation ends here. Beyond this line are barbarians.
 
-The Chinese did not build the Wall because they were ignorant of the peoples beyond it. They built it because they knew them intimately. The steppe nomads — Xiongnu, Turkic, Mongol — were militarily formidable, culturally alien, and, when admitted in large numbers, politically destabilising. The periods when the Wall was neglected or the borders were porous — the late Han, the late Tang, the late Song — were precisely the periods when China was conquered or fragmented by peoples from beyond it (Barfield, 1989).
+The Chinese did not build the Wall because they were ignorant of the peoples beyond it. They built it because they knew them intimately. The steppe nomads — Xiongnu, Turkic, Mongol — were militarily formidable, culturally alien, and, when admitted in large numbers, politically destabilising. The periods when the Wall was neglected or the borders were porous — the late Han, the late Tang, the late Song — were precisely the periods when China was conquered or fragmented by peoples from beyond it.
 
 The lesson was not lost on subsequent dynasties. The Ming, having expelled the Mongol Yuan Dynasty, rebuilt the Wall with a thoroughness that bordered on obsession. They were not building against a specific threat. They were building against the *principle* of uncontrolled entry.
 
 ### Japan: The Closed Country
 
-Japan's *sakoku* policy (1633–1853) represents the most extreme version of immigration control in recorded history. For over two hundred years, no foreigner could enter Japan and no Japanese could leave, on pain of death. Foreign trade was restricted to a single artificial island in Nagasaki harbour, where a handful of Dutch merchants were permitted to operate under suffocating restrictions (Toby, 1984).
+Japan's *sakoku* policy (1633–1853) represents the most extreme version of immigration control in recorded history. For over two hundred years, no foreigner could enter Japan and no Japanese could leave, on pain of death. Foreign trade was restricted to a single artificial island in Nagasaki harbour, where a handful of Dutch merchants were permitted to operate under suffocating restrictions.
 
-The result was not stagnation. It was one of the most remarkable periods of cultural flowering in Japanese history. The Edo period produced kabuki, ukiyo-e, haiku, the tea ceremony in its mature form, and a level of urban sophistication that astonished the first Western visitors when the country was forcibly opened in the 1850s. Japan's population was literate, healthy, and culturally cohesive to a degree unmatched anywhere in the contemporary world (Jansen, 2000).
+The result was not stagnation. It was one of the most remarkable periods of cultural flowering in Japanese history. The Edo period produced kabuki, ukiyo-e, haiku, the tea ceremony in its mature form, and a level of urban sophistication that astonished the first Western visitors when the country was forcibly opened in the 1850s. Japan's population was literate, healthy, and culturally cohesive to a degree unmatched anywhere in the contemporary world.
 
 The *sakoku* policy was extreme. But it demonstrated something important: a society that controls its borders controls its destiny. Japan emerged from two centuries of isolation as the most culturally unified nation on earth, and within fifty years of opening had industrialised faster than any country in history.
 
@@ -64,15 +64,15 @@ No civilisation's experience with immigration is more relevant to the modern Wes
 
 ### The Early Republic: Citizenship as Fortress
 
-Early Rome was ferociously exclusive. Citizenship was restricted to freeborn Romans. The *ius civitatis* — the right of citizenship — was the most jealously guarded privilege in the ancient world. It conferred legal protections, voting rights, access to public land, and exemption from certain taxes and punishments. It could not be bought. It could only be inherited or, in rare cases, granted by the Senate for extraordinary service (Sherwin-White, 1973).
+Early Rome was ferociously exclusive. Citizenship was restricted to freeborn Romans. The *ius civitatis* — the right of citizenship — was the most jealously guarded privilege in the ancient world. It conferred legal protections, voting rights, access to public land, and exemption from certain taxes and punishments. It could not be bought. It could only be inherited or, in rare cases, granted by the Senate for extraordinary service.
 
 Rome's Italian allies fought a war — the Social War of 91–88 BC — specifically to obtain Roman citizenship. The fact that they had to fight a war to get it tells you everything about how Rome valued it.
 
 ### The Turning Point: Universal Citizenship
 
-In AD 212, the Emperor Caracalla issued the *Constitutio Antoniniana*, granting Roman citizenship to virtually all free inhabitants of the empire. The stated reason was administrative convenience and tax revenue. The actual effect was to render citizenship meaningless. If everyone is a citizen, no one is (Ando, 2012).
+In AD 212, the Emperor Caracalla issued the *Constitutio Antoniniana*, granting Roman citizenship to virtually all free inhabitants of the empire. The stated reason was administrative convenience and tax revenue. The actual effect was to render citizenship meaningless. If everyone is a citizen, no one is.
 
-Within two generations, the Roman army was predominantly staffed by Germanic *foederati* — barbarian soldiers serving under their own commanders, loyal to their own chiefs, fighting for Roman pay but not for Roman identity. By the fifth century, the distinction between Roman and barbarian had become so blurred that the "fall" of Rome in 476 was less a conquest than a change of management. Odoacer, the Germanic chieftain who deposed the last Western emperor, had been a Roman general (Heather, 2006).
+Within two generations, the Roman army was predominantly staffed by Germanic *foederati* — barbarian soldiers serving under their own commanders, loyal to their own chiefs, fighting for Roman pay but not for Roman identity. By the fifth century, the distinction between Roman and barbarian had become so blurred that the "fall" of Rome in 476 was less a conquest than a change of management. Odoacer, the Germanic chieftain who deposed the last Western emperor, had been a Roman general.
 
 The parallel with modern Western citizenship — increasingly detached from cultural identity, increasingly a matter of paperwork rather than belonging — is uncomfortable and precise.
 
@@ -82,9 +82,9 @@ The current Western approach to immigration is not the product of centuries of l
 
 ### The United States: From Restriction to Revolution
 
-The United States, often presented as a "nation of immigrants," was for most of its history a nation of *selected* immigrants. The Naturalization Act of 1790 restricted citizenship to "free white persons of good character." The Chinese Exclusion Act of 1882 banned Chinese immigration entirely. The Immigration Act of 1924 established national-origin quotas designed to preserve the existing ethnic composition of the country — overwhelmingly Northern European (Daniels, 2004).
+The United States, often presented as a "nation of immigrants," was for most of its history a nation of *selected* immigrants. The Naturalization Act of 1790 restricted citizenship to "free white persons of good character." The Chinese Exclusion Act of 1882 banned Chinese immigration entirely. The Immigration Act of 1924 established national-origin quotas designed to preserve the existing ethnic composition of the country — overwhelmingly Northern European.
 
-This changed with the Hart-Celler Act of 1965, which abolished national-origin quotas and replaced them with a system based on family reunification and skills. The Act's sponsors explicitly promised it would not change the ethnic composition of the country. Senator Ted Kennedy declared: "The bill will not flood our cities with immigrants. It will not upset the ethnic mix of our society." He was wrong on both counts. The foreign-born share of the US population has risen from 4.7% in 1970 to over 14% today — the highest level in over a century (Migration Policy Institute, 2024).
+This changed with the Hart-Celler Act of 1965, which abolished national-origin quotas and replaced them with a system based on family reunification and skills. The Act's sponsors explicitly promised it would not change the ethnic composition of the country. Senator Ted Kennedy declared: "The bill will not flood our cities with immigrants. It will not upset the ethnic mix of our society." He was wrong on both counts. The foreign-born share of the US population has risen from 4.7% in 1970 to over 14% today — the highest level in over a century.
 
 ### Europe: The Post-War Labour Bargain
 
@@ -92,7 +92,7 @@ Europe's transformation was different in mechanism but identical in outcome. Pos
 
 They did not go home.
 
-Germany's Turkish *Gastarbeiter* population, recruited from the 1960s, has grown to over three million. Britain's Commonwealth immigration, initially from the Caribbean and later from South Asia, has transformed the demographics of every major English city. France's North African population, concentrated in the *banlieues*, has created what the French themselves call "territories lost to the Republic" (Caldwell, 2009).
+Germany's Turkish *Gastarbeiter* population, recruited from the 1960s, has grown to over three million. Britain's Commonwealth immigration, initially from the Caribbean and later from South Asia, has transformed the demographics of every major English city. France's North African population, concentrated in the *banlieues*, has created what the French themselves call "territories lost to the Republic".
 
 In every case, the pattern is the same: temporary labour migration became permanent settlement, which became family reunification, which became community formation, which became a demographic and political fact that no government could reverse without measures no democracy would tolerate.
 
@@ -100,11 +100,11 @@ In every case, the pattern is the same: temporary labour migration became perman
 
 Perhaps the most striking feature of Western immigration policy is the persistent gap between what governments do and what citizens want. This is not a recent phenomenon. It has been a constant for over fifty years.
 
-In Britain, every major survey since the 1960s has shown that a majority of the public wants immigration reduced. Ipsos MORI's long-running tracker shows that immigration has been named as one of the top issues facing the country in every survey since 2001, and "too much immigration" has been the majority view for as long as the question has been asked (Ipsos, 2024). The 2016 Brexit vote was, at its core, a vote about immigration — and it was won by the side that promised to reduce it.
+In Britain, every major survey since the 1960s has shown that a majority of the public wants immigration reduced. Ipsos MORI's long-running tracker shows that immigration has been named as one of the top issues facing the country in every survey since 2001, and "too much immigration" has been the majority view for as long as the question has been asked. The 2016 Brexit vote was, at its core, a vote about immigration — and it was won by the side that promised to reduce it.
 
-In the United States, Gallup polling shows that the percentage of Americans who want immigration decreased has exceeded those who want it increased in every year since 1965 — the very year the Hart-Celler Act was passed. As of 2024, 55% of Americans want immigration reduced, versus 16% who want it increased (Gallup, 2024).
+In the United States, Gallup polling shows that the percentage of Americans who want immigration decreased has exceeded those who want it increased in every year since 1965 — the very year the Hart-Celler Act was passed. As of 2024, 55% of Americans want immigration reduced, versus 16% who want it increased.
 
-In Germany, the *Willkommenskultur* of 2015 evaporated within months. By 2016, Merkel's approval ratings had collapsed, and the anti-immigration Alternative for Germany (AfD) had become the country's third-largest party. By 2024, it was polling as the second-largest (Infratest dimap, 2024).
+In Germany, the *Willkommenskultur* of 2015 evaporated within months. By 2016, Merkel's approval ratings had collapsed, and the anti-immigration Alternative for Germany (AfD) had become the country's third-largest party. By 2024, it was polling as the second-largest.
 
 The pattern is universal across the Western world: governments pursue high immigration; publics oppose it; governments ignore the opposition; populist parties emerge; mainstream parties belatedly adopt restrictionist rhetoric while changing little in practice.
 
@@ -114,9 +114,9 @@ The debate about immigration is often conducted in moral terms — compassion ve
 
 ### The Integration Problem
 
-The assumption underlying Western immigration policy is that immigrants will integrate — adopt the language, values, and civic habits of the host society within a generation or two. For some groups, this has been broadly true. East Asian immigrants to the United States, for example, outperform the native-born population on virtually every measure within a single generation (Pew Research Center, 2024).
+The assumption underlying Western immigration policy is that immigrants will integrate — adopt the language, values, and civic habits of the host society within a generation or two. For some groups, this has been broadly true. East Asian immigrants to the United States, for example, outperform the native-born population on virtually every measure within a single generation.
 
-For other groups, the picture is starkly different. In France, third-generation North African immigrants still have unemployment rates roughly double the national average. In Sweden, immigrants from Somalia, Afghanistan, and Iraq have employment rates below 40% after ten years of residence. In Germany, Turkish-origin residents in the third generation still show significant gaps in educational attainment and labour-force participation (OECD, 2023).
+For other groups, the picture is starkly different. In France, third-generation North African immigrants still have unemployment rates roughly double the national average. In Sweden, immigrants from Somalia, Afghanistan, and Iraq have employment rates below 40% after ten years of residence. In Germany, Turkish-origin residents in the third generation still show significant gaps in educational attainment and labour-force participation.
 
 These are not failures of individual effort. They are structural patterns that persist across generations, and they suggest that the assumption of automatic integration is, for certain origin-destination combinations, simply wrong.
 
@@ -130,9 +130,9 @@ The pattern is consistent: immigration from culturally and economically similar 
 
 ### The Social Trust Problem
 
-Perhaps the most consequential finding in the immigration literature is Robert Putnam's discovery that ethnic diversity reduces social trust — not just between groups, but *within* groups. In diverse communities, people of all ethnicities trust their neighbours less, participate less in civic life, and report lower life satisfaction (Putnam, 2007).
+Perhaps the most consequential finding in the immigration literature is Robert Putnam's discovery that ethnic diversity reduces social trust — not just between groups, but *within* groups. In diverse communities, people of all ethnicities trust their neighbours less, participate less in civic life, and report lower life satisfaction.
 
-Putnam, a liberal academic who spent years trying to find a way to present his findings positively, eventually concluded that diversity's negative effects on social cohesion were real, significant, and not easily remedied by policy interventions. His finding has been replicated across multiple countries and contexts (Dinesen & Sønderskov, 2015; Schaeffer, 2014).
+Putnam, a liberal academic who spent years trying to find a way to present his findings positively, eventually concluded that diversity's negative effects on social cohesion were real, significant, and not easily remedied by policy interventions. His finding has been replicated across multiple countries and contexts.
 
 This does not mean diversity is always bad. It means that rapid, large-scale demographic change imposes real costs on social cohesion that policymakers have consistently refused to acknowledge.
 

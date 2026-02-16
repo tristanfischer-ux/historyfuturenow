@@ -1,26 +1,26 @@
 ---
 title: >-
-  The New Literacy: How AI Is Killing The Scribes
-  And What Happens Next
+ The New Literacy: How AI Is Killing The Scribes
+ And What Happens Next
 date: "2026-02-16"
 url: >-
-  https://www.historyfuturenow.com/part-3-jobs-and-the-economy/the-new-literacy
+ https://www.historyfuturenow.com/part-3-jobs-and-the-economy/the-new-literacy
 image: "/images/articles/the-new-literacy/hero.png"
 type: article
 part: Jobs & Economy
 slug: >-
-  the-new-literacy
+ the-new-literacy
 excerpt: >-
-  For five thousand years, if you could not write, you hired a scribe.
-  If you could not code, you hired a developer. AI has just made
-  everyone literate in the digital scribal arts — coding, design,
-  filmmaking, marketing — in months, not decades. The middlemen are
-  disappearing and a flourishing has begun. But history shows what
-  comes after the flourishing: dependency and atrophy. The question
-  is how long the golden age lasts.
+ For five thousand years, if you could not write, you hired a scribe.
+ If you could not code, you hired a developer. AI has just made
+ everyone literate in the digital scribal arts — coding, design,
+ filmmaking, marketing — in months, not decades. The middlemen are
+ disappearing and a flourishing has begun. But history shows what
+ comes after the flourishing: dependency and atrophy. The question
+ is how long the golden age lasts.
 share_summary: >-
-  AI is doing to coders what the printing press did to scribes.
-  The flourishing has begun — but dependency always follows.
+ AI is doing to coders what the printing press did to scribes.
+ The flourishing has begun — but dependency always follows.
 signal: ''
 ---
 # The New Literacy: How AI Is Killing The Scribes And What Happens Next
@@ -35,9 +35,9 @@ This article argues that artificial intelligence is doing to the digital scribal
 
 ## The Scribes' Monopoly: Five Thousand Years of Cognitive Middlemen
 
-Writing was invented in Sumer around 3200 BCE, not for poetry or philosophy but for accounting — recording grain stores, tax payments, and livestock inventories (Schmandt-Besserat, 1996). For its first two and a half millennia, writing remained the exclusive property of a tiny caste. Literacy rates in ancient Mesopotamia, Egypt, and the early civilisations of the Indus Valley and China are estimated at well below one per cent of the population (Harris, 1989). The scribes were not merely useful; they were indispensable. Every contract, every law, every religious text, every diplomatic letter, every tax record — all passed through their hands.
+Writing was invented in Sumer around 3200 BCE, not for poetry or philosophy but for accounting — recording grain stores, tax payments, and livestock inventories. For its first two and a half millennia, writing remained the exclusive property of a tiny caste. Literacy rates in ancient Mesopotamia, Egypt, and the early civilisations of the Indus Valley and China are estimated at well below one per cent of the population. The scribes were not merely useful; they were indispensable. Every contract, every law, every religious text, every diplomatic letter, every tax record — all passed through their hands.
 
-This gave scribes extraordinary power. In Egypt, the scribal profession became a gateway to the priesthood and the bureaucracy. The *Satire of the Trades*, a Middle Kingdom text from around 1900 BCE, describes every other occupation as miserable — the soldier is beaten, the farmer is exhausted, the washerman stinks — while the scribe sits in comfort and commands respect (Lichtheim, 1973). "Be a scribe," the text urges, "for it frees you from toil." The scribes did not merely record the will of the powerful; they shaped it. If you could not read a contract, you could not verify its terms. If you could not write a petition, you could not seek justice. The scribes were the interface between the individual and every institution that mattered.
+This gave scribes extraordinary power. In Egypt, the scribal profession became a gateway to the priesthood and the bureaucracy. The *Satire of the Trades*, a Middle Kingdom text from around 1900 BCE, describes every other occupation as miserable — the soldier is beaten, the farmer is exhausted, the washerman stinks — while the scribe sits in comfort and commands respect. "Be a scribe," the text urges, "for it frees you from toil." The scribes did not merely record the will of the powerful; they shaped it. If you could not read a contract, you could not verify its terms. If you could not write a petition, you could not seek justice. The scribes were the interface between the individual and every institution that mattered.
 
 This dynamic — the individual separated from their own intentions by a specialist intermediary — persisted for millennia. It is the fundamental condition of pre-literate society, and it lasted far longer than most people realise.
 
@@ -45,11 +45,11 @@ This dynamic — the individual separated from their own intentions by a special
 
 Three innovations, spread across three millennia, progressively demolished the scribes' monopoly.
 
-**The first was the alphabet.** Around 1050 BCE, the Phoenicians developed a writing system of roughly twenty-two consonantal signs — a radical simplification from the hundreds of cuneiform characters or Egyptian hieroglyphs that had previously required years of memorisation (Havelock, 1982). The Phoenician alphabet was not invented for literature; it was invented for trade. Merchants needed a writing system simple enough that they could learn it themselves, without years of scribal training. The Greeks adopted and expanded this system around 800 BCE, adding vowels and creating the first fully phonetic alphabet.
+**The first was the alphabet.** Around 1050 BCE, the Phoenicians developed a writing system of roughly twenty-two consonantal signs — a radical simplification from the hundreds of cuneiform characters or Egyptian hieroglyphs that had previously required years of memorisation. The Phoenician alphabet was not invented for literature; it was invented for trade. Merchants needed a writing system simple enough that they could learn it themselves, without years of scribal training. The Greeks adopted and expanded this system around 800 BCE, adding vowels and creating the first fully phonetic alphabet.
 
-The consequences were revolutionary. Within two centuries, Greek literacy rates rose to an estimated ten to fifteen per cent of adult males — low by modern standards, but a tenfold increase over anything the ancient Near East had achieved (Harris, 1989). This wider literacy enabled philosophy (Socrates could assume literate interlocutors), drama (audiences could follow complex written plots), history (Herodotus and Thucydides wrote for readers, not listeners), and — most consequentially — democracy. The Athenian Assembly, with its written laws, published decrees, and literate citizen-jurors, would have been impossible without the alphabet's democratisation of writing. The scribes did not disappear overnight, but their monopoly was broken. Ordinary citizens could, for the first time, read the laws that governed them and write the arguments that shaped them.
+The consequences were revolutionary. Within two centuries, Greek literacy rates rose to an estimated ten to fifteen per cent of adult males — low by modern standards, but a tenfold increase over anything the ancient Near East had achieved. This wider literacy enabled philosophy (Socrates could assume literate interlocutors), drama (audiences could follow complex written plots), history (Herodotus and Thucydides wrote for readers, not listeners), and — most consequentially — democracy. The Athenian Assembly, with its written laws, published decrees, and literate citizen-jurors, would have been impossible without the alphabet's democratisation of writing. The scribes did not disappear overnight, but their monopoly was broken. Ordinary citizens could, for the first time, read the laws that governed them and write the arguments that shaped them.
 
-**The second revolution was the printing press.** When Johannes Gutenberg printed his Bible around 1440, a handwritten book cost roughly the same as a small house. Within fifty years, the cost of a printed book had fallen by eighty per cent (Eisenstein, 1979). Within a century, there were an estimated twenty million volumes in circulation in Europe. The monastic copyists — the medieval equivalents of the Sumerian scribes — were destroyed as a profession. But what replaced them was immeasurably greater: the Reformation, the Scientific Revolution, the Enlightenment, the novel, the newspaper, the political pamphlet, and the written constitution. Martin Luther's Ninety-Five Theses mattered not because they were written, but because the printing press ensured that everyone could read them. European literacy rates climbed from roughly five to ten per cent in 1400 to over fifty per cent by 1800 and above ninety-five per cent by 1950 (Our World in Data, 2023).
+**The second revolution was the printing press.** When Johannes Gutenberg printed his Bible around 1440, a handwritten book cost roughly the same as a small house. Within fifty years, the cost of a printed book had fallen by eighty per cent. Within a century, there were an estimated twenty million volumes in circulation in Europe. The monastic copyists — the medieval equivalents of the Sumerian scribes — were destroyed as a profession. But what replaced them was immeasurably greater: the Reformation, the Scientific Revolution, the Enlightenment, the novel, the newspaper, the political pamphlet, and the written constitution. Martin Luther's Ninety-Five Theses mattered not because they were written, but because the printing press ensured that everyone could read them. European literacy rates climbed from roughly five to ten per cent in 1400 to over fifty per cent by 1800 and above ninety-five per cent by 1950.
 
 The pattern was unmistakable: **the middlemen lost their livelihoods, but humanity gained its voice.**
 
@@ -63,9 +63,9 @@ Yet even as traditional literacy became universal, a new scribal class was formi
 
 The digital revolution created an entirely new medium — software — that was as opaque to the average person as cuneiform had been to the Sumerian merchant. If you wanted a website in 1995, you hired a developer. If you wanted a mobile app in 2010, you hired a development team. If you wanted a brand identity, you hired a designer. If you wanted a video advertisement, you hired a production company. If you wanted a marketing strategy, you hired an agency. The tools existed, but they required years of specialist training to use — just as cuneiform had required years of scribal education.
 
-The numbers are striking. As of 2024, roughly 28 million people worldwide could write production-quality software — approximately 0.35 per cent of the global population (Evans Data Corporation, 2024). This is remarkably close to the literacy rates of ancient Mesopotamia. The remaining 99.65 per cent of humanity could no more build an application than a Bronze Age farmer could compose a legal contract.
+The numbers are striking. As of 2024, roughly 28 million people worldwide could write production-quality software — approximately 0.35 per cent of the global population. This is remarkably close to the literacy rates of ancient Mesopotamia. The remaining 99.65 per cent of humanity could no more build an application than a Bronze Age farmer could compose a legal contract.
 
-The economic structure that emerged around this digital illiteracy was enormous. The global IT services market reached $1.24 trillion in 2024 (Statista, 2025). Creative services — design, video production, advertising, marketing — added another $600 billion. Combined, this "scribal economy" exceeded the GDP of all but a handful of nations. And the fundamental dynamic was precisely the same as it had been in Ur five thousand years ago: you had an idea in your head, you could not manifest it in the medium, you paid someone who could, and you hoped they understood what you meant.
+The economic structure that emerged around this digital illiteracy was enormous. The global IT services market reached $1.24 trillion in 2024. Creative services — design, video production, advertising, marketing — added another $600 billion. Combined, this "scribal economy" exceeded the GDP of all but a handful of nations. And the fundamental dynamic was precisely the same as it had been in Ur five thousand years ago: you had an idea in your head, you could not manifest it in the medium, you paid someone who could, and you hoped they understood what you meant.
 
 Anyone who has commissioned software development will recognise the ancient merchant's frustration. You explain your vision. The specialist interprets it through their own framework. What comes back is functional but not quite what you imagined. You request revisions. The cost escalates. The timeline extends. The specialist speaks a language you do not understand — React, APIs, databases, deployment pipelines — just as the scribe spoke a language the merchant could not verify. The "lost in translation" problem that haunted every interaction between the literate and the illiterate was alive and well in the twenty-first century.
 
@@ -73,13 +73,13 @@ Anyone who has commissioned software development will recognise the ancient merc
 
 Then, in what will likely be seen as the most consequential eighteen months since Gutenberg, the cost and skill barrier collapsed.
 
-The emergence of large language models capable of writing code — first tentatively with GitHub Copilot in 2021, then with increasing competence through 2023 and 2024, and finally with genuine autonomy in late 2025 — has reduced the barrier to software creation by roughly the same magnitude as the printing press reduced the barrier to book production. GitHub's own research found that developers using Copilot completed tasks 55 per cent faster (Kalliamvakou, 2022). But the more important finding, which emerged over the following two years, was that *non-developers* could now produce functional software at all.
+The emergence of large language models capable of writing code — first tentatively with GitHub Copilot in 2021, then with increasing competence through 2023 and 2024, and finally with genuine autonomy in late 2025 — has reduced the barrier to software creation by roughly the same magnitude as the printing press reduced the barrier to book production. GitHub's own research found that developers using Copilot completed tasks 55 per cent faster. But the more important finding, which emerged over the following two years, was that *non-developers* could now produce functional software at all.
 
-By February 2026, the landscape has shifted from incremental improvement to qualitative transformation. Agentic AI systems — models that do not merely suggest code but orchestrate entire workflows, execute multi-step tasks, and deploy functioning applications — have moved from research curiosities to production tools (Anthropic, 2025; OpenAI, 2025). A teacher can describe a classroom management tool in plain English and have a working application within hours. A small business owner can produce broadcast-quality video advertisements without an agency. A novelist can generate illustrations for their book without an illustrator. An entrepreneur can build, test, and launch a SaaS product without an engineering team.
+By February 2026, the landscape has shifted from incremental improvement to qualitative transformation. Agentic AI systems — models that do not merely suggest code but orchestrate entire workflows, execute multi-step tasks, and deploy functioning applications — have moved from research curiosities to production tools. A teacher can describe a classroom management tool in plain English and have a working application within hours. A small business owner can produce broadcast-quality video advertisements without an agency. A novelist can generate illustrations for their book without an illustrator. An entrepreneur can build, test, and launch a SaaS product without an engineering team.
 
 The parallel with Gutenberg is almost exact. The printing press did not make everyone a great writer; it made everyone capable of *producing* and *distributing* text. AI is not making everyone a great programmer; it is making everyone capable of *producing* and *deploying* software. The scribal monopoly — whether held by cuneiform specialists in 2000 BCE or React developers in 2024 — depended on the medium being inaccessible. When the medium becomes accessible, the monopoly collapses.
 
-The investment community has noticed. Global AI spending is forecast to reach $2.52 trillion in 2026, a 44 per cent increase year-on-year (IDC, 2025). Much of this investment is a bet on precisely the disintermediation described here: that individuals and small teams, equipped with AI tools, will be able to do what previously required large specialist organisations.
+The investment community has noticed. Global AI spending is forecast to reach $2.52 trillion in 2026, a 44 per cent increase year-on-year. Much of this investment is a bet on precisely the disintermediation described here: that individuals and small teams, equipped with AI tools, will be able to do what previously required large specialist organisations.
 
 Samsung's Galaxy Unpacked event on 25 February 2026 promises "effortless AI" baked into consumer devices. Apple's Siri overhaul, long rumoured, is reportedly centred on agentic capabilities — not answering questions but *doing tasks*. The India AI Impact Summit, which opened on 16 February 2026, has framed its agenda around "AI for welfare for all" — the democratisation thesis applied at the scale of a billion people.
 
@@ -113,11 +113,11 @@ Consider writing itself. The spread of mass literacy in the nineteenth and early
 
 The pattern repeats with every tool:
 
-**Calculators.** Introduced widely in the 1970s and 1980s, electronic calculators initially enhanced mathematical capability — students could tackle more complex problems, engineers could work faster. Within a generation, most people could not perform mental arithmetic that their grandparents had done routinely. A 2019 study by the National Numeracy charity found that nearly half of working-age adults in the United Kingdom had the numeracy skills of a primary school child (National Numeracy, 2019).
+**Calculators.** Introduced widely in the 1970s and 1980s, electronic calculators initially enhanced mathematical capability — students could tackle more complex problems, engineers could work faster. Within a generation, most people could not perform mental arithmetic that their grandparents had done routinely. A 2019 study by the National Numeracy charity found that nearly half of working-age adults in the United Kingdom had the numeracy skills of a primary school child.
 
-**GPS navigation.** When satellite navigation became standard in vehicles and smartphones in the 2000s, it initially empowered people to travel more confidently to unfamiliar places. Within a decade, research showed measurable atrophy in spatial cognition among heavy GPS users. A 2020 study in *Nature Communications* found that using GPS navigation consistently reduced hippocampal engagement and impaired the ability to form cognitive maps (Dahmani and Bhöhbot, 2020).
+**GPS navigation.** When satellite navigation became standard in vehicles and smartphones in the 2000s, it initially empowered people to travel more confidently to unfamiliar places. Within a decade, research showed measurable atrophy in spatial cognition among heavy GPS users. A 2020 study in *Nature Communications* found that using GPS navigation consistently reduced hippocampal engagement and impaired the ability to form cognitive maps.
 
-**Spell-checking.** Autocorrect and spell-check made professional-quality spelling accessible to everyone, regardless of natural spelling ability. Studies consistently show that reliance on spell-check correlates with declining spelling accuracy when the tool is unavailable (Lunsford and Lunsford, 2008).
+**Spell-checking.** Autocorrect and spell-check made professional-quality spelling accessible to everyone, regardless of natural spelling ability. Studies consistently show that reliance on spell-check correlates with declining spelling accuracy when the tool is unavailable.
 
 The pattern is not that the tools are bad. Each tool genuinely democratised a capability and produced a genuine flourishing. The pattern is that humans are rational: when a tool can do something for you, most people let it, and the underlying skill gradually decays. Nicholas Carr's *The Shallows* (2010) documented this tendency across multiple cognitive domains, arguing that the internet itself was rewiring our capacity for deep reading and sustained attention.
 
