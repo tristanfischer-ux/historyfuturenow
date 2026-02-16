@@ -1607,16 +1607,15 @@ def build_listen_page(essays):
 
 def build_library():
     """Build the /library page — an intellectual map of the reading behind HFN."""
-    from library_data import THEMES, PHASES, FINGERPRINT, INTRO_ESSAY, BOOKS, get_books_by_theme, get_books_by_year, get_library_stats
+    from library_data import THEMES, INTRO_ESSAY, BOOKS, get_books_by_theme, get_library_stats
 
     stats = get_library_stats()
     by_theme = get_books_by_theme()
-    by_year = get_books_by_year()
 
     breadcrumbs = make_breadcrumbs([('Home', '/'), ('Library', None)])
 
     # Stats bar
-    stats_html = f'''<span class="lib-stat"><strong>{stats["books"]}</strong> titles</span>
+    stats_html = f'''<span class="lib-stat"><strong>{stats["books"]}</strong> titles shown</span>
       <span class="lib-stat-sep">&middot;</span>
       <span class="lib-stat"><strong>{stats["themes"]}</strong> themes</span>
       <span class="lib-stat-sep">&middot;</span>
@@ -1627,19 +1626,16 @@ def build_library():
     for para in INTRO_ESSAY.strip().split("\n\n"):
         intro_paras += f'  <p>{html_mod.escape(para)}</p>\n'
 
-    # ── Theme cards ──
+    # ── Theme cards with books shown by default ──
     theme_cards = ""
     for tid in sorted(THEMES.keys(), key=lambda t: THEMES[t]["order"]):
         theme = THEMES[tid]
         books = by_theme.get(tid, [])
         book_items = ""
         for b in books:
-            src_label = b["source"][:3].upper()
             book_items += f'''      <div class="lib-book-item">
         <span class="lib-book-title">{html_mod.escape(b["title"])}</span>
         <span class="lib-book-author">{html_mod.escape(b["author"])}</span>
-        <span class="lib-book-year">{b["year"]}</span>
-        <span class="lib-book-source">{src_label}</span>
       </div>\n'''
 
         theme_cards += f'''    <div class="lib-theme-card" style="--theme-color:{theme["color"]}">
@@ -1651,76 +1647,14 @@ def build_library():
         </div>
       </div>
       <p class="lib-theme-desc">{theme["desc"]}</p>
-      <button class="lib-theme-toggle" aria-expanded="false">Show books &#9656;</button>
       <div class="lib-book-list">
 {book_items}      </div>
     </div>\n'''
 
-    # ── Timeline ──
-    timeline_html = ""
-    for phase in PHASES:
-        phase_years = sorted([y for y in by_year.keys() if phase["start"] <= y <= phase["end"]], reverse=True)
-        year_sections = ""
-        for y in phase_years:
-            books = by_year[y]
-            # Collect theme dots for this year
-            theme_dots = ""
-            seen_themes = set()
-            for b in books:
-                for t in b["themes"]:
-                    if t not in seen_themes and t in THEMES:
-                        seen_themes.add(t)
-                        theme_dots += f'<span class="lib-year-theme-dot" style="background:{THEMES[t]["color"]}" title="{THEMES[t]["name"]}"></span>'
-
-            book_rows = ""
-            for b in books:
-                primary = b["themes"][0] if b["themes"] else "civilisation"
-                dot_color = THEMES.get(primary, {}).get("color", "#999")
-                book_rows += f'''        <div class="lib-year-book">
-          <span class="lib-year-book-dot" style="background:{dot_color}"></span>
-          <span class="lib-year-book-title">{html_mod.escape(b["title"])}</span>
-          <span class="lib-year-book-author">{html_mod.escape(b["author"])}</span>
-        </div>\n'''
-
-            year_sections += f'''      <div class="lib-year-section">
-        <button class="lib-year-toggle" aria-expanded="false">
-          <span class="lib-year-arrow">&#9656;</span>
-          <span class="lib-year-label">{y}</span>
-          <span class="lib-year-count">{len(books)} titles</span>
-          <span class="lib-year-themes">{theme_dots}</span>
-        </button>
-        <div class="lib-year-books">
-{book_rows}        </div>
-      </div>\n'''
-
-        timeline_html += f'''    <div class="lib-phase">
-      <div class="lib-phase-header">
-        <span class="lib-phase-years">{phase["start"]}&ndash;{phase["end"]}</span>
-        <span class="lib-phase-label">{phase["label"]}</span>
-      </div>
-      <p class="lib-phase-desc">{phase["desc"]}</p>
-{year_sections}    </div>\n'''
-
-    # ── Fingerprint section ──
-    questions_html = ""
-    for q in FINGERPRINT["default_questions"]:
-        questions_html += f'    <li>{html_mod.escape(q)}</li>\n'
-
-    tensions_html = ""
-    for t in FINGERPRINT["tensions"]:
-        tensions_html += f'''    <div class="lib-tension">
-      <div class="lib-tension-name">{html_mod.escape(t["name"])}</div>
-      <div class="lib-tension-desc">{html_mod.escape(t["desc"])}</div>
-    </div>\n'''
-
-    underrep_html = ""
-    for u in FINGERPRINT["underrepresented"]:
-        underrep_html += f'    <li>{html_mod.escape(u)}</li>\n'
-
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head("The Library — History Future Now", "An intellectual map of the 300+ books behind every article. Organised by theme, traced through time.", "/library")}
+{make_head("The Library — History Future Now", "A curated selection from over 1,300 books — the intellectual inputs behind every article. Organised by theme.", "/library")}
 </head>
 <body>
 
@@ -1732,7 +1666,7 @@ def build_library():
   <div class="lib-hero-inner">
     {breadcrumbs}
     <h1 class="lib-hero-title">The Library</h1>
-    <p class="lib-hero-desc">An intellectual map of the reading behind every article on this site.</p>
+    <p class="lib-hero-desc">The intellectual inputs behind every article on this site.</p>
     <div class="lib-hero-stats">
       {stats_html}
     </div>
@@ -1744,50 +1678,12 @@ def build_library():
   <p class="lib-disclaimer">Inclusion is not endorsement. A serious reader engages with arguments they find uncomfortable. Understanding a position is not the same as agreeing with it.</p>
 </div>
 
-<div class="lib-view-toggle">
-  <div class="lib-view-toggle-inner">
-    <button class="lib-view-btn active" data-view="themes">By Theme</button>
-    <button class="lib-view-btn" data-view="timeline">By Year</button>
-  </div>
+<div class="lib-themes-wrap">
+  <div class="lib-themes-grid">
+{theme_cards}  </div>
 </div>
-
-<div class="lib-view" id="lib-themes">
-  <div class="lib-themes-wrap">
-    <div class="lib-themes-grid">
-{theme_cards}    </div>
-  </div>
-</div>
-
-<div class="lib-view" id="lib-timeline" style="display:none">
-  <div class="lib-timeline-wrap">
-{timeline_html}  </div>
-</div>
-
-<section class="lib-fingerprint">
-  <div class="lib-fingerprint-inner">
-    <div class="lib-fp-section">
-      <div class="lib-fp-subtitle">Intellectual Fingerprint</div>
-      <h2 class="lib-fp-title">The Questions This Library Trains You to Ask</h2>
-      <ul class="lib-fp-list">
-{questions_html}      </ul>
-    </div>
-
-    <div class="lib-fp-section">
-      <div class="lib-fp-subtitle">Productive Contradictions</div>
-      <h2 class="lib-fp-title">Tensions Inside the Library</h2>
-{tensions_html}    </div>
-
-    <div class="lib-fp-section">
-      <div class="lib-fp-subtitle">Honest Gaps</div>
-      <h2 class="lib-fp-title">What&rsquo;s Underrepresented</h2>
-      <ul class="lib-fp-list">
-{underrep_html}      </ul>
-    </div>
-  </div>
-</section>
 
 {make_footer()}
-<script src="/js/library.js"></script>
 </body>
 </html>'''
 

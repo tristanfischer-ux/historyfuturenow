@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 61
+Total articles: 62
 
 ## Sections
 ### Natural Resources (11 articles)
@@ -14,7 +14,7 @@ Total articles: 61
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (12 articles)
+### Jobs & Economy (13 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
@@ -239,6 +239,12 @@ Total articles: 61
 - Section: Society
 - Reading time: 30 min
 - The Covid 19 pandemic is a genuinely historical event. Future historians will analyse the period leading up to the outbreak, searching for clues about why it got so bad so quickly, will then investiga
+
+### The New Literacy: How AI Is Killing The Scribes And What Happens Next [5 charts]
+- URL: https://www.historyfuturenow.com/articles/the-new-literacy
+- Section: Jobs & Economy
+- Reading time: 16 min
+- For five thousand years, if you could not write, you hired a scribe. If you could not code, you hired a developer. AI has just made everyone literate in the digital scribal arts — coding, design, film
 
 ### The North African Threat And Mediterranean Reunification [5 charts]
 - URL: https://www.historyfuturenow.com/articles/the-north-african-threat-and-mediterranean-reunification

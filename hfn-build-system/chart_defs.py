@@ -2526,6 +2526,133 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
         },
     ]
 
+    # ── The New Literacy ───────────────────────────────────────────
+    charts['the-new-literacy'] = [
+        {
+            'id': 'newLitChart1', 'figure_num': 1,
+            'title': 'Global Literacy Rates Over Five Thousand Years',
+            'desc': 'For most of human history, fewer than five per cent of people could read or write. The alphabet, printing press, and compulsory education each triggered step-changes — AI may be triggering the next.',
+            'source': 'Our World in Data (2023); Harris, Ancient Literacy (1989); Havelock (1982); UNESCO',
+            'position': 'after_para_6',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('newLitChart1');
+const yrs=['-3000','-2500','-2000','-1500','-1000','-800','-500','-300','0','500','800','1000','1200','1400','1500','1600','1700','1800','1850','1900','1950','1980','2000','2020'];
+const rates=[0.1,0.2,0.4,0.5,0.8,1.5,3,5,5,3,4,5,6,8,9,12,18,38,45,56,80,88,93,97];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('World literacy rate (%)',yrs,rates,C.accent)
+]},options:{responsive:true,maintainAspectRatio:false,
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+title:i=>{const v=+i[0].parsed.x;return v<0?Math.abs(v)+' BCE':v+' CE'},
+label:i=>i.parsed.y+'% literate'
+}},
+annotation:{annotations:{
+alph:{type:'label',xValue:-800,yValue:12,content:['Phoenician','alphabet'],color:C.blue,font:{size:10,weight:'bold'}},
+press:{type:'line',xMin:1440,xMax:1440,yMin:0,yMax:100,borderColor:C.green,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Printing press (1440)',position:'start',color:C.green,font:{size:10}}},
+edu:{type:'line',xMin:1870,xMax:1870,yMin:0,yMax:100,borderColor:C.purple,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Compulsory education (1870s)',position:'start',color:C.purple,font:{size:10}}},
+ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'AI coding literacy? (2024)',position:'start',color:C.amber,font:{size:10}}}
+}}},
+scales:{x:{type:'linear',min:-3200,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BCE':v===0?'0':v+' CE',stepSize:500}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},min:0,max:100,title:{display:true,text:'Population literate (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'newLitChart2', 'figure_num': 2,
+            'title': 'The Cost of Creating: Specialists vs AI Tools',
+            'desc': 'AI has reduced the cost of digital creation by 80-95 per cent in under two years — a compression comparable to the printing press\'s impact on book production.',
+            'source': 'Upwork (2024); Fiverr market data; industry estimates; author analysis',
+            'position': 'after_heading:The Printing Press Moment',
+            'js': """
+(()=>{const ctx=document.getElementById('newLitChart2');
+const cats=['Custom app','Video advert','Brand identity','Marketing strategy','Book illustration'];
+const specialist=[45000,25000,8000,15000,5000];
+const aiTool=[2000,500,200,100,300];
+new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
+{label:'With specialists (2023)',data:specialist,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
+{label:'With AI tools (2026)',data:aiTool,backgroundColor:C.accent,borderRadius:3,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw;return i.dataset.label+': $'+v.toLocaleString()}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v.toLocaleString()},title:{display:true,text:'Estimated cost (USD)',color:C.dim}},
+y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+})();"""
+        },
+        {
+            'id': 'newLitChart3', 'figure_num': 3,
+            'title': 'Who Can Code? The New Literacy Curve',
+            'desc': 'Traditional developers number roughly 30 million. AI-assisted creators — people producing functional software with AI tools — are growing exponentially and may outnumber developers 10:1 by 2030.',
+            'source': 'Evans Data Corporation (2024); GitHub; Stack Overflow Developer Survey; Gartner low-code forecasts',
+            'position': 'after_para_24',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('newLitChart3');
+const yrs=['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'];
+const devs=[21,22,23,24,25,26,27,27,28,28,29,30,30,31,31,32];
+const aiCreators=[0,0,0,0,0,0,0.5,2,8,20,45,80,120,180,250,320];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Traditional developers (M)',yrs,devs,C.blue),
+dxy('AI-assisted creators (M)',yrs,aiCreators,C.accent),
+dxy('AI-assisted (projected)',['2025','2026','2027','2028','2029','2030'],[45,80,120,180,250,320],C.accent,[5,4])
+]},options:{responsive:true,maintainAspectRatio:false,
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'M people'}}},
+scales:{x:{type:'linear',min:2015,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,stepSize:2}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},min:0,title:{display:true,text:'People who can produce functional software (millions)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'newLitChart4', 'figure_num': 4,
+            'title': 'The Dependency Curve: Skill Atrophy After Tool Adoption',
+            'desc': 'Every democratised tool follows the same arc: flourishing, then dependency, then atrophy. Each successive technology compresses the cycle faster.',
+            'source': 'Author synthesis; Carr, The Shallows (2010); National Numeracy (2019); Dahmani & Bohbot (2020)',
+            'position': 'after_heading:The Dependency Question',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('newLitChart4');
+const gen=['0','1','2','3','4'];
+const writing=[30,90,85,70,60];
+const arithmetic=[50,80,60,35,30];
+const navigation=[60,85,50,30,25];
+const aiSkills=[20,95,null,null,null];
+const aiProj=[null,95,70,40,null];
+new Chart(ctx,{type:'line',data:{labels:gen,datasets:[
+{label:'Writing (post-printing press)',data:writing,borderColor:C.blue,backgroundColor:C.blue+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.blue,borderWidth:2.5},
+{label:'Mental arithmetic (post-calculator)',data:arithmetic,borderColor:C.green,backgroundColor:C.green+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.green,borderWidth:2.5},
+{label:'Navigation (post-GPS)',data:navigation,borderColor:C.purple,backgroundColor:C.purple+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.purple,borderWidth:2.5},
+{label:'AI-enabled skills (actual)',data:aiSkills,borderColor:C.accent,backgroundColor:C.accent+'18',fill:false,tension:.35,pointRadius:5,pointBackgroundColor:C.accent,borderWidth:3},
+{label:'AI-enabled skills (projected)',data:aiProj,borderColor:C.accent,backgroundColor:C.accent+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.accent,borderWidth:2.5,borderDash:[5,4]}
+]},options:{responsive:true,maintainAspectRatio:false,
+plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'/100'}},
+annotation:{annotations:{
+peak:{type:'label',xValue:1,yValue:100,content:['Flourishing','peak'],color:C.accent,font:{size:10,weight:'bold'}},
+dep:{type:'label',xValue:2.5,yValue:18,content:['Dependency','zone'],color:C.dim,font:{size:10,style:'italic'}}
+}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'Gen '+v},title:{display:true,text:'Generations after tool adoption',color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:100,title:{display:true,text:'Skill level / creative output (index)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'newLitChart5', 'figure_num': 5,
+            'title': 'The Scribal Economy Under Threat',
+            'desc': 'Over $3 trillion in global "scribal" services — specialist intermediaries between people and digital creation — face AI-driven disintermediation.',
+            'source': 'Statista (2025); McKinsey Global Institute (2023); Goldman Sachs (2023)',
+            'position': 'after_para_18',
+            'js': """
+(()=>{const ctx=document.getElementById('newLitChart5');
+const sectors=['IT services &\\nsoftware dev','Creative &\\nadvertising','Legal\\nservices','Accounting &\\nfinance','Marketing &\\nPR'];
+const sizes=[1240,620,380,340,280];
+const automatable=[65,55,45,60,70];
+new Chart(ctx,{type:'bar',data:{labels:sectors,datasets:[
+{label:'Market size ($B)',data:sizes,backgroundColor:C.blue,borderRadius:3,borderSkipped:false,yAxisID:'y'},
+{label:'% automatable by AI',data:automatable,backgroundColor:C.accent+'88',borderColor:C.accent,borderWidth:2,borderRadius:3,borderSkipped:false,yAxisID:'y1',type:'line',tension:.3,pointRadius:5,pointBackgroundColor:C.accent,fill:false}
+]},options:{responsive:true,maintainAspectRatio:false,
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{if(i.datasetIndex===0)return'Market size: $'+i.raw+'B';return'Automatable: '+i.raw+'%'}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v+'B'},title:{display:true,text:'Market size ($B)',color:C.dim},min:0,position:'left'},
+y1:{grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% automatable by AI',color:C.accent},min:0,max:100,position:'right'}
+}}});
+})();"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

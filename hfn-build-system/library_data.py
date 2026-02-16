@@ -125,7 +125,7 @@ INTRO_ESSAY = """You are what you read, in much the same way that you are what y
 
 This page is an act of radical transparency. Every article on History Future Now emerges from a specific set of readings, and here they are — not curated to flatter, but listed honestly. Some of these books are brilliant. Some are wrong. Some are both. A serious reader must engage with arguments they find uncomfortable, because understanding a position is not the same as endorsing it. You cannot critique what you have not read.
 
-What follows is a selection from a larger library of over 470 titles acquired between 2012 and 2025. They are organised by the intellectual themes they collectively reinforce — the recurring questions, tensions, and frameworks that shape the analysis on this site."""
+What follows is a curated selection from a larger library of over 1,300 titles acquired between 2012 and 2025. They are organised by the intellectual themes they collectively reinforce — the recurring questions, tensions, and frameworks that shape the analysis on this site."""
 
 # ── Book data ──
 # Each book: {"title", "author", "year", "source": "audible"|"kindle"|"physical", "themes": [list]}
