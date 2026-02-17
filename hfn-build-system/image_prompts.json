@@ -900,6 +900,36 @@
     "output_path": "images/articles/the-150-year-life-how-radical-longevity-will-transform-our-world/thumb.webp"
   },
   {
+    "slug": "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+    "title": "The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next",
+    "section": "Society",
+    "size": "hero",
+    "width": 1200,
+    "height": 675,
+    "prompt": "Editorial illustration for a serious analytical magazine about history and geopolitics. Conceptual and metaphorical, not literal or photorealistic. Bold flat shapes with clean geometric composition. Palette: muted earth tones (warm cream, deep crimson #c43425, navy blue, ochre, olive) with one or two vivid accent colours. No text, no lettering, no words, no logos in the image. Inspired by Noma Bar, Christoph Niemann, and the conceptual illustration tradition of The Economist magazine covers. Sophisticated, intellectual, slightly provocative. Suitable for a publication about historical forces shaping the future. A grand Roman aqueduct and an East Asian pagoda standing side by side, both dissolving into geometric fragments that drift rightward into empty space. An hourglass silhouette formed by the falling particles. In the foreground, a small geometric robot figure reaches upward toward the crumbling structures. Left side solid and imposing, right side fragmenting into nothing. Warm earth tones: terracotta, deep navy, ochre, sand, muted teal accent. Wide panoramic composition. Image dimensions: 1200x675 pixels.",
+    "output_path": "images/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing/hero.webp"
+  },
+  {
+    "slug": "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+    "title": "The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next",
+    "section": "Society",
+    "size": "card",
+    "width": 600,
+    "height": 400,
+    "prompt": "Editorial illustration for a serious analytical magazine about history and geopolitics. Conceptual and metaphorical, not literal or photorealistic. Bold flat shapes with clean geometric composition. Palette: muted earth tones (warm cream, deep crimson #c43425, navy blue, ochre, olive) with one or two vivid accent colours. No text, no lettering, no words, no logos in the image. Inspired by Noma Bar, Christoph Niemann, and the conceptual illustration tradition of The Economist magazine covers. Sophisticated, intellectual, slightly provocative. Suitable for a publication about historical forces shaping the future. A grand Roman aqueduct and an East Asian pagoda standing side by side, both dissolving into geometric fragments that drift rightward into empty space. An hourglass silhouette formed by the falling particles. In the foreground, a small geometric robot figure reaches upward toward the crumbling structures. Left side solid and imposing, right side fragmenting into nothing. Warm earth tones: terracotta, deep navy, ochre, sand, muted teal accent. Compact composition, clear focal point. Image dimensions: 600x400 pixels.",
+    "output_path": "images/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing/card.webp"
+  },
+  {
+    "slug": "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+    "title": "The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next",
+    "section": "Society",
+    "size": "thumb",
+    "width": 300,
+    "height": 200,
+    "prompt": "Editorial illustration for a serious analytical magazine about history and geopolitics. Conceptual and metaphorical, not literal or photorealistic. Bold flat shapes with clean geometric composition. Palette: muted earth tones (warm cream, deep crimson #c43425, navy blue, ochre, olive) with one or two vivid accent colours. No text, no lettering, no words, no logos in the image. Inspired by Noma Bar, Christoph Niemann, and the conceptual illustration tradition of The Economist magazine covers. Sophisticated, intellectual, slightly provocative. Suitable for a publication about historical forces shaping the future. A grand Roman aqueduct and an East Asian pagoda standing side by side, both dissolving into geometric fragments that drift rightward into empty space. An hourglass silhouette formed by the falling particles. In the foreground, a small geometric robot figure reaches upward toward the crumbling structures. Left side solid and imposing, right side fragmenting into nothing. Warm earth tones: terracotta, deep navy, ochre, sand, muted teal accent. Simple iconic composition, reads well at small size. Image dimensions: 300x200 pixels.",
+    "output_path": "images/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing/thumb.webp"
+  },
+  {
     "slug": "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
     "title": "The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth",
     "section": "Society",

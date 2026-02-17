@@ -293,6 +293,14 @@ ARTICLE_SUBJECTS = {
         "and knives held by distant hands. Crop fields visible on the continent's surface. "
         "A ghosted image of Ireland's famine in the corner."
     ),
+    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing": (
+        "A grand Roman aqueduct and an East Asian pagoda standing side by side, both "
+        "dissolving into geometric fragments that drift rightward into empty space. "
+        "An hourglass silhouette formed by the falling particles. In the foreground, "
+        "a small geometric robot figure reaches upward toward the crumbling structures. "
+        "Left side solid and imposing, right side fragmenting into nothing. "
+        "Warm earth tones: terracotta, deep navy, ochre, sand, muted teal accent."
+    ),
 }
 
 
