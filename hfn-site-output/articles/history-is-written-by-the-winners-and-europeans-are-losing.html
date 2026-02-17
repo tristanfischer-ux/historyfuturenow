@@ -212,20 +212,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Is Democracy The Opium Of The Masses?</span>
         <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="related-card">
+      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The 150 Year Life: How Radical Longevity Will Transform Our World</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -309,6 +309,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});

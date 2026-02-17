@@ -368,20 +368,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Are Europeans Fundamentally Racist?</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="related-card">
+      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">What Does It Take To Get Europeans To Have A Revolution?</span>
-        <span class="related-time">48 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="related-card">
+      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The 150 Year Life: How Radical Longevity Will Transform Our World</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -465,6 +465,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});

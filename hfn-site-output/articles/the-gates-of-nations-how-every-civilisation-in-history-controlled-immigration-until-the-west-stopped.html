@@ -286,19 +286,19 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
+      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
+      <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What Does It Take To Get Europeans To Have A Revolution?</span>
+        <span class="related-time">48 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
+      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
+        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
         <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
@@ -383,6 +383,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
