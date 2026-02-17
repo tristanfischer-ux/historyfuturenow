@@ -117,7 +117,7 @@ cat >> "$LOG_FILE" << ENTRY
 ENTRY
 
 # ─── Step 6: Regenerate section intros in background ─────────────────────────
-if [ -n "$ANTHROPIC_API_KEY" ]; then
+if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
     echo ""
     echo "▸ Regenerating section intros in background..."
     (
