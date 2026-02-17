@@ -1,0 +1,18 @@
+# Requirements for Qwen3-TTS voice-cloned narration generation
+#
+# Install in a clean Python 3.12 environment:
+#   conda create -n qwen3-tts python=3.12 -y
+#   conda activate qwen3-tts
+#   pip install -r requirements-qwen-tts.txt
+#
+# GPU: NVIDIA with >=6 GB VRAM (CUDA toolkit required)
+
+qwen-tts
+torch
+soundfile
+numpy
+pyyaml
+
+# Optional but strongly recommended — reduces VRAM usage significantly:
+#   pip install -U flash-attn --no-build-isolation
+# (must be installed separately due to build-time CUDA dependency)
