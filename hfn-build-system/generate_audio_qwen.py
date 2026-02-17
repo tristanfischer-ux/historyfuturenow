@@ -425,6 +425,8 @@ def generate_test_clip():
 
 
 def main():
+    global MODEL_ID
+
     parser = argparse.ArgumentParser(
         description="Generate audio narrations using Qwen3-TTS voice cloning"
     )
@@ -432,12 +434,11 @@ def main():
     parser.add_argument("--force", action="store_true", help="Regenerate even if audio exists")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be generated")
     parser.add_argument("--test", action="store_true", help="Generate a short test clip only")
-    parser.add_argument("--model", type=str, default=MODEL_ID,
+    parser.add_argument("--model", type=str, default=None,
                         help=f"HuggingFace model ID (default: {MODEL_ID})")
     args = parser.parse_args()
 
-    global MODEL_ID
-    if args.model != MODEL_ID:
+    if args.model is not None:
         MODEL_ID = args.model
 
     import shutil
