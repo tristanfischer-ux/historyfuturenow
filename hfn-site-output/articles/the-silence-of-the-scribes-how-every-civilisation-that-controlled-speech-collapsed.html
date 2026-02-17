@@ -223,20 +223,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
+      <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The 150 Year Life: How Radical Longevity Will Transform Our World</span>
+        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
         <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -321,7 +321,8 @@ const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:tr
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
-const chartPad={bottom:16,left:4,right:4,top:4};
+const chartPad={bottom:16,left:8,right:8,top:8};
+if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};

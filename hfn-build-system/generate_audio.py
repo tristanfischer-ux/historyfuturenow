@@ -46,7 +46,7 @@ def _next_gemini_key() -> str:
     _key_index += 1
     return key
 
-GEMINI_TTS_MODEL = "gemini-2.5-pro-preview-tts"
+GEMINI_TTS_MODELS = ["gemini-2.5-pro-preview-tts", "gemini-2.5-flash-preview-tts"]
 
 # Two British voices for alternating narration
 VOICE_MALE = "Puck"     # Upbeat, lively British male
@@ -56,8 +56,8 @@ ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
 AUDIO_DIR = OUTPUT_DIR / "audio"
 
-# Max chars per TTS request (Pro model needs smaller chunks)
-TTS_MAX_CHARS = 3500
+# Max chars per TTS request
+TTS_MAX_CHARS = 4500
 
 
 # ─── Text Extraction ─────────────────────────────────────────────────────────
@@ -208,15 +208,13 @@ def wav_to_mp3(wav_data: bytes) -> bytes:
     return result.stdout
 
 
-def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 8) -> bytes:
+def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 6) -> bytes:
     """Generate audio for a chunk of sections using Gemini multi-speaker TTS.
-    Returns raw PCM bytes."""
+    Tries Flash first, falls back to Pro if rate-limited. Returns raw PCM bytes."""
     lines = []
     for voice, text in chunk:
         lines.append(f"{voice}: {text}")
     formatted = "\n\n".join(lines)
-
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_TTS_MODEL}:generateContent"
 
     payload = {
         "contents": [
@@ -249,64 +247,68 @@ def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 8) -> by
     }
 
     last_error = None
-    for attempt in range(max_retries):
-        api_key = _next_gemini_key()
-        try:
-            response = requests.post(
-                url, params={"key": api_key}, json=payload, timeout=360,
-            )
-        except requests.exceptions.Timeout:
-            wait = 15 + (attempt * 10)
-            print(f"      Timeout (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-            time.sleep(wait)
-            last_error = "Timeout"
+    for model in GEMINI_TTS_MODELS:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+        model_short = "flash" if "flash" in model else "pro"
+
+        for attempt in range(max_retries):
+            api_key = _next_gemini_key()
+            try:
+                response = requests.post(
+                    url, params={"key": api_key}, json=payload, timeout=360,
+                )
+            except requests.exceptions.Timeout:
+                wait = 15 + (attempt * 10)
+                print(f"      [{model_short}] Timeout (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                time.sleep(wait)
+                last_error = "Timeout"
+                continue
+
+            if response.status_code == 429:
+                err_msg = response.json().get("error", {}).get("message", "")
+                if "per_day" in err_msg or "limit: 0" in err_msg:
+                    print(f"      [{model_short}] Daily quota exhausted, trying next model...")
+                    break  # Break inner loop to try next model
+                wait = 30 + (attempt * 30)
+                print(f"      [{model_short}] Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                time.sleep(wait)
+                last_error = "Rate limited"
+                continue
+
+            if response.status_code in (500, 503):
+                wait = 10 + (attempt * 10)
+                print(f"      [{model_short}] Server error {response.status_code} (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                time.sleep(wait)
+                last_error = f"HTTP {response.status_code}"
+                continue
+
+            if response.status_code != 200:
+                raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
+
+            data = response.json()
+            candidates = data.get("candidates", [])
+            if not candidates:
+                wait = 15 + (attempt * 10)
+                print(f"      [{model_short}] No candidates (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                time.sleep(wait)
+                last_error = "No candidates"
+                continue
+
+            inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
+            if not inline_data:
+                finish_reason = candidates[0].get("finishReason", "unknown")
+                wait = 15 + (attempt * 10)
+                print(f"      [{model_short}] No audio (finishReason={finish_reason}, attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                time.sleep(wait)
+                last_error = f"No audio (finishReason={finish_reason})"
+                continue
+
+            return base64.b64decode(inline_data.get("data", ""))
+        else:
+            # All retries exhausted for this model — try next
             continue
 
-        if response.status_code == 429:
-            wait = 30 + (attempt * 30)
-            print(f"      Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-            time.sleep(wait)
-            last_error = "Rate limited"
-            continue
-
-        if response.status_code in (500, 503):
-            wait = 10 + (attempt * 10)
-            print(f"      Server error {response.status_code} (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-            time.sleep(wait)
-            last_error = f"HTTP {response.status_code}"
-            continue
-
-        if response.status_code != 200:
-            raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
-        break
-    else:
-        raise RuntimeError(f"TTS failed after {max_retries} retries: {last_error}")
-
-    data = response.json()
-    candidates = data.get("candidates", [])
-    if not candidates:
-        # Retryable — sometimes the model returns empty candidates
-        if attempt < max_retries - 1:
-            wait = 15 + (attempt * 10)
-            print(f"      No candidates (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-            time.sleep(wait)
-            last_error = "No candidates"
-            continue
-        raise RuntimeError(f"No TTS candidates: {json.dumps(data, indent=2)[:500]}")
-
-    inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
-    if not inline_data:
-        # Retryable — Pro model sometimes returns finishReason:OTHER with no audio
-        finish_reason = candidates[0].get("finishReason", "unknown")
-        if attempt < max_retries - 1:
-            wait = 15 + (attempt * 10)
-            print(f"      No audio data (finishReason={finish_reason}, attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-            time.sleep(wait)
-            last_error = f"No audio (finishReason={finish_reason})"
-            continue
-        raise RuntimeError(f"No audio data in TTS response (finishReason={finish_reason})")
-
-    return base64.b64decode(inline_data.get("data", ""))
+    raise RuntimeError(f"TTS failed on all models after retries: {last_error}")
 
 
 # ─── Main Generation ─────────────────────────────────────────────────────────
@@ -342,7 +344,7 @@ def generate_article_audio(filepath: Path, force: bool = False) -> bool:
         all_pcm.extend(pcm_data)
 
         if i < len(chunks) - 1:
-            time.sleep(15)
+            time.sleep(45)
 
     # Convert PCM → WAV → MP3
     wav_data = pcm_to_wav(bytes(all_pcm))
@@ -391,7 +393,7 @@ def main():
 
     print(f"Audio generation: {len(essays)} essays")
     print(f"Voices: {VOICE_MALE} (male) + {VOICE_FEMALE} (female)")
-    print(f"Model: {GEMINI_TTS_MODEL}")
+    print(f"Models: {', '.join(GEMINI_TTS_MODELS)}")
     print(f"Using {len(GEMINI_API_KEYS)} API key(s)")
     print(f"Output: {AUDIO_DIR}")
     print()

@@ -376,20 +376,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
-        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Are Europeans Fundamentally Racist?</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
         <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -474,7 +474,8 @@ const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:tr
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
-const chartPad={bottom:16,left:4,right:4,top:4};
+const chartPad={bottom:16,left:8,right:8,top:8};
+if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};

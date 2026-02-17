@@ -229,20 +229,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
+      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
+      <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</span>
+        <span class="related-time">35 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely" class="related-card">
+      <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
+        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -327,7 +327,8 @@ const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:tr
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
-const chartPad={bottom:16,left:4,right:4,top:4};
+const chartPad={bottom:16,left:8,right:8,top:8};
+if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};

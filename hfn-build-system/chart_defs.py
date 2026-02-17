@@ -26,7 +26,8 @@ const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:tr
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
-const chartPad={bottom:16,left:4,right:4,top:4};
+const chartPad={bottom:16,left:8,right:8,top:8};
+if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -2771,9 +2772,9 @@ new Chart(ctx,{type:'line',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
 proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-peak:{type:'label',xValue:1963,yValue:40,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
-nadir:{type:'label',xValue:2088,yValue:11,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
-africaLabel:{type:'label',xValue:2080,yValue:47,content:['Nearly half','of all births'],color:C.green,font:{size:10,style:'italic'}},
+peak:{type:'label',xValue:1975,yValue:42,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
+nadir:{type:'label',xValue:2075,yValue:11,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
+africaLabel:{type:'label',xValue:2070,yValue:47,content:['Nearly half','of all births'],color:C.green,font:{size:10,style:'italic'}},
 eurNote:{type:'label',xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
 }}},
 scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:50}}}});
