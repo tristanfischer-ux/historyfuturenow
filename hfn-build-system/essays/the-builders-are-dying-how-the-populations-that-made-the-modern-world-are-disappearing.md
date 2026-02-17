@@ -95,7 +95,7 @@ In Europe, the figures are uniformly bleak. Italy: 1.24. Spain: 1.19. Greece: 1.
 
 In East Asia, the collapse is even more extreme. South Korea's total fertility rate of 0.72 is the lowest ever recorded by any nation in human history. Taiwan: 0.87. China: 1.02, with several provinces reporting rates below 0.8. Japan: 1.20. Hong Kong: 0.77. Singapore: 0.97.
 
-
+The raw birth numbers make the trajectory visceral. In 1960, European-heritage and East Asian women together gave birth to roughly 45 million children per year. By 2025, that figure has fallen to approximately 18 million — a 60% collapse in a single lifetime. By 2100, on current trajectories, it will be around 8 million. Meanwhile, sub-Saharan Africa's annual births have risen from 10 million in 1960 to over 42 million today and are projected to remain above 44 million through the end of the century. The crossover has already happened: Africa now produces more than twice as many births per year as the builder populations combined. By 2100, the ratio will be roughly six to one.
 
 The population projections that follow from these numbers are not speculative. They are arithmetic. A fertility rate of 1.0 means each generation is half the size of the one before. South Korea's current rate of 0.72 means each generation is roughly a third of the previous one. The UN Population Division's median variant projects that China's population will fall from 1.4 billion today to approximately 800 million by 2100 — a loss of 600 million people, equivalent to the entire population of Europe. Japan will fall from 125 million to roughly 75 million. South Korea, from 52 million to perhaps 24 million.
 

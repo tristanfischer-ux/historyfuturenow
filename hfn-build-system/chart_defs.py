@@ -2747,7 +2747,33 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,
 })();"""
         },
         {
-            'id': 'buildersChart5', 'figure_num': 5,
+            'id': 'buildersChart4b', 'figure_num': 5,
+            'title': 'Annual Births: Builder Populations vs. Sub-Saharan Africa, 1960–2100',
+            'desc': 'European and East Asian births have collapsed from 45 million per year to a projected 12 million by 2100. Sub-Saharan Africa will produce more births each year than both combined by a factor of six.',
+            'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
+            'position': 'after_para_32',
+            'js': """
+(()=>{const ctx=document.getElementById('buildersChart4b');
+const yrs=[1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
+const europe=[12.5,11.8,10.8,9.8,7.8,7.9,7.0,6.4,5.9,5.3,4.8,4.3,3.9,3.6,3.3,3.1];
+const eastAsia=[32.0,32.5,24.5,26.0,18.5,18.0,14.5,12.0,10.5,9.0,8.0,7.2,6.5,6.0,5.5,5.0];
+const ssa=[10.5,13.5,17.5,22.0,27.5,33.0,39.5,42.0,44.5,48.0,50.0,50.5,49.5,48.0,46.0,44.0];
+const combined=europe.map((v,i)=>v+eastAsia[i]);
+new Chart(ctx,{type:'line',data:{datasets:[
+{...dxy('Europe (heritage)',yrs,europe,C.blue),fill:true,backgroundColor:C.blue+'25'},
+{...dxy('East Asia (China/Japan/Korea)',yrs,eastAsia,C.accent),fill:true,backgroundColor:C.accent+'25'},
+dxy('Builder total',yrs,combined,C.purple,[6,4]),
+{...dxy('Sub-Saharan Africa',yrs,ssa,C.green),borderWidth:3}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'M births/year'}},
+annotation:{annotations:{
+proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+cross:{type:'label',xValue:2042,yValue:38,content:['Africa overtakes','builder total'],color:C.dim,font:{size:10,style:'italic'}}
+}}},
+scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},title:{display:true,text:'Annual births (millions)',color:C.dim},min:0,max:55}}}});
+})();"""
+        },
+        {
+            'id': 'buildersChart5', 'figure_num': 6,  # was 5
             'title': 'European and East Asian Share of World Population, 1800–2100',
             'desc': 'The populations that built the modern world are shrinking from over 40% of humanity to under 15%.',
             'source': 'UN Population Division 2024, Maddison Project Database 2020',
@@ -2768,7 +2794,7 @@ scales:{x:linX(1800,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
 })();"""
         },
         {
-            'id': 'buildersChart6', 'figure_num': 6,
+            'id': 'buildersChart6', 'figure_num': 7,  # was 6
             'title': 'Population Trajectories 2025–2100 (Indexed: 2025 = 100)',
             'desc': 'The scissors: builder populations shrink while sub-Saharan Africa triples.',
             'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
@@ -2793,7 +2819,7 @@ scales:{x:linX(2025,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
 })();"""
         },
         {
-            'id': 'buildersChart7', 'figure_num': 7,
+            'id': 'buildersChart7', 'figure_num': 8,  # was 7
             'title': 'South Africa: Eskom Load-Shedding Hours per Year, 2007–2024',
             'desc': 'From zero load-shedding to over 6,500 hours — the collapse of a First World power grid.',
             'source': 'CSIR South Africa, Eskom Annual Reports',
@@ -2809,7 +2835,7 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
 })();"""
         },
         {
-            'id': 'buildersChart8', 'figure_num': 8,
+            'id': 'buildersChart8', 'figure_num': 9,  # was 8
             'title': 'South Africa: GDP Per Capita (Constant 2015 USD), 1994–2024',
             'desc': 'Thirty years after transition, GDP per capita has declined since 2011.',
             'source': 'World Bank, World Development Indicators',
