@@ -122,7 +122,7 @@ If you are in your thirties today and do not have children, understand this clea
 
 ### The Innovation Collapse
 
-In 1950, China and European-heritage countries — broadly, Europe, the Americas, and Australasia — accounted for approximately 40% of all births worldwide. Today, that share has fallen below 9%. By 2050, it will be under 5%. By the end of the century, on current trajectories, approximately 2%.
+In 1950, East Asian and European-heritage peoples — adjusting for ethnic composition within Europe and including the diaspora in the Americas, Australasia, and Russia — accounted for approximately 40% of all births worldwide (UN WPP 2024; CDC NCHS; Eurostat; ONS). Today, that share has fallen to roughly 14%. By 2050, it will be around 10%. By the end of the century, on current trajectories, approximately 7% — with the European-heritage share alone at just 2.2%.
 
 This matters because, as this site has [documented extensively](https://www.historyfuturenow.com/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people), an overwhelming majority of modern scientific publications, patents, technological breakthroughs, and institutional innovations originate from these populations and the institutions they built. This is not a claim of inherent superiority. It is a reflection of accumulated institutional infrastructure — universities, research labs, legal systems, venture capital ecosystems — that took centuries to build and that require a critical mass of people to sustain.
 

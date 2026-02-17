@@ -2465,23 +2465,26 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},title:{displa
         },
         {
             'id': 'cradleChart4', 'figure_num': 4,
-            'title': 'Share of Global Births: European-Heritage & Chinese Populations',
-            'desc': 'From 40% of all births in 1950 to a projected 2% by 2100',
-            'source': 'UN Population Division, World Population Prospects 2024. Projected values shown dashed.',
+            'title': 'Share of Global Births: European-Heritage & East Asian Populations',
+            'desc': 'From 37% of all births in 1960 to a projected 7% by 2100. European-heritage figures adjusted for ethnic composition (excluding immigrant-origin births within Europe, including diaspora births in US, Canada, Australia, Russia, Latin America).',
+            'source': 'UN WPP 2024; CDC NCHS; Eurostat; ONS; Statistics Canada; ABS; Russia 2021 Census. Heritage-adjusted, not geographic.',
             'position': 'after_heading:The Innovation Collapse',
             'tall': False,
             'js': """
 (()=>{const ctx=document.getElementById('cradleChart4');
 const yrsH=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
-const sharesH=[40,36,31,26,21,16,13,10,9];
+const sharesH=[40,37,35,28.8,27.7,21.6,19.8,16.3,14.4];
 const yrsP=[2025,2030,2040,2050,2060,2070,2080,2090,2100];
-const sharesP=[9,7.5,6,4.8,3.8,3.1,2.6,2.2,2.0];
+const sharesP=[14.4,12.9,11.4,10.4,9.5,8.7,8.2,7.6,7.1];
 new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('Historic share (%)',yrsH,sharesH,C.accent),
 dxy('Projected share (%)',yrsP,sharesP,C.accent,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global births'}},
-annotation:{annotations:{repl:{type:'line',yMin:9,yMax:9,borderColor:C.dim+'60',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 9%',position:'start',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{
+today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'60',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 14%',position:'start',color:C.dim,font:{size:10}}},
+eurOnly:{type:'label',xValue:2080,yValue:4,content:['European heritage alone: ~2.2%'],color:C.blue,font:{size:9,style:'italic'}}
+}}},
 scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:45,title:{display:true,text:'Share of global births (%)',color:C.dim}}}}});
 })();"""
         },
@@ -2660,7 +2663,7 @@ y1:{grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'%'}
         {
             'id': 'buildersChart1', 'figure_num': 1,
             'title': 'The Builder Premium: % of Global Achievements vs. % of World Population',
-            'desc': 'European-heritage and East Asian populations are ~25% of the world but account for 87–95% of major scientific prizes, 71% of manufacturing, and 93% of shipbuilding.',
+            'desc': 'European-heritage and East Asian populations are ~21% of the world but account for 87–95% of major scientific prizes, 71% of manufacturing, and 93% of shipbuilding.',
             'source': 'Nobel Committee, IMU, ACM, World Bank, Clarksons Research, WIPO — cumulative through 2024',
             'position': 'after_para_11',
             'tall': True,
@@ -2677,8 +2680,8 @@ new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
 annotation:{annotations:{
-popEur:{type:'line',yMin:16,yMax:16,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European-heritage population: 16%',position:'start',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}},
-popEA:{type:'line',yMin:25,yMax:25,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European + East Asian population: 25%',position:'end',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}}
+popEur:{type:'line',yMin:12,yMax:12,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European-heritage population: ~12%',position:'start',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}},
+popEA:{type:'line',yMin:21,yMax:21,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European + East Asian population: ~21%',position:'end',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0},stacked:true},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global total',color:C.dim},stacked:true,min:0,max:100}}}});

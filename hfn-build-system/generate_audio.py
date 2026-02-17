@@ -313,7 +313,7 @@ def generate_article_audio(filepath: Path, force: bool = False) -> bool:
         all_pcm.extend(pcm_data)
 
         if i < len(chunks) - 1:
-            time.sleep(10)
+            time.sleep(15)
 
     # Convert PCM → WAV → MP3
     wav_data = pcm_to_wav(bytes(all_pcm))

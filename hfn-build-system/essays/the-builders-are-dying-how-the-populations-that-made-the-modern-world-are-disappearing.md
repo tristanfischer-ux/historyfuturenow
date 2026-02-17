@@ -43,7 +43,7 @@ Charles Murray's *Human Accomplishment* catalogued every significant scientific 
 
 
 
-These populations currently constitute roughly 15–16% of the world's population. They account for approximately 87% of the world's most prestigious scientific and mathematical prizes. The disproportion is not a talking point. It is a structural feature of who builds the knowledge frontier.
+These populations currently constitute roughly 12% of the world's population when measured by ethnic heritage rather than geography — a distinction that matters, since a growing share of births within Europe are to immigrant-origin families, while European-heritage populations in the Americas, Australasia, and Russia are not captured in geographic European data. They account for approximately 87% of the world's most prestigious scientific and mathematical prizes. The disproportion is not a talking point. It is a structural feature of who builds the knowledge frontier.
 
 **The institutional operating system.** Constitutional democracy, the independent judiciary, the separation of powers, the university system, patent law, double-entry bookkeeping, central banking, limited liability corporations, the scientific journal, the peer review system, the hospital, the public health system, international law, the Geneva Conventions — all European in origin. These are not cultural ornaments. They are the operating system of the modern world. Every functional state on Earth, including China, Japan, and South Korea, runs on institutional architecture that was designed in Europe.
 
@@ -53,7 +53,7 @@ These populations currently constitute roughly 15–16% of the world's populatio
 
 **Telecommunications and computing.** From Morse's telegraph to Bell's telephone to Marconi's radio to Berners-Lee's World Wide Web, the entire chain of global telecommunications is European and European-diaspora. The internet itself descends from ARPANET, a US Defence Department project. The semiconductor: Shockley, Bardeen, and Brattain at Bell Labs. The personal computer: Wozniak and Jobs (Apple), Gates and Allen (Microsoft). The smartphone: Jobs again. GPS: a US military system. Every layer of the digital world runs on European-heritage invention.
 
-**Manufacturing.** The Industrial Revolution — the most consequential economic transformation in human history — originated entirely in Britain in the late eighteenth century and diffused through Western Europe and North America. The factory system, the assembly line (Ford, American), precision machining, mass production of interchangeable parts (Whitney, American) — all European-heritage innovations. Today, European-heritage nations (the EU, US, Canada, Australia) still account for approximately 32% of global manufacturing value added, despite constituting under 16% of the world's population.
+**Manufacturing.** The Industrial Revolution — the most consequential economic transformation in human history — originated entirely in Britain in the late eighteenth century and diffused through Western Europe and North America. The factory system, the assembly line (Ford, American), precision machining, mass production of interchangeable parts (Whitney, American) — all European-heritage innovations. Today, European-heritage nations (the EU, US, Canada, Australia) still account for approximately 32% of global manufacturing value added, despite constituting roughly 12% of the world's population by ethnic heritage.
 
 None of this happened in a vacuum. European science built on Islamic algebra and optics. European navigation used Chinese compasses and gunpowder. The Renaissance was partly sparked by the rediscovery of Greek texts preserved by Arab scholars. But the fact remains: the system that now sustains eight billion people — its medicine, its agriculture, its energy, its communications — was overwhelmingly designed and built by people of European heritage. That population is now disappearing.
 
@@ -79,7 +79,7 @@ The Great Divergence — why China did not industrialise first despite having ma
 
 
 
-Together, European-heritage and East Asian populations — currently about 25% of the world's people — account for roughly 95% of all Nobel Prizes in the sciences, over 90% of Fields Medals, over 90% of Turing Awards, approximately 71% of global manufacturing output, 93% of global shipbuilding, over 90% of semiconductor fabrication, and the overwhelming majority of global patent filings. They designed, built, and currently operate the infrastructure of the modern world: the power stations, the semiconductor fabs, the pharmaceutical laboratories, the fibre-optic networks, the water treatment facilities, the aircraft, the hospitals, the universities.
+Together, European-heritage and East Asian populations — currently about 21% of the world's people by ethnic heritage — account for roughly 95% of all Nobel Prizes in the sciences, over 90% of Fields Medals, over 90% of Turing Awards, approximately 71% of global manufacturing output, 93% of global shipbuilding, over 90% of semiconductor fabrication, and the overwhelming majority of global patent filings. They designed, built, and currently operate the infrastructure of the modern world: the power stations, the semiconductor fabs, the pharmaceutical laboratories, the fibre-optic networks, the water treatment facilities, the aircraft, the hospitals, the universities.
 
 Both populations are now dying.
 
@@ -103,7 +103,7 @@ The population projections that follow from these numbers are not speculative. T
 
 Europe's trajectory is slower but equally irreversible. The continent's population is projected to fall from approximately 450 million to 350 million by 2100. But the working-age population will fall faster, as the proportion of elderly rises. The median age in Europe is already 44.4, compared to 19.7 in sub-Saharan Africa.
 
-The ethnic European share of global population tells the story most starkly. In 1900, people of European heritage constituted roughly 25% of the world's population. By 1950, it was approximately 22%. Today it is around 9%. By 2100, on current trajectories, it will be approximately 5%. East Asian populations are on a similar trajectory, delayed by a generation but falling faster.
+The ethnic European share of global population tells the story most starkly. In 1900, people of European heritage — counting not just those living in Europe but the diaspora in the Americas, Australasia, Russia, and southern Africa — constituted roughly 25% of the world's population. By 1950, it was approximately 22%. Today it is around 12%. By 2100, on current trajectories, it will be approximately 5%. East Asian populations are on a similar trajectory, delayed by a generation but falling faster.
 
 
 
