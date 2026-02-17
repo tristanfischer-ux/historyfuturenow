@@ -2768,7 +2768,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
 proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-oneInThree:{type:'label',xValue:1963,yValue:37,content:['1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
+oneInThree:{type:'label',xValue:1975,yValue:37,content:['1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
 oneInTwelve:{type:'label',xValue:2090,yValue:12,content:['1 in 12'],color:C.purple,font:{size:11,weight:'bold'}},
 africaLabel:{type:'label',xValue:2080,yValue:47,content:['Nearly half','of all births'],color:C.green,font:{size:10,style:'italic'}}
 }}},
