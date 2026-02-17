@@ -196,6 +196,77 @@ Chart positions reference paragraph numbers in the *rendered HTML*, not the mark
 - **Google Fonts**: Playfair Display, Source Sans 3, IBM Plex Mono
 - **Python packages** (build only): `markdown`, `pyyaml`
 
+## Audio Generation
+
+The site generates audio narrations and (optionally) debate audio for each essay. Two TTS backends are supported:
+
+### Backend 1: Google Cloud TTS (Original)
+
+- Uses Neural2 British voices (`en-GB-Neural2-B` male, `en-GB-Neural2-C` female)
+- Requires `gcloud` CLI authentication and a GCP project
+- Has per-character costs and rate limits
+- Run: `python3 generate_audio.py` (default backend)
+
+### Backend 2: Voicebox (Local, Free)
+
+[Voicebox](https://github.com/jamiepine/voicebox) is an open-source voice cloning studio powered by Qwen3-TTS. It runs entirely on local hardware — no API costs, no rate limits, no data leaving your machine.
+
+**Key files:**
+
+| File | Purpose |
+|------|---------|
+| `voicebox_tts.py` | REST API client for the Voicebox server |
+| `setup_voicebox_profiles.py` | Interactive setup for creating voice profiles |
+| `generate_audio.py --backend voicebox` | Article narration via Voicebox |
+| `generate_discussions.py audio --backend voicebox` | Debate audio via Voicebox |
+
+**Setup:**
+
+```bash
+# 1. Install & run Voicebox (https://github.com/jamiepine/voicebox/releases)
+#    Or run the backend directly:
+cd voicebox/backend && pip install -r requirements.txt
+python -m backend.server --host 0.0.0.0 --port 8000
+
+# 2. Download a model in Voicebox (Qwen3-TTS 1.7B recommended)
+
+# 3. Create voice profiles and add audio samples:
+python3 setup_voicebox_profiles.py --create-all
+python3 setup_voicebox_profiles.py --add-sample <PROFILE_ID> sample.wav "transcript"
+
+# 4. Set environment variables (from the output of --create-all):
+export VOICEBOX_PROFILE_MALE=<id>
+export VOICEBOX_PROFILE_FEMALE=<id>
+export VOICEBOX_PROFILE_JAMES=<id>    # optional, for debates
+export VOICEBOX_PROFILE_ELENA=<id>    # optional, for debates
+
+# 5. Generate audio:
+python3 generate_audio.py --backend voicebox                    # all articles
+python3 generate_audio.py --backend voicebox --article SLUG     # one article
+python3 generate_discussions.py audio --backend voicebox         # debate audio
+```
+
+**Configuration (environment variables):**
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VOICEBOX_URL` | `http://localhost:8000` | Voicebox server URL |
+| `VOICEBOX_PROFILE_MALE` | — | Profile ID for male British narrator |
+| `VOICEBOX_PROFILE_FEMALE` | — | Profile ID for female British narrator |
+| `VOICEBOX_PROFILE_JAMES` | — | Profile ID for James (debate speaker) |
+| `VOICEBOX_PROFILE_ELENA` | — | Profile ID for Elena (debate speaker) |
+| `VOICEBOX_MODEL_SIZE` | `1.7B` | Model size: `1.7B` or `0.6B` |
+| `VOICEBOX_TIMEOUT` | `300` | Generation request timeout (seconds) |
+
+**Why Voicebox over cloud TTS:**
+
+- **Cost:** Free — no per-character charges
+- **Voice cloning:** Create distinctive, consistent voices from short audio samples
+- **Privacy:** Audio never leaves the machine
+- **No rate limits:** Generate as fast as your GPU allows
+- **Instruct mode:** Control delivery style per-utterance (dry, emphatic, sardonic, etc.)
+- **Existing backends unaffected:** Google Cloud TTS and Gemini TTS remain the defaults
+
 ## Known Issues / Things to Watch
 
 1. **Build system is ephemeral** — It only exists on Claude's container which resets between sessions. Either recreate it in Cursor's workspace or keep a local copy of `build.py`, `chart_defs.py`, and the `essays/` directory.
