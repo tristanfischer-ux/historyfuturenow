@@ -2,14 +2,13 @@
 """
 History Future Now — Audio Narration Generator
 
-Generates MP3 narrations for all essays using Google Cloud TTS.
+Generates MP3 narrations for all essays using Gemini TTS.
 Two alternating British voices (male + female) read the article straight through,
 switching at section boundaries for a varied listening experience.
 
 Prerequisites:
-    - gcloud CLI authenticated (gcloud auth login)
+    - GEMINI_API_KEY env var (comma-separated for rotation)
     - ffmpeg installed (brew install ffmpeg)
-    - Cloud TTS API enabled on the GCP project
 
 Usage:
     python3 generate_audio.py                    # Generate all missing audio
@@ -28,24 +27,37 @@ import yaml
 import argparse
 import requests
 import base64
-import subprocess
-import tempfile
 from pathlib import Path
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
-GCP_PROJECT = "fractional-6a765"
+GEMINI_API_KEYS = [
+    k.strip() for k in
+    os.environ.get("GEMINI_API_KEY", "").split(",")
+    if k.strip()
+]
+_key_index = 0
 
-# Two British Neural2 voices for alternating narration
-VOICE_MALE = "en-GB-Neural2-B"
-VOICE_FEMALE = "en-GB-Neural2-C"
+def _next_gemini_key() -> str:
+    global _key_index
+    if not GEMINI_API_KEYS:
+        return ""
+    key = GEMINI_API_KEYS[_key_index % len(GEMINI_API_KEYS)]
+    _key_index += 1
+    return key
+
+GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
+
+# Two British voices for alternating narration
+VOICE_MALE = "Puck"     # Upbeat, lively British male
+VOICE_FEMALE = "Kore"   # Clear, engaging British female
 
 ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
 AUDIO_DIR = OUTPUT_DIR / "audio"
 
-# Max chars per Cloud TTS request
-TTS_MAX_CHARS = 4800
+# Max chars per TTS request (Gemini TTS has token limits)
+TTS_MAX_CHARS = 4500
 
 
 # ─── Text Extraction ─────────────────────────────────────────────────────────
@@ -140,135 +152,132 @@ def split_into_sections(narration: str) -> list[str]:
     return sections
 
 
-def assign_voices(sections: list[str]) -> list[tuple[str, str]]:
-    """Assign alternating voices to sections.
-    Returns list of (voice_name, text) tuples."""
-    voices = [VOICE_MALE, VOICE_FEMALE]
-    return [(voices[i % 2], sec) for i, sec in enumerate(sections)]
-
-
-def split_long_section(text: str, max_chars: int = TTS_MAX_CHARS) -> list[str]:
-    """Split a section that exceeds max_chars at sentence boundaries."""
-    if len(text) <= max_chars:
-        return [text]
+def chunk_sections_for_tts(sections: list[str], max_chars: int = TTS_MAX_CHARS) -> list[list[tuple[str, str]]]:
+    """Group sections into TTS-sized chunks, preserving voice assignment.
+    Returns list of chunks, each chunk is a list of (voice_label, text) tuples."""
+    voices = ["Reader1", "Reader2"]
+    all_assigned = [(voices[i % 2], sec) for i, sec in enumerate(sections)]
 
     chunks = []
-    current = ""
-    sentences = re.split(r'(?<=[.!?])\s+', text)
+    current_chunk = []
+    current_len = 0
 
-    for sentence in sentences:
-        if current and len(current) + len(sentence) + 1 > max_chars:
-            chunks.append(current.strip())
-            current = sentence
-        else:
-            current = f"{current} {sentence}" if current else sentence
+    for voice, text in all_assigned:
+        entry_len = len(text) + 30
+        if current_len + entry_len > max_chars and current_chunk:
+            chunks.append(current_chunk)
+            current_chunk = []
+            current_len = 0
+        current_chunk.append((voice, text))
+        current_len += entry_len
 
-    if current.strip():
-        chunks.append(current.strip())
+    if current_chunk:
+        chunks.append(current_chunk)
+
+    # Merge last chunk into previous if it's too short for TTS
+    if len(chunks) >= 2:
+        last_len = sum(len(t) + 30 for _, t in chunks[-1])
+        if last_len < 1000:
+            chunks[-2].extend(chunks[-1])
+            chunks.pop()
 
     return chunks
 
 
-# ─── Google Cloud TTS ────────────────────────────────────────────────────────
+# ─── Gemini TTS ──────────────────────────────────────────────────────────────
 
-_gcloud_token = None
-_gcloud_token_time = 0
+def pcm_to_wav(pcm_data: bytes, sample_rate: int = 24000, channels: int = 1, sample_width: int = 2) -> bytes:
+    import wave
+    buf = io.BytesIO()
+    with wave.open(buf, 'wb') as wf:
+        wf.setnchannels(channels)
+        wf.setsampwidth(sample_width)
+        wf.setframerate(sample_rate)
+        wf.writeframes(pcm_data)
+    return buf.getvalue()
 
 
-def _get_gcloud_token() -> str:
-    """Get a fresh gcloud access token, caching for 30 minutes."""
-    global _gcloud_token, _gcloud_token_time
-    if _gcloud_token and (time.time() - _gcloud_token_time) < 1800:
-        return _gcloud_token
-
+def wav_to_mp3(wav_data: bytes) -> bytes:
+    import subprocess
     result = subprocess.run(
-        ['gcloud', 'auth', 'print-access-token'],
-        capture_output=True, text=True, timeout=30,
+        ['ffmpeg', '-y', '-i', 'pipe:0', '-codec:a', 'libmp3lame', '-b:a', '128k', '-f', 'mp3', 'pipe:1'],
+        input=wav_data, capture_output=True, timeout=120,
     )
     if result.returncode != 0:
-        raise RuntimeError(f"gcloud auth failed: {result.stderr[:300]}")
-
-    _gcloud_token = result.stdout.strip()
-    _gcloud_token_time = time.time()
-    return _gcloud_token
+        raise RuntimeError(f"ffmpeg error: {result.stderr.decode()[:500]}")
+    return result.stdout
 
 
-def generate_section_audio(text: str, voice_name: str, max_retries: int = 5) -> bytes:
-    """Generate MP3 audio for a single section using Google Cloud TTS.
-    Returns raw MP3 bytes."""
-    url = "https://texttospeech.googleapis.com/v1/text:synthesize"
+def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 8) -> bytes:
+    """Generate audio for a chunk of sections using Gemini multi-speaker TTS.
+    Returns raw PCM bytes."""
+    lines = []
+    for voice, text in chunk:
+        lines.append(f"{voice}: {text}")
+    formatted = "\n\n".join(lines)
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_TTS_MODEL}:generateContent"
 
     payload = {
-        "input": {"text": text},
-        "voice": {
-            "languageCode": "en-GB",
-            "name": voice_name,
-        },
-        "audioConfig": {
-            "audioEncoding": "MP3",
-            "speakingRate": 1.0,
-            "pitch": 0.0,
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": f"Read this article narration aloud using British English accents — Received Pronunciation, like BBC Radio 4. Reader1 is a calm, authoritative male narrator. Reader2 is a clear, engaging female narrator. Both read at a natural, measured pace suitable for a serious analytical article. This is a straight narration, not a conversation — each reader reads their assigned sections smoothly and professionally.\n\n{formatted}"}]
+            }
+        ],
+        "generationConfig": {
+            "responseModalities": ["AUDIO"],
+            "speechConfig": {
+                "multiSpeakerVoiceConfig": {
+                    "speakerVoiceConfigs": [
+                        {
+                            "speaker": "Reader1",
+                            "voiceConfig": {
+                                "prebuiltVoiceConfig": {"voiceName": VOICE_MALE}
+                            }
+                        },
+                        {
+                            "speaker": "Reader2",
+                            "voiceConfig": {
+                                "prebuiltVoiceConfig": {"voiceName": VOICE_FEMALE}
+                            }
+                        }
+                    ]
+                }
+            }
         },
     }
 
     last_error = None
     for attempt in range(max_retries):
-        token = _get_gcloud_token()
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "x-goog-user-project": GCP_PROJECT,
-        }
+        api_key = _next_gemini_key()
+        response = requests.post(
+            url, params={"key": api_key}, json=payload, timeout=180,
+        )
 
-        response = requests.post(url, headers=headers, json=payload, timeout=120)
-
-        if response.status_code in (429, 403, 500, 503):
-            wait = 3 + (attempt * 5)
-            print(f"      Retryable error {response.status_code} (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+        if response.status_code == 429:
+            wait = 30 + (attempt * 30)
+            print(f"      Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
             time.sleep(wait)
-            last_error = f"HTTP {response.status_code}"
+            last_error = "Rate limited"
             continue
 
         if response.status_code != 200:
-            raise RuntimeError(f"Cloud TTS error {response.status_code}: {response.text[:500]}")
+            raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
         break
     else:
         raise RuntimeError(f"TTS failed after {max_retries} retries: {last_error}")
 
     data = response.json()
-    audio_content = data.get("audioContent", "")
-    if not audio_content:
-        raise RuntimeError("No audio content in Cloud TTS response")
+    candidates = data.get("candidates", [])
+    if not candidates:
+        raise RuntimeError(f"No TTS candidates: {json.dumps(data, indent=2)[:500]}")
 
-    return base64.b64decode(audio_content)
+    inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
+    if not inline_data:
+        raise RuntimeError("No audio data in TTS response")
 
-
-def concatenate_mp3_segments(segments: list[bytes]) -> bytes:
-    """Concatenate multiple MP3 segments into one using ffmpeg."""
-    with tempfile.TemporaryDirectory() as tmpdir:
-        file_list = []
-        for i, seg in enumerate(segments):
-            seg_path = os.path.join(tmpdir, f"seg_{i:04d}.mp3")
-            with open(seg_path, 'wb') as f:
-                f.write(seg)
-            file_list.append(seg_path)
-
-        list_path = os.path.join(tmpdir, "files.txt")
-        with open(list_path, 'w') as f:
-            for fp in file_list:
-                f.write(f"file '{fp}'\n")
-
-        output_path = os.path.join(tmpdir, "output.mp3")
-        result = subprocess.run(
-            ['ffmpeg', '-y', '-f', 'concat', '-safe', '0',
-             '-i', list_path, '-codec:a', 'libmp3lame', '-b:a', '128k', output_path],
-            capture_output=True, timeout=300,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(f"ffmpeg concat error: {result.stderr.decode()[:500]}")
-
-        with open(output_path, 'rb') as f:
-            return f.read()
+    return base64.b64decode(inline_data.get("data", ""))
 
 
 # ─── Main Generation ─────────────────────────────────────────────────────────
@@ -290,36 +299,32 @@ def generate_article_audio(filepath: Path, force: bool = False) -> bool:
     print(f"    {word_count:,} words, {char_count:,} chars, ~{est_minutes} min estimated")
 
     sections = split_into_sections(narration)
-    voiced_sections = assign_voices(sections)
-    print(f"    {len(sections)} sections, alternating M/F")
+    chunks = chunk_sections_for_tts(sections)
+    print(f"    {len(sections)} sections → {len(chunks)} TTS chunk(s)")
 
-    mp3_segments = []
-    total_tts_calls = 0
+    all_pcm = bytearray()
+    for i, chunk in enumerate(chunks):
+        chunk_chars = sum(len(t) for _, t in chunk)
+        voices_in_chunk = set(v for v, _ in chunk)
+        voice_str = "M+F" if len(voices_in_chunk) > 1 else ("M" if "Reader1" in voices_in_chunk else "F")
+        print(f"    [{i+1}/{len(chunks)}] {len(chunk)} sections, {chunk_chars:,} chars ({voice_str})")
 
-    for i, (voice, section_text) in enumerate(voiced_sections):
-        voice_label = "M" if voice == VOICE_MALE else "F"
-        sub_chunks = split_long_section(section_text)
+        pcm_data = generate_tts_chunk(chunk)
+        all_pcm.extend(pcm_data)
 
-        for j, chunk in enumerate(sub_chunks):
-            total_tts_calls += 1
-            chunk_label = f"    [{i+1}/{len(voiced_sections)}]"
-            if len(sub_chunks) > 1:
-                chunk_label += f"({j+1}/{len(sub_chunks)})"
-            print(f"{chunk_label} {len(chunk):,} chars ({voice_label})")
+        if i < len(chunks) - 1:
+            time.sleep(10)
 
-            mp3_data = generate_section_audio(chunk, voice)
-            mp3_segments.append(mp3_data)
-
-            if total_tts_calls % 20 == 0:
-                time.sleep(2)
-
-    final_mp3 = concatenate_mp3_segments(mp3_segments)
+    # Convert PCM → WAV → MP3
+    wav_data = pcm_to_wav(bytes(all_pcm))
+    mp3_data = wav_to_mp3(wav_data)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_bytes(final_mp3)
+    output_path.write_bytes(mp3_data)
 
-    total_mb = round(len(final_mp3) / (1024 * 1024), 2)
-    print(f"    Saved: {output_path.name} ({total_mb} MB, {total_tts_calls} API calls)")
+    total_mb = round(len(mp3_data) / (1024 * 1024), 2)
+    duration_est = round(len(all_pcm) / (24000 * 2) / 60, 1)
+    print(f"    Saved: {output_path.name} ({total_mb} MB, ~{duration_est} min)")
     return True
 
 
@@ -330,22 +335,13 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Show what would be generated")
     args = parser.parse_args()
 
-    import shutil
-
-    # Check gcloud
-    if not shutil.which('gcloud'):
-        print("ERROR: gcloud CLI not found. Install from https://cloud.google.com/sdk/docs/install")
-        sys.exit(1)
-
-    # Verify gcloud auth
-    try:
-        _get_gcloud_token()
-    except Exception as e:
-        print(f"ERROR: gcloud authentication failed: {e}")
-        print("  Run: gcloud auth login")
+    if not GEMINI_API_KEYS:
+        print("ERROR: GEMINI_API_KEY not set.")
+        print("  export GEMINI_API_KEY=key1,key2")
         sys.exit(1)
 
     # Check ffmpeg
+    import shutil
     if not shutil.which('ffmpeg'):
         print("ERROR: ffmpeg not found. Install with: brew install ffmpeg")
         sys.exit(1)
@@ -366,8 +362,8 @@ def main():
 
     print(f"Audio generation: {len(essays)} essays")
     print(f"Voices: {VOICE_MALE} (male) + {VOICE_FEMALE} (female)")
-    print(f"Backend: Google Cloud TTS (Neural2)")
-    print(f"Project: {GCP_PROJECT}")
+    print(f"Model: {GEMINI_TTS_MODEL}")
+    print(f"Using {len(GEMINI_API_KEYS)} API key(s)")
     print(f"Output: {AUDIO_DIR}")
     print()
 

@@ -2750,27 +2750,28 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,
         {
             'id': 'buildersChart4b', 'figure_num': 5,
             'title': 'Builder Share of Global Births Is Collapsing, 1960–2100',
-            'desc': 'European and East Asian peoples accounted for one in three of all births in 1960. By 2100, they will account for fewer than one in twelve. Sub-Saharan Africa will account for nearly half of all births on Earth.',
-            'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
+            'desc': 'European-heritage peoples (adjusted for ethnic composition within Europe and including diaspora in the Americas, Australasia, and Russia) and East Asians accounted for over one in three births in 1960. By 2100, they will account for roughly one in fifteen.',
+            'source': 'UN WPP 2024; CDC NCHS (US births by race/ethnicity); Eurostat; ONS (UK births by parents\' country of birth); Statistics Canada; ABS; Russia 2021 Census. European-heritage figures adjust geographic births for immigrant-origin share and add diaspora births (US non-Hispanic white, Canada, Australia, NZ, Latin America, Russia ethnic Russian).',
             'position': 'after_para_32',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart4b');
 const yrs=[1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
-const eurPct=[9.3,8.4,8.0,7.0,5.9,5.6,5.0,4.7,4.4,4.1,3.9,3.7,3.5,3.3,3.1,3.0];
+const eurPct=[13.3,11.8,10.7,9.1,7.7,6.9,5.9,5.5,5.0,4.4,3.8,3.3,2.9,2.6,2.4,2.2];
 const eaPct=[23.7,23.2,18.1,18.6,13.9,12.9,10.4,8.9,7.9,7.0,6.6,6.2,5.8,5.6,5.2,4.9];
 const ssaPct=[7.8,9.6,13.0,15.7,20.7,23.6,28.2,31.1,33.5,37.5,41.0,43.5,44.2,44.4,43.8,43.1];
 const builderPct=eurPct.map((v,i)=>v+eaPct[i]);
 new Chart(ctx,{type:'line',data:{datasets:[
-{...dxy('Europe (heritage)',yrs,eurPct,C.blue),fill:true,backgroundColor:C.blue+'30'},
+{...dxy('European heritage (adj.)',yrs,eurPct,C.blue),fill:true,backgroundColor:C.blue+'30'},
 {...dxy('East Asia (China/Japan/Korea)',yrs,eaPct,C.accent),fill:true,backgroundColor:C.accent+'30'},
-{...dxy('Builder total (Europe + East Asia)',yrs,builderPct,C.purple,[6,4]),borderWidth:3},
+{...dxy('Builder total',yrs,builderPct,C.purple,[6,4]),borderWidth:3},
 {...dxy('Sub-Saharan Africa',yrs,ssaPct,C.green),borderWidth:3}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
 proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-oneInThree:{type:'label',xValue:1975,yValue:37,content:['1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
-oneInTwelve:{type:'label',xValue:2090,yValue:12,content:['1 in 12'],color:C.purple,font:{size:11,weight:'bold'}},
-africaLabel:{type:'label',xValue:2080,yValue:47,content:['Nearly half','of all births'],color:C.green,font:{size:10,style:'italic'}}
+peak:{type:'label',xValue:1963,yValue:40,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
+nadir:{type:'label',xValue:2088,yValue:11,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
+africaLabel:{type:'label',xValue:2080,yValue:47,content:['Nearly half','of all births'],color:C.green,font:{size:10,style:'italic'}},
+eurNote:{type:'label',xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
 }}},
 scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:50}}}});
 })();"""
@@ -2778,8 +2779,8 @@ scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
         {
             'id': 'buildersChart5', 'figure_num': 6,  # was 5
             'title': 'European and East Asian Share of World Population, 1800–2100',
-            'desc': 'The populations that built the modern world are shrinking from over 40% of humanity to under 15%.',
-            'source': 'UN Population Division 2024, Maddison Project Database 2020',
+            'desc': 'The populations that built the modern world are shrinking from over 40% of humanity to under 15%. Note: uses geographic population (people living in Europe/East Asia), not ethnic heritage — the ethnic European-heritage share is lower still.',
+            'source': 'UN Population Division 2024, Maddison Project Database 2020. Geographic regions, not ethnic composition.',
             'position': 'after_para_34',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart5');
@@ -2788,7 +2789,7 @@ const europe=[20.5,21.8,24.7,21.6,17.8,12.0,9.2,7.4,6.1,5.1];
 const eastAsia=[28.4,28.0,24.0,24.5,23.9,22.8,20.0,16.2,13.0,10.5];
 const combined=europe.map((v,i)=>v+eastAsia[i]);
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Europe (heritage)',yrs,europe,C.blue),
+dxy('Europe (geographic)',yrs,europe,C.blue),
 dxy('East Asia (China/Japan/Korea)',yrs,eastAsia,C.accent),
 dxy('Combined',yrs,combined,C.purple,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
