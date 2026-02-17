@@ -36,6 +36,12 @@ if [ "$SKIP_BUILD" = false ]; then
     cd "$BUILD_DIR"
     python3 build.py
     echo "  ✓ Build complete"
+
+    echo ""
+    echo "▸ Generating chart images for social sharing..."
+    cd "$BUILD_DIR"
+    python3 generate_chart_images.py || echo "  ⚠ Chart image generation had errors (non-blocking)"
+    echo "  ✓ Chart images generated"
 else
     echo ""
     echo "▸ Skipping build (--skip-build)"

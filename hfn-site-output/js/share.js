@@ -133,10 +133,18 @@
 
   function shareChartSocial(chartFigure, platform) {
     var title = chartFigure.getAttribute('data-chart-title') || 'Chart';
+    var chartId = chartFigure.getAttribute('data-chart-id');
     var articleTitle = document.title.replace(' — History Future Now', '');
-    var url = window.location.href;
-    var text = title + ' — from "' + articleTitle + '" on History Future Now';
+    var url;
 
+    if (chartId) {
+      var slug = window.location.pathname.replace('/articles/', '').replace('.html', '').replace(/\/$/, '');
+      url = SITE + '/articles/' + slug + '/chart/' + chartId;
+    } else {
+      url = window.location.href;
+    }
+
+    var text = title + ' — from "' + articleTitle + '" on History Future Now';
     openShare(platform, url, articleTitle, text);
   }
 
