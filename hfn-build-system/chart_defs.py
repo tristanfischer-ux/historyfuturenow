@@ -2474,18 +2474,25 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},title:{displa
             'tall': False,
             'js': """
 (()=>{const ctx=document.getElementById('cradleChart4');
-const yrsH=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
-const sharesH=[40,37,35,28.8,27.7,21.6,19.8,16.3,14.4];
+const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
 const yrsP=[2025,2030,2040,2050,2060,2070,2080,2090,2100];
-const sharesP=[14.4,12.9,11.4,10.4,9.5,8.7,8.2,7.6,7.1];
+const eurH=[22,20,18,15,13.5,11,10,8.5,7.5];
+const eurP=[7.5,6.5,5.3,4.3,3.6,3.0,2.6,2.4,2.2];
+const eaH=[18,17,17,13.8,14.2,10.6,9.8,7.8,6.9];
+const eaP=[6.9,6.4,6.1,6.1,5.9,5.7,5.6,5.2,4.9];
+const combH=[40,37,35,28.8,27.7,21.6,19.8,16.3,14.4];
+const combP=[14.4,12.9,11.4,10.4,9.5,8.7,8.2,7.6,7.1];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('Historic share (%)',yrsH,sharesH,C.accent),
-dxy('Projected share (%)',yrsP,sharesP,C.accent,[6,4])
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global births'}},
+dxy('Combined total',yrs,combH,C.dim),
+dxy('Combined projected',yrsP,combP,C.dim,[6,4]),
+dxy('European heritage',yrs,eurH,C.accent),
+dxy('European projected',yrsP,eurP,C.accent,[6,4]),
+dxy('East Asian',yrs,eaH,C.blue),
+dxy('East Asian projected',yrsP,eaP,C.blue,[6,4])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11},filter:i=>[0,2,4].includes(i.datasetIndex)}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label.replace(' projected','')+': '+i.raw+'%'}},
 annotation:{annotations:{
-today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'60',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 14%',position:'start',color:C.dim,font:{size:10}}},
-eurOnly:{type:'label',xValue:2080,yValue:4,content:['European heritage alone: ~2.2%'],color:C.blue,font:{size:9,style:'italic'}}
+today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'40',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 14% combined',position:'start',color:C.dim,font:{size:10}}}
 }}},
 scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:45,title:{display:true,text:'Share of global births (%)',color:C.dim}}}}});
 })();"""

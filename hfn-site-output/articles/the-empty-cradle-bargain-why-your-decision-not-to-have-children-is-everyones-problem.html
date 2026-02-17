@@ -356,20 +356,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="related-card">
+      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</span>
-        <span class="related-time">51 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
+      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
+        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
+      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -500,18 +500,25 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},title:{displa
 })();
 
 (()=>{const ctx=document.getElementById('cradleChart4');
-const yrsH=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
-const sharesH=[40,37,35,28.8,27.7,21.6,19.8,16.3,14.4];
+const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
 const yrsP=[2025,2030,2040,2050,2060,2070,2080,2090,2100];
-const sharesP=[14.4,12.9,11.4,10.4,9.5,8.7,8.2,7.6,7.1];
+const eurH=[22,20,18,15,13.5,11,10,8.5,7.5];
+const eurP=[7.5,6.5,5.3,4.3,3.6,3.0,2.6,2.4,2.2];
+const eaH=[18,17,17,13.8,14.2,10.6,9.8,7.8,6.9];
+const eaP=[6.9,6.4,6.1,6.1,5.9,5.7,5.6,5.2,4.9];
+const combH=[40,37,35,28.8,27.7,21.6,19.8,16.3,14.4];
+const combP=[14.4,12.9,11.4,10.4,9.5,8.7,8.2,7.6,7.1];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-dxy('Historic share (%)',yrsH,sharesH,C.accent),
-dxy('Projected share (%)',yrsP,sharesP,C.accent,[6,4])
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global births'}},
+dxy('Combined total',yrs,combH,C.dim),
+dxy('Combined projected',yrsP,combP,C.dim,[6,4]),
+dxy('European heritage',yrs,eurH,C.accent),
+dxy('European projected',yrsP,eurP,C.accent,[6,4]),
+dxy('East Asian',yrs,eaH,C.blue),
+dxy('East Asian projected',yrsP,eaP,C.blue,[6,4])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11},filter:i=>[0,2,4].includes(i.datasetIndex)}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label.replace(' projected','')+': '+i.raw+'%'}},
 annotation:{annotations:{
-today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'60',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 14%',position:'start',color:C.dim,font:{size:10}}},
-eurOnly:{type:'label',xValue:2080,yValue:4,content:['European heritage alone: ~2.2%'],color:C.blue,font:{size:9,style:'italic'}}
+today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'40',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 14% combined',position:'start',color:C.dim,font:{size:10}}}
 }}},
 scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:45,title:{display:true,text:'Share of global births (%)',color:C.dim}}}}});
 })();
