@@ -2665,7 +2665,7 @@ y1:{grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'%'}
             'title': 'The Builder Premium: % of Global Achievements vs. % of World Population',
             'desc': 'European-heritage and East Asian populations are ~21% of the world but account for 87–95% of major scientific prizes, 71% of manufacturing, and 93% of shipbuilding.',
             'source': 'Nobel Committee, IMU, ACM, World Bank, Clarksons Research, WIPO — cumulative through 2024',
-            'position': 'after_para_11',
+            'position': 'after_para_21',
             'tall': True,
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart1');
@@ -2692,7 +2692,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},titl
             'title': 'Nobel Prizes in Sciences by Civilisational Origin (Cumulative through 2024)',
             'desc': 'Across physics, chemistry, medicine, and economics, European-heritage laureates dominate every discipline.',
             'source': 'Nobel Prize Committee — all individual laureates categorised by heritage',
-            'position': 'after_para_14',
+            'position': 'after_para_18',
             'tall': True,
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart2');
@@ -2714,7 +2714,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},titl
             'title': 'Who Builds the World? Global Manufacturing, Shipbuilding, and Semiconductors',
             'desc': 'East Asia dominates manufacturing volume and shipbuilding; European-heritage nations lead in pharmaceuticals and aerospace. Together they account for the vast majority.',
             'source': 'World Bank, Clarksons Research, TrendForce, SIPRI — 2024 data',
-            'position': 'after_para_24',
+            'position': 'after_para_20',
             'tall': True,
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart3');
@@ -2755,7 +2755,7 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,
             'title': 'Builder Share of Global Births Is Collapsing, 1960–2100',
             'desc': 'European-heritage peoples (adjusted for ethnic composition within Europe and including diaspora in the Americas, Australasia, and Russia) and East Asians accounted for over one in three births in 1960. By 2100, they will account for roughly one in fifteen.',
             'source': 'UN WPP 2024; CDC NCHS (US births by race/ethnicity); Eurostat; ONS (UK births by parents\' country of birth); Statistics Canada; ABS; Russia 2021 Census. European-heritage figures adjust geographic births for immigrant-origin share and add diaspora births (US non-Hispanic white, Canada, Australia, NZ, Latin America, Russia ethnic Russian).',
-            'position': 'after_para_32',
+            'position': 'after_para_10',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart4b');
 const yrs=[1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
@@ -2784,7 +2784,7 @@ scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
             'title': 'European and East Asian Share of World Population, 1800–2100',
             'desc': 'The populations that built the modern world are shrinking from over 40% of humanity to under 15%. Note: uses geographic population (people living in Europe/East Asia), not ethnic heritage — the ethnic European-heritage share is lower still.',
             'source': 'UN Population Division 2024, Maddison Project Database 2020. Geographic regions, not ethnic composition.',
-            'position': 'after_para_34',
+            'position': 'after_para_13',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart5');
 const yrs=[1800,1850,1900,1950,1970,2000,2025,2050,2075,2100];
@@ -2805,7 +2805,7 @@ scales:{x:linX(1800,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
             'title': 'Population Trajectories 2025–2100 (Indexed: 2025 = 100)',
             'desc': 'The scissors: builder populations shrink while sub-Saharan Africa triples.',
             'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
-            'position': 'after_para_38',
+            'position': 'after_para_12',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart6');
 const yrs=[2025,2035,2050,2065,2080,2100];
@@ -2830,7 +2830,7 @@ scales:{x:linX(2025,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
             'title': 'South Africa: Eskom Load-Shedding Hours per Year, 2007–2024',
             'desc': 'From zero load-shedding to over 6,500 hours — the collapse of a First World power grid.',
             'source': 'CSIR South Africa, Eskom Annual Reports',
-            'position': 'after_para_49',
+            'position': 'after_para_29',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart7');
 const yrs=['2007','2008','2014','2015','2018','2019','2020','2021','2022','2023','2024'];
@@ -2846,7 +2846,7 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
             'title': 'South Africa: GDP Per Capita (Constant 2015 USD), 1994–2024',
             'desc': 'Thirty years after transition, GDP per capita has declined since 2011.',
             'source': 'World Bank, World Development Indicators',
-            'position': 'after_para_52',
+            'position': 'after_para_30',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart8');
 const yrs=[1994,1996,1998,2000,2002,2004,2006,2008,2010,2011,2012,2014,2016,2018,2020,2022,2024];

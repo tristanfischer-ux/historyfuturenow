@@ -46,7 +46,7 @@ def _next_gemini_key() -> str:
     _key_index += 1
     return key
 
-GEMINI_TTS_MODEL = "gemini-2.5-flash-preview-tts"
+GEMINI_TTS_MODEL = "gemini-2.5-pro-preview-tts"
 
 # Two British voices for alternating narration
 VOICE_MALE = "Puck"     # Upbeat, lively British male
@@ -56,8 +56,8 @@ ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
 AUDIO_DIR = OUTPUT_DIR / "audio"
 
-# Max chars per TTS request (Gemini TTS has token limits)
-TTS_MAX_CHARS = 4500
+# Max chars per TTS request (Pro model needs smaller chunks)
+TTS_MAX_CHARS = 3500
 
 
 # ─── Text Extraction ─────────────────────────────────────────────────────────
@@ -251,15 +251,29 @@ def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 8) -> by
     last_error = None
     for attempt in range(max_retries):
         api_key = _next_gemini_key()
-        response = requests.post(
-            url, params={"key": api_key}, json=payload, timeout=180,
-        )
+        try:
+            response = requests.post(
+                url, params={"key": api_key}, json=payload, timeout=360,
+            )
+        except requests.exceptions.Timeout:
+            wait = 15 + (attempt * 10)
+            print(f"      Timeout (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+            time.sleep(wait)
+            last_error = "Timeout"
+            continue
 
         if response.status_code == 429:
             wait = 30 + (attempt * 30)
             print(f"      Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
             time.sleep(wait)
             last_error = "Rate limited"
+            continue
+
+        if response.status_code in (500, 503):
+            wait = 10 + (attempt * 10)
+            print(f"      Server error {response.status_code} (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+            time.sleep(wait)
+            last_error = f"HTTP {response.status_code}"
             continue
 
         if response.status_code != 200:
@@ -271,11 +285,26 @@ def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 8) -> by
     data = response.json()
     candidates = data.get("candidates", [])
     if not candidates:
+        # Retryable — sometimes the model returns empty candidates
+        if attempt < max_retries - 1:
+            wait = 15 + (attempt * 10)
+            print(f"      No candidates (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+            time.sleep(wait)
+            last_error = "No candidates"
+            continue
         raise RuntimeError(f"No TTS candidates: {json.dumps(data, indent=2)[:500]}")
 
     inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
     if not inline_data:
-        raise RuntimeError("No audio data in TTS response")
+        # Retryable — Pro model sometimes returns finishReason:OTHER with no audio
+        finish_reason = candidates[0].get("finishReason", "unknown")
+        if attempt < max_retries - 1:
+            wait = 15 + (attempt * 10)
+            print(f"      No audio data (finishReason={finish_reason}, attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+            time.sleep(wait)
+            last_error = f"No audio (finishReason={finish_reason})"
+            continue
+        raise RuntimeError(f"No audio data in TTS response (finishReason={finish_reason})")
 
     return base64.b64decode(inline_data.get("data", ""))
 
