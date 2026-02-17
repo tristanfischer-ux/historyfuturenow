@@ -347,6 +347,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -365,7 +366,7 @@ datasets:[
 {label:'UK',data:[{x:1.49,y:111}],backgroundColor:C.cyan,pointRadius:8,pointHoverRadius:10},
 {label:'India',data:[{x:2.00,y:7}],backgroundColor:C.dim,pointRadius:8,pointHoverRadius:10}
 ]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.dataset.label+': TFR '+i.parsed.x+', '+i.parsed.y+' robots/10k workers'}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate (children per woman)',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},reverse:true,min:0.5,max:2.2},
 y:{title:{display:true,text:'Industrial Robots per 10,000 Workers',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0}}}});
@@ -378,7 +379,7 @@ datasets:[
 dxy('Robot cost per hour ($)',yrs,[12,9,7,5,3.5,2.5,1],C.accent),
 dxy('US minimum wage ($/hr)',yrs,[7.25,7.25,7.25,8,9,10,12],C.blue,[5,3]),
 dxy('China factory wage ($/hr)',yrs,[3.5,4,4.5,5,5.5,6,7],C.amber,[3,3])
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(2020,2035),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'/hr'},title:{display:true,text:'Cost per working hour ($)',color:C.dim}}}}});
 })();
 
@@ -389,7 +390,7 @@ datasets:[
 dxy('Industrial output (index)',yrs,[10,15,22,30,40,55,70,100,130,180,250,300],C.blue),
 dxy('Real wages (index)',yrs,[100,100,95,90,90,92,95,100,110,130,160,180],C.accent),
 dxy('Artisan income (index)',yrs,[100,90,70,55,45,40,38,40,50,65,80,90],C.dim,[5,5])
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1760,1910),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1850=100 for output)',color:C.dim}}}}});
 })();
 </script>

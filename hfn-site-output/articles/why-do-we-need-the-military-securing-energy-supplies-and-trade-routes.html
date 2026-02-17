@@ -243,15 +243,15 @@ The military cost of supporting cheap oil, however, is even more extraordinary.<
         <span class="related-title">The North African Threat And Mediterranean Reunification</span>
         <span class="related-time">17 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
+      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
+        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
+      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
-        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -335,6 +335,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -346,7 +347,7 @@ labels:['US','China','Russia','UK','France','Saudi\nArabia','India'],
 datasets:[
 {label:'Military spending ($bn)',data:[886,292,86,68,56,75,84],backgroundColor:C.accent+'cc',borderRadius:3},
 {label:'Energy imports ($bn)',data:[200,350,0,40,50,0,160],backgroundColor:C.blue+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'bn'}}}}});
 })();
 
@@ -360,7 +361,7 @@ Straits','Panama
 Canal'],
 datasets:[{label:'Oil flow (million barrels/day)',data:[21,16,5.5,4.8,2.9,0.9],
 backgroundColor:[C.accent,C.accent,C.amber,C.amber,C.blue,C.blue],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' million barrels/day'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' million barrels/day'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Oil flow (million bbl/day)',color:C.dim}}}}});
 })();

@@ -312,20 +312,20 @@ Three innovations, spread across three millennia, progressively demolished the s
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
+      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -409,6 +409,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -419,7 +420,7 @@ const yrs=['-3000','-2500','-2000','-1500','-1000','-800','-500','-300','0','500
 const rates=[0.1,0.2,0.4,0.5,0.8,1.5,3,5,5,3,4,5,6,8,9,12,18,38,45,56,80,88,93,97];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('World literacy rate (%)',yrs,rates,C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>{const v=+i[0].parsed.x;return v<0?Math.abs(v)+' BCE':v+' CE'},
 label:i=>i.parsed.y+'% literate'
@@ -441,7 +442,7 @@ const aiTool=[2000,500,200,100,300];
 new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
 {label:'With specialists (2023)',data:specialist,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
 {label:'With AI tools (2026)',data:aiTool,backgroundColor:C.accent,borderRadius:3,borderSkipped:false}
-]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},indexAxis:'y',
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw;return i.dataset.label+': $'+v.toLocaleString()}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v.toLocaleString()},title:{display:true,text:'Estimated cost (USD)',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
@@ -455,7 +456,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 dxy('Traditional developers (M)',yrs,devs,C.blue),
 dxy('AI-assisted creators (M)',yrs,aiCreators,C.accent),
 dxy('AI-assisted (projected)',['2025','2026','2027','2028','2029','2030'],[45,80,120,180,250,320],C.accent,[5,4])
-]},options:{responsive:true,maintainAspectRatio:false,
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'M people'}}},
 scales:{x:{type:'linear',min:2015,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,stepSize:2}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},min:0,title:{display:true,text:'People who can produce functional software (millions)',color:C.dim}}}}});
@@ -474,7 +475,7 @@ new Chart(ctx,{type:'line',data:{labels:gen,datasets:[
 {label:'Navigation (post-GPS)',data:navigation,borderColor:C.purple,backgroundColor:C.purple+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.purple,borderWidth:2.5},
 {label:'AI-enabled skills (actual)',data:aiSkills,borderColor:C.accent,backgroundColor:C.accent+'18',fill:false,tension:.35,pointRadius:5,pointBackgroundColor:C.accent,borderWidth:3},
 {label:'AI-enabled skills (projected)',data:aiProj,borderColor:C.accent,backgroundColor:C.accent+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.accent,borderWidth:2.5,borderDash:[5,4]}
-]},options:{responsive:true,maintainAspectRatio:false,
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'/100'}},
 annotation:{annotations:{
 peak:{type:'label',xValue:1,yValue:100,content:['Flourishing','peak'],color:C.accent,font:{size:10,weight:'bold'}},
@@ -491,7 +492,7 @@ const automatable=[65,55,45,60,70];
 new Chart(ctx,{type:'bar',data:{labels:sectors,datasets:[
 {label:'Market size ($B)',data:sizes,backgroundColor:C.blue,borderRadius:3,borderSkipped:false,yAxisID:'y',order:1},
 {label:'% automatable by AI',data:automatable,backgroundColor:C.accent+'88',borderColor:C.accent,borderWidth:2,borderRadius:3,borderSkipped:false,yAxisID:'y1',type:'line',tension:.3,pointRadius:5,pointBackgroundColor:C.accent,fill:false,order:0}
-]},options:{responsive:true,maintainAspectRatio:false,
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{if(i.datasetIndex===0)return'Market size: $'+i.raw+'B';return'Automatable: '+i.raw+'%'}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v+'B'},title:{display:true,text:'Market size ($B)',color:C.dim},min:0,position:'left'},

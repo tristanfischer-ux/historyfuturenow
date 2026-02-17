@@ -359,6 +359,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -371,14 +372,14 @@ new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('China + India',yrs,[73,68,40,12,5,8,18,30,42],C.accent),
 dxy('Europe + N. America',yrs,[22,28,55,82,85,70,62,48,38],C.blue)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1750,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global manufacturing (%)',color:C.dim}}}}});
 })();
 (()=>{const ctx=document.getElementById('rearmChart3');
 const colors=['#c0392b','#c0392b','#c0392b','#c0392b','#e67e22','#e67e22','#2980b9','#2980b9','#2980b9','#2980b9','#7f8c8d','#7f8c8d','#7f8c8d'];
 new Chart(ctx,{type:'bar',data:{labels:['Poland','Lithuania','Estonia','Latvia','Finland','Greece','UK','France','Germany','Netherlands','Italy','Belgium','Spain'],
 datasets:[{label:'% GDP',data:[4.7,3.9,3.4,3.4,2.4,3.1,2.3,2.1,2.1,2.0,1.6,1.3,1.3],backgroundColor:colors,borderRadius:4}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:tooltipStyle,
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Defence Spending % GDP (2025): Proximity to Russia Matters',color:C.text,font:{size:13}}},
 scales:{x:{title:{display:true,text:'% of GDP',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},beginAtZero:true,max:5.5},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
@@ -391,7 +392,7 @@ datasets:[
 dxy('West (Europe+US)',yrs,[12,12,18,22,24,30,42,50,52,48,42,30],C.blue),
 dxy('China',yrs,[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
 dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
 })();
 </script>

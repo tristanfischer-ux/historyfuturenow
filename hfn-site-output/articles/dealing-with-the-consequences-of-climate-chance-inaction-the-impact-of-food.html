@@ -250,20 +250,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
         <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -347,6 +347,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -357,7 +358,7 @@ new Chart(ctx,{type:'line',data:{labels:['2000','2010','2020','2030','2040','205
 datasets:[
 ds('World population (bn)',[6.1,6.9,7.8,8.5,9.2,10],C.accent),
 ds('Sustainable food capacity (bn)',[7,6.5,6,5.5,5.2,5],C.green,[5,3])
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'bn'},title:{display:true,text:'Billions of people',color:C.dim}}}}});
 })();
 
@@ -365,7 +366,7 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
 new Chart(ctx,{type:'bar',data:{labels:['Underground\naquifers','Fish stocks\n(vs 1955)','Arable soil\nquality','Biodiversity\nindex'],
 datasets:[{label:'% remaining',data:[40,20,70,35],
 backgroundColor:[C.blue,C.teal,C.amber,C.green],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% remaining'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% remaining'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,title:{display:true,text:'% of resource remaining',color:C.dim}}}}});
 })();
 
@@ -375,7 +376,7 @@ Arabia','Algeria','UAE','Japan','South
 Korea','UK','China','India','US'],
 datasets:[{label:'Food imported (%)',data:[60,80,70,90,60,70,40,15,5,5],
 backgroundColor:[C.accent,C.accent,C.accent,C.accent,C.amber,C.amber,C.blue,C.green,C.green,C.green],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of food imported'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of food imported'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Food imported (%)',color:C.dim}}}}});
 })();
@@ -391,7 +392,7 @@ const rivers=[
 new Chart(ctx,{type:'bar',data:{labels:rivers.map(r=>r.l),
 datasets:[{label:'Tension',data:rivers.map(r=>r.t),
 backgroundColor:rivers.map(r=>r.c+'bb'),borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[rivers[i[0].dataIndex].l],
 label:i=>{const r=rivers[i.dataIndex];return r.u+' controls flow to '+r.d+' | Tension: '+r.t+'/10'}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},

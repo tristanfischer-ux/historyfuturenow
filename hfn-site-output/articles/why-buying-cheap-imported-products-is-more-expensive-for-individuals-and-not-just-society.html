@@ -229,20 +229,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/the-new-literacy" class="related-card">
+      <a href="/articles/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The New Literacy: How AI Is Killing The Scribes And What Happens Next</span>
-        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Perils of Prediction: Lessons from History on Navigating an Uncertain Future</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/robotics-and-slavery" class="related-card">
+      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Robotics And Slavery</span>
-        <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
+      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -326,6 +326,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -337,7 +338,7 @@ labels:['Product price','+ Lost tax\nrevenue','+ Benefits\npaid','+ Retraining\n
 datasets:[
 {label:'Imported',data:[100,12,18,5,135],backgroundColor:C.accent+'cc',borderRadius:3},
 {label:'Domestic',data:[115,0,0,0,115],backgroundColor:C.blue+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw}}},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v}}}}});
 })();
 
@@ -351,7 +352,7 @@ social costs','Net cost to
 society'],
 datasets:[{data:[100,-40,-25,-15,-30,-10],
 backgroundColor:[C.green+'cc',C.accent+'cc',C.accent+'cc',C.accent+'cc',C.accent+'cc',C.accent],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>(i.raw>0?'+':'')+i.raw+' (index)'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>(i.raw>0?'+':'')+i.raw+' (index)'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (consumer saving = 100)',color:C.dim}}}}});
 })();

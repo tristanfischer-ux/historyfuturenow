@@ -234,15 +234,15 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
+      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
+      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
@@ -331,6 +331,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -341,7 +342,7 @@ const powers=[{l:'Phoenicia',y:800},{l:'Greek city-states',y:600},{l:'Rome',y:50
 new Chart(ctx,{type:'bar',data:{labels:powers.map(p=>p.l),
 datasets:[{label:'Duration (years)',data:powers.map(p=>p.y),
 backgroundColor:[C.teal,C.blue,C.purple,C.dim,C.amber,C.blue,C.accent,C.accent],borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years of colonial expansion'}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years of colonial expansion'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Duration of colonial period (years)',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();
 
@@ -354,7 +355,7 @@ East','Europe','Pacific
 Islands'],
 datasets:[{label:'Chinese lending ($bn)',data:[150,120,65,55,40,30,10],
 backgroundColor:[C.accent,C.amber,C.purple,C.green,C.teal,C.blue,C.cyan],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'bn in Chinese loans'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'bn in Chinese loans'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'bn'},title:{display:true,text:'Cumulative Chinese lending ($bn)',color:C.dim}}}}});
 })();

@@ -274,19 +274,19 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
+      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
+        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
         <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
+      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Are Europeans Fundamentally Racist?</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
+        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
@@ -371,6 +371,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -380,7 +381,7 @@ const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={}
 new Chart(ctx,{type:'bar',data:{labels:['Stone\nAge','Classical\nAntiquity','Medieval\nEurope','1800','1900','1950','2000','2025','2050?','2100?'],
 datasets:[{label:'Life expectancy',data:[30,35,40,40,50,60,70,78,90,150],
 backgroundColor:[C.dim,C.dim,C.dim,C.dim,C.amber,C.amber,C.blue,C.blue,C.green+'aa',C.green],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Life expectancy (years)',color:C.dim}}}}});
 })();
 
@@ -393,7 +394,7 @@ datasets:[
 {label:'Career 2',data:[0,30],backgroundColor:C.green+'cc',borderRadius:3},
 {label:'Career 3',data:[0,20],backgroundColor:C.purple+'cc',borderRadius:3},
 {label:'Retirement',data:[18,25],backgroundColor:C.dim+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Years of life',color:C.dim}}},
 datasets:{bar:{stacked:true}}}});
 })();
@@ -407,7 +408,7 @@ new Chart(ctx,{type:'bar',data:{labels:['1950
 (life: 150)'],
 datasets:[{label:'Workers per retiree',data:[8,5,3.5,2,0.8],
 backgroundColor:[C.green,C.green,C.amber,C.accent,C.accent],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' workers per retiree'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' workers per retiree'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Workers per retiree',color:C.dim},min:0}}}});
 })();

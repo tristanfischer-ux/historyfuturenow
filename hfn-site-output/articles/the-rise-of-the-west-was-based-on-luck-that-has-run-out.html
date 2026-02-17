@@ -294,20 +294,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
         <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The North African Threat And Mediterranean Reunification</span>
-        <span class="related-time">17 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -391,6 +391,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -404,7 +405,7 @@ dxy('China',yrs,[26,23,22,25,22,33,17,9,5,5,12,19],C.accent),
 dxy('India',yrs,[33,28,28,24,24,16,12,8,4,3,5,8],C.amber),
 dxy('Western Europe',yrs,[11,12,9,18,22,23,33,33,26,24,20,15],C.blue),
 dxy('USA',yrs,[0,0,0,0,0.2,2,9,19,27,22,22,16],C.purple)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
 })();
 
@@ -423,7 +424,7 @@ const b=[
 new Chart(ctx,{type:'bubble',data:{datasets:[{
 data:b.map(x=>({x:x.y,y:x.i,r:x.i*2.2})),
 backgroundColor:b.map(x=>x.c+'55'),borderColor:b.map(x=>x.c),borderWidth:2
-}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[b[i[0].dataIndex].l],label:i=>'Year: '+b[i.dataIndex].y+', Impact: '+b[i.dataIndex].i+'/10'}}},
 scales:{x:{type:'linear',min:1300,max:1850,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick},title:{display:true,text:'Year',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:11,title:{display:true,text:'Historical impact (1-10)',color:C.dim}}}}});
@@ -436,7 +437,7 @@ datasets:[
 dxy('West (Europe+US)',yrs,[12,12,18,22,24,30,42,50,52,48,42,30],C.blue),
 dxy('China',yrs,[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
 dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
 })();
 </script>

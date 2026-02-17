@@ -252,15 +252,15 @@ We stand at a pivotal juncture in human history, facing two seemingly contradict
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
+      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/the-new-literacy" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
@@ -349,6 +349,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -359,7 +360,7 @@ new Chart(ctx,{type:'line',data:{labels:['2000','2005','2010','2015','2020','202
 datasets:[
 ds('Net migration to OECD (M/yr)',[3,3.5,4,5,3.5,5.5,6],C.blue),
 ds('Industrial robots installed globally (M)',[0.7,0.9,1.1,1.6,3,4.5,7],C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Millions',color:C.dim}}}}});
 })();
 
@@ -370,7 +371,7 @@ manufacture','Care work'],
 datasets:[
 {label:'Immigrant workforce share (%)',data:[45,35,30,40,55,30,50,25],backgroundColor:C.blue+'bb',borderRadius:3,borderSkipped:false},
 {label:'Automation potential (%)',data:[60,65,40,75,50,70,85,30],backgroundColor:C.accent+'bb',borderRadius:3,borderSkipped:false}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'%',color:C.dim}}}}});
 })();

@@ -235,10 +235,10 @@
         <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
         <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
+      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Establishing A Price Floor For Energy</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -322,6 +322,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -332,7 +333,7 @@ new Chart(ctx,{type:'bar',data:{
 labels:['Solar/wind\nmanufacturers','Battery\nmakers','Electric\nvehicles','Oil\nmajors','Coal\nminers','Gas\nutilities','Petrostates','Renewable-rich\nnations'],
 datasets:[{label:'Impact score',data:[9,8,7,-8,-9,-6,-7,8],
 backgroundColor:[9,8,7,-8,-9,-6,-7,8].map(v=>v>0?C.green:C.accent),borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>(i.raw>0?'Winner: +':'Loser: ')+i.raw+'/10'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>(i.raw>0?'Winner: +':'Loser: ')+i.raw+'/10'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Impact (-10 = devastated, +10 = thriving)',color:C.dim}}}}});
 })();
 
@@ -344,7 +345,7 @@ reserves'],
 datasets:[
 {label:'Can be burned (2°C budget)',data:[20,35,50],backgroundColor:C.amber+'bb',borderRadius:3,borderSkipped:false},
 {label:'Must stay in ground',data:[80,65,50],backgroundColor:C.dim+'bb',borderRadius:3,borderSkipped:false}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of known reserves'}}},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of known reserves'}}},
 scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,maxRotation:0}},
 y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of known reserves (%)',color:C.dim},max:100}}}});
 })();

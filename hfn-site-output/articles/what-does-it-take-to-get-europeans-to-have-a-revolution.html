@@ -529,20 +529,20 @@ The English Civil War, or English Revolution, which kicked off in 1642, is perha
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
+      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
+        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
         <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
+      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Long Term Impact of Covid 19</span>
-        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -626,6 +626,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -636,13 +637,13 @@ new Chart(ctx,{type:'bar',data:{labels:['1640s','1680s','1710s','1770s','1790s',
 datasets:[{label:'Number of revolutions',data:[1,1,1,1,2,1,1,2,12,2,2,3,3,8,3,7,16],
 backgroundColor:['1640s','1680s','1710s','1770s','1790s','1800s','1820s','1830s','1840s','1850s','1860s','1870s','1900s','1910s','1970s','1980s','1990s'].map(d=>{
 const y=parseInt(d);return y<1800?C.blue:y<1900?C.amber:y<1950?C.accent:C.purple}),borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:tooltipStyle},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:45}},y:{grid:{color:C.grid},ticks:{color:C.dim,stepSize:2},title:{display:true,text:'Number of revolutions',color:C.dim}}}}});
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:tooltipStyle},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:45}},y:{grid:{color:C.grid},ticks:{color:C.dim,stepSize:2},title:{display:true,text:'Number of revolutions',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('revChart2');
 new Chart(ctx,{type:'doughnut',data:{labels:['Social inequality\n(within ethnic group)','Ethnic/national\ninequality'],
 datasets:[{data:[24,39],backgroundColor:[C.blue,C.accent],borderWidth:0,hoverOffset:8}]},
-options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{padding:20,font:{size:13}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},cutout:'55%',plugins:{legend:{position:'bottom',labels:{padding:20,font:{size:13}}},
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' revolutions ('+Math.round(i.raw/63*100)+'%)'}}}}});
 })();
 
@@ -650,7 +651,7 @@ tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' revolutions ('+Math.round(i
 new Chart(ctx,{type:'bar',data:{
 labels:['1789-1832\nFrench Revolution\nwave','1848\nSpring of\nNations','1917-1919\nPost-WW1\ncollapse','1989-1991\nFall of\nCommunism'],
 datasets:[{label:'Countries affected',data:[6,12,8,18],backgroundColor:[C.blue,C.amber,C.accent,C.purple],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:tooltipStyle},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,stepSize:5},title:{display:true,text:'Countries with revolutions',color:C.dim}}}}});
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:tooltipStyle},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,stepSize:5},title:{display:true,text:'Countries with revolutions',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('revChart4');
@@ -659,14 +660,14 @@ labels:['Social\ninequality','Foreign\nrule','Military\nexperience','Leadership'
 datasets:[
 {label:'1848 conditions',data:[9,8,7,7,9,10,9],borderColor:C.accent,backgroundColor:C.accent+'20',pointBackgroundColor:C.accent,borderWidth:2},
 {label:'2011-today',data:[7,4,2,2,3,8,6],borderColor:C.blue,backgroundColor:C.blue+'20',pointBackgroundColor:C.blue,borderWidth:2}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},scales:{r:{grid:{color:C.grid},ticks:{display:false},pointLabels:{font:{size:11},color:C.dim},min:0,max:10}}}});
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},scales:{r:{grid:{color:C.grid},ticks:{display:false},pointLabels:{font:{size:11},color:C.dim},min:0,max:10}}}});
 })();
 
 (()=>{const ctx=document.getElementById('revChart5');
 new Chart(ctx,{type:'bar',data:{labels:['Spain','Greece','Italy','Portugal','Ireland','France','UK','Germany'],
 datasets:[{label:'Youth unemployment %',data:[51,48,31,28,26,22,20,8],
 backgroundColor:[C.accent,C.accent+'cc',C.accent+'aa',C.amber,C.amber+'cc',C.blue,C.blue+'cc',C.green],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% youth unemployment'}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% youth unemployment'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of under-25s unemployed',color:C.dim}}}}});
 })();
 
@@ -682,7 +683,7 @@ const ch=[
 new Chart(ctx,{type:'bubble',data:{datasets:[{
 data:ch.map(c=>({x:c.y,y:c.i,r:c.i*2.5})),
 backgroundColor:ch.map(c=>c.c+'66'),borderColor:ch.map(c=>c.c),borderWidth:2
-}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[ch[i[0].dataIndex].l],
 label:i=>'Year: '+ch[i.dataIndex].y+', Contagion: '+ch[i.dataIndex].i+'/10'}}},
 scales:{x:{type:'linear',min:1630,max:2000,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick},title:{display:true,text:'Year',color:C.dim}},

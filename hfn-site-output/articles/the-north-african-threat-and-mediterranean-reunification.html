@@ -322,20 +322,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
+      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
+      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -419,6 +419,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -429,7 +430,7 @@ new Chart(ctx,{type:'line',data:{labels:['1960','1970','1980','1990','2000','201
 datasets:[
 ds('North Africa (Egypt, Libya, Tunisia, Algeria, Morocco)',[55,70,95,120,150,180,210,245,280,310],C.accent),
 ds('Southern Europe (Spain, Italy, Greece, Portugal)',[95,105,112,118,121,124,122,118,113,107],C.blue)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label.split('(')[0].trim()+': '+i.raw+'M'}}},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label.split('(')[0].trim()+': '+i.raw+'M'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Population (millions)',color:C.dim}}}}});
 })();
 
@@ -438,7 +439,7 @@ new Chart(ctx,{type:'bar',data:{labels:['Egypt','Algeria','Morocco','Libya','Tun
 datasets:[{label:'Median age (years)',data:[24,29,30,29,33,null,45,48,46,46],
 backgroundColor:['Egypt','Algeria','Morocco','Libya','Tunisia','—','Spain','Italy','Greece','Portugal'].map(c=>
 c==='—'?'transparent':['Egypt','Algeria','Morocco','Libya','Tunisia'].includes(c)?C.accent:C.blue),borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw?i.raw+' years':''}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw?i.raw+' years':''}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Median age (years)',color:C.dim}}}}});
 })();
 
@@ -446,7 +447,7 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{col
 const data=[{c:'Egypt',v:2.9},{c:'Algeria',v:2.6},{c:'Morocco',v:2.3},{c:'Libya',v:2.2},{c:'Tunisia',v:2.0},{c:'Spain',v:1.2},{c:'Italy',v:1.2},{c:'Greece',v:1.3},{c:'Portugal',v:1.4}];
 new Chart(ctx,{type:'bar',data:{labels:data.map(d=>d.c),datasets:[{label:'TFR',data:data.map(d=>d.v),
 backgroundColor:data.map(d=>d.v>=2.1?C.green:d.v>=1.5?C.amber:C.accent),borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
 annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Replacement level (2.1)',position:'start',font:{size:11}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total fertility rate',color:C.dim}}}}});
 })();
@@ -464,7 +465,7 @@ const periods=[
 ];
 new Chart(ctx,{type:'bar',data:{labels:periods.map(p=>p.l),
 datasets:[{data:periods.map(p=>[(p.s<0?p.s:p.s),(p.e<0?p.e:p.e)]),backgroundColor:periods.map(p=>p.c+'cc'),borderRadius:3,borderSkipped:false}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[periods[i[0].dataIndex].l],
 label:i=>{const p=periods[i.dataIndex];return (p.s<0?Math.abs(p.s)+' BC':p.s+' AD')+' – '+(p.e<0?Math.abs(p.e)+' BC':p.e+' AD')+' ('+(p.e-p.s)+' years)'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v<0?Math.abs(v)+' BC':v+' AD'},title:{display:true,text:'Year',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
@@ -476,7 +477,7 @@ new Chart(ctx,{type:'bar',data:{labels:ages,
 datasets:[
 {label:'Algeria (% of pop.)',data:[20,18,17,15,12,8,5,3,2],backgroundColor:C.accent+'bb',borderRadius:3,borderSkipped:false},
 {label:'Italy (% of pop.)',data:[8,9,10,12,14,15,13,11,8],backgroundColor:C.blue+'bb',borderRadius:3,borderSkipped:false}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim},title:{display:true,text:'Age group',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of total population (%)',color:C.dim}}}}});
 })();

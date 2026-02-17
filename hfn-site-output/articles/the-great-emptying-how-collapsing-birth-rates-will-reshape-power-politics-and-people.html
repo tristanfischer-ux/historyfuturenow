@@ -376,20 +376,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing" class="related-card">
+      <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</span>
-        <span class="related-time">19 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What Does It Take To Get Europeans To Have A Revolution?</span>
+        <span class="related-time">48 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
         <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
+      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Are Europeans Fundamentally Racist?</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -473,6 +473,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -482,7 +483,7 @@ new Chart(ctx,{type:'bar',data:{labels:['S. Korea','China','Poland','Spain','Ita
 datasets:[{label:'Fertility Rate',data:[0.72,1.02,1.10,1.13,1.20,1.20,1.22,1.26,1.36,1.44,1.53,1.58,1.55,1.62,1.68,1.76,1.80,2.00,2.15,2.33,2.78,3.20,3.55,5.20,6.80],
 backgroundColor:function(c){var v=c.raw;if(v<1.3)return C.accent;if(v<1.5)return C.amber;if(v<2.1)return C.amber+'aa';if(v<3.0)return C.green;return C.blue},
 borderRadius:3}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:tooltipStyle,
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Total Fertility Rate by Country (2023-2024)',color:C.text,font:{size:14}},
 annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{display:true,content:'Replacement (2.1)',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim}},
@@ -499,7 +500,7 @@ dxy('Japan',yrs,[2.00,2.14,2.13,1.91,1.75,1.76,1.54,1.42,1.36,1.26,1.39,1.45,1.3
 dxy('South Korea',yrs,[6.00,5.63,4.53,3.47,2.83,1.67,1.59,1.65,1.48,1.09,1.23,1.24,0.84,0.72],C.amber,[5,5]),
 dxy('China',yrs,[5.76,6.13,5.81,3.57,2.63,2.52,2.51,1.86,1.60,1.62,1.54,1.62,1.28,1.02],C.purple,[5,5])
 ]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Fertility Rates 1960-2024: The Long Decline',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(1960,2024,{grid:{display:false},ticks:{color:C.dim}})}}});
@@ -510,7 +511,7 @@ var r=[1.08,1.10,1.13,1.16,1.20,1.22,1.26,1.31,1.33,1.35,1.36,1.37,1.41,1.41,1.4
 new Chart(ctx,{type:'bar',data:{labels:c,datasets:[{data:r,
 backgroundColor:function(c){var v=c.raw;if(v<1.3)return C.accent;if(v<1.5)return C.amber;return C.amber+'aa'},
 borderRadius:3}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,aspectRatio:0.65,plugins:{legend:noLegend,tooltip:tooltipStyle,
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},aspectRatio:0.65,plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Europe: Not a Single Country at Replacement',color:C.text,font:{size:14}},
 annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{display:true,content:'Replacement (2.1)',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0.8,max:2.3},
@@ -527,7 +528,7 @@ dxy('Average Wages (+85%)',yrs,[0,8,12,18,22,28,32,42,55,70,85],C.blue,[8,4]),
 dxy('Food (+75%)',yrs,[0,5,8,15,18,22,25,30,45,60,75],C.green),
 dxy('Electronics (-94%)',yrs,[0,-15,-30,-40,-55,-65,-75,-82,-88,-92,-94],C.teal,[3,3])
 ]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Cost of Raising Children vs Wages Since 2000',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% Change Since 2000',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}}},
 x:linX(2000,2024,{grid:{display:false},ticks:{color:C.dim}})}}});
@@ -538,7 +539,7 @@ datasets:[
 ds('Males',[24.6,25.1,25.5,26.3,27.5,28.9,30.0,31.0,31.5,31.8,32.1],C.blue),
 ds('Females',[22.4,22.8,23.0,24.1,25.5,26.9,28.2,29.5,30.0,30.3,30.7],C.accent)
 ]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Average Age at First Marriage, England & Wales',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Age',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:20,max:34},
 x:{grid:{display:false},ticks:{color:C.dim}}}}});
@@ -551,7 +552,7 @@ ds('All immigrant women',[3.30,3.15,2.95,2.70,2.55,2.50,2.50],C.green),
 ds('European immigrants',[2.45,2.40,2.30,2.15,2.05,2.00,2.00],C.teal),
 ds('Native-born French',[2.42,2.35,2.25,2.12,2.03,1.95,1.90],C.blue,[8,4])
 ]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Immigrant Fertility Converges to Host Country, France',color:C.text,font:{size:14}},
 annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
 scales:{y:{title:{display:true,text:'Children per Woman',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:1.5},
@@ -562,7 +563,7 @@ new Chart(ctx,{type:'bar',data:{labels:['Native Finnish','Western countries','So
 datasets:[{label:'Net fiscal impact per person',data:[2060,0,-1250,-4500,-5390,-6900,-7320,-9010,-11960,-17180],
 backgroundColor:function(c){const v=c.raw;if(v>0)return C.green;if(v>=-1000)return C.amber;if(v>-7000)return C.amber+'cc';return C.accent},
 borderRadius:3}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:function(c){const v=c.raw;const sign=v>0?'+':'';return sign+'€'+v.toLocaleString()+' vs. native Finnish'}}},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:function(c){const v=c.raw;const sign=v>0?'+':'';return sign+'€'+v.toLocaleString()+' vs. native Finnish'}}},
 title:{display:true,text:'Net Fiscal Impact by Region of Origin, Finland',color:C.text,font:{size:14}}},
 scales:{x:{title:{display:true,text:'Net Fiscal Impact (€ per person, relative to native Finnish)',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return '€'+v.toLocaleString()}}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
@@ -574,7 +575,7 @@ datasets:[
 {label:'Legal Immigrant',data:[52,23,34,36,5],backgroundColor:C.amber,borderRadius:3},
 {label:'Illegal-Headed',data:[59,18,48,39,4],backgroundColor:C.purple,borderRadius:3}
 ]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Welfare Usage by Household Type, United States',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% of Households',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}},beginAtZero:true},
 x:{grid:{display:false},ticks:{color:C.dim}}}}});
@@ -583,7 +584,7 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
 new Chart(ctx,{type:'line',data:{
 datasets:[{label:'% of Congress over 70',data:xy([1950,1960,1970,1980,1985,1990,2000,2005,2010,2015,2020,2025],[8,10,9,6,6,5,8,9,11,14,20,23]),
 borderColor:C.purple,backgroundColor:C.purple+'22',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:noLegend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'The Gerontocracy: % of U.S. Congress Over Age 70',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% Over 70',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}},min:0},
 x:linX(1950,2025,{grid:{display:false},ticks:{color:C.dim}})}}});
@@ -598,7 +599,7 @@ dxy('China',yrs,[10,12,17,21,26,38,47,55],C.purple,[5,5]),
 dxy('United States',yrs,[19,20,26,29,33,37,39,42],C.green),
 dxy('India',yrs,[8,8,10,10,11,15,19,24],C.amber)
 ]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Old-Age Dependency Ratios: Who Will Pay?',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'65+ per 100 Working-Age',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(2000,2060,{grid:{display:false},ticks:{color:C.dim}})}}});

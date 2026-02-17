@@ -332,8 +332,8 @@ img { max-width: 100%; height: auto; }
 .chart-figure-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; margin-bottom: 0.15rem; }
 .chart-figure h4 { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.1rem; }
 .chart-figure .chart-desc { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.4rem; font-weight: 300; line-height: 1.45; }
-.chart-area { position: relative; width: 100%; aspect-ratio: 2.2 / 1; }
-.chart-area.tall { aspect-ratio: 3 / 2; }
+.chart-area { position: relative; width: 100%; aspect-ratio: 1.8 / 1; }
+.chart-area.tall { aspect-ratio: 4 / 3; }
 .chart-figure .chart-source { font-family: var(--mono); font-size: 0.58rem; color: var(--text-faint); margin-top: 0.25rem; padding-top: 0.2rem; border-top: 1px solid var(--border-light); }
 
 /* SPIRAL */
@@ -412,8 +412,8 @@ img { max-width: 100%; height: auto; }
   .page-container { padding: 1.5rem 1rem 2rem; }
   .hero { padding: 2rem 1rem 1rem; }
   .chart-figure { margin: 1rem -0.5rem; padding: 0.75rem; }
-  .chart-area { aspect-ratio: 3 / 2; }
-  .chart-area.tall { aspect-ratio: 4 / 3; }
+  .chart-area { aspect-ratio: 2 / 1; }
+  .chart-area.tall { aspect-ratio: 5 / 4; }
   .spiral-node { width: 95px; font-size: 0.63rem; padding: 8px 6px; }
   .cards { grid-template-columns: 1fr; }
   .featured-card { padding: 1rem 0; grid-template-columns: 1fr; gap: 0.75rem; }

@@ -1,0 +1,31 @@
+# Article Library Cross-References
+
+Every article must reference relevant books from the HFN Library and link to related HFN articles.
+
+## Library References
+
+- Every article must reference **at least 3 books** from the Library (`library_data.py`)
+- References should be woven naturally into the text — not bolted on as a "further reading" list
+- Use the format: `Author's *Title* (Year)` when introducing a source, linking the argument to the Library's intellectual map
+- When a book from the Library directly supports a claim, say so: "As Vaclav Smil argues in *Energy and Civilization*..." not just "(Smil, 2017)"
+- Check `hfn-build-system/library_data.py` for the full catalogue before writing
+
+## Internal Cross-References
+
+- Every article must link to **at least 2 other HFN articles** where the arguments connect
+- Use relative links: `[The Robot Bargain](/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap)`
+- Cross-references should feel natural — "as we explored in [article]" or "this connects to [article]'s argument that..."
+- Check `hfn-site-output/search-index.json` or the essays directory for the full article catalogue
+- Place cross-references where the argument naturally connects, not in a footnote ghetto at the end
+
+## Why This Matters
+
+- The Library is a key differentiator — it shows the intellectual depth behind the analysis
+- Internal links keep readers on the site and show how arguments connect across articles
+- Both improve SEO (internal linking) and reader trust (showing your sources)
+
+## When Reviewing Articles
+
+- If an article cites no Library books, flag it as incomplete
+- If an article has no internal links to other HFN articles, flag it
+- If references feel forced or bolted-on rather than natural, flag the writing

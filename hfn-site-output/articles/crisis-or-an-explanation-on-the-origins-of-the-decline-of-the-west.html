@@ -385,20 +385,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
+      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
+      <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The North African Threat And Mediterranean Reunification</span>
+        <span class="related-time">17 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
+        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -482,6 +482,7 @@ const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callbac
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
 const noLegend={display:false};
 const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const chartPad={bottom:16,left:4,right:4,top:4};
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
@@ -493,7 +494,7 @@ new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('Western share of global trade (%)',yrs,[15,25,35,45,60,70,55,50,45,38,30],C.blue),
 dxy('Financial sector as % of economy',yrs,[2,3,3,4,5,7,8,12,18,22,20],C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1500,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'}}}}});
 })();
 
@@ -503,7 +504,7 @@ new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('China + India',yrs,[73,68,40,12,5,8,18,30,42],C.accent),
 dxy('Europe + N. America',yrs,[22,28,55,82,85,70,62,48,38],C.blue)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:tooltipStyle},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1750,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global manufacturing (%)',color:C.dim}}}}});
 })();
 
@@ -513,7 +514,7 @@ new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('UK financial services (% GDP)',yrs,[3,4,5,6,8,10,12,10,9,8,7],C.blue),
 dxy('US financial services (% GDP)',yrs,[3,4,4,5,7,8,9,8,7,7,8],C.accent)
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.parsed.y+'% of GDP'}}},
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.parsed.y+'% of GDP'}}},
 scales:{x:linX(1950,2020),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Financial services as % of GDP',color:C.dim},min:0,max:15}}}});
 })();
 </script>
