@@ -2748,28 +2748,30 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,
         },
         {
             'id': 'buildersChart4b', 'figure_num': 5,
-            'title': 'Annual Births: Builder Populations vs. Sub-Saharan Africa, 1960–2100',
-            'desc': 'European and East Asian births have collapsed from 45 million per year to a projected 12 million by 2100. Sub-Saharan Africa will produce more births each year than both combined by a factor of six.',
+            'title': 'Builder Share of Global Births Is Collapsing, 1960–2100',
+            'desc': 'European and East Asian peoples accounted for one in three of all births in 1960. By 2100, they will account for fewer than one in twelve. Sub-Saharan Africa will account for nearly half of all births on Earth.',
             'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
             'position': 'after_para_32',
             'js': """
 (()=>{const ctx=document.getElementById('buildersChart4b');
 const yrs=[1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
-const europe=[12.5,11.8,10.8,9.8,7.8,7.9,7.0,6.4,5.9,5.3,4.8,4.3,3.9,3.6,3.3,3.1];
-const eastAsia=[32.0,32.5,24.5,26.0,18.5,18.0,14.5,12.0,10.5,9.0,8.0,7.2,6.5,6.0,5.5,5.0];
-const ssa=[10.5,13.5,17.5,22.0,27.5,33.0,39.5,42.0,44.5,48.0,50.0,50.5,49.5,48.0,46.0,44.0];
-const combined=europe.map((v,i)=>v+eastAsia[i]);
+const eurPct=[9.3,8.4,8.0,7.0,5.9,5.6,5.0,4.7,4.4,4.1,3.9,3.7,3.5,3.3,3.1,3.0];
+const eaPct=[23.7,23.2,18.1,18.6,13.9,12.9,10.4,8.9,7.9,7.0,6.6,6.2,5.8,5.6,5.2,4.9];
+const ssaPct=[7.8,9.6,13.0,15.7,20.7,23.6,28.2,31.1,33.5,37.5,41.0,43.5,44.2,44.4,43.8,43.1];
+const builderPct=eurPct.map((v,i)=>v+eaPct[i]);
 new Chart(ctx,{type:'line',data:{datasets:[
-{...dxy('Europe (heritage)',yrs,europe,C.blue),fill:true,backgroundColor:C.blue+'25'},
-{...dxy('East Asia (China/Japan/Korea)',yrs,eastAsia,C.accent),fill:true,backgroundColor:C.accent+'25'},
-dxy('Builder total',yrs,combined,C.purple,[6,4]),
-{...dxy('Sub-Saharan Africa',yrs,ssa,C.green),borderWidth:3}
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'M births/year'}},
+{...dxy('Europe (heritage)',yrs,eurPct,C.blue),fill:true,backgroundColor:C.blue+'30'},
+{...dxy('East Asia (China/Japan/Korea)',yrs,eaPct,C.accent),fill:true,backgroundColor:C.accent+'30'},
+{...dxy('Builder total (Europe + East Asia)',yrs,builderPct,C.purple,[6,4]),borderWidth:3},
+{...dxy('Sub-Saharan Africa',yrs,ssaPct,C.green),borderWidth:3}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
 proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-cross:{type:'label',xValue:2042,yValue:38,content:['Africa overtakes','builder total'],color:C.dim,font:{size:10,style:'italic'}}
+oneInThree:{type:'label',xValue:1963,yValue:37,content:['1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
+oneInTwelve:{type:'label',xValue:2090,yValue:12,content:['1 in 12'],color:C.purple,font:{size:11,weight:'bold'}},
+africaLabel:{type:'label',xValue:2080,yValue:47,content:['Nearly half','of all births'],color:C.green,font:{size:10,style:'italic'}}
 }}},
-scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},title:{display:true,text:'Annual births (millions)',color:C.dim},min:0,max:55}}}});
+scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:50}}}});
 })();"""
         },
         {
