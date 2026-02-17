@@ -2675,8 +2675,8 @@ new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
 annotation:{annotations:{
-popEur:{type:'line',yMin:16,yMax:16,borderColor:C.blue,borderWidth:2,borderDash:[6,4],label:{display:true,content:'European-heritage population: 16%',position:'start',backgroundColor:C.blue+'dd',color:'#fff',font:{size:10}}},
-popEA:{type:'line',yMin:25,yMax:25,borderColor:C.accent,borderWidth:2,borderDash:[6,4],label:{display:true,content:'European + East Asian population: 25%',position:'end',backgroundColor:C.accent+'dd',color:'#fff',font:{size:10}}}
+popEur:{type:'line',yMin:16,yMax:16,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European-heritage population: 16%',position:'start',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}},
+popEA:{type:'line',yMin:25,yMax:25,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European + East Asian population: 25%',position:'end',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0},stacked:true},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global total',color:C.dim},stacked:true,min:0,max:100}}}});
