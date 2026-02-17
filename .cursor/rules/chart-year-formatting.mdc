@@ -1,0 +1,40 @@
+# Chart Year Formatting — No Commas in Years
+
+Years are not quantities. They must never be formatted with thousand-separator commas.
+
+## The Rule
+
+Any Chart.js axis that displays **years** (e.g. 1500, 1800, 2025) must use a tick callback that returns a plain string without commas.
+
+```javascript
+// ✅ CORRECT — explicit yearTick callback
+ticks: { callback: v => String(v) }
+// or use the shared helper:
+ticks: { callback: yearTick }
+
+// ❌ WRONG — no callback, Chart.js uses locale formatting → "1,500", "2,025"
+ticks: { color: '#8a8479', font: { size: 9 } }
+```
+
+## Why This Happens
+
+Chart.js v4 uses `Intl.NumberFormat` (locale-aware) for default tick labels on linear scales. In English locales, numbers ≥ 1,000 get thousand-separator commas. This is correct for quantities ($1,500, 10,000 people) but wrong for years (1500 AD, 2025).
+
+## Where the Helpers Live
+
+- **Article charts** (`chart_defs.py`): Use the shared `yearTick` function or the `linX()` helper, which includes `yearTick` automatically.
+- **Homepage charts** (`build.py`): Use the `_yt` function defined in the hero chart JS preamble.
+
+## Checklist for Any New Chart with a Year Axis
+
+- [ ] If the x-axis shows years and uses `type: 'linear'`, does it have `callback: yearTick` (or `callback: _yt` on the homepage)?
+- [ ] If using `linX()`, the callback is included automatically — no action needed.
+- [ ] If using category labels (string arrays like `['2000', '2005', '2010']`), no callback needed — strings display as-is.
+
+## When Commas ARE Correct
+
+- Currency values: `$1,500`, `€10,000`
+- Quantities: `1,500 aircraft`, `10,000 pages`
+- Population: `1,440M`
+
+Only **years** must be comma-free.
