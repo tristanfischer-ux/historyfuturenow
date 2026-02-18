@@ -173,6 +173,18 @@ BOOKS = [
     {"title": "A Brief History of Everyone Who Ever Lived", "author": "Adam Rutherford", "year": 2018, "source": "audible", "themes": ["civilisation", "biology"]},
     {"title": "Knowledge", "author": "Lewis Dartnell", "year": 2015, "source": "audible", "themes": ["civilisation", "technology"]},
     {"title": "How to Invent Everything", "author": "Ryan North", "year": 2019, "source": "audible", "themes": ["civilisation", "technology"]},
+    {"title": "Ancient Slavery and Modern Ideology", "author": "M. I. Finley", "year": 2025, "source": "kindle", "themes": ["civilisation"]},
+    {"title": "The Athenian Democracy in the Age of Demosthenes", "author": "Mogens Herman Hansen", "year": 2025, "source": "kindle", "themes": ["civilisation"]},
+    {"title": "Slavery in Classical Greece", "author": "N. R. E. Fisher", "year": 2025, "source": "kindle", "themes": ["civilisation"]},
+    {"title": "Daily Life in Ancient Rome", "author": "Jérôme Carcopino", "year": 2025, "source": "kindle", "themes": ["civilisation"]},
+    {"title": "Death and Renewal", "author": "Keith Hopkins", "year": 2025, "source": "kindle", "themes": ["civilisation"]},
+    {"title": "The Scientific Life", "author": "Steven Shapin", "year": 2025, "source": "kindle", "themes": ["civilisation", "technology"]},
+    {"title": "Science, Technology and Society in Seventeenth-Century England", "author": "Robert K. Merton", "year": 2025, "source": "kindle", "themes": ["civilisation", "technology"]},
+    {"title": "The Best Circles", "author": "Leonore Davidoff", "year": 2025, "source": "kindle", "themes": ["civilisation", "biology"]},
+    {"title": "The Gentleman's Daughter", "author": "Amanda Vickery", "year": 2025, "source": "kindle", "themes": ["civilisation", "biology"]},
+    {"title": "A Cultural History of Civil Examinations in Late Imperial China", "author": "Benjamin Elman", "year": 2025, "source": "kindle", "themes": ["civilisation", "ideology"]},
+    {"title": "The Ladder of Success in Imperial China", "author": "Ping-ti Ho", "year": 2025, "source": "kindle", "themes": ["civilisation"]},
+    {"title": "The Theory of the Leisure Class", "author": "Thorstein Veblen", "year": 2025, "source": "kindle", "themes": ["economics", "civilisation"]},
 
     # ═══════════════════════════════════════════════════════════════
     # EMPIRE LIFECYCLE & FAILURE MODES

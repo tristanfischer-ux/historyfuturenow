@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 66
+Total articles: 67
 
 ## Sections
 ### Natural Resources (11 articles)
@@ -18,7 +18,7 @@ Total articles: 66
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (27 articles)
+### Society (28 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -422,6 +422,13 @@ Total articles: 66
 - Published: 2013-02-01
 - Reading time: 25 min
 - Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst. That is a problem as it is an important subject which doesn'
+
+### When the Servants Are Silicon: What History's Leisure Classes Reveal About the AI Age [4 charts]
+- URL: https://www.historyfuturenow.com/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age
+- Section: Society
+- Published: 2026-02-20
+- Reading time: 15 min
+- Robots are not stealing jobs. They are replacing the unborn. When the Shadow Workforce handles survival, seven billion people become an aristocracy. Athens used that freedom to invent philosophy. Rome
 
 ### Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain. [3 charts]
 - URL: https://www.historyfuturenow.com/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain

@@ -3165,6 +3165,104 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
         },
     ]
 
+    # ─── WHEN THE SERVANTS ARE SILICON ───
+    charts['when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age'] = [
+        {
+            'id': 'siliconChart1', 'figure_num': 1,
+            'title': 'The Demographic Gap: Old-Age Dependency Ratios to 2060',
+            'desc': 'Number of people aged 65+ per 100 working-age adults — the gap the Shadow Workforce must fill',
+            'source': 'UN Population Division, World Population Prospects 2024 revision',
+            'position': 'after_heading_The Shadow Workforce',
+            'js': """
+(()=>{const ctx=document.getElementById('siliconChart1');
+const yrs=[2000,2010,2020,2030,2040,2050,2060];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Japan',yrs,[25,36,50,54,68,75,80],C.accent,[]),
+dxy('Germany',yrs,[24,31,34,46,53,58,66],C.purple,[]),
+dxy('South Korea',yrs,[10,15,22,38,57,72,82],C.blue,[]),
+dxy('Italy',yrs,[27,31,37,47,58,66,68],C.amber,[]),
+dxy('China',yrs,[10,11,17,25,37,47,55],C.teal,[])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+' per 100'}},
+annotation:{annotations:{
+shadow:{type:'box',xMin:2026,xMax:2060,backgroundColor:C.green+'12',borderWidth:0},
+shadowLabel:{type:'label',xValue:2043,yValue:15,content:['Shadow Workforce','era'],color:C.green,font:{size:12,weight:'bold'}}
+}}},
+scales:{x:linX(2000,2060),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v},
+title:{display:true,text:'People 65+ per 100 working-age',color:C.dim},min:0,max:90}}}});
+})();"""
+        },
+        {
+            'id': 'siliconChart2', 'figure_num': 2,
+            'title': 'The Gentleman Scientist Effect: Amateur vs Professional Discovery',
+            'desc': 'Share of major scientific breakthroughs by independently wealthy amateurs, by half-century',
+            'source': 'Derived from Merton (1938), Shapin (2008), Royal Society records',
+            'position': 'after_heading_The Gentleman Scientist and the Duchess',
+            'js': """
+(()=>{const ctx=document.getElementById('siliconChart2');
+const periods=['1600–\\n1650','1650–\\n1700','1700–\\n1750','1750–\\n1800','1800–\\n1850','1850–\\n1900','1900–\\n1950','1950–\\n2000'];
+const amateur=[55,65,70,60,45,25,8,2];
+const professional=[45,35,30,40,55,75,92,98];
+new Chart(ctx,{type:'bar',data:{labels:periods,datasets:[
+{label:'Wealthy amateurs',data:amateur,backgroundColor:C.amber,borderRadius:4,borderSkipped:false},
+{label:'Professional / institutional',data:professional,backgroundColor:C.blue+'77',borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,
+title:{display:true,text:'Share of major discoveries (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'siliconChart3', 'figure_num': 3,
+            'title': 'The Hierarchy of Time: How Leisure Classes Spent Their Days',
+            'desc': 'Estimated daily time allocation across four historical archetypes',
+            'source': 'Reconstructed from Thompson (1967), Carcopino (1940), Davidoff (1973), Hansen (1991)',
+            'position': 'after_heading_The Hierarchy of Time',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('siliconChart3');
+const groups=['1850 English\\nFactory Worker','5th-c BC\\nAthenian Citizen','1780 English\\nGentleman','2050 AI-Supported\\nCitizen (projected)'];
+new Chart(ctx,{type:'bar',data:{labels:groups,datasets:[
+{label:'Survival labour',data:[13,2,0,0],backgroundColor:C.accent,borderRadius:4,borderSkipped:false},
+{label:'Household / estate',data:[2,2,2,1],backgroundColor:C.amber,borderRadius:4,borderSkipped:false},
+{label:'Civic / governance',data:[0,4,1,3],backgroundColor:C.blue,borderRadius:4,borderSkipped:false},
+{label:'Intellectual / creative',data:[0,3,4,5],backgroundColor:C.green,borderRadius:4,borderSkipped:false},
+{label:'Social / leisure',data:[1,3,5,5],backgroundColor:C.purple,borderRadius:4,borderSkipped:false},
+{label:'Sleep & rest',data:[8,8,8,8],backgroundColor:C.dim+'55',borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,font:{size:11}}},
+tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': ~'+i.raw+' hrs'}}},
+scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'h'},max:24,
+title:{display:true,text:'Hours per day',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'siliconChart4', 'figure_num': 4,
+            'title': 'Servants of Silicon: The Worker-to-Citizen Ratio Across History',
+            'desc': 'How many workers (human or machine) supported each free citizen or household',
+            'source': 'Finley (1980), Scheidel (2005), Davidoff (1973), Elman (2000), IFR World Robotics',
+            'position': 'after_para_42',
+            'js': """
+(()=>{const ctx=document.getElementById('siliconChart4');
+const labels=['Athens\\n(5th c BC)','Rome\\n(1st c AD)','English Great\\nHouse (1780)','Qing Scholar-\\nGentry (1800)','2050 Household\\n(projected)'];
+const ratios=[3,5,30,15,50];
+const colors=[C.amber,C.accent,C.purple,C.teal,C.blue];
+new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{label:'Workers per citizen/household',data:ratios,
+backgroundColor:colors.map(c=>c+'99'),borderColor:colors,borderWidth:2,borderRadius:6,borderSkipped:false,barPercentage:0.6}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' workers per citizen/household'}},
+annotation:{annotations:{
+projLabel:{type:'label',xValue:4,yValue:56,content:['Robots + AI agents','per household'],color:C.blue,font:{size:12,weight:'bold'}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},
+title:{display:true,text:'Workers per citizen / household',color:C.dim},min:0,max:60}}}});
+})();"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):
