@@ -2975,9 +2975,9 @@ backgroundColor:cats.map(c=>catColors[c]+'99'),borderColor:cats.map(c=>catColors
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Score: '+i.raw+' ('+cats[i.dataIndex]+'-dominant)'}},
 annotation:{annotations:{
-guiltLabel:{type:'label',xValue:85,yValue:3,content:['Guilt-dominant'],color:C.blue,font:{size:11,weight:'bold'}},
-shameLabel:{type:'label',xValue:85,yValue:14,content:['Shame-dominant'],color:C.accent,font:{size:11,weight:'bold'}},
-mixedLabel:{type:'label',xValue:85,yValue:10,content:['Mixed'],color:C.amber,font:{size:11,weight:'bold'}}
+guiltLabel:{type:'label',xValue:85,yValue:3,content:['Guilt-dominant'],color:C.blue,font:{size:13,weight:'bold'}},
+shameLabel:{type:'label',xValue:85,yValue:14,content:['Shame-dominant'],color:C.accent,font:{size:13,weight:'bold'}},
+mixedLabel:{type:'label',xValue:85,yValue:10,content:['Mixed'],color:C.amber,font:{size:13,weight:'bold'}}
 }}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Hofstede Individualism Index (0–100)',color:C.dim},min:0,max:100},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
@@ -2998,8 +2998,8 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean CPI: '+i.raw+'/100'}},
 annotation:{annotations:{
 avg:{type:'line',yMin:43,yMax:43,borderColor:C.dim,borderWidth:1,borderDash:[6,4],label:{display:true,content:'Global average (43)',position:'end',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-guiltNote:{type:'label',xValue:0,yValue:85,content:['e.g. Denmark 90,','Finland 87, Sweden 82'],color:C.blue,font:{size:10,style:'italic'}},
-shameNote:{type:'label',xValue:2,yValue:30,content:['e.g. China 45,','Indonesia 34, Pakistan 24'],color:C.accent,font:{size:10,style:'italic'}}
+guiltNote:{type:'label',xValue:0,yValue:85,content:['e.g. Denmark 90,','Finland 87, Sweden 82'],color:C.blue,font:{size:12,weight:'bold'}},
+shameNote:{type:'label',xValue:2,yValue:30,content:['e.g. China 45,','Indonesia 34, Pakistan 24'],color:C.accent,font:{size:12,weight:'bold'}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean CPI score (0–100)',color:C.dim},min:0,max:100}}}});
 })();"""
@@ -3019,9 +3019,9 @@ backgroundColor:[C.blue+'99',C.amber+'99',C.accent+'99'],borderColor:[C.blue,C.a
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean GII: '+i.raw}},
 annotation:{annotations:{
-guiltNote:{type:'label',xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 5th'],color:C.blue,font:{size:10,style:'italic'}},
-shameNote:{type:'label',xValue:2,yValue:48,content:['S. Korea 4th, Singapore','5th raise the average'],color:C.accent,font:{size:10,style:'italic'}},
-caveat:{type:'label',xValue:1,yValue:5,content:['Note: shame-dominant outliers (S. Korea, Japan) adopted guilt-culture institutions'],color:C.dim,font:{size:9,style:'italic'}}
+guiltNote:{type:'label',xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 5th'],color:C.blue,font:{size:12,weight:'bold'}},
+shameNote:{type:'label',xValue:2,yValue:48,content:['S. Korea 4th, Singapore','5th raise the average'],color:C.accent,font:{size:12,weight:'bold'}},
+caveat:{type:'label',xValue:1,yValue:5,content:['Note: shame-dominant outliers (S. Korea, Japan)','adopted guilt-culture institutions'],color:C.text,font:{size:11,weight:'bold'}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean GII score',color:C.dim},min:0,max:75}}}});
 })();"""
