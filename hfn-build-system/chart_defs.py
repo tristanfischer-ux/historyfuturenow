@@ -3172,7 +3172,7 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
             'title': 'The Demographic Gap: Old-Age Dependency Ratios to 2060',
             'desc': 'Number of people aged 65+ per 100 working-age adults — the gap the Shadow Workforce must fill',
             'source': 'UN Population Division, World Population Prospects 2024 revision',
-            'position': 'after_heading_The Shadow Workforce',
+            'position': 'after_para_11',
             'js': """
 (()=>{const ctx=document.getElementById('siliconChart1');
 const yrs=[2000,2010,2020,2030,2040,2050,2060];
@@ -3197,7 +3197,7 @@ title:{display:true,text:'People 65+ per 100 working-age',color:C.dim},min:0,max
             'title': 'The Gentleman Scientist Effect: Amateur vs Professional Discovery',
             'desc': 'Share of major scientific breakthroughs by independently wealthy amateurs, by half-century',
             'source': 'Derived from Merton (1938), Shapin (2008), Royal Society records',
-            'position': 'after_heading_The Gentleman Scientist and the Duchess',
+            'position': 'after_para_29',
             'js': """
 (()=>{const ctx=document.getElementById('siliconChart2');
 const periods=['1600–\\n1650','1650–\\n1700','1700–\\n1750','1750–\\n1800','1800–\\n1850','1850–\\n1900','1900–\\n1950','1950–\\n2000'];
@@ -3218,7 +3218,7 @@ title:{display:true,text:'Share of major discoveries (%)',color:C.dim}}}}});
             'title': 'The Hierarchy of Time: How Leisure Classes Spent Their Days',
             'desc': 'Estimated daily time allocation across four historical archetypes',
             'source': 'Reconstructed from Thompson (1967), Carcopino (1940), Davidoff (1973), Hansen (1991)',
-            'position': 'after_heading_The Hierarchy of Time',
+            'position': 'after_para_38',
             'tall': True,
             'js': """
 (()=>{const ctx=document.getElementById('siliconChart3');
@@ -3243,7 +3243,7 @@ title:{display:true,text:'Hours per day',color:C.dim}}}}});
             'title': 'Servants of Silicon: The Worker-to-Citizen Ratio Across History',
             'desc': 'How many workers (human or machine) supported each free citizen or household',
             'source': 'Finley (1980), Scheidel (2005), Davidoff (1973), Elman (2000), IFR World Robotics',
-            'position': 'after_para_42',
+            'position': 'after_para_39',
             'js': """
 (()=>{const ctx=document.getElementById('siliconChart4');
 const labels=['Athens\\n(5th c BC)','Rome\\n(1st c AD)','English Great\\nHouse (1780)','Qing Scholar-\\nGentry (1800)','2050 Household\\n(projected)'];
