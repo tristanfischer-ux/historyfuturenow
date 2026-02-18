@@ -3244,18 +3244,18 @@ title:{display:true,text:'Hours per day',color:C.dim}}}}});
             'position': 'after_para_39',
             'js': """
 (()=>{const ctx=document.getElementById('siliconChart4');
-const labels=['Athens\\n(5th c BC)','Rome\\n(1st c AD)','English Great\\nHouse (1780)','Qing Scholar-\\nGentry (1800)','2050 Household\\n(projected)'];
+const labels=['Athens (5th c BC)','Rome (1st c AD)','English Great House (1780)','Qing Scholar-Gentry (1800)','2050 Household (projected)'];
 const ratios=[3,5,30,15,50];
 const colors=[C.amber,C.accent,C.purple,C.teal,C.blue];
-new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{label:'Workers per citizen/household',data:ratios,
+new Chart(ctx,{type:'bar',indexAxis:'y',data:{labels:labels,datasets:[{label:'Workers per citizen/household',data:ratios,
 backgroundColor:colors.map(c=>c+'99'),borderColor:colors,borderWidth:2,borderRadius:6,borderSkipped:false,barPercentage:0.6}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' workers per citizen/household'}},
 annotation:{annotations:{
-projLabel:{type:'label',xValue:4,yValue:56,content:['Robots + AI agents','per household'],color:C.blue,font:{size:12,weight:'bold'}}
+projLabel:{type:'label',xValue:52,yValue:4,content:['Robots + AI agents','per household'],color:C.blue,font:{size:12,weight:'bold'}}
 }}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
-y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},
+scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:11},autoSkip:false}},
+x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},
 title:{display:true,text:'Workers per citizen / household',color:C.dim},min:0,max:60}}}});
 })();"""
         },
