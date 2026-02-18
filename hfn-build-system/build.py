@@ -124,6 +124,7 @@ ARTICLE_DATES = {
     "europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence": "2026-02-10",
     "the-new-literacy": "2026-02-16",
     "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing": "2026-02-16",
+    "a-nation-transformed-britains-demographic-revolution-1948-2050": "2026-02-18",
 }
 
 def load_original_slugs():

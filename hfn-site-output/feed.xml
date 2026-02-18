@@ -5,13 +5,22 @@
     <link>https://www.historyfuturenow.com</link>
     <description>Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.</description>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 16 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 18 Feb 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.historyfuturenow.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://www.historyfuturenow.com/favicon.svg</url>
       <title>History Future Now</title>
       <link>https://www.historyfuturenow.com</link>
     </image>
+    <item>
+      <title>A Nation Transformed: Britain&#x27;s Demographic Revolution, 1948–2050</title>
+      <link>https://www.historyfuturenow.com/articles/a-nation-transformed-britains-demographic-revolution-1948-2050</link>
+      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/a-nation-transformed-britains-demographic-revolution-1948-2050</guid>
+      <pubDate>Wed, 18 Feb 2026 00:00:00 +0000</pubDate>
+      <description>Britain has undergone one of the most rapid peacetime demographic transformations in European history. It was not planned. It emerged from a sequence of policy decisions — and its long-term trajectory is one of the most significant and least-discussed facts about Britain&#x27;s future.</description>
+      <category>Society</category>
+      <enclosure url="https://www.historyfuturenow.com/images/articles/a-nation-transformed-britains-demographic-revolution-1948-2050/hero.png" type="image/png" />
+    </item>
     <item>
       <title>The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</title>
       <link>https://www.historyfuturenow.com/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing</link>
@@ -182,15 +191,6 @@
       <description>For centuries, war has been a brutal constant in human affairs, with nations locked in cycles of conquest and revenge that have left countless lives shattered. Yet even from the ashes of the most devastating conflicts, lasting peace has managed to emerge through the alchemy of pragmatic diplomacy and difficult compromises.</description>
       <category>Global Balance of Power</category>
       <enclosure url="https://www.historyfuturenow.com/images/articles/forging-peace-from-centuries-of-war-to-ukraines-future/hero.png" type="image/png" />
-    </item>
-    <item>
-      <title>Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</title>
-      <link>https://www.historyfuturenow.com/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture</link>
-      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture</guid>
-      <pubDate>Sat, 15 Jan 2022 00:00:00 +0000</pubDate>
-      <description>The COP26 climate conference held in November 2021 reiterated the need to reduce global greenhouse gas emissions to net zero by 2050, and to stop the average global temperature from rising above 1.5 degrees compared to pre-industrial levels.</description>
-      <category>Natural Resources</category>
-      <enclosure url="https://www.historyfuturenow.com/images/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture/hero.png" type="image/png" />
     </item>
   </channel>
 </rss>
