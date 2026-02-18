@@ -94,6 +94,29 @@
     <img src="/images/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible/hero.png" alt="Editorial illustration for The Invisible Judge: Why Guilt and Shame Societies Are Incompatible" class="article-hero-img" loading="lazy" width="1200" height="675">
   </div>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article</div>
+        <div class="audio-meta">16 min</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-track"><div class="audio-progress-bar" id="audioProgressBar"></div></div>
+        <div class="scrub-thumb" id="audioThumb"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" data-queue-title="The Invisible Judge: Why Guilt and Shame Societies Are Incompatible" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible.mp3" aria-label="Add to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible.mp3"></audio>
+  </div>
   <div class="share-bar share-bar-top" data-share-url="https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" data-share-title="The Invisible Judge: Why Guilt and Shame Societies Are Incompatible" data-share-text="Two ways of keeping people honest: the invisible judge and the eye of the crowd. They don&#x27;t mix. Why it matters.">
     <span class="share-label">Share</span>
     <button class="share-btn" data-share="x" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></button>
@@ -238,20 +261,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="related-card">
+      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The 150 Year Life: How Radical Longevity Will Transform Our World</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
+      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Long Term Impact of Covid 19</span>
+        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -391,7 +414,118 @@ caveat:{type:'label',xValue:1,yValue:5,content:['Note: shame-dominant outliers (
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean GII score',color:C.dim},min:0,max:75}}}});
 })();
 </script>
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId,thumbId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    var thumb=document.getElementById(thumbId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
+    var dragging=false;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    function seekTo(e){
+      if(!audio.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+      audio.currentTime=pct*audio.duration;
+      updateBar(pct);
+    }
+
+    function seekToTouch(e){
+      if(!audio.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var touch=e.touches[0];
+      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
+      audio.currentTime=pct*audio.duration;
+      updateBar(pct);
+    }
+
+    function updateBar(pct){
+      var p=(pct*100)+'%';
+      bar.style.width=p;
+      if(thumb)thumb.style.left=p;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(dragging)return;
+      if(audio.duration){
+        var pct=audio.currentTime/audio.duration;
+        updateBar(pct);
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      updateBar(0);
+    };
+
+    wrap.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekTo(e);
+      function onMove(ev){seekTo(ev);}
+      function onUp(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('mousemove',onMove);
+        document.removeEventListener('mouseup',onUp);
+      }
+      document.addEventListener('mousemove',onMove);
+      document.addEventListener('mouseup',onUp);
+    });
+
+    wrap.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekToTouch(e);
+      function onTouchMove(ev){ev.preventDefault();seekToTouch(ev);}
+      function onTouchEnd(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('touchmove',onTouchMove);
+        document.removeEventListener('touchend',onTouchEnd);
+      }
+      document.addEventListener('touchmove',onTouchMove,{passive:false});
+      document.addEventListener('touchend',onTouchEnd);
+    });
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
+  if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
+})();
+</script>
 <script src="/js/share.js"></script>
 </body>
 </html>

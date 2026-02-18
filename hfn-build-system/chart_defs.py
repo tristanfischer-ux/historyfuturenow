@@ -2870,6 +2870,143 @@ scales:{x:linX(1994,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
         },
     ]
 
+    # ─── A NATION TRANSFORMED: BRITAIN'S DEMOGRAPHIC REVOLUTION ───
+    charts['a-nation-transformed-britains-demographic-revolution-1948-2050'] = [
+        {
+            'id': 'nationChart1', 'figure_num': 1,
+            'title': 'White British Share of Population, England and Wales, 1961–2061',
+            'desc': 'Census and projection: from over 97% to under 75%, with ONS-based projection to 2061.',
+            'source': 'ONS Census 1961–2021; ONS mid-year estimates and 2021-based principal projection',
+            'position': 'after_para_9',
+            'js': """
+(()=>{const ctx=document.getElementById('nationChart1');
+const yrs=[1961,1971,1981,1991,2001,2011,2021,2031,2041,2051,2061];
+const pct=[97,95.5,93,90,87.5,80.5,74.4,68,62,56,51];
+new Chart(ctx,{type:'line',data:{datasets:[
+{label:'White British %',data:xy(yrs,pct),borderColor:C.purple,backgroundColor:C.purple+'18',fill:false,tension:.35,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5,borderDash:[],spanGaps:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
+annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
+scales:{x:linX(1960,2065),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of population',color:C.dim},min:45,max:100}}}});
+})();"""
+        },
+        {
+            'id': 'nationChart2', 'figure_num': 2,
+            'title': 'Ethnic Minority Share (%) in Selected Local Authorities, 1950–2021',
+            'desc': 'Geographic concentration over time. 1991–2021 from census; 1950–1980 estimated from migration and country-of-birth data.',
+            'source': 'ONS Census 1991, 2001, 2011, 2021; 1950–1980 from migration and country-of-birth studies',
+            'position': 'after_para_11',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('nationChart2');
+const yrs=[1950,1960,1970,1980,1991,2001,2011,2021];
+const birmingham=[0,2,6,15,22,29.6,42,51];
+const bradford=[0,1,4,12,28,36,50,55];
+const leicester=[0,1,8,15,28,36,45,52];
+const london=[1,3,8,14,22,29,40,47];
+const manchester=[0,1,3,8,14,19,33,41];
+const slough=[0,0,2,15,38,47,64,72];
+const brent=[1,2,8,20,45,55,65,72];
+const newham=[1,3,12,25,50,61,67,73];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Birmingham',yrs,birmingham,C.blue),
+dxy('Bradford',yrs,bradford,C.purple),
+dxy('Leicester',yrs,leicester,C.green),
+dxy('London',yrs,london,C.accent),
+dxy('Manchester',yrs,manchester,C.amber),
+dxy('Slough',yrs,slough,C.teal),
+dxy('Brent',yrs,brent,C.rose),
+dxy('Newham',yrs,newham,C.indigo)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
+annotation:{annotations:{census:{type:'line',xMin:1991,xMax:1991,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Est. | Census →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
+scales:{x:linX(1950,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Non-White British %',color:C.dim},min:0,max:80}}}});
+})();"""
+        },
+        {
+            'id': 'nationChart3', 'figure_num': 3,
+            'title': 'Total Fertility Rate by Broad Ethnic Group, England and Wales, 1971–2021',
+            'desc': 'Replacement level is 2.1. White British below replacement; Pakistani/Bangladeshi above but converging.',
+            'source': 'ONS Birth characteristics; ONS Fertility and mortality by ethnic group',
+            'position': 'after_para_13',
+            'js': """
+(()=>{const ctx=document.getElementById('nationChart3');
+const yrs=[1971,1981,1991,2001,2011,2021];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('White British',yrs,[2.0,1.8,1.7,1.6,1.6,1.5],C.blue),
+dxy('Pakistani/Bangladeshi',yrs,[4.9,4.2,3.5,3.0,2.9,2.5],C.purple),
+dxy('Black African',yrs,[3.2,2.8,2.6,2.4,2.3,2.1],C.green),
+{label:'Replacement (2.1)',data:xy([1971,2021],[2.1,2.1]),borderColor:C.dim,borderWidth:1,borderDash:[6,4],pointRadius:0,fill:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+(i.dataset.borderDash&&i.dataset.borderDash.length?'':': '+i.parsed.y)}}},
+scales:{x:linX(1970,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Total fertility rate',color:C.dim},min:1.2,max:5.5}}}});
+})();"""
+        },
+        {
+            'id': 'nationChart4', 'figure_num': 4,
+            'title': 'Generations in 100 Years: 24-Year vs 30-Year Interval',
+            'desc': 'Shorter generational interval (e.g. average first birth at 24) yields ~4.2 generations per century; 30-year interval yields ~3.3.',
+            'source': 'Demographic mechanics; ONS Births by characteristics (median age at first birth)',
+            'position': 'after_para_14',
+            'js': """
+(()=>{const ctx=document.getElementById('nationChart4');
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('24-year interval (e.g. Pakistani/Bangladeshi median)',[0,24,48,72,96,100],[0,1,2,3,4,4.17],C.purple),
+dxy('30-year interval (e.g. White British median)',[0,30,60,90,100],[0,1,2,3,3.33,3.33],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>'Generation '+i.parsed.y.toFixed(2)+' at year '+i.parsed.x}}},
+scales:{x:linX(0,100,{title:{display:true,text:'Years',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,stepSize:1},title:{display:true,text:'Cumulative generations',color:C.dim},min:0,max:5}}}});
+})();"""
+        },
+        {
+            'id': 'nationChart5', 'figure_num': 5,
+            'title': 'UK Immigration, Emigration and Net Migration, 1964–2023 (Thousands per Year)',
+            'desc': 'Gross flows show the scale of both movement into and out of the UK; net migration is immigration minus emigration. Policy milestones annotated.',
+            'source': 'ONS Long-term international migration; House of Commons Library',
+            'position': 'after_para_7',
+            'js': """
+(()=>{const ctx=document.getElementById('nationChart5');
+const yrs=[1964,1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2016,2017,2018,2019,2020,2021,2022,2023];
+const imm=[280,270,230,270,290,320,340,480,560,591,630,630,580,625,650,580,510,1050,1200];
+const emm=[230,230,270,250,260,270,290,330,360,341,300,300,330,345,350,320,340,550,528];
+const net=[50,40,-40,20,30,50,50,150,200,250,330,330,250,280,300,260,170,500,672];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Immigration (inflow)',yrs,imm,C.green),
+dxy('Emigration (outflow)',yrs,emm,C.blue),
+dxy('Net migration',yrs,net,C.accent,[6,4])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'k'}}},
+annotation:{annotations:{
+v62:{type:'line',xMin:1962,xMax:1962,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'1962 Act',position:'start',font:{size:9}}},
+v73:{type:'line',xMin:1973,xMax:1973,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'EU join',position:'start',font:{size:9}}},
+v04:{type:'line',xMin:2004,xMax:2004,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'EU A8',position:'start',font:{size:9}}},
+v16:{type:'line',xMin:2016,xMax:2016,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'Brexit',position:'start',font:{size:9}}}
+}},
+scales:{x:linX(1964,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'k'},title:{display:true,text:'Thousands per year',color:C.dim},min:-60,max:1300}}}});
+})();"""
+        },
+        {
+            'id': 'nationChart6', 'figure_num': 6,
+            'title': 'White British Share of Population and Births, and UK Population, 1961–2100',
+            'desc': 'Population share (census to 2021, then demographer projections); births share (driving future composition); total UK population in millions. 2021–2100 are illustrative projections, not official ONS.',
+            'source': 'ONS Census 1961–2021; ONS Births by ethnic group; ONS National population projections; demographer projections 2021–2100',
+            'position': 'after_para_25',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('nationChart6');
+const yrs=[1961,1971,1981,1991,2001,2011,2021,2030,2040,2050,2060,2070,2080,2090,2100];
+const popShare=[97,95.5,93,90,87.5,80.5,74.4,70,65,58,52,47,43,40,38];
+const birthShare=[96,92,88,85,80,72,58,55,50,45,42,40,38,37,36];
+const popMillions=[52.8,54.4,56.4,57.4,59.1,63.2,67.0,69,70,70.5,71,71,70.5,70,69];
+new Chart(ctx,{type:'line',data:{datasets:[
+{...dxy('White British % of population',yrs,popShare,C.purple),yAxisID:'y',borderWidth:2.5},
+{...dxy('White British % of births',yrs,birthShare,C.blue),yAxisID:'y',borderDash:[6,4]},
+{...dxy('UK population (millions)',yrs,popMillions,C.accent),yAxisID:'y1',borderWidth:2,pointRadius:2}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+(i.dataset.yAxisID==='y1'?i.parsed.y+'m':i.parsed.y+'%')}}},
+annotation:{annotations:{
+proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Census / data | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}
+}},
+interaction:{intersect:false,mode:'index'},
+scales:{x:linX(1960,2100),y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'White British % (population and births)',color:C.dim},min:30,max:100},
+y1:{type:'linear',position:'right',grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'m'},title:{display:true,text:'UK population (millions)',color:C.accent},min:50,max:75}}}});
+})();"""
+        },
+    ]
 
     # ─── THE GREAT OFFSHORING ───
     charts['the-great-offshoring-how-the-worlds-factory-moved-east'] = [
