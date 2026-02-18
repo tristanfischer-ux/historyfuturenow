@@ -1,5 +1,5 @@
 ---
-description: Articles need user approval before deploying. Audio and other post-approval media auto-deploy.
+description: New articles need user approval. All other instructed changes (fixes, upgrades, layout, media) auto-deploy.
 alwaysApply: true
 ---
 
@@ -7,7 +7,7 @@ alwaysApply: true
 
 This is a static website hosted on Vercel. Deploying is low risk.
 
-## Articles: Draft-First, Deploy on Approval
+## What Needs Approval: New Articles Only
 
 New articles must be **built locally as drafts** for the user to review before deploying.
 
@@ -26,19 +26,18 @@ Only after the user explicitly approves (e.g. "deploy", "ship it", "looks good")
 ./scripts/deploy.sh "feat: description of changes"
 ```
 
-## Audio Narrations: Auto-Deploy
+## What Auto-Deploys: Everything Else the User Instructed
 
-Audio narrations are generated **after** an article has been approved and deployed. Since the content is already approved, audio narrations should be **deployed immediately** without waiting for further approval.
+If the user has asked you to do something and it is **not a new article**, deploy it immediately without waiting for approval. This includes but is not limited to:
 
-After generating audio for an approved article:
+- **Fixes** — bug fixes, broken links, typos, chart corrections
+- **Upgrades** — build system improvements, dependency updates, performance changes
+- **Layout changes** — CSS, HTML structure, navigation, responsive design
+- **Audio narrations** — generated for already-approved articles
+- **Media assets** — chart images, thumbnails, hero image regeneration
+- **Site-wide changes** — new features, styling updates, sharing improvements
 
-```bash
-./scripts/deploy.sh "feat: add audio narration for [article name]"
-```
-
-## Other Post-Approval Media: Auto-Deploy
-
-Chart image fixes, thumbnail generation, and other media improvements to already-published articles should also auto-deploy without approval.
+The principle: the user's instruction **is** the approval. Don't ask twice.
 
 ## Deploy Commands
 

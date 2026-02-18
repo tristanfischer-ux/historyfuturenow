@@ -216,17 +216,19 @@ def main():
     skipped = 0
 
     for slug, chart_list in all_charts.items():
-        print(f"\n[{slug}] {len(chart_list)} charts")
+        # Exclude data_story entries (mini-charts for homepage carousel only)
+        charts_for_article = [c for c in chart_list if not c.get("data_story") and "id" in c]
+        print(f"\n[{slug}] {len(charts_for_article)} charts")
 
         # Generate share pages for each chart
-        for chart in chart_list:
+        for chart in charts_for_article:
             generate_chart_share_page(
                 slug, chart["id"], chart["title"],
                 chart["desc"], chart["source"]
             )
 
         # Screenshot all charts in one Puppeteer session per article
-        results = screenshot_charts_for_article(slug, chart_list)
+        results = screenshot_charts_for_article(slug, charts_for_article)
 
         for r in results:
             if r.get("ok"):
@@ -237,7 +239,7 @@ def main():
                 failed += 1
 
         if not results:
-            skipped += len(chart_list)
+            skipped += len(charts_for_article)
 
     httpd.shutdown()
 
