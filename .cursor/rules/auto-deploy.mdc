@@ -1,32 +1,52 @@
 ---
-description: Build articles as drafts for review. Do NOT deploy until the user has read and approved.
+description: Articles need user approval before deploying. Audio and other post-approval media auto-deploy.
 alwaysApply: true
 ---
 
-# Draft-First Workflow
+# Deployment Workflow
 
-New articles and content changes must be **built locally as drafts** for the user to review before deploying.
+This is a static website hosted on Vercel. Deploying is low risk.
 
-## Rule
+## Articles: Draft-First, Deploy on Approval
 
-After completing any task that changes site content:
+New articles must be **built locally as drafts** for the user to review before deploying.
+
+After completing a new article (text, charts, hero image):
 
 1. **Build the site** so the article is viewable locally with all charts and images:
    ```bash
    cd hfn-build-system && python3 build.py
    ```
-2. **Do NOT deploy.** Do not run `./scripts/deploy.sh`, do not `git push`, do not run `vercel --prod`. The article is a draft until the user has read it and said to deploy.
+2. **Do NOT deploy.** The article is a draft until the user has read it and approved.
 3. **Tell the user** the article is ready to review and where to find the built HTML (e.g. `hfn-site-output/articles/{slug}.html`).
 
-## When the User Approves
-
-Only after the user explicitly says to deploy (e.g. "deploy", "ship it", "looks good, push it"):
+Only after the user explicitly approves (e.g. "deploy", "ship it", "looks good"):
 
 ```bash
 ./scripts/deploy.sh "feat: description of changes"
 ```
 
-This single command: builds the site, commits, pushes to git, deploys to Vercel production, verifies the site, and logs the deployment.
+## Audio Narrations: Auto-Deploy
+
+Audio narrations are generated **after** an article has been approved and deployed. Since the content is already approved, audio narrations should be **deployed immediately** without waiting for further approval.
+
+After generating audio for an approved article:
+
+```bash
+./scripts/deploy.sh "feat: add audio narration for [article name]"
+```
+
+## Other Post-Approval Media: Auto-Deploy
+
+Chart image fixes, thumbnail generation, and other media improvements to already-published articles should also auto-deploy without approval.
+
+## Deploy Commands
+
+The deploy script handles build, commit, push, and Vercel deploy:
+
+```bash
+./scripts/deploy.sh "feat: description of changes"
+```
 
 ### Manual steps (if not using the script):
 
@@ -41,9 +61,8 @@ This single command: builds the site, commits, pushes to git, deploys to Vercel 
 - The domain `www.historyfuturenow.com` is served by **Vercel**, not GitHub Pages
 - `git push` alone does NOT deploy to the live site — you MUST run `vercel --prod`
 - The deploy script handles both git push and Vercel deploy
-- **Never deploy without user approval.** Build and present the draft first.
 
-## After Deploying (once approved)
+## After Deploying
 
 - Verify the site loads at https://www.historyfuturenow.com
 - The deploy script auto-logs to `~/.memory/daily/YYYY-MM-DD.md`
