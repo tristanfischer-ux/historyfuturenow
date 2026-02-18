@@ -3224,9 +3224,9 @@ const groups=['1850 English\\nFactory Worker','5th-c BC\\nAthenian Citizen','178
 new Chart(ctx,{type:'bar',data:{labels:groups,datasets:[
 {label:'Survival labour',data:[13,2,0,0],backgroundColor:C.accent,borderRadius:4,borderSkipped:false},
 {label:'Household / estate',data:[2,2,2,1],backgroundColor:C.amber,borderRadius:4,borderSkipped:false},
-{label:'Civic / governance',data:[0,4,1,3],backgroundColor:C.blue,borderRadius:4,borderSkipped:false},
-{label:'Intellectual / creative',data:[0,3,4,5],backgroundColor:C.green,borderRadius:4,borderSkipped:false},
-{label:'Social / leisure',data:[1,3,5,5],backgroundColor:C.purple,borderRadius:4,borderSkipped:false},
+{label:'Civic / governance',data:[0,5,1,3],backgroundColor:C.blue,borderRadius:4,borderSkipped:false},
+{label:'Intellectual / creative',data:[0,3,6,6],backgroundColor:C.green,borderRadius:4,borderSkipped:false},
+{label:'Social / leisure',data:[1,4,7,6],backgroundColor:C.purple,borderRadius:4,borderSkipped:false},
 {label:'Sleep & rest',data:[8,8,8,8],backgroundColor:C.dim+'55',borderRadius:4,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:{...legend,labels:{...legend.labels,font:{size:11}}},
