@@ -176,6 +176,12 @@ title:i=>[items[i[0].dataIndex].l],label:i=>{const d=items[i.dataIndex];return d
 scales:{x:{type:'linear',min:1600,max:2030,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': 'Nearly half of Soviet men aged 18-30 were killed in WW2',
+            'chart_id': 'heroWar',
+            'js': """(()=>{const ctx=document.getElementById('heroWar');new Chart(ctx,{type:'bar',data:{labels:['Soviet\\nUnion','Germany','Germany\\n(WW1)','Confederate\\nStates','Russia\\n(WW1)','France\\n(WW1)'],datasets:[{data:[49,45,28,19,18.7,17],backgroundColor:['#c43425','#c43425cc','#7c3aed','#2563eb','#7c3aedcc','#b8751a'],borderRadius:3,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',callback:v=>v+'%',font:{size:9}}},y:{grid:{display:false},ticks:{color:'#8a8479',font:{size:9}}}}}});})();"""
+        },
     ]
 
     # ─── 2. RENEWABLES AND BATTERY REVOLUTION ───
@@ -298,6 +304,12 @@ datasets:[
 scales:{x:linX(1800,2025),y:{stacked:false,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,title:{display:true,text:'Share of global primary energy (%)',color:C.dim}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': 'Solar costs fell 99% in 40 years',
+            'chart_id': 'heroSolar',
+            'js': """(()=>{const ctx=document.getElementById('heroSolar');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1976,1985,1995,2000,2005,2010,2015,2020,2024],[100,25,8,5,4,2,0.6,0.25,0.2]),borderColor:'#0d9a5a',backgroundColor:'#0d9a5a18',fill:true,tension:.35,pointRadius:2,pointBackgroundColor:'#0d9a5a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'$'+i.parsed.y+'/watt'}}},scales:{x:{type:'linear',min:1976,max:2024,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v}}}}});})();"""
+        },
     ]
 
     # ─── 3. EUROPEAN REVOLUTIONS ───
@@ -402,6 +414,12 @@ scales:{x:{type:'linear',min:1630,max:2000,grid:{color:C.grid},ticks:{color:C.di
 y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:12,title:{display:true,text:'Contagion influence',color:C.dim}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': '60+ revolutions in 350 years',
+            'chart_id': 'heroRev',
+            'js': """(()=>{const ctx=document.getElementById('heroRev');const ch=[{y:1642,i:3,c:'#2563eb'},{y:1688,i:2,c:'#2563eb'},{y:1775,i:5,c:'#c43425'},{y:1789,i:9,c:'#c43425'},{y:1821,i:3,c:'#7c3aed'},{y:1830,i:4,c:'#b8751a'},{y:1848,i:10,c:'#c43425'},{y:1917,i:8,c:'#c43425'},{y:1989,i:9,c:'#0d9a5a'}];new Chart(ctx,{type:'bubble',data:{datasets:[{data:ch.map(c=>({x:c.y,y:c.i,r:c.i*1.8})),backgroundColor:ch.map(c=>c.c+'55'),borderColor:ch.map(c=>c.c),borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1620,max:2000,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0,max:12}}}});})();"""
+        },
     ]
 
     # ─── 4. NORTH AFRICAN THREAT ───
@@ -498,6 +516,12 @@ datasets:[
 scales:{x:{grid:{display:false},ticks:{color:C.dim},title:{display:true,text:'Age group',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of total population (%)',color:C.dim}}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'North Africa will outnumber Southern Europe by 2030',
+            'chart_id': 'heroNAfrica',
+            'js': """(()=>{const ctx=document.getElementById('heroNAfrica');new Chart(ctx,{type:'line',data:{datasets:[{label:'N. Africa',data:_xy([1960,1980,2000,2020,2035,2050],[55,95,150,210,260,310]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'S. Europe',data:_xy([1960,1980,2000,2020,2035,2050],[95,112,121,122,116,107]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'M'}}},scales:{x:{type:'linear',min:1960,max:2050,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'M'},min:0}}}});})();"""
         },
     ]
 
@@ -612,6 +636,12 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?'$'+(v/1000)+'T':'$'+v+'bn'},title:{display:true,text:'Additional government borrowing',color:C.dim}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': 'COVID accelerated deglobalisation by a decade',
+            'chart_id': 'heroCovid',
+            'js': """(()=>{const ctx=document.getElementById('heroCovid');new Chart(ctx,{type:'bar',data:{labels:['Trade','Remote Work','Digital Health','Automation','Debt/GDP','Inequality'],datasets:[{label:'Change (%)',data:[-15,300,180,40,25,18],backgroundColor:function(c){return c.raw<0?'#c43425':'#0d9a5a'},borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>(i.raw>0?'+':'')+i.raw+'%'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>(v>0?'+':'')+v+'%'}}}}});})();"""
+        },
     ]
 
     # ─── 6. DEBT JUBILEES & HYPERINFLATION ───
@@ -695,6 +725,12 @@ ds('Federal tax revenue (% GDP)',[20,17,15,18,16,17,18,18],C.blue,[5,5])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of GDP',color:C.dim},min:10,max:30}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'A loaf of bread cost 3 billion Marks by 1923',
+            'chart_id': 'heroDebt',
+            'js': """(()=>{const ctx=document.getElementById('heroDebt');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1921.0,1921.5,1922.0,1922.5,1923.0,1923.25,1923.5,1923.67,1923.83],[1,2,3,10,250,500,100000,2000000,3000000000]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.3,pointRadius:2,pointBackgroundColor:'#b8751a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>{const v=i.parsed.y;return v>=1e9?(v/1e9)+'B Marks':v>=1e6?(v/1e6)+'M':v>=1e3?(v/1e3)+'K':v+' Marks'}}}},scales:{x:{type:'linear',min:1921,max:1924,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>{const yr=Math.floor(v);const f=v-yr;if(f<0.01)return'Jan '+yr;if(Math.abs(f-0.5)<0.01)return'Jul '+yr;return''}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>{if(v>=1e9)return v/1e9+'B';if(v>=1e6)return v/1e6+'M';if(v>=1e3)return v/1e3+'K';return v}}}}}});})();"""
         },
     ]
 
@@ -824,6 +860,12 @@ dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
 scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': 'Western dominance was a 200-year anomaly',
+            'chart_id': 'heroWest',
+            'js': """(()=>{const ctx=document.getElementById('heroWest');const yrs=[1,1500,1700,1870,1950,2000,2025];new Chart(ctx,{type:'line',data:{datasets:[{label:'West',data:_xy(yrs,[12,18,24,42,52,42,30]),borderColor:'#2563eb',fill:false,tension:.35,pointRadius:2,borderWidth:2},{label:'China',data:_xy(yrs,[26,25,22,17,5,12,20]),borderColor:'#c43425',fill:false,tension:.35,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},max:55}}}});})();"""
+        },
     ]
 
     # ─── 9. JOBS: GET RID OF EXPENSIVE WESTERNERS ───
@@ -938,6 +980,12 @@ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding
 title:i=>[eras[i[0].dataIndex].l],label:i=>{const e=eras[i.dataIndex];return e.s+' ('+e.y1+' \u2014 '+(e.y2>2024?'future':e.y2)+')'}}}},
 scales:{x:{type:'linear',min:1450,max:2070,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'Robot costs falling below human labour',
+            'chart_id': 'heroRobot',
+            'js': """(()=>{const ctx=document.getElementById('heroRobot');const yrs=[2010,2015,2018,2020,2022,2024,2027,2030];new Chart(ctx,{type:'line',data:{datasets:[{label:'Robot cost/hr',data:_xy(yrs,[15,10,7,5,3.5,2.5,1.5,1]),borderColor:'#b8751a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Human min wage',data:_xy(yrs,[7.25,7.25,7.25,7.25,7.25,7.25,7.25,7.25]),borderColor:'#c43425',fill:false,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:2010,max:2030,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v},min:0}}}});})();"""
         },
     ]
 
@@ -1054,6 +1102,12 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Workers per retiree',color:C.dim},min:0}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'Human life expectancy: from 30 to 150 years',
+            'chart_id': 'heroLongevity',
+            'js': """(()=>{const ctx=document.getElementById('heroLongevity');new Chart(ctx,{type:'bar',data:{labels:['Stone Age','Classical','Medieval','1800','1900','1950','2000','2025','2100?'],datasets:[{data:[30,35,40,40,50,60,70,78,150],backgroundColor:['#8a8479','#8a8479','#8a8479','#8a8479','#b8751a','#b8751a','#2563eb','#2563eb','#0d9a5a'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+' years'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:7},maxRotation:45}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0}}}});})();"""
         },
     ]
 
@@ -1272,6 +1326,12 @@ annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Total Fertility Rate',color:C.dim},min:0,max:5.5}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'South Korea: 0.72 children per woman',
+            'chart_id': 'heroFertility',
+            'js': """(()=>{const ctx=document.getElementById('heroFertility');new Chart(ctx,{type:'bar',data:{labels:['S.Korea','China','Italy','Japan','Germany','UK','France','US','India','Nigeria'],datasets:[{data:[0.72,1.09,1.24,1.20,1.35,1.49,1.79,1.62,2.03,5.14],backgroundColor:['#c43425','#c43425','#c43425','#c43425','#c43425','#b8751a','#b8751a','#b8751a','#0d9a5a','#0d9a5a'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+' children per woman'}},annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:'#8a8479',borderDash:[4,3],borderWidth:1}}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8},maxRotation:45}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0,max:5.5}}}});})();"""
         },
     ]
 
@@ -1556,6 +1616,12 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global advanced chips'}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': "Taiwan makes 63% of the world's advanced chips",
+            'chart_id': 'heroTaiwan',
+            'js': """(()=>{const ctx=document.getElementById('heroTaiwan');new Chart(ctx,{type:'bar',data:{labels:['Taiwan','S. Korea','China','US','Europe','Other'],datasets:[{data:[63,18,6,5,3,5],backgroundColor:['#c43425','#2563eb','#b8751a','#7c3aed','#0c8f8f','#8a8479'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of global advanced chips'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});})();"""
+        },
     ]
 
     # ─── 24. ROOTS: CLIMATE DENIAL, CREATIONISM, SLAVERY ───
@@ -1792,6 +1858,12 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global academic output'}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': 'By 2100, Africa will have 4 billion people',
+            'chart_id': 'heroWinners',
+            'js': """(()=>{const ctx=document.getElementById('heroWinners');new Chart(ctx,{type:'bar',data:{labels:['Europe','N. America','China','India','SE Asia','Africa'],datasets:[{label:'2025',data:[450,375,1410,1440,700,1500],backgroundColor:'#2563eb88',borderRadius:2},{label:'2100',data:[350,400,750,1500,850,4000],backgroundColor:'#0d9a5a88',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.raw+'M'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v>=1000?(v/1000)+'B':v+'M'}}}}});})();"""
+        },
     ]
 
     # ─── 30. WHY THE MILITARY: ENERGY & TRADE ───
@@ -1925,6 +1997,12 @@ scales:{x:{title:{display:true,text:'% of GDP',color:C.dim},grid:{color:C.grid},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': '€800 billion: Europe rearming at unprecedented speed',
+            'chart_id': 'heroRearm',
+            'js': """(()=>{const ctx=document.getElementById('heroRearm');new Chart(ctx,{type:'bar',data:{labels:['Poland','Estonia','Lithuania','Latvia','Finland','UK','France','Germany','Italy','Spain'],datasets:[{data:[4.2,3.4,3.5,3.2,2.5,2.3,2.1,2.1,1.6,1.3],backgroundColor:function(c){return c.raw>3?'#c43425':c.raw>2?'#2563eb':'#8a847966'},borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of GDP'}},annotation:{annotations:{nato:{type:'line',yMin:2,yMax:2,borderColor:'#8a8479',borderDash:[4,3],borderWidth:1}}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});})();"""
+        },
     ]
 
     charts['the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth'] = [
@@ -2001,6 +2079,12 @@ tooltip:tooltipStyle,title:{display:true,text:'Digital Subscribers: NYT Soaring 
 scales:{y:{title:{display:true,text:'Millions',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(2013,2026,{grid:{display:false},ticks:{color:C.dim}})}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'US newspaper jobs down 80% since 1990',
+            'chart_id': 'heroPress',
+            'js': """(()=>{const ctx=document.getElementById('heroPress');new Chart(ctx,{type:'line',data:{labels:['1990','1995','2000','2005','2010','2015','2020','2025'],datasets:[{data:[458,400,412,310,260,183,140,87],borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'k jobs'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'k'},min:0}}}});})();"""
         },
     ],
 
@@ -2214,6 +2298,12 @@ scales:{y:{title:{display:true,text:'65+ per 100 Working-Age',color:C.dim},grid:
 x:linX(2000,2060,{grid:{display:false},ticks:{color:C.dim}})}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': 'No country has recovered from sub-1.5 fertility',
+            'chart_id': 'heroEmpty',
+            'js': """(()=>{const ctx=document.getElementById('heroEmpty');const yrs=[1960,1970,1980,1990,2000,2010,2020,2024];new Chart(ctx,{type:'line',data:{datasets:[{label:'S. Korea',data:_xy(yrs,[6.0,4.53,2.83,1.59,1.48,1.23,0.84,0.72]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'China',data:_xy(yrs,[5.76,5.81,2.63,2.51,1.60,1.54,1.28,1.02]),borderColor:'#7c3aed',fill:false,tension:.3,pointRadius:2,borderWidth:2,borderDash:[5,3]},{label:'US',data:_xy(yrs,[3.65,2.48,1.84,2.08,2.06,1.93,1.64,1.62]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1960,max:2024,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0}}}});})();"""
+        },
     ]
 
     # ═══════════════════════════════════════════════════════
@@ -2269,6 +2359,12 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();"""
         },
+        {
+            'data_story': True,
+            'headline': 'India made 78,500 content removal requests in 2024',
+            'chart_id': 'heroScribes',
+            'js': """(()=>{const ctx=document.getElementById('heroScribes');new Chart(ctx,{type:'bar',data:{labels:['India','Turkey','Russia','S. Korea','France','Germany','Brazil','US'],datasets:[{data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9],backgroundColor:['#c43425','#b8751a','#7c3aed','#2563eb','#0c8f8f','#2563ebcc','#0d9a5a','#0284c7'],borderRadius:3,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'K requests'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'K'}},y:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}}}}});})();"""
+        },
     ]
 
     # ─── THE SCRAMBLE FOR THE SOLAR SYSTEM ───
@@ -2291,6 +2387,12 @@ scales:{y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:fu
 title:{display:true,text:'USD per kg (log scale)',color:C.dim}},
 x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'Launch costs fell from $54,500 to $200/kg',
+            'chart_id': 'heroSpace',
+            'js': """(()=>{const ctx=document.getElementById('heroSpace');new Chart(ctx,{type:'bar',data:{labels:['Shuttle','Atlas V','Falcon 9','F. Heavy','Starship'],datasets:[{data:[54500,13200,2720,1500,200],backgroundColor:['#8a8479','#b8751a','#2563eb','#2563ebcc','#c43425'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'$'+i.raw.toLocaleString()+'/kg'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v.toLocaleString()}}}}});})();"""
         },
     ]
 
@@ -2316,6 +2418,12 @@ scales:{y:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+
 title:{display:true,text:'Pages (thousands)',color:C.dim},min:0},
 x:{grid:{display:false},ticks:{color:C.dim}}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'US federal regulations grew 18x since 1950',
+            'chart_id': 'heroGuards',
+            'js': """(()=>{const ctx=document.getElementById('heroGuards');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1950,1960,1970,1975,1980,1990,2000,2010,2020,2025],[10,19,35,54,71,102,128,157,175,180]),borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.3,pointRadius:2,pointBackgroundColor:'#7c3aed',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.parsed.y+'K pages'}}},scales:{x:{type:'linear',min:1950,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'K'},min:0}}}});})();"""
         },
     ]
 
@@ -2343,6 +2451,12 @@ scales:{y:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+
 title:{display:true,text:'Manufacturing % of GDP',color:C.dim},min:5,max:40},
 x:{grid:{display:false},ticks:{color:C.dim}}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'Manufacturing fell from 30% to 11% of US GDP',
+            'chart_id': 'heroFactory',
+            'js': """(()=>{const ctx=document.getElementById('heroFactory');new Chart(ctx,{type:'line',data:{datasets:[{label:'US',data:_xy([1970,1985,2000,2010,2025],[24,18,15,12,11]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'UK',data:_xy([1970,1985,2000,2010,2025],[28,18,14,10,9]),borderColor:'#0c8f8f',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'China',data:_xy([1970,1985,2000,2010,2025],[30,34,32,32,28]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1970,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:5,max:40}}}});})();"""
         },
     ]
 
@@ -2401,6 +2515,12 @@ backgroundColor:[C.green,C.accent,C.green+'cc',C.accent+'cc',C.green+'99',C.acce
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{var v=i.raw;return (v>=0?'+':'')+v.toLocaleString()+' €/year per capita'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>(v>=0?'+':'')+v.toLocaleString()+'€'},title:{display:true,text:'Net annual fiscal contribution per capita (€)',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'Foreign-born populations tripled since 1970',
+            'chart_id': 'heroGates',
+            'js': """(()=>{const ctx=document.getElementById('heroGates');new Chart(ctx,{type:'line',data:{datasets:[{label:'UK',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[4.3,5.8,6.2,6.5,8.3,12.0,14.4,15.8]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Germany',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[2.8,6.6,7.5,8.4,12.5,13.0,18.8,20.2]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'US',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[5.4,4.7,6.2,7.9,11.1,12.9,13.7,14.3]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1960,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});})();"""
         },
     ]
 
@@ -2867,6 +2987,12 @@ annotation:{annotations:{peak:{type:'point',xValue:2011,yValue:7000,backgroundCo
 peakLabel:{type:'label',xValue:2011,yValue:7350,content:'Peak: $7,000 (2011)',color:C.accent,font:{size:11,weight:'bold'}}}}},
 scales:{x:linX(1994,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v.toLocaleString()},title:{display:true,text:'GDP per capita (constant 2015 USD)',color:C.dim},min:5000,max:7500}}}});
 })();"""
+        },
+        {
+            'data_story': True,
+            'headline': 'From 1 in 3 births to 1 in 15 — builder populations vanishing',
+            'chart_id': 'heroBuilders',
+            'js': """(()=>{const ctx=document.getElementById('heroBuilders');new Chart(ctx,{type:'line',data:{datasets:[{label:'Builder share',data:_xy([1960,1980,2000,2025,2050,2100],[37,28.8,21.6,14.4,10.4,7.1]),borderColor:'#7c3aed',fill:true,backgroundColor:'#7c3aed18',tension:.3,pointRadius:2,borderWidth:2.5},{label:'Sub-Saharan Africa',data:_xy([1960,1980,2000,2025,2050,2100],[7.8,13,20.7,31.1,41,43.1]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of global births'}}},scales:{x:{type:'linear',min:1960,max:2100,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0,max:50}}}});})();"""
         },
     ]
 

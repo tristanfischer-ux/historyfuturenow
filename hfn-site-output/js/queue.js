@@ -295,7 +295,6 @@
   }
 
   function addToQueue(item) {
-    // Prevent duplicates
     for (var i = 0; i < queue.length; i++) {
       if (queue[i].slug === item.slug) return false;
     }
@@ -305,11 +304,43 @@
     updateBadges();
     renderQueueList();
 
-    // If this is the first item, load it
     if (queue.length === 1) {
       loadTrack(0, false);
     }
     return true;
+  }
+
+  function addNextToQueue(item) {
+    for (var i = 0; i < queue.length; i++) {
+      if (queue[i].slug === item.slug) return false;
+    }
+    var insertAt = currentIndex >= 0 ? currentIndex + 1 : 0;
+    queue.splice(insertAt, 0, item);
+    save();
+    showBar();
+    updateBadges();
+    renderQueueList();
+
+    if (queue.length === 1) {
+      loadTrack(0, false);
+    }
+    return true;
+  }
+
+  function playNowItem(item) {
+    for (var i = 0; i < queue.length; i++) {
+      if (queue[i].slug === item.slug) {
+        loadTrack(i, true);
+        showBar();
+        return;
+      }
+    }
+    var insertAt = currentIndex >= 0 ? currentIndex + 1 : 0;
+    queue.splice(insertAt, 0, item);
+    showBar();
+    updateBadges();
+    renderQueueList();
+    loadTrack(insertAt, true);
   }
 
   function removeFromQueue(index) {
@@ -477,19 +508,174 @@
     return div.innerHTML;
   }
 
+  // ─── Bookmarks ─────────────────────────────────────────────────────────────
+  var BOOKMARK_KEY = 'hfn_bookmarks';
+  var bookmarks = [];
+
+  function loadBookmarks() {
+    try {
+      var raw = localStorage.getItem(BOOKMARK_KEY);
+      if (raw) bookmarks = JSON.parse(raw);
+    } catch (e) { bookmarks = []; }
+  }
+
+  function saveBookmarks() {
+    try {
+      localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarks));
+    } catch (e) { /* quota exceeded */ }
+  }
+
+  function toggleBookmark(slug, title, url) {
+    var idx = -1;
+    for (var i = 0; i < bookmarks.length; i++) {
+      if (bookmarks[i].slug === slug) { idx = i; break; }
+    }
+    if (idx >= 0) {
+      bookmarks.splice(idx, 1);
+      saveBookmarks();
+      updateBookmarkIcons();
+      return false;
+    }
+    bookmarks.push({ slug: slug, title: title, url: url, savedAt: Date.now() });
+    saveBookmarks();
+    updateBookmarkIcons();
+    return true;
+  }
+
+  function isBookmarked(slug) {
+    for (var i = 0; i < bookmarks.length; i++) {
+      if (bookmarks[i].slug === slug) return true;
+    }
+    return false;
+  }
+
+  function updateBookmarkIcons() {
+    document.querySelectorAll('.card-bookmark-btn').forEach(function (btn) {
+      var slug = btn.dataset.bookmarkSlug;
+      var saved = isBookmarked(slug);
+      btn.classList.toggle('bookmarked', saved);
+      btn.setAttribute('aria-label', saved ? 'Remove bookmark' : 'Bookmark');
+    });
+  }
+
+  // ─── Toast ────────────────────────────────────────────────────────────────
+  var toastTimer = null;
+
+  function showToast(msg) {
+    var el = document.getElementById('hfnToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'hfnToast';
+      el.className = 'hfn-toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('visible'); }, 2200);
+  }
+
+  // ─── Popover ──────────────────────────────────────────────────────────────
+  var activePopover = null;
+
+  function closePopover() {
+    if (activePopover) {
+      activePopover.remove();
+      activePopover = null;
+    }
+  }
+
+  function openPopover(btn) {
+    closePopover();
+    var slug = btn.dataset.queueSlug;
+    var title = btn.dataset.queueTitle;
+    var section = btn.dataset.queueSection || '';
+    var color = btn.dataset.queueColor || '#7c3aed';
+    var url = btn.dataset.queueUrl;
+
+    var pop = document.createElement('div');
+    pop.className = 'audio-popover';
+    pop.innerHTML =
+      '<button class="audio-popover-item" data-action="playNow">' +
+        '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>' +
+        ' Play now</button>' +
+      '<button class="audio-popover-item" data-action="addNext">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M17 11H3M21 7l-4 4 4 4M7 5v14"/></svg>' +
+        ' Add next</button>' +
+      '<button class="audio-popover-item" data-action="addEnd">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg>' +
+        ' Add to end</button>';
+
+    var item = { slug: slug, title: title, section: section, color: color, url: url };
+
+    pop.querySelectorAll('.audio-popover-item').forEach(function (opt) {
+      opt.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var action = this.dataset.action;
+        if (action === 'playNow') {
+          playNowItem(item);
+          showToast('Playing now');
+        } else if (action === 'addNext') {
+          addNextToQueue(item) ? showToast('Playing next') : showToast('Already in queue');
+        } else if (action === 'addEnd') {
+          addToQueue(item) ? showToast('Added to queue') : showToast('Already in queue');
+        }
+        closePopover();
+      });
+    });
+
+    var rect = btn.getBoundingClientRect();
+    pop.style.position = 'fixed';
+    pop.style.zIndex = '10001';
+
+    document.body.appendChild(pop);
+
+    var popRect = pop.getBoundingClientRect();
+    var top = rect.bottom + 4;
+    var left = rect.left;
+    if (top + popRect.height > window.innerHeight) top = rect.top - popRect.height - 4;
+    if (left + popRect.width > window.innerWidth) left = window.innerWidth - popRect.width - 8;
+    if (left < 8) left = 8;
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+
+    activePopover = pop;
+  }
+
+  document.addEventListener('click', function (e) {
+    if (activePopover && !activePopover.contains(e.target) && !e.target.closest('.card-play-btn')) {
+      closePopover();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closePopover();
+  });
+
   // ─── Public API ──────────────────────────────────────────────────────────────
   window.HFNQueue = {
     add: function (slug, title, section, color, url) {
-      var added = addToQueue({
-        slug: slug,
-        title: title,
-        section: section,
-        color: color,
-        url: url,
-      });
+      var added = addToQueue({ slug: slug, title: title, section: section, color: color, url: url });
       if (added) {
         updateBadges();
+        showToast('Added to queue');
+      } else {
+        showToast('Already in queue');
       }
+    },
+    addNext: function (slug, title, section, color, url) {
+      var added = addNextToQueue({ slug: slug, title: title, section: section, color: color, url: url });
+      if (added) {
+        updateBadges();
+        showToast('Playing next');
+      } else {
+        showToast('Already in queue');
+      }
+    },
+    playNow: function (slug, title, section, color, url) {
+      playNowItem({ slug: slug, title: title, section: section, color: color, url: url });
+      showToast('Playing now');
     },
     addAll: function (items) {
       var count = 0;
@@ -497,14 +683,20 @@
         if (addToQueue(items[i])) count++;
       }
       updateBadges();
+      if (count > 0) showToast(count + ' added to queue');
       return count;
     },
+    bookmark: function (slug, title, url) {
+      var added = toggleBookmark(slug, title, url);
+      showToast(added ? 'Bookmarked' : 'Bookmark removed');
+    },
+    isBookmarked: isBookmarked,
   };
 
   // ─── Bind data-attribute buttons ────────────────────────────────────────────
   function bindQueueButtons() {
-    // "Add to Queue" buttons (both dark and light variants)
-    document.querySelectorAll('[data-queue-slug][data-queue-title]').forEach(function (btn) {
+    // Legacy "Add to Queue" buttons (q-add-btn with data attributes)
+    document.querySelectorAll('.q-add-btn[data-queue-slug]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -514,6 +706,28 @@
           this.dataset.queueSection,
           this.dataset.queueColor,
           this.dataset.queueUrl
+        );
+      });
+    });
+
+    // Play buttons — open popover
+    document.querySelectorAll('.card-play-btn[data-queue-slug]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openPopover(this);
+      });
+    });
+
+    // Bookmark buttons
+    document.querySelectorAll('.card-bookmark-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        HFNQueue.bookmark(
+          this.dataset.bookmarkSlug,
+          this.dataset.bookmarkTitle,
+          this.dataset.bookmarkUrl
         );
       });
     });
@@ -534,6 +748,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     if (!document.getElementById('queueBar')) return;
 
+    loadBookmarks();
     initDOM();
     var savedTime = load();
 
@@ -547,6 +762,7 @@
 
     bindQueueButtons();
     updateBadges();
+    updateBookmarkIcons();
     renderQueueList();
   });
 })();

@@ -265,6 +265,42 @@ def get_hero_image(slug):
             return f"/images/articles/{slug}/hero.{ext}"
     return None
 
+def make_card_controls(essay, pi):
+    """Generate play button + bookmark HTML for article cards."""
+    slug = html_mod.escape(essay['slug'])
+    title_esc = html_mod.escape(essay['title'])
+    section_label = html_mod.escape(f"{pi['label']} · {essay['part']}")
+    color = pi['color']
+    article_url = f"/articles/{slug}"
+
+    bookmark_btn = (
+        f'<button class="card-bookmark-btn" data-bookmark-slug="{slug}" '
+        f'data-bookmark-title="{title_esc}" data-bookmark-url="{article_url}" '
+        f'aria-label="Bookmark">'
+        '<svg class="bk-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
+        '<svg class="bk-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
+        '</button>'
+    )
+
+    has_audio = essay.get('has_audio') or essay.get('has_discussion')
+    if has_audio:
+        if essay.get('has_audio'):
+            queue_url = f"/audio/{essay['slug']}.mp3"
+        else:
+            queue_url = f"/audio/discussions/{essay['slug']}.mp3"
+        play_btn = (
+            f'<button class="card-play-btn" '
+            f'data-queue-slug="{slug}" data-queue-title="{title_esc}" '
+            f'data-queue-section="{section_label}" data-queue-color="{color}" '
+            f'data-queue-url="{queue_url}" aria-label="Play options">'
+            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'
+            '</button>'
+        )
+        return f'<div class="card-controls">{play_btn}{bookmark_btn}</div>'
+
+    return f'<div class="card-controls">{bookmark_btn}</div>'
+
+
 def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None, pub_date=None):
     te = html_mod.escape(title)
     de = html_mod.escape(desc[:300]) if desc else ""
@@ -561,6 +597,70 @@ def make_audio_player_script():
 
 ALL_CHARTS = get_all_charts()
 
+
+def _charts_for_article(slug):
+    """Return chart list for an article, excluding data_story entries (homepage carousel only)."""
+    return [c for c in ALL_CHARTS.get(slug, []) if not c.get('data_story')]
+
+
+def auto_wrap_chart(chart_def, auto_id):
+    """Produce a mini-chart JS from a full chart definition by swapping canvas ID and applying small-canvas defaults."""
+    original_id = chart_def.get('id', '')
+    if not original_id:
+        return ""
+    js = chart_def.get('js', '')
+    js = js.replace(f"getElementById('{original_id}')", f"getElementById('{auto_id}')")
+    return f"""(()=>{{
+const _origFontSize = (Chart.defaults.font && Chart.defaults.font.size) || 12;
+if (Chart.defaults.font) Chart.defaults.font.size = 9;
+{js.strip()}
+if (Chart.defaults.font) Chart.defaults.font.size = _origFontSize;
+}})();"""
+
+
+def collect_data_stories(essays, all_charts):
+    """Build data stories list: curated entries first, then auto-generated from first chart of each article with charts."""
+    stories = []
+    for essay in essays:
+        slug = essay['slug']
+        charts = all_charts.get(slug, [])
+        # Only real charts (exclude data_story dicts when counting for "has charts")
+        real_charts = [c for c in charts if not c.get('data_story')]
+        if not real_charts:
+            continue
+
+        ds_entry = next((c for c in charts if c.get('data_story')), None)
+        part = essay.get('part', 'Society')
+        color = PARTS.get(part, PARTS['Society'])['color']
+
+        if ds_entry:
+            stories.append({
+                'slug': slug,
+                'chart_id': ds_entry['chart_id'],
+                'headline': ds_entry['headline'],
+                'sub': essay['title'],
+                'color': color,
+                'js': ds_entry['js'],
+                'curated': True,
+            })
+        else:
+            first = real_charts[0]
+            auto_id = f'dsAuto{len(stories)}'
+            stories.append({
+                'slug': slug,
+                'chart_id': auto_id,
+                'headline': first.get('title', essay['title']),
+                'sub': essay['title'],
+                'color': color,
+                'js': auto_wrap_chart(first, auto_id),
+                'curated': False,
+            })
+
+    curated = [s for s in stories if s['curated']]
+    auto = [s for s in stories if not s['curated']]
+    return curated + auto
+
+
 # SVG icons for share buttons (inline, no external deps)
 _SHARE_ICONS = {
     'x': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
@@ -758,8 +858,8 @@ def build_article(essay, all_essays):
     body = inject_pull_quote(essay['body_html'], essay['pull_quote'])
     related = get_related(essay, all_essays)
 
-    # Inject charts if available for this article
-    article_charts = ALL_CHARTS.get(essay['slug'], [])
+    # Inject charts if available for this article (exclude data_story entries — they are for homepage carousel only)
+    article_charts = [c for c in ALL_CHARTS.get(essay['slug'], []) if not c.get('data_story')]
     body, chart_script = inject_charts_into_body(body, article_charts)
     chart_count = len(article_charts)
 
@@ -981,19 +1081,61 @@ def _get_section_intro(part_name):
     section_data = _SECTION_INTROS_CACHE.get("sections", {}).get(part_name, {})
     return section_data.get("html", ""), section_data.get("chart_ids", [])
 
+def _split_intro_paragraphs(html):
+    """Split intro HTML into first paragraph and rest (each <p>...</p>). Returns (first, rest_html)."""
+    first = ""
+    rest_parts = []
+    remaining = html.strip()
+    in_first = True
+    while remaining:
+        if remaining.startswith("<p>"):
+            end = remaining.find("</p>", 3)
+            if end == -1:
+                break
+            para = remaining[: end + 4]
+            remaining = remaining[end + 4 :].lstrip()
+            if in_first:
+                first = para
+                in_first = False
+            else:
+                rest_parts.append(para)
+        else:
+            break
+    rest_html = "\n".join(rest_parts) if rest_parts else ""
+    return first, rest_html
+
+
 def _build_section_editorial(part_name, pi):
     """Build the editorial intro HTML block for a section page, including charts."""
     intro_html, chart_ids = _get_section_intro(part_name)
     if not intro_html:
         return "", ""
 
+    first_para, rest_html = _split_intro_paragraphs(intro_html)
+    if rest_html:
+        prose_block = f'''    <div class="section-editorial-prose">
+{first_para}
+    </div>
+    <div class="section-editorial-more" id="sectionEditorialMore" hidden>
+{rest_html}
+    </div>
+    <p class="section-editorial-toggle-wrap">
+      <button type="button" class="section-editorial-toggle" id="sectionEditorialToggle" aria-expanded="false">Continue reading</button>
+    </p>'''
+    else:
+        prose_block = f'''    <div class="section-editorial-prose">
+{first_para}
+    </div>'''
+
     # Build chart figures for the editorial
     chart_figures = ""
     chart_js_parts = []
     for chart_id in chart_ids:
-        # Find the chart definition across all articles
+        # Find the chart definition across all articles (skip data_story entries)
         for slug_charts in ALL_CHARTS.values():
             for ch in slug_charts:
+                if ch.get('data_story') or 'id' not in ch:
+                    continue
                 if ch['id'] == chart_id:
                     chart_figures += f'''
     <figure class="section-editorial-chart">
@@ -1008,9 +1150,7 @@ def _build_section_editorial(part_name, pi):
     editorial_block = f'''
 <div class="section-editorial" style="--section-color:{pi['color']}">
   <div class="section-editorial-inner">
-    <div class="section-editorial-prose">
-{intro_html}
-    </div>
+{prose_block}
 {chart_figures}
   </div>
 </div>'''
@@ -1040,29 +1180,37 @@ def build_section(part_name, essays, new_slugs=None):
     # Build editorial intro (from cached LLM-generated content)
     editorial_block, editorial_chart_script = _build_section_editorial(part_name, pi)
 
-    # Build newspaper-style article list with thumbnails
-    article_items = ""
-    for e in se:
+    # Build card grid: first article featured, rest in 3-column grid
+    def make_card(e, featured=False):
         chart_count = len(ALL_CHARTS.get(e['slug'], []))
         chart_tag = f'<span>{chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
         audio_tag = '<span>Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
         new_badge = '<span class="card-new-badge">New</span> ' if e['slug'] in new_slugs else ''
-
         hero_img = get_hero_image(e['slug'])
-        thumb_html = f'<img src="{hero_img}" alt="" class="section-article-thumb" loading="lazy" width="160" height="110">' if hero_img else ''
-
-        article_items += f'''    <a href="/articles/{html_mod.escape(e['slug'])}" class="section-article-item">
-      {thumb_html}
-      <div class="section-article-text">
+        img_html = f'<img src="{hero_img}" alt="" class="section-card-img" loading="lazy" width="400" height="220">' if hero_img else ''
+        if featured:
+            img_html = f'<img src="{hero_img}" alt="" class="section-card-img section-featured-img" loading="lazy" width="1100" height="280">' if hero_img else ''
+        cls = "section-featured-card" if featured else "section-card"
+        controls = make_card_controls(e, pi)
+        return f'''    <a href="/articles/{html_mod.escape(e['slug'])}" class="{cls}">
+      <div class="section-card-img-wrap">{img_html}</div>
+      <div class="section-card-text">
         <h3>{new_badge}{html_mod.escape(e['title'])}</h3>
         <p>{truncate_excerpt(e['excerpt'], 180)}</p>
-        <div class="section-article-meta">
+        <div class="section-card-meta">
           <span>{e['reading_time']} min read</span>
           {chart_tag}
           {audio_tag}
         </div>
       </div>
-    </a>\n'''
+      {controls}
+    </a>'''
+
+    article_items = ""
+    if se:
+        article_items = make_card(se[0], featured=True)
+        for e in se[1:]:
+            article_items += "\n" + make_card(e, featured=False)
 
     breadcrumbs = make_breadcrumbs([
         ('Home', '/'),
@@ -1092,11 +1240,25 @@ def build_section(part_name, essays, new_slugs=None):
 
 {editorial_block}
 
-<div class="section-article-list">
-{article_items}</div>
+<div class="section-card-grid">
+{article_items}
+</div>
 
 {make_footer()}
 {editorial_chart_script}
+<script>
+(function(){{
+  var btn = document.getElementById('sectionEditorialToggle');
+  var more = document.getElementById('sectionEditorialMore');
+  if (!btn || !more) return;
+  btn.addEventListener('click', function(){{
+    var expanded = more.hidden;
+    more.hidden = !expanded;
+    btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    btn.textContent = expanded ? 'Show less' : 'Continue reading';
+  }});
+}})();
+</script>
 </body>
 </html>'''
 
@@ -1107,7 +1269,7 @@ def build_homepage(essays, new_essays=None):
     all_charts = get_all_charts()
 
     total_articles = len(essays)
-    total_charts = sum(len(v) for v in all_charts.values())
+    total_charts = sum(len(_charts_for_article(slug)) for slug in all_charts)
     total_reading = sum(e.get('reading_time', 5) for e in essays)
     total_hours = round(total_reading / 60)
 
@@ -1135,7 +1297,7 @@ def build_homepage(essays, new_essays=None):
     latest_html = ""
     for i, e in enumerate(latest):
         pi = PARTS[e['part']]
-        n_charts = len(all_charts.get(e['slug'], []))
+        n_charts = len(_charts_for_article(e['slug']))
         badge = f'<span class="latest-badge">{n_charts} charts</span>' if n_charts else ''
         audio_badge = '<span class="latest-badge latest-audio-badge">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
         size_class = "latest-hero" if i == 0 else "latest-secondary"
@@ -1144,12 +1306,14 @@ def build_homepage(essays, new_essays=None):
         hero_img = get_hero_image(e['slug'])
         img_html = f'<img src="{hero_img}" alt="" class="latest-card-img" loading="lazy">' if hero_img else ''
 
+        controls_html = make_card_controls(e, pi)
         latest_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
         {img_html}
         <div class="latest-kicker">{new_tag}{pi['label']} &middot; {html_mod.escape(e['part'])} {badge} {audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{truncate_excerpt(e['excerpt'], 200)}</p>
         <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
+        {controls_html}
       </a>\n"""
 
     # ── New Articles section (grouped by category) ──
@@ -1165,9 +1329,10 @@ def build_homepage(essays, new_essays=None):
                 continue
             pi = PARTS[pn]
             for e in new_cards_by_part[pn]:
-                n_charts = len(all_charts.get(e['slug'], []))
+                n_charts = len(_charts_for_article(e['slug']))
                 chart_badge = f' <span class="card-charts">&middot; {n_charts} chart{"s" if n_charts != 1 else ""}</span>' if n_charts > 0 else ''
                 audio_badge = ' <span class="card-audio">&middot; Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
+                card_controls = make_card_controls(e, pi)
                 new_cards_html += f"""    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
       <div class="card-kicker" style="color:{pi['color']}"><span class="card-new-badge">New</span> {pi['label']}</div>
       <h3>{html_mod.escape(e['title'])}</h3>
@@ -1176,6 +1341,7 @@ def build_homepage(essays, new_essays=None):
         <span class="card-link" style="color:{pi['color']}">Read article &rarr;</span>
         <span class="card-time">{e['reading_time']} min{chart_badge}{audio_badge}</span>
       </div>
+      {card_controls}
     </a>\n"""
 
         new_section_html = f"""
@@ -1191,72 +1357,8 @@ def build_homepage(essays, new_essays=None):
 </div>
 """
 
-    # ── Data Stories: expanded carousel with 12 stories ──
-    data_stories = [
-        {'slug':'the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing',
-         'chart_id':'heroBuilders','headline':'From 1 in 3 births to 1 in 15 — builder populations vanishing','sub':'The Builders Are Dying','color':'#c43425',
-         'js':"""(()=>{const ctx=document.getElementById('heroBuilders');new Chart(ctx,{type:'line',data:{datasets:[{label:'Builder share',data:_xy([1960,1980,2000,2025,2050,2100],[37,28.8,21.6,14.4,10.4,7.1]),borderColor:'#7c3aed',fill:true,backgroundColor:'#7c3aed18',tension:.3,pointRadius:2,borderWidth:2.5},{label:'Sub-Saharan Africa',data:_xy([1960,1980,2000,2025,2050,2100],[7.8,13,20.7,31.1,41,43.1]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of global births'}}},scales:{x:{type:'linear',min:1960,max:2100,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0,max:50}}}});})();"""},
-        {'slug':'the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state',
-         'chart_id':'heroWar','headline':'Nearly half of Soviet men aged 18-30 were killed in WW2','sub':'The Unintended Consequences of War','color':'#c43425',
-         'js':"""(()=>{const ctx=document.getElementById('heroWar');new Chart(ctx,{type:'bar',data:{labels:['Soviet\\nUnion','Germany','Germany\\n(WW1)','Confederate\\nStates','Russia\\n(WW1)','France\\n(WW1)'],datasets:[{data:[49,45,28,19,18.7,17],backgroundColor:['#c43425','#c43425cc','#7c3aed','#2563eb','#7c3aedcc','#b8751a'],borderRadius:3,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',callback:v=>v+'%',font:{size:9}}},y:{grid:{display:false},ticks:{color:'#8a8479',font:{size:9}}}}}});})();"""},
-        {'slug':'the-renewables-and-battery-revolution',
-         'chart_id':'heroSolar','headline':'Solar costs fell 99% in 40 years','sub':'The Renewables & Battery Revolution','color':'#0d9a5a',
-         'js':"""(()=>{const ctx=document.getElementById('heroSolar');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1976,1985,1995,2000,2005,2010,2015,2020,2024],[100,25,8,5,4,2,0.6,0.25,0.2]),borderColor:'#0d9a5a',backgroundColor:'#0d9a5a18',fill:true,tension:.35,pointRadius:2,pointBackgroundColor:'#0d9a5a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'$'+i.parsed.y+'/watt'}}},scales:{x:{type:'linear',min:1976,max:2024,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v}}}}});})();"""},
-        {'slug':'debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all',
-         'chart_id':'heroDebt','headline':'A loaf of bread cost 3 billion Marks by 1923','sub':'Debt Jubilees & Hyperinflation','color':'#b8751a',
-         'js':"""(()=>{const ctx=document.getElementById('heroDebt');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1921.0,1921.5,1922.0,1922.5,1923.0,1923.25,1923.5,1923.67,1923.83],[1,2,3,10,250,500,100000,2000000,3000000000]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.3,pointRadius:2,pointBackgroundColor:'#b8751a',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>{const v=i.parsed.y;return v>=1e9?(v/1e9)+'B Marks':v>=1e6?(v/1e6)+'M':v>=1e3?(v/1e3)+'K':v+' Marks'}}}},scales:{x:{type:'linear',min:1921,max:1924,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>{const yr=Math.floor(v);const f=v-yr;if(f<0.01)return'Jan '+yr;if(Math.abs(f-0.5)<0.01)return'Jul '+yr;return''}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>{if(v>=1e9)return v/1e9+'B';if(v>=1e6)return v/1e6+'M';if(v>=1e3)return v/1e3+'K';return v}}}}}});})();"""},
-        {'slug':'lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people',
-         'chart_id':'heroFertility','headline':'South Korea: 0.72 children per woman','sub':'The Separation of Sex & Procreation','color':'#7c3aed',
-         'js':"""(()=>{const ctx=document.getElementById('heroFertility');new Chart(ctx,{type:'bar',data:{labels:['S.Korea','China','Italy','Japan','Germany','UK','France','US','India','Nigeria'],datasets:[{data:[0.72,1.09,1.24,1.20,1.35,1.49,1.79,1.62,2.03,5.14],backgroundColor:['#c43425','#c43425','#c43425','#c43425','#c43425','#b8751a','#b8751a','#b8751a','#0d9a5a','#0d9a5a'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+' children per woman'}},annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:'#8a8479',borderDash:[4,3],borderWidth:1}}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8},maxRotation:45}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0,max:5.5}}}});})();"""},
-        {'slug':'what-does-it-take-to-get-europeans-to-have-a-revolution',
-         'chart_id':'heroRev','headline':'60+ revolutions in 350 years','sub':'What Does It Take To Start A Revolution?','color':'#2563eb',
-         'js':"""(()=>{const ctx=document.getElementById('heroRev');const ch=[{y:1642,i:3,c:'#2563eb'},{y:1688,i:2,c:'#2563eb'},{y:1775,i:5,c:'#c43425'},{y:1789,i:9,c:'#c43425'},{y:1821,i:3,c:'#7c3aed'},{y:1830,i:4,c:'#b8751a'},{y:1848,i:10,c:'#c43425'},{y:1917,i:8,c:'#c43425'},{y:1989,i:9,c:'#0d9a5a'}];new Chart(ctx,{type:'bubble',data:{datasets:[{data:ch.map(c=>({x:c.y,y:c.i,r:c.i*1.8})),backgroundColor:ch.map(c=>c.c+'55'),borderColor:ch.map(c=>c.c),borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1620,max:2000,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0,max:12}}}});})();"""},
-        {'slug':'the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people',
-         'chart_id':'heroEmpty','headline':'No country has recovered from sub-1.5 fertility','sub':'The Great Emptying','color':'#c43425',
-         'js':"""(()=>{const ctx=document.getElementById('heroEmpty');const yrs=[1960,1970,1980,1990,2000,2010,2020,2024];new Chart(ctx,{type:'line',data:{datasets:[{label:'S. Korea',data:_xy(yrs,[6.0,4.53,2.83,1.59,1.48,1.23,0.84,0.72]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'China',data:_xy(yrs,[5.76,5.81,2.63,2.51,1.60,1.54,1.28,1.02]),borderColor:'#7c3aed',fill:false,tension:.3,pointRadius:2,borderWidth:2,borderDash:[5,3]},{label:'US',data:_xy(yrs,[3.65,2.48,1.84,2.08,2.06,1.93,1.64,1.62]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1960,max:2024,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0}}}});})();"""},
-        {'slug':'europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence',
-         'chart_id':'heroRearm','headline':'€800 billion: Europe rearming at unprecedented speed','sub':'Europe Rearms','color':'#2563eb',
-         'js':"""(()=>{const ctx=document.getElementById('heroRearm');new Chart(ctx,{type:'bar',data:{labels:['Poland','Estonia','Lithuania','Latvia','Finland','UK','France','Germany','Italy','Spain'],datasets:[{data:[4.2,3.4,3.5,3.2,2.5,2.3,2.1,2.1,1.6,1.3],backgroundColor:function(c){return c.raw>3?'#c43425':c.raw>2?'#2563eb':'#8a847966'},borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of GDP'}},annotation:{annotations:{nato:{type:'line',yMin:2,yMax:2,borderColor:'#8a8479',borderDash:[4,3],borderWidth:1}}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});})();"""},
-        {'slug':'the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth',
-         'chart_id':'heroPress','headline':'US newspaper jobs down 80% since 1990','sub':'The Death of the Fourth Estate','color':'#7c3aed',
-         'js':"""(()=>{const ctx=document.getElementById('heroPress');new Chart(ctx,{type:'line',data:{labels:['1990','1995','2000','2005','2010','2015','2020','2025'],datasets:[{data:[458,400,412,310,260,183,140,87],borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'k jobs'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'k'},min:0}}}});})();"""},
-        {'slug':'the-rise-of-the-west-was-based-on-luck-that-has-run-out',
-         'chart_id':'heroWest','headline':'Western dominance was a 200-year anomaly','sub':'The Rise of the West Was Based on Luck','color':'#b8751a',
-         'js':"""(()=>{const ctx=document.getElementById('heroWest');const yrs=[1,1500,1700,1870,1950,2000,2025];new Chart(ctx,{type:'line',data:{datasets:[{label:'West',data:_xy(yrs,[12,18,24,42,52,42,30]),borderColor:'#2563eb',fill:false,tension:.35,pointRadius:2,borderWidth:2},{label:'China',data:_xy(yrs,[26,25,22,17,5,12,20]),borderColor:'#c43425',fill:false,tension:.35,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},max:55}}}});})();"""},
-        {'slug':'robotics-and-slavery',
-         'chart_id':'heroRobot','headline':'Robot costs falling below human labour','sub':'Robotics and Slavery','color':'#b8751a',
-         'js':"""(()=>{const ctx=document.getElementById('heroRobot');const yrs=[2010,2015,2018,2020,2022,2024,2027,2030];new Chart(ctx,{type:'line',data:{datasets:[{label:'Robot cost/hr',data:_xy(yrs,[15,10,7,5,3.5,2.5,1.5,1]),borderColor:'#b8751a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Human min wage',data:_xy(yrs,[7.25,7.25,7.25,7.25,7.25,7.25,7.25,7.25]),borderColor:'#c43425',fill:false,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:2010,max:2030,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v},min:0}}}});})();"""},
-        {'slug':'the-long-term-impact-of-covid-19',
-         'chart_id':'heroCovid','headline':'COVID accelerated deglobalisation by a decade','sub':'The Long-Term Impact of COVID-19','color':'#c43425',
-         'js':"""(()=>{const ctx=document.getElementById('heroCovid');new Chart(ctx,{type:'bar',data:{labels:['Trade','Remote Work','Digital Health','Automation','Debt/GDP','Inequality'],datasets:[{label:'Change (%)',data:[-15,300,180,40,25,18],backgroundColor:function(c){return c.raw<0?'#c43425':'#0d9a5a'},borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>(i.raw>0?'+':'')+i.raw+'%'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>(v>0?'+':'')+v+'%'}}}}});})();"""},
-        {'slug':'history-is-written-by-the-winners-and-europeans-are-losing',
-         'chart_id':'heroWinners','headline':'By 2100, Africa will have 4 billion people','sub':'History Is Written By The Winners','color':'#0d9a5a',
-         'js':"""(()=>{const ctx=document.getElementById('heroWinners');new Chart(ctx,{type:'bar',data:{labels:['Europe','N. America','China','India','SE Asia','Africa'],datasets:[{label:'2025',data:[450,375,1410,1440,700,1500],backgroundColor:'#2563eb88',borderRadius:2},{label:'2100',data:[350,400,750,1500,850,4000],backgroundColor:'#0d9a5a88',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.raw+'M'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v>=1000?(v/1000)+'B':v+'M'}}}}});})();"""},
-        {'slug':'why-china-could-invade-taiwan-and-get-away-with-it',
-         'chart_id':'heroTaiwan','headline':'Taiwan makes 63% of the world\'s advanced chips','sub':'Why China Could Invade Taiwan','color':'#c43425',
-         'js':"""(()=>{const ctx=document.getElementById('heroTaiwan');new Chart(ctx,{type:'bar',data:{labels:['Taiwan','S. Korea','China','US','Europe','Other'],datasets:[{data:[63,18,6,5,3,5],backgroundColor:['#c43425','#2563eb','#b8751a','#7c3aed','#0c8f8f','#8a8479'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'% of global advanced chips'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});})();"""},
-        {'slug':'the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun',
-         'chart_id':'heroSpace','headline':'Launch costs fell from $54,500 to $200/kg','sub':'The Scramble for the Solar System','color':'#2563eb',
-         'js':"""(()=>{const ctx=document.getElementById('heroSpace');new Chart(ctx,{type:'bar',data:{labels:['Shuttle','Atlas V','Falcon 9','F. Heavy','Starship'],datasets:[{data:[54500,13200,2720,1500,200],backgroundColor:['#8a8479','#b8751a','#2563eb','#2563ebcc','#c43425'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'$'+i.raw.toLocaleString()+'/kg'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}},y:{type:'logarithmic',grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v.toLocaleString()}}}}});})();"""},
-        {'slug':'the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped',
-         'chart_id':'heroGates','headline':'Foreign-born populations tripled since 1970','sub':'The Gates of Nations','color':'#0d9a5a',
-         'js':"""(()=>{const ctx=document.getElementById('heroGates');new Chart(ctx,{type:'line',data:{datasets:[{label:'UK',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[4.3,5.8,6.2,6.5,8.3,12.0,14.4,15.8]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Germany',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[2.8,6.6,7.5,8.4,12.5,13.0,18.8,20.2]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'US',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[5.4,4.7,6.2,7.9,11.1,12.9,13.7,14.3]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1960,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});})();"""},
-        {'slug':'the-north-african-threat-and-mediterranean-reunification',
-         'chart_id':'heroNAfrica','headline':'North Africa will outnumber Southern Europe by 2030','sub':'The North African Threat','color':'#b8751a',
-         'js':"""(()=>{const ctx=document.getElementById('heroNAfrica');new Chart(ctx,{type:'line',data:{datasets:[{label:'N. Africa',data:_xy([1960,1980,2000,2020,2035,2050],[55,95,150,210,260,310]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'S. Europe',data:_xy([1960,1980,2000,2020,2035,2050],[95,112,121,122,116,107]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'M'}}},scales:{x:{type:'linear',min:1960,max:2050,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'M'},min:0}}}});})();"""},
-        {'slug':'the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering',
-         'chart_id':'heroFactory','headline':'Manufacturing fell from 30% to 11% of US GDP','sub':'The Return of the State Factory','color':'#0c8f8f',
-         'js':"""(()=>{const ctx=document.getElementById('heroFactory');new Chart(ctx,{type:'line',data:{datasets:[{label:'US',data:_xy([1970,1985,2000,2010,2025],[24,18,15,12,11]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'UK',data:_xy([1970,1985,2000,2010,2025],[28,18,14,10,9]),borderColor:'#0c8f8f',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'China',data:_xy([1970,1985,2000,2010,2025],[30,34,32,32,28]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1970,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:5,max:40}}}});})();"""},
-        {'slug':'who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state',
-         'chart_id':'heroGuards','headline':'US federal regulations grew 18x since 1950','sub':'Who Guards the Guards?','color':'#7c3aed',
-         'js':"""(()=>{const ctx=document.getElementById('heroGuards');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1950,1960,1970,1975,1980,1990,2000,2010,2020,2025],[10,19,35,54,71,102,128,157,175,180]),borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.3,pointRadius:2,pointBackgroundColor:'#7c3aed',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.parsed.y+'K pages'}}},scales:{x:{type:'linear',min:1950,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'K'},min:0}}}});})();"""},
-        {'slug':'the-150-year-life-how-radical-longevity-will-transform-our-world',
-         'chart_id':'heroLongevity','headline':'Human life expectancy: from 30 to 150 years','sub':'The 150-Year Life','color':'#0d9a5a',
-         'js':"""(()=>{const ctx=document.getElementById('heroLongevity');new Chart(ctx,{type:'bar',data:{labels:['Stone Age','Classical','Medieval','1800','1900','1950','2000','2025','2100?'],datasets:[{data:[30,35,40,40,50,60,70,78,150],backgroundColor:['#8a8479','#8a8479','#8a8479','#8a8479','#b8751a','#b8751a','#2563eb','#2563eb','#0d9a5a'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+' years'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:7},maxRotation:45}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0}}}});})();"""},
-        {'slug':'the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed',
-         'chart_id':'heroScribes','headline':'India made 78,500 content removal requests in 2024','sub':'The Silence of the Scribes','color':'#e11d48',
-         'js':"""(()=>{const ctx=document.getElementById('heroScribes');new Chart(ctx,{type:'bar',data:{labels:['India','Turkey','Russia','S. Korea','France','Germany','Brazil','US'],datasets:[{data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9],backgroundColor:['#c43425','#b8751a','#7c3aed','#2563eb','#0c8f8f','#2563ebcc','#0d9a5a','#0284c7'],borderRadius:3,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+'K requests'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'K'}},y:{grid:{display:false},ticks:{color:'#8a8479',font:{size:8}}}}}});})();"""},
-    ]
+    # ── Data Stories: auto-collected from chart_defs (curated first, then auto-generated) ──
+    data_stories = collect_data_stories(sorted_essays, all_charts)
 
     # Build data stories HTML
     stories_html = ""
@@ -1310,7 +1412,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 
         cards = ""
         for e in se[:3]:
-            n_charts = len(all_charts.get(e['slug'], []))
+            n_charts = len(_charts_for_article(e['slug']))
             chart_badge = f'<span class="card-charts">{n_charts} charts</span>' if n_charts > 0 else ''
             audio_badge = ' <span class="card-audio">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
             cards += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
@@ -1528,6 +1630,7 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 {make_footer()}
 <script>
 {hero_chart_js}
+{CHART_COLORS}
 {stories_js}
 {sec_chart_js}
 </script>
@@ -1608,6 +1711,7 @@ def build_listen_page(essays):
 
         excerpt_text = truncate_excerpt(ae.get('excerpt', ''), 120)
 
+        lp_controls = make_card_controls(ae, pi)
         rows_html += f'''    <a href="/articles/{html_mod.escape(ae['slug'])}" class="lp-row" data-section="{html_mod.escape(pi['slug'])}" data-audio-type="{audio_type_filter}">
       <svg class="lp-row-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
       <div class="lp-row-main">
@@ -1617,10 +1721,7 @@ def build_listen_page(essays):
       <span class="lp-row-section" style="color:{pi['color']};border-color:{pi['color']}">{html_mod.escape(pi['label'])}</span>
       <span class="lp-row-duration">{listen_time} min</span>
       <span class="lp-row-type">{type_label}</span>
-      <button class="q-add-btn" data-queue-slug="{html_mod.escape(ae['slug'])}" data-queue-title="{html_mod.escape(ae['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="{queue_url}" aria-label="Add to queue">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-        <span class="q-add-label">Queue</span>
-      </button>
+      {lp_controls}
     </a>\n'''
 
     breadcrumbs = make_breadcrumbs([
@@ -1678,8 +1779,8 @@ def build_listen_page(essays):
     });
   }
 
-  // Stop queue button clicks from navigating to the article
-  document.querySelectorAll('.lp-row .q-add-btn').forEach(function(btn){
+  // Stop control button clicks from navigating to the article
+  document.querySelectorAll('.lp-row .q-add-btn, .lp-row .card-play-btn, .lp-row .card-bookmark-btn').forEach(function(btn){
     btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); });
   });
 })();
