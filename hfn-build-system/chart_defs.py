@@ -2882,7 +2882,7 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,
         {
             'id': 'buildersChart4b', 'figure_num': 5,
             'title': 'Builder Share of Global Births Is Collapsing, 1960–2100',
-            'desc': 'European-heritage peoples (adjusted for ethnic composition within Europe and including diaspora in the Americas, Australasia, and Russia) and East Asians accounted for over one in three births in 1960. By 2100, they will account for roughly one in fifteen.',
+            'desc': 'European-heritage peoples (adjusted for ethnic composition within Europe and including diaspora in the Americas, Australasia, and Russia) and East Asians accounted for over one in three births in 1960. By 2100, they will account for roughly one in fifteen — the rest of the world will account for 93%.',
             'source': 'UN WPP 2024; CDC NCHS (US births by race/ethnicity); Eurostat; ONS (UK births by parents\' country of birth); Statistics Canada; ABS; Russia 2021 Census. European-heritage figures adjust geographic births for immigrant-origin share and add diaspora births (US non-Hispanic white, Canada, Australia, NZ, Latin America, Russia ethnic Russian).',
             'position': 'after_para_10',
             'js': """
@@ -2890,22 +2890,22 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,
 const yrs=[1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
 const eurPct=[13.3,11.8,10.7,9.1,7.7,6.9,5.9,5.5,5.0,4.4,3.8,3.3,2.9,2.6,2.4,2.2];
 const eaPct=[23.7,23.2,18.1,18.6,13.9,12.9,10.4,8.9,7.9,7.0,6.6,6.2,5.8,5.6,5.2,4.9];
-const ssaPct=[7.8,9.6,13.0,15.7,20.7,23.6,28.2,31.1,33.5,37.5,41.0,43.5,44.2,44.4,43.8,43.1];
 const builderPct=eurPct.map((v,i)=>v+eaPct[i]);
+const restPct=builderPct.map(v=>+(100-v).toFixed(1));
 new Chart(ctx,{type:'line',data:{datasets:[
 {...dxy('European heritage (adj.)',yrs,eurPct,C.blue),fill:true,backgroundColor:C.blue+'30'},
 {...dxy('East Asia (China/Japan/Korea)',yrs,eaPct,C.accent),fill:true,backgroundColor:C.accent+'30'},
 {...dxy('Builder total',yrs,builderPct,C.purple,[6,4]),borderWidth:3},
-{...dxy('Sub-Saharan Africa',yrs,ssaPct,C.green),borderWidth:3}
+{...dxy('Rest of world',yrs,restPct,C.green),borderWidth:3}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
 proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
 peak:{type:'label',xValue:1975,yValue:42,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
-nadir:{type:'label',xValue:2075,yValue:11,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
-africaLabel:{type:'label',xValue:2070,yValue:47,content:['Nearly half','of all births'],color:C.green,font:{size:10,style:'italic'}},
+nadir:{type:'label',xValue:2075,yValue:4,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
+restLabel:{type:'label',xValue:2070,yValue:95,content:['Rest of world: 93%'],color:C.green,font:{size:10,style:'italic'}},
 eurNote:{type:'label',xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
 }}},
-scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:50}}}});
+scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:100}}}});
 })();"""
         },
         {
@@ -2932,7 +2932,7 @@ scales:{x:linX(1800,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
         {
             'id': 'buildersChart6', 'figure_num': 7,  # was 6
             'title': 'Population Trajectories 2025–2100 (Indexed: 2025 = 100)',
-            'desc': 'The scissors: builder populations shrink while sub-Saharan Africa triples.',
+            'desc': 'The scissors: builder populations shrink while the rest of the world grows by over 50%.',
             'source': 'UN Population Division, World Population Prospects 2024 (median variant)',
             'position': 'after_para_12',
             'js': """
@@ -2942,16 +2942,16 @@ const europe=[100,97,90,82,75,68];
 const china=[100,96,84,70,60,52];
 const japan=[100,94,83,72,63,56];
 const skorea=[100,95,80,64,52,42];
-const ssafrica=[100,128,172,222,270,315];
+const restWorld=[100,113,133,147,154,155];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('Europe',yrs,europe,C.blue),
 dxy('China',yrs,china,C.accent),
 dxy('Japan',yrs,japan,C.purple),
 dxy('South Korea',yrs,skorea,C.amber),
-dxy('Sub-Saharan Africa',yrs,ssafrica,C.green)
+dxy('Rest of world',yrs,restWorld,C.green)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+' (index)'}},
 annotation:{annotations:{baseline:{type:'line',yMin:100,yMax:100,borderColor:C.dim,borderWidth:1,borderDash:[4,4]}}}},
-scales:{x:linX(2025,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Population index (2025 = 100)',color:C.dim},min:0,max:340}}}});
+scales:{x:linX(2025,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Population index (2025 = 100)',color:C.dim},min:0,max:180}}}});
 })();"""
         },
         {
@@ -2992,7 +2992,7 @@ scales:{x:linX(1994,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
             'data_story': True,
             'headline': 'From 1 in 3 births to 1 in 15 — builder populations vanishing',
             'chart_id': 'heroBuilders',
-            'js': """(()=>{const ctx=document.getElementById('heroBuilders');new Chart(ctx,{type:'line',data:{datasets:[{label:'Builder share',data:_xy([1960,1980,2000,2025,2050,2100],[37,28.8,21.6,14.4,10.4,7.1]),borderColor:'#7c3aed',fill:true,backgroundColor:'#7c3aed18',tension:.3,pointRadius:2,borderWidth:2.5},{label:'Sub-Saharan Africa',data:_xy([1960,1980,2000,2025,2050,2100],[7.8,13,20.7,31.1,41,43.1]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of global births'}}},scales:{x:{type:'linear',min:1960,max:2100,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0,max:50}}}});})();"""
+            'js': """(()=>{const ctx=document.getElementById('heroBuilders');new Chart(ctx,{type:'line',data:{datasets:[{label:'Builder share',data:_xy([1960,1980,2000,2025,2050,2100],[37,28.8,21.6,14.4,10.4,7.1]),borderColor:'#7c3aed',fill:true,backgroundColor:'#7c3aed18',tension:.3,pointRadius:2,borderWidth:2.5},{label:'Rest of world',data:_xy([1960,1980,2000,2025,2050,2100],[63,71.2,78.4,85.6,89.6,92.9]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of global births'}}},scales:{x:{type:'linear',min:1960,max:2100,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0,max:100}}}});})();"""
         },
     ]
 

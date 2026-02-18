@@ -222,17 +222,20 @@ img { max-width: 100%; height: auto; }
 
 /* SECTION EDITORIAL INTRO (auto-generated magazine-style introduction) */
 .section-editorial { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 1.5rem; border-bottom: 1px solid var(--border-light); }
-.section-editorial-inner { max-width: 780px; }
+.section-editorial-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; }
+.section-editorial-inner > .section-editorial-prose,
+.section-editorial-inner > .section-editorial-more,
+.section-editorial-inner > .section-editorial-toggle-wrap { grid-column: 1 / -1; }
 .section-editorial-prose p { font-family: var(--sans); font-size: 1.02rem; line-height: 1.78; color: var(--text-body); margin-bottom: 1.1rem; }
 .section-editorial-prose p:first-child::first-letter { font-family: var(--serif); font-size: 3.2rem; float: left; line-height: 0.85; margin-right: 0.08em; margin-top: 0.05em; font-weight: 700; color: var(--section-color, var(--accent)); }
 .section-editorial-prose a { color: var(--section-color, var(--accent)); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s, color 0.2s; }
 .section-editorial-prose a:hover { border-bottom-color: var(--section-color, var(--accent)); }
-.section-editorial-chart { margin: 1.5rem 0 1.8rem; padding: 0; }
-.section-editorial-chart h4 { font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
-.section-editorial-chart .chart-desc { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.6rem; line-height: 1.5; }
-.section-editorial-chart .chart-area { position: relative; height: 280px; margin-bottom: 0.4rem; }
+.section-editorial-chart { margin: 0.75rem 0; padding: 0; }
+.section-editorial-chart h4 { font-family: var(--serif); font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
+.section-editorial-chart .chart-desc { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.5rem; line-height: 1.45; }
+.section-editorial-chart .chart-area { position: relative; height: 240px; margin-bottom: 0.4rem; }
 .section-editorial-chart .chart-area canvas { width: 100% !important; height: 100% !important; }
-.section-editorial-chart .chart-source { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); letter-spacing: 0.04em; }
+.section-editorial-chart .chart-source { font-family: var(--mono); font-size: 0.56rem; color: var(--text-faint); letter-spacing: 0.04em; }
 .section-editorial-more p { font-family: var(--sans); font-size: 1.02rem; line-height: 1.78; color: var(--text-body); margin-bottom: 1.1rem; }
 .section-editorial-more a { color: var(--section-color, var(--accent)); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s, color 0.2s; }
 .section-editorial-more a:hover { border-bottom-color: var(--section-color, var(--accent)); }
@@ -241,6 +244,7 @@ img { max-width: 100%; height: auto; }
 .section-editorial-toggle:hover { opacity: 0.85; }
 @media (max-width: 640px) {
   .section-editorial { padding: 1.5rem 1rem 1rem; }
+  .section-editorial-inner { grid-template-columns: 1fr; }
   .section-editorial-prose p:first-child::first-letter { font-size: 2.6rem; }
   .section-editorial-chart .chart-area { height: 220px; }
 }

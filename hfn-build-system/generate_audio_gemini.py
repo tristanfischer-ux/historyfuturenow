@@ -256,6 +256,13 @@ def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 8) -> by
             last_error = "Rate limited"
             continue
 
+        if response.status_code >= 500:
+            wait = 15 + (attempt * 15)
+            print(f"      Server error {response.status_code} (attempt {attempt+1}/{max_retries}), retrying in {wait}s...")
+            time.sleep(wait)
+            last_error = f"Server error {response.status_code}"
+            continue
+
         if response.status_code != 200:
             raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
         break
