@@ -125,6 +125,7 @@ ARTICLE_DATES = {
     "the-new-literacy": "2026-02-16",
     "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing": "2026-02-16",
     "a-nation-transformed-britains-demographic-revolution-1948-2050": "2026-02-18",
+    "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible": "2026-02-20",
 }
 
 def load_original_slugs():

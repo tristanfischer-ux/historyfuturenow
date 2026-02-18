@@ -2871,6 +2871,163 @@ scales:{x:linX(1994,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:1
     ]
 
 
+    # ─── THE GREAT OFFSHORING ───
+    charts['the-great-offshoring-how-the-worlds-factory-moved-east'] = [
+        {
+            'id': 'offshoringChart1', 'figure_num': 1,
+            'title': 'The Great Crossover: G7 vs Emerging Asia Share of Global Manufacturing',
+            'desc': 'Percentage of global manufacturing value added held by the G7 nations versus Emerging Asia (China, India, ASEAN)',
+            'source': 'UNIDO Industrial Statistics Database; World Bank National Accounts',
+            'position': 'after_heading:The First Wave',
+            'js': """
+(()=>{const ctx=document.getElementById('offshoringChart1');
+const yrs=[1990,1995,2000,2005,2010,2015,2020,2024];
+const g7=[67,63,57,52,46,42,38,40];
+const asia=[7,10,14,21,28,35,41,46];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('G7 nations',yrs,g7,C.blue),
+dxy('Emerging Asia',yrs,asia,C.accent)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
+annotation:{annotations:{crossover:{type:'line',xMin:2020,xMax:2020,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],label:{display:true,content:'Crossover',color:C.dim,font:{size:11},position:'start'}}}}},
+scales:{x:linX(1990,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global manufacturing value added',color:C.dim},min:0,max:75}}}});
+})();"""
+        },
+        {
+            'id': 'offshoringChart2', 'figure_num': 2,
+            'title': 'The Efficiency Trap: US Manufacturing Output vs Employment',
+            'desc': 'Manufacturing output has risen while employment has collapsed — the factories stayed, but the workers vanished',
+            'source': 'US Bureau of Labor Statistics; Federal Reserve Industrial Production Index',
+            'position': 'after_heading:The Pivot Point',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('offshoringChart2');
+const yrs=[1990,1992,1994,1996,1998,2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020,2022,2024];
+const emp=[17.7,16.8,17.0,17.2,17.6,17.3,15.3,14.3,14.2,13.4,11.5,11.9,12.2,12.3,12.7,12.2,12.8,12.9];
+const out=[100,98,106,111,118,121,112,116,120,117,105,114,118,119,124,113,126,130];
+new Chart(ctx,{type:'line',data:{datasets:[
+{label:'Employment (millions)',data:yrs.map((x,i)=>({x,y:emp[i]})),borderColor:C.accent,backgroundColor:C.accent+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.accent,borderWidth:2.5,yAxisID:'y'},
+{label:'Output index (1990 = 100)',data:yrs.map((x,i)=>({x,y:out[i]})),borderColor:C.blue,backgroundColor:C.blue+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:C.blue,borderWidth:2.5,yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+(i.dataset.yAxisID==='y'?i.parsed.y+'M':i.parsed.y)}}},
+scales:{x:linX(1990,2024),y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,font:{size:11},callback:v=>v+'M'},title:{display:true,text:'Employment (millions)',color:C.accent},min:10,max:20},
+y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,font:{size:11}},title:{display:true,text:'Output index (1990 = 100)',color:C.blue},min:80,max:140}}}});
+})();"""
+        },
+        {
+            'id': 'offshoringChart3', 'figure_num': 3,
+            'title': 'Deindustrialisation by Country: Manufacturing as % of GDP',
+            'desc': 'The West shrank its industrial base while the East expanded — 1990 versus 2024',
+            'source': 'World Bank World Development Indicators; OECD National Accounts; Vietnam GSO',
+            'position': 'after_heading:Deindustrialisation by the Numbers',
+            'js': """
+(()=>{const ctx=document.getElementById('offshoringChart3');
+const countries=['UK','US','Germany','China','Vietnam'];
+const d1990=[16.5,16.6,26,33,12];
+const d2024=[8.5,10.4,19,27,25];
+new Chart(ctx,{type:'bar',data:{labels:countries,datasets:[
+{label:'1990',data:d1990,backgroundColor:C.blue,borderRadius:4,borderSkipped:false},
+{label:'2024',data:d2024,backgroundColor:C.accent,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:12}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Manufacturing as % of GDP',color:C.dim},min:0,max:40}}}});
+})();"""
+        },
+        {
+            'id': 'offshoringChart4', 'figure_num': 4,
+            'title': 'The New Geography of Making: Regional Shares of Global Manufacturing',
+            'desc': 'How the distribution of global manufacturing value added has shifted from the Atlantic to the Pacific',
+            'source': 'UNIDO MVA Database; World Bank',
+            'position': 'after_heading:The New Map',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('offshoringChart4');
+const yrs=['1990','1995','2000','2005','2010','2015','2020','2024'];
+const g7=[67,63,57,52,46,42,38,40];
+const china=[3,5,7,12,18,25,31,31];
+const restAsia=[4,5,7,9,10,10,10,15];
+const restWorld=[26,27,29,27,26,23,21,14];
+new Chart(ctx,{type:'bar',data:{labels:yrs,datasets:[
+{label:'G7',data:g7,backgroundColor:C.blue,borderRadius:0,borderSkipped:false},
+{label:'China',data:china,backgroundColor:C.accent,borderRadius:0,borderSkipped:false},
+{label:'Rest of Emerging Asia',data:restAsia,backgroundColor:C.teal,borderRadius:0,borderSkipped:false},
+{label:'Rest of world',data:restWorld,backgroundColor:C.dim,borderRadius:0,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of global manufacturing value added',color:C.dim},min:0,max:100}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE INVISIBLE JUDGE: GUILT VS SHAME SOCIETIES ───
+    charts['the-invisible-judge-why-guilt-and-shame-societies-are-incompatible'] = [
+        {
+            'id': 'guiltChart1', 'figure_num': 1,
+            'title': 'Hofstede Individualism Score by Country (Proxy for Guilt vs. Shame Orientation)',
+            'desc': 'Higher individualism correlates loosely with guilt-dominant norms; lower with shame/collectivist norms.',
+            'source': 'Hofstede, Culture\'s Consequences (2001); Hofstede Insights country comparison tool',
+            'position': 'after_para_12',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('guiltChart1');
+const countries=['Denmark','Netherlands','UK','USA','Australia','Sweden','Germany','France','Japan','South Korea','Brazil','Turkey','India','China','Saudi Arabia','Indonesia','Thailand','Pakistan','Colombia','Nigeria'];
+const scores=[74,80,89,91,90,71,67,71,46,18,38,37,48,20,25,14,20,14,13,30];
+const cats=['guilt','guilt','guilt','guilt','guilt','guilt','guilt','guilt','shame','shame','mixed','mixed','mixed','shame','shame','shame','shame','shame','mixed','mixed'];
+const catColors={guilt:C.blue,shame:C.accent,mixed:C.amber};
+new Chart(ctx,{type:'bar',data:{labels:countries,datasets:[{label:'Individualism score',data:scores,
+backgroundColor:cats.map(c=>catColors[c]+'99'),borderColor:cats.map(c=>catColors[c]),borderWidth:1,borderRadius:3,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:i=>'Score: '+i.raw+' ('+cats[i.dataIndex]+'-dominant)'}},
+annotation:{annotations:{
+guiltLabel:{type:'label',xValue:85,yValue:3,content:['Guilt-dominant'],color:C.blue,font:{size:11,weight:'bold'}},
+shameLabel:{type:'label',xValue:85,yValue:14,content:['Shame-dominant'],color:C.accent,font:{size:11,weight:'bold'}},
+mixedLabel:{type:'label',xValue:85,yValue:10,content:['Mixed'],color:C.amber,font:{size:11,weight:'bold'}}
+}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Hofstede Individualism Index (0–100)',color:C.dim},min:0,max:100},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
+})();"""
+        },
+        {
+            'id': 'guiltChart2', 'figure_num': 2,
+            'title': 'Corruption Perceptions Index by Culture Type',
+            'desc': 'Average CPI score (0 = highly corrupt, 100 = very clean) for guilt-dominant, shame-dominant, and mixed societies.',
+            'source': 'Transparency International, Corruption Perceptions Index 2024; culture classification per Benedict/Hofstede',
+            'position': 'after_para_14',
+            'js': """
+(()=>{const ctx=document.getElementById('guiltChart2');
+const groups=['Guilt-dominant','Mixed /\\nTransitional','Shame-dominant'];
+const means=[78,48,38];
+new Chart(ctx,{type:'bar',data:{labels:groups,datasets:[{label:'Mean CPI score',data:means,
+backgroundColor:[C.blue+'99',C.amber+'99',C.accent+'99'],borderColor:[C.blue,C.amber,C.accent],borderWidth:2,borderRadius:6,borderSkipped:false,barPercentage:0.55}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean CPI: '+i.raw+'/100'}},
+annotation:{annotations:{
+avg:{type:'line',yMin:43,yMax:43,borderColor:C.dim,borderWidth:1,borderDash:[6,4],label:{display:true,content:'Global average (43)',position:'end',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+guiltNote:{type:'label',xValue:0,yValue:85,content:['e.g. Denmark 90,','Finland 87, Sweden 82'],color:C.blue,font:{size:10,style:'italic'}},
+shameNote:{type:'label',xValue:2,yValue:30,content:['e.g. China 45,','Indonesia 34, Pakistan 24'],color:C.accent,font:{size:10,style:'italic'}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean CPI score (0–100)',color:C.dim},min:0,max:100}}}});
+})();"""
+        },
+        {
+            'id': 'guiltChart3', 'figure_num': 3,
+            'title': 'Global Innovation Index Score by Culture Type',
+            'desc': 'Mean GII score for guilt-dominant, shame-dominant, and mixed societies. Higher = more innovative.',
+            'source': 'WIPO, Global Innovation Index 2025; culture classification per Benedict/Hofstede',
+            'position': 'after_para_16',
+            'js': """
+(()=>{const ctx=document.getElementById('guiltChart3');
+const groups=['Guilt-dominant','Mixed /\\nTransitional','Shame-dominant'];
+const means=[60,35,40];
+new Chart(ctx,{type:'bar',data:{labels:groups,datasets:[{label:'Mean GII score',data:means,
+backgroundColor:[C.blue+'99',C.amber+'99',C.accent+'99'],borderColor:[C.blue,C.amber,C.accent],borderWidth:2,borderRadius:6,borderSkipped:false,barPercentage:0.55}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean GII: '+i.raw}},
+annotation:{annotations:{
+guiltNote:{type:'label',xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 5th'],color:C.blue,font:{size:10,style:'italic'}},
+shameNote:{type:'label',xValue:2,yValue:48,content:['S. Korea 4th, Singapore','5th raise the average'],color:C.accent,font:{size:10,style:'italic'}},
+caveat:{type:'label',xValue:1,yValue:5,content:['Note: shame-dominant outliers (S. Korea, Japan) adopted guilt-culture institutions'],color:C.dim,font:{size:9,style:'italic'}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean GII score',color:C.dim},min:0,max:75}}}});
+})();"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

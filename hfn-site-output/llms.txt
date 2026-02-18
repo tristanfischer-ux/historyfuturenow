@@ -3,14 +3,14 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 63
+Total articles: 65
 
 ## Sections
 ### Natural Resources (11 articles)
 - URL: https://www.historyfuturenow.com/natural-resources
 - Energy, food, water, land — the physical foundations that every civilisation depends on.
 
-### Global Balance of Power (14 articles)
+### Global Balance of Power (15 articles)
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
@@ -18,7 +18,7 @@ Total articles: 63
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (25 articles)
+### Society (26 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -269,12 +269,26 @@ Total articles: 63
 - Reading time: 12 min
 - In a small town in southern Italy, a school closed last year. Not because of budget cuts. Because there were no children left. That empty classroom is the future of the developed world. No country in 
 
+### The Great Offshoring: How the World's Factory Moved East [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-great-offshoring-how-the-worlds-factory-moved-east
+- Section: Global Balance of Power
+- Published: 2026-02-18
+- Reading time: 13 min
+- In a single generation, the West gave away the industrial monopoly it had held for two centuries. From the rust belts of the Midlands to the boomtowns of Guangdong, this is the story of the Great Offs
+
 ### The immorality of climate change, a reflection on slavery and the Civil War
 - URL: https://www.historyfuturenow.com/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war
 - Section: Natural Resources
 - Published: 2012-04-15
 - Reading time: 5 min
 - Today, few people look back upon African slavery in the Americas as a good thing. There are no rousing speeches defending slave owners rights over their property, or demands not just to maintain the i
+
+### The Invisible Judge: Why Guilt and Shame Societies Are Incompatible [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible
+- Section: Society
+- Published: 2026-02-20
+- Reading time: 12 min
+- Guilt societies are ruled by an internal judge; shame societies by the eye of the crowd. The difference shapes corruption, rule of law, and how civilisations understand each other — when they meet, th
 
 ### The Long Term Impact of Covid 19 [6 charts]
 - URL: https://www.historyfuturenow.com/articles/the-long-term-impact-of-covid-19
