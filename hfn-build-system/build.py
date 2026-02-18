@@ -798,7 +798,7 @@ def build_article(essay, all_essays):
         <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
       </button>
       <div class="audio-info">
-        <div class="audio-label">Listen to this article</div>
+        <div class="audio-label">Listen to this article <span class="ai-narrated-badge">AI narrated <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4M8 5.5v-.01"/></svg></span></div>
         <div class="audio-meta">{est_listen} min</div>
       </div>
       <div class="audio-progress-wrap" id="audioProgressWrap">
