@@ -12,7 +12,7 @@ slug: >-
   when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age
 excerpt: >-
   Robots are not stealing jobs. They are replacing the unborn.
-  When the Shadow Workforce handles survival, seven billion people
+  When the Shadow Workforce handles survival, eight billion people
   become an aristocracy. Athens used that freedom to invent
   philosophy. Rome used it to invent gladiators. Which will we choose?
 share_summary: >-
@@ -27,7 +27,7 @@ On a Tuesday morning in 1780, Georgiana Cavendish, Duchess of Devonshire, rose a
 
 What did she do with the time? She hosted salons with the sharpest political minds in England. She campaigned for the Whig party with such vigour that she was satirised in the press. She patronised artists, read voraciously, corresponded with half of fashionable Europe, and — in her less admirable hours — lost staggering sums at the card table. Georgiana had two hundred servants and still managed to lose a fortune at faro. If this is what happens when one person has a robot workforce, imagine what happens when everyone does.
 
-That question is no longer hypothetical. Within a generation, artificial intelligence and robotics will do for seven billion people what Georgiana's servants did for her: manage the material business of existence. The cooks will be algorithms. The estate managers will be software. The labourers will be machines. The parallel is not poetic — it is structural. And the question it poses is the most important one of the twenty-first century: when survival is handled, what is a human life *for*?
+That question is no longer hypothetical. Within a generation, artificial intelligence and robotics will do for over eight billion people what Georgiana's servants did for her: manage the material business of existence. The cooks will be algorithms. The estate managers will be software. The labourers will be machines. The parallel is not poetic — it is structural. And the question it poses is the most important one of the twenty-first century: when survival is handled, what is a human life *for*?
 
 Every civilisation that freed a class from survival labour saw an explosion of creativity — and an epidemic of purposelessness. Athens produced Socrates. Rome produced gladiators. The Georgian gentry produced Darwin — and a great many alcoholics. The AI revolution will give us both outcomes. History tells us what determines which one wins.
 
