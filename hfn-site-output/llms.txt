@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 64
+Total articles: 63
 
 ## Sections
 ### Natural Resources (11 articles)
@@ -18,7 +18,7 @@ Total articles: 64
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (26 articles)
+### Society (25 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -30,13 +30,6 @@ Total articles: 64
 - Published: 2013-09-01
 - Reading time: 3 min
 - History Future Now has been considering the historical and future implications of the NSA files that have been leaked bit by bit by Edward Snowden over the past few months. History Future Now is very 
-
-### A Nation Transformed: Britain's Demographic Revolution, 1948–2050 [5 charts]
-- URL: https://www.historyfuturenow.com/articles/a-nation-transformed-britains-demographic-revolution-1948-2050
-- Section: Society
-- Published: 2026-02-18
-- Reading time: 8 min
-- Britain has undergone one of the most rapid peacetime demographic transformations in European history. It was not planned. It emerged from a sequence of policy decisions — and its long-term trajectory
 
 ### Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do? [2 charts]
 - URL: https://www.historyfuturenow.com/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do

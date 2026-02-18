@@ -1,15 +1,26 @@
 ---
-description: Automatically deploy after completing any task. This is a static site — deploying is low risk.
+description: Build articles as drafts for review. Do NOT deploy until the user has read and approved.
 alwaysApply: true
 ---
 
-# Auto-Deploy After Task Completion
+# Draft-First Workflow
 
-This is a static website hosted on Vercel. Deploying is low risk.
+New articles and content changes must be **built locally as drafts** for the user to review before deploying.
 
 ## Rule
 
-After completing any task that changes site content or build output:
+After completing any task that changes site content:
+
+1. **Build the site** so the article is viewable locally with all charts and images:
+   ```bash
+   cd hfn-build-system && python3 build.py
+   ```
+2. **Do NOT deploy.** Do not run `./scripts/deploy.sh`, do not `git push`, do not run `vercel --prod`. The article is a draft until the user has read it and said to deploy.
+3. **Tell the user** the article is ready to review and where to find the built HTML (e.g. `hfn-site-output/articles/{slug}.html`).
+
+## When the User Approves
+
+Only after the user explicitly says to deploy (e.g. "deploy", "ship it", "looks good, push it"):
 
 ```bash
 ./scripts/deploy.sh "feat: description of changes"
@@ -19,7 +30,7 @@ This single command: builds the site, commits, pushes to git, deploys to Vercel 
 
 ### Manual steps (if not using the script):
 
-1. Run the build: `cd hfn-build-system && python build.py`
+1. Run the build: `cd hfn-build-system && python3 build.py`
 2. Stage all changes: `git add .`
 3. Commit with a descriptive message
 4. Push to main: `git push origin main`
@@ -30,14 +41,9 @@ This single command: builds the site, commits, pushes to git, deploys to Vercel 
 - The domain `www.historyfuturenow.com` is served by **Vercel**, not GitHub Pages
 - `git push` alone does NOT deploy to the live site — you MUST run `vercel --prod`
 - The deploy script handles both git push and Vercel deploy
+- **Never deploy without user approval.** Build and present the draft first.
 
-## Why
-
-- Static HTML — no server, no database, no runtime errors
-- Vercel deployment is atomic and instant-rollback
-- Don't wait for permission. Just build, commit, push, deploy, and verify.
-
-## After Deploying
+## After Deploying (once approved)
 
 - Verify the site loads at https://www.historyfuturenow.com
 - The deploy script auto-logs to `~/.memory/daily/YYYY-MM-DD.md`

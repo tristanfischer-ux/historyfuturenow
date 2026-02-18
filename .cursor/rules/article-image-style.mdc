@@ -21,6 +21,7 @@ Every hero image must be a **flat, geometric, modernist editorial illustration**
 - **Symbolic, not literal** — convey the article's theme through visual metaphor and iconography, not a literal scene
 - **No photorealism** — no realistic faces, no detailed landscapes, no oil-painting aesthetics
 - **Clean lines** — crisp edges between colour areas, not soft or blended
+- **No text** — hero images must not contain any words, letters, numbers, or typography. Convey the theme through shape and colour only.
 
 ### Colour Guidance
 
@@ -45,6 +46,7 @@ Accent colours are fine but should remain muted and editorial, never garish.
 | Photographic depth of field | This is graphic design, not photography |
 | Bright saturated colours | The palette is warm and muted, not vivid |
 | Busy, cluttered compositions | Each image should have clear negative space and visual breathing room |
+| Text, words, letters, or numbers | Hero images are purely visual; no typography on the image |
 
 ### Prompt Guidance (for AI Image Generation)
 
@@ -60,10 +62,12 @@ Explicitly exclude:
 - "realistic", "photorealistic", "detailed", "painterly"
 - "oil painting", "concept art", "fantasy art"
 - "3D render", "photograph"
+- "text", "words", "letters", "typography", "writing" — hero images must have no text on them
 
 ## When Reviewing Images
 
 - If a hero image uses a realistic or painterly style, flag it for regeneration
 - If the colour palette is too saturated or inconsistent with the site palette, flag it
 - If the image has heavy texture, detailed faces, or photographic qualities, flag it
+- If the image contains any text, words, letters, or numbers, flag it for regeneration — hero images must be text-free
 - The test: does this image look like it belongs next to "The Robot Bargain" and "The Silence of the Scribes"? If not, regenerate it.
