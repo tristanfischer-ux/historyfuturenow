@@ -1,0 +1,32 @@
+{
+  "issue_number": 1,
+  "label": "Spring 2012",
+  "date": "2012-03-01",
+  "articles": [
+    "green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition",
+    "the-north-african-threat-and-mediterranean-reunification",
+    "keynes-and-hayek-are-both-dead-and-wrong",
+    "the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war",
+    "what-does-it-take-to-get-europeans-to-have-a-revolution"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 1,
+      "text": "Issue 1 (Spring 2012) of History Future Now is out. Inside: Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition | The North African Threat And Mediterranean Reunification | Keynes And Hayek Are Both Dead, And Wrong | The immorality of climate change, a reflection on slavery and the Civil War | What Does It Take To Get Europeans To Have A Revolution?.\n\nhttps://www.historyfuturenow.com/issues/1",
+      "article_count": 5
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 1,
+      "tweets": [
+        "🧵 Issue 1 of History Future Now — Spring 2012. Here's what's inside:",
+        "By 1992, with Reagan, Thatcher and the end of the Cold War, socialism and left wing thinking appeared to be dead. https://www.historyfuturenow.com/articles/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition",
+        "In the last few years most of its countries have been convulsed by revolutions and are in disarray. https://www.historyfuturenow.com/articles/the-north-african-threat-and-mediterranean-reunification",
+        "Both men were brilliant and arguably had people listened to their opinions before the Great Depression that started in 1929, the Depression and the Second World War… https://www.historyfuturenow.com/articles/keynes-and-hayek-are-both-dead-and-wrong",
+        "Why was the United States, the icon of freedom and liberty who had inspired the French revolution and the 1848 revolutions across… https://www.historyfuturenow.com/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war",
+        "“If you look on the street, you’ll find the answer … countless uprisings in most European countries will finally generate a profound revolution that… https://www.historyfuturenow.com/articles/what-does-it-take-to-get-europeans-to-have-a-revolution"
+      ]
+    }
+  }
+}

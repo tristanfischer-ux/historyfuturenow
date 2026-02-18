@@ -16,6 +16,9 @@ excerpt: >-
   Industrial policy is back. After forty years of being told that manufacturing
   didn't matter, every serious nation on Earth is scrambling to rebuild its
   factories. History explains why — and what comes next.
+share_summary: >-
+  After forty years of being told manufacturing didn't matter, every
+  serious nation on Earth is scrambling to rebuild its factories.
 signal: ''
 ---
 # The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering

@@ -13,6 +13,9 @@ excerpt: >-
   initial phase of the outbreak and finally will make conclusions about the long
   term impacts. When they do so they will have the benefit of hindsight and
   history will look neat, with few loose ends.
+share_summary: >-
+  Pandemics don't just kill people. They reshape economies, politics,
+  and social norms for generations. Covid will be no different.
 signal: ''
 ---
 # The Long Term Impact of Covid 19

@@ -10,6 +10,9 @@ excerpt: >-
   dead, their ideas are very much alive today and form the basis of whether
   governments choose austerity or stimulus as a way out of our current economic
   crisis.
+share_summary: >-
+  Governments still argue over Keynes vs Hayek. Both predate the
+  internet, globalisation, and demographic collapse. Both are wrong.
 signal: ''
 ---
 # Keynes And Hayek Are Both Dead, And Wrong

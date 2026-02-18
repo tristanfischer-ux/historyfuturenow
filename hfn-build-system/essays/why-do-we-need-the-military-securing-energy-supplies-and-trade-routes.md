@@ -14,6 +14,9 @@ excerpt: >-
   defend our borders and countries from attack, but to maintain secure energy
   supplies and trade routes. Both of which are not worth fighting for. Read on
   to discover the astounding statistics to show why.
+share_summary: >-
+  Modern militaries no longer defend borders. They protect energy
+  supplies and trade routes. Neither is worth fighting for.
 signal: ''
 ---
 # Why Do We Need The Military? Securing Energy Supplies And Trade Routes

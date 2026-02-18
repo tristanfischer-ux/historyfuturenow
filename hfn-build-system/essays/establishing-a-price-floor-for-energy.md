@@ -16,6 +16,9 @@ excerpt: >-
   for Apple’s management, who are trying to predict consumer demand for a new
   product. By the time of launch, other competitors could have released cheaper,
   superior products.
+share_summary: >-
+  Cheap oil kills renewable investment. A price floor for energy would
+  let markets solve climate change without subsidies.
 signal: ''
 ---
 # Establishing A Price Floor For Energy

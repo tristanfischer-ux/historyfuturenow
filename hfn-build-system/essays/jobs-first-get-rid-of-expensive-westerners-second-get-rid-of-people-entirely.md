@@ -9,6 +9,9 @@ excerpt: >-
   Why do so many Western politicians and economists promote a trading system
   that increases Western unemployment levels and results in a gigantic transfer
   of wealth to the East every year?
+share_summary: >-
+  First, corporations replaced Western workers with cheaper Asian ones.
+  Next, they'll replace the Asian workers with robots. Nobody wins.
 signal: ''
 ---
 # Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely

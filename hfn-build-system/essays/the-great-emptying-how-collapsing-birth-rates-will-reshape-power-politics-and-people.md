@@ -15,6 +15,9 @@ excerpt: >-
   of budget cuts. Because there were no children left. That empty classroom
   is the future of the developed world. No country in human history has
   recovered from a sustained fertility rate below 1.5.
+share_summary: >-
+  No country in history has recovered from a sustained fertility rate
+  below 1.5. Most of the developed world is already there.
 signal: ''
 ---
 # The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People

@@ -1,0 +1,42 @@
+{
+  "cycle": 2,
+  "week": "B",
+  "start_date": "2026-03-16",
+  "end_date": "2026-03-21",
+  "issue_context": {
+    "current": 16,
+    "next": 18
+  },
+  "posts": [
+    {
+      "day": "Wednesday",
+      "date": "2026-03-18",
+      "platform": "linkedin",
+      "type": "issue_preview",
+      "source_article": null,
+      "text": "A new issue of History Future Now arrives this Friday.\n\nhttps://www.historyfuturenow.com",
+      "image": null,
+      "link": null
+    },
+    {
+      "day": "Thursday",
+      "date": "2026-03-19",
+      "platform": "twitter",
+      "type": "issue_thread",
+      "source_article": null,
+      "text": "Issue 18 of History Future Now drops tomorrow:",
+      "image": null,
+      "link": null
+    },
+    {
+      "day": "Friday",
+      "date": "2026-03-20",
+      "platform": "twitter_linkedin",
+      "type": "issue_announcement",
+      "source_article": null,
+      "text": "Issue 18 of History Future Now is out.\n\nhttps://www.historyfuturenow.com/issues/18",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/issues/18"
+    }
+  ]
+}

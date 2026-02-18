@@ -11,6 +11,10 @@ excerpt: >-
   years ago. We examine how changes in European attitudes towards Christianity
   today may make Islam more rigid in the future. Multiculturalism and strict
   monotheism are incompatible.
+share_summary: >-
+  The first monotheist was an Egyptian pharaoh 3,350 years ago.
+  Multiculturalism and strict monotheism have been incompatible ever
+  since.
 signal: ''
 ---
 # Why God Needs The Government: Multiculturalism Vs Monotheism

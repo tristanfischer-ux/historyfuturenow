@@ -16,6 +16,10 @@ excerpt: >-
   robotics, vertical farming, quantum computing, brain-computer interfaces
   (BCIs), nanotechnology, biotechnology, and genomics, are transformative forces
   with the potential to revolutionise entire sectors of society.
+share_summary: >-
+  Steam, electricity, and the internet each reshaped civilisation. AI,
+  biotech, and quantum computing are converging to do it again — all at
+  once.
 signal: ''
 ---
 # The Fusion of Revolutionary Technologies: Unlocking Humanity's Greatest Transformation

@@ -13,6 +13,9 @@ excerpt: >-
   Why do so many Western politicians and economists promote a trading system
   that increases Western unemployment levels and results in a gigantic transfer
   of wealth to the East every year?
+share_summary: >-
+  Cheap imports cost Western workers their jobs, then their taxes rise
+  to pay for unemployment. The savings are an illusion.
 signal: ''
 ---
 # Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society

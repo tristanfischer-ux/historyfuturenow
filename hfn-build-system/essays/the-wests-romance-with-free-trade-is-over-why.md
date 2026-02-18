@@ -15,6 +15,9 @@ excerpt: >-
   story ark that goes from mercantilism to free trade and back. What is
   interesting is that free trade may have been an illusion all along. Read on to
   find out why.
+share_summary: >-
+  The West promoted free trade for a century. Now it's retreating to
+  mercantilism. History suggests free trade was the anomaly all along.
 signal: ''
 ---
 # The West’s romance with Free Trade is ending. Why?

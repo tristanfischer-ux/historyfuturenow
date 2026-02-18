@@ -14,6 +14,10 @@ excerpt: >-
   woman. She had a warm smile and long legs that never seemed to stop. She was
   also very smart and had a master’s degree in engineering. I had met her the
   previous night at an expensive Moscow restaurant.
+share_summary: >-
+  A brilliant Russian engineer working as a hostess in Moscow. Her
+  story is the story of an entire generation — lost, educated, and
+  wasted.
 signal: ''
 ---
 # A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story

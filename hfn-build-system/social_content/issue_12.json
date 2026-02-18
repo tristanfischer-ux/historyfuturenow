@@ -1,0 +1,30 @@
+{
+  "issue_number": 12,
+  "label": "2024",
+  "date": "2024-03-01",
+  "articles": [
+    "platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future",
+    "robotics-and-slavery",
+    "the-paradox-of-mass-migration-and-robots-in-the-age-of-automation",
+    "the-150-year-life-how-radical-longevity-will-transform-our-world"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 12,
+      "text": "Issue 12 (2024) of History Future Now is out. Inside: The Fusion of Revolutionary Technologies: Unlocking Humanity's Greatest Transformation | Robotics And Slavery&nbsp; | The Paradox of Mass Migration and Robots in the Age of Automation | The 150 Year Life: How Radical Longevity Will Transform Our World.\n\nhttps://www.historyfuturenow.com/issues/12",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 12,
+      "tweets": [
+        "🧵 Issue 12 of History Future Now — 2024. Here's what's inside:",
+        "Biotechnology and genomics will pave the way for lifespans of 150 years or more. https://www.historyfuturenow.com/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future",
+        "Rapid advancements in humanoid robotics and artificial intelligence are bringing us closer to a reality once confined to the realm of science fiction. https://www.historyfuturenow.com/articles/robotics-and-slavery",
+        "We stand at a pivotal juncture in human history, facing two seemingly contradictory narratives about the future of work and society. On one… https://www.historyfuturenow.com/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation",
+        "The tantalizing prospect of living to 150 years or more has captivated our imaginations, fueled by the exceptional longevity of individuals… https://www.historyfuturenow.com/articles/the-150-year-life-how-radical-longevity-will-transform-our-world"
+      ]
+    }
+  }
+}

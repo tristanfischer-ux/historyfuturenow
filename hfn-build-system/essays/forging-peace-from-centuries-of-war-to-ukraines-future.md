@@ -11,6 +11,9 @@ excerpt: >-
   shattered. Yet even from the ashes of the most devastating conflicts, lasting
   peace has managed to emerge through the alchemy of pragmatic diplomacy and
   difficult compromises.
+share_summary: >-
+  Every war that seemed intractable eventually ended through pragmatic
+  diplomacy. Ukraine's will too. History shows five paths to peace.
 signal: ''
 ---
 # Forging Peace: From Centuries of War to Ukraine's Future

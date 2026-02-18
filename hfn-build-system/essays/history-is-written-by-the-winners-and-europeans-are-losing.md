@@ -9,7 +9,10 @@ excerpt: >-
   There are a lot of people to whom the quote "history is written by the
   winners" is attributed to. Winston Churchill frequently pops up in the context
   of a discussion that he had with Stalin on how they would be remembered by
-  history. Another is George Orwell, the writer of "1984" and "Animal Farm".
+  history. Another is   George Orwell, the writer of "1984" and "Animal Farm".
+share_summary: >-
+  History is written by the winners. For 500 years, that meant
+  Europeans. Not any more.
 signal: ''
 ---
 # History is written by the winners. And Europeans are losing.

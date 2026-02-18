@@ -12,6 +12,9 @@ excerpt: >-
   start buying into energy companies that do focus on solar. There is an energy
   revolution that is taking place and most of the incumbents in the energy
   sector won't make it.
+share_summary: >-
+  An energy revolution is under way and most incumbent energy companies
+  won't survive it. The losers may surprise you.
 signal: ''
 ---
 # Who Are The Losers In The Energy Revolution?

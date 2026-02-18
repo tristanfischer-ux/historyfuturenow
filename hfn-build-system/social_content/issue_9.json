@@ -1,0 +1,30 @@
+{
+  "issue_number": 9,
+  "label": "2016-2018",
+  "date": "2016-09-01",
+  "articles": [
+    "hinkley-point-decision-is-really-about-china-and-brexit",
+    "history-is-written-by-the-winners-and-europeans-are-losing",
+    "the-renewables-and-battery-revolution",
+    "big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 9,
+      "text": "Issue 9 (2016-2018) of History Future Now is out. Inside: Hinkley Point Decision Is Really About China And Brexit | History Is Written By The Winners. And Europeans Are Losing. | The renewables and battery revolution. What history teaches us about the future. | Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?.\n\nhttps://www.historyfuturenow.com/issues/9",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 9,
+      "tweets": [
+        "🧵 Issue 9 of History Future Now — 2016-2018. Here's what's inside:",
+        "History Future Now is interested in the immediate controversy and, having spent 20 years in the energy sector, has a some observations on the merits… https://www.historyfuturenow.com/articles/hinkley-point-decision-is-really-about-china-and-brexit",
+        "Another is George Orwell, the writer of \"1984\" and \"Animal Farm\". https://www.historyfuturenow.com/articles/history-is-written-by-the-winners-and-europeans-are-losing",
+        "History Future Now has worked in the energy sector for over 20 years in a career that has included coal and natural gas power stations, oil refineries, and renewable… https://www.historyfuturenow.com/articles/the-renewables-and-battery-revolution",
+        "Most big European electricity utilities are in deep trouble and their share prices have… https://www.historyfuturenow.com/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do"
+      ]
+    }
+  }
+}

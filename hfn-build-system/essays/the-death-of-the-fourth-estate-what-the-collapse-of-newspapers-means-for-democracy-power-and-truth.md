@@ -16,6 +16,9 @@ excerpt: >-
   newsroom was gone in a single day. This is not just a story about one
   newspaper. Every revolution in information technology has overthrown the
   existing power structure. Every single one.
+share_summary: >-
+  Every revolution in information technology has overthrown the existing
+  power structure. Newspapers are dying. What replaces them may be worse.
 signal: ''
 ---
 # The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth

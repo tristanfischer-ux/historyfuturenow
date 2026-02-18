@@ -15,6 +15,9 @@ excerpt: >-
   and service sector jobs, and a significant increase in the world’s
   interconnected population, a natural question to ask is: “Are there enough
   good jobs to go around for everyone?”
+share_summary: >-
+  The first Industrial Revolution destroyed jobs for 150 years before
+  living standards recovered. We are entering the second one.
 signal: ''
 ---
 # Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.

@@ -1,0 +1,30 @@
+{
+  "issue_number": 10,
+  "label": "2019-2021",
+  "date": "2019-01-15",
+  "articles": [
+    "the-wests-romance-with-free-trade-is-over-why",
+    "the-long-term-impact-of-covid-19",
+    "the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state",
+    "the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 10,
+      "text": "Issue 10 (2019-2021) of History Future Now is out. Inside: The West’s romance with Free Trade is ending. Why? | The Long Term Impact of Covid 19 | The Unintended Consequences of War: How the Loss of Young Men Transformed Women's Roles in Society and ushered in the Welfare State | The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People.\n\nhttps://www.historyfuturenow.com/issues/10",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 10,
+      "tweets": [
+        "🧵 Issue 10 of History Future Now — 2019-2021. Here's what's inside:",
+        "Early examples include the Bristol Society of Merchant Venturers, who paid for John Cabot (an Italian) to sail to Newfoundland in 1497, the Virginia Company… https://www.historyfuturenow.com/articles/the-wests-romance-with-free-trade-is-over-why",
+        "From our prospective, in the early phases of the outbreak in March 2020, things look confused and even chaotic. https://www.historyfuturenow.com/articles/the-long-term-impact-of-covid-19",
+        "Throughout history, war has left an indelible mark on society, transforming… https://www.historyfuturenow.com/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state",
+        "In a small town in southern Italy, a school closed last year. https://www.historyfuturenow.com/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people"
+      ]
+    }
+  }
+}

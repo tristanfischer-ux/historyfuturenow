@@ -14,6 +14,9 @@ excerpt: >-
   or sometimes for political prisoners too important to kill and too dangerous
   to let free. Bentham brought in the idea that prisons could be used as a place
   to reform prisoners before they were released back into society.
+share_summary: >-
+  Prisons are barely 200 years old. Before Bentham, there was no such
+  thing. Technology may make them obsolete again.
 signal: ''
 ---
 # Prisons: We Never Used To Have Them. Will They Exist In The Future?

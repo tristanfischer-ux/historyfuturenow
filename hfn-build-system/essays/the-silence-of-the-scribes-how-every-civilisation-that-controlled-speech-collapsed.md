@@ -18,6 +18,9 @@ excerpt: >-
   over who controls information is the oldest power struggle in human
   history. Every civilisation that chose censorship over openness
   eventually fell behind — and fell apart.
+share_summary: >-
+  Every civilisation that chose censorship over openness eventually fell
+  behind — and fell apart. The pattern has no exceptions.
 signal: ''
 ---
 # The Silence Of The Scribes: How Every Civilisation That Controlled Speech Collapsed

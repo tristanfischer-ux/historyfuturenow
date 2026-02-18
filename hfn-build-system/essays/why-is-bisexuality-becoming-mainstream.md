@@ -13,6 +13,9 @@ excerpt: >-
   amongst the politics and backstabbing of the Washington DC elite, has the
   president’s male chief of staff get married to his long-term male lover. He
   was once married to a woman.
+share_summary: >-
+  Ancient Rome and Greece treated bisexuality as unremarkable. The last
+  two centuries were the anomaly, not today's shift.
 signal: ''
 ---
 # Why Is Bisexuality Becoming Mainstream?

@@ -15,6 +15,10 @@ excerpt: >-
   advancement of technologies such as gene therapy, stem cell research,
   artificial intelligence, and nanotechnology has brought us closer than ever to
   realizing this dream.
+share_summary: >-
+  What happens to pensions, careers, and marriages when people
+  routinely live to 150? Every social institution was built for
+  70-year lifespans.
 signal: ''
 ---
 # The 150-Year Life: How Radical Longevity Will Transform Our World

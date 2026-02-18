@@ -17,6 +17,10 @@ excerpt: >-
   of the demographic trend is frightening, but History Future Now offers a
   solution. It won't be easy and nobody will like it. The alternative is worse,
   however.
+share_summary: >-
+  North Africa's population is exploding while Europe's is collapsing.
+  Demographics will force a Mediterranean reunification — whether
+  Europe wants it or not.
 signal: ''
 ---
 # The North African Threat And Mediterranean Reunification

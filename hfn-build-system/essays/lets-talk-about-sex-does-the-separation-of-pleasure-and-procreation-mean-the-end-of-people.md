@@ -17,6 +17,10 @@ excerpt: >-
   the indigenous population – excluding immigration – will peak and then fall.
   Japan’s population, at 128 million, has been falling by a few hundred thousand
   per year for the past 6 years.
+share_summary: >-
+  Humanity separated sex from procreation. Now birth rates are
+  collapsing everywhere. The contraceptive revolution may end the
+  species.
 signal: ''
 ---
 # Lets Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?

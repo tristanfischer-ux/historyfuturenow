@@ -1,0 +1,32 @@
+{
+  "issue_number": 16,
+  "label": "February 2026",
+  "date": "2026-02-19",
+  "articles": [
+    "the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did",
+    "the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions",
+    "the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed",
+    "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible",
+    "when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 16,
+      "text": "Issue 16 (February 2026) of History Future Now is out. Inside: The Elephant Awakens: Why India's Rise Will Reshape the World More Than China's Did | The Empty Throne: Why the West No Longer Believes in Its Own Institutions | The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed | The Invisible Judge: Why Guilt and Shame Societies Are Incompatible | When the Servants Are Silicon: What History's Leisure Classes Reveal About the AI Age.\n\nhttps://www.historyfuturenow.com/issues/16",
+      "article_count": 5
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 16,
+      "tweets": [
+        "🧵 Issue 16 of History Future Now — February 2026. Here's what's inside:",
+        "On 23 August 2023, India's Chandrayaan-3 spacecraft touched down on the lunar south pole — a region no other nation had… https://www.historyfuturenow.com/articles/the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did",
+        "Gallup's long-running confidence surveys show that trust in virtually every major American institution — Congress, the presidency,… https://www.historyfuturenow.com/articles/the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions",
+        "In January 2018, the city of Cape Town announced that it was ninety days away from running out of water. https://www.historyfuturenow.com/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed",
+        "He does so cheerfully, because everyone at his level does, nobody of consequence is watching, and the businessman will mention it to no… https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible",
+        "On a Tuesday morning in 1780, Georgiana Cavendish, Duchess of Devonshire, rose at Chatsworth House to find her world… https://www.historyfuturenow.com/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age"
+      ]
+    }
+  }
+}

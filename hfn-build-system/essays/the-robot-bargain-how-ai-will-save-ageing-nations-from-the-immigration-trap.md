@@ -17,6 +17,9 @@ excerpt: >-
   a price below $20,000. Every ageing nation faces the same binary choice:
   import people or import robots. History tells us what happens when
   civilisations choose the first option. Technology now offers the second.
+share_summary: >-
+  Every ageing nation faces the same binary choice: import people or
+  import robots. History shows what happens when you choose people.
 signal: ''
 ---
 # The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap

@@ -15,6 +15,9 @@ excerpt: >-
   previously. This left true socialists and left-wingers out in the cold,
   looking for a reason to exist. Conveniently, the emerging ozone hole crisis of
   the mid / late 1980s gave them an outlet for their energies: environmentalism.
+share_summary: >-
+  Environmentalism was hijacked by the left after the Cold War. In
+  reality, conservation is a fundamentally conservative idea.
 signal: ''
 ---
 # Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition

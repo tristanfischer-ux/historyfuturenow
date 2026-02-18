@@ -10,6 +10,9 @@ excerpt: >-
   History Future Now has been considering the historical and future implications
   of the NSA files that have been leaked bit by bit by Edward Snowden over the
   past few months. History Future Now is very worried.
+share_summary: >-
+  Mass surveillance doesn't just catch terrorists. It freezes society
+  — making everyone afraid to speak, organise, or dissent.
 signal: ''
 ---
 # A Frozen Society: The Long Term Implications Of NSA’s Secrets

@@ -12,6 +12,10 @@ excerpt: >-
   beneath this conventional story lies a deeper and more complex tale - one
   shaped by the clash and synthesis of two very different cultural and spiritual
   traditions.
+share_summary: >-
+  Western civilisation was forged from two incompatible traditions: the
+  pagan warrior ethos and Judeo-Christian monotheism. The tension still
+  defines us.
 signal: ''
 ---
 # Clash of Titans: How the Warrior Ethos and Judeo-Christian Monotheism Shaped the Soul of the West

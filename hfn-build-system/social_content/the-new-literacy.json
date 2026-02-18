@@ -1,0 +1,52 @@
+{
+  "slug": "the-new-literacy",
+  "title": "The New Literacy: How AI Is Killing The Scribes And What Happens Next",
+  "url": "https://www.historyfuturenow.com/articles/the-new-literacy",
+  "part": "Jobs & Economy",
+  "posts": {
+    "hook": {
+      "platform": "twitter",
+      "text": "Imagine a merchant in the city of Ur, around 2000 BCE.",
+      "link": "https://www.historyfuturenow.com/articles/the-new-literacy",
+      "full": "Imagine a merchant in the city of Ur, around 2000 BCE. https://www.historyfuturenow.com/articles/the-new-literacy"
+    },
+    "thread": {
+      "platform": "twitter",
+      "tweets": [
+        "🧵 Imagine a merchant in the city of Ur, around 2000 BCE.",
+        "Writing was invented in Sumer around 3200 BCE, not for poetry or philosophy but for accounting — recording grain stores, tax payments, and livestock inventories.",
+        "Around 1050 BCE, the Phoenicians developed a writing system of roughly twenty-two consonantal signs — a radical simplification from the hundreds of cuneiform characters or Egyptian hieroglyphs that had previously required years of memorisation.",
+        "If you wanted a website in 1995, you hired a developer.",
+        "The emergence of large language models capable of writing code — first tentatively with GitHub Copilot in 2021, then with increasing competence through 2023 and 2024, and finally with genuine autonomy in late 2025 — has reduced the barrier to software creation by roughly…",
+        "Full article: https://www.historyfuturenow.com/articles/the-new-literacy"
+      ]
+    },
+    "chart_insight": {
+      "platform": "both",
+      "text": "Global Literacy Rates Over Five Thousand Years. For most of human history, fewer than five per cent of people could read or write. The alphabet, printing press, and compulsory education each triggered step-changes — AI may be triggering the next.",
+      "chart_title": "Global Literacy Rates Over Five Thousand Years",
+      "image": "images/articles/the-new-literacy/chart-newLitChart1.png",
+      "source": "Our World in Data (2023); Harris, Ancient Literacy (1989); Havelock (1982); UNESCO"
+    },
+    "linkedin_essay": {
+      "platform": "linkedin",
+      "text": "Three innovations, spread across three millennia, progressively demolished the scribes' monopoly.\n\n**The first was the alphabet.** Around 1050 BCE, the Phoenicians developed a writing system of roughly twenty-two consonantal signs — a radical simplification from the hundreds of cuneiform characters or Egyptian hieroglyphs that had previously required years of memorisation. The Phoenician alphabet was not invented for literature; it was invented for trade. Merchants needed a writing system simple enough that they could learn it themselves, without years of scribal training. The Greeks adopted and expanded this system around 800 BCE, adding vowels and creating the first fully phonetic alphabet.\n\nThe consequences were revolutionary. Within two centuries, Greek literacy rates rose to an estimated ten to fifteen per cent of adult males — low by modern standards, but a tenfold increase over anything the ancient Near East had achieved. This wider literacy enabled philosophy (Socrates could assume literate interlocutors), drama (audiences could follow complex written plots), history (Herodotus and Thucydides wrote for readers, not listeners), and — most consequentially — democracy. The Athenian Assembly, with its written laws, published decrees, and literate citizen-jurors, would have been impossible without the alphabet's democratisation of writing. The scribes did not disappear overnight, but their monopoly was broken. Ordinary citizens could, for the first time, read the laws that governed them and write the arguments that shaped them.\n\nRead the full essay: https://www.historyfuturenow.com/articles/the-new-literacy\n\n#Economy #FutureOfWork #Automation #HistoryFutureNow #LongRead",
+      "hashtags": [
+        "#Economy",
+        "#FutureOfWork",
+        "#Automation",
+        "#HistoryFutureNow",
+        "#LongRead"
+      ]
+    },
+    "provocative_question": {
+      "platform": "twitter",
+      "text": "How AI Is Killing The Scribes And What Happens Next?"
+    },
+    "quote_card": {
+      "platform": "both",
+      "text": "Then, in what will likely be seen as the most consequential eighteen months since Gutenberg, the cost and skill barrier collapsed.",
+      "char_count": 130
+    }
+  }
+}

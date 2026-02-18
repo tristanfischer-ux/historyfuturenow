@@ -9,6 +9,10 @@ excerpt: >-
   Many Westerners fret about the relative decline of the West. For over 500
   years, since the successful conquest of the Americas by Atlantic Ocean facing
   power, influence and culture.
+share_summary: >-
+  Western dominance lasted 500 years and was based on geographical
+  luck: facing the Atlantic when the Americas were discovered. That
+  luck has run out.
 signal: ''
 ---
 # The Rise Of The West Was Based On Luck. That Has Run Out.

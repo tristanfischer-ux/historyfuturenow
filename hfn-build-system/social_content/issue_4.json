@@ -1,0 +1,32 @@
+{
+  "issue_number": 4,
+  "label": "Spring 2013",
+  "date": "2013-03-15",
+  "articles": [
+    "why-is-bisexuality-becoming-mainstream",
+    "emigration-colonies-of-the-mind-and-space",
+    "crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west",
+    "prisons-we-never-used-to-have-them-will-they-exist-in-the-future",
+    "jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 4,
+      "text": "Issue 4 (Spring 2013) of History Future Now is out. Inside: Why Is Bisexuality Becoming Mainstream? | Emigration: Colonies Of The Mind And Space | Crisis: Or An Explanation On The Origins Of The Decline Of The West | Prisons: We Never Used To Have Them. Will They Exist In The Future? | Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely.\n\nhttps://www.historyfuturenow.com/issues/4",
+      "article_count": 5
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 4,
+      "tweets": [
+        "🧵 Issue 4 of History Future Now — Spring 2013. Here's what's inside:",
+        "Interracial relationships happened on screen, in an era where most of the US south still had laws preventing blacks and whites from marrying. https://www.historyfuturenow.com/articles/why-is-bisexuality-becoming-mainstream",
+        "In the modern world, migration, from mainly non-Western countries into Western countries, has accelerated to unprecedented levels with children of immigrants… https://www.historyfuturenow.com/articles/emigration-colonies-of-the-mind-and-space",
+        "Christopher Marlowe’s play Doctor Faustus was written in 1592 and was based on an earlier German work about Dr Faustus, a talented German… https://www.historyfuturenow.com/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west",
+        "Prisons as we know them are relatively new and we can thank Jeremy Bentham’s philosophy of utilitarianism in the 19th century for the first… https://www.historyfuturenow.com/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future",
+        "Since 2000 many jobs have moved from Europe and America to Asia. https://www.historyfuturenow.com/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely"
+      ]
+    }
+  }
+}

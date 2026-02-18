@@ -13,6 +13,9 @@ excerpt: >-
   its aboriginal people speak a language that is Austronesian in origin, closer
   to what was spoken on Easter Island and Madagascar than across the 180 km
   stretch of water to Mainland China.
+share_summary: >-
+  Taiwan was a Dutch colony and only became part of China in 1683. The
+  West assumes it will defend the island. History suggests otherwise.
 signal: ''
 ---
 # Why China Could Invade Taiwan – And Get Away With It

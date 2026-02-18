@@ -13,6 +13,9 @@ excerpt: >-
   to change the world. It is not an exaggeration to call this change a
   “revolution”. Some companies and countries will make it through this
   revolution stronger and better. Many will fail.
+share_summary: >-
+  Cheap renewables and batteries are rewriting the energy map. Some
+  nations will thrive. Many petrostates will collapse.
 signal: ''
 ---
 # The renewables and battery revolution. What history teaches us about the future.

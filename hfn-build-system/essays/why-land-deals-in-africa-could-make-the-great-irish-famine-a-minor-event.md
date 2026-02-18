@@ -12,6 +12,10 @@ excerpt: >-
   headlines “China Gives Up On Europe, Will Target Africa Instead” or “Chinese
   acquisitions: China buys up the world” or “Fears of Chinese land grab as
   Beijing’s billions buy up resources …”
+share_summary: >-
+  Foreign governments are buying African farmland to feed their own
+  people. During the Irish Famine, food was exported while millions
+  starved.
 signal: ''
 ---
 # Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event

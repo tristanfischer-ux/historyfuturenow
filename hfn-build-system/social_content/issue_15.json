@@ -1,0 +1,30 @@
+{
+  "issue_number": 15,
+  "label": "February 2026",
+  "date": "2026-02-16",
+  "articles": [
+    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+    "the-new-literacy",
+    "a-nation-transformed-britains-demographic-revolution-1948-2050",
+    "the-great-offshoring-how-the-worlds-factory-moved-east"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 15,
+      "text": "Issue 15 (February 2026) of History Future Now is out. Inside: The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next | The New Literacy: How AI Is Killing The Scribes And What Happens Next | A Nation Transformed: Britain's Demographic Revolution, 1948–2050 | The Great Offshoring: How the World's Factory Moved East.\n\nhttps://www.historyfuturenow.com/issues/15",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 15,
+      "tweets": [
+        "🧵 Issue 15 of History Future Now — February 2026. Here's what's inside:",
+        "In 2018, the Swiss alpine village of Albinen made international headlines by offering families 25,000 Swiss francs per… https://www.historyfuturenow.com/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+        "Imagine a merchant in the city of Ur, around 2000 BCE. https://www.historyfuturenow.com/articles/the-new-literacy",
+        "On 22 June 1948, the Empire Windrush docked at Tilbury with 492 passengers from Jamaica, recruited to fill postwar labour shortages. https://www.historyfuturenow.com/articles/a-nation-transformed-britains-demographic-revolution-1948-2050",
+        "Here is a number that should stop you cold: in 1990, the G7 nations produced roughly two-thirds of everything manufactured on Earth. https://www.historyfuturenow.com/articles/the-great-offshoring-how-the-worlds-factory-moved-east"
+      ]
+    }
+  }
+}

@@ -3387,6 +3387,1301 @@ title:{display:true,text:'Workers per citizen / household',color:C.dim},min:0,ma
         },
     ]
 
+    # ─── THE ELEPHANT AWAKENS: INDIA'S RISE ───
+    charts['the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did'] = [
+        {
+            'id': 'indiaChart1', 'figure_num': 1,
+            'title': 'Population Trajectories: India, China, United States, European Union (1950–2100)',
+            'desc': 'India surpassed China in 2023 and will remain the world\'s most populous country for the rest of the century',
+            'source': 'UN Population Division, World Population Prospects 2024 (medium variant)',
+            'position': 'after_para_5',
+            'js': """
+(()=>{const ctx=document.getElementById('indiaChart1');
+const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('India',yrs,[376,449,555,697,873,1057,1234,1396,1442,1485,1545,1533,1487,1416,1330,1237,1143],C.amber),
+dxy('China',yrs,[544,660,818,981,1135,1264,1348,1411,1410,1395,1348,1261,1148,1027,912,808,716],C.accent),
+dxy('United States',yrs,[158,186,210,229,253,282,310,335,345,355,373,383,389,392,393,392,389],C.blue),
+dxy('European Union',yrs,[380,406,435,457,473,487,502,513,509,504,488,465,441,418,397,378,361],C.purple)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
+annotation:{annotations:{
+crossover:{type:'line',xMin:2023,xMax:2023,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
+label:{display:true,content:'India passes China (2023)',position:'start',color:C.dim,font:{size:11}}}
+}}},
+scales:{x:linX(1950,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'B':v+'M'},
+title:{display:true,text:'Population (millions)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'indiaChart2', 'figure_num': 2,
+            'title': 'Median Age Comparison: The Youth Gap (2025 and 2050)',
+            'desc': 'India is the youngest major economy — and will remain so for decades',
+            'source': 'UN Population Division, World Population Prospects 2024',
+            'position': 'after_para_8',
+            'js': """
+(()=>{const ctx=document.getElementById('indiaChart2');
+const countries=['India','Indonesia','Brazil','United States','China','EU Average','South Korea','Japan'];
+const age2025=[28.4,30.2,34.4,38.5,39.6,44.4,44.5,49.1];
+const age2050=[35.2,37.8,42.1,42.3,50.7,51.2,56.5,54.7];
+new Chart(ctx,{type:'bar',data:{labels:countries,datasets:[
+{label:'2025',data:age2025,backgroundColor:C.amber+'bb',borderColor:C.amber,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'2050 (projected)',data:age2050,backgroundColor:C.purple+'88',borderColor:C.purple,borderWidth:1.5,borderRadius:4,borderSkipped:false,borderDash:[3,3]}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+' years'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:45}},
+y:{grid:{color:C.grid},ticks:{color:C.dim},min:20,max:60,title:{display:true,text:'Median age (years)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'indiaChart3', 'figure_num': 3,
+            'title': 'GDP Growth Trajectories: India vs. China vs. United States (2000–2050)',
+            'desc': 'India\'s GDP is projected to surpass Japan and Germany, reaching third place by 2030',
+            'source': 'World Bank; IMF World Economic Outlook 2024; Goldman Sachs projections (dashed = projected)',
+            'position': 'after_para_22',
+            'js': """
+(()=>{const ctx=document.getElementById('indiaChart3');
+const yrs=[2000,2005,2010,2015,2020,2025,2030,2035,2040,2045,2050];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('United States',yrs,[10.3,13.0,15.0,18.2,21.1,28.8,33.5,38.1,43.2,48.5,54.3],C.blue),
+dxy('China',yrs,[1.2,2.3,6.1,11.1,14.7,18.5,22.8,26.3,29.1,31.2,33.0],C.accent),
+dxy('India',yrs,[0.47,0.83,1.68,2.10,2.67,3.94,5.8,8.2,11.5,15.2,19.8],C.amber),
+dxy('Japan',yrs,[4.89,4.76,5.76,4.44,5.04,4.4,4.5,4.5,4.4,4.3,4.2],C.dim,[5,5]),
+dxy('Germany',yrs,[1.94,2.86,3.42,3.36,3.89,4.6,4.8,4.9,5.0,5.0,5.0],C.teal,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'T'}},
+annotation:{annotations:{
+proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
+label:{display:true,content:'Projected →',position:'start',color:C.dim,font:{size:10}}}
+}}},
+scales:{x:linX(2000,2050),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'T'},
+title:{display:true,text:'GDP ($ trillions, nominal)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'indiaChart4', 'figure_num': 4,
+            'title': 'The Demographic Dividend Window: Working-Age Population as Share of Total',
+            'desc': 'India\'s window opened around 2010 and peaks in the 2040s — the last major dividend on Earth',
+            'source': 'UN Population Division, World Population Prospects 2024',
+            'position': 'after_para_10',
+            'js': """
+(()=>{const ctx=document.getElementById('indiaChart4');
+const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('India',yrs,[56.3,55.2,55.1,56.8,58.5,61.2,64.9,67.5,68.2,68.9,69.5,67.8,64.5,62.1,60.8],C.amber),
+dxy('China',yrs,[59.1,56.3,55.7,60.7,65.5,68.5,72.4,70.3,68.4,66.2,61.9,56.8,54.2,53.8,52.5],C.accent),
+dxy('Japan',yrs,[59.6,64.2,68.9,67.3,69.5,68.0,63.7,59.2,58.0,57.2,54.0,52.0,51.5,50.8,49.5],C.dim,[5,5]),
+dxy('United States',yrs,[65.0,60.2,62.0,66.1,65.8,66.2,67.0,64.8,64.0,63.2,61.5,60.5,60.0,59.5,59.0],C.blue,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}},
+annotation:{annotations:{
+peak:{type:'box',xMin:2010,xMax:2045,backgroundColor:C.amber+'11',borderWidth:0,
+label:{display:true,content:"India's dividend window",color:C.amber,font:{size:11,weight:'bold'},position:{x:'center',y:'start'}}}
+}}},
+scales:{x:linX(1950,2080),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:45,max:75,
+title:{display:true,text:'Working-age population (15–64) as % of total',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'indiaMapChart', 'figure_num': 5,
+            'title': 'The Age of Nations: Median Age by Country (2025)',
+            'desc': 'A world divided by youth and age — India (orange) sits at the young end while Europe and East Asia grey rapidly',
+            'source': 'UN Population Division, World Population Prospects 2024',
+            'position': 'after_para_7',
+            'geo': True,
+            'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const medianAges={356:28.4,156:39.6,840:38.5,392:49.1,410:44.5,276:46.8,250:42.3,826:40.6,76:34.4,360:30.2,
+566:17.2,404:20.0,800:15.7,562:14.5,180:16.7,231:19.5,710:28.3,288:20.0,834:17.7,
+36:38.1,124:41.7,380:48.0,724:45.3,620:46.2,56:42.0,528:42.8,752:41.1,246:43.1,
+616:42.2,642:44.5,300:46.5,203:43.9,348:44.0,40:44.5,756:43.1,
+643:39.6,792:32.2,682:31.8,364:32.0,586:22.0,4:17.6,50:28.1,
+704:33.0,764:40.1,608:25.7,458:30.4,116:26.4,418:24.8,104:29.5};
+const ctx=document.getElementById('indiaMapChart');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Median Age',data:countries.map(d=>({feature:d,value:medianAges[+d.id]||null})),
+outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#effaf4','#fef8ee','#fed7aa','#f97316','#c43425'];return colors[Math.min(Math.floor(v*5),4)];},
+min:14,max:50}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'Median age: '+i.raw.value+' years':'No data'}}}}});
+});
+})();"""
+        },
+    ]
+
+    # ─── THE LAST DROP: WATER SCARCITY ───
+    charts['the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed'] = [
+        {
+            'id': 'waterChart1', 'figure_num': 1,
+            'title': 'Global Freshwater Withdrawal vs. Renewable Supply (1900–2050)',
+            'desc': 'Humanity is drawing down its water reserves faster than nature can replenish them',
+            'source': 'FAO AQUASTAT; UN World Water Development Report 2024',
+            'position': 'after_para_14',
+            'js': """
+(()=>{const ctx=document.getElementById('waterChart1');
+const yrs=[1900,1920,1940,1950,1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Global freshwater withdrawal',yrs,[580,700,1100,1400,1950,2600,3200,3600,3950,4100,4300,4450,4600,4900,5200],C.accent),
+dxy('Sustainable renewable supply',yrs,[4200,4200,4200,4200,4200,4200,4200,4200,4200,4100,4000,3950,3900,3800,3700],C.blue,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+' km³/yr'}},
+annotation:{annotations:{
+cross:{type:'label',xValue:2025,yValue:4600,content:['Demand exceeds','sustainable supply'],color:C.accent,font:{size:11,weight:'bold'}}
+}}},
+scales:{x:linX(1900,2050),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v},
+title:{display:true,text:'km³ per year',color:C.dim},min:0,max:6000}}}});
+})();"""
+        },
+        {
+            'id': 'waterChart2', 'figure_num': 2,
+            'title': 'Major Aquifer Depletion: Extraction vs. Recharge Rates',
+            'desc': 'The world\'s great aquifers are being drained far faster than they refill',
+            'source': 'USGS; Central Ground Water Board (India); Famiglietti (2014)',
+            'position': 'after_para_18',
+            'js': """
+(()=>{const ctx=document.getElementById('waterChart2');
+const aquifers=['Ogallala\\n(US Great Plains)','North China\\nPlain','Upper Ganges\\n(India)','Arabian\\nAquifer System','Nubian Sandstone\\n(N. Africa)','Murray-Darling\\n(Australia)'];
+const extraction=[26,30,45,20,2.7,12];
+const recharge=[3,8,12,1.2,0.5,5];
+new Chart(ctx,{type:'bar',data:{labels:aquifers,datasets:[
+{label:'Annual extraction (km³)',data:extraction,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Annual natural recharge (km³)',data:recharge,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+' km³/yr'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'km³ per year',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'waterChart3', 'figure_num': 3,
+            'title': 'Water Stress by Region: 2025 vs. 2050 (Projected)',
+            'desc': 'The Middle East and North Africa already face extreme stress — South Asia and Southern Europe are catching up',
+            'source': 'WRI Aqueduct 4.0; UN World Water Development Report 2024',
+            'position': 'after_para_20',
+            'js': """
+(()=>{const ctx=document.getElementById('waterChart3');
+const regions=['Middle East &\\nNorth Africa','South\\nAsia','Southern\\nEurope','Western\\nUS','Sub-Saharan\\nAfrica','East\\nAsia'];
+const stress2025=[4.5,3.8,3.1,3.0,1.8,2.4];
+const stress2050=[4.9,4.5,3.8,3.6,2.8,3.1];
+new Chart(ctx,{type:'bar',data:{labels:regions,datasets:[
+{label:'Water stress index 2025',data:stress2025,backgroundColor:C.amber+'bb',borderColor:C.amber,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Water stress index 2050 (projected)',data:stress2050,backgroundColor:C.accent+'88',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(1)+'/5.0'}},
+annotation:{annotations:{
+extreme:{type:'line',yMin:4.0,yMax:4.0,borderColor:C.accent,borderDash:[6,4],borderWidth:1.5,
+label:{display:true,content:'Extreme stress threshold',position:'end',color:C.accent,font:{size:10}}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:5.5,title:{display:true,text:'Water stress index (0–5)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'waterMapChart', 'figure_num': 4,
+            'title': 'Global Water Stress: The Thirsty World (2025)',
+            'desc': 'A world map of water stress — from the parched Middle East to the water-rich north',
+            'source': 'WRI Aqueduct 4.0; FAO AQUASTAT',
+            'position': 'after_para_16',
+            'geo': True,
+            'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const stress={682:4.8,634:4.5,414:4.9,784:4.3,512:4.5,48:4.6,400:4.5,376:4.2,275:4.6,760:4.3,
+818:4.0,434:3.5,788:3.2,504:3.0,12:2.8,356:3.8,586:3.6,4:3.5,364:4.0,792:3.5,
+724:3.2,380:2.8,300:3.0,196:3.3,840:2.5,484:2.8,152:2.2,710:2.5,156:2.4,
+36:2.0,76:1.5,124:0.8,826:1.2,250:1.5,276:1.5,528:1.0,752:0.5,246:0.5,
+578:0.3,643:1.0,566:2.2,404:2.5,800:1.8,231:2.0,834:1.5};
+const ctx=document.getElementById('waterMapChart');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Water Stress',data:countries.map(d=>({feature:d,value:stress[+d.id]||null})),
+outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#2563eb','#60a5fa','#fbbf24','#f97316','#c43425'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:5}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'Water stress: '+i.raw.value.toFixed(1)+'/5.0':'No data'}}}}});
+});
+})();"""
+        },
+    ]
+
+    # ─── THE EMPTY THRONE: COLLAPSE OF TRUST ───
+    charts['the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions'] = [
+        {
+            'id': 'trustChart1', 'figure_num': 1,
+            'title': 'Trust in Government Over Time: US, UK, France, Germany (1960–2025)',
+            'desc': 'A sixty-year collapse in the most fundamental measure of democratic legitimacy',
+            'source': 'Pew Research Center; Eurobarometer; Edelman Trust Barometer',
+            'position': 'after_para_16',
+            'js': """
+(()=>{const ctx=document.getElementById('trustChart1');
+const yrs=[1960,1965,1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('United States',yrs,[73,77,54,36,26,44,25,22,42,31,22,19,20,16],C.blue),
+dxy('United Kingdom',yrs,[null,null,45,38,34,38,36,28,30,26,22,18,16,12],C.accent),
+dxy('France',yrs,[null,null,42,38,35,30,34,25,28,24,22,15,14,11],C.purple),
+dxy('Germany',yrs,[null,null,55,52,50,48,52,38,35,28,30,40,35,28],C.amber)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}}},
+scales:{x:linX(1960,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:85,
+title:{display:true,text:'% who trust the government',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'trustChart2', 'figure_num': 2,
+            'title': 'Trust Across Institutions: The Universal Decline (Latest Data)',
+            'desc': 'No institution has been spared — government, media, business, science, and religion all face a credibility crisis',
+            'source': 'Edelman Trust Barometer 2025; Gallup',
+            'position': 'after_para_20',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('trustChart2');
+const institutions=['National\\nGovernment','News\\nMedia','Business','NGOs /\\nCharities','Science /\\nAcademia','Organised\\nReligion'];
+const us=[16,21,49,43,48,30];
+const uk=[12,18,42,40,52,22];
+const france=[11,23,44,38,50,18];
+const germany=[28,30,50,45,58,25];
+new Chart(ctx,{type:'bar',data:{labels:institutions,datasets:[
+{label:'US',data:us,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'UK',data:uk,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'France',data:france,backgroundColor:C.purple+'bb',borderColor:C.purple,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Germany',data:germany,backgroundColor:C.amber+'bb',borderColor:C.amber,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% trust'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:70,
+title:{display:true,text:'% who trust this institution',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'trustChart3', 'figure_num': 3,
+            'title': 'The Pattern: Trust Collapse and What Followed',
+            'desc': 'When institutions lose legitimacy, transformations follow — from Rome to the Reformation to today',
+            'source': 'Historical analysis; Pew Research; Eurobarometer',
+            'position': 'after_para_24',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('trustChart3');
+const events=[
+{y:2025,l:'Western democracies (2020s)',c:C.accent},
+{y:1789,l:'French monarchy collapses (1789)',c:C.purple},
+{y:1517,l:'Reformation begins (1517)',c:C.amber},
+{y:49,l:'Caesar crosses the Rubicon (49 BC)',c:C.blue},
+{y:-133,l:'Gracchi reforms rejected (133 BC)',c:C.teal}
+];
+new Chart(ctx,{type:'bar',data:{
+labels:events.map(e=>e.l),
+datasets:[{label:'Crisis Point',data:events.map((_,i)=>[0,100-i*15]),
+backgroundColor:events.map(e=>e.c+'88'),borderColor:events.map(e=>e.c),borderWidth:2,borderRadius:6,borderSkipped:false,barPercentage:0.5}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.label||'',
+label:()=>'Institutional trust crisis → systemic transformation'}}},
+scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+})();"""
+        },
+        {
+            'id': 'trustChart4', 'figure_num': 4,
+            'title': 'Populist Party Vote Share in Europe (2000–2024)',
+            'desc': 'Populism is not an aberration — it is the predictable response to institutional failure',
+            'source': 'ParlGov database; national election data',
+            'position': 'after_para_28',
+            'js': """
+(()=>{const ctx=document.getElementById('trustChart4');
+const yrs=[2000,2004,2008,2012,2016,2020,2024];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('France (RN/FN)',yrs,[11,12,10,18,21,23,33],C.blue),
+dxy('Italy (populist total)',yrs,[15,18,22,25,35,48,44],C.accent),
+dxy('Germany (AfD)',yrs,[0,0,0,0,13,11,21],C.amber),
+dxy('Netherlands (PVV+FvD)',yrs,[0,6,16,10,13,14,24],C.teal),
+dxy('Sweden (SD)',yrs,[1,2,6,13,17,17,20],C.purple)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% vote share'}}},
+scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:55,
+title:{display:true,text:'Populist party vote share (%)',color:C.dim}}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE SEVERED CIRCUIT: US-CHINA TECH WAR ───
+    charts['the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two'] = [
+        {
+            'id': 'techwarChart1', 'figure_num': 1,
+            'title': 'Global Semiconductor Market Share by Region (2024)',
+            'desc': 'A handful of chokepoints control the world\'s most critical technology',
+            'source': 'SIA; Gartner; ASML Annual Report 2024',
+            'position': 'after_para_6',
+            'js': """
+(()=>{const ctx=document.getElementById('techwarChart1');
+new Chart(ctx,{type:'bar',data:{labels:['Design\\n(fabless)','Fabrication\\n(<10nm)','Lithography\\n(EUV)','Packaging\\n(advanced)','Memory\\n(DRAM)'],
+datasets:[
+{label:'US',data:[65,0,0,5,0],backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Taiwan',data:[10,92,0,50,0],backgroundColor:C.amber+'bb',borderColor:C.amber,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Netherlands',data:[0,0,100,0,0],backgroundColor:C.teal+'bb',borderColor:C.teal,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'South Korea',data:[3,8,0,15,60],backgroundColor:C.purple+'bb',borderColor:C.purple,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'China',data:[7,0,0,20,10],backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% market share'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:105,title:{display:true,text:'Market share (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'techwarChart2', 'figure_num': 2,
+            'title': 'The Bifurcation: US-Aligned vs. China-Aligned Technology Stacks',
+            'desc': 'Two parallel technology ecosystems are emerging across every layer of the stack',
+            'source': 'Rhodium Group; Eurasia Group; author analysis',
+            'position': 'after_para_18',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('techwarChart2');
+const layers=['AI Models','Social Media','Mobile OS','Payments','5G Networks','Satellite Nav','Cloud'];
+const us=[85,60,72,65,45,55,65];
+const cn=[12,35,22,30,40,35,25];
+new Chart(ctx,{type:'bar',data:{labels:layers,datasets:[
+{label:'US-aligned stack market share',data:us,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'China-aligned stack market share',data:cn,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
+x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,stacked:true,
+title:{display:true,text:'Global market share (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'techwarMapChart', 'figure_num': 3,
+            'title': 'The Tech Bloc Map: US-Aligned, China-Aligned, and Non-Aligned (2025)',
+            'desc': 'Every nation is being pulled towards one tech ecosystem — some are trying to straddle both',
+            'source': 'Author analysis based on 5G deployment, AI partnerships, and payment system adoption',
+            'position': 'after_para_20',
+            'geo': True,
+            'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const blocs={840:1,124:1,826:1,276:1,250:1,380:1,724:1,620:1,528:1,56:1,40:1,756:1,752:1,246:1,
+578:1,208:1,372:1,36:1,554:1,392:1,410:1,158:1,
+156:2,408:2,643:2,112:2,
+356:0.5,76:0.5,360:0.5,566:0.5,682:0.5,784:0.5,764:0.5,704:0.5,458:0.5,608:0.5,
+710:0.5,818:0.5,792:0.5,586:0.5,50:0.5,404:0.5};
+const ctx=document.getElementById('techwarMapChart');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Tech Bloc',data:countries.map(d=>({feature:d,value:blocs[+d.id]!=null?blocs[+d.id]:null})),
+outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:3,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=[C.blue,C.amber,C.accent];return colors[Math.min(Math.floor(v*3),2)];},
+min:0,max:2}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>{const v=i.raw.value;if(v==null)return'No data';if(v<0.3)return'US-aligned';if(v>1.5)return'China-aligned';return'Non-aligned / straddling'}}}}}});
+});
+})();"""
+        },
+    ]
+
+    # ─── THE DEBASEMENT: SOVEREIGN DEBT ───
+    charts['the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin'] = [
+        {
+            'id': 'debtChart1', 'figure_num': 1,
+            'title': 'Government Debt-to-GDP Ratio: Major Economies (1900–2025)',
+            'desc': 'The debt mountain has been growing for a century — peacetime borrowing now rivals wartime levels',
+            'source': 'IMF Historical Public Debt Database; Reinhart & Rogoff (2009)',
+            'position': 'after_para_10',
+            'js': """
+(()=>{const ctx=document.getElementById('debtChart1');
+const yrs=[1900,1910,1920,1930,1940,1945,1950,1960,1970,1980,1990,2000,2010,2020,2025];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('United States',yrs,[10,8,30,18,50,120,80,45,28,32,55,55,95,134,124],C.blue),
+dxy('United Kingdom',yrs,[30,28,130,170,200,250,200,130,65,45,30,38,75,105,100],C.accent),
+dxy('Japan',yrs,[50,35,40,50,80,200,15,10,12,50,65,140,215,254,260],C.amber),
+dxy('France',yrs,[95,80,180,120,140,160,40,30,20,20,35,58,82,115,112],C.purple)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% of GDP'}},
+annotation:{annotations:{
+ww2:{type:'box',xMin:1939,xMax:1945,backgroundColor:'rgba(196,52,37,0.06)',borderWidth:0,
+label:{display:true,content:'World War II',color:C.dim,font:{size:10},position:{x:'center',y:'start'}}}
+}}},
+scales:{x:linX(1900,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},
+title:{display:true,text:'Government debt (% of GDP)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'debtChart2', 'figure_num': 2,
+            'title': 'US Federal Interest Payments vs. Defence Spending (2000–2025)',
+            'desc': 'In 2025, for the first time in American history, interest costs exceeded the defence budget',
+            'source': 'CBO; US Treasury; OMB',
+            'position': 'after_para_3',
+            'js': """
+(()=>{const ctx=document.getElementById('debtChart2');
+const yrs=[2000,2005,2008,2010,2012,2015,2018,2020,2022,2024,2025];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Net interest payments',yrs,[223,184,253,196,220,223,325,345,475,870,1050],C.accent),
+dxy('Defence spending',yrs,[295,495,616,689,677,597,631,714,767,874,895],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'B'}},
+annotation:{annotations:{
+cross:{type:'line',xMin:2024,xMax:2024,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
+label:{display:true,content:'Interest exceeds defence',position:'start',color:C.accent,font:{size:10}}}
+}}},
+scales:{x:linX(2000,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
+title:{display:true,text:'$ billions',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'debtChart3', 'figure_num': 3,
+            'title': 'The Roman Debasement: Silver Content of the Denarius (27 BC – 300 AD)',
+            'desc': 'Rome\'s currency lost 95% of its silver content over three centuries — the original quantitative easing',
+            'source': 'Harl, Coinage in the Roman Economy (1996)',
+            'position': 'after_para_18',
+            'js': """
+(()=>{const ctx=document.getElementById('debtChart3');
+const yrs=[-27,14,54,69,96,138,161,193,218,260,300];
+const labels=['Augustus\\n27 BC','Tiberius\\n14 AD','Nero\\n54','Vespasian\\n69','Trajan\\n96','Hadrian\\n138','M. Aurelius\\n161','Septimius\\nSeverus 193','Elagabalus\\n218','Gallienus\\n260','Diocletian\\n300'];
+const silver=[97,97,93.5,90,93,90,83.5,56.5,43,5,4];
+new Chart(ctx,{type:'line',data:{labels:labels,datasets:[
+{label:'Silver content (%)',data:silver,borderColor:C.purple,backgroundColor:C.purple+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% silver content'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:9},maxRotation:45}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:100,
+title:{display:true,text:'Silver content of denarius (%)',color:C.dim}}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE LOCKED GATE: HOUSING CRISIS ───
+    charts['the-locked-gate-how-the-west-priced-its-children-out-of-existence'] = [
+        {
+            'id': 'housingChart1', 'figure_num': 1,
+            'title': 'House Price-to-Income Ratio: Selected Countries (1970–2025)',
+            'desc': 'Housing has decoupled from wages in every major Western economy',
+            'source': 'OECD; ONS; ABS; Statistics Canada',
+            'position': 'after_para_5',
+            'js': """
+(()=>{const ctx=document.getElementById('housingChart1');
+const yrs=[1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('England',yrs,[3.5,3.2,3.8,3.6,4.5,3.5,4.4,6.8,7.0,7.6,8.2,8.9],C.accent),
+dxy('Australia',yrs,[3.0,2.8,3.2,3.5,4.5,4.0,5.5,7.2,6.5,8.0,9.5,10.2],C.amber),
+dxy('Canada',yrs,[3.0,2.8,3.0,3.2,3.8,3.2,3.5,4.8,5.2,6.0,7.8,8.5],C.purple),
+dxy('United States',yrs,[2.8,2.5,2.8,3.0,3.2,2.8,3.5,4.8,3.8,4.2,5.0,5.5],C.blue),
+dxy('Japan',yrs,[4.0,4.5,5.5,6.0,8.5,6.0,5.5,5.2,5.0,5.2,5.0,5.0],C.teal,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'x income'}}},
+scales:{x:linX(1970,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'x'},min:2,max:12,
+title:{display:true,text:'House price / median income',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'housingChart2', 'figure_num': 2,
+            'title': 'The Demographic Mechanism: Housing Cost vs. Fertility Rate',
+            'desc': 'The most expensive cities have the lowest birth rates — this is not coincidence',
+            'source': 'OECD; UN Population Division; national statistics offices',
+            'position': 'after_para_16',
+            'js': """
+(()=>{const ctx=document.getElementById('housingChart2');
+const cities=['Seoul','Hong Kong','London','Sydney','Vancouver','Tokyo','New York','Vienna','Singapore','Houston'];
+const priceIncome=[18,20.7,13.5,12.2,11.0,10.5,9.5,7.0,5.5,4.0];
+const tfr=[0.72,0.75,1.38,1.55,1.30,1.20,1.40,1.50,1.04,1.85];
+new Chart(ctx,{type:'scatter',data:{datasets:[{
+label:'City',data:cities.map((c,i)=>({x:priceIncome[i],y:tfr[i]})),
+backgroundColor:cities.map((_,i)=>i<5?C.accent+'bb':C.blue+'bb'),
+borderColor:cities.map((_,i)=>i<5?C.accent:C.blue),
+pointRadius:8,pointHoverRadius:10,borderWidth:2}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>{const i=items[0]?.dataIndex;return i!=null?cities[i]:'';},
+label:i=>'Price/income: '+i.raw.x+'x | TFR: '+i.raw.y}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'x'},min:2,max:22,
+title:{display:true,text:'House price / median income ratio',color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim},min:0.5,max:2.1,
+title:{display:true,text:'Total fertility rate',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'housingChart3', 'figure_num': 3,
+            'title': 'Homeownership Rate by Age Group: UK (1990 vs. 2025)',
+            'desc': 'Young adults have been locked out of ownership — the intergenerational transfer that never arrived',
+            'source': 'ONS; English Housing Survey; Resolution Foundation',
+            'position': 'after_para_20',
+            'js': """
+(()=>{const ctx=document.getElementById('housingChart3');
+const ages=['25–34','35–44','45–54','55–64','65+'];
+new Chart(ctx,{type:'bar',data:{labels:ages,datasets:[
+{label:'1990',data:[67,78,76,72,63],backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'2025',data:[28,52,65,72,74],backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:85,
+title:{display:true,text:'Homeownership rate (%)',color:C.dim}}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE NEW OIL: CRITICAL MINERALS ───
+    charts['the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century'] = [
+        {
+            'id': 'mineralsChart1', 'figure_num': 1,
+            'title': 'China\'s Share of Global Mineral Processing (2024)',
+            'desc': 'Even minerals mined elsewhere are shipped to China for processing — a chokepoint with no equivalent in history',
+            'source': 'IEA Critical Minerals Report 2024; USGS',
+            'position': 'after_para_14',
+            'js': """
+(()=>{const ctx=document.getElementById('mineralsChart1');
+const minerals=['Rare Earths\\nProcessing','Lithium\\nRefining','Cobalt\\nRefining','Graphite\\nProcessing','Nickel\\nRefining','Copper\\nSmelting'];
+const chinaShare=[90,65,73,93,35,40];
+new Chart(ctx,{type:'bar',data:{labels:minerals,datasets:[
+{label:'China',data:chinaShare,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Rest of world',data:chinaShare.map(v=>100-v),backgroundColor:C.blue+'44',borderColor:C.blue+'66',borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0},stacked:true},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,stacked:true,
+title:{display:true,text:'Share of global processing (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'mineralsChart2', 'figure_num': 2,
+            'title': 'Projected Critical Mineral Demand Growth (2023–2040)',
+            'desc': 'The energy transition requires a mining revolution of unprecedented scale',
+            'source': 'IEA World Energy Outlook 2024; BloombergNEF',
+            'position': 'after_para_10',
+            'js': """
+(()=>{const ctx=document.getElementById('mineralsChart2');
+const minerals=['Lithium','Graphite','Cobalt','Nickel','Copper','Rare Earths'];
+const growth=[400,350,200,180,100,250];
+new Chart(ctx,{type:'bar',data:{labels:minerals,datasets:[
+{label:'Demand growth by 2040 vs 2023 (%)',data:growth,
+backgroundColor:[C.amber,C.purple,C.teal,C.blue,C.accent,C.indigo].map(c=>c+'bb'),
+borderColor:[C.amber,C.purple,C.teal,C.blue,C.accent,C.indigo],borderWidth:1.5,borderRadius:6,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'+'+i.raw+'% demand growth'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'+'+v+'%'},
+title:{display:true,text:'Demand growth by 2040 (%)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'mineralsMapChart', 'figure_num': 3,
+            'title': 'Where the Minerals Are: Major Mining and Processing Nations (2024)',
+            'desc': 'Minerals are mined in the Global South and processed in China — a supply chain geography that mirrors colonial extraction',
+            'source': 'USGS Mineral Commodity Summaries 2024; IEA',
+            'position': 'after_para_12',
+            'geo': True,
+            'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const mineral={156:5,36:4,152:4,180:4,360:3,76:3,710:3,566:2,706:2,508:2,
+170:2,604:3,32:3,484:2,858:1,124:2,840:2,826:1,250:1,276:1};
+const ctx=document.getElementById('mineralsMapChart');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Mineral Significance',data:countries.map(d=>({feature:d,value:mineral[+d.id]||null})),
+outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#f2eeea','#fed7aa','#f97316','#c43425','#7c3aed'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:5}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>{const v=i.raw.value;if(!v)return'Minor/no role';return['Minor','Moderate','Significant','Major producer','Dominant processor/miner'][Math.min(v,4)];}}}}}});
+});
+})();"""
+        },
+    ]
+
+    # ─── THE GREAT DIVERGENCE: GENDER DIVIDE ───
+    charts['the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world'] = [
+        {
+            'id': 'genderChart1', 'figure_num': 1,
+            'title': 'The Gender-Ideology Gap Among 18–29 Year Olds (2000–2024)',
+            'desc': 'Young women have moved dramatically more liberal while young men have held steady or shifted right',
+            'source': 'Gallup; Financial Times/John Burn-Murdoch (2024); European Social Survey',
+            'position': 'after_para_6',
+            'js': """
+(()=>{const ctx=document.getElementById('genderChart1');
+const yrs=[2000,2004,2008,2012,2016,2020,2024];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Young women (US)',yrs,[44,46,50,54,58,65,68],C.rose),
+dxy('Young men (US)',yrs,[42,40,42,40,38,39,43],C.blue),
+dxy('Young women (Germany)',yrs,[null,null,null,48,55,62,68],C.rose,[5,5]),
+dxy('Young men (Germany)',yrs,[null,null,null,44,42,38,38],C.blue,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% liberal'}}},
+scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:30,max:75,
+title:{display:true,text:'% identifying as liberal/progressive',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'genderChart2', 'figure_num': 2,
+            'title': 'Gender Gap on Key Issues (US, 18–29 Year Olds, 2024)',
+            'desc': 'The divide is widest on social and cultural issues, narrower on economics',
+            'source': 'The 19th/SurveyMonkey 2025; Gallup',
+            'position': 'after_para_10',
+            'tall': True,
+            'js': """
+(()=>{const ctx=document.getElementById('genderChart2');
+const issues=['Toxic masculinity\\nis a problem','Gender-affirming\\ncare for minors','Abortion\\naccess','Immigration\\nlevels too high','Criminal justice\\ntoo lenient','Economic\\npolicy'];
+const womenLib=[78,62,80,32,28,52];
+const menLib=[56,50,63,55,52,48];
+new Chart(ctx,{type:'bar',data:{labels:issues,datasets:[
+{label:'Young women agree (%)',data:womenLib,backgroundColor:C.rose+'bb',borderColor:C.rose,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Young men agree (%)',data:menLib,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
+x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:90,
+title:{display:true,text:'% who agree',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'genderChart3', 'figure_num': 3,
+            'title': 'University Degree Attainment by Sex (OECD Average, 2000–2024)',
+            'desc': 'Women now outperform men at every level of education — a structural driver of the ideological gap',
+            'source': 'OECD Education at a Glance 2024',
+            'position': 'after_para_18',
+            'js': """
+(()=>{const ctx=document.getElementById('genderChart3');
+const yrs=[2000,2004,2008,2012,2016,2020,2024];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Women with bachelor\'s+ (%)',yrs,[28,33,38,43,48,53,59.5],C.rose),
+dxy('Men with bachelor\'s+ (%)',yrs,[26,28,30,33,36,40,44],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}}},
+scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:20,max:65,
+title:{display:true,text:'% of 25–34 year olds with degree',color:C.dim}}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE ATOM RETURNS: NUCLEAR RENAISSANCE ───
+    charts['the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope'] = [
+        {
+            'id': 'nuclearChart1', 'figure_num': 1,
+            'title': 'Nuclear Electricity Generation by Region (1960–2025)',
+            'desc': 'After decades of stagnation, nuclear is growing again — driven by China and renewed Western interest',
+            'source': 'IAEA PRIS; Ember Global Electricity Review 2024',
+            'position': 'after_para_10',
+            'js': """
+(()=>{const ctx=document.getElementById('nuclearChart1');
+const yrs=[1960,1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('United States',yrs,[1,22,173,251,384,577,673,754,782,807,798,790,778],C.blue),
+dxy('France',yrs,[0,6,18,61,224,314,376,395,430,410,419,335,361],C.purple),
+dxy('China',yrs,[0,0,0,0,0,0,13,17,53,74,171,345,440],C.accent),
+dxy('Rest of world',yrs,[2,10,42,120,250,420,550,600,610,650,590,560,590],C.dim,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+' TWh'}}},
+scales:{x:linX(1960,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v},
+title:{display:true,text:'TWh generated',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'nuclearChart2', 'figure_num': 2,
+            'title': 'Deaths per TWh by Energy Source',
+            'desc': 'Nuclear is statistically the safest energy source on Earth — including Chernobyl and Fukushima',
+            'source': 'Our World in Data; Markandya & Wilkinson (2007); UNSCEAR',
+            'position': 'after_para_16',
+            'js': """
+(()=>{const ctx=document.getElementById('nuclearChart2');
+const sources=['Coal','Oil','Biomass','Gas','Hydro','Wind','Nuclear','Solar'];
+const deaths=[24.6,18.4,4.6,2.8,1.3,0.04,0.03,0.02];
+const colors=[C.dim,C.dim,C.amber,C.amber,C.blue,C.teal,C.purple,C.amber];
+new Chart(ctx,{type:'bar',data:{labels:sources,datasets:[{label:'Deaths per TWh',data:deaths,
+backgroundColor:colors.map(c=>c+'bb'),borderColor:colors,borderWidth:1.5,borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' deaths per TWh'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
+y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1?v:v.toFixed(2)},
+title:{display:true,text:'Deaths per TWh (log scale)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'nuclearChart3', 'figure_num': 3,
+            'title': 'Carbon Intensity of Electricity: France vs. Germany (2000–2025)',
+            'desc': 'France\'s nuclear fleet produces electricity at a fraction of Germany\'s carbon intensity',
+            'source': 'Ember; IEA; Electricitymap.org',
+            'position': 'after_para_24',
+            'js': """
+(()=>{const ctx=document.getElementById('nuclearChart3');
+const yrs=[2000,2005,2010,2015,2018,2020,2022,2024,2025];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Germany',yrs,[420,400,380,350,340,310,380,330,310],C.accent),
+dxy('France',yrs,[85,70,75,42,55,45,80,55,50],C.blue),
+dxy('United Kingdom',yrs,[450,420,380,280,200,160,130,110,100],C.purple,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+' gCO₂/kWh'}}},
+scales:{x:linX(2000,2025),y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:500,
+title:{display:true,text:'gCO₂ per kWh',color:C.dim}}}}});
+})();"""
+        },
+    ]
+
+    # ─── THE YOUNG CONTINENT: AFRICA'S DEMOGRAPHIC EXPLOSION ───
+    charts['the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order'] = [
+        {
+            'id': 'africaChart1', 'figure_num': 1,
+            'title': 'Continental Population Trajectories (1950–2100)',
+            'desc': 'By 2100, one in three humans will be African — the most dramatic demographic shift in recorded history',
+            'source': 'UN Population Division, World Population Prospects 2024 (medium variant)',
+            'position': 'after_para_6',
+            'js': """
+(()=>{const ctx=document.getElementById('africaChart1');
+const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Africa',yrs,[229,285,366,478,632,811,1040,1341,1463,1588,1853,2094,2330,2538,2698,2812,2891],C.amber),
+dxy('Asia',yrs,[1394,1688,2120,2632,3202,3714,4170,4641,4756,4817,4871,4837,4706,4503,4264,4015,3770],C.accent),
+dxy('Europe',yrs,[549,605,657,694,721,726,735,747,745,741,728,707,681,655,631,610,592],C.purple),
+dxy('Americas',yrs,[339,416,511,614,727,841,942,1029,1060,1085,1118,1129,1123,1106,1082,1054,1027],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
+annotation:{annotations:{
+cross:{type:'label',xValue:2075,yValue:3500,content:['Africa overtakes','rest-of-Asia combined'],color:C.amber,font:{size:11,weight:'bold'}}
+}}},
+scales:{x:linX(1950,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'B':v+'M'},
+title:{display:true,text:'Population (millions)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'africaChart2', 'figure_num': 2,
+            'title': 'Africa\'s Youngest Nations: Median Age (2025)',
+            'desc': 'Half the population of Niger is under 14.5 years old — Europe has not seen demographics like this since the medieval period',
+            'source': 'UN Population Division 2024',
+            'position': 'after_para_3',
+            'js': """
+(()=>{const ctx=document.getElementById('africaChart2');
+const countries=['Niger','Uganda','Mali','Chad','DRC','Mozambique','Tanzania','Ethiopia','Nigeria','Kenya','South Africa','Japan','Germany'];
+const ages=[14.5,15.7,16.2,16.7,16.7,17.0,17.7,19.5,17.2,20.0,28.3,49.1,46.8];
+const colors=countries.map((_,i)=>i<10?C.amber:i<12?C.purple:C.dim);
+new Chart(ctx,{type:'bar',data:{labels:countries,datasets:[{label:'Median age (2025)',data:ages,
+backgroundColor:colors.map(c=>c+'bb'),borderColor:colors,borderWidth:1.5,borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:45}},
+y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:55,
+title:{display:true,text:'Median age (years)',color:C.dim}}}}});
+})();"""
+        },
+        {
+            'id': 'africaMapChart', 'figure_num': 3,
+            'title': 'Africa\'s Population Density: Where the Surge Is Concentrated (2025)',
+            'desc': 'Nigeria, DRC, Ethiopia, and East Africa are the engines of the demographic explosion',
+            'source': 'UN Population Division 2024; World Bank',
+            'position': 'after_para_8',
+            'geo': True,
+            'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const pop={566:224,180:105,231:126,834:67,404:55,800:49,508:34,288:34,12:46,504:38,
+710:60,24:36,148:18,562:27,466:23,854:23,324:14,894:20,
+818:109,736:47,646:14,270:2.7,768:9,204:13};
+const ctx=document.getElementById('africaMapChart');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Population (millions)',data:countries.map(d=>({feature:d,value:pop[+d.id]||null})),
+outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#f2eeea','#fef8ee','#fed7aa','#f97316','#c43425'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:250}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?i.raw.value+'M people':'No data'}}}}});
+});
+})();"""
+        },
+        {
+            'id': 'africaChart4', 'figure_num': 4,
+            'title': 'The New Scramble: Foreign Direct Investment in Africa by Origin (2024)',
+            'desc': 'China\'s Belt and Road has made it Africa\'s largest trading partner — but others are catching up',
+            'source': 'UNCTAD; China Africa Research Initiative; fDi Markets',
+            'position': 'after_para_18',
+            'js': """
+(()=>{const ctx=document.getElementById('africaChart4');
+const investors=['China','EU','United\\nStates','India','Turkey','UAE &\\nSaudi','Russia'];
+const trade=[282,240,65,98,50,42,18];
+const fdi=[40,35,8,12,6,15,3];
+new Chart(ctx,{type:'bar',data:{labels:investors,datasets:[
+{label:'Bilateral trade ($bn)',data:trade,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Annual FDI ($bn)',data:fdi,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw+'B'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
+title:{display:true,text:'$ billions',color:C.dim}}}}});
+})();"""
+        },
+    ]
+
+    # ═══════════════════════════════════════════════════════
+    # RETROACTIVE MAPS — TIER 1 (Strong geographic dimension)
+    # ═══════════════════════════════════════════════════════
+
+    # ─── MAP: THE GREAT EMPTYING (Fertility rate by country) ───
+    charts['the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people'].append({
+        'id': 'emptyingMap', 'figure_num': 12,
+        'title': 'The Fertility Map: Total Fertility Rate by Country (2024)',
+        'desc': 'Below 2.1 children per woman, a population shrinks. Most of the developed world — and increasingly the developing world — is below the line.',
+        'source': 'UN Population Division, World Population Prospects 2024',
+        'position': 'after_para_4',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const tfr={410:0.72,158:0.87,392:1.20,380:1.24,724:1.19,300:1.30,616:1.29,
+156:1.02,764:1.08,826:1.49,250:1.68,840:1.62,36:1.58,124:1.33,276:1.35,
+56:1.53,528:1.49,752:1.52,246:1.32,578:1.41,208:1.55,40:1.37,756:1.39,
+643:1.50,792:1.62,76:1.65,484:1.80,356:2.00,360:2.10,586:3.30,
+50:1.95,704:1.94,608:2.38,458:1.82,764:1.08,
+566:5.10,180:6.20,800:4.70,562:6.70,231:4.10,404:3.30,
+834:4.70,508:4.50,710:2.33,818:2.80,682:2.40,
+4:4.50,104:2.10,116:2.30,418:2.40};
+const ctx=document.getElementById('emptyingMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'TFR',data:countries.map(d=>({feature:d,value:tfr[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#c43425','#f97316','#fbbf24','#60a5fa','#2563eb'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0.5,max:5.5}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'TFR: '+i.raw.value.toFixed(2)+' children per woman':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: THE BUILDERS ARE DYING (Population change 2025-2050) ───
+    charts['the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing'].append({
+        'id': 'buildersMap', 'figure_num': 11,
+        'title': 'The Vanishing Map: Projected Population Change by Country (2025–2050)',
+        'desc': 'Red nations are shrinking. Blue nations are growing. The builders of the modern world are disappearing.',
+        'source': 'UN Population Division, World Population Prospects 2024 (medium variant)',
+        'position': 'after_para_8',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const chg={392:-17,410:-12,380:-11,724:-8,300:-10,616:-15,642:-18,
+826:-3,276:-7,250:-3,528:-4,56:-3,40:-6,756:-3,752:-4,246:-5,
+643:-12,156:-13,158:-16,804:-22,112:-15,
+840:10,124:12,36:14,554:12,
+356:11,586:30,566:54,231:42,834:68,180:62,800:62,562:84,
+404:35,288:35,508:50,24:52,710:12,
+76:4,484:10,170:6,32:6,152:2,
+360:6,704:5,764:-3,458:9,608:24,
+818:28,682:18,364:10,792:6,4:30,50:8};
+const ctx=document.getElementById('buildersMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Pop Change',data:countries.map(d=>({feature:d,value:chg[+d.id]!=null?chg[+d.id]:null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#c43425','#f97316','#fbbf24','#60a5fa','#2563eb'];return colors[Math.min(Math.floor(v*5),4)];},
+min:-25,max:75}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>{const v=i.raw.value;if(v==null)return'No data';return(v>=0?'+':'')+v+'% population change (2025–2050)'}}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: THE GREAT OFFSHORING (Manufacturing as % GDP) ───
+    charts['the-great-offshoring-how-the-worlds-factory-moved-east'].append({
+        'id': 'offshoringMap', 'figure_num': 5,
+        'title': 'Where the Factories Are: Manufacturing Value-Added as Share of GDP (2024)',
+        'desc': 'The geography of production has shifted decisively eastward — the West has hollowed out its industrial base',
+        'source': 'World Bank; UNIDO Industrial Statistics Database 2024',
+        'position': 'after_heading:The New Map',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const mfg={156:28,704:25,764:25,410:26,158:22,360:20,458:22,50:21,
+356:14,586:12,608:22,116:16,418:13,104:20,
+276:19,392:20,380:15,250:10,826:9,840:11,124:10,36:6,
+724:12,620:13,40:18,203:24,348:17,616:19,642:19,
+643:14,792:22,76:11,484:17,32:13,170:11,
+566:9,710:12,818:16,682:13,364:12,504:15};
+const ctx=document.getElementById('offshoringMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Mfg % GDP',data:countries.map(d=>({feature:d,value:mfg[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#f2eeea','#fed7aa','#f97316','#c43425','#7c3aed'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:30}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'Manufacturing: '+i.raw.value+'% of GDP':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: EUROPE REARMS (Defence spending % GDP) ───
+    charts['europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence'].append({
+        'id': 'rearmsMap', 'figure_num': 5,
+        'title': 'The Defence Map: Military Spending as Share of GDP (2025)',
+        'desc': 'NATO\'s 2% target has become 3.5%. Some nations exceed it. Others are nowhere close.',
+        'source': 'SIPRI Military Expenditure Database 2025; NATO',
+        'position': 'after_para_12',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const def={840:3.4,643:5.5,156:1.7,826:2.3,250:2.1,276:1.5,380:1.5,
+724:1.3,620:1.5,528:1.7,56:1.2,40:0.8,752:2.2,246:2.4,578:1.7,208:2.0,
+372:0.3,616:4.2,804:26,300:3.1,792:1.9,410:2.8,392:1.2,
+36:2.0,124:1.4,356:2.4,586:3.5,682:6.0,784:5.5,376:5.3,
+818:1.2,566:0.7,710:0.9,76:1.2,170:3.3,
+764:1.3,704:2.3,458:1.1,360:0.7,
+408:25,364:2.5,760:3.0,400:4.8,504:4.5,12:5.5};
+const ctx=document.getElementById('rearmsMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Defence % GDP',data:countries.map(d=>({feature:d,value:def[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#effaf4','#60a5fa','#fbbf24','#f97316','#c43425'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:6}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'Defence: '+i.raw.value+'% of GDP':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: THE RENEWABLES AND BATTERY REVOLUTION (Renewable share) ───
+    charts['the-renewables-and-battery-revolution'].append({
+        'id': 'renewablesMap', 'figure_num': 9,
+        'title': 'The Green Map: Renewable Energy as Share of Electricity Generation (2024)',
+        'desc': 'Some nations generate most of their electricity from renewables. Others remain overwhelmingly fossil-fuelled.',
+        'source': 'Ember Global Electricity Review 2024; IEA',
+        'position': 'after_para_7',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const ren={578:98,352:100,76:85,124:68,554:87,40:80,752:70,208:84,
+620:62,724:50,276:52,826:43,250:25,840:22,380:42,300:42,
+203:15,616:22,642:35,348:18,56:28,528:38,246:42,372:40,
+156:32,356:22,392:22,410:9,36:35,
+566:20,710:12,818:12,682:0.5,364:7,
+792:42,76:85,170:75,32:30,152:50,
+704:35,764:15,458:25,360:20,608:25,50:3,
+643:20,804:10};
+const ctx=document.getElementById('renewablesMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Renewable %',data:countries.map(d=>({feature:d,value:ren[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#4A4A4A','#b8751a','#fbbf24','#60a5fa','#0d9a5a'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:100}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value!=null?'Renewables: '+i.raw.value+'% of electricity':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: THE EMPTY CRADLE BARGAIN (Fertility rate — different framing) ───
+    charts['the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem'].append({
+        'id': 'cradleMap', 'figure_num': 7,
+        'title': 'The Cradle Map: Where Babies Are — and Aren\'t — Being Born (2024)',
+        'desc': 'The fertility collapse is not universal. It is concentrated in the richest and most educated societies.',
+        'source': 'UN Population Division, World Population Prospects 2024',
+        'position': 'after_para_4',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const tfr={410:0.72,158:0.87,392:1.20,380:1.24,724:1.19,300:1.30,616:1.29,
+156:1.02,764:1.08,826:1.49,250:1.68,840:1.62,36:1.58,124:1.33,276:1.35,
+56:1.53,528:1.49,752:1.52,246:1.32,578:1.41,208:1.55,40:1.37,756:1.39,
+643:1.50,792:1.62,76:1.65,484:1.80,356:2.00,360:2.10,586:3.30,
+50:1.95,704:1.94,608:2.38,458:1.82,
+566:5.10,180:6.20,800:4.70,562:6.70,231:4.10,404:3.30,
+834:4.70,508:4.50,710:2.33,818:2.80,682:2.40,
+4:4.50,104:2.10,116:2.30,418:2.40};
+const ctx=document.getElementById('cradleMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'TFR',data:countries.map(d=>({feature:d,value:tfr[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#c43425','#f97316','#fbbf24','#60a5fa','#2563eb'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0.5,max:5.5}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'TFR: '+i.raw.value.toFixed(2)+' children per woman':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ═══════════════════════════════════════════════════════
+    # RETROACTIVE MAPS — TIER 2 (Moderate geographic dimension)
+    # ═══════════════════════════════════════════════════════
+
+    # ─── MAP: LAND DEALS IN AFRICA (Foreign land acquisition) ───
+    charts['why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event'].append({
+        'id': 'landDealsMap', 'figure_num': 3,
+        'title': 'The New Land Grab: Foreign Agricultural Land Acquisition in Africa (Cumulative to 2024)',
+        'desc': 'Millions of hectares of African farmland have been acquired by foreign investors — a pattern with colonial echoes',
+        'source': 'Land Matrix Global Observatory; Cotula et al. (2009); Grain.org',
+        'position': 'after_para_6',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const land={736:4.0,231:3.5,508:2.8,834:2.5,288:1.5,450:1.2,566:1.0,
+180:0.8,800:0.6,894:0.5,324:0.4,404:0.3,24:0.5,710:0.3,
+148:0.2,204:0.3,270:0.1,768:0.2,854:0.2};
+const ctx=document.getElementById('landDealsMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Land Acquired',data:countries.map(d=>({feature:d,value:land[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#f2eeea','#fed7aa','#f97316','#c43425','#7c3aed'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:4.5}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?i.raw.value.toFixed(1)+' million hectares acquired':'No significant acquisitions'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: GATES OF NATIONS (Foreign-born population %) ───
+    charts['the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped'].append({
+        'id': 'gatesMap', 'figure_num': 5,
+        'title': 'The Open Gate: Foreign-Born Population as Share of Total (2024)',
+        'desc': 'The West\'s experiment with mass immigration is historically unique — most nations in history tightly controlled who entered',
+        'source': 'UN DESA International Migrant Stock 2024; OECD',
+        'position': 'after_heading:The Modern Anomaly',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const fb={784:88,634:77,414:72,682:38,376:23,756:30,36:30,124:22,
+554:28,40:20,826:14,276:18,250:13,840:15,724:15,
+528:14,56:17,752:20,578:16,208:13,372:18,
+380:10,300:12,620:10,246:8,
+643:8,792:6,156:0.1,392:2.3,410:4,
+356:0.4,586:3,76:0.5,484:0.9,566:0.7,710:7,
+764:5.5,458:10,360:0.1,608:0.1};
+const ctx=document.getElementById('gatesMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Foreign-born %',data:countries.map(d=>({feature:d,value:fb[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#effaf4','#60a5fa','#fbbf24','#f97316','#c43425'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:40}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value!=null?'Foreign-born: '+i.raw.value+'% of population':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: COVID-19 (Excess mortality per 100k) ───
+    charts['the-long-term-impact-of-covid-19'].append({
+        'id': 'covidMap', 'figure_num': 8,
+        'title': 'The Pandemic Map: Estimated Excess Mortality per 100,000 Population (2020–2022)',
+        'desc': 'The pandemic hit hardest where healthcare systems were weakest and populations oldest',
+        'source': 'The Economist excess deaths tracker; WHO; Our World in Data',
+        'position': 'after_para_10',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const mort={643:800,76:700,484:600,604:700,380:300,840:350,826:280,
+724:240,250:200,276:190,356:400,586:200,566:150,
+710:500,818:100,364:300,792:200,32:400,170:400,
+156:50,392:150,410:120,158:80,36:200,124:150,
+554:80,578:80,208:100,752:120,246:120,
+360:350,764:200,704:50,458:100,608:250,
+528:170,56:200,40:210,616:350,642:400};
+const ctx=document.getElementById('covidMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Excess deaths/100k',data:countries.map(d=>({feature:d,value:mort[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#effaf4','#fbbf24','#f97316','#c43425','#7c3aed'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:800}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'Excess deaths: ~'+i.raw.value+' per 100,000':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: CHINA AS COLONIAL POWER (Chinese BRI investment) ───
+    charts['china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically'].append({
+        'id': 'chinaColonialMap', 'figure_num': 3,
+        'title': 'China\'s Global Reach: Belt and Road Investment by Country (Cumulative to 2024)',
+        'desc': 'China has invested or lent over $1 trillion across 150+ countries — the largest infrastructure programme since the Marshall Plan',
+        'source': 'AidData; China Africa Research Initiative; Refinitiv BRI Connect',
+        'position': 'after_para_6',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const bri={586:62,360:25,76:15,643:20,458:18,804:8,566:15,
+231:12,404:10,834:8,508:6,24:10,180:5,
+818:10,364:15,682:5,784:12,764:12,
+116:12,418:8,104:6,50:25,704:8,
+792:6,32:15,152:5,170:3,484:3,
+710:5,288:4,800:3,562:2,854:1,
+300:1.5,620:2,380:3,348:2,724:2,826:1};
+const ctx=document.getElementById('chinaColonialMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'BRI Investment',data:countries.map(d=>({feature:d,value:bri[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#f2eeea','#fed7aa','#f97316','#c43425','#7c3aed'];return colors[Math.min(Math.floor(v*5),4)];},
+min:0,max:65}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'~$'+i.raw.value+'B in BRI investment/lending':'Minimal or no BRI activity'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: CLIMATE AND FOOD (Food insecurity index) ───
+    charts['dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food'].append({
+        'id': 'foodMap', 'figure_num': 5,
+        'title': 'The Hunger Map: Global Food Insecurity Index (2024)',
+        'desc': 'Climate change hits hardest where food systems are weakest — the nations least responsible for emissions face the greatest consequences',
+        'source': 'Global Food Security Index (Economist Impact) 2024; FAO',
+        'position': 'after_para_8',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const fi={246:85,372:84,826:82,840:80,124:82,578:84,752:83,208:82,
+528:81,756:82,40:81,276:82,250:79,392:80,36:80,554:79,
+410:78,724:75,380:73,300:70,620:72,
+156:72,76:65,484:62,764:65,458:68,356:50,360:55,
+643:68,792:60,682:68,364:52,784:72,
+586:35,50:42,116:48,704:58,608:52,418:42,104:38,
+566:38,404:42,231:32,834:28,800:25,180:20,
+710:52,818:48,504:50,562:20,854:25,324:28,508:22};
+const ctx=document.getElementById('foodMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Food Security',data:countries.map(d=>({feature:d,value:fi[+d.id]||null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#c43425','#f97316','#fbbf24','#60a5fa','#0d9a5a'];return colors[Math.min(Math.floor(v*5),4)];},
+min:15,max:90}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>i.raw.value?'Food Security Index: '+i.raw.value+'/100':'No data'}}}}});
+});
+})();"""
+    })
+
+    # ─── MAP: NORTH AFRICAN THREAT (Population growth Mediterranean) ───
+    charts['the-north-african-threat-and-mediterranean-reunification'].append({
+        'id': 'northAfricaMap', 'figure_num': 7,
+        'title': 'The Mediterranean Divide: Population Growth Rate by Country (2024)',
+        'desc': 'The southern shore of the Mediterranean is growing rapidly. The northern shore is shrinking. The pressure differential is immense.',
+        'source': 'UN Population Division 2024; World Bank',
+        'position': 'after_para_8',
+        'geo': True,
+        'js': """
+(()=>{
+_geoDataPromise.then(worldData=>{
+const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
+const gr={566:2.4,562:3.7,818:1.7,504:1.2,12:1.5,788:0.9,434:0.8,
+231:2.5,800:3.0,404:2.2,834:2.9,180:3.2,
+710:0.9,288:2.1,324:2.4,
+380:-0.3,724:-0.1,300:-0.5,250:0.2,826:0.4,276:-0.1,
+620:-0.4,40:-0.1,756:0.5,528:0.4,56:0.3,
+752:0.5,578:0.6,208:0.4,246:0.0,372:1.0,
+643:-0.3,804:-6.5,616:-0.3,642:-0.5,348:-0.3,
+792:0.7,376:1.5,400:0.9,682:1.5,364:0.8,
+156:-0.2,392:-0.5,410:-0.3};
+const ctx=document.getElementById('northAfricaMap');
+new Chart(ctx,{type:'choropleth',data:{
+labels:countries.map(d=>d.properties.name),
+datasets:[{label:'Pop Growth',data:countries.map(d=>({feature:d,value:gr[+d.id]!=null?gr[+d.id]:null})),outline:countries}]},
+options:{responsive:true,maintainAspectRatio:false,showOutline:true,showGraticule:false,
+layout:{padding:{top:4,bottom:4,left:4,right:4}},
+scales:{projection:{axis:'x',projection:'equalEarth'},
+color:{axis:'x',quantize:5,legend:{position:'bottom-right',align:'right'},
+interpolate:function(v){const colors=['#7c3aed','#60a5fa','#fbbf24','#f97316','#c43425'];return colors[Math.min(Math.floor(v*5),4)];},
+min:-1,max:3.5}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+title:items=>items[0]?.raw?.feature?.properties?.name||'',
+label:i=>{const v=i.raw.value;if(v==null)return'No data';return'Population growth: '+(v>=0?'+':'')+v.toFixed(1)+'% per year';}}}}}});
+});
+})();"""
+    })
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

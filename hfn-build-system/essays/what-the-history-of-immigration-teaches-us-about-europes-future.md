@@ -15,6 +15,9 @@ excerpt: >-
   at emigration before, from the perspective of colonisation in the past. This
   time we are going to look at the historical impact of immigration on the
   indigenous population.
+share_summary: >-
+  When moderates refuse to discuss immigration, extremists fill the
+  void. History shows what happens to societies that avoid the conversation.
 signal: ''
 ---
 # What The History Of Immigration Teaches Us About Europe’s Future

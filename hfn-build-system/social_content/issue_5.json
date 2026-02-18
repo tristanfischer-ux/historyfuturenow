@@ -1,0 +1,30 @@
+{
+  "issue_number": 5,
+  "label": "Autumn 2013",
+  "date": "2013-08-01",
+  "articles": [
+    "a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story",
+    "a-frozen-society-the-long-term-implications-of-nsas-secrets",
+    "why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society",
+    "debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 5,
+      "text": "Issue 5 (Autumn 2013) of History Future Now is out. Inside: A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story | A Frozen Society: The Long Term Implications Of NSA’s Secrets | Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society | Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All.\n\nhttps://www.historyfuturenow.com/issues/5",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 5,
+      "tweets": [
+        "🧵 Issue 5 of History Future Now — Autumn 2013. Here's what's inside:",
+        "She had a warm smile and long legs that never seemed to stop. https://www.historyfuturenow.com/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story",
+        "History Future Now has been considering the historical and future implications of the NSA files that have been leaked bit by bit by Edward… https://www.historyfuturenow.com/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets",
+        "Since 2000 many jobs have moved from Europe and America to Asia. https://www.historyfuturenow.com/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society",
+        "The US CBO expects that by 2025 US interest payments combined with the costs of Medicare, Medicaid and… https://www.historyfuturenow.com/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all"
+      ]
+    }
+  }
+}

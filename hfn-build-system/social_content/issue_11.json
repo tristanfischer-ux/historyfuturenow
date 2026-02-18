@@ -1,0 +1,30 @@
+{
+  "issue_number": 11,
+  "label": "2022-2023",
+  "date": "2022-01-15",
+  "articles": [
+    "vertical-farming-the-electrical-convergence-power-transport-and-agriculture",
+    "forging-peace-from-centuries-of-war-to-ukraines-future",
+    "the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace",
+    "the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 11,
+      "text": "Issue 11 (2022-2023) of History Future Now is out. Inside: Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture | Forging Peace: From Centuries of War to Ukraine's Future | The War in Ukraine: Escalation, Miscalculation, and the Path to Peace | The Perils of Prediction: Lessons from History on Navigating an Uncertain Future.\n\nhttps://www.historyfuturenow.com/issues/11",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 11,
+      "tweets": [
+        "🧵 Issue 11 of History Future Now — 2022-2023. Here's what's inside:",
+        "The COP26 climate conference held in November 2021 reiterated the need to reduce global greenhouse gas emissions to net zero by… https://www.historyfuturenow.com/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture",
+        "Yet even from the ashes of the most devastating conflicts, lasting peace has managed to emerge through the alchemy of pragmatic diplomacy and… https://www.historyfuturenow.com/articles/forging-peace-from-centuries-of-war-to-ukraines-future",
+        "The war in Ukraine, which began with Russia's invasion in February 2022, has brought the world to a dangerous crossroads. https://www.historyfuturenow.com/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace",
+        "Clarke's vision of geostationary satellites in 1945, have proven remarkably prescient, others, like the Y2K hysteria of the… https://www.historyfuturenow.com/articles/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future"
+      ]
+    }
+  }
+}

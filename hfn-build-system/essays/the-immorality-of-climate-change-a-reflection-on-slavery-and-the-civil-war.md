@@ -18,6 +18,9 @@ excerpt: >-
   took place between the Northern and the Southern states. 150 years is not a
   long time. Photography, telegraphs, railroads and huge factories existed. Many
   of your grand or great grand parents would have been alive.
+share_summary: >-
+  Slavery was legal and profitable. It took a war to end it. Climate
+  change is legal and profitable. What will it take?
 signal: ''
 ---
 # The immorality of climate change, a reflection on slavery and the Civil War

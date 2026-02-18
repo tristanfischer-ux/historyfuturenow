@@ -13,6 +13,9 @@ excerpt: >-
   levels. History Future Now briefly looks back at how this technology developed
   and its result on social behaviour then asks a question: how does this affect
   our democracies?
+share_summary: >-
+  Social media didn't create political polarisation. It monetised it.
+  The fragmentation of shared reality is the real threat to democracy.
 signal: ''
 ---
 # Who Benefits From Our Increased Social Fragmentation?

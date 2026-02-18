@@ -12,6 +12,9 @@ excerpt: >-
   devastating consequences for the people of Ukraine, the conflict risks
   escalating into a broader confrontation between Russia and the West, with the
   potential for catastrophic consequences.
+share_summary: >-
+  Every major war in history began with limited objectives and spiralled
+  out of control. Ukraine fits the pattern precisely.
 signal: ''
 ---
 # The War in Ukraine: Escalation, Miscalculation, and the Path to Peace

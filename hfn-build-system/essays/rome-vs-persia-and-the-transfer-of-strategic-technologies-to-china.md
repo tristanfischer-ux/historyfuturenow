@@ -12,6 +12,9 @@ excerpt: >-
   History Future Now asks what are the lessons that can be learned from
   history, what is happening today and what impact could this have on the
   future?
+share_summary: >-
+  China forces Western firms to hand over intellectual property for
+  market access. Rome did the same to Persia. It ended badly for Rome.
 signal: ''
 ---
 # Rome Vs. Persia And The Transfer Of Strategic Technologies To China

@@ -13,6 +13,10 @@ excerpt: >-
   environmentalists has recently gathered 120,700 certified signatures
   supporting their referendum demand: a cap on population growth via
   immigration.
+share_summary: >-
+  When Swiss environmentalists campaign to cap immigration, is it
+  racism or resource management? Europe cannot answer this question
+  honestly.
 signal: ''
 ---
 # Are Europeans Fundamentally Racist?

@@ -8,6 +8,9 @@ slug: robotics-and-slaverynbsp
 excerpt: >-
   Rapid advancements in humanoid robotics and artificial intelligence are
   bringing us closer to a reality once confined to the realm of science fiction.
+share_summary: >-
+  Every civilisation built wealth on forced labour. Robots offer the
+  same output without the moral catastrophe. History is rhyming.
 signal: ''
 ---
 # Robotics and Slavery

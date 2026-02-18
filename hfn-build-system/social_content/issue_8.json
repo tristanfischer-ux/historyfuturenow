@@ -1,0 +1,30 @@
+{
+  "issue_number": 8,
+  "label": "2015",
+  "date": "2015-06-01",
+  "articles": [
+    "establishing-a-price-floor-for-energy",
+    "clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west",
+    "why-china-could-invade-taiwan-and-get-away-with-it",
+    "dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 8,
+      "text": "Issue 8 (2015) of History Future Now is out. Inside: Establishing A Price Floor For Energy | Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West | Why China Could Invade Taiwan – And Get Away With It | Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food.\n\nhttps://www.historyfuturenow.com/issues/8",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 8,
+      "tweets": [
+        "🧵 Issue 8 of History Future Now — 2015. Here's what's inside:",
+        "Even for a company like Apple, however, there is a lag between demand and what they can supply: typically they will be planning new products 12-18 months ahead of… https://www.historyfuturenow.com/articles/establishing-a-price-floor-for-energy",
+        "This History Future Now article presents a sweeping exploration of how these contrasting worldviews have… https://www.historyfuturenow.com/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west",
+        "How many people in the West know that Taiwan was once a Dutch colony and that it only became part of China in 1683? https://www.historyfuturenow.com/articles/why-china-could-invade-taiwan-and-get-away-with-it",
+        "It will be 10 billion in another two to three decades. https://www.historyfuturenow.com/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food"
+      ]
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "cycle": 4,
+  "week": "A",
+  "start_date": "2026-04-06",
+  "end_date": "2026-04-11",
+  "issue_context": {
+    "current": 16,
+    "next": 20
+  },
+  "posts": [
+    {
+      "day": "Monday",
+      "date": "2026-04-06",
+      "platform": "twitter",
+      "type": "hook",
+      "source_article": "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
+      "text": "On February 4th 2026, Lizzie Johnson, a Washington Post correspondent covering the war in Ukraine, posted… https://www.historyfuturenow.com/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth"
+    },
+    {
+      "day": "Tuesday",
+      "date": "2026-04-07",
+      "platform": "twitter_linkedin",
+      "type": "chart_insight",
+      "source_article": "the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering",
+      "text": "Manufacturing as % of GDP: The West vs China. Western nations hollowed out their manufacturing base while China built the largest industrial economy in history",
+      "image": "images/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering/chart-factoryChart1.png",
+      "link": "https://www.historyfuturenow.com/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering"
+    },
+    {
+      "day": "Wednesday",
+      "date": "2026-04-08",
+      "platform": "linkedin",
+      "type": "linkedin_essay",
+      "source_article": "lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people",
+      "text": "Everybody knows that the world’s population has increased dramatically since 1930 – population 2 billion – to today – population 7.7.  Most people also know that the fertility rate of women in most of Europe and parts of East Asia is lower than replacement level. Statistics which would suggest that over time the indigenous population – excluding immigration – will peak and then fall.  Japan’s population, at 128 million, has been falling by a few hundred thousand per year for the past 6 years.\n\nHistorically people bred for survival.  The institution of marriage, and a lack of birth control, meant that women had a lot of pregnancies.  Many pregnancies ended before their term, or resulted in stillbirths, or in high infant mortality.  Catherine of Aragon the first wife of King Henry VIII’s was cast aside for not bearing him a male heir in favour of Anne Boleyn.  Catherine actually bore him six children, including three sons, yet only Mary survived.\n\nThe natural philosophers of the 1700s, who morphed into the scientists of the 1800s, stopped believing in the four humours of black bile, yellow bile, phlegm and blood, (knowledge of which formed the core of western medicine from ancient Egypt, Greece and Rome) and brought scientific rigour and analytical statistics to providing a new understanding of why people got sick and died.  Basics of clean water and hygienic, clean equipment and spaces in surgery when conducting operations saved millions of people who would have otherwise died.\n\nRead the full essay: https://www.historyfuturenow.com/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people\n\n#Society #Demographics #Culture #HistoryFutureNow #LongRead",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people"
+    },
+    {
+      "day": "Thursday",
+      "date": "2026-04-09",
+      "platform": "twitter",
+      "type": "provocative_question",
+      "source_article": "is-democracy-the-opium-of-the-masses",
+      "text": "What if Is Democracy The Opium Of The Masses?\n\nhttps://www.historyfuturenow.com/articles/is-democracy-the-opium-of-the-masses",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/is-democracy-the-opium-of-the-masses"
+    },
+    {
+      "day": "Friday",
+      "date": "2026-04-10",
+      "platform": "twitter_linkedin",
+      "type": "teaser",
+      "source_article": null,
+      "text": "The next issue of History Future Now is in the works. Stay tuned.\n\nhttps://www.historyfuturenow.com",
+      "image": null,
+      "link": null
+    },
+    {
+      "day": "Saturday",
+      "date": "2026-04-11",
+      "platform": "twitter",
+      "type": "thread",
+      "source_article": "the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped",
+      "text": "🧵 In 2015, Angela Merkel stood before the cameras and said three words that will define her legacy more than any other act of her chancellorship: Wir schaffen das — we can manage this.\n\nThe Sumerian city-states (c. 3500–2000 BC) had specific legal categories for non-citizens, who were barred from owning land, holding office, or participating in religious rites.\n\nNo civilisation's experience with immigration is more relevant to the modern West than Rome's, because no civilisation's trajectory more closely mirrors our own.\n\n### The Early Republic: Citizenship as Fortress\n\nEarly Rome was ferociously exclusive.\n\nIt is the product of a single generation's policy decisions, made between approximately 1948 and 1975, and it reversed millennia of practice.\n\n### The United States: From Restriction to Revolution\n\nThe United States, often presented as a \"nation of immigrants,\" was for…\n\nThe debate about immigration is often conducted in moral terms — compassion versus cruelty, openness versus bigotry.\n\nFull article: https://www.historyfuturenow.com/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped"
+    }
+  ]
+}

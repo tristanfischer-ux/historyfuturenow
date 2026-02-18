@@ -15,6 +15,10 @@ excerpt: >-
   figure was 23%. The transformation took just seven years. Today, Europe is
   embarking on the fastest rearmament since the Cold War. History suggests
   that once the machine starts, it is very hard to stop.
+share_summary: >-
+  Germany went from 1% to 23% of GDP on defence in seven years. Europe
+  is rearming faster than at any point since the Cold War. History says
+  it won't stop.
 signal: ''
 ---
 # Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence

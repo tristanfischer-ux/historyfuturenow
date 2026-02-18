@@ -18,6 +18,10 @@ excerpt: >-
   factors that shape our ability to anticipate change, drawing upon historical
   lessons and contemporary case studies to illuminate the challenges and
   opportunities of navigating an uncertain world.
+share_summary: >-
+  From ancient oracles to modern economists, humans are terrible at
+  predicting the future. Yet we keep trying — and the stakes keep
+  rising.
 signal: ''
 ---
 # The Perils of Prediction: Lessons from History on Navigating an Uncertain Future

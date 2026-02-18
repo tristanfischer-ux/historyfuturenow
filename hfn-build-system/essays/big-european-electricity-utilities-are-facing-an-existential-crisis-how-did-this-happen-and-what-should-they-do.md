@@ -16,6 +16,10 @@ excerpt: >-
   that centralised power - are reeling like battered boxers in round 9 of a
   heavyweight boxing championship. Some will make it. Others will be knocked
   out.
+share_summary: >-
+  Europe's biggest electricity utilities are being destroyed by solar
+  and wind. The revolution is invisible to consumers — but fatal to
+  incumbents.
 signal: ''
 ---
 # Big European electricity utilities are facing an existential crisis. How did this happen and what should they do?

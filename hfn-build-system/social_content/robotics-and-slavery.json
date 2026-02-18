@@ -1,0 +1,48 @@
+{
+  "slug": "robotics-and-slavery",
+  "title": "Robotics And Slavery&nbsp;",
+  "url": "https://www.historyfuturenow.com/articles/robotics-and-slavery",
+  "part": "Jobs & Economy",
+  "posts": {
+    "hook": {
+      "platform": "twitter",
+      "text": "Rapid advancements in humanoid robotics and artificial intelligence are bringing us closer to a reality once confined to the realm of science fiction.",
+      "link": "https://www.historyfuturenow.com/articles/robotics-and-slavery",
+      "full": "Rapid advancements in humanoid robotics and artificial intelligence are bringing us closer to a reality once confined to the realm of science fiction. https://www.historyfuturenow.com/articles/robotics-and-slavery"
+    },
+    "thread": {
+      "platform": "twitter",
+      "tweets": [
+        "🧵 Rapid advancements in humanoid robotics and artificial intelligence are bringing us closer to a reality once confined to the realm of science fiction.",
+        "Full article: https://www.historyfuturenow.com/articles/robotics-and-slavery"
+      ]
+    },
+    "chart_insight": {
+      "platform": "both",
+      "text": "Humanoid Robot Comparison. Price, speed, and capabilities of leading humanoid robots",
+      "chart_title": "Humanoid Robot Comparison",
+      "image": "images/articles/robotics-and-slavery/chart-robotChart1.png",
+      "source": "Company announcements, IEEE Spectrum, 2024"
+    },
+    "linkedin_essay": {
+      "platform": "linkedin",
+      "text": "Rapid advancements in humanoid robotics and artificial intelligence are bringing us closer to a reality once confined to the realm of science fiction.\n\nIn this article, History Future Now explores the potential consequences of the rise of humanoid robots for the future of work and society as a whole. We will begin by examining the current state of humanoid robotics and the key players driving innovation in this field, from Boston Dynamics to Tesla to NVIDIA and beyond.\n\nFrom there, we will look at the historical parallels between the rise of robots and the institution of slavery in ancient civilisations like Greece, Rome, and the Ottoman Empire. We will explore how the influx of slave labor transformed these societies, creating new forms of social stratification and economic inequality, and how the practice of individuals selling themselves into slavery to escape poverty or debt foreshadows the potential risks of widespread adoption of robots.\n\nRead the full essay: https://www.historyfuturenow.com/articles/robotics-and-slavery\n\n#Economy #FutureOfWork #Automation #HistoryFutureNow #LongRead",
+      "hashtags": [
+        "#Economy",
+        "#FutureOfWork",
+        "#Automation",
+        "#HistoryFutureNow",
+        "#LongRead"
+      ]
+    },
+    "provocative_question": {
+      "platform": "twitter",
+      "text": "What if Robotics And Slavery&nbsp;?"
+    },
+    "quote_card": {
+      "platform": "both",
+      "text": "From there, we will look at the historical parallels between the rise of robots and the institution of slavery in ancient civilisations like Greece, Rome, and the Ottoman Empire.",
+      "char_count": 178
+    }
+  }
+}

@@ -16,6 +16,10 @@ excerpt: >-
   well-documented, the true extent of war's influence on society, particularly
   in relation to the loss of young men and the subsequent changes in women's
   roles, is often overlooked.
+share_summary: >-
+  War killed millions of young men. The women who replaced them in
+  factories won the vote, entered the workforce, and built the welfare
+  state.
 signal: ''
 ---
 # The Unintended Consequences of War: How the Loss of Young Men Transformed Women's Roles in Society and ushered in the Welfare State

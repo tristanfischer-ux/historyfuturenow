@@ -14,6 +14,9 @@ excerpt: >-
   influx of young, dynamic workers from abroad, advanced nations will face
   economic stagnation, declining productivity, and fiscal crises as fewer
   workers support a growing elderly population.
+share_summary: >-
+  We're importing millions of workers while building robots to replace
+  them. One of these strategies is wrong. History suggests which.
 signal: ''
 ---
 # The Paradox of Mass Migration and Robots in the Age of Automation

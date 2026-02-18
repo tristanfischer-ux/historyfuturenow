@@ -15,6 +15,9 @@ excerpt: >-
   geographic overlap. We look at the issues and then try to understand their
   historical roots, looking back to the early waves of British immigrants to the
   US between 1629-1775.
+share_summary: >-
+  Climate change denial, creationism, and slavery all share a biblical
+  justification and a geographic overlap. The roots go back to 1629.
 signal: ''
 ---
 # Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775

@@ -14,6 +14,10 @@ excerpt: >-
   rescue the financial sector. Working out what will happen next is a matter of
   great speculation, but history can provide us with some pointers about what
   could be done. Two possible solutions are debt jubilees and hyper-inflation.
+share_summary: >-
+  Ancient Mesopotamia cancelled all debts every 50 years. Western
+  governments are drowning in debt. Perhaps the ancients knew something
+  we've forgotten.
 signal: ''
 ---
 # Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All

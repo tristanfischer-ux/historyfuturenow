@@ -8,6 +8,7 @@ import os, re, yaml, markdown, json, math, random
 import html as html_mod
 from pathlib import Path
 from chart_defs import get_all_charts, COLORS as CHART_COLORS
+from issues import ISSUES, get_issue_for_slug, get_current_issue, build_slug_to_issue_map
 
 ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
@@ -338,7 +339,8 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
 {ld}'''
 
 def make_nav(active=None):
-    secs = [("Home","/",None),("Resources","/natural-resources","Natural Resources"),
+    secs = [("Home","/",None),("Issues","/issues",None),("Charts","/charts",None),
+            ("Natural Resources","/natural-resources","Natural Resources"),
             ("Power","/balance-of-power","Global Balance of Power"),
             ("Economy","/jobs-economy","Jobs & Economy"),("Society","/society","Society"),
             ("Listen","/listen",None),("Library","/library",None)]
@@ -452,7 +454,9 @@ def make_footer():
     <p class="footer-tagline">History doesn&rsquo;t repeat itself, but it does rhyme.</p>
     <ul class="footer-links">
       <li><a href="/">Home</a></li>
-      <li><a href="/natural-resources">Resources</a></li>
+      <li><a href="/issues">Issues</a></li>
+      <li><a href="/charts">Charts</a></li>
+      <li><a href="/natural-resources">Natural Resources</a></li>
       <li><a href="/balance-of-power">Power</a></li>
       <li><a href="/jobs-economy">Economy</a></li>
       <li><a href="/society">Society</a></li>
@@ -842,9 +846,12 @@ def inject_charts_into_body(body_html, charts):
 
     # Build the combined JS for all charts
     all_js = '\n'.join(ch['js'] for ch in charts)
+    needs_geo = any(ch.get('geo') for ch in charts)
+    geo_scripts = '\n<script src="/js/chartjs-chart-geo.umd.min.js"></script>' if needs_geo else ''
+    geo_data = '\n<script>let _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());</script>' if needs_geo else ''
     script_block = f'''
 <script src="/js/chart.umd.min.js"></script>
-<script src="/js/chartjs-plugin-annotation.min.js"></script>
+<script src="/js/chartjs-plugin-annotation.min.js"></script>{geo_scripts}{geo_data}
 <script>
 {CHART_COLORS}
 {all_js}
@@ -1010,6 +1017,13 @@ def build_article(essay, all_essays):
 
     end_of_article_cta = discussion_player + share_cta
 
+    issue = get_issue_for_slug(essay['slug'])
+    issue_badge_html = ''
+    if issue:
+        from datetime import datetime as _dt
+        _issue_date = _dt.strptime(issue['date'], '%Y-%m-%d').strftime('%B %Y')
+        issue_badge_html = f'\n    <div class="article-issue-badge"><a href="/issues/{issue["number"]}">Issue {issue["number"]} &middot; {_issue_date}</a></div>'
+
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1029,7 +1043,7 @@ def build_article(essay, all_essays):
 <article class="page-container">
   {breadcrumbs}
   <header class="article-header">
-    <div class="article-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(essay['part'])}</div>
+    <div class="article-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(essay['part'])}</div>{issue_badge_html}
     <h1>{te}</h1>
     <div class="article-meta">
       <span class="article-reading-time">{essay['reading_time']} min read</span>
@@ -1266,6 +1280,7 @@ def build_homepage(essays, new_essays=None):
     if new_essays is None:
         new_essays = []
     from chart_defs import get_all_charts, COLORS
+    from datetime import datetime
     all_charts = get_all_charts()
 
     total_articles = len(essays)
@@ -1273,7 +1288,6 @@ def build_homepage(essays, new_essays=None):
     total_reading = sum(e.get('reading_time', 5) for e in essays)
     total_hours = round(total_reading / 60)
 
-    # Sort essays by file modification time (newest first) for "latest" ordering
     import os
     for e in essays:
         if 'mtime' not in e:
@@ -1285,77 +1299,56 @@ def build_homepage(essays, new_essays=None):
                 e['mtime'] = 0
     sorted_essays = sorted(essays, key=lambda x: x.get('mtime', 0), reverse=True)
 
-    # ── Latest Articles: top 3 newest as hero cards ──
-    # If new articles exist, the newest new article gets the hero slot
-    if new_essays:
-        hero_essay = new_essays[0]
-        remaining = [e for e in sorted_essays if e['slug'] != hero_essay['slug']]
-        latest = [hero_essay] + remaining[:2]
-    else:
-        latest = sorted_essays[:3]
+    # ── Current Issue section ──
+    current_issue = get_current_issue()
+    slug_map = {e['slug']: e for e in essays}
+    ci_essays = [slug_map[s] for s in current_issue['articles'] if s in slug_map]
+    ci_num = current_issue['number']
+    ci_date_label = current_issue['label']
+    ci_total_reading = sum(e.get('reading_time', 5) for e in ci_essays)
 
-    latest_html = ""
-    for i, e in enumerate(latest):
+    ci_cards_html = ""
+    for i, e in enumerate(ci_essays):
         pi = PARTS[e['part']]
         n_charts = len(_charts_for_article(e['slug']))
-        badge = f'<span class="latest-badge">{n_charts} charts</span>' if n_charts else ''
+        chart_badge = f'<span class="latest-badge">{n_charts} charts</span>' if n_charts else ''
         audio_badge = '<span class="latest-badge latest-audio-badge">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
-        size_class = "latest-hero" if i == 0 else "latest-secondary"
-        new_tag = '<span class="latest-new">New</span> ' if e.get('is_new') else ''
-
         hero_img = get_hero_image(e['slug'])
         img_html = f'<img src="{hero_img}" alt="" class="latest-card-img" loading="lazy">' if hero_img else ''
-
         controls_html = make_card_controls(e, pi)
-        latest_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
+        size_class = "latest-hero" if i == 0 else "latest-secondary"
+        ci_cards_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
         {img_html}
-        <div class="latest-kicker">{new_tag}{pi['label']} &middot; {html_mod.escape(e['part'])} {badge} {audio_badge}</div>
+        <div class="latest-kicker">{pi['label']} &middot; {html_mod.escape(e['part'])} {chart_badge} {audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{truncate_excerpt(e['excerpt'], 200)}</p>
         <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
         {controls_html}
       </a>\n"""
 
-    # ── New Articles section (grouped by category) ──
-    new_section_html = ""
-    if new_essays:
-        new_cards_by_part = {}
-        for e in new_essays:
-            new_cards_by_part.setdefault(e['part'], []).append(e)
-
-        new_cards_html = ""
-        for pn in sorted(PARTS.keys(), key=lambda p: PARTS[p]['order']):
-            if pn not in new_cards_by_part:
-                continue
-            pi = PARTS[pn]
-            for e in new_cards_by_part[pn]:
-                n_charts = len(_charts_for_article(e['slug']))
-                chart_badge = f' <span class="card-charts">&middot; {n_charts} chart{"s" if n_charts != 1 else ""}</span>' if n_charts > 0 else ''
-                audio_badge = ' <span class="card-audio">&middot; Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
-                card_controls = make_card_controls(e, pi)
-                new_cards_html += f"""    <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
-      <div class="card-kicker" style="color:{pi['color']}"><span class="card-new-badge">New</span> {pi['label']}</div>
-      <h3>{html_mod.escape(e['title'])}</h3>
-      <p>{truncate_excerpt(e['excerpt'], 160)}</p>
-      <div class="card-meta">
-        <span class="card-link" style="color:{pi['color']}">Read article &rarr;</span>
-        <span class="card-time">{e['reading_time']} min{chart_badge}{audio_badge}</span>
-      </div>
-      {card_controls}
-    </a>\n"""
-
-        new_section_html = f"""
-<div class="new-articles-wrap">
-  <div class="new-articles-inner">
-    <div class="new-articles-header">
-      <h2 class="new-articles-title">New Articles</h2>
-      <p class="new-articles-intro">Recently published analysis across all sections.</p>
+    # ── Previous issue teaser ──
+    prev_issue_html = ""
+    if ci_num > 1:
+        from issues import get_issue_by_number
+        prev = get_issue_by_number(ci_num - 1)
+        if prev:
+            prev_label = prev['label']
+            prev_essays = [slug_map[s] for s in prev['articles'] if s in slug_map]
+            prev_titles = "".join(
+                f'<li>{html_mod.escape(e["title"])}</li>' for e in prev_essays[:3]
+            )
+            if len(prev_essays) > 3:
+                prev_titles += f'<li class="prev-issue-more">+ {len(prev_essays) - 3} more</li>'
+            prev_issue_html = f"""
+<div class="prev-issue-teaser">
+  <div class="prev-issue-inner">
+    <div class="prev-issue-header">
+      <span class="prev-issue-label">Previous Issue</span>
+      <a href="/issues/{ci_num - 1}" class="prev-issue-link">Issue {ci_num - 1} &middot; {prev_label} &rarr;</a>
     </div>
-    <div class="cards">
-{new_cards_html}    </div>
+    <ul class="prev-issue-titles">{prev_titles}</ul>
   </div>
-</div>
-"""
+</div>"""
 
     # ── Data Stories: auto-collected from chart_defs (curated first, then auto-generated) ──
     data_stories = collect_data_stories(sorted_essays, all_charts)
@@ -1413,10 +1406,14 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
         cards = ""
         for e in se[:3]:
             n_charts = len(_charts_for_article(e['slug']))
-            chart_badge = f'<span class="card-charts">{n_charts} charts</span>' if n_charts > 0 else ''
+            chart_badge = f' <span class="card-charts">{n_charts} charts</span>' if n_charts > 0 else ''
             audio_badge = ' <span class="card-audio">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
-            cards += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="card" data-section="{pi['slug']}">
-        <div class="card-kicker" style="color:{pi['color']}">{pi['label']} {chart_badge}{audio_badge}</div>
+            hero_img = get_hero_image(e['slug'])
+            img_html = f'<img src="{hero_img}" alt="" class="home-section-card-img" loading="lazy">' if hero_img else ''
+            part_badge = f'<span class="card-part-badge" style="--part-color:{pi["color"]}">{pi["label"]}</span>'
+            cards += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="card home-section-card" data-section="{pi['slug']}">
+        {img_html}
+        <div class="card-kicker" style="color:{pi['color']}">{part_badge}{chart_badge}{audio_badge}</div>
       <h3>{html_mod.escape(e['title'])}</h3>
       <p>{truncate_excerpt(e['excerpt'], 160)}</p>
       <div class="card-meta">
@@ -1573,31 +1570,35 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 <div class="latest-wrap">
   <div class="latest-inner">
     <div class="latest-header">
-      <h2 class="latest-title">Latest</h2>
-      <span class="latest-pulse"></span>
+      <div>
+        <h2 class="latest-title">Issue {ci_num}</h2>
+        <span class="issue-date-sub">{ci_date_label} &middot; {len(ci_essays)} articles &middot; {ci_total_reading} min reading time</span>
+      </div>
+      <a href="/issues" class="issue-archive-link">All issues &rarr;</a>
     </div>
     <div class="latest-grid">
-{latest_html}    </div>
+{ci_cards_html}    </div>
   </div>
 </div>
-{new_section_html}
-<div class="hero-chart-wrap">
-  <div class="hero-chart-inner">
-    <div class="hero-chart-label">The Big Picture</div>
-    <h2 class="hero-chart-title">Who Runs the World Economy?</h2>
-    <p class="hero-chart-desc">Western dominance was a 200-year anomaly. The world is reverting to the historical mean.</p>
-    <div class="hero-chart-box"><canvas id="heroChart"></canvas></div>
-    <p class="hero-chart-source">Source: Maddison Project, IMF &middot; <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out">Read the full analysis &rarr;</a></p>
+{prev_issue_html}
+<div class="hero-and-stats-wrap">
+  <div class="hero-chart-wrap">
+    <div class="hero-chart-inner">
+      <div class="hero-chart-label">The Big Picture</div>
+      <h2 class="hero-chart-title">Who Runs the World Economy?</h2>
+      <p class="hero-chart-desc">Western dominance was a 200-year anomaly. The world is reverting to the historical mean.</p>
+      <div class="hero-chart-box"><canvas id="heroChart"></canvas></div>
+      <p class="hero-chart-source">Source: Maddison Project, IMF &middot; <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out">Read the full analysis &rarr;</a></p>
+    </div>
   </div>
-</div>
-
-<div class="stats-bar">
-  <div class="stats-inner">
-    <div class="stat"><span class="stat-num">{total_articles}</span><span class="stat-label">Articles</span></div>
-    <div class="stat"><span class="stat-num">{total_charts}</span><span class="stat-label">Interactive Charts</span></div>
-    <div class="stat"><span class="stat-num">{total_hours}+</span><span class="stat-label">Hours of Analysis</span></div>
-    <div class="stat"><span class="stat-num">500</span><span class="stat-label">Years of History</span></div>
-    {"" if audio_article_count == 0 else f'<div class="stat"><span class="stat-num">{audio_article_count}</span><span class="stat-label">Audio Articles</span></div>'}
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat"><span class="stat-num">{total_articles}</span><span class="stat-label">Articles</span></div>
+      <div class="stat"><span class="stat-num">{total_charts}</span><span class="stat-label">Interactive Charts</span></div>
+      <div class="stat"><span class="stat-num">{total_hours}+</span><span class="stat-label">Hours of Analysis</span></div>
+      <div class="stat"><span class="stat-num">500</span><span class="stat-label">Years of History</span></div>
+      {"" if audio_article_count == 0 else f'<div class="stat"><span class="stat-num">{audio_article_count}</span><span class="stat-label">Audio Articles</span></div>'}
+    </div>
   </div>
 </div>
 {listen_section_html}
@@ -1611,18 +1612,6 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 </div>
 
 <div class="section-grid">
-
-  <div class="featured-banner">
-    <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="featured-card">
-      {"" if not get_hero_image("the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people") else '<img src="' + get_hero_image("the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people") + '" alt="" class="featured-img" loading="lazy">'}
-      <div class="featured-text">
-        <div class="featured-badge">Featured &middot; 10 interactive charts</div>
-        <h2>The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</h2>
-        <p>No country in human history has recovered from a sustained fertility rate below 1.5. The forces that drive the decline &mdash; urbanisation, education, contraception &mdash; are things we call progress. The clock is already at zero.</p>
-        <span class="featured-cta">Read the full analysis &rarr;</span>
-      </div>
-    </a>
-  </div>
 
 {secs}
 </div>
@@ -1928,6 +1917,294 @@ def build_library():
 </html>'''
 
 
+def build_issue_page(issue, essays, all_charts):
+    """Build an individual issue page: /issues/N/."""
+    slug_map = {e['slug']: e for e in essays}
+    issue_essays = [slug_map[s] for s in issue['articles'] if s in slug_map]
+
+    num = issue['number']
+    date_label = issue['label']
+    total_reading = sum(e.get('reading_time', 5) for e in issue_essays)
+    article_count = len(issue_essays)
+
+    breadcrumbs = make_breadcrumbs([
+        ('Home', '/'),
+        ('Issues', '/issues'),
+        (f'Issue {num}', None),
+    ])
+
+    def issue_card(e, featured=False):
+        pi = PARTS[e['part']]
+        chart_count = len(all_charts.get(e['slug'], []))
+        chart_tag = f'<span>{chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
+        audio_tag = '<span>Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
+        hero_img = get_hero_image(e['slug'])
+        section_badge = f'<span class="issue-card-section" style="color:{pi["color"]}">{pi["label"]}: {html_mod.escape(e["part"])}</span>'
+
+        if featured:
+            img_html = f'<img src="{hero_img}" alt="" class="section-card-img section-featured-img" loading="lazy" width="1100" height="280">' if hero_img else ''
+            cls = "section-featured-card"
+        else:
+            img_html = f'<img src="{hero_img}" alt="" class="section-card-img" loading="lazy" width="400" height="220">' if hero_img else ''
+            cls = "section-card"
+
+        controls = make_card_controls(e, pi)
+        return f'''    <a href="/articles/{html_mod.escape(e['slug'])}" class="{cls}">
+      <div class="section-card-img-wrap">{img_html}</div>
+      <div class="section-card-text">
+        {section_badge}
+        <h3>{html_mod.escape(e['title'])}</h3>
+        <p>{truncate_excerpt(e['excerpt'], 180)}</p>
+        <div class="section-card-meta">
+          <span>{e['reading_time']} min read</span>
+          {chart_tag}
+          {audio_tag}
+        </div>
+      </div>
+      {controls}
+    </a>'''
+
+    article_cards = ""
+    if issue_essays:
+        article_cards = issue_card(issue_essays[0], featured=True)
+        for e in issue_essays[1:]:
+            article_cards += "\n" + issue_card(e, featured=False)
+
+    prev_link = ""
+    next_link = ""
+    if num > 1:
+        prev_link = f'<a href="/issues/{num - 1}" class="issue-nav-link issue-nav-prev">&larr; Issue {num - 1}</a>'
+    if num < len(ISSUES):
+        next_link = f'<a href="/issues/{num + 1}" class="issue-nav-link issue-nav-next">Issue {num + 1} &rarr;</a>'
+    issue_nav = f'<div class="issue-page-nav">{prev_link}<span></span>{next_link}</div>' if prev_link or next_link else ''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{make_head(f"Issue {num} — History Future Now", f"Issue {num} ({date_label}): {article_count} articles on history, geopolitics, and the forces shaping the future.", f"/issues/{num}", "#c43425")}
+</head>
+<body>
+
+{make_nav("Issues")}
+
+{make_search_overlay()}
+
+<section class="issue-hero">
+  <div class="issue-hero-inner">
+    {breadcrumbs}
+    <div class="issue-number-label">Issue {num}</div>
+    <h1 class="issue-title">{date_label}</h1>
+    <div class="issue-meta">{article_count} articles &middot; {total_reading} min total reading time</div>
+  </div>
+</section>
+
+<div class="section-card-grid">
+{article_cards}
+</div>
+
+{issue_nav}
+
+{make_footer()}
+</body>
+</html>'''
+
+
+def build_charts_page(essays, all_charts):
+    """Build the charts gallery page: /charts."""
+    slug_map = {e['slug']: e for e in essays}
+
+    breadcrumbs = make_breadcrumbs([
+        ('Home', '/'),
+        ('Charts', None),
+    ])
+
+    # Collect all articles with charts, grouped by section
+    articles_with_charts = []
+    for slug, charts in all_charts.items():
+        real_charts = [c for c in charts if not c.get('data_story')]
+        if not real_charts:
+            continue
+        e = slug_map.get(slug)
+        if not e:
+            continue
+        pi = PARTS.get(e['part'], PARTS['Society'])
+        articles_with_charts.append({
+            'essay': e,
+            'charts': real_charts,
+            'part': e['part'],
+            'pi': pi,
+        })
+
+    # Sort by section order, then by title
+    part_order = {pn: PARTS[pn]['order'] for pn in PARTS}
+    articles_with_charts.sort(key=lambda x: (part_order.get(x['part'], 99), x['essay']['title']))
+
+    # Filter buttons
+    filter_buttons = '<button class="charts-filter-btn active" data-filter="all">All</button>'
+    for pn in sorted(PARTS.keys(), key=lambda p: PARTS[p]['order']):
+        pi = PARTS[pn]
+        count = sum(1 for a in articles_with_charts if a['part'] == pn)
+        if count > 0:
+            filter_buttons += f'<button class="charts-filter-btn" data-filter="{pi["slug"]}">{pi["label"]}</button>'
+
+    # Build chart cards
+    all_js = []
+    cards_html = ""
+    for item in articles_with_charts:
+        e = item['essay']
+        pi = item['pi']
+        slug = e['slug']
+        part_slug = pi['slug']
+
+        for idx, c in enumerate(item['charts']):
+            orig_id = c['id']
+            unique_id = f"chart_{slug}_{orig_id}_{idx}"
+            mod_js = c['js'].replace(f"getElementById('{orig_id}')", f"getElementById('{unique_id}')")
+            all_js.append(mod_js)
+
+            height_class = "charts-canvas-tall" if c.get('tall') else "charts-canvas-normal"
+            cards_html += f'''  <div class="charts-card" data-section="{part_slug}">
+    <div class="charts-card-inner">
+      <a href="/articles/{html_mod.escape(slug)}" class="charts-card-link">
+        <span class="charts-card-section" style="color:{pi['color']}">{pi['label']}</span>
+        <h3 class="charts-card-title">{html_mod.escape(e['title'])}</h3>
+      </a>
+      <div class="charts-chart-title">{html_mod.escape(c.get('title', ''))}</div>
+      <div class="charts-canvas-wrap {height_class}">
+        <canvas id="{unique_id}"></canvas>
+      </div>
+      <p class="charts-source">{html_mod.escape(c.get('source', ''))}</p>
+      <a href="/articles/{html_mod.escape(slug)}" class="charts-read-link" style="color:{pi['color']}">Read article &rarr;</a>
+    </div>
+  </div>
+'''
+
+    total_charts = sum(len(item['charts']) for item in articles_with_charts)
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{make_head("Charts — History Future Now", f"Browse {total_charts} interactive data visualisations from History Future Now. Every chart links to its source article.", "/charts", "#c43425")}
+<script src="/js/chart.umd.min.js"></script>
+<script src="/js/chartjs-plugin-annotation.min.js"></script>
+</head>
+<body>
+
+{make_nav("Charts")}
+
+{make_search_overlay()}
+
+<section class="charts-hero">
+  <div class="charts-hero-inner">
+    {breadcrumbs}
+    <h1 class="charts-title">Charts</h1>
+    <p class="charts-intro">Interactive data visualisations from every article. Hover for details. Click through to read the analysis.</p>
+    <div class="charts-filters">
+      {filter_buttons}
+    </div>
+  </div>
+</section>
+
+<div class="charts-grid">
+{cards_html}</div>
+
+{make_footer()}
+<script>
+{CHART_COLORS}
+{"\n".join(all_js)}
+</script>
+<script>
+(function(){{
+  const btns = document.querySelectorAll('.charts-filter-btn');
+  const cards = document.querySelectorAll('.charts-card');
+  btns.forEach(btn => {{
+    btn.addEventListener('click', () => {{
+      const f = btn.dataset.filter;
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      cards.forEach(c => {{
+        const show = f === 'all' || c.dataset.section === f;
+        c.style.display = show ? '' : 'none';
+      }});
+    }});
+  }});
+}})();
+</script>
+</body>
+</html>'''
+
+
+def build_issues_archive(essays, all_charts):
+    """Build the issues archive page: /issues/."""
+    slug_map = {e['slug']: e for e in essays}
+    from datetime import datetime
+
+    breadcrumbs = make_breadcrumbs([
+        ('Home', '/'),
+        ('Issues', None),
+    ])
+
+    issue_cards = ""
+    for issue in sorted(ISSUES, key=lambda i: i['number'], reverse=True):
+        num = issue['number']
+        date_label = issue['label']
+        article_count = len(issue['articles'])
+
+        lead_slug = issue['articles'][0] if issue['articles'] else None
+        lead_essay = slug_map.get(lead_slug)
+        hero_img = get_hero_image(lead_slug) if lead_slug else None
+        img_html = f'<img src="{hero_img}" alt="" class="issue-archive-img" loading="lazy" width="400" height="220">' if hero_img else ''
+
+        titles_html = ""
+        for slug in issue['articles'][:4]:
+            e = slug_map.get(slug)
+            if e:
+                titles_html += f'<li>{html_mod.escape(e["title"])}</li>'
+        if len(issue['articles']) > 4:
+            titles_html += f'<li class="issue-archive-more">+ {len(issue["articles"]) - 4} more</li>'
+
+        total_charts = sum(len(all_charts.get(s, [])) for s in issue['articles'])
+        chart_note = f' &middot; {total_charts} charts' if total_charts else ''
+
+        issue_cards += f'''  <a href="/issues/{num}" class="issue-archive-card">
+    <div class="issue-archive-img-wrap">{img_html}</div>
+    <div class="issue-archive-text">
+      <div class="issue-archive-number">Issue {num}</div>
+      <h3>{date_label}</h3>
+      <ul class="issue-archive-titles">{titles_html}</ul>
+      <div class="issue-archive-meta">{article_count} articles{chart_note}</div>
+    </div>
+  </a>
+'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{make_head("All Issues — History Future Now", "Browse all issues of History Future Now — fortnightly collections of data-driven essays on history, geopolitics, and the future.", "/issues", "#c43425")}
+</head>
+<body>
+
+{make_nav("Issues")}
+
+{make_search_overlay()}
+
+<section class="issue-hero">
+  <div class="issue-hero-inner">
+    {breadcrumbs}
+    <h1 class="issue-title">All Issues</h1>
+    <div class="issue-meta">{len(ISSUES)} issues &middot; {len(essays)} articles</div>
+  </div>
+</section>
+
+<div class="issue-archive-grid">
+{issue_cards}
+</div>
+
+{make_footer()}
+</body>
+</html>'''
+
+
 def main():
     essays = []
     for md in sorted(ESSAYS_DIR.glob("*.md")):
@@ -1979,6 +2256,17 @@ def main():
         (OUTPUT_DIR / f"{pi['slug']}.html").write_text(build_section(pn, essays, new_slugs), encoding='utf-8')
     print(f"  Built {len(PARTS)} section pages")
 
+    print("Building issue pages...")
+    all_charts = get_all_charts()
+    issues_dir = OUTPUT_DIR / "issues"
+    issues_dir.mkdir(parents=True, exist_ok=True)
+    for issue in ISSUES:
+        issue_dir = issues_dir / str(issue['number'])
+        issue_dir.mkdir(parents=True, exist_ok=True)
+        (issue_dir / "index.html").write_text(build_issue_page(issue, essays, all_charts), encoding='utf-8')
+    (issues_dir / "index.html").write_text(build_issues_archive(essays, all_charts), encoding='utf-8')
+    print(f"  Built {len(ISSUES)} issue pages + archive")
+
     print("Building homepage...")
     (OUTPUT_DIR / "index.html").write_text(build_homepage(essays, new_essays), encoding='utf-8')
     print("  Built homepage")
@@ -1991,6 +2279,10 @@ def main():
     (OUTPUT_DIR / "library.html").write_text(build_library(), encoding='utf-8')
     print("  Built library page")
 
+    print("Building charts page...")
+    (OUTPUT_DIR / "charts.html").write_text(build_charts_page(essays, all_charts), encoding='utf-8')
+    print("  Built charts page")
+
     # ── SEO files ──
     print("Building SEO files...")
     all_charts = get_all_charts()
@@ -1999,6 +2291,10 @@ def main():
     urls = [f'  <url><loc>{SITE_URL}/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>']
     urls.append(f'  <url><loc>{SITE_URL}/listen</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     urls.append(f'  <url><loc>{SITE_URL}/library</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>')
+    urls.append(f'  <url><loc>{SITE_URL}/issues</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
+    urls.append(f'  <url><loc>{SITE_URL}/charts</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
+    for issue in ISSUES:
+        urls.append(f'  <url><loc>{SITE_URL}/issues/{issue["number"]}</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>')
     for pi in PARTS.values():
         urls.append(f'  <url><loc>{SITE_URL}/{pi["slug"]}</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     for e in essays:

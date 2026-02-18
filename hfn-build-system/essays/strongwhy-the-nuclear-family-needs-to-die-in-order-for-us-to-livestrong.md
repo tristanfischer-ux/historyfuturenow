@@ -15,6 +15,9 @@ excerpt: >-
   separately that then enabled the significant social change of splitting up the
   extended family. History Future Now believes that the nuclear family is a
   historical aberration and ultimately doomed to fail.
+share_summary: >-
+  The nuclear family is barely a century old. For most of human history,
+  extended families lived together. The experiment is failing.
 signal: ''
 ---
 # Why The Nuclear Family Needs To Die, In Order For Us To Live

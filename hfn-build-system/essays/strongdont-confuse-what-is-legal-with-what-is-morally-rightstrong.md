@@ -14,6 +14,9 @@ excerpt: >-
   what is legal and what is morally right. But make no mistake. What is legal or
   illegal is not necessarily the same as what is morally right or wrong. Here
   are three good examples of laws that we now find morally wrong:
+share_summary: >-
+  Slavery was legal. The Holocaust was legal. Apartheid was legal.
+  Legality and morality are not the same thing — and never have been.
 signal: ''
 ---
 # Don't Confuse What Is Legal With What Is Morally Right

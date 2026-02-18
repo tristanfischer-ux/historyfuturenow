@@ -10,6 +10,9 @@ excerpt: >-
   government except for all the others that have been tried.” With this
   statement he was expressing a view that many share: yes, democracy has its
   faults, but it is better than all of the alternatives.
+share_summary: >-
+  Churchill called democracy the worst system except all the others.
+  But what if democracy is just a comforting illusion of control?
 signal: ''
 ---
 # Is Democracy The Opium Of The Masses?

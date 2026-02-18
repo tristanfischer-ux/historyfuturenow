@@ -12,6 +12,9 @@ excerpt: >-
   at the time. Imagine how hard and dangerous it would be to adapt to living in
   the frozen tundra of the arctic north or to settle Pacific islands like Easter
   Island, thousands of miles from the nearest land.
+share_summary: >-
+  Humans walked out of Africa 60,000 years ago and never stopped
+  emigrating. The next frontier is space — and the drive is the same.
 signal: ''
 ---
 # Emigration: Colonies Of The Mind And Space

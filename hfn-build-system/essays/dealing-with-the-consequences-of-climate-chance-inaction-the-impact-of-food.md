@@ -13,6 +13,9 @@ excerpt: >-
   should be allowed to increase by. We need to stop worrying about how to
   prevent it from getting worse and start concentrating on what governments need
   to do to manage this new reality.
+share_summary: >-
+  We've lost the battle to prevent climate change. The question now is
+  whether we can feed eight billion people as the climate shifts.
 signal: ''
 ---
 # Dealing With The Consequences Of Climate Chance Inaction: The Impact Of Food

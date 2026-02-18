@@ -1,0 +1,32 @@
+{
+  "issue_number": 2,
+  "label": "Summer 2012",
+  "date": "2012-06-01",
+  "articles": [
+    "where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain",
+    "cassandra-time-to-give-up-on-predicting-climate-change",
+    "why-do-we-need-the-military-securing-energy-supplies-and-trade-routes",
+    "who-are-the-losers-in-the-energy-revolution",
+    "why-the-nuclear-family-needs-to-die-in-order-for-us-to-live"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 2,
+      "text": "Issue 2 (Summer 2012) of History Future Now is out. Inside: Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain. | Cassandra: Time To Give Up On Predicting Climate Change? | Why Do We Need The Military? Securing Energy Supplies And Trade Routes | Who Are The Losers In The Energy Revolution? | Why The Nuclear Family Needs To Die, In Order For Us To Live.\n\nhttps://www.historyfuturenow.com/issues/2",
+      "article_count": 5
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 2,
+      "tweets": [
+        "🧵 Issue 2 of History Future Now — Summer 2012. Here's what's inside:",
+        "In a world which is seeing a simultaneous increase in the capabilities of robots and artificial intelligence… https://www.historyfuturenow.com/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain",
+        "Most History Future Now readers will be familiar with Homer’s epic of the Iliad, written about 2,800 years ago. https://www.historyfuturenow.com/articles/cassandra-time-to-give-up-on-predicting-climate-change",
+        "The results were surprising and the conclusion is clear: the military is no longer used to defend our borders and countries from… https://www.historyfuturenow.com/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes",
+        "We are going to crash through the 550 parts per million barrier of carbon dioxide equivalent. https://www.historyfuturenow.com/articles/who-are-the-losers-in-the-energy-revolution",
+        "The concept of a nuclear family is relatively recent – it is first mentioned in The Oxford English Dictionary  in 1925 – and refers to a… https://www.historyfuturenow.com/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live"
+      ]
+    }
+  }
+}

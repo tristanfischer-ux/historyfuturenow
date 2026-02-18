@@ -1,0 +1,30 @@
+{
+  "issue_number": 7,
+  "label": "Winter 2014",
+  "date": "2014-10-01",
+  "articles": [
+    "lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people",
+    "china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically",
+    "why-god-needs-the-government-multiculturalism-vs-monotheism",
+    "who-benefits-from-our-increased-social-fragmentation"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 7,
+      "text": "Issue 7 (Winter 2014) of History Future Now is out. Inside: Let's Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People? | China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically? | Why God Needs The Government: Multiculturalism Vs Monotheism | Who Benefits From Our Increased Social Fragmentation?.\n\nhttps://www.historyfuturenow.com/issues/7",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 7,
+      "tweets": [
+        "🧵 Issue 7 of History Future Now — Winter 2014. Here's what's inside:",
+        "Everybody knows that the world’s population has increased dramatically since 1930 – population 2 billion – to… https://www.historyfuturenow.com/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people",
+        "Indian-Kenyans make up less than 1% of the country’s 43 million people, but apparently account for… https://www.historyfuturenow.com/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically",
+        "Most people will have heard of Tutankhamon, the young Egyptian Pharaoh whose tomb was rediscovered, intact, in 1922. https://www.historyfuturenow.com/articles/why-god-needs-the-government-multiculturalism-vs-monotheism",
+        "Cable television and satellite radio stations have been praised for providing greater choice and criticised for the fragmentation of our societies.  New… https://www.historyfuturenow.com/articles/who-benefits-from-our-increased-social-fragmentation"
+      ]
+    }
+  }
+}

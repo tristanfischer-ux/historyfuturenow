@@ -17,6 +17,9 @@ excerpt: >-
   launch a war against the city of Troy. They will know of Hector, the brave and
   sensible older brother of Paris (played by brooding Eric Bana), and will
   possibly remember that Peter O’Toole played Priam, the King of Troy.
+share_summary: >-
+  Cassandra predicted Troy’s fall and nobody believed her. Climate
+  scientists are the modern Cassandra — and nobody is listening.
 signal: ''
 ---
 # Cassandra: Time To Give Up On Predicting Climate Change?

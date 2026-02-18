@@ -18,6 +18,9 @@ excerpt: >-
   claim territory in space. History says that treaty will be ignored —
   just like every other treaty that stood between great powers and
   unclaimed resources.
+share_summary: >-
+  The 1967 Outer Space Treaty says nobody can claim territory in space.
+  History says that treaty will be ignored — just like every other one.
 signal: ''
 ---
 # The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun

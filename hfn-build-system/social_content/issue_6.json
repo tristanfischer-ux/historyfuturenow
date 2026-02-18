@@ -1,0 +1,30 @@
+{
+  "issue_number": 6,
+  "label": "Spring 2014",
+  "date": "2014-02-01",
+  "articles": [
+    "are-europeans-fundamentally-racist",
+    "what-happens-when-china-becomes-the-largest-economy-in-the-world",
+    "why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event",
+    "is-democracy-the-opium-of-the-masses"
+  ],
+  "posts": {
+    "issue_announcement": {
+      "platform": "both",
+      "issue_number": 6,
+      "text": "Issue 6 (Spring 2014) of History Future Now is out. Inside: Are Europeans Fundamentally Racist? | What Happens When China Becomes The Largest Economy In The World? | Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event | Is Democracy The Opium Of The Masses?.\n\nhttps://www.historyfuturenow.com/issues/6",
+      "article_count": 4
+    },
+    "issue_thread": {
+      "platform": "twitter",
+      "issue_number": 6,
+      "tweets": [
+        "🧵 Issue 6 of History Future Now — Spring 2014. Here's what's inside:",
+        "This concept of a country being “full” is not a new one and Ecopop’s call echoes that of the flamboyantly gay Dutch politician Pim Fortuyn in 2001 and 2002 who claimed… https://www.historyfuturenow.com/articles/are-europeans-fundamentally-racist",
+        "By 2030 it predicts that China will account for 25% of the world’s economy. https://www.historyfuturenow.com/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world",
+        "Which brings us to the Great Irish Famine of 1845 and 1852 when over one million people died and another million emigrated from… https://www.historyfuturenow.com/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event",
+        "In a BBC survey of British attitudes in 2002 the British public voted Churchill as the greatest Briton to have ever lived. https://www.historyfuturenow.com/articles/is-democracy-the-opium-of-the-masses"
+      ]
+    }
+  }
+}

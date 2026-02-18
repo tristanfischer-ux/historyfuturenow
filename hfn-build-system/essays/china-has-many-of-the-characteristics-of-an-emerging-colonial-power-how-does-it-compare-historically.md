@@ -12,7 +12,11 @@ excerpt: >-
   people, but apparently account for 70-80% of the country’s wealth.
   Indian-Kenyans arrived in the country in the late 19th and early 20th century,
   typically with nothing but the brains in their heads and the clothes on their
-  backs. This dinner triggered thoughts the new player in Africa: China.
+  backs.   This dinner triggered thoughts the new player in Africa: China.
+share_summary: >-
+  China is building roads, ports, and railways across Africa and
+  lending billions to governments. History has a name for this:
+  colonialism.
 signal: ''
 ---
 # China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?

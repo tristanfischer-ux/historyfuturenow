@@ -10,6 +10,10 @@ excerpt: >-
   According to the OECD , China is due to overtake the US economy as the largest
   in the world in three years. By 2030 it predicts that China will account for
   25% of the world’s economy. That is impressive.
+share_summary: >-
+  China is about to become the world’s largest economy. Every previous
+  shift in economic dominance reshaped the global order. This one will
+  too.
 signal: ''
 ---
 # What Happens When China Becomes The Largest Economy In The World?

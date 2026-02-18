@@ -16,6 +16,9 @@ excerpt: >-
   by thousands of pages each year. Every civilisation in history has faced
   the same problem: the people hired to run the state eventually capture
   it. The question is whether AI can break the pattern.
+share_summary: >-
+  Every civilisation has faced the same problem: the people hired to run
+  the state eventually capture it. Can AI break the pattern?
 signal: ''
 ---
 # Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State

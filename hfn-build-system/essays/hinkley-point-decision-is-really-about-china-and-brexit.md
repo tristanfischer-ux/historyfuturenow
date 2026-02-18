@@ -12,6 +12,9 @@ excerpt: >-
   China. Most of the UK’s major newspapers have come out against it and you can
   read their arguments on their websites: see The Financial Times , The
   Telegraph , The Independent , and The Guardian .
+share_summary: >-
+  Hinkley Point isn't about nuclear power. It's about whether
+  post-Brexit Britain will let China build its critical infrastructure.
 signal: ''
 ---
 # Hinkley Point decision is really about China and Brexit

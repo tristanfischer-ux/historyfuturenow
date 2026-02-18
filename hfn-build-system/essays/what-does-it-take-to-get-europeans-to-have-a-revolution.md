@@ -10,6 +10,9 @@ excerpt: >-
   In an online article about the youth unemployment crisis in Europe and Africa
   HFN asked a question: “What are all these people going to do?” to which a
   reader responded:
+share_summary: >-
+  Youth unemployment in Europe is at crisis levels. History shows
+  exactly what happens next — and it isn't pretty.
 signal: ''
 ---
 # What Does It Take To Get Europeans To Have A Revolution?

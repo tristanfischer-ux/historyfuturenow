@@ -11,6 +11,9 @@ excerpt: >-
   reduce global greenhouse gas emissions to net zero by 2050, and to stop the
   average global temperature from rising above 1.5 degrees compared to
   pre-industrial levels.
+share_summary: >-
+  Power, transport, and agriculture are converging into a single
+  electrical system. Vertical farming is where all three meet.
 signal: ''
 ---
 # Vertical Farming: the electrical convergence power, transport and agriculture

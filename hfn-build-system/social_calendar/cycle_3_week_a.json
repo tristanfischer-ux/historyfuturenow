@@ -1,0 +1,72 @@
+{
+  "cycle": 3,
+  "week": "A",
+  "start_date": "2026-03-23",
+  "end_date": "2026-03-28",
+  "issue_context": {
+    "current": 16,
+    "next": 19
+  },
+  "posts": [
+    {
+      "day": "Monday",
+      "date": "2026-03-23",
+      "platform": "twitter",
+      "type": "hook",
+      "source_article": "why-do-we-need-the-military-securing-energy-supplies-and-trade-routes",
+      "text": "The results were surprising and the conclusion is clear: the military is no longer used to defend our borders and countries from… https://www.historyfuturenow.com/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes"
+    },
+    {
+      "day": "Tuesday",
+      "date": "2026-03-24",
+      "platform": "twitter_linkedin",
+      "type": "chart_insight",
+      "source_article": "the-north-african-threat-and-mediterranean-reunification",
+      "text": "Population Growth: North Africa vs Southern Europe. The demographic lines are crossing — and the implications are profound",
+      "image": "images/articles/the-north-african-threat-and-mediterranean-reunification/chart-nafChart1.png",
+      "link": "https://www.historyfuturenow.com/articles/the-north-african-threat-and-mediterranean-reunification"
+    },
+    {
+      "day": "Wednesday",
+      "date": "2026-03-25",
+      "platform": "linkedin",
+      "type": "linkedin_essay",
+      "source_article": "the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun",
+      "text": "The Solar System is not empty. It is extraordinarily rich.\n\nThe Moon contains significant deposits of helium-3, a potential fuel for fusion reactors, as well as water ice at the poles (critical for sustaining human presence and manufacturing rocket fuel), and rare earth elements. Lunar regolith can be processed into building materials. The Moon's low gravity makes it an ideal staging point for deeper space missions — launching from the lunar surface requires roughly one-twentieth the energy of launching from Earth.\n\nThe asteroid belt contains mineral wealth that dwarfs anything on Earth. A single metallic asteroid — 16 Psyche, which NASA is currently studying — is estimated to contain iron, nickel, and gold worth approximately $10,000 quadrillion at current market prices. Even a small metallic asteroid could contain more platinum-group metals than have ever been mined in human history. These are not theoretical resources. They are physical objects with known compositions, orbiting in predictable paths.\n\nRead the full essay: https://www.historyfuturenow.com/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun\n\n#History #FutureOfWork #HistoryFutureNow #LongRead",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun"
+    },
+    {
+      "day": "Thursday",
+      "date": "2026-03-26",
+      "platform": "twitter",
+      "type": "provocative_question",
+      "source_article": "where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain",
+      "text": "What if Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain?\n\nhttps://www.historyfuturenow.com/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain"
+    },
+    {
+      "day": "Friday",
+      "date": "2026-03-27",
+      "platform": "twitter_linkedin",
+      "type": "teaser",
+      "source_article": null,
+      "text": "The next issue of History Future Now is in the works. Stay tuned.\n\nhttps://www.historyfuturenow.com",
+      "image": null,
+      "link": null
+    },
+    {
+      "day": "Saturday",
+      "date": "2026-03-28",
+      "platform": "twitter",
+      "type": "thread",
+      "source_article": "the-paradox-of-mass-migration-and-robots-in-the-age-of-automation",
+      "text": "🧵 We stand at a pivotal juncture in human history, facing two seemingly contradictory narratives about the future of work and society.\n\nFull article: https://www.historyfuturenow.com/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation",
+      "image": null,
+      "link": "https://www.historyfuturenow.com/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation"
+    }
+  ]
+}

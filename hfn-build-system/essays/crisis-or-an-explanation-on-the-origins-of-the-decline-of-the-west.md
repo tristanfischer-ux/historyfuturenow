@@ -17,6 +17,9 @@ excerpt: >-
   Faustus’ soul. Faustus, realising his mistake, is horrified and begs for mercy
   from God and the devil. But it is too late and he is dragged off. His friends
   later find his body, torn to pieces.
+share_summary: >-
+  The West made a Faustian bargain: short-term wealth in exchange for
+  long-term decline. The devil is now collecting.
 signal: ''
 ---
 # Crisis: Or An Explanation On The Origins Of The Decline Of The West
