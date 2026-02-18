@@ -3169,27 +3169,25 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
     charts['when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age'] = [
         {
             'id': 'siliconChart1', 'figure_num': 1,
-            'title': 'The Demographic Gap: Old-Age Dependency Ratios to 2060',
-            'desc': 'Number of people aged 65+ per 100 working-age adults — the gap the Shadow Workforce must fill',
-            'source': 'UN Population Division, World Population Prospects 2024 revision',
+            'title': "Japan's Workforce Gap: Who Does the Work When the Workers Are Gone?",
+            'desc': "Projected working-age population vs workers needed to maintain services — the gap is the Shadow Workforce",
+            'source': 'UN Population Division, World Population Prospects 2024; ratio extrapolation by HFN',
             'position': 'after_para_11',
             'js': """
 (()=>{const ctx=document.getElementById('siliconChart1');
 const yrs=[2000,2010,2020,2030,2040,2050,2060];
+const needed=[66,72,75,80,87,90,92];
+const available=[86,81,75,68,59,52,45];
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Japan',yrs,[25,36,50,54,68,75,80],C.accent,[]),
-dxy('Germany',yrs,[24,31,34,46,53,58,66],C.purple,[]),
-dxy('South Korea',yrs,[10,15,22,38,57,72,82],C.blue,[]),
-dxy('Italy',yrs,[27,31,37,47,58,66,68],C.amber,[]),
-dxy('China',yrs,[10,11,17,25,37,47,55],C.teal,[])
+{...dxy('Workers needed',yrs,needed,C.accent,[]),fill:false},
+{...dxy('Workers available',yrs,available,C.blue,[]),fill:'-1',backgroundColor:C.green+'33'}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+' per 100'}},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
-shadow:{type:'box',xMin:2026,xMax:2060,backgroundColor:C.green+'12',borderWidth:0},
-shadowLabel:{type:'label',xValue:2043,yValue:15,content:['Shadow Workforce','era'],color:C.green,font:{size:12,weight:'bold'}}
+shadowLabel:{type:'label',xValue:2040,yValue:72,content:['Shadow Workforce','(gap to fill)'],color:C.green,font:{size:12,weight:'bold'}}
 }}},
-scales:{x:linX(2000,2060),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v},
-title:{display:true,text:'People 65+ per 100 working-age',color:C.dim},min:0,max:90}}}});
+scales:{x:linX(2000,2060),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},
+title:{display:true,text:'Working-age adults (millions)',color:C.dim},min:40,max:95}}}});
 })();"""
         },
         {
