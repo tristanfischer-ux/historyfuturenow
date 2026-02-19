@@ -8,7 +8,7 @@ import os, re, yaml, markdown, json, math, random
 import html as html_mod
 from pathlib import Path
 from chart_defs import get_all_charts, COLORS as CHART_COLORS
-from issues import ISSUES, get_issue_for_slug, get_current_issue, get_issue_by_number, build_slug_to_issue_map
+from issues import ISSUES, get_issue_for_slug, get_current_issue, build_slug_to_issue_map
 
 ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
@@ -1353,6 +1353,7 @@ def build_homepage(essays, new_essays=None):
     # ── Previous issue teaser ──
     prev_issue_html = ""
     if ci_num > 1:
+        from issues import get_issue_by_number
         prev = get_issue_by_number(ci_num - 1)
         if prev:
             prev_label = prev['label']
@@ -2031,78 +2032,26 @@ def build_issue_page(issue, essays, all_charts):
         for e in issue_essays[1:]:
             article_cards += "\n" + issue_card(e, featured=False)
 
-    def truncate_title(title, max_len=40):
-        t = html_mod.escape(title)
-        return (t[:max_len] + '&hellip;') if len(t) > max_len else t
-
-    def make_issue_nav_card(adj_issue, direction_label, is_prev):
-        anum = adj_issue['number']
-        alabel = html_mod.escape(adj_issue['label'])
-        acount = len(adj_issue['articles'])
-        first_slug = adj_issue['articles'][0] if adj_issue['articles'] else None
-        hero_img = get_hero_image(first_slug) if first_slug else None
-        img_html = f'<img src="{hero_img}" alt="" class="issue-nav-card-img" loading="lazy" width="400" height="200">' if hero_img else '<div class="issue-nav-card-img issue-nav-card-img-placeholder"></div>'
-        preview_titles = []
-        for slug in adj_issue['articles'][:2]:
-            e = slug_map.get(slug)
-            if e:
-                preview_titles.append(f'<li>{truncate_title(e["title"])}</li>')
-        preview_html = '\n          '.join(preview_titles) if preview_titles else ''
-        cls = 'issue-nav-card issue-nav-prev' if is_prev else 'issue-nav-card issue-nav-next'
-        return f'''    <a href="/issues/{anum}" class="{cls}">
-      <span class="issue-nav-card-direction">{direction_label}</span>
-      <div class="issue-nav-card-img-wrap">{img_html}</div>
-      <div class="issue-nav-card-text">
-        <div class="issue-nav-card-title">Issue {anum} &middot; {alabel}</div>
-        <div class="issue-nav-card-meta">{acount} article{"s" if acount != 1 else ""}</div>
-        <ul class="issue-nav-card-preview">{preview_html}</ul>
-      </div>
-    </a>'''
-
-    total_issues = len(ISSUES)
-    prev_issue = get_issue_by_number(num - 1) if num > 1 else None
-    next_issue = get_issue_by_number(num + 1) if num < total_issues else None
-
-    issue_nav_cards_html = ""
-    if prev_issue or next_issue:
-        cards_inner = ""
-        if prev_issue:
-            cards_inner += make_issue_nav_card(prev_issue, "&larr; PREVIOUS ISSUE", True)
-        if next_issue:
-            if cards_inner:
-                cards_inner += "\n"
-            cards_inner += make_issue_nav_card(next_issue, "NEXT ISSUE &rarr;", False)
-        issue_nav_cards_html = f'<div class="issue-nav-cards-wrapper"><div class="issue-nav-cards" id="issueNavCards">\n{cards_inner}\n</div></div>'
-
-    floating_bar_html = ""
-    if prev_issue or next_issue:
-        prev_part = f'<a href="/issues/{prev_issue["number"]}" class="issue-nav-floating-prev">&larr; {html_mod.escape(prev_issue["label"])}</a>' if prev_issue else '<span></span>'
-        next_part = f'<a href="/issues/{next_issue["number"]}" class="issue-nav-floating-next">{html_mod.escape(next_issue["label"])} &rarr;</a>' if next_issue else '<span></span>'
-        floating_bar_html = f'''<div class="issue-nav-floating" id="issueNavFloating" aria-hidden="true">
-  <div class="issue-nav-floating-inner">
-    {prev_part}
-    <span class="issue-nav-floating-current">{num} of {total_issues}</span>
-    {next_part}
-  </div>
-</div>'''
-
-    body_data_prev = f' data-prev-url="/issues/{num - 1}"' if num > 1 else ''
-    body_data_next = f' data-next-url="/issues/{num + 1}"' if num < total_issues else ''
-
-    issue_nav_script = '<script src="/js/issue-nav.js"></script>' if (prev_issue or next_issue) else ''
+    prev_link = ""
+    next_link = ""
+    if num > 1:
+        prev_link = f'<a href="/issues/{num - 1}" class="issue-nav-link issue-nav-prev">&larr; Issue {num - 1}</a>'
+    if num < len(ISSUES):
+        next_link = f'<a href="/issues/{num + 1}" class="issue-nav-link issue-nav-next">Issue {num + 1} &rarr;</a>'
+    issue_nav = f'<div class="issue-page-nav">{prev_link}<span></span>{next_link}</div>' if prev_link or next_link else ''
 
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 {make_head(f"Issue {num} — History Future Now", f"Issue {num} ({date_label}): {article_count} articles on history, geopolitics, and the forces shaping the future.", f"/issues/{num}", "#c43425")}
 </head>
-<body{body_data_prev}{body_data_next}>
+<body>
 
 {make_nav("Issues")}
 
 {make_search_overlay()}
 
-<section class="issue-hero" id="issueHero">
+<section class="issue-hero">
   <div class="issue-hero-inner">
     {breadcrumbs}
     <div class="issue-number-label">Issue {num}</div>
@@ -2115,11 +2064,9 @@ def build_issue_page(issue, essays, all_charts):
 {article_cards}
 </div>
 
-{issue_nav_cards_html}
-{floating_bar_html}
+{issue_nav}
 
 {make_footer()}
-{issue_nav_script}
 </body>
 </html>'''
 
