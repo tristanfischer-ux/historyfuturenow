@@ -57,6 +57,16 @@
     return s;
   }
 
+  var BM_KEY = 'hfn_bookmarks';
+
+  function isBookmarked(slug) {
+    try {
+      var bm = JSON.parse(localStorage.getItem(BM_KEY) || '[]');
+      for (var i = 0; i < bm.length; i++) { if (bm[i].slug === slug) return true; }
+    } catch (e) {}
+    return false;
+  }
+
   function render(matched) {
     if (matched.length === 0) {
       results.innerHTML = '<div class="search-empty">No articles found</div>';
@@ -72,11 +82,25 @@
       if (a.hasAudio) {
         badges += '<span class="search-badge search-badge-audio">Audio</span>';
       }
-      html += '<a href="/articles/' + a.slug + '" class="search-result" data-idx="' + i + '">' +
+      var sectionLabel = escHtml(a.label + ' \u00b7 ' + a.section);
+      var controls = '';
+      if (a.hasAudio) {
+        controls += '<button class="card-play-btn" data-queue-slug="' + escHtml(a.slug) + '" data-queue-title="' + escHtml(a.title) + '" data-queue-section="' + sectionLabel + '" data-queue-color="' + a.color + '" data-queue-url="/audio/' + escHtml(a.slug) + '.mp3" aria-label="Play">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>';
+      }
+      var bmClass = isBookmarked(a.slug) ? ' bookmarked' : '';
+      controls += '<button class="card-bookmark-btn' + bmClass + '" data-bookmark-slug="' + escHtml(a.slug) + '" data-bookmark-title="' + escHtml(a.title) + '" data-bookmark-url="/articles/' + escHtml(a.slug) + '" data-bookmark-section="' + sectionLabel + '" data-bookmark-color="' + a.color + '" aria-label="Bookmark">' +
+        '<svg class="bk-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>' +
+        '<svg class="bk-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>' +
+        '</button>';
+      html += '<div class="search-result" data-idx="' + i + '">' +
+        '<a href="/articles/' + a.slug + '" class="search-result-link">' +
         '<span class="search-result-kicker" style="color:' + a.color + '">' + a.label + ' &middot; ' + escHtml(a.section) + badges + '</span>' +
         '<span class="search-result-title">' + escHtml(a.title) + '</span>' +
         '<span class="search-result-meta">' + a.readingTime + ' min read</span>' +
-        '</a>';
+        '</a>' +
+        '<div class="card-controls">' + controls + '</div>' +
+        '</div>';
     }
     results.innerHTML = html;
   }
@@ -135,9 +159,41 @@
       highlightResult(activeIdx);
     } else if (e.key === 'Enter' && activeIdx >= 0 && els[activeIdx]) {
       e.preventDefault();
-      els[activeIdx].click();
+      var link = els[activeIdx].querySelector('.search-result-link');
+      if (link) link.click();
     }
   }
+
+  // Delegated handlers for play + bookmark buttons inside search results
+  results.addEventListener('click', function (e) {
+    var playBtn = e.target.closest('.card-play-btn');
+    if (playBtn && window.HFNQueue) {
+      e.preventDefault();
+      e.stopPropagation();
+      HFNQueue.playNow(
+        playBtn.dataset.queueSlug,
+        playBtn.dataset.queueTitle,
+        playBtn.dataset.queueSection,
+        playBtn.dataset.queueColor,
+        playBtn.dataset.queueUrl
+      );
+      return;
+    }
+    var bmBtn = e.target.closest('.card-bookmark-btn');
+    if (bmBtn && window.HFNQueue) {
+      e.preventDefault();
+      e.stopPropagation();
+      HFNQueue.bookmark(
+        bmBtn.dataset.bookmarkSlug,
+        bmBtn.dataset.bookmarkTitle,
+        bmBtn.dataset.bookmarkUrl,
+        bmBtn.dataset.bookmarkSection,
+        bmBtn.dataset.bookmarkColor
+      );
+      bmBtn.classList.toggle('bookmarked');
+      return;
+    }
+  });
 
   openBtn.addEventListener('click', open);
   if (closeBtn) closeBtn.addEventListener('click', close);
