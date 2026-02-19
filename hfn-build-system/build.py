@@ -4,7 +4,7 @@ History Future Now — Static Site Builder v2
 Enhanced: reading time, related articles, pull quotes, OG tags, section theming, favicon
 """
 
-import os, re, yaml, markdown, json, math, random
+import os, re, yaml, markdown, json, math, random, hashlib
 import html as html_mod
 from pathlib import Path
 from chart_defs import get_all_charts, COLORS as CHART_COLORS
@@ -463,7 +463,17 @@ def make_queue_bar():
 </div>'''
 
 
+def _js_hash(filename):
+    """Short content hash for cache-busting JS files."""
+    p = OUTPUT_DIR / "js" / filename
+    if p.exists():
+        return hashlib.md5(p.read_bytes()).hexdigest()[:8]
+    return "0"
+
 def make_footer():
+    nav_v = _js_hash("nav.js")
+    search_v = _js_hash("search.js")
+    queue_v = _js_hash("queue.js")
     return '''<footer class="site-footer">
   <div class="footer-inner">
     <p class="footer-tagline">The longer the run-up, the further the leap.</p>
@@ -482,10 +492,10 @@ def make_footer():
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
-''' + make_queue_bar() + '''
-<script src="/js/nav.js"></script>
-<script src="/js/search.js"></script>
-<script src="/js/queue.js"></script>'''
+''' + make_queue_bar() + f'''
+<script src="/js/nav.js?v={nav_v}"></script>
+<script src="/js/search.js?v={search_v}"></script>
+<script src="/js/queue.js?v={queue_v}"></script>'''
 
 def inject_pull_quote(body_html, pq):
     if not pq: return body_html
@@ -1142,7 +1152,7 @@ def build_article(essay, all_essays, is_review=False):
 {make_footer()}
 {chart_script}
 {make_audio_player_script() if (has_audio or has_discussion) else ''}
-<script src="/js/share.js"></script>
+<script src="/js/share.js?v={_js_hash('share.js')}"></script>
 </body>
 </html>'''
 
@@ -2419,7 +2429,7 @@ window.__chartInits = window.__chartInits || {{}};
   }});
 }})();
 </script>
-<script src="/js/share.js"></script>
+<script src="/js/share.js?v={_js_hash('share.js')}"></script>
 </body>
 </html>'''
 

@@ -210,12 +210,18 @@
 
     if (seekTo && seekTo > 0) {
       audio.addEventListener('loadedmetadata', function onMeta() {
-        audio.currentTime = seekTo;
         audio.removeEventListener('loadedmetadata', onMeta);
+        audio.currentTime = seekTo;
+        if (autoplay) {
+          audio.play().then(function () {
+            setPlayingState(true);
+          }).catch(function () {
+            setPlayingState(false);
+          });
+        }
       });
-    }
-
-    if (autoplay) {
+      audio.load();
+    } else if (autoplay) {
       audio.play().then(function () {
         setPlayingState(true);
       }).catch(function () {
