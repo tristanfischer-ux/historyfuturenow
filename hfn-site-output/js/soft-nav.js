@@ -85,8 +85,12 @@
         // Detach persistent elements from current DOM
         var audioEl = document.querySelector('body > audio');
         var toast = document.getElementById('hfnToast');
+        var queueBarEl = document.getElementById('queueBar');
+        var queuePanelEl = document.getElementById('queuePanel');
         if (audioEl) audioEl.remove();
         if (toast) toast.remove();
+        if (queueBarEl) queueBarEl.remove();
+        if (queuePanelEl) queuePanelEl.remove();
 
         // Strip queue bar, queue panel, and persistent scripts from new page
         var newBody = doc.body;
@@ -108,6 +112,8 @@
         // Re-attach persistent elements
         if (audioEl) document.body.appendChild(audioEl);
         if (toast) document.body.appendChild(toast);
+        if (queueBarEl) document.body.appendChild(queueBarEl);
+        if (queuePanelEl) document.body.appendChild(queuePanelEl);
 
         // Update document title and meta
         document.title = doc.title;
