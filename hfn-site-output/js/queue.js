@@ -26,6 +26,7 @@
         currentIndex: currentIndex,
         speedIndex: speedIndex,
         currentTime: audio ? audio.currentTime : 0,
+        isPlaying: isPlaying,
       }));
     } catch (e) { /* quota exceeded — fail silently */ }
   }
@@ -33,7 +34,7 @@
   function load() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
+      if (!raw) return { currentTime: 0, wasPlaying: false };
       var data = JSON.parse(raw);
       if (data.queue && data.queue.length) {
         queue = data.queue;
@@ -41,8 +42,8 @@
         speedIndex = typeof data.speedIndex === 'number' ? data.speedIndex : 1;
         if (currentIndex >= queue.length) currentIndex = queue.length - 1;
       }
-      return data.currentTime || 0;
-    } catch (e) { return 0; }
+      return { currentTime: data.currentTime || 0, wasPlaying: !!data.isPlaying };
+    } catch (e) { return { currentTime: 0, wasPlaying: false }; }
   }
 
   // ─── Formatting ─────────────────────────────────────────────────────────────
@@ -183,6 +184,10 @@
       // Skip to next on error
       if (queue.length > 1) playNext();
     };
+
+    window.addEventListener('beforeunload', function () {
+      if (queue.length > 0 && audio) save();
+    });
   }
 
   // ─── Playback Controls ──────────────────────────────────────────────────────
@@ -199,7 +204,9 @@
     timeEl.textContent = '0:00';
     updateQueueHighlight();
     updateNavButtons();
-    save();
+    if (!seekTo || seekTo <= 0) {
+      save();
+    }
 
     if (seekTo && seekTo > 0) {
       audio.addEventListener('loadedmetadata', function onMeta() {
@@ -796,12 +803,12 @@
 
     loadBookmarks();
     initDOM();
-    var savedTime = load();
+    var state = load();
 
     if (queue.length > 0) {
       showBar();
       if (currentIndex >= 0 && currentIndex < queue.length) {
-        loadTrack(currentIndex, false, savedTime);
+        loadTrack(currentIndex, state.wasPlaying, state.currentTime);
       }
       speedBtn.textContent = speeds[speedIndex] + '\u00d7';
     }
