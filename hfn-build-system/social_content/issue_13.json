@@ -1,31 +1,39 @@
 {
   "issue_number": 13,
-  "label": "Late 2024",
-  "date": "2024-09-01",
+  "label": "January 2026",
+  "date": "2026-01-23",
   "articles": [
     "the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem",
     "the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped",
     "the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap",
     "the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed",
-    "the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun"
+    "the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun",
+    "who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state",
+    "the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering",
+    "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
+    "europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence"
   ],
   "posts": {
     "issue_announcement": {
       "platform": "both",
       "issue_number": 13,
-      "text": "Issue 13 (Late 2024) of History Future Now is out. Inside: The Empty Cradle Bargain: Why Falling Birth Rates Are Everyone's Problem | The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped | The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap | The Silence Of The Scribes: How Every Civilisation That Controlled Speech Collapsed | The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun.\n\nhttps://www.historyfuturenow.com/issues/13",
-      "article_count": 5
+      "text": "Issue 13 (January 2026) of History Future Now is out. Inside: The Empty Cradle Bargain | The Gates of Nations | The Robot Bargain | The Silence of the Scribes | The Scramble for the Solar System | Who Guards the Guards? | The Return of the State Factory | The Death of the Fourth Estate | Europe Rearms.\n\nhttps://www.historyfuturenow.com/issues/13",
+      "article_count": 9
     },
     "issue_thread": {
       "platform": "twitter",
       "issue_number": 13,
       "tweets": [
-        "🧵 Issue 13 of History Future Now — Late 2024. Here's what's inside:",
+        "🧵 Issue 13 of History Future Now — January 2026. Here's what's inside:",
         "And some are in the middle of the most physically and emotionally gruelling process in modern medicine, wondering why it… https://www.historyfuturenow.com/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem",
         "The idea that a nation should accept large numbers of culturally distinct foreigners as a matter of… https://www.historyfuturenow.com/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped",
         "In February 2026, Mustafa Suleyman, the CEO of Microsoft AI, predicted that \"most, if not all\" white-collar tasks would be fully… https://www.historyfuturenow.com/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap",
         "Meta alone had restricted over 28,000 pieces of Indian content in the first half of 2025 following government requests. https://www.historyfuturenow.com/articles/the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed",
-        "In 1494, Pope Alexander VI drew a line down the middle of the Atlantic Ocean. https://www.historyfuturenow.com/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun"
+        "In 1494, Pope Alexander VI drew a line down the middle of the Atlantic Ocean. https://www.historyfuturenow.com/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun",
+        "By early 2026, it had achieved approximately $215 billion in estimated savings through contract cancellations, fraud… https://www.historyfuturenow.com/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state",
+        "Over 2.5 million jobs have been reshored or created through foreign direct investment in the US since 2010, with… https://www.historyfuturenow.com/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering",
+        "On February 4th 2026, Lizzie Johnson, a Washington Post correspondent covering the war in Ukraine, posted… https://www.historyfuturenow.com/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
+        "In the summer of 1932, the German military budget was a rounding error. https://www.historyfuturenow.com/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence"
       ]
     }
   }

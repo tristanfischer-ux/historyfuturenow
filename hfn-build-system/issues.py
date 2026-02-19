@@ -2,9 +2,8 @@
 """
 Issue definitions for History Future Now.
 
-HFN publishes fortnightly issues, each containing 4-5 articles.
-Issues 1-12 are retroactive groupings of the archive (2011-2024).
-Issues 13+ are the current publishing run (2026-).
+Archive issues (1-12) use seasonal labels (Spring/Summer/Autumn/Winter YYYY).
+Current issues (13+, from January 2026) are monthly.
 """
 
 
@@ -60,7 +59,7 @@ ISSUES = [
     {
         "number": 5,
         "date": "2013-08-01",
-        "label": "Autumn 2013",
+        "label": "Summer 2013",
         "articles": [
             "a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story",
             "a-frozen-society-the-long-term-implications-of-nsas-secrets",
@@ -71,7 +70,7 @@ ISSUES = [
     {
         "number": 6,
         "date": "2014-02-01",
-        "label": "Spring 2014",
+        "label": "Winter 2014",
         "articles": [
             "are-europeans-fundamentally-racist",
             "what-happens-when-china-becomes-the-largest-economy-in-the-world",
@@ -82,7 +81,7 @@ ISSUES = [
     {
         "number": 7,
         "date": "2014-10-01",
-        "label": "Winter 2014",
+        "label": "Autumn 2014",
         "articles": [
             "lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people",
             "china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically",
@@ -93,7 +92,7 @@ ISSUES = [
     {
         "number": 8,
         "date": "2015-06-01",
-        "label": "2015",
+        "label": "Summer 2015",
         "articles": [
             "establishing-a-price-floor-for-energy",
             "clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west",
@@ -104,7 +103,7 @@ ISSUES = [
     {
         "number": 9,
         "date": "2016-09-01",
-        "label": "September 2016",
+        "label": "Autumn 2016",
         "articles": [
             "hinkley-point-decision-is-really-about-china-and-brexit",
             "history-is-written-by-the-winners-and-europeans-are-losing",
@@ -115,7 +114,7 @@ ISSUES = [
     {
         "number": 10,
         "date": "2019-01-15",
-        "label": "January 2019",
+        "label": "Winter 2019",
         "articles": [
             "the-wests-romance-with-free-trade-is-over-why",
             "the-long-term-impact-of-covid-19",
@@ -126,7 +125,7 @@ ISSUES = [
     {
         "number": 11,
         "date": "2022-01-15",
-        "label": "January 2022",
+        "label": "Winter 2022",
         "articles": [
             "vertical-farming-the-electrical-convergence-power-transport-and-agriculture",
             "forging-peace-from-centuries-of-war-to-ukraines-future",
@@ -137,7 +136,7 @@ ISSUES = [
     {
         "number": 12,
         "date": "2024-03-01",
-        "label": "March 2024",
+        "label": "Spring 2024",
         "articles": [
             "platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future",
             "robotics-and-slavery",
@@ -147,21 +146,14 @@ ISSUES = [
     },
     {
         "number": 13,
-        "date": "2026-01-09",
-        "label": "9 January 2026",
+        "date": "2026-01-23",
+        "label": "January 2026",
         "articles": [
             "the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem",
             "the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped",
             "the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap",
             "the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed",
             "the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun",
-        ],
-    },
-    {
-        "number": 14,
-        "date": "2026-01-23",
-        "label": "23 January 2026",
-        "articles": [
             "who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state",
             "the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering",
             "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
@@ -169,26 +161,33 @@ ISSUES = [
         ],
     },
     {
-        "number": 15,
-        "date": "2026-02-06",
-        "label": "6 February 2026",
+        "number": 14,
+        "date": "2026-02-20",
+        "label": "February 2026",
         "articles": [
             "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
             "the-new-literacy",
             "a-nation-transformed-britains-demographic-revolution-1948-2050",
             "the-great-offshoring-how-the-worlds-factory-moved-east",
-        ],
-    },
-    {
-        "number": 16,
-        "date": "2026-02-20",
-        "label": "20 February 2026",
-        "articles": [
             "the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did",
             "the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions",
             "the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed",
             "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible",
             "when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age",
+        ],
+    },
+    {
+        "number": 15,
+        "date": "2026-03-01",
+        "label": "March 2026",
+        "articles": [
+            "the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century",
+            "the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order",
+            "the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world",
+            "the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope",
+            "the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two",
+            "the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin",
+            "the-locked-gate-how-the-west-priced-its-children-out-of-existence",
         ],
     },
 ]

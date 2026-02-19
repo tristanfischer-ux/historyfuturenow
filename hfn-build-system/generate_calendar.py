@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Fortnightly social media content calendar generator for History Future Now.
+Monthly social media content calendar generator for History Future Now.
 
-Reads social_content/*.json files and issues.py to produce a two-week
-posting schedule that alternates between off-weeks (back catalogue) and
-issue weeks (new issue promotion).
+Reads social_content/*.json files and issues.py to produce a four-week
+posting schedule per monthly cycle: weeks 1-3 drip articles from the
+current issue plus back catalogue; week 4 promotes the upcoming issue.
 
 Usage:
-    python3 generate_calendar.py --start-date 2026-02-23 --cycles 4 --current-issue 16
+    python3 generate_calendar.py --start-date 2026-03-02 --cycles 3 --current-issue 14
 """
 
 import argparse
@@ -24,7 +24,7 @@ from issues import ISSUES, get_issue_by_number
 BASE_URL = "https://www.historyfuturenow.com"
 SOCIAL_DIR = Path(__file__).parent / "social_content"
 OUTPUT_DIR = Path(__file__).parent / "social_calendar"
-REPEAT_WINDOW_WEEKS = 4
+REPEAT_WINDOW_WEEKS = 8
 
 
 def load_article_content():
@@ -96,24 +96,39 @@ def article_link(slug):
     return BASE_URL + "/articles/" + slug
 
 
-def generate_week_a(cycle_num, monday, current_issue_num, next_issue_num,
-                    back_catalogue, all_articles, issue_content,
-                    recently_used, rng):
-    """Generate Week A (off-week): back-catalogue promotion + teaser."""
+def generate_drip_week(week_num, cycle_num, monday, current_issue_num,
+                       next_issue_num, back_catalogue, current_issue_articles,
+                       all_articles, issue_content, recently_used, rng):
+    """Generate a drip week (weeks 1-3): mix of current issue articles and
+    back catalogue promotion."""
     posts = []
     days = [monday + timedelta(days=i) for i in range(6)]
     names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-    # Mon: hook from back catalogue (X)
-    slug = pick_back_catalogue(back_catalogue, "hook", recently_used, rng)
-    if slug:
-        pd = back_catalogue[slug]["posts"]["hook"]
+    ci = get_issue_by_number(current_issue_num)
+    issue_slugs = ci["articles"] if ci else []
+    unused_issue_slugs = [s for s in issue_slugs if s not in recently_used and s in all_articles]
+
+    # Mon: hook from current issue article (X)
+    slug = unused_issue_slugs.pop(0) if unused_issue_slugs else None
+    if slug and "hook" in all_articles.get(slug, {}).get("posts", {}):
+        pd = all_articles[slug]["posts"]["hook"]
         posts.append(make_post(
             names[0], days[0].isoformat(), "twitter", "hook", slug,
             pd.get("full", pd["text"]),
             link=article_link(slug),
         ))
         recently_used.add(slug)
+    elif slug is None:
+        slug = pick_back_catalogue(back_catalogue, "hook", recently_used, rng)
+        if slug:
+            pd = back_catalogue[slug]["posts"]["hook"]
+            posts.append(make_post(
+                names[0], days[0].isoformat(), "twitter", "hook", slug,
+                pd.get("full", pd["text"]),
+                link=article_link(slug),
+            ))
+            recently_used.add(slug)
 
     # Tue: chart insight from back catalogue (X + LinkedIn)
     slug = pick_back_catalogue(back_catalogue, "chart_insight", recently_used, rng)
@@ -149,18 +164,16 @@ def generate_week_a(cycle_num, monday, current_issue_num, next_issue_num,
         ))
         recently_used.add(slug)
 
-    # Fri: "Next issue drops in one week" teaser (X + LinkedIn)
-    ni = get_issue_by_number(next_issue_num)
-    if ni:
-        teaser = ("Issue {} of History Future Now drops next Friday. "
-                  "Stay tuned.\n\n{}/issues/{}").format(
-                      next_issue_num, BASE_URL, next_issue_num)
-    else:
-        teaser = ("The next issue of History Future Now is in the works. "
-                  "Stay tuned.\n\n{}").format(BASE_URL)
-    posts.append(make_post(
-        names[4], days[4].isoformat(), "twitter_linkedin", "teaser", None, teaser,
-    ))
+    # Fri: current issue article spotlight (X + LinkedIn)
+    slug2 = unused_issue_slugs.pop(0) if unused_issue_slugs else None
+    if slug2 and "chart_insight" in all_articles.get(slug2, {}).get("posts", {}):
+        ci_post = all_articles[slug2]["posts"]["chart_insight"]
+        posts.append(make_post(
+            names[4], days[4].isoformat(), "twitter_linkedin", "chart_insight",
+            slug2, ci_post["text"], image=ci_post.get("image"),
+            link=article_link(slug2),
+        ))
+        recently_used.add(slug2)
 
     # Sat: thread from back catalogue (X)
     slug = pick_back_catalogue(back_catalogue, "thread", recently_used, rng)
@@ -174,7 +187,8 @@ def generate_week_a(cycle_num, monday, current_issue_num, next_issue_num,
 
     return {
         "cycle": cycle_num,
-        "week": "A",
+        "week": week_num,
+        "week_type": "drip",
         "start_date": days[0].isoformat(),
         "end_date": days[5].isoformat(),
         "issue_context": {"current": current_issue_num, "next": next_issue_num},
@@ -182,9 +196,9 @@ def generate_week_a(cycle_num, monday, current_issue_num, next_issue_num,
     }
 
 
-def generate_week_b(cycle_num, monday, current_issue_num, next_issue_num,
-                    all_articles, issue_content, rng):
-    """Generate Week B (issue week): promote the new issue dropping Friday."""
+def generate_launch_week(cycle_num, monday, current_issue_num, next_issue_num,
+                         all_articles, issue_content, rng):
+    """Generate week 4 (launch week): promote the upcoming issue."""
     posts = []
     days = [monday + timedelta(days=i) for i in range(6)]
     names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -203,7 +217,7 @@ def generate_week_b(cycle_num, monday, current_issue_num, next_issue_num,
                 hook.get("full", hook["text"]), link=article_link(lead),
             ))
 
-    # Tue: chart insight from upcoming issue (X + LinkedIn) -- prefer one with image
+    # Tue: chart insight from upcoming issue (X + LinkedIn)
     chart_slug = None
     for s in issue_slugs:
         if s in all_articles and "chart_insight" in all_articles[s].get("posts", {}):
@@ -261,7 +275,7 @@ def generate_week_b(cycle_num, monday, current_issue_num, next_issue_num,
         None, ann_text, link="{}/issues/{}".format(BASE_URL, next_issue_num),
     ))
 
-    # Sat: best chart from the new issue (X + LinkedIn) -- different article from Tuesday
+    # Sat: best chart from the new issue (X + LinkedIn)
     best = None
     for s in issue_slugs:
         if s in all_articles and "chart_insight" in all_articles[s].get("posts", {}):
@@ -285,7 +299,8 @@ def generate_week_b(cycle_num, monday, current_issue_num, next_issue_num,
 
     return {
         "cycle": cycle_num,
-        "week": "B",
+        "week": 4,
+        "week_type": "launch",
         "start_date": days[0].isoformat(),
         "end_date": days[5].isoformat(),
         "issue_context": {"current": current_issue_num, "next": next_issue_num},
@@ -293,23 +308,22 @@ def generate_week_b(cycle_num, monday, current_issue_num, next_issue_num,
     }
 
 
-def render_markdown(cycle_num, week_a, week_b):
-    """Render a human-readable markdown file for the full two-week cycle."""
+def render_markdown(cycle_num, weeks):
+    """Render a human-readable markdown file for the full four-week cycle."""
     lines = [
         "# Content Calendar -- Cycle {}".format(cycle_num),
         "",
         "**Issue context:** Current = Issue {}, Next = Issue {}".format(
-            week_a["issue_context"]["current"],
-            week_a["issue_context"]["next"],
+            weeks[0]["issue_context"]["current"],
+            weeks[0]["issue_context"]["next"],
         ),
         "",
     ]
 
-    sections = [
-        (week_a, "Week A (off-week)"),
-        (week_b, "Week B (issue week)"),
-    ]
-    for week_data, label in sections:
+    for week_data in weeks:
+        wtype = week_data["week_type"]
+        label = "Week {} ({})".format(week_data["week"],
+                                      "launch week" if wtype == "launch" else "drip week")
         lines.append("## {}".format(label))
         lines.append("_{} to {}_".format(week_data["start_date"], week_data["end_date"]))
         lines.append("")
@@ -341,15 +355,15 @@ def render_markdown(cycle_num, week_a, week_b):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generate fortnightly social media content calendar for HFN."
+        description="Generate monthly social media content calendar for HFN."
     )
     parser.add_argument(
         "--start-date", required=True,
         help="Monday of the first week (YYYY-MM-DD). Must be a Monday.",
     )
     parser.add_argument(
-        "--cycles", type=int, default=4,
-        help="Fortnightly cycles to generate (default: 4 = 8 weeks).",
+        "--cycles", type=int, default=3,
+        help="Monthly cycles to generate (default: 3 = 12 weeks).",
     )
     parser.add_argument(
         "--current-issue", type=int, required=True,
@@ -377,54 +391,58 @@ def main():
         cycle_num = cycle_idx + 1
         next_issue_num = current_issue_num + cycle_idx + 1
 
-        week_a_monday = start + timedelta(weeks=cycle_idx * 2)
-        week_b_monday = week_a_monday + timedelta(weeks=1)
-
-        rng = random.Random("hfn-{}".format(week_a_monday.isoformat()))
-
         excluded_issues = {current_issue_num, next_issue_num}
         back_catalogue = {
             slug: data for slug, data in all_articles.items()
             if slug_to_issue.get(slug) not in excluded_issues
         }
 
-        # Clear recently_used every REPEAT_WINDOW_WEEKS / 2 cycles
-        if cycle_idx > 0 and cycle_idx % (REPEAT_WINDOW_WEEKS // 2) == 0:
+        if cycle_idx > 0 and cycle_idx % 2 == 0:
             recently_used.clear()
 
-        week_a = generate_week_a(
-            cycle_num, week_a_monday, current_issue_num, next_issue_num,
-            back_catalogue, all_articles, issue_content, recently_used, rng,
-        )
-        week_b = generate_week_b(
-            cycle_num, week_b_monday, current_issue_num, next_issue_num,
+        cycle_weeks = []
+        rng = random.Random("hfn-cycle-{}".format(cycle_num))
+
+        ci = get_issue_by_number(current_issue_num + cycle_idx)
+        current_issue_articles = ci["articles"] if ci else []
+
+        for week_idx in range(3):
+            monday = start + timedelta(weeks=cycle_idx * 4 + week_idx)
+            week = generate_drip_week(
+                week_idx + 1, cycle_num, monday,
+                current_issue_num + cycle_idx, next_issue_num,
+                back_catalogue, current_issue_articles,
+                all_articles, issue_content, recently_used, rng,
+            )
+            cycle_weeks.append(week)
+
+        monday_w4 = start + timedelta(weeks=cycle_idx * 4 + 3)
+        launch = generate_launch_week(
+            cycle_num, monday_w4,
+            current_issue_num + cycle_idx, next_issue_num,
             all_articles, issue_content, rng,
         )
+        cycle_weeks.append(launch)
 
-        wa_path = OUTPUT_DIR / "cycle_{}_week_a.json".format(cycle_num)
-        wb_path = OUTPUT_DIR / "cycle_{}_week_b.json".format(cycle_num)
+        cycle_posts = sum(len(w["posts"]) for w in cycle_weeks)
+        total_posts += cycle_posts
+
+        for w in cycle_weeks:
+            wpath = OUTPUT_DIR / "cycle_{}_week_{}.json".format(cycle_num, w["week"])
+            with open(wpath, "w") as f:
+                json.dump(w, f, indent=2, ensure_ascii=False)
+
         md_path = OUTPUT_DIR / "cycle_{}.md".format(cycle_num)
-
-        with open(wa_path, "w") as f:
-            json.dump(week_a, f, indent=2, ensure_ascii=False)
-        with open(wb_path, "w") as f:
-            json.dump(week_b, f, indent=2, ensure_ascii=False)
         with open(md_path, "w") as f:
-            f.write(render_markdown(cycle_num, week_a, week_b))
+            f.write(render_markdown(cycle_num, cycle_weeks))
 
-        wa_count = len(week_a["posts"])
-        wb_count = len(week_b["posts"])
-        total_posts += wa_count + wb_count
-
-        print("Cycle {}: Week A ({} to {}) = {} posts, "
-              "Week B ({} to {}) = {} posts".format(
-                  cycle_num,
-                  week_a["start_date"], week_a["end_date"], wa_count,
-                  week_b["start_date"], week_b["end_date"], wb_count))
+        print("Cycle {}: {} weeks, {} posts (Issue {} -> {})".format(
+            cycle_num, len(cycle_weeks), cycle_posts,
+            current_issue_num + cycle_idx, next_issue_num))
 
     print("")
     print("Total: {} posts across {} cycles ({} weeks)".format(
-        total_posts, args.cycles, args.cycles * 2))
+        total_posts, args.cycles, args.cycles * 4))
     print("Output: {}/".format(OUTPUT_DIR))
 
 

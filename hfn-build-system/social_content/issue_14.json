@@ -1,29 +1,39 @@
 {
   "issue_number": 14,
   "label": "February 2026",
-  "date": "2026-02-07",
+  "date": "2026-02-20",
   "articles": [
-    "who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state",
-    "the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering",
-    "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
-    "europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence"
+    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+    "the-new-literacy",
+    "a-nation-transformed-britains-demographic-revolution-1948-2050",
+    "the-great-offshoring-how-the-worlds-factory-moved-east",
+    "the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did",
+    "the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions",
+    "the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed",
+    "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible",
+    "when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age"
   ],
   "posts": {
     "issue_announcement": {
       "platform": "both",
       "issue_number": 14,
-      "text": "Issue 14 (February 2026) of History Future Now is out. Inside: Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State | The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering | The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth | Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence.\n\nhttps://www.historyfuturenow.com/issues/14",
-      "article_count": 4
+      "text": "Issue 14 (February 2026) of History Future Now is out. Inside: The Builders Are Dying | The New Literacy | A Nation Transformed: Britain's Demographic Revolution | The Great Offshoring | The Elephant Awakens | The Empty Throne | The Last Drop | The Invisible Judge | When the Servants Are Silicon.\n\nhttps://www.historyfuturenow.com/issues/14",
+      "article_count": 9
     },
     "issue_thread": {
       "platform": "twitter",
       "issue_number": 14,
       "tweets": [
         "🧵 Issue 14 of History Future Now — February 2026. Here's what's inside:",
-        "By early 2026, it had achieved approximately $215 billion in estimated savings through contract cancellations, fraud… https://www.historyfuturenow.com/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state",
-        "Over 2.5 million jobs have been reshored or created through foreign direct investment in the US since 2010, with… https://www.historyfuturenow.com/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering",
-        "On February 4th 2026, Lizzie Johnson, a Washington Post correspondent covering the war in Ukraine, posted… https://www.historyfuturenow.com/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
-        "In the summer of 1932, the German military budget was a rounding error. https://www.historyfuturenow.com/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence"
+        "In 2018, the Swiss alpine village of Albinen made international headlines by offering families 25,000 Swiss francs per… https://www.historyfuturenow.com/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+        "Imagine a merchant in the city of Ur, around 2000 BCE. https://www.historyfuturenow.com/articles/the-new-literacy",
+        "On 22 June 1948, the Empire Windrush docked at Tilbury with 492 passengers from Jamaica, recruited to fill postwar labour shortages. https://www.historyfuturenow.com/articles/a-nation-transformed-britains-demographic-revolution-1948-2050",
+        "Here is a number that should stop you cold: in 1990, the G7 nations produced roughly two-thirds of everything manufactured on Earth. https://www.historyfuturenow.com/articles/the-great-offshoring-how-the-worlds-factory-moved-east",
+        "On 23 August 2023, India's Chandrayaan-3 spacecraft touched down on the lunar south pole — a region no other nation had… https://www.historyfuturenow.com/articles/the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did",
+        "Gallup's long-running confidence surveys show that trust in virtually every major American institution — Congress, the presidency,… https://www.historyfuturenow.com/articles/the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions",
+        "In January 2018, the city of Cape Town announced that it was ninety days away from running out of water. https://www.historyfuturenow.com/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed",
+        "He does so cheerfully, because everyone at his level does, nobody of consequence is watching, and the businessman will mention it to no… https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible",
+        "On a Tuesday morning in 1780, Georgiana Cavendish, Duchess of Devonshire, rose at Chatsworth House to find her world… https://www.historyfuturenow.com/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age"
       ]
     }
   }

@@ -1,29 +1,35 @@
 {
   "issue_number": 15,
-  "label": "February 2026",
-  "date": "2026-02-16",
+  "label": "March 2026",
+  "date": "2026-03-01",
   "articles": [
-    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
-    "the-new-literacy",
-    "a-nation-transformed-britains-demographic-revolution-1948-2050",
-    "the-great-offshoring-how-the-worlds-factory-moved-east"
+    "the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century",
+    "the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order",
+    "the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world",
+    "the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope",
+    "the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two",
+    "the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin",
+    "the-locked-gate-how-the-west-priced-its-children-out-of-existence"
   ],
   "posts": {
     "issue_announcement": {
       "platform": "both",
       "issue_number": 15,
-      "text": "Issue 15 (February 2026) of History Future Now is out. Inside: The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next | The New Literacy: How AI Is Killing The Scribes And What Happens Next | A Nation Transformed: Britain's Demographic Revolution, 1948–2050 | The Great Offshoring: How the World's Factory Moved East.\n\nhttps://www.historyfuturenow.com/issues/15",
-      "article_count": 4
+      "text": "Issue 15 (March 2026) of History Future Now is out. Inside: The New Oil | The Young Continent | The Great Divergence | The Atom Returns | The Severed Circuit | The Debasement | The Locked Gate.\n\nhttps://www.historyfuturenow.com/issues/15",
+      "article_count": 7
     },
     "issue_thread": {
       "platform": "twitter",
       "issue_number": 15,
       "tweets": [
-        "🧵 Issue 15 of History Future Now — February 2026. Here's what's inside:",
-        "In 2018, the Swiss alpine village of Albinen made international headlines by offering families 25,000 Swiss francs per… https://www.historyfuturenow.com/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
-        "Imagine a merchant in the city of Ur, around 2000 BCE. https://www.historyfuturenow.com/articles/the-new-literacy",
-        "On 22 June 1948, the Empire Windrush docked at Tilbury with 492 passengers from Jamaica, recruited to fill postwar labour shortages. https://www.historyfuturenow.com/articles/a-nation-transformed-britains-demographic-revolution-1948-2050",
-        "Here is a number that should stop you cold: in 1990, the G7 nations produced roughly two-thirds of everything manufactured on Earth. https://www.historyfuturenow.com/articles/the-great-offshoring-how-the-worlds-factory-moved-east"
+        "🧵 Issue 15 of History Future Now — March 2026. Here's what's inside:",
+        "The New Oil: Why the Race for Critical Minerals Will Define the 21st Century https://www.historyfuturenow.com/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century",
+        "The Young Continent: How Africa's Billion-Person Surge Will Reshape the Global Order https://www.historyfuturenow.com/articles/the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order",
+        "The Great Divergence: Why Young Men and Women No Longer See the Same World https://www.historyfuturenow.com/articles/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world",
+        "The Atom Returns: Why the World's Most Feared Energy Source Is Its Best Hope https://www.historyfuturenow.com/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope",
+        "The Severed Circuit: How the US-China Tech War Is Splitting the World in Two https://www.historyfuturenow.com/articles/the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two",
+        "The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin https://www.historyfuturenow.com/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin",
+        "The Locked Gate: How the West Priced Its Children Out of Existence https://www.historyfuturenow.com/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence"
       ]
     }
   }
