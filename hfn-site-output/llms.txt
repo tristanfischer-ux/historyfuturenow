@@ -3,10 +3,10 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 67
+Total articles: 68
 
 ## Sections
-### Natural Resources (11 articles)
+### Natural Resources (12 articles)
 - URL: https://www.historyfuturenow.com/natural-resources
 - Energy, food, water, land — the physical foundations that every civilisation depends on.
 
@@ -310,6 +310,13 @@ Total articles: 67
 - Published: 2020-04-01
 - Reading time: 30 min
 - The Covid 19 pandemic is a genuinely historical event. Future historians will analyse the period leading up to the outbreak, searching for clues about why it got so bad so quickly, will then investiga
+
+### The New Oil: Why the Race for Critical Minerals Will Define the 21st Century [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century
+- Section: Natural Resources
+- Published: 2026-02-19
+- Reading time: 10 min
+- China banned gallium and germanium exports in 2023 and most Western policymakers had never heard of either element. The energy transition depends on minerals most people cannot name, mined in places m
 
 ### The North African Threat And Mediterranean Reunification [7 charts]
 - URL: https://www.historyfuturenow.com/articles/the-north-african-threat-and-mediterranean-reunification

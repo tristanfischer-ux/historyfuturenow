@@ -26,7 +26,6 @@ ENABLE_DISCUSSIONS = False
 REVIEW_SLUGS = {
     'the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed',
     'the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope',
-    'the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century',
     'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
