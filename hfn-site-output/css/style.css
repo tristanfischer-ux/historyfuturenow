@@ -1011,6 +1011,21 @@ img { max-width: 100%; height: auto; }
   .lib-book-amazon { margin-left: auto; }
 }
 
+/* ─── Saved (My Library) page ─── */
+.saved-hero { background: var(--surface); padding: 2.5rem 0 2rem; border-bottom: 1px solid var(--border); }
+.saved-hero-inner { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; text-align: center; }
+.saved-hero-title { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.saved-hero-desc { font-size: 0.95rem; color: var(--text-dim); line-height: 1.5; margin: 0; }
+.saved-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 1.5rem; }
+.saved-card { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; transition: box-shadow 0.2s; }
+.saved-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.saved-card-link { flex: 1; font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--text); text-decoration: none; line-height: 1.35; }
+.saved-card-link:hover { color: var(--accent); }
+.saved-card-remove { flex-shrink: 0; width: 2rem; height: 2rem; padding: 0; border: none; background: var(--surface); color: var(--text-faint); font-size: 1.25rem; line-height: 1; border-radius: 4px; cursor: pointer; transition: background 0.15s, color 0.15s; }
+.saved-card-remove:hover { background: var(--border); color: var(--text); }
+.saved-empty { padding: 2rem 1rem; text-align: center; color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
+.saved-empty a { color: var(--accent); font-weight: 500; }
+
 /* ─── Issue Pages ─── */
 .issue-hero { background: var(--bg-warm); border-bottom: 1px solid var(--border); padding: 2.5rem 1.5rem 2rem; }
 .issue-hero-inner { max-width: 1100px; margin: 0 auto; }
