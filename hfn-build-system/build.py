@@ -23,7 +23,19 @@ ENABLE_DISCUSSIONS = False
 
 # Articles pulled from public site for editorial review. They remain accessible
 # at their direct URLs (with noindex) and are listed on a hidden /review/ page.
-REVIEW_SLUGS = set()
+REVIEW_SLUGS = {
+    'the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed',
+    'the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope',
+    'the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century',
+    'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
+    'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
+    'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
+    'the-new-literacy',
+    'the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin',
+    'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
+    'the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world',
+    'the-locked-gate-how-the-west-priced-its-children-out-of-existence',
+}
 
 def truncate_excerpt(text, max_len):
     """Truncate text to max_len characters, adding ellipsis if truncated."""

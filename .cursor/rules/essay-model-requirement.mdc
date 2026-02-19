@@ -1,0 +1,25 @@
+---
+description: Essay writing must use Opus 4.6 — never delegate to faster/cheaper models
+alwaysApply: true
+---
+
+# Essay Writing: Opus 4.6 Only
+
+When writing, editing, or substantially revising article/essay content, **always use the main agent (Opus 4.6)**. Never delegate essay writing to subagents using faster or less capable models.
+
+## What This Covers
+
+- Drafting new articles
+- Rewriting or substantially editing existing prose
+- Writing debate scripts
+- Crafting share summaries, article excerpts, and frontmatter copy
+
+## What This Does NOT Cover
+
+Routine tasks that don't require top-tier prose quality can still use faster models:
+
+- Chart definitions (`chart_defs.py` data and JS)
+- Build system changes
+- File searches and codebase exploration
+- Image generation prompts
+- Deploying, committing, running scripts
