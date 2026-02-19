@@ -24,19 +24,17 @@ ENABLE_DISCUSSIONS = False
 # Articles pulled from public site for editorial review. They remain accessible
 # at their direct URLs (with noindex) and are listed on a hidden /review/ page.
 REVIEW_SLUGS = {
-    # Issue 16
+    "the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope",
+    "the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin",
     "the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did",
     "the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions",
+    "the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world",
     "the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed",
-    "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible",
-    "when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age",
-    # Issue 15
-    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+    "the-locked-gate-how-the-west-priced-its-children-out-of-existence",
     "the-new-literacy",
-    "a-nation-transformed-britains-demographic-revolution-1948-2050",
-    "the-great-offshoring-how-the-worlds-factory-moved-east",
-    # Issue 14
-    "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
+    "the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century",
+    "the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two",
+    "the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order",
 }
 
 def truncate_excerpt(text, max_len):
