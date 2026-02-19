@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 66
+Total articles: 67
 
 ## Sections
 ### Natural Resources (11 articles)
@@ -14,7 +14,7 @@ Total articles: 66
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (12 articles)
+### Jobs & Economy (13 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
@@ -254,6 +254,13 @@ Total articles: 66
 - Published: 2026-02-09
 - Reading time: 20 min
 - On February 4th 2026, a Washington Post reporter in a warzone in Ukraine learned by text message that she had been laid off. Nearly half the newsroom was gone in a single day. This is not just a story
+
+### The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin
+- Section: Jobs & Economy
+- Published: 2026-02-19
+- Reading time: 11 min
+- The US spent more on interest payments than on defence in 2025 for the first time in history. Spain defaulted six times between 1557 and 1647. France's debt triggered the Revolution. The pattern is al
 
 ### The Empty Cradle Bargain: Why Falling Birth Rates Are Everyone's Problem [7 charts]
 - URL: https://www.historyfuturenow.com/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem
