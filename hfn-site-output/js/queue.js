@@ -83,11 +83,12 @@
     clearQueueBtn = document.getElementById('queueClear');
     barCloseBtn = document.getElementById('queueBarClose');
 
-    audio = document.createElement('audio');
-    audio.preload = 'none';
-    document.body.appendChild(audio);
+    if (!audio) {
+      audio = document.createElement('audio');
+      audio.preload = 'none';
+    }
+    if (!audio.parentNode) document.body.appendChild(audio);
 
-    // Events
     playBtn.onclick = togglePlay;
     prevBtn.onclick = playPrev;
     nextBtn.onclick = playNext;
@@ -748,6 +749,33 @@
       updateSavedBadge();
     },
     isBookmarked: isBookmarked,
+    rebind: function () {
+      if (!document.getElementById('queueBar')) return;
+      initDOM();
+      if (queue.length > 0) {
+        showBar();
+        if (currentIndex >= 0 && currentIndex < queue.length) {
+          var track = queue[currentIndex];
+          titleEl.textContent = track.title;
+          sectionEl.textContent = track.section;
+          sectionEl.style.color = track.color;
+          speedBtn.textContent = speeds[speedIndex] + '\u00d7';
+          setPlayingState(!audio.paused);
+          updateNavButtons();
+          if (audio.duration) {
+            var pct = audio.currentTime / audio.duration;
+            progressBar.style.width = (pct * 100) + '%';
+            if (progressThumb) progressThumb.style.left = (pct * 100) + '%';
+            timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+          }
+        }
+      }
+      bindQueueButtons();
+      updateBadges();
+      updateBookmarkIcons();
+      updateSavedBadge();
+      renderQueueList();
+    },
   };
 
   // ─── Bind data-attribute buttons ────────────────────────────────────────────

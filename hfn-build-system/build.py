@@ -478,6 +478,7 @@ def make_footer():
     nav_v = _js_hash("nav.js")
     search_v = _js_hash("search.js")
     queue_v = _js_hash("queue.js")
+    softnav_v = _js_hash("soft-nav.js")
     return '''<footer class="site-footer">
   <div class="footer-inner">
     <p class="footer-tagline">The longer the run-up, the further the leap.</p>
@@ -499,7 +500,8 @@ def make_footer():
 ''' + make_queue_bar() + f'''
 <script src="/js/nav.js?v={nav_v}"></script>
 <script src="/js/search.js?v={search_v}"></script>
-<script src="/js/queue.js?v={queue_v}"></script>'''
+<script src="/js/queue.js?v={queue_v}"></script>
+<script src="/js/soft-nav.js?v={softnav_v}"></script>'''
 
 def inject_pull_quote(body_html, pq):
     if not pq: return body_html
