@@ -209,7 +209,7 @@
       </div>
       <div class="chart-figure-label">Figure 3</div>
       <h4>Lithium-Ion Battery Pack Cost Decline</h4>
-      <p class="chart-desc">From $1,200/kWh in 2010 to $139/kWh in 2024</p>
+      <p class="chart-desc">From $1,200/kWh in 2010 to $115/kWh in 2024</p>
       <div class="chart-area"><canvas id="renChart3"></canvas></div>
       <p class="chart-source">Source: Bloomberg NEF annual battery price survey</p>
     </div>
@@ -366,20 +366,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</span>
+        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" class="related-card">
+      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -498,7 +498,7 @@ scales:{x:linX(1976,2025),y:{type:'logarithmic',grid:{color:C.grid},ticks:{color
 
 (()=>{const ctx=document.getElementById('renChart3');
 new Chart(ctx,{type:'line',data:{labels:['2010','2012','2014','2016','2018','2020','2022','2024'],
-datasets:[{label:'$/kWh',data:[1200,700,500,290,180,140,151,139],
+datasets:[{label:'$/kWh',data:[1200,700,500,290,180,140,151,115],
 borderColor:C.teal,backgroundColor:C.teal+'15',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:C.teal,borderWidth:3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'/kWh'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'Price per kWh',color:C.dim}}}}});

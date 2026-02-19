@@ -223,13 +223,13 @@ scales:{x:linX(1976,2025),y:{type:'logarithmic',grid:{color:C.grid},ticks:{color
         {
             'id': 'renChart3', 'figure_num': 3,
             'title': 'Lithium-Ion Battery Pack Cost Decline',
-            'desc': 'From $1,200/kWh in 2010 to $139/kWh in 2024',
+            'desc': 'From $1,200/kWh in 2010 to $115/kWh in 2024',
             'source': 'Bloomberg NEF annual battery price survey',
             'position': 'after_para_15',
             'js': """
 (()=>{const ctx=document.getElementById('renChart3');
 new Chart(ctx,{type:'line',data:{labels:['2010','2012','2014','2016','2018','2020','2022','2024'],
-datasets:[{label:'$/kWh',data:[1200,700,500,290,180,140,151,139],
+datasets:[{label:'$/kWh',data:[1200,700,500,290,180,140,151,115],
 borderColor:C.teal,backgroundColor:C.teal+'15',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:C.teal,borderWidth:3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'/kWh'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'Price per kWh',color:C.dim}}}}});
@@ -1496,7 +1496,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Reinforcing
             'js': """
 (()=>{const ctx=document.getElementById('platChart3');
 new Chart(ctx,{type:'bar',data:{labels:['Electricity','Telephone','Automobile','Radio','Television','Computer','Internet','Smartphone','AI assistants'],
-datasets:[{label:'Years to 50M users',data:[46,50,62,22,13,14,4,2,0.2],
+datasets:[{label:'Years to 50M users',data:[46,75,62,22,13,14,4,2,0.5],
 backgroundColor:[C.dim,C.dim,C.dim,C.amber,C.amber,C.blue,C.blue,C.purple,C.accent],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years to 50M users'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}},
@@ -2027,7 +2027,7 @@ x:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
             'id': 'pressChart2',
             'figure_num': 2,
             'title': 'The Collapse of US Newspaper Employment',
-            'desc': 'US newspaper employment has fallen 80% from 458,000 in 1990 to under 87,000 in 2025. Over 3,500 newspapers have closed since 2005. 88 million Americans now live in news deserts.',
+            'desc': 'US newspaper employment has fallen 80% from 458,000 in 1990 to under 87,000 in 2025. Over 3,500 newspapers have closed since 2005. 50 million Americans now have limited or no access to local news.',
             'source': 'Bureau of Labor Statistics, Northwestern Medill Local News Initiative.',
             'position': 'after_para_38',
             'js': """(()=>{const ctx=document.getElementById('pressChart2');
@@ -2322,7 +2322,7 @@ x:linX(2000,2060,{grid:{display:false},ticks:{color:C.dim}})}}});
 (()=>{const ctx=document.getElementById('robotBargainChart1');
 new Chart(ctx,{type:'scatter',data:{
 datasets:[
-{label:'Japan',data:[{x:1.20,y:399}],backgroundColor:C.accent,pointRadius:8,pointHoverRadius:10},
+{label:'Japan',data:[{x:1.20,y:419}],backgroundColor:C.accent,pointRadius:8,pointHoverRadius:10},
 {label:'South Korea',data:[{x:0.72,y:1012}],backgroundColor:C.purple,pointRadius:8,pointHoverRadius:10},
 {label:'Germany',data:[{x:1.35,y:415}],backgroundColor:C.blue,pointRadius:8,pointHoverRadius:10},
 {label:'United States',data:[{x:1.62,y:285}],backgroundColor:C.green,pointRadius:8,pointHoverRadius:10},
@@ -2672,7 +2672,7 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
             'js': """
 (()=>{const ctx=document.getElementById('newLitChart1');
 const yrs=['-3000','-2500','-2000','-1500','-1000','-800','-500','-300','0','500','800','1000','1200','1400','1500','1600','1700','1800','1850','1900','1950','1980','2000','2020'];
-const rates=[0.1,0.2,0.4,0.5,0.8,1.5,3,5,5,3,4,5,6,8,9,12,18,38,45,56,80,88,93,97];
+const rates=[0.1,0.2,0.4,0.5,0.8,1.5,3,5,5,3,4,5,6,8,9,12,18,38,45,56,80,88,93,88];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('World literacy rate (%)',yrs,rates,C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
@@ -3261,8 +3261,8 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean CPI: '+i.raw+'/100'}},
 annotation:{annotations:{
 avg:{type:'line',yMin:43,yMax:43,borderColor:C.dim,borderWidth:1,borderDash:[6,4],label:{display:true,content:'Global average (43)',position:'end',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-guiltNote:{type:'label',xValue:0,yValue:85,content:['e.g. Denmark 90,','Finland 87, Sweden 82'],color:C.blue,font:{size:12,weight:'bold'}},
-shameNote:{type:'label',xValue:2,yValue:30,content:['e.g. China 45,','Indonesia 34, Pakistan 24'],color:C.accent,font:{size:12,weight:'bold'}}
+guiltNote:{type:'label',xValue:0,yValue:85,content:['e.g. Denmark 90,','Finland 88, Sweden 80'],color:C.blue,font:{size:12,weight:'bold'}},
+shameNote:{type:'label',xValue:2,yValue:30,content:['e.g. China 43,','Indonesia 34, Pakistan 28'],color:C.accent,font:{size:12,weight:'bold'}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean CPI score (0–100)',color:C.dim},min:0,max:100}}}});
 })();"""
@@ -3282,7 +3282,7 @@ backgroundColor:[C.blue+'99',C.amber+'99',C.accent+'99'],borderColor:[C.blue,C.a
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean GII: '+i.raw}},
 annotation:{annotations:{
-guiltNote:{type:'label',xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 5th'],color:C.blue,font:{size:12,weight:'bold'}},
+guiltNote:{type:'label',xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 6th'],color:C.blue,font:{size:12,weight:'bold'}},
 shameNote:{type:'label',xValue:2,yValue:48,content:['S. Korea 4th, Singapore','5th raise the average'],color:C.accent,font:{size:12,weight:'bold'}},
 caveat:{type:'label',xValue:1,yValue:5,content:['Note: shame-dominant outliers (S. Korea, Japan)','adopted guilt-culture institutions'],color:C.text,font:{size:11,weight:'bold'}}
 }}},
@@ -3949,7 +3949,7 @@ title:{display:true,text:'Homeownership rate (%)',color:C.dim}}}}});
             'js': """
 (()=>{const ctx=document.getElementById('mineralsChart1');
 const minerals=['Rare Earths\\nProcessing','Lithium\\nRefining','Cobalt\\nRefining','Graphite\\nProcessing','Nickel\\nRefining','Copper\\nSmelting'];
-const chinaShare=[90,65,73,93,35,40];
+const chinaShare=[98,65,73,93,35,40];
 new Chart(ctx,{type:'bar',data:{labels:minerals,datasets:[
 {label:'China',data:chinaShare,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
 {label:'Rest of world',data:chinaShare.map(v=>100-v),backgroundColor:C.blue+'44',borderColor:C.blue+'66',borderWidth:1.5,borderRadius:4,borderSkipped:false}
