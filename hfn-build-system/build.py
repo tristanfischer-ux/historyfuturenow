@@ -269,6 +269,25 @@ def get_related(essay, all_essays, n=3):
     random.seed(hash(essay['slug']))
     return random.sample(same, min(n, len(same)))
 
+
+def get_next_in_section(essay, all_essays):
+    """Next article in the same section when ordered by pub_date descending (newest first)."""
+    section = [e for e in all_essays if e['part'] == essay['part']]
+    if len(section) < 2:
+        return None
+    # Sort by pub_date desc (newest first); no date = end
+    def sort_key(e):
+        d = e.get('pub_date') or ''
+        return (d == '', d)
+    section_sorted = sorted(section, key=sort_key, reverse=True)
+    try:
+        idx = next(i for i, e in enumerate(section_sorted) if e['slug'] == essay['slug'])
+    except StopIteration:
+        return None
+    if idx + 1 < len(section_sorted):
+        return section_sorted[idx + 1]
+    return None
+
 IMAGES_DIR = OUTPUT_DIR / "images" / "articles"
 
 def get_hero_image(slug):
@@ -500,9 +519,13 @@ def make_footer():
       <li><a href="/library">Library</a></li>
       <li><a href="/saved">Saved</a></li>
     </ul>
+    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+<script>
+(function(){ var key='hfn_theme'; var root=document.documentElement; function apply(t){ root.dataset.theme=t||'default'; document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.theme===t); b.setAttribute('aria-pressed',b.dataset.theme===t); }); } try{ var s=localStorage.getItem(key); if(s)apply(s); }catch(e){} document.querySelectorAll('.theme-btn').forEach(function(b){ b.addEventListener('click',function(){ var t=this.dataset.theme; try{ localStorage.setItem(key,t); }catch(e){} apply(t); }); }); })();
+</script>
 ''' + make_queue_bar() + f'''
 <script src="/js/nav.js?v={nav_v}"></script>
 <script src="/js/search.js?v={search_v}"></script>
@@ -957,6 +980,7 @@ def build_article(essay, all_essays, is_review=False):
     te = html_mod.escape(essay['title'])
     body = inject_pull_quote(essay['body_html'], essay['pull_quote'])
     related = get_related(essay, all_essays)
+    next_essay = get_next_in_section(essay, all_essays)
 
     # Inject charts if available for this article (exclude data_story entries — they are for homepage carousel only)
     article_charts = [c for c in ALL_CHARTS.get(essay['slug'], []) if not c.get('data_story')]
@@ -979,6 +1003,25 @@ def build_article(essay, all_essays, is_review=False):
     <h3>Continue reading in {html_mod.escape(essay['part'])}</h3>
     <div class="related-grid">
 {cards}    </div>
+  </section>'''
+
+    up_next_html = ''
+    if next_essay:
+        np = PARTS[next_essay['part']]
+        next_audio = ' <span class="up-next-audio">Audio</span>' if (next_essay.get('has_audio') or next_essay.get('has_discussion')) else ''
+        next_hero = get_hero_image(next_essay['slug'])
+        next_img = f'<img src="{next_hero}" alt="" class="up-next-img" loading="lazy" width="800" height="450">' if next_hero else ''
+        up_next_html = f'''
+  <section class="up-next-section" aria-label="Up next in this section">
+    <h2 class="up-next-heading">Up next in {html_mod.escape(essay['part'])}</h2>
+    <a href="/articles/{html_mod.escape(next_essay['slug'])}" class="up-next-card" style="--section-color:{np['color']}">
+      <div class="up-next-img-wrap">{next_img}</div>
+      <div class="up-next-text">
+        <span class="up-next-kicker" style="color:{np['color']}">{np['label']}</span>
+        <h3 class="up-next-title">{html_mod.escape(next_essay['title'])}</h3>
+        <span class="up-next-meta">{next_essay['reading_time']} min read{next_audio}</span>
+      </div>
+    </a>
   </section>'''
 
     chart_badge = f'\n    <div class="article-chart-badge">{chart_count} interactive charts</div>' if chart_count > 0 else ''
@@ -1158,6 +1201,7 @@ def build_article(essay, all_essays, is_review=False):
     <a href="/{pi['slug']}" class="back-to-section" style="color:{pi['color']}">&larr; All {html_mod.escape(essay['part'])} articles</a>
     <a href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">&uarr; Back to top</a>
   </div>
+{up_next_html}
 {rel_html}
 </article>
 

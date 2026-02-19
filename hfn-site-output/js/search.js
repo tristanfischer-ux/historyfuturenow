@@ -167,16 +167,10 @@
   // Delegated handlers for play + bookmark buttons inside search results
   results.addEventListener('click', function (e) {
     var playBtn = e.target.closest('.card-play-btn');
-    if (playBtn && window.HFNQueue) {
+    if (playBtn && window.HFNQueue && HFNQueue.openPopover) {
       e.preventDefault();
       e.stopPropagation();
-      HFNQueue.playNow(
-        playBtn.dataset.queueSlug,
-        playBtn.dataset.queueTitle,
-        playBtn.dataset.queueSection,
-        playBtn.dataset.queueColor,
-        playBtn.dataset.queueUrl
-      );
+      HFNQueue.openPopover(playBtn);
       return;
     }
     var bmBtn = e.target.closest('.card-bookmark-btn');

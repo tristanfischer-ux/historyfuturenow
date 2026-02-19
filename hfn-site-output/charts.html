@@ -3454,9 +3454,13 @@
       <li><a href="/library">Library</a></li>
       <li><a href="/saved">Saved</a></li>
     </ul>
+    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+<script>
+(function(){ var key='hfn_theme'; var root=document.documentElement; function apply(t){ root.dataset.theme=t||'default'; document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.theme===t); b.setAttribute('aria-pressed',b.dataset.theme===t); }); } try{ var s=localStorage.getItem(key); if(s)apply(s); }catch(e){} document.querySelectorAll('.theme-btn').forEach(function(b){ b.addEventListener('click',function(){ var t=this.dataset.theme; try{ localStorage.setItem(key,t); }catch(e){} apply(t); }); }); })();
+</script>
 
 <div class="queue-bar" id="queueBar">
   <div class="queue-bar-inner">
@@ -3508,8 +3512,8 @@
   <div class="q-list" id="queueList"></div>
 </div>
 <script src="/js/nav.js?v=f825f705"></script>
-<script src="/js/search.js?v=e535ed82"></script>
-<script src="/js/queue.js?v=2f2805fa"></script>
+<script src="/js/search.js?v=a8c0e71d"></script>
+<script src="/js/queue.js?v=805f800c"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
 <script>
 const C = {
@@ -6224,6 +6228,6 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
   });
 })();
 </script>
-<script src="/js/share.js?v=0052e929"></script>
+<script src="/js/share.js?v=9b5d5e09"></script>
 </body>
 </html>

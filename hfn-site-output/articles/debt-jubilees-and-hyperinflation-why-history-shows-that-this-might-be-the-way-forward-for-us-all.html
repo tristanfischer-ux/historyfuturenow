@@ -279,23 +279,35 @@
     <a href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">&uarr; Back to top</a>
   </div>
 
+  <section class="up-next-section" aria-label="Up next in this section">
+    <h2 class="up-next-heading">Up next in Jobs &amp; Economy</h2>
+    <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="up-next-card" style="--section-color:#b8751a">
+      <div class="up-next-img-wrap"><img src="/images/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society/hero.png" alt="" class="up-next-img" loading="lazy" width="800" height="450"></div>
+      <div class="up-next-text">
+        <span class="up-next-kicker" style="color:#b8751a">Part 3</span>
+        <h3 class="up-next-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</h3>
+        <span class="up-next-meta">9 min read <span class="up-next-audio">Audio</span></span>
+      </div>
+    </a>
+  </section>
+
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
+      <a href="/articles/the-new-literacy" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
+        <span class="related-title">The New Literacy: How AI Is Killing The Scribes And What Happens Next</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -316,9 +328,13 @@
       <li><a href="/library">Library</a></li>
       <li><a href="/saved">Saved</a></li>
     </ul>
+    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+<script>
+(function(){ var key='hfn_theme'; var root=document.documentElement; function apply(t){ root.dataset.theme=t||'default'; document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.theme===t); b.setAttribute('aria-pressed',b.dataset.theme===t); }); } try{ var s=localStorage.getItem(key); if(s)apply(s); }catch(e){} document.querySelectorAll('.theme-btn').forEach(function(b){ b.addEventListener('click',function(){ var t=this.dataset.theme; try{ localStorage.setItem(key,t); }catch(e){} apply(t); }); }); })();
+</script>
 
 <div class="queue-bar" id="queueBar">
   <div class="queue-bar-inner">
@@ -370,8 +386,8 @@
   <div class="q-list" id="queueList"></div>
 </div>
 <script src="/js/nav.js?v=f825f705"></script>
-<script src="/js/search.js?v=e535ed82"></script>
-<script src="/js/queue.js?v=2f2805fa"></script>
+<script src="/js/search.js?v=a8c0e71d"></script>
+<script src="/js/queue.js?v=805f800c"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
 
 <script src="/js/chart.umd.min.js"></script>
@@ -557,6 +573,6 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks
   if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
 })();
 </script>
-<script src="/js/share.js?v=0052e929"></script>
+<script src="/js/share.js?v=9b5d5e09"></script>
 </body>
 </html>

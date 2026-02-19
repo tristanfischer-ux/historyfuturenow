@@ -321,7 +321,10 @@
         var full = text + ' ' + url;
         navigator.clipboard.writeText(full).then(function () {
           if (window.showToast) window.showToast('Quote copied');
-          else btn.classList.add('copied');
+          var orig = btn.innerHTML;
+          btn.innerHTML = '<span class="pull-quote-copied">Copied</span>';
+          btn.classList.add('copied');
+          setTimeout(function () { btn.innerHTML = orig; btn.classList.remove('copied'); }, 1500);
         });
       });
     });

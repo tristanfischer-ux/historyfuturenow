@@ -13,7 +13,18 @@
     document.head.appendChild(s);
   }
 
-  function openShare(platform, url, title, text) {
+  function showCopyFeedback(btn) {
+    if (!btn) return;
+    var html = btn.innerHTML;
+    btn.innerHTML = '<span class="share-copied-text">Copied</span>';
+    btn.classList.add('share-copied');
+    setTimeout(function() {
+      btn.innerHTML = html;
+      btn.classList.remove('share-copied');
+    }, 1500);
+  }
+
+  function openShare(platform, url, title, text, shareBtn) {
     var encoded = encodeURIComponent(url);
     var encodedTitle = encodeURIComponent(title);
     var encodedText = encodeURIComponent(text);
@@ -34,10 +45,14 @@
         break;
       case 'copy':
         if (navigator.clipboard) {
-          navigator.clipboard.writeText(url).then(function() { showToast('Link copied'); });
+          navigator.clipboard.writeText(url).then(function() {
+            showToast('Link copied');
+            showCopyFeedback(shareBtn);
+          });
         } else {
           fallbackCopy(url);
           showToast('Link copied');
+          showCopyFeedback(shareBtn);
         }
         return;
     }
@@ -180,6 +195,6 @@
     var title = container ? container.getAttribute('data-share-title') : document.title;
     var text = container ? (container.getAttribute('data-share-text') || '') : '';
 
-    openShare(platform, url, title, text);
+    openShare(platform, url, title, text, btn);
   });
 })();

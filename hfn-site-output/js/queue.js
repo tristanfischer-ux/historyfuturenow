@@ -749,6 +749,7 @@
       updateSavedBadge();
     },
     isBookmarked: isBookmarked,
+    openPopover: openPopover,
     rebind: function () {
       if (!document.getElementById('queueBar')) return;
       initDOM();

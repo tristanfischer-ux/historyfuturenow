@@ -271,6 +271,18 @@
     <a href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">&uarr; Back to top</a>
   </div>
 
+  <section class="up-next-section" aria-label="Up next in this section">
+    <h2 class="up-next-heading">Up next in Natural Resources</h2>
+    <a href="/articles/establishing-a-price-floor-for-energy" class="up-next-card" style="--section-color:#0d9a5a">
+      <div class="up-next-img-wrap"><img src="/images/articles/establishing-a-price-floor-for-energy/hero.png" alt="" class="up-next-img" loading="lazy" width="800" height="450"></div>
+      <div class="up-next-text">
+        <span class="up-next-kicker" style="color:#0d9a5a">Part 1</span>
+        <h3 class="up-next-title">Establishing A Price Floor For Energy</h3>
+        <span class="up-next-meta">9 min read <span class="up-next-audio">Audio</span></span>
+      </div>
+    </a>
+  </section>
+
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
@@ -279,15 +291,15 @@
         <span class="related-title">Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
+      <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
+      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -308,9 +320,13 @@
       <li><a href="/library">Library</a></li>
       <li><a href="/saved">Saved</a></li>
     </ul>
+    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+<script>
+(function(){ var key='hfn_theme'; var root=document.documentElement; function apply(t){ root.dataset.theme=t||'default'; document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.theme===t); b.setAttribute('aria-pressed',b.dataset.theme===t); }); } try{ var s=localStorage.getItem(key); if(s)apply(s); }catch(e){} document.querySelectorAll('.theme-btn').forEach(function(b){ b.addEventListener('click',function(){ var t=this.dataset.theme; try{ localStorage.setItem(key,t); }catch(e){} apply(t); }); }); })();
+</script>
 
 <div class="queue-bar" id="queueBar">
   <div class="queue-bar-inner">
@@ -362,8 +378,8 @@
   <div class="q-list" id="queueList"></div>
 </div>
 <script src="/js/nav.js?v=f825f705"></script>
-<script src="/js/search.js?v=e535ed82"></script>
-<script src="/js/queue.js?v=2f2805fa"></script>
+<script src="/js/search.js?v=a8c0e71d"></script>
+<script src="/js/queue.js?v=805f800c"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
 
 <script src="/js/chart.umd.min.js"></script>
@@ -578,6 +594,6 @@ label:i=>i.raw.value?'Food Security Index: '+i.raw.value+'/100':'No data'}}}}});
   if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
 })();
 </script>
-<script src="/js/share.js?v=0052e929"></script>
+<script src="/js/share.js?v=9b5d5e09"></script>
 </body>
 </html>
