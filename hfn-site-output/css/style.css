@@ -703,10 +703,10 @@ img { max-width: 100%; height: auto; }
 .card-new-badge { display: inline-block; background: var(--accent); color: #fff; padding: 0.1em 0.45em; border-radius: 3px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; vertical-align: middle; margin-right: 0.3em; }
 
 /* ── Queue Bar (persistent bottom player) ── */
-.queue-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: #1a1815; color: #f5f0e8; transform: translateY(100%); transition: transform 0.3s ease; box-shadow: 0 -4px 24px rgba(0,0,0,0.25); }
+.queue-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: #1a1815; color: #f5f0e8; transform: translateY(100%); transition: transform 0.3s ease; box-shadow: 0 -4px 24px rgba(0,0,0,0.25); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .queue-bar.visible { transform: translateY(0); }
-.has-queue-bar { padding-bottom: 72px; }
-.queue-bar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; height: 72px; }
+.has-queue-bar { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+.queue-bar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem calc(1rem + env(safe-area-inset-right, 0px)) 0.6rem calc(1rem + env(safe-area-inset-left, 0px)); height: 72px; }
 
 /* Queue bar controls */
 .q-nav-btn { background: none; border: none; color: #a89f91; cursor: pointer; padding: 0.3rem; display: flex; align-items: center; justify-content: center; transition: color 0.15s; }
@@ -805,7 +805,7 @@ img { max-width: 100%; height: auto; }
 
 /* ── Queue Bar Responsive ── */
 @media (max-width: 640px) {
-  .queue-bar-inner { gap: 0.35rem; padding: 0.5rem 0.6rem; height: 64px; }
+  .queue-bar-inner { gap: 0.35rem; padding: 0.5rem calc(0.6rem + env(safe-area-inset-right, 0px)) 0.5rem calc(0.6rem + env(safe-area-inset-left, 0px)); height: 64px; }
   .q-nav-btn { display: none; }
   .q-play-btn { width: 36px; height: 36px; flex-shrink: 0; align-self: center; }
   .q-play-btn svg { width: 16px; height: 16px; }
@@ -821,8 +821,8 @@ img { max-width: 100%; height: auto; }
   .q-toggle-btn { padding: 0.25rem; }
   .q-toggle-btn svg { width: 17px; height: 17px; }
   .q-badge { min-width: 14px; height: 14px; font-size: 0.5rem; }
-  .has-queue-bar { padding-bottom: 64px; }
-  .queue-panel { width: 100%; border-radius: 12px 12px 0 0; border-left: none; max-height: 50vh; bottom: 64px; }
+  .has-queue-bar { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  .queue-panel { width: 100%; border-radius: 12px 12px 0 0; border-left: none; max-height: 50vh; bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* ── Card Audio & Bookmark Controls ── */

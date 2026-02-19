@@ -327,7 +327,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
     ld = f'<script type="application/ld+json">{json.dumps(json_ld, ensure_ascii=False)}</script>' if json_ld else ""
     robots = "noindex, nofollow" if noindex else "index, follow"
     return f'''<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>{te}</title>
 <meta name="description" content="{de}">
 {canonical}
