@@ -2407,10 +2407,10 @@ x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}}}}});
             'js': """
 (()=>{const ctx=document.getElementById('guardsChart1');
 new Chart(ctx,{type:'line',data:{
+labels:['1950','1960','1965','1970','1975','1980','1990','1995','2000','2005','2010','2020','2025'],
 datasets:[ds('Pages (thousands)',
 [10,19,22,35,54,71,102,106,128,138,157,175,180],
 C.accent)]},
-labels:['1950','1960','1965','1970','1975','1980','1990','1995','2000','2005','2010','2020','2025']},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K pages'}}},
 title:{display:true,text:'U.S. Code of Federal Regulations (thousands of pages)',color:C.text,font:{size:14}}},

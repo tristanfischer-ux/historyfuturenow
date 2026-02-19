@@ -619,6 +619,44 @@ def make_audio_player_script():
 ALL_CHARTS = get_all_charts()
 
 
+def _fix_js_string_newlines(js):
+    """Fix literal newlines inside JS string literals.
+
+    Python triple-quoted strings convert \\n to literal newlines, which breaks
+    JS string literals (single- and double-quoted). This walks the JS char by
+    char, tracking string context, and re-escapes literal newlines to \\n.
+    """
+    out = []
+    i = 0
+    n = len(js)
+    while i < n:
+        ch = js[i]
+        if ch in ("'", '"'):
+            quote = ch
+            out.append(ch)
+            i += 1
+            while i < n:
+                c = js[i]
+                if c == '\\' and i + 1 < n:
+                    out.append(c)
+                    out.append(js[i + 1])
+                    i += 2
+                elif c == '\n':
+                    out.append('\\n')
+                    i += 1
+                elif c == quote:
+                    out.append(c)
+                    i += 1
+                    break
+                else:
+                    out.append(c)
+                    i += 1
+        else:
+            out.append(ch)
+            i += 1
+    return ''.join(out)
+
+
 def _charts_for_article(slug):
     """Return chart list for an article, excluding data_story entries (homepage carousel only)."""
     return [c for c in ALL_CHARTS.get(slug, []) if not c.get('data_story')]
@@ -629,7 +667,7 @@ def auto_wrap_chart(chart_def, auto_id):
     original_id = chart_def.get('id', '')
     if not original_id:
         return ""
-    js = chart_def.get('js', '')
+    js = _fix_js_string_newlines(chart_def.get('js', ''))
     js = js.replace(f"getElementById('{original_id}')", f"getElementById('{auto_id}')")
     return f"""(()=>{{
 const _origFontSize = (Chart.defaults.font && Chart.defaults.font.size) || 12;
@@ -862,7 +900,7 @@ def inject_charts_into_body(body_html, charts):
         body_html += '\n' + end_block
 
     # Build the combined JS for all charts
-    all_js = '\n'.join(ch['js'] for ch in charts)
+    all_js = '\n'.join(_fix_js_string_newlines(ch['js']) for ch in charts)
     needs_geo = any(ch.get('geo') for ch in charts)
     geo_scripts = '\n<script src="/js/chartjs-chart-geo.umd.min.js"></script>' if needs_geo else ''
     geo_data = '\n<script>let _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());</script>' if needs_geo else ''
@@ -1189,7 +1227,7 @@ def _build_section_editorial(part_name, pi):
     # Build chart script block
     chart_script = ""
     if chart_js_parts:
-        all_js = "\n".join(chart_js_parts)
+        all_js = "\n".join(_fix_js_string_newlines(js) for js in chart_js_parts)
         chart_script = f'''
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
@@ -2121,8 +2159,7 @@ def build_charts_page(essays, all_charts):
         for idx, c in enumerate(item['charts']):
             orig_id = c['id']
             unique_id = f"chart_{slug}_{orig_id}_{idx}"
-            mod_js = c['js'].replace(f"getElementById('{orig_id}')", f"getElementById('{unique_id}')")
-            # Escape </script> so it doesn't close the HTML script tag
+            mod_js = _fix_js_string_newlines(c['js']).replace(f"getElementById('{orig_id}')", f"getElementById('{unique_id}')")
             safe_js = mod_js.replace("</script>", "<\\/script>")
             deferred_js_lines.append(f"window.__chartInits['{unique_id}'] = function() {{\n{safe_js}\n}};")
 
