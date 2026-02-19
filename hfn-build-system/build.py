@@ -2109,8 +2109,8 @@ def build_charts_page(essays, all_charts):
         if count > 0:
             filter_buttons += f'<button class="charts-filter-btn" data-filter="{pi["slug"]}">{pi["label"]}</button>'
 
-    # Build chart cards
-    all_js = []
+    # Build chart cards; wrap each chart's JS in a deferred init for lazy loading
+    deferred_js_lines = []
     cards_html = ""
     for item in articles_with_charts:
         e = item['essay']
@@ -2122,7 +2122,9 @@ def build_charts_page(essays, all_charts):
             orig_id = c['id']
             unique_id = f"chart_{slug}_{orig_id}_{idx}"
             mod_js = c['js'].replace(f"getElementById('{orig_id}')", f"getElementById('{unique_id}')")
-            all_js.append(mod_js)
+            # Escape </script> so it doesn't close the HTML script tag
+            safe_js = mod_js.replace("</script>", "<\\/script>")
+            deferred_js_lines.append(f"window.__chartInits['{unique_id}'] = function() {{\n{safe_js}\n}};")
 
             height_class = "charts-canvas-tall" if c.get('tall') else "charts-canvas-normal"
             cards_html += f'''  <div class="charts-card" data-section="{part_slug}">
@@ -2142,6 +2144,25 @@ def build_charts_page(essays, all_charts):
 '''
 
     total_charts = sum(len(item['charts']) for item in articles_with_charts)
+
+    lazy_observer_script = r'''(function(){
+  window.__chartInits = window.__chartInits || {};
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        if (window.__chartInits[id]) {
+          window.__chartInits[id]();
+          delete window.__chartInits[id];
+        }
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '200px' });
+  document.querySelectorAll('.charts-canvas-wrap canvas').forEach(function(c) {
+    obs.observe(c);
+  });
+})();'''
 
     return f'''<!DOCTYPE html>
 <html lang="en">
@@ -2173,7 +2194,11 @@ def build_charts_page(essays, all_charts):
 {make_footer()}
 <script>
 {CHART_COLORS}
-{"\n".join(all_js)}
+window.__chartInits = window.__chartInits || {{}};
+{"\n".join(deferred_js_lines)}
+</script>
+<script>
+{lazy_observer_script}
 </script>
 <script>
 (function(){{

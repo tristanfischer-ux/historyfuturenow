@@ -45,7 +45,7 @@ Germany's nuclear exit is estimated by researchers at the National Bureau of Eco
 
 Something shifted around 2022, and it shifted on five fronts simultaneously.
 
-The first was climate arithmetic. The IPCC's Sixth Assessment Report stated plainly that most credible pathways to limiting warming to 1.5°C require significant nuclear expansion. The International Energy Agency's Net Zero roadmap called for a doubling of nuclear capacity. France's grid emits roughly 56 grams of CO₂ per kilowatt-hour; Germany's emits approximately 385 — nearly seven times as much, for the same unit of electricity.
+The first was climate arithmetic — and it had finally caught up with what France had known for fifty years. Modelling exercises, including those summarised in the IPCC's Sixth Assessment Report and the IEA's Net Zero roadmap, now state plainly that most credible pathways to limiting warming require significant nuclear expansion. France and China had reached that conclusion through national calculation long before any supranational body endorsed it. France's grid emits roughly 56 grams of CO₂ per kilowatt-hour; Germany's emits approximately 385 — nearly seven times as much, for the same unit of electricity.
 
 The second was energy security. Russia's invasion of Ukraine in February 2022 exposed, with brutal clarity, how dependent Europe had become on imported natural gas. Nuclear fuel, by contrast, is energy-dense and easy to stockpile; a single fuel load lasts eighteen to twenty-four months, and the fuel itself is sourced from geopolitically stable nations — Australia, Canada, Kazakhstan. A country with a nuclear fleet does not check the weather forecast or the gas price every morning.
 
@@ -55,7 +55,7 @@ The fourth was new technology. Small modular reactors — compact designs of fif
 
 The fifth was fusion. In December 2022, the National Ignition Facility in California achieved fusion ignition for the first time — producing more energy from a fusion reaction than the lasers put in. Commercial fusion remains distant, but the milestone shifted the conversation from "always thirty years away" to "which decade."
 
-At COP28 in Dubai, twenty-two nations pledged to triple global nuclear capacity by 2050. The atom had returned to the diplomatic mainstream.
+At COP28 in Dubai, twenty-two nations announced individual pledges to triple nuclear capacity by 2050 — a diplomatic echo of choices that serious countries had already made on their own. The summit did not lead; it followed. The atom had returned to the mainstream because nations acting in their own interest had proved the case.
 
 ## Winners, Losers, and One Spectacular Own Goal
 
