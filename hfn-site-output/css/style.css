@@ -1102,13 +1102,14 @@ img { max-width: 100%; height: auto; }
 .charts-filter-btn:hover { border-color: var(--accent); color: var(--accent); }
 .charts-filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-.charts-grid { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 3rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.charts-grid { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 3rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 .charts-card { position: relative; }
 .charts-card .chart-figure { margin: 0; }
 .charts-article-link { display: block; font-size: 0.82rem; font-weight: 600; text-decoration: none; color: var(--accent); margin-top: 0.5rem; text-align: right; }
 .charts-article-link:hover { text-decoration: underline; }
 
 @media (max-width: 768px) {
+  .charts-grid { grid-template-columns: 1fr; }
   .charts-filters { gap: 0.4rem; }
 }
 
