@@ -55,6 +55,7 @@
       <li><a href="/society" class="active">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
   </div>
 </nav>
@@ -112,7 +113,7 @@
         <div class="scrub-thumb" id="audioThumb"></div>
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
-      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1.25&times;</div>
       <button class="q-add-btn-light" data-queue-slug="the-long-term-impact-of-covid-19" data-queue-title="The Long Term Impact of Covid 19" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/the-long-term-impact-of-covid-19.mp3" aria-label="Add to queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
         <span class="q-add-label">Add to Queue</span>
@@ -386,15 +387,15 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age" class="related-card">
+      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age</span>
-        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="related-card">
+      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Are Europeans Fundamentally Racist?</span>
+        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
@@ -418,6 +419,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
@@ -444,7 +446,7 @@
       <div class="scrub-thumb" id="queueThumb"></div>
     </div>
     <div class="q-time" id="queueTime">0:00</div>
-    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
     <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
       <span class="q-badge" id="queueCount">0</span>
@@ -603,7 +605,7 @@ label:i=>i.raw.value?'Excess deaths: ~'+i.raw.value+' per 100,000':'No data'}}}}
     var iconPlay=btn.querySelector('.audio-icon-play');
     var iconPause=btn.querySelector('.audio-icon-pause');
     var speeds=[1,1.25,1.5,1.75,2];
-    var si=0;
+    var si=1;
     var dragging=false;
 
     function fmt(s){
@@ -688,6 +690,8 @@ label:i=>i.raw.value?'Excess deaths: ~'+i.raw.value+' per 100,000':'No data'}}}}
     });
 
     if(speedEl){
+      audio.playbackRate=speeds[si];
+      speedEl.textContent=speeds[si]+'\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
         audio.playbackRate=speeds[si];

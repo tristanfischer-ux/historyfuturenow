@@ -55,6 +55,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
   </div>
 </nav>
@@ -112,7 +113,7 @@
         <div class="scrub-thumb" id="audioThumb"></div>
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
-      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1.25&times;</div>
       <button class="q-add-btn-light" data-queue-slug="the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did" data-queue-title="The Elephant Awakens: Why India&#x27;s Rise Will Reshape the World More Than China&#x27;s Did" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did.mp3" aria-label="Add to queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
         <span class="q-add-label">Add to Queue</span>
@@ -274,20 +275,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
+        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun</span>
         <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
-        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -306,6 +307,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
@@ -332,7 +334,7 @@
       <div class="scrub-thumb" id="queueThumb"></div>
     </div>
     <div class="q-time" id="queueTime">0:00</div>
-    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
     <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
       <span class="q-badge" id="queueCount">0</span>
@@ -490,7 +492,7 @@ label:i=>i.raw.value?'Median age: '+i.raw.value+' years':'No data'}}}}});
     var iconPlay=btn.querySelector('.audio-icon-play');
     var iconPause=btn.querySelector('.audio-icon-pause');
     var speeds=[1,1.25,1.5,1.75,2];
-    var si=0;
+    var si=1;
     var dragging=false;
 
     function fmt(s){
@@ -575,6 +577,8 @@ label:i=>i.raw.value?'Median age: '+i.raw.value+' years':'No data'}}}}});
     });
 
     if(speedEl){
+      audio.playbackRate=speeds[si];
+      speedEl.textContent=speeds[si]+'\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
         audio.playbackRate=speeds[si];

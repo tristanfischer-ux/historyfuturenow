@@ -55,6 +55,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
   </div>
 </nav>
@@ -112,7 +113,7 @@
         <div class="scrub-thumb" id="audioThumb"></div>
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
-      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1.25&times;</div>
       <button class="q-add-btn-light" data-queue-slug="green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition" data-queue-title="Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition.mp3" aria-label="Add to queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
         <span class="q-add-label">Add to Queue</span>
@@ -234,20 +235,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
+      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
         <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
-        <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -266,6 +267,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
@@ -292,7 +294,7 @@
       <div class="scrub-thumb" id="queueThumb"></div>
     </div>
     <div class="q-time" id="queueTime">0:00</div>
-    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
     <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
       <span class="q-badge" id="queueCount">0</span>
@@ -385,7 +387,7 @@ scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:
     var iconPlay=btn.querySelector('.audio-icon-play');
     var iconPause=btn.querySelector('.audio-icon-pause');
     var speeds=[1,1.25,1.5,1.75,2];
-    var si=0;
+    var si=1;
     var dragging=false;
 
     function fmt(s){
@@ -470,6 +472,8 @@ scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:
     });
 
     if(speedEl){
+      audio.playbackRate=speeds[si];
+      speedEl.textContent=speeds[si]+'\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
         audio.playbackRate=speeds[si];

@@ -55,6 +55,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
   </div>
 </nav>
@@ -111,7 +112,7 @@
         <div class="scrub-thumb" id="audioThumb"></div>
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
-      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1.25&times;</div>
       <button class="q-add-btn-light" data-queue-slug="the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future" data-queue-title="The Perils of Prediction: Lessons from History on Navigating an Uncertain Future" data-queue-section="Part 3 · Jobs &amp; Economy" data-queue-color="#b8751a" data-queue-url="/audio/the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future.mp3" aria-label="Add to queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
         <span class="q-add-label">Add to Queue</span>
@@ -241,20 +242,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
         <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -273,6 +274,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
@@ -299,7 +301,7 @@
       <div class="scrub-thumb" id="queueThumb"></div>
     </div>
     <div class="q-time" id="queueTime">0:00</div>
-    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
     <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
       <span class="q-badge" id="queueCount">0</span>
@@ -340,7 +342,7 @@
     var iconPlay=btn.querySelector('.audio-icon-play');
     var iconPause=btn.querySelector('.audio-icon-pause');
     var speeds=[1,1.25,1.5,1.75,2];
-    var si=0;
+    var si=1;
     var dragging=false;
 
     function fmt(s){
@@ -425,6 +427,8 @@
     });
 
     if(speedEl){
+      audio.playbackRate=speeds[si];
+      speedEl.textContent=speeds[si]+'\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
         audio.playbackRate=speeds[si];

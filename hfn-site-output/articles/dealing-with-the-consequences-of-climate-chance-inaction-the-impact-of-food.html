@@ -55,6 +55,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
   </div>
 </nav>
@@ -112,7 +113,7 @@
         <div class="scrub-thumb" id="audioThumb"></div>
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
-      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1.25&times;</div>
       <button class="q-add-btn-light" data-queue-slug="dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" data-queue-title="Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food.mp3" aria-label="Add to queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
         <span class="q-add-label">Add to Queue</span>
@@ -269,20 +270,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
+      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
         <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
+      <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Cassandra: Time To Give Up On Predicting Climate Change?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -301,6 +302,7 @@
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
@@ -327,7 +329,7 @@
       <div class="scrub-thumb" id="queueThumb"></div>
     </div>
     <div class="q-time" id="queueTime">0:00</div>
-    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
     <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
       <span class="q-badge" id="queueCount">0</span>
@@ -465,7 +467,7 @@ label:i=>i.raw.value?'Food Security Index: '+i.raw.value+'/100':'No data'}}}}});
     var iconPlay=btn.querySelector('.audio-icon-play');
     var iconPause=btn.querySelector('.audio-icon-pause');
     var speeds=[1,1.25,1.5,1.75,2];
-    var si=0;
+    var si=1;
     var dragging=false;
 
     function fmt(s){
@@ -550,6 +552,8 @@ label:i=>i.raw.value?'Food Security Index: '+i.raw.value+'/100':'No data'}}}}});
     });
 
     if(speedEl){
+      audio.playbackRate=speeds[si];
+      speedEl.textContent=speeds[si]+'\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
         audio.playbackRate=speeds[si];

@@ -372,6 +372,13 @@ img { max-width: 100%; height: auto; }
 .card .card-link { font-family: var(--mono); font-size: 0.62rem; font-weight: 500; }
 .card-time { font-family: var(--mono); font-size: 0.58rem; color: var(--text-faint); letter-spacing: 0.05em; }
 
+/* Read / Listened badges (reading history) */
+.article-link-read { position: relative; }
+.article-link-read::after { content: 'Read'; position: absolute; top: 0.25rem; right: 0.25rem; font-family: var(--mono); font-size: 0.55rem; color: var(--text-faint); background: var(--surface); padding: 0.15rem 0.4rem; border-radius: 3px; font-weight: 500; }
+.article-link-listened::after { content: 'Listened'; }
+.latest-card .article-link-read::after { top: 0.5rem; right: 0.5rem; }
+.section-card .article-link-read::after { top: 0.35rem; right: 0.35rem; }
+
 /* Card with image (Economist-style: image left, text right) */
 .card-with-img { flex-direction: row; gap: 1rem; align-items: flex-start; }
 .card-with-img .card-thumb { width: 140px; height: 95px; flex-shrink: 0; object-fit: cover; border-radius: 4px; }
@@ -791,13 +798,19 @@ img { max-width: 100%; height: auto; }
 
 /* ── Queue Bar Responsive ── */
 @media (max-width: 640px) {
-  .queue-bar-inner { gap: 0.4rem; padding: 0.5rem 0.75rem; height: 64px; }
-  .q-play-btn { width: 38px; height: 38px; }
-  .q-play-btn svg { width: 18px; height: 18px; }
-  .q-track-info { max-width: 120px; }
-  .q-track-title { font-size: 0.75rem; }
-  .q-time { display: none; }
-  .q-speed { display: none; }
+  .queue-bar-inner { gap: 0.35rem; padding: 0.5rem 0.6rem; height: 64px; }
+  .q-nav-btn { display: none; }
+  .q-play-btn { width: 36px; height: 36px; }
+  .q-play-btn svg { width: 16px; height: 16px; }
+  .q-track-info { max-width: 100px; }
+  .q-track-title { font-size: 0.72rem; }
+  .q-track-section { display: none; }
+  .q-progress-wrap { min-width: 50px; }
+  .q-time { font-size: 0.58rem; min-width: auto; }
+  .q-speed { font-size: 0.58rem; padding: 0.15rem 0.3rem; }
+  .q-toggle-btn { padding: 0.25rem; }
+  .q-toggle-btn svg { width: 17px; height: 17px; }
+  .q-badge { min-width: 14px; height: 14px; font-size: 0.5rem; }
   .has-queue-bar { padding-bottom: 64px; }
   .queue-panel { width: 100%; border-radius: 12px 12px 0 0; border-left: none; max-height: 50vh; bottom: 64px; }
 }

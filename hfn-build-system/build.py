@@ -360,7 +360,7 @@ def make_nav(active=None):
             ("Natural Resources","/natural-resources","Natural Resources"),
             ("Power","/balance-of-power","Global Balance of Power"),
             ("Economy","/jobs-economy","Jobs & Economy"),("Society","/society","Society"),
-            ("Listen","/listen",None),("Library","/library",None)]
+            ("Listen","/listen",None),("Library","/library",None),("Saved","/saved",None)]
     li = ""
     for label, href, part in secs:
         ac = ' class="active"' if (part and part == active) or (label == active) else ''
@@ -441,7 +441,7 @@ def make_queue_bar():
       <div class="scrub-thumb" id="queueThumb"></div>
     </div>
     <div class="q-time" id="queueTime">0:00</div>
-    <div class="q-speed" id="queueSpeed" title="Playback speed">1&times;</div>
+    <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
     <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
       <span class="q-badge" id="queueCount">0</span>
@@ -479,6 +479,7 @@ def make_footer():
       <li><a href="/society">Society</a></li>
       <li><a href="/listen">Listen</a></li>
       <li><a href="/library">Library</a></li>
+      <li><a href="/saved">Saved</a></li>
     </ul>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
@@ -518,7 +519,7 @@ def make_audio_player_script():
     var iconPlay=btn.querySelector('.audio-icon-play');
     var iconPause=btn.querySelector('.audio-icon-pause');
     var speeds=[1,1.25,1.5,1.75,2];
-    var si=0;
+    var si=1;
     var dragging=false;
 
     function fmt(s){
@@ -603,6 +604,8 @@ def make_audio_player_script():
     });
 
     if(speedEl){
+      audio.playbackRate=speeds[si];
+      speedEl.textContent=speeds[si]+'\\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
         audio.playbackRate=speeds[si];
@@ -968,7 +971,7 @@ def build_article(essay, all_essays, is_review=False):
         <div class="scrub-thumb" id="audioThumb"></div>
       </div>
       <div class="audio-time" id="audioTime">0:00</div>
-      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1.25&times;</div>
       <button class="q-add-btn-light" data-queue-slug="{html_mod.escape(essay['slug'])}" data-queue-title="{html_mod.escape(essay['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="/audio/{html_mod.escape(essay['slug'])}.mp3" aria-label="Add to queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
         <span class="q-add-label">Add to Queue</span>
@@ -998,7 +1001,7 @@ def build_article(essay, all_essays, is_review=False):
         <div class="scrub-thumb" id="discussionThumb"></div>
       </div>
       <div class="discussion-time" id="discussionTime">0:00</div>
-      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1&times;</div>
+      <div class="discussion-speed" id="discussionSpeed" title="Playback speed">1.25&times;</div>
       <button class="q-add-btn-light" data-queue-slug="discussion-{html_mod.escape(essay['slug'])}" data-queue-title="Discussion: {html_mod.escape(essay['title'])}" data-queue-section="{html_mod.escape(discussion_section_label)}" data-queue-color="{pi['color']}" data-queue-url="/audio/discussions/{html_mod.escape(essay['slug'])}.mp3" aria-label="Add discussion to queue">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
         <span class="q-add-label">Add to Queue</span>
@@ -2017,6 +2020,97 @@ def build_library():
 </html>'''
 
 
+def build_saved():
+    """Build the /saved page — bookmarked articles from localStorage (My Library)."""
+    breadcrumbs = make_breadcrumbs([('Home', '/'), ('Saved', None)])
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{make_head("Saved articles — History Future Now", "Articles you have bookmarked for later.", "/saved")}
+</head>
+<body>
+
+{make_nav("Saved")}
+
+<section class="saved-hero">
+  <div class="saved-hero-inner">
+    {breadcrumbs}
+    <h1 class="saved-hero-title">Saved articles</h1>
+    <p class="saved-hero-desc">Articles you have bookmarked. Remove any with the × button.</p>
+  </div>
+</section>
+
+<div class="page-container">
+  <div id="savedGrid" class="saved-grid" aria-live="polite"></div>
+  <div id="savedEmpty" class="saved-empty" style="display:none">
+    <p>No saved articles yet. Bookmark articles from any article page or the Listen page to see them here.</p>
+    <p><a href="/">Browse articles</a> or <a href="/listen">Listen</a>.</p>
+  </div>
+</div>
+
+{make_footer()}
+
+<script>
+(function() {{
+  var BOOKMARK_KEY = 'hfn_bookmarks';
+  var grid = document.getElementById('savedGrid');
+  var empty = document.getElementById('savedEmpty');
+
+  function getBookmarks() {{
+    try {{
+      var raw = localStorage.getItem(BOOKMARK_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }} catch (e) {{ return []; }}
+  }}
+
+  function setBookmarks(arr) {{
+    try {{
+      localStorage.setItem(BOOKMARK_KEY, JSON.stringify(arr));
+    }} catch (e) {{}}
+  }}
+
+  function escapeHtml(s) {{
+    var div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }}
+
+  function removeBookmark(slug) {{
+    var arr = getBookmarks().filter(function (b) {{ return b.slug !== slug; }});
+    setBookmarks(arr);
+    render();
+  }}
+
+  function render() {{
+    var list = getBookmarks();
+    if (list.length === 0) {{
+      grid.innerHTML = '';
+      grid.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }}
+    empty.style.display = 'none';
+    grid.style.display = 'grid';
+    grid.innerHTML = list.map(function (b) {{
+      return '<article class="saved-card">' +
+        '<a href="' + escapeHtml(b.url) + '" class="saved-card-link">' + escapeHtml(b.title) + '</a>' +
+        '<button type="button" class="saved-card-remove" aria-label="Remove from saved" data-slug="' + escapeHtml(b.slug) + '">×</button>' +
+      '</article>';
+    }}).join('');
+    grid.querySelectorAll('.saved-card-remove').forEach(function (btn) {{
+      btn.addEventListener('click', function () {{
+        removeBookmark(this.getAttribute('data-slug'));
+      }});
+    }});
+  }}
+
+  render();
+}})();
+</script>
+</body>
+</html>'''
+
+
 def build_issue_page(issue, essays, all_charts):
     """Build an individual issue page: /issues/N/."""
     slug_map = {e['slug']: e for e in essays}
@@ -2442,6 +2536,10 @@ def main():
     (OUTPUT_DIR / "library.html").write_text(build_library(), encoding='utf-8')
     print("  Built library page")
 
+    print("Building saved page...")
+    (OUTPUT_DIR / "saved.html").write_text(build_saved(), encoding='utf-8')
+    print("  Built saved page")
+
     print("Building charts page...")
     (OUTPUT_DIR / "charts.html").write_text(build_charts_page(public_essays, all_charts), encoding='utf-8')
     print("  Built charts page")
@@ -2461,6 +2559,7 @@ def main():
     urls = [f'  <url><loc>{SITE_URL}/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>']
     urls.append(f'  <url><loc>{SITE_URL}/listen</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     urls.append(f'  <url><loc>{SITE_URL}/library</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>')
+    urls.append(f'  <url><loc>{SITE_URL}/saved</loc><priority>0.6</priority><changefreq>weekly</changefreq></url>')
     urls.append(f'  <url><loc>{SITE_URL}/issues</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     urls.append(f'  <url><loc>{SITE_URL}/charts</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     for issue in public_issues:

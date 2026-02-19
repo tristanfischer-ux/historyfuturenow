@@ -13,7 +13,7 @@
   var currentIndex = -1;
   var isPlaying = false;
   var speeds = [1, 1.25, 1.5, 1.75, 2];
-  var speedIndex = 0;
+  var speedIndex = 1;
   var queueOpen = false;
   var audio = null;
   var dragSrcIndex = null;
@@ -38,7 +38,7 @@
       if (data.queue && data.queue.length) {
         queue = data.queue;
         currentIndex = typeof data.currentIndex === 'number' ? data.currentIndex : -1;
-        speedIndex = typeof data.speedIndex === 'number' ? data.speedIndex : 0;
+        speedIndex = typeof data.speedIndex === 'number' ? data.speedIndex : 1;
         if (currentIndex >= queue.length) currentIndex = queue.length - 1;
       }
       return data.currentTime || 0;
@@ -155,11 +155,27 @@
       if (qDragging) return;
       if (!audio.duration) return;
       qUpdateBar(audio.currentTime / audio.duration);
-      timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+      if (window.innerWidth <= 640) {
+        timeEl.textContent = '-' + fmt(audio.duration - audio.currentTime);
+      } else {
+        timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+      }
       save();
     };
 
     audio.onended = function () {
+      if (currentIndex >= 0 && currentIndex < queue.length) {
+        try {
+          var slug = queue[currentIndex].slug;
+          var raw = localStorage.getItem('hfn_listened_slugs');
+          var slugs = raw ? JSON.parse(raw) : [];
+          if (slugs.indexOf(slug) === -1) {
+            slugs.push(slug);
+            if (slugs.length > 500) slugs = slugs.slice(-400);
+            localStorage.setItem('hfn_listened_slugs', JSON.stringify(slugs));
+          }
+        } catch (e) {}
+      }
       playNext();
     };
 
