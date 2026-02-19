@@ -279,20 +279,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
+        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
         <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -329,23 +329,29 @@
     <button class="q-nav-btn" id="queueNext" aria-label="Next" title="Next">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
     </button>
-    <div class="q-track-info">
-      <div class="q-track-title" id="queueTitle">No track loaded</div>
-      <div class="q-track-section" id="queueSection"></div>
+    <div class="q-center">
+      <div class="q-center-top">
+        <div class="q-track-info">
+          <div class="q-track-title" id="queueTitle">No track loaded</div>
+          <div class="q-track-section" id="queueSection"></div>
+        </div>
+        <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
+        <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          <span class="q-badge" id="queueCount">0</span>
+        </button>
+        <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="q-center-bottom">
+        <div class="q-progress-wrap" id="queueProgressWrap">
+          <div class="q-progress-track"><div class="q-progress-bar" id="queueProgressBar"></div></div>
+          <div class="scrub-thumb" id="queueThumb"></div>
+        </div>
+        <div class="q-time" id="queueTime">0:00</div>
+      </div>
     </div>
-    <div class="q-progress-wrap" id="queueProgressWrap">
-      <div class="q-progress-track"><div class="q-progress-bar" id="queueProgressBar"></div></div>
-      <div class="scrub-thumb" id="queueThumb"></div>
-    </div>
-    <div class="q-time" id="queueTime">0:00</div>
-    <div class="q-speed" id="queueSpeed" title="Playback speed">1.25&times;</div>
-    <button class="q-toggle-btn" id="queueToggle" aria-label="Queue" title="View queue">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-      <span class="q-badge" id="queueCount">0</span>
-    </button>
-    <button class="q-bar-close" id="queueBarClose" aria-label="Close queue" title="Close queue">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
   </div>
 </div>
 <div class="queue-panel" id="queuePanel">
