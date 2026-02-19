@@ -3678,29 +3678,24 @@ title:{display:true,text:'% who trust this institution',color:C.dim}}}}});
         },
         {
             'id': 'trustChart3', 'figure_num': 3,
-            'title': 'The Pattern: Trust Collapse and What Followed',
-            'desc': 'When institutions lose legitimacy, transformations follow — from Rome to the Reformation to today',
-            'source': 'Historical analysis; Pew Research; Eurobarometer',
+            'title': 'How Far They Have Fallen: US Institutional Confidence, Peak vs. 2025',
+            'desc': 'Every major American institution has lost the majority of the public confidence it once commanded',
+            'source': 'Gallup Confidence in Institutions (1973–2025)',
             'position': 'after_para_24',
             'tall': True,
             'js': """
 (()=>{const ctx=document.getElementById('trustChart3');
-const events=[
-{y:2025,l:'Western democracies (2020s)',c:C.accent},
-{y:1789,l:'French monarchy collapses (1789)',c:C.purple},
-{y:1517,l:'Reformation begins (1517)',c:C.amber},
-{y:49,l:'Caesar crosses the Rubicon (49 BC)',c:C.blue},
-{y:-133,l:'Gracchi reforms rejected (133 BC)',c:C.teal}
-];
-new Chart(ctx,{type:'bar',data:{
-labels:events.map(e=>e.l),
-datasets:[{label:'Crisis Point',data:events.map((_,i)=>[0,100-i*15]),
-backgroundColor:events.map(e=>e.c+'88'),borderColor:events.map(e=>e.c),borderWidth:2,borderRadius:6,borderSkipped:false,barPercentage:0.5}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
-title:items=>items[0]?.label||'',
-label:()=>'Institutional trust crisis → systemic transformation'}}},
-scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+const labels=['The Military','The Presidency','The Supreme\\nCourt','Organised\\nReligion','Public\\nSchools','Newspapers','Television\\nNews','Congress'];
+const peak= [85,72,49,68,62,39,46,42];
+const now=   [60,26,25,30,26,13,11, 8];
+new Chart(ctx,{type:'bar',data:{labels,datasets:[
+{label:'Peak confidence',data:peak,backgroundColor:C.blue+'88',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'2025',data:now,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:95,
+title:{display:true,text:'% expressing "a great deal" or "quite a lot" of confidence',color:C.dim}},
+y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();"""
         },
         {
