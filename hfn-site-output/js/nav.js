@@ -44,4 +44,44 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
   }
+
+  // Focus mode: hide nav when scrolling down on article pages; show "Menu" button to reveal
+  const articleBody = document.querySelector('article .article-body');
+  if (articleBody) {
+    let lastY = window.scrollY;
+    let menuBtn = null;
+    const threshold = 400;
+    let tickingFocus = false;
+    const onScrollFocus = () => {
+      if (!tickingFocus) {
+        window.requestAnimationFrame(() => {
+          const y = window.scrollY;
+          if (y > threshold) {
+            if (y > lastY) document.body.classList.add('nav-focus-hidden');
+            else document.body.classList.remove('nav-focus-hidden');
+          } else {
+            document.body.classList.remove('nav-focus-hidden');
+          }
+          lastY = y;
+          if (document.body.classList.contains('nav-focus-hidden')) {
+            if (!menuBtn) {
+              menuBtn = document.createElement('button');
+              menuBtn.type = 'button';
+              menuBtn.className = 'focus-menu-btn';
+              menuBtn.setAttribute('aria-label', 'Show menu');
+              menuBtn.textContent = 'Menu';
+              menuBtn.onclick = () => {
+                document.body.classList.remove('nav-focus-hidden');
+              };
+              document.body.appendChild(menuBtn);
+            }
+            menuBtn.style.display = '';
+          } else if (menuBtn) menuBtn.style.display = 'none';
+          tickingFocus = false;
+        });
+        tickingFocus = true;
+      }
+    };
+    window.addEventListener('scroll', onScrollFocus, { passive: true });
+  }
 });

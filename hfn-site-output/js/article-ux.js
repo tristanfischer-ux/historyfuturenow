@@ -101,7 +101,7 @@
     const links = body.querySelectorAll('a[href^="#"]');
     let popover = null;
     let hideTimer = null;
-    function showPopover(targetId) {
+    function showPopover(targetId, refLink) {
       const target = document.getElementById(targetId);
       if (!target || !refs.contains(target)) return;
       hidePopover();
@@ -109,8 +109,22 @@
       popover.className = 'footnote-popover';
       popover.setAttribute('role', 'tooltip');
       popover.innerHTML = target.innerHTML;
+      if (refLink) {
+        const back = document.createElement('p');
+        back.className = 'footnote-popover-back';
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = '← Back to text';
+        a.onclick = function (e) {
+          e.preventDefault();
+          hidePopover();
+          refLink.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+        back.appendChild(a);
+        popover.appendChild(back);
+      }
       document.body.appendChild(popover);
-      const link = document.querySelector('.article-body a[href="#' + targetId + '"]');
+      const link = refLink || document.querySelector('.article-body a[href="#' + targetId + '"]');
       if (link) {
         const rect = link.getBoundingClientRect();
         requestAnimationFrame(function () {
@@ -134,14 +148,14 @@
       if (!target || !refs.contains(target)) return;
       a.addEventListener('mouseenter', function () {
         if (hideTimer) clearTimeout(hideTimer);
-        showPopover(id);
+        showPopover(id, a);
       });
       a.addEventListener('mouseleave', function () {
         hideTimer = setTimeout(hidePopover, 150);
       });
       a.addEventListener('focus', function () {
         if (hideTimer) clearTimeout(hideTimer);
-        showPopover(id);
+        showPopover(id, a);
       });
       a.addEventListener('blur', function () {
         hideTimer = setTimeout(hidePopover, 150);
@@ -149,7 +163,7 @@
       a.addEventListener('click', function (e) {
         e.preventDefault();
         if (popover) hidePopover();
-        else showPopover(id);
+        else showPopover(id, a);
       });
     });
   }
