@@ -2180,18 +2180,16 @@ def build_charts_page(essays, all_charts):
             deferred_js_lines.append(f"window.__chartInits['{unique_id}'] = function() {{\n{safe_js}\n}};")
 
             height_class = "charts-canvas-tall" if c.get('tall') else "charts-canvas-normal"
+            chart_anchor = f"chart-{orig_id}"
+            article_chart_url = f"/articles/{html_mod.escape(slug)}#{chart_anchor}"
             cards_html += f'''  <div class="charts-card" data-section="{part_slug}">
     <div class="charts-card-inner">
-      <a href="/articles/{html_mod.escape(slug)}" class="charts-card-link">
-        <span class="charts-card-section" style="color:{pi['color']}">{pi['label']}</span>
-        <h3 class="charts-card-title">{html_mod.escape(e['title'])}</h3>
+      <a href="{article_chart_url}" class="charts-canvas-link">
+        <div class="charts-canvas-wrap {height_class}">
+          <canvas id="{unique_id}"></canvas>
+        </div>
       </a>
-      <div class="charts-chart-title">{html_mod.escape(c.get('title', ''))}</div>
-      <div class="charts-canvas-wrap {height_class}">
-        <canvas id="{unique_id}"></canvas>
-      </div>
-      <p class="charts-source">{html_mod.escape(c.get('source', ''))}</p>
-      <a href="/articles/{html_mod.escape(slug)}" class="charts-read-link" style="color:{pi['color']}">Read article &rarr;</a>
+      <a href="{article_chart_url}" class="charts-read-link">Read article &rarr;</a>
     </div>
   </div>
 '''
