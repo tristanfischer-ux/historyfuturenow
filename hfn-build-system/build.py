@@ -1415,6 +1415,31 @@ def build_homepage(essays, new_essays=None):
   </div>
 </div>"""
 
+    # ── New: 20 most recent articles by pub_date ──
+    def _sort_key_pub_date(e):
+        d = e.get('pub_date', '')
+        return d if d else '0000-00-00'
+    recent_essays = sorted(essays, key=_sort_key_pub_date, reverse=True)[:20]
+
+    new_cards_html = ""
+    for i, e in enumerate(recent_essays):
+        pi = PARTS[e['part']]
+        n_charts = len(_charts_for_article(e['slug']))
+        chart_badge = f'<span class="latest-badge">{n_charts} charts</span>' if n_charts else ''
+        audio_badge = '<span class="latest-badge latest-audio-badge">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
+        hero_img = get_hero_image(e['slug'])
+        img_html = f'<img src="{hero_img}" alt="" class="latest-card-img" loading="lazy">' if hero_img else ''
+        controls_html = make_card_controls(e, pi)
+        size_class = "latest-hero" if i == 0 else "latest-secondary"
+        new_cards_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
+        {img_html}
+        <div class="latest-kicker">{pi['label']} &middot; {html_mod.escape(e['part'])} {chart_badge} {audio_badge}</div>
+        <h3>{html_mod.escape(e['title'])}</h3>
+        <p>{truncate_excerpt(e['excerpt'], 200)}</p>
+        <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
+        {controls_html}
+      </a>\n"""
+
     # ── Data Stories: auto-collected from chart_defs (curated first, then auto-generated) ──
     data_stories = collect_data_stories(sorted_essays, all_charts)
 
@@ -1646,6 +1671,18 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
   </div>
 </div>
 {prev_issue_html}
+<div class="latest-wrap">
+  <div class="latest-inner">
+    <div class="latest-header">
+      <div>
+        <h2 class="latest-title">New</h2>
+        <span class="issue-date-sub">The 20 most recent articles</span>
+      </div>
+    </div>
+    <div class="latest-grid">
+{new_cards_html}    </div>
+  </div>
+</div>
 <div class="hero-and-stats-wrap">
   <div class="hero-chart-wrap">
     <div class="hero-chart-inner">
