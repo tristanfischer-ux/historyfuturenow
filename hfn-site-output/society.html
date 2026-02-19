@@ -107,10 +107,22 @@
       <p class="chart-source">Source: World Bank, UN Population Division, national statistics offices (2023-2024).</p>
     </figure>
     <figure class="section-editorial-chart">
+      <h4>Foreign-Born Population Share: US, UK, Germany, France (1900–2030)</h4>
+      <p class="chart-desc">After decades of restriction, Western nations opened their borders from the 1960s onward — a historically unprecedented shift</p>
+      <div class="chart-area"><canvas id="gatesChart1"></canvas></div>
+      <p class="chart-source">Source: UN Population Division; Migration Policy Institute; national census data. 2025–2030 projected.</p>
+    </figure>
+    <figure class="section-editorial-chart">
       <h4>Government Content Removal Requests to Major Platforms (2024)</h4>
       <p class="chart-desc">India, Turkey, and Russia lead the world in demanding platforms remove content — the modern equivalent of burning books</p>
       <div class="chart-area"><canvas id="scribesChart1"></canvas></div>
       <p class="chart-source">Source: Google Transparency Report 2024; X Transparency Center 2024; Meta Transparency Reports</p>
+    </figure>
+    <figure class="section-editorial-chart">
+      <h4>The Gender-Ideology Gap Among 18–29 Year Olds (1999–2024)</h4>
+      <p class="chart-desc">Young women have moved dramatically more liberal while young men have held steady</p>
+      <div class="chart-area"><canvas id="genderChart1"></canvas></div>
+      <p class="chart-source">Source: Gallup Political Ideology surveys (2024); Burn-Murdoch/FT (2024)</p>
     </figure>
   </div>
 </div>
@@ -583,6 +595,19 @@ scales:{x:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{co
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
 })();
 
+(()=>{const ctx=document.getElementById('gatesChart1');
+const yrs=['1900','1910','1920','1930','1940','1950','1960','1970','1980','1990','2000','2010','2020','2025','2030'];
+new Chart(ctx,{type:'line',data:{labels:yrs,datasets:[
+ds('United States',[13.6,14.7,13.2,11.6,8.8,6.9,5.4,4.7,6.2,7.9,11.1,12.9,13.7,14.3,15.1],C.blue,[]),
+ds('United Kingdom',[1.5,1.5,1.5,1.8,2.0,3.4,4.3,5.8,6.2,6.5,8.3,12.0,14.4,15.8,17.0],C.accent,[]),
+ds('Germany',[1.9,1.9,1.5,1.5,1.2,1.1,2.8,6.6,7.5,8.4,12.5,13.0,18.8,20.2,21.5],C.green,[]),
+ds('France',[2.7,2.8,3.9,6.6,5.1,4.1,5.4,6.5,7.4,7.4,7.4,8.6,10.2,11.0,12.0],C.amber,[]),
+{label:'Projected',data:[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],borderColor:C.dim,borderDash:[5,5],borderWidth:1,pointRadius:0,fill:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{projLine:{type:'line',xMin:'2020',xMax:'2020',borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Projected →',position:'start',font:{size:10},color:C.dim}}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Foreign-born % of population',color:C.dim},min:0,max:25}}}});
+})();
+
 (()=>{const ctx=document.getElementById('scribesChart1');
 new Chart(ctx,{type:'bar',data:{
 labels:['India','Turkey','Russia','South Korea','France','Germany','Brazil','United States','UK','Australia'],
@@ -592,6 +617,21 @@ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K requests'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},title:{display:true,text:'Requests (thousands)',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+})();
+
+(()=>{const ctx=document.getElementById('genderChart1');
+const yrs=[1999,2003,2007,2011,2015,2017,2019,2020,2022,2024];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Young women (US)',yrs,[30,29,28,32,36,38,40,44,41,40],C.rose),
+dxy('Young men (US)',yrs,[28,27,26,26,25,24,25,25,25,25],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% liberal'}},
+annotation:{annotations:{
+metoo:{type:'label',xValue:2017,yValue:43,content:['#MeToo /','Trump era'],color:C.dim,font:{size:10}},
+roe:{type:'label',xValue:2021.5,yValue:46,content:['Dobbs'],color:C.dim,font:{size:10}}
+}}},
+scales:{x:linX(1999,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:50,
+title:{display:true,text:'% identifying as liberal (Gallup)',color:C.dim}}}}});
 })();
 </script>
 <script>

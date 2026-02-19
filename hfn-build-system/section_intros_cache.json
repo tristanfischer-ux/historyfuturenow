@@ -6,7 +6,8 @@
       "chart_ids": [
         "renChart6",
         "renChart2",
-        "landChart1"
+        "landChart1",
+        "foodChart1"
       ],
       "articles_referenced": [
         "the-renewables-and-battery-revolution",
@@ -25,7 +26,8 @@
       "chart_ids": [
         "crisisChart2",
         "rearmChart3",
-        "luckChart3"
+        "luckChart3",
+        "techwarChart1"
       ],
       "articles_referenced": [
         "crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west",
@@ -43,7 +45,8 @@
       "chart_ids": [
         "robotBargainChart1",
         "robotChart2",
-        "jobsHistChart2"
+        "jobsHistChart2",
+        "factoryChart1"
       ],
       "articles_referenced": [
         "the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap",
@@ -62,8 +65,9 @@
       "html": "<p>Consider, if you will, South Korea's latest fertility rate: a staggering 0.72. This is not merely low; it is an unprecedented civilisational collapse, a figure that makes Italy's 1.24 or Japan's 1.20 appear almost fecund by comparison. No advanced society in recorded history has ever recovered from sustained fertility below 1.5, suggesting that the developed world, particularly the West and East Asia, is not merely shrinking but rather, to put it starkly, vanishing. This is not a policy challenge to be tinkered with, but a fundamental demographic implosion, the profound implications of which are explored in articles such as <a href=\"/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people\">The Great Emptying</a> and <a href=\"/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people\">Let's Talk About Sex</a>. The future, it seems, will not be one of overpopulation, but of an unsettling quiet.</p><p>The common panacea offered for this demographic dearth – mass immigration – proves, upon closer inspection, to be less a cure and more a mathematical fallacy. The notion that immigrant populations will sustain native birth rates is demonstrably false; within a generation, fertility rates converge to those of the host nation, as detailed in <a href=\"/articles/what-the-history-of-immigration-teaches-us-about-europes-future\">What The History Of Immigration Teaches Us About Europe's Future</a>. Moreover, the fiscal contributions of these new arrivals often fail to offset the costs of integration, infrastructure, and welfare, creating a net drain rather than a demographic dividend. For five millennia, civilisations understood the imperative of border control; the West's current experiment with open gates, as examined in <a href=\"/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped\">The Gates of Nations</a>, is historically anomalous and, one might argue, fiscally imprudent.</p><p>History offers stark warnings regarding societal cohesion and endurance. Every civilisation that rigorously controlled speech – from Sparta's rigid adherence to orthodoxy to the Soviet Union's suffocating censorship – eventually stagnated and collapsed. Conversely, those that lost control of their borders, such as the later Roman Empire, faced inevitable fragmentation. Intriguingly, the contemporary West appears to be running both experiments simultaneously. Our analysis in <a href=\"/articles/the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed\">The Silence Of The Scribes</a> reveals a worrying trend towards digital censorship, while the aforementioned approach to immigration continues unabated. One might wonder if this is merely historical irony, or a deliberate pursuit of decline.</p><p>Beneath these macro-level shifts lies a deeper erosion of social fabric. The nuclear family, a relatively recent and, some argue, precarious construct, is struggling to cohere, as discussed in <a href=\"/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live\">Why The Nuclear Family Needs To Die</a>. Concurrently, the decline of traditional religious belief leaves a void where communal identity and shared values once resided, with no cohesive secular alternative having emerged to bind atomised individuals together. As <a href=\"/articles/why-god-needs-the-government-multiculturalism-vs-monotheism\">Why God Needs The Government</a> suggests, the very concept of a shared moral framework is under unprecedented strain, leaving societies increasingly fragmented and vulnerable.</p><p>These are not merely abstract trends; they are structural forces shaping the very foundations of our future. Past civilisations, from dynastic China to the Islamic Golden Age, grappled with similar demographic troughs, immigration pressures, and social fragmentation. Their eventual fates serve as cautionary tales, reminding us that while the particulars may differ, the underlying dynamics of societal resilience and decay remain remarkably consistent. To understand the century ahead, one must first comprehend the profound societal shifts already underway, shifts that promise to redefine power, politics, and what it means to be human.</p>",
       "chart_ids": [
         "emptyChart1",
-        "gatesChart4",
-        "scribesChart1"
+        "gatesChart1",
+        "scribesChart1",
+        "genderChart1"
       ],
       "articles_referenced": [
         "the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people",

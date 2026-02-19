@@ -118,6 +118,12 @@
       <div class="chart-area"><canvas id="luckChart3"></canvas></div>
       <p class="chart-source">Source: Maddison Project; IMF WEO</p>
     </figure>
+    <figure class="section-editorial-chart">
+      <h4>Global Semiconductor Market Share by Region (2024)</h4>
+      <p class="chart-desc">A handful of chokepoints control the world&#x27;s most critical technology</p>
+      <div class="chart-area"><canvas id="techwarChart1"></canvas></div>
+      <p class="chart-source">Source: SIA; Gartner; ASML Annual Report 2024</p>
+    </figure>
   </div>
 </div>
 
@@ -437,6 +443,20 @@ dxy('China',yrs,[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
 dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
+})();
+
+(()=>{const ctx=document.getElementById('techwarChart1');
+new Chart(ctx,{type:'bar',data:{labels:['Design\n(fabless)','Fabrication\n(<10nm)','Lithography\n(EUV)','Packaging\n(advanced)','Memory\n(DRAM)'],
+datasets:[
+{label:'US',data:[65,0,0,5,0],backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Taiwan',data:[10,92,0,50,0],backgroundColor:C.amber+'bb',borderColor:C.amber,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Netherlands',data:[0,0,100,0,0],backgroundColor:C.teal+'bb',borderColor:C.teal,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'South Korea',data:[3,8,0,15,60],backgroundColor:C.purple+'bb',borderColor:C.purple,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'China',data:[7,0,0,20,10],backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% market share'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:105,title:{display:true,text:'Market share (%)',color:C.dim}}}}});
 })();
 </script>
 <script>

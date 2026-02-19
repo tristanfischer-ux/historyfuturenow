@@ -28,7 +28,7 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-6PS9DYS2PZ');</script>
 
 </head>
-<body>
+<body data-next-url="/issues/2">
 
 <nav class="site-nav">
   <div class="nav-inner">
@@ -74,7 +74,7 @@
   </div>
 </div>
 
-<section class="issue-hero">
+<section class="issue-hero" id="issueHero">
   <div class="issue-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> <span class="breadcrumb-sep">/</span> <a href="/issues">Issues</a> <span class="breadcrumb-sep">/</span> <span class="breadcrumb-current">Issue 1</span></nav>
     <div class="issue-number-label">Issue 1</div>
@@ -156,7 +156,25 @@
     </a>
 </div>
 
-<div class="issue-page-nav"><span></span><a href="/issues/2" class="issue-nav-link issue-nav-next">Issue 2 &rarr;</a></div>
+<div class="issue-nav-cards-wrapper"><div class="issue-nav-cards" id="issueNavCards">
+    <a href="/issues/2" class="issue-nav-card issue-nav-next">
+      <span class="issue-nav-card-direction">NEXT ISSUE &rarr;</span>
+      <div class="issue-nav-card-img-wrap"><img src="/images/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain/hero.png" alt="" class="issue-nav-card-img" loading="lazy" width="400" height="200"></div>
+      <div class="issue-nav-card-text">
+        <div class="issue-nav-card-title">Issue 2 &middot; Summer 2012</div>
+        <div class="issue-nav-card-meta">5 articles</div>
+        <ul class="issue-nav-card-preview"><li>Where Are All The Jobs Going? Lessons Fr&hellip;</li>
+          <li>Cassandra: Time To Give Up On Predicting&hellip;</li></ul>
+      </div>
+    </a>
+</div></div>
+<div class="issue-nav-floating" id="issueNavFloating" aria-hidden="true">
+  <div class="issue-nav-floating-inner">
+    <span></span>
+    <span class="issue-nav-floating-current">1 of 15</span>
+    <a href="/issues/2" class="issue-nav-floating-next">Summer 2012 &rarr;</a>
+  </div>
+</div>
 
 <footer class="site-footer">
   <div class="footer-inner">
@@ -222,5 +240,6 @@
 <script src="/js/nav.js"></script>
 <script src="/js/search.js"></script>
 <script src="/js/queue.js"></script>
+<script src="/js/issue-nav.js"></script>
 </body>
 </html>

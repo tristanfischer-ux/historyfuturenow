@@ -118,6 +118,12 @@
       <div class="chart-area"><canvas id="landChart1"></canvas></div>
       <p class="chart-source">Source: Land Matrix, Oxfam, GRAIN database</p>
     </figure>
+    <figure class="section-editorial-chart">
+      <h4>The Food Gap: Production Capacity vs Population</h4>
+      <p class="chart-desc">The world may only be able to feed 5 billion — but will have 10 billion mouths</p>
+      <div class="chart-area"><canvas id="foodChart1"></canvas></div>
+      <p class="chart-source">Source: FAO, UN WPP, article estimates</p>
+    </figure>
   </div>
 </div>
 
@@ -380,6 +386,15 @@ datasets:[{label:'Land acquired (M hectares)',data:[3.6,3.2,2.5,2.2,1.8,1.5,1.1,
 backgroundColor:C.accent,borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'M hectares'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M ha'},title:{display:true,text:'Hectares (millions)',color:C.dim}}}}});
+})();
+
+(()=>{const ctx=document.getElementById('foodChart1');
+new Chart(ctx,{type:'line',data:{labels:['2000','2010','2020','2030','2040','2050'],
+datasets:[
+ds('World population (bn)',[6.1,6.9,7.8,8.5,9.2,10],C.accent),
+ds('Sustainable food capacity (bn)',[7,6.5,6,5.5,5.2,5],C.green,[5,3])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'bn'},title:{display:true,text:'Billions of people',color:C.dim}}}}});
 })();
 </script>
 <script>

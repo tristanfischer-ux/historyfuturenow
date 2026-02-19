@@ -118,6 +118,12 @@
       <div class="chart-area"><canvas id="jobsHistChart2"></canvas></div>
       <p class="chart-source">Source: Clark, A Farewell to Alms; Crafts &amp; Mills wage data</p>
     </figure>
+    <figure class="section-editorial-chart">
+      <h4>Manufacturing as % of GDP: The West vs China</h4>
+      <p class="chart-desc">Western nations hollowed out their manufacturing base while China built the largest industrial economy in history</p>
+      <div class="chart-area"><canvas id="factoryChart1"></canvas></div>
+      <p class="chart-source">Source: World Bank, National Bureau of Statistics of China, OECD</p>
+    </figure>
   </div>
 </div>
 
@@ -408,6 +414,22 @@ dxy('Real wages (index)',yrs,[100,100,95,90,90,92,95,100,110,130,160,180],C.acce
 dxy('Artisan income (index)',yrs,[100,90,70,55,45,40,38,40,50,65,80,90],C.dim,[5,5])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1760,1910),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1850=100 for output)',color:C.dim}}}}});
+})();
+
+(()=>{const ctx=document.getElementById('factoryChart1');
+const yrs=['1970','1980','1990','2000','2005','2010','2015','2020','2025'];
+new Chart(ctx,{type:'line',data:{labels:yrs,
+datasets:[
+ds('United States',[24,21,17,15,13,12,12,11,11],C.blue),
+ds('United Kingdom',[28,22,17,14,11,10,10,9,9],C.teal),
+ds('Germany',[33,29,27,22,21,20,21,19,19],C.amber),
+ds('China',[30,35,33,32,32,32,29,27,28],C.accent),
+ds('Japan',[34,28,26,21,20,20,21,20,20],C.purple)
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle},
+scales:{y:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}},
+title:{display:true,text:'Manufacturing % of GDP',color:C.dim},min:5,max:40},
+x:{grid:{display:false},ticks:{color:C.dim}}}}});
 })();
 </script>
 <script>

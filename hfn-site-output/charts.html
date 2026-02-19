@@ -2485,6 +2485,8 @@ const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
 
+const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const _yt=v=>String(v);
 window.__chartInits = window.__chartInits || {};
 window.__chartInits['chart_big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do_utilChart1_0'] = function() {
 
@@ -4963,21 +4965,37 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
 <script>
 (function(){
   window.__chartInits = window.__chartInits || {};
+  function runInit(canvas) {
+    var id = canvas.id;
+    if (window.__chartInits[id]) {
+      try { window.__chartInits[id](); } catch (e) { console.error("[charts] init " + id, e); }
+      delete window.__chartInits[id];
+    }
+  }
   var obs = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
-        var id = entry.target.id;
-        if (window.__chartInits[id]) {
-          window.__chartInits[id]();
-          delete window.__chartInits[id];
-        }
+        runInit(entry.target);
         obs.unobserve(entry.target);
       }
     });
   }, { rootMargin: '200px' });
-  document.querySelectorAll('.charts-canvas-wrap canvas').forEach(function(c) {
-    obs.observe(c);
-  });
+  function startObserving() {
+    var canvases = document.querySelectorAll('.charts-canvas-wrap canvas');
+    canvases.forEach(function(c) {
+      obs.observe(c);
+    });
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    canvases.forEach(function(c) {
+      var cr = c.getBoundingClientRect();
+      if (cr.top < vh + 200 && cr.bottom > -200) {
+        runInit(c);
+        obs.unobserve(c);
+      }
+    });
+  }
+  if (document.readyState === 'complete') startObserving();
+  else window.addEventListener('load', startObserving);
 })();
 </script>
 <script>
