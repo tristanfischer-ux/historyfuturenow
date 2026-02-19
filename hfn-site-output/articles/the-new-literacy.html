@@ -282,15 +282,15 @@ The scribal monopoly was broken in three stages, each of which triggered a flour
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
+      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/robotics-and-slavery" class="related-card">
+      <a href="/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Robotics And Slavery</span>
-        <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Paradox of Mass Migration and Robots in the Age of Automation</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
@@ -385,6 +385,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -402,10 +403,10 @@ title:i=>{const v=+i[0].parsed.x;return v<0?Math.abs(v)+' BCE':v+' CE'},
 label:i=>i.parsed.y+'% literate'
 }},
 annotation:{annotations:{
-alph:{type:'label',xValue:-800,yValue:12,content:['Phoenician','alphabet'],color:C.blue,font:{size:10,weight:'bold'}},
-press:{type:'line',xMin:1440,xMax:1440,yMin:0,yMax:100,borderColor:C.green,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Printing press (1440)',position:'start',color:C.green,font:{size:10}}},
-edu:{type:'line',xMin:1870,xMax:1870,yMin:0,yMax:100,borderColor:C.purple,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Compulsory education (1870s)',position:'start',color:C.purple,font:{size:10}}},
-ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'AI coding literacy? (2024)',position:'start',color:C.amber,font:{size:10}}}
+alph:{type:'label',..._al,xValue:-800,yValue:12,content:['Phoenician','alphabet'],color:C.blue,font:{size:10,weight:'bold'}},
+press:{type:'line',xMin:1440,xMax:1440,yMin:0,yMax:100,borderColor:C.green,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Printing press (1440)',position:'start',color:C.green,font:{size:10}}},
+edu:{type:'line',xMin:1870,xMax:1870,yMin:0,yMax:100,borderColor:C.purple,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Compulsory education (1870s)',position:'start',color:C.purple,font:{size:10}}},
+ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'AI coding literacy? (2024)',position:'start',color:C.amber,font:{size:10}}}
 }}},
 scales:{x:{type:'linear',min:-3200,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BCE':v===0?'0':v+' CE',stepSize:500}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},min:0,max:100,title:{display:true,text:'Population literate (%)',color:C.dim}}}}});
@@ -454,8 +455,8 @@ new Chart(ctx,{type:'line',data:{labels:gen,datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'/100'}},
 annotation:{annotations:{
-peak:{type:'label',xValue:1,yValue:100,content:['Flourishing','peak'],color:C.accent,font:{size:10,weight:'bold'}},
-dep:{type:'label',xValue:2.5,yValue:18,content:['Dependency','zone'],color:C.dim,font:{size:10,style:'italic'}}
+peak:{type:'label',..._al,xValue:1,yValue:100,content:['Flourishing','peak'],color:C.accent,font:{size:10,weight:'bold'}},
+dep:{type:'label',..._al,xValue:2.5,yValue:18,content:['Dependency','zone'],color:C.dim,font:{size:10,style:'italic'}}
 }}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'Gen '+v},title:{display:true,text:'Generations after tool adoption',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:100,title:{display:true,text:'Skill level / creative output (index)',color:C.dim}}}}});

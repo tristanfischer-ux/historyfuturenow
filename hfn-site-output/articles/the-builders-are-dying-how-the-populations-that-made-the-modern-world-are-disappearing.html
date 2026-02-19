@@ -375,20 +375,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
+      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
+      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Long Term Impact of Covid 19</span>
-        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
+      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Are Europeans Fundamentally Racist?</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -480,6 +480,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -498,8 +499,8 @@ new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
 annotation:{annotations:{
-popEur:{type:'line',yMin:12,yMax:12,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European-heritage population: ~12%',position:'start',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}},
-popEA:{type:'line',yMin:21,yMax:21,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European + East Asian population: ~21%',position:'end',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}}
+popEur:{type:'line',yMin:12,yMax:12,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{..._al,display:true,content:'European-heritage population: ~12%',position:'start',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}},
+popEA:{type:'line',yMin:21,yMax:21,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{..._al,display:true,content:'European + East Asian population: ~21%',position:'end',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0},stacked:true},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global total',color:C.dim},stacked:true,min:0,max:100}}}});
@@ -540,7 +541,7 @@ const colors=vals.map((v,i)=>i===labels.length-1?C.green:v<1.0?C.accent:v<1.5?C.
 new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'TFR',data:vals,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
-annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,4],label:{display:true,content:'Replacement: 2.1',position:'end',backgroundColor:C.green,color:'#fff',font:{size:11}}}}}},
+annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,4],label:{..._al,display:true,content:'Replacement: 2.1',position:'end',backgroundColor:C.green,color:'#fff',font:{size:11}}}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,title:{display:true,text:'Children per woman',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();
 
@@ -557,11 +558,11 @@ new Chart(ctx,{type:'line',data:{datasets:[
 {...dxy('Rest of world',yrs,restPct,C.green),borderWidth:3}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
-proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-peak:{type:'label',xValue:1975,yValue:42,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
-nadir:{type:'label',xValue:2075,yValue:4,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
-restLabel:{type:'label',xValue:2070,yValue:95,content:['Rest of world: 93%'],color:C.green,font:{size:10,style:'italic'}},
-eurNote:{type:'label',xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
+proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+peak:{type:'label',..._al,xValue:1975,yValue:42,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
+nadir:{type:'label',..._al,xValue:2075,yValue:4,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
+restLabel:{type:'label',..._al,xValue:2070,yValue:95,content:['Rest of world: 93%'],color:C.green,font:{size:10,style:'italic'}},
+eurNote:{type:'label',..._al,xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
 }}},
 scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:100}}}});
 })();
@@ -576,7 +577,7 @@ dxy('Europe (geographic)',yrs,europe,C.blue),
 dxy('East Asia (China/Japan/Korea)',yrs,eastAsia,C.accent),
 dxy('Combined',yrs,combined,C.purple,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
-annotation:{annotations:{proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}}},
+annotation:{annotations:{proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}}},
 scales:{x:linX(1800,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of world population',color:C.dim},min:0,max:55}}}});
 })();
 
@@ -614,7 +615,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 dxy('GDP per capita (const. 2015 USD)',yrs,gdp,C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.parsed.y.toLocaleString()}},
 annotation:{annotations:{peak:{type:'point',xValue:2011,yValue:7000,backgroundColor:C.accent,radius:6,borderColor:'#fff',borderWidth:2},
-peakLabel:{type:'label',xValue:2011,yValue:7350,content:'Peak: $7,000 (2011)',color:C.accent,font:{size:11,weight:'bold'}}}}},
+peakLabel:{type:'label',..._al,xValue:2011,yValue:7350,content:'Peak: $7,000 (2011)',color:C.accent,font:{size:11,weight:'bold'}}}}},
 scales:{x:linX(1994,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v.toLocaleString()},title:{display:true,text:'GDP per capita (constant 2015 USD)',color:C.dim},min:5000,max:7500}}}});
 })();
 

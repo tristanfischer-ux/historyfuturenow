@@ -246,15 +246,15 @@
         <span class="related-title">Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
+      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
+      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -344,6 +344,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -361,7 +362,7 @@ dxy('France',yrs,[95,80,180,120,140,160,40,30,20,20,35,58,82,115,112],C.purple)
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% of GDP'}},
 annotation:{annotations:{
 ww2:{type:'box',xMin:1939,xMax:1945,backgroundColor:'rgba(196,52,37,0.06)',borderWidth:0,
-label:{display:true,content:'World War II',color:C.dim,font:{size:10},position:{x:'center',y:'start'}}}
+label:{..._al,display:true,content:'World War II',color:C.dim,font:{size:10},position:{x:'center',y:'start'}}}
 }}},
 scales:{x:linX(1900,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},
 title:{display:true,text:'Government debt (% of GDP)',color:C.dim}}}}});
@@ -376,7 +377,7 @@ dxy('Defence spending',yrs,[295,495,616,689,677,597,631,714,767,874,895],C.blue)
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'B'}},
 annotation:{annotations:{
 cross:{type:'line',xMin:2024,xMax:2024,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
-label:{display:true,content:'Interest exceeds defence',position:'start',color:C.accent,font:{size:10}}}
+label:{..._al,display:true,content:'Interest exceeds defence',position:'start',color:C.accent,font:{size:10}}}
 }}},
 scales:{x:linX(2000,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
 title:{display:true,text:'$ billions',color:C.dim}}}}});

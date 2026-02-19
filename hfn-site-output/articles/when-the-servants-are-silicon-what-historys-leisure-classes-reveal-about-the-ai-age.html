@@ -282,20 +282,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Long Term Impact of Covid 19</span>
+        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
         <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -385,6 +385,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -401,7 +402,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
-shadowLabel:{type:'label',xValue:2040,yValue:72,content:['Shadow Workforce','(gap to fill)'],color:C.green,font:{size:12,weight:'bold'}}
+shadowLabel:{type:'label',..._al,xValue:2040,yValue:72,content:['Shadow Workforce','(gap to fill)'],color:C.green,font:{size:12,weight:'bold'}}
 }}},
 scales:{x:linX(2000,2060),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},
 title:{display:true,text:'Working-age adults (millions)',color:C.dim},min:40,max:95}}}});
@@ -447,7 +448,7 @@ backgroundColor:colors.map(c=>c+'99'),borderColor:colors,borderWidth:2,borderRad
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' workers per citizen/household'}},
 annotation:{annotations:{
-projLabel:{type:'label',xValue:52,yValue:4,content:['Robots + AI agents','per household'],color:C.blue,font:{size:12,weight:'bold'}}
+projLabel:{type:'label',..._al,xValue:52,yValue:4,content:['Robots + AI agents','per household'],color:C.blue,font:{size:12,weight:'bold'}}
 }}},
 scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:11},autoSkip:false}},
 x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},

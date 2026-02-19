@@ -376,20 +376,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
+      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
+        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
+      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -481,6 +481,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -520,7 +521,7 @@ datasets:[
 {label:'IVF live birth rate (% per cycle)',data:ivf,borderColor:C.purple,backgroundColor:C.purple+'10',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5,borderDash:[6,3]}
 ]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
-annotation:{annotations:{cliff:{type:'line',xMin:'35',xMax:'35',borderColor:C.dim+'80',borderWidth:1.5,borderDash:[4,4],label:{display:true,content:'Sharp decline begins',position:'start',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{cliff:{type:'line',xMin:'35',xMax:'35',borderColor:C.dim+'80',borderWidth:1.5,borderDash:[4,4],label:{..._al,display:true,content:'Sharp decline begins',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:"Woman's age",color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:40,title:{display:true,text:'Probability (%)',color:C.dim}}}}});
 })();
 
@@ -543,7 +544,7 @@ dxy('East Asian',yrs,eaH,C.blue),
 dxy('East Asian projected',yrsP,eaP,C.blue,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11},filter:i=>[0,2,4].includes(i.datasetIndex)}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label.replace(' projected','')+': '+i.raw+'%'}},
 annotation:{annotations:{
-today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'40',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 14% combined',position:'start',color:C.dim,font:{size:10}}}
+today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'40',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Today ≈ 14% combined',position:'start',color:C.dim,font:{size:10}}}
 }}},
 scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:45,title:{display:true,text:'Share of global births (%)',color:C.dim}}}}});
 })();
@@ -569,7 +570,7 @@ datasets:[
 {label:'Before / baseline',data:before,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
 {label:'After / latest',data:after,backgroundColor:C.accent,borderRadius:3,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(2)+' TFR'}},
-annotation:{annotations:{repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,3],label:{display:true,content:'Replacement (2.1)',position:'end',color:C.green,font:{size:10}}}}}},
+annotation:{annotations:{repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,3],label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.green,font:{size:10}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total Fertility Rate (TFR)',color:C.dim}}}}});
 })();
 

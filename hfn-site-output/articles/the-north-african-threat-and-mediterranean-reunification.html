@@ -342,20 +342,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
-        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" class="related-card">
+      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
+        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -447,6 +447,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -476,7 +477,7 @@ const data=[{c:'Egypt',v:2.9},{c:'Algeria',v:2.6},{c:'Morocco',v:2.3},{c:'Libya'
 new Chart(ctx,{type:'bar',data:{labels:data.map(d=>d.c),datasets:[{label:'TFR',data:data.map(d=>d.v),
 backgroundColor:data.map(d=>d.v>=2.1?C.green:d.v>=1.5?C.amber:C.accent),borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
-annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Replacement level (2.1)',position:'start',font:{size:11}}}}}},
+annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Replacement level (2.1)',position:'start',font:{size:11}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total fertility rate',color:C.dim}}}}});
 })();
 

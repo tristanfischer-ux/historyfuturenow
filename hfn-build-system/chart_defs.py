@@ -28,6 +28,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -468,7 +469,7 @@ const data=[{c:'Egypt',v:2.9},{c:'Algeria',v:2.6},{c:'Morocco',v:2.3},{c:'Libya'
 new Chart(ctx,{type:'bar',data:{labels:data.map(d=>d.c),datasets:[{label:'TFR',data:data.map(d=>d.v),
 backgroundColor:data.map(d=>d.v>=2.1?C.green:d.v>=1.5?C.amber:C.accent),borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
-annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Replacement level (2.1)',position:'start',font:{size:11}}}}}},
+annotation:{annotations:{line1:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Replacement level (2.1)',position:'start',font:{size:11}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total fertility rate',color:C.dim}}}}});
 })();"""
         },
@@ -1322,7 +1323,7 @@ new Chart(ctx,{type:'bar',data:{labels:['South\nKorea','Spain','Italy','Japan','
 datasets:[{label:'Total fertility rate (2023)',data:[0.72,1.16,1.24,1.20,1.35,1.09,1.49,1.79,1.62,1.65,2.03,5.14],
 backgroundColor:['#c43425','#c43425','#c43425','#c43425','#c43425','#c43425','#b8751a','#b8751a','#b8751a','#b8751a','#0d9a5a','#0d9a5a'],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
-annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Total Fertility Rate',color:C.dim},min:0,max:5.5}}}});
 })();"""
@@ -2113,7 +2114,7 @@ backgroundColor:function(c){var v=c.raw;if(v<1.3)return C.accent;if(v<1.5)return
 borderRadius:3}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Total Fertility Rate by Country (2023-2024)',color:C.text,font:{size:14}},
-annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{display:true,content:'Replacement (2.1)',position:'start',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
 })();"""
@@ -2157,7 +2158,7 @@ backgroundColor:function(c){var v=c.raw;if(v<1.3)return C.accent;if(v<1.5)return
 borderRadius:3}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},aspectRatio:0.65,plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Europe: Not a Single Country at Replacement',color:C.text,font:{size:14}},
-annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{display:true,content:'Replacement (2.1)',position:'start',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0.8,max:2.3},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
 })();"""
@@ -2222,7 +2223,7 @@ ds('Native-born French',[2.42,2.35,2.25,2.12,2.03,1.95,1.90],C.blue,[8,4])
 ]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
 title:{display:true,text:'Immigrant Fertility Converges to Host Country, France',color:C.text,font:{size:14}},
-annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
 scales:{y:{title:{display:true,text:'Children per Woman',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:1.5},
 x:{title:{display:true,text:'Birth Cohort',color:C.dim},grid:{display:false},ticks:{color:C.dim}}}}});
 })();"""
@@ -2485,7 +2486,7 @@ ds('Germany',[1.9,1.9,1.5,1.5,1.2,1.1,2.8,6.6,7.5,8.4,12.5,13.0,18.8,20.2,21.5],
 ds('France',[2.7,2.8,3.9,6.6,5.1,4.1,5.4,6.5,7.4,7.4,7.4,8.6,10.2,11.0,12.0],C.amber,[]),
 {label:'Projected',data:[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],borderColor:C.dim,borderDash:[5,5],borderWidth:1,pointRadius:0,fill:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle,
-annotation:{annotations:{projLine:{type:'line',xMin:'2020',xMax:'2020',borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Projected →',position:'start',font:{size:10},color:C.dim}}}}},
+annotation:{annotations:{projLine:{type:'line',xMin:'2020',xMax:'2020',borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Projected →',position:'start',font:{size:10},color:C.dim}}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Foreign-born % of population',color:C.dim},min:0,max:25}}}});
 })();"""
         },
@@ -2588,7 +2589,7 @@ datasets:[
 {label:'IVF live birth rate (% per cycle)',data:ivf,borderColor:C.purple,backgroundColor:C.purple+'10',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5,borderDash:[6,3]}
 ]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
-annotation:{annotations:{cliff:{type:'line',xMin:'35',xMax:'35',borderColor:C.dim+'80',borderWidth:1.5,borderDash:[4,4],label:{display:true,content:'Sharp decline begins',position:'start',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{cliff:{type:'line',xMin:'35',xMax:'35',borderColor:C.dim+'80',borderWidth:1.5,borderDash:[4,4],label:{..._al,display:true,content:'Sharp decline begins',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:"Woman's age",color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:40,title:{display:true,text:'Probability (%)',color:C.dim}}}}});
 })();"""
         },
@@ -2619,7 +2620,7 @@ dxy('East Asian',yrs,eaH,C.blue),
 dxy('East Asian projected',yrsP,eaP,C.blue,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11},filter:i=>[0,2,4].includes(i.datasetIndex)}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label.replace(' projected','')+': '+i.raw+'%'}},
 annotation:{annotations:{
-today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'40',borderWidth:1,borderDash:[4,4],label:{display:true,content:'Today ≈ 14% combined',position:'start',color:C.dim,font:{size:10}}}
+today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'40',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Today ≈ 14% combined',position:'start',color:C.dim,font:{size:10}}}
 }}},
 scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:45,title:{display:true,text:'Share of global births (%)',color:C.dim}}}}});
 })();"""
@@ -2661,7 +2662,7 @@ datasets:[
 {label:'Before / baseline',data:before,backgroundColor:C.blue,borderRadius:3,borderSkipped:false},
 {label:'After / latest',data:after,backgroundColor:C.accent,borderRadius:3,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(2)+' TFR'}},
-annotation:{annotations:{repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,3],label:{display:true,content:'Replacement (2.1)',position:'end',color:C.green,font:{size:10}}}}}},
+annotation:{annotations:{repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,3],label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.green,font:{size:10}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total Fertility Rate (TFR)',color:C.dim}}}}});
 })();"""
         },
@@ -2688,10 +2689,10 @@ title:i=>{const v=+i[0].parsed.x;return v<0?Math.abs(v)+' BCE':v+' CE'},
 label:i=>i.parsed.y+'% literate'
 }},
 annotation:{annotations:{
-alph:{type:'label',xValue:-800,yValue:12,content:['Phoenician','alphabet'],color:C.blue,font:{size:10,weight:'bold'}},
-press:{type:'line',xMin:1440,xMax:1440,yMin:0,yMax:100,borderColor:C.green,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Printing press (1440)',position:'start',color:C.green,font:{size:10}}},
-edu:{type:'line',xMin:1870,xMax:1870,yMin:0,yMax:100,borderColor:C.purple,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'Compulsory education (1870s)',position:'start',color:C.purple,font:{size:10}}},
-ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWidth:1.5,borderDash:[5,3],label:{display:true,content:'AI coding literacy? (2024)',position:'start',color:C.amber,font:{size:10}}}
+alph:{type:'label',..._al,xValue:-800,yValue:12,content:['Phoenician','alphabet'],color:C.blue,font:{size:10,weight:'bold'}},
+press:{type:'line',xMin:1440,xMax:1440,yMin:0,yMax:100,borderColor:C.green,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Printing press (1440)',position:'start',color:C.green,font:{size:10}}},
+edu:{type:'line',xMin:1870,xMax:1870,yMin:0,yMax:100,borderColor:C.purple,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Compulsory education (1870s)',position:'start',color:C.purple,font:{size:10}}},
+ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'AI coding literacy? (2024)',position:'start',color:C.amber,font:{size:10}}}
 }}},
 scales:{x:{type:'linear',min:-3200,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BCE':v===0?'0':v+' CE',stepSize:500}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},min:0,max:100,title:{display:true,text:'Population literate (%)',color:C.dim}}}}});
@@ -2763,8 +2764,8 @@ new Chart(ctx,{type:'line',data:{labels:gen,datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:{display:true,position:'bottom',labels:{padding:12,usePointStyle:true,pointStyle:'circle',font:{size:11}}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'/100'}},
 annotation:{annotations:{
-peak:{type:'label',xValue:1,yValue:100,content:['Flourishing','peak'],color:C.accent,font:{size:10,weight:'bold'}},
-dep:{type:'label',xValue:2.5,yValue:18,content:['Dependency','zone'],color:C.dim,font:{size:10,style:'italic'}}
+peak:{type:'label',..._al,xValue:1,yValue:100,content:['Flourishing','peak'],color:C.accent,font:{size:10,weight:'bold'}},
+dep:{type:'label',..._al,xValue:2.5,yValue:18,content:['Dependency','zone'],color:C.dim,font:{size:10,style:'italic'}}
 }}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'Gen '+v},title:{display:true,text:'Generations after tool adoption',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:100,title:{display:true,text:'Skill level / creative output (index)',color:C.dim}}}}});
@@ -2816,8 +2817,8 @@ new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
 annotation:{annotations:{
-popEur:{type:'line',yMin:12,yMax:12,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European-heritage population: ~12%',position:'start',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}},
-popEA:{type:'line',yMin:21,yMax:21,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{display:true,content:'European + East Asian population: ~21%',position:'end',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}}
+popEur:{type:'line',yMin:12,yMax:12,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{..._al,display:true,content:'European-heritage population: ~12%',position:'start',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}},
+popEA:{type:'line',yMin:21,yMax:21,borderColor:'#1a1a1a',borderWidth:2.5,borderDash:[8,5],z:10,label:{..._al,display:true,content:'European + East Asian population: ~21%',position:'end',backgroundColor:'#1a1a1add',color:'#fff',font:{size:11,weight:'bold'},padding:4}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0},stacked:true},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global total',color:C.dim},stacked:true,min:0,max:100}}}});
@@ -2882,7 +2883,7 @@ const colors=vals.map((v,i)=>i===labels.length-1?C.green:v<1.0?C.accent:v<1.5?C.
 new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'TFR',data:vals,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' children per woman'}},
-annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,4],label:{display:true,content:'Replacement: 2.1',position:'end',backgroundColor:C.green,color:'#fff',font:{size:11}}}}}},
+annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,4],label:{..._al,display:true,content:'Replacement: 2.1',position:'end',backgroundColor:C.green,color:'#fff',font:{size:11}}}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:2.5,title:{display:true,text:'Children per woman',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 })();"""
         },
@@ -2906,11 +2907,11 @@ new Chart(ctx,{type:'line',data:{datasets:[
 {...dxy('Rest of world',yrs,restPct,C.green),borderWidth:3}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
-proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-peak:{type:'label',xValue:1975,yValue:42,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
-nadir:{type:'label',xValue:2075,yValue:4,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
-restLabel:{type:'label',xValue:2070,yValue:95,content:['Rest of world: 93%'],color:C.green,font:{size:10,style:'italic'}},
-eurNote:{type:'label',xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
+proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+peak:{type:'label',..._al,xValue:1975,yValue:42,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
+nadir:{type:'label',..._al,xValue:2075,yValue:4,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
+restLabel:{type:'label',..._al,xValue:2070,yValue:95,content:['Rest of world: 93%'],color:C.green,font:{size:10,style:'italic'}},
+eurNote:{type:'label',..._al,xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
 }}},
 scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:100}}}});
 })();"""
@@ -2932,7 +2933,7 @@ dxy('Europe (geographic)',yrs,europe,C.blue),
 dxy('East Asia (China/Japan/Korea)',yrs,eastAsia,C.accent),
 dxy('Combined',yrs,combined,C.purple,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
-annotation:{annotations:{proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}}},
+annotation:{annotations:{proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}}},
 scales:{x:linX(1800,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of world population',color:C.dim},min:0,max:55}}}});
 })();"""
         },
@@ -2991,7 +2992,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 dxy('GDP per capita (const. 2015 USD)',yrs,gdp,C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.parsed.y.toLocaleString()}},
 annotation:{annotations:{peak:{type:'point',xValue:2011,yValue:7000,backgroundColor:C.accent,radius:6,borderColor:'#fff',borderWidth:2},
-peakLabel:{type:'label',xValue:2011,yValue:7350,content:'Peak: $7,000 (2011)',color:C.accent,font:{size:11,weight:'bold'}}}}},
+peakLabel:{type:'label',..._al,xValue:2011,yValue:7350,content:'Peak: $7,000 (2011)',color:C.accent,font:{size:11,weight:'bold'}}}}},
 scales:{x:linX(1994,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v.toLocaleString()},title:{display:true,text:'GDP per capita (constant 2015 USD)',color:C.dim},min:5000,max:7500}}}});
 })();"""
         },
@@ -3018,7 +3019,7 @@ const pct=[97,95.5,93,90,87.5,80.5,74.4,68,62,56,51];
 new Chart(ctx,{type:'line',data:{datasets:[
 {label:'White British %',data:xy(yrs,pct),borderColor:C.purple,backgroundColor:C.purple+'18',fill:false,tension:.35,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5,borderDash:[],spanGaps:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
-annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
+annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
 scales:{x:linX(1960,2065),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of population',color:C.dim},min:45,max:100}}}});
 })();"""
         },
@@ -3050,7 +3051,7 @@ dxy('Slough',yrs,slough,C.teal),
 dxy('Brent',yrs,brent,C.rose),
 dxy('Newham',yrs,newham,C.indigo)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
-annotation:{annotations:{census:{type:'line',xMin:1991,xMax:1991,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Est. | Census →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
+annotation:{annotations:{census:{type:'line',xMin:1991,xMax:1991,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Est. | Census →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
 scales:{x:linX(1950,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Non-White British %',color:C.dim},min:0,max:80}}}});
 })();"""
         },
@@ -3105,10 +3106,10 @@ dxy('Emigration (outflow)',yrs,emm,C.blue),
 dxy('Net migration',yrs,net,C.accent,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'k'}}},
 annotation:{annotations:{
-v62:{type:'line',xMin:1962,xMax:1962,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'1962 Act',position:'start',font:{size:9}}},
-v73:{type:'line',xMin:1973,xMax:1973,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'EU join',position:'start',font:{size:9}}},
-v04:{type:'line',xMin:2004,xMax:2004,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'EU A8',position:'start',font:{size:9}}},
-v16:{type:'line',xMin:2016,xMax:2016,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'Brexit',position:'start',font:{size:9}}}
+v62:{type:'line',xMin:1962,xMax:1962,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'1962 Act',position:'start',font:{size:9}}},
+v73:{type:'line',xMin:1973,xMax:1973,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'EU join',position:'start',font:{size:9}}},
+v04:{type:'line',xMin:2004,xMax:2004,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'EU A8',position:'start',font:{size:9}}},
+v16:{type:'line',xMin:2016,xMax:2016,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Brexit',position:'start',font:{size:9}}}
 }},
 scales:{x:linX(1964,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'k'},title:{display:true,text:'Thousands per year',color:C.dim},min:-60,max:1300}}}});
 })();"""
@@ -3132,7 +3133,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 {...dxy('UK population (millions)',yrs,popMillions,C.accent),yAxisID:'y1',borderWidth:2,pointRadius:2}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+(i.dataset.yAxisID==='y1'?i.parsed.y+'m':i.parsed.y+'%')}}},
 annotation:{annotations:{
-proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Census / data | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}
+proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Census / data | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}
 }},
 interaction:{intersect:false,mode:'index'},
 scales:{x:linX(1960,2100),y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'White British % (population and births)',color:C.dim},min:30,max:100},
@@ -3158,7 +3159,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 dxy('G7 nations',yrs,g7,C.blue),
 dxy('Emerging Asia',yrs,asia,C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
-annotation:{annotations:{crossover:{type:'line',xMin:2020,xMax:2020,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],label:{display:true,content:'Crossover',color:C.dim,font:{size:11},position:'start'}}}}},
+annotation:{annotations:{crossover:{type:'line',xMin:2020,xMax:2020,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],label:{..._al,display:true,content:'Crossover',color:C.dim,font:{size:11},position:'start'}}}}},
 scales:{x:linX(1990,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global manufacturing value added',color:C.dim},min:0,max:75}}}});
 })();"""
         },
@@ -3245,9 +3246,9 @@ backgroundColor:cats.map(c=>catColors[c]+'99'),borderColor:cats.map(c=>catColors
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Score: '+i.raw+' ('+cats[i.dataIndex]+'-dominant)'}},
 annotation:{annotations:{
-guiltLabel:{type:'label',xValue:85,yValue:3,content:['Guilt-dominant'],color:C.blue,font:{size:13,weight:'bold'}},
-shameLabel:{type:'label',xValue:85,yValue:14,content:['Shame-dominant'],color:C.accent,font:{size:13,weight:'bold'}},
-mixedLabel:{type:'label',xValue:85,yValue:10,content:['Mixed'],color:C.amber,font:{size:13,weight:'bold'}}
+guiltLabel:{type:'label',..._al,xValue:85,yValue:3,content:['Guilt-dominant'],color:C.blue,font:{size:13,weight:'bold'}},
+shameLabel:{type:'label',..._al,xValue:85,yValue:14,content:['Shame-dominant'],color:C.accent,font:{size:13,weight:'bold'}},
+mixedLabel:{type:'label',..._al,xValue:85,yValue:10,content:['Mixed'],color:C.amber,font:{size:13,weight:'bold'}}
 }}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Hofstede Individualism Index (0–100)',color:C.dim},min:0,max:100},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();"""
@@ -3267,9 +3268,9 @@ backgroundColor:[C.blue+'99',C.amber+'99',C.accent+'99'],borderColor:[C.blue,C.a
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean CPI: '+i.raw+'/100'}},
 annotation:{annotations:{
-avg:{type:'line',yMin:43,yMax:43,borderColor:C.dim,borderWidth:1,borderDash:[6,4],label:{display:true,content:'Global average (43)',position:'end',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-guiltNote:{type:'label',xValue:0,yValue:85,content:['e.g. Denmark 90,','Finland 88, Sweden 80'],color:C.blue,font:{size:12,weight:'bold'}},
-shameNote:{type:'label',xValue:2,yValue:30,content:['e.g. China 43,','Indonesia 34, Pakistan 28'],color:C.accent,font:{size:12,weight:'bold'}}
+avg:{type:'line',yMin:43,yMax:43,borderColor:C.dim,borderWidth:1,borderDash:[6,4],label:{..._al,display:true,content:'Global average (43)',position:'end',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+guiltNote:{type:'label',..._al,xValue:0,yValue:85,content:['e.g. Denmark 90,','Finland 88, Sweden 80'],color:C.blue,font:{size:12,weight:'bold'}},
+shameNote:{type:'label',..._al,xValue:2,yValue:30,content:['e.g. China 43,','Indonesia 34, Pakistan 28'],color:C.accent,font:{size:12,weight:'bold'}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean CPI score (0–100)',color:C.dim},min:0,max:100}}}});
 })();"""
@@ -3289,9 +3290,9 @@ backgroundColor:[C.blue+'99',C.amber+'99',C.accent+'99'],borderColor:[C.blue,C.a
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean GII: '+i.raw}},
 annotation:{annotations:{
-guiltNote:{type:'label',xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 6th'],color:C.blue,font:{size:12,weight:'bold'}},
-shameNote:{type:'label',xValue:2,yValue:48,content:['S. Korea 4th, Singapore','5th raise the average'],color:C.accent,font:{size:12,weight:'bold'}},
-caveat:{type:'label',xValue:1,yValue:5,content:['Note: shame-dominant outliers (S. Korea, Japan)','adopted guilt-culture institutions'],color:C.text,font:{size:11,weight:'bold'}}
+guiltNote:{type:'label',..._al,xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 6th'],color:C.blue,font:{size:12,weight:'bold'}},
+shameNote:{type:'label',..._al,xValue:2,yValue:48,content:['S. Korea 4th, Singapore','5th raise the average'],color:C.accent,font:{size:12,weight:'bold'}},
+caveat:{type:'label',..._al,xValue:1,yValue:5,content:['Note: shame-dominant outliers (S. Korea, Japan)','adopted guilt-culture institutions'],color:C.text,font:{size:11,weight:'bold'}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean GII score',color:C.dim},min:0,max:75}}}});
 })();"""
@@ -3317,7 +3318,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
-shadowLabel:{type:'label',xValue:2040,yValue:72,content:['Shadow Workforce','(gap to fill)'],color:C.green,font:{size:12,weight:'bold'}}
+shadowLabel:{type:'label',..._al,xValue:2040,yValue:72,content:['Shadow Workforce','(gap to fill)'],color:C.green,font:{size:12,weight:'bold'}}
 }}},
 scales:{x:linX(2000,2060),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},
 title:{display:true,text:'Working-age adults (millions)',color:C.dim},min:40,max:95}}}});
@@ -3385,7 +3386,7 @@ backgroundColor:colors.map(c=>c+'99'),borderColor:colors,borderWidth:2,borderRad
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' workers per citizen/household'}},
 annotation:{annotations:{
-projLabel:{type:'label',xValue:52,yValue:4,content:['Robots + AI agents','per household'],color:C.blue,font:{size:12,weight:'bold'}}
+projLabel:{type:'label',..._al,xValue:52,yValue:4,content:['Robots + AI agents','per household'],color:C.blue,font:{size:12,weight:'bold'}}
 }}},
 scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:11},autoSkip:false}},
 x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},
@@ -3414,7 +3415,7 @@ dxy('European Union',yrs,[380,406,435,457,473,487,502,513,509,504,488,465,441,41
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
 crossover:{type:'line',xMin:2023,xMax:2023,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
-label:{display:true,content:'India passes China (2023)',position:'start',color:C.dim,font:{size:11}}}
+label:{..._al,display:true,content:'India passes China (2023)',position:'start',color:C.dim,font:{size:11}}}
 }}},
 scales:{x:linX(1950,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'B':v+'M'},
 title:{display:true,text:'Population (millions)',color:C.dim}}}}});
@@ -3459,7 +3460,7 @@ dxy('Germany',yrs,[1.94,2.86,3.42,3.36,3.89,4.6,4.8,4.9,5.0,5.0,5.0],C.teal,[5,5
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'T'}},
 annotation:{annotations:{
 proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
-label:{display:true,content:'Projected →',position:'start',color:C.dim,font:{size:10}}}
+label:{..._al,display:true,content:'Projected →',position:'start',color:C.dim,font:{size:10}}}
 }}},
 scales:{x:linX(2000,2050),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'T'},
 title:{display:true,text:'GDP ($ trillions, nominal)',color:C.dim}}}}});
@@ -3483,7 +3484,7 @@ dxy('United States',yrs,[65.0,60.2,62.0,66.1,65.8,66.2,67.0,64.8,64.0,63.2,61.5,
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}},
 annotation:{annotations:{
 peak:{type:'box',xMin:2010,xMax:2045,backgroundColor:C.amber+'11',borderWidth:0,
-label:{display:true,content:"India's dividend window",color:C.amber,font:{size:11,weight:'bold'},position:{x:'center',y:'start'}}}
+label:{..._al,display:true,content:"India's dividend window",color:C.amber,font:{size:11,weight:'bold'},position:{x:'center',y:'start'}}}
 }}},
 scales:{x:linX(1950,2080),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:45,max:75,
 title:{display:true,text:'Working-age population (15–64) as % of total',color:C.dim}}}}});
@@ -3542,7 +3543,7 @@ dxy('Sustainable renewable supply',yrs,[4200,4200,4200,4200,4200,4200,4200,4200,
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+' km³/yr'}},
 annotation:{annotations:{
-cross:{type:'label',xValue:2025,yValue:4600,content:['Demand exceeds','sustainable supply'],color:C.accent,font:{size:11,weight:'bold'}}
+cross:{type:'label',..._al,xValue:2025,yValue:4600,content:['Demand exceeds','sustainable supply'],color:C.accent,font:{size:11,weight:'bold'}}
 }}},
 scales:{x:linX(1900,2050),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v},
 title:{display:true,text:'km³ per year',color:C.dim},min:0,max:6000}}}});
@@ -3586,7 +3587,7 @@ new Chart(ctx,{type:'bar',data:{labels:regions,datasets:[
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(1)+'/5.0'}},
 annotation:{annotations:{
 extreme:{type:'line',yMin:4.0,yMax:4.0,borderColor:C.accent,borderDash:[6,4],borderWidth:1.5,
-label:{display:true,content:'Extreme stress threshold',position:'end',color:C.accent,font:{size:10}}}
+label:{..._al,display:true,content:'Extreme stress threshold',position:'end',color:C.accent,font:{size:10}}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:5.5,title:{display:true,text:'Water stress index (0–5)',color:C.dim}}}}});
@@ -3825,7 +3826,7 @@ dxy('France',yrs,[95,80,180,120,140,160,40,30,20,20,35,58,82,115,112],C.purple)
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% of GDP'}},
 annotation:{annotations:{
 ww2:{type:'box',xMin:1939,xMax:1945,backgroundColor:'rgba(196,52,37,0.06)',borderWidth:0,
-label:{display:true,content:'World War II',color:C.dim,font:{size:10},position:{x:'center',y:'start'}}}
+label:{..._al,display:true,content:'World War II',color:C.dim,font:{size:10},position:{x:'center',y:'start'}}}
 }}},
 scales:{x:linX(1900,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},
 title:{display:true,text:'Government debt (% of GDP)',color:C.dim}}}}});
@@ -3847,7 +3848,7 @@ dxy('Defence spending',yrs,[295,495,616,689,677,597,631,714,767,874,895],C.blue)
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'B'}},
 annotation:{annotations:{
 cross:{type:'line',xMin:2024,xMax:2024,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
-label:{display:true,content:'Interest exceeds defence',position:'start',color:C.accent,font:{size:10}}}
+label:{..._al,display:true,content:'Interest exceeds defence',position:'start',color:C.accent,font:{size:10}}}
 }}},
 scales:{x:linX(2000,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
 title:{display:true,text:'$ billions',color:C.dim}}}}});
@@ -4037,8 +4038,8 @@ dxy('Young men (US)',yrs,[28,27,26,26,25,24,25,25,25,25],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% liberal'}},
 annotation:{annotations:{
-metoo:{type:'label',xValue:2017,yValue:43,content:['#MeToo /','Trump era'],color:C.dim,font:{size:10}},
-roe:{type:'label',xValue:2021.5,yValue:46,content:['Dobbs'],color:C.dim,font:{size:10}}
+metoo:{type:'label',..._al,xValue:2017,yValue:43,content:['#MeToo /','Trump era'],color:C.dim,font:{size:10}},
+roe:{type:'label',..._al,xValue:2021.5,yValue:46,content:['Dobbs'],color:C.dim,font:{size:10}}
 }}},
 scales:{x:linX(1999,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:50,
 title:{display:true,text:'% identifying as liberal (Gallup)',color:C.dim}}}}});
@@ -4168,7 +4169,7 @@ dxy('Americas',yrs,[339,416,511,614,727,841,942,1029,1060,1085,1118,1129,1123,11
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
-cross:{type:'label',xValue:2085,yValue:3200,content:['Africa surpasses','3 billion'],color:C.amber,font:{size:11,weight:'bold'}}
+cross:{type:'label',..._al,xValue:2085,yValue:3200,content:['Africa surpasses','3 billion'],color:C.amber,font:{size:11,weight:'bold'}}
 }}},
 scales:{x:linX(1950,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'B':v+'M'},
 title:{display:true,text:'Population (millions)',color:C.dim}}}}});

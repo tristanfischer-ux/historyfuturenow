@@ -1040,6 +1040,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -1361,7 +1362,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
-shadowLabel:{type:'label',xValue:2040,yValue:72,content:['Shadow Workforce','(gap to fill)'],color:C.green,font:{size:12,weight:'bold'}}
+shadowLabel:{type:'label',..._al,xValue:2040,yValue:72,content:['Shadow Workforce','(gap to fill)'],color:C.green,font:{size:12,weight:'bold'}}
 }}},
 scales:{x:linX(2000,2060),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},
 title:{display:true,text:'Working-age adults (millions)',color:C.dim},min:40,max:95}}}});
@@ -1381,9 +1382,9 @@ backgroundColor:cats.map(c=>catColors[c]+'99'),borderColor:cats.map(c=>catColors
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Score: '+i.raw+' ('+cats[i.dataIndex]+'-dominant)'}},
 annotation:{annotations:{
-guiltLabel:{type:'label',xValue:85,yValue:3,content:['Guilt-dominant'],color:C.blue,font:{size:13,weight:'bold'}},
-shameLabel:{type:'label',xValue:85,yValue:14,content:['Shame-dominant'],color:C.accent,font:{size:13,weight:'bold'}},
-mixedLabel:{type:'label',xValue:85,yValue:10,content:['Mixed'],color:C.amber,font:{size:13,weight:'bold'}}
+guiltLabel:{type:'label',..._al,xValue:85,yValue:3,content:['Guilt-dominant'],color:C.blue,font:{size:13,weight:'bold'}},
+shameLabel:{type:'label',..._al,xValue:85,yValue:14,content:['Shame-dominant'],color:C.accent,font:{size:13,weight:'bold'}},
+mixedLabel:{type:'label',..._al,xValue:85,yValue:10,content:['Mixed'],color:C.amber,font:{size:13,weight:'bold'}}
 }}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Hofstede Individualism Index (0–100)',color:C.dim},min:0,max:100},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 })();
@@ -1414,7 +1415,7 @@ const pct=[97,95.5,93,90,87.5,80.5,74.4,68,62,56,51];
 new Chart(ctx,{type:'line',data:{datasets:[
 {label:'White British %',data:xy(yrs,pct),borderColor:C.purple,backgroundColor:C.purple+'18',fill:false,tension:.35,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5,borderDash:[],spanGaps:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
-annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
+annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
 scales:{x:linX(1960,2065),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of population',color:C.dim},min:45,max:100}}}});
 })();
 if (Chart.defaults.font) Chart.defaults.font.size = _origFontSize;
@@ -1430,7 +1431,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 dxy('G7 nations',yrs,g7,C.blue),
 dxy('Emerging Asia',yrs,asia,C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
-annotation:{annotations:{crossover:{type:'line',xMin:2020,xMax:2020,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],label:{display:true,content:'Crossover',color:C.dim,font:{size:11},position:'start'}}}}},
+annotation:{annotations:{crossover:{type:'line',xMin:2020,xMax:2020,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],label:{..._al,display:true,content:'Crossover',color:C.dim,font:{size:11},position:'start'}}}}},
 scales:{x:linX(1990,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global manufacturing value added',color:C.dim},min:0,max:75}}}});
 })();
 if (Chart.defaults.font) Chart.defaults.font.size = _origFontSize;

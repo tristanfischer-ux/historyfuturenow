@@ -275,15 +275,15 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
+      <a href="/articles/the-great-offshoring-how-the-worlds-factory-moved-east" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The North African Threat And Mediterranean Reunification</span>
-        <span class="related-time">17 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Great Offshoring: How the World&#x27;s Factory Moved East</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
@@ -380,6 +380,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -397,7 +398,7 @@ dxy('European Union',yrs,[380,406,435,457,473,487,502,513,509,504,488,465,441,41
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
 crossover:{type:'line',xMin:2023,xMax:2023,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
-label:{display:true,content:'India passes China (2023)',position:'start',color:C.dim,font:{size:11}}}
+label:{..._al,display:true,content:'India passes China (2023)',position:'start',color:C.dim,font:{size:11}}}
 }}},
 scales:{x:linX(1950,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'B':v+'M'},
 title:{display:true,text:'Population (millions)',color:C.dim}}}}});
@@ -428,7 +429,7 @@ dxy('Germany',yrs,[1.94,2.86,3.42,3.36,3.89,4.6,4.8,4.9,5.0,5.0,5.0],C.teal,[5,5
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'T'}},
 annotation:{annotations:{
 proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
-label:{display:true,content:'Projected →',position:'start',color:C.dim,font:{size:10}}}
+label:{..._al,display:true,content:'Projected →',position:'start',color:C.dim,font:{size:10}}}
 }}},
 scales:{x:linX(2000,2050),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'T'},
 title:{display:true,text:'GDP ($ trillions, nominal)',color:C.dim}}}}});
@@ -445,7 +446,7 @@ dxy('United States',yrs,[65.0,60.2,62.0,66.1,65.8,66.2,67.0,64.8,64.0,63.2,61.5,
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}},
 annotation:{annotations:{
 peak:{type:'box',xMin:2010,xMax:2045,backgroundColor:C.amber+'11',borderWidth:0,
-label:{display:true,content:"India's dividend window",color:C.amber,font:{size:11,weight:'bold'},position:{x:'center',y:'start'}}}
+label:{..._al,display:true,content:"India's dividend window",color:C.amber,font:{size:11,weight:'bold'},position:{x:'center',y:'start'}}}
 }}},
 scales:{x:linX(1950,2080),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:45,max:75,
 title:{display:true,text:'Working-age population (15–64) as % of total',color:C.dim}}}}});

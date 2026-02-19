@@ -300,20 +300,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem" class="related-card">
+      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Empty Cradle Bargain: Why Falling Birth Rates Are Everyone&#x27;s Problem</span>
-        <span class="related-time">21 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
+      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
+      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
-        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -403,6 +403,7 @@ const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{si
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
+const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
@@ -415,7 +416,7 @@ const pct=[97,95.5,93,90,87.5,80.5,74.4,68,62,56,51];
 new Chart(ctx,{type:'line',data:{datasets:[
 {label:'White British %',data:xy(yrs,pct),borderColor:C.purple,backgroundColor:C.purple+'18',fill:false,tension:.35,pointRadius:4,pointBackgroundColor:C.purple,borderWidth:2.5,borderDash:[],spanGaps:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
-annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
+annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
 scales:{x:linX(1960,2065),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of population',color:C.dim},min:45,max:100}}}});
 })();
 
@@ -439,7 +440,7 @@ dxy('Slough',yrs,slough,C.teal),
 dxy('Brent',yrs,brent,C.rose),
 dxy('Newham',yrs,newham,C.indigo)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
-annotation:{annotations:{census:{type:'line',xMin:1991,xMax:1991,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Est. | Census →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
+annotation:{annotations:{census:{type:'line',xMin:1991,xMax:1991,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Est. | Census →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
 scales:{x:linX(1950,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Non-White British %',color:C.dim},min:0,max:80}}}});
 })();
 
@@ -473,10 +474,10 @@ dxy('Emigration (outflow)',yrs,emm,C.blue),
 dxy('Net migration',yrs,net,C.accent,[6,4])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'k'}}},
 annotation:{annotations:{
-v62:{type:'line',xMin:1962,xMax:1962,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'1962 Act',position:'start',font:{size:9}}},
-v73:{type:'line',xMin:1973,xMax:1973,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'EU join',position:'start',font:{size:9}}},
-v04:{type:'line',xMin:2004,xMax:2004,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'EU A8',position:'start',font:{size:9}}},
-v16:{type:'line',xMin:2016,xMax:2016,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'Brexit',position:'start',font:{size:9}}}
+v62:{type:'line',xMin:1962,xMax:1962,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'1962 Act',position:'start',font:{size:9}}},
+v73:{type:'line',xMin:1973,xMax:1973,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'EU join',position:'start',font:{size:9}}},
+v04:{type:'line',xMin:2004,xMax:2004,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'EU A8',position:'start',font:{size:9}}},
+v16:{type:'line',xMin:2016,xMax:2016,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Brexit',position:'start',font:{size:9}}}
 }},
 scales:{x:linX(1964,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'k'},title:{display:true,text:'Thousands per year',color:C.dim},min:-60,max:1300}}}});
 })();
@@ -492,7 +493,7 @@ new Chart(ctx,{type:'line',data:{datasets:[
 {...dxy('UK population (millions)',yrs,popMillions,C.accent),yAxisID:'y1',borderWidth:2,pointRadius:2}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+(i.dataset.yAxisID==='y1'?i.parsed.y+'m':i.parsed.y+'%')}}},
 annotation:{annotations:{
-proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{display:true,content:'← Census / data | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}
+proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Census / data | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}
 }},
 interaction:{intersect:false,mode:'index'},
 scales:{x:linX(1960,2100),y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'White British % (population and births)',color:C.dim},min:30,max:100},
