@@ -29,7 +29,6 @@ REVIEW_SLUGS = {
     'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
-    'the-new-literacy',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
     'the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world',
     'the-locked-gate-how-the-west-priced-its-children-out-of-existence',
