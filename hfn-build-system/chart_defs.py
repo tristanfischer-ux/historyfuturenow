@@ -1456,9 +1456,9 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true
         {
             'id': 'platChart1', 'figure_num': 1,
             'title': 'Platform Technology Adoption Timelines',
-            'desc': 'Time from invention to mass adoption is accelerating dramatically',
-            'source': 'Various technology adoption studies',
-            'position': 'after_para_10',
+            'desc': 'Time from invention to mass adoption is accelerating dramatically — AI assistants reached 50 million users in under six months',
+            'source': 'Various technology adoption studies; Stanford HAI AI Index, 2024',
+            'position': 'after_para_14',
             'js': """
 (()=>{const ctx=document.getElementById('platChart1');
 new Chart(ctx,{type:'bar',data:{
@@ -1470,37 +1470,44 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
 })();"""
         },
         {
-            'id': 'platChart2', 'figure_num': 2,
-            'title': 'Technology Convergence: Reinforcing Platform Technologies',
-            'desc': 'Emerging technologies form an interconnected ecosystem, each accelerating the others',
-            'source': 'Analysis from this article',
-            'position': 'before_end',
+            'id': 'platChart4', 'figure_num': 2,
+            'title': 'The Great Cost Collapse',
+            'desc': 'Multiple platform technology costs are plummeting simultaneously — when this happens, convergence follows',
+            'source': 'NHGRI (genome); IRENA (solar); Stanford HAI (compute); NASA / SpaceX (launch)',
+            'position': 'after_para_23',
             'js': """
-(()=>{const ctx=document.getElementById('platChart2');
-const techs=['AI','Robotics','Quantum\nComputing','Biotech','Space\nTech','Vertical\nFarming','Nano-\nmaterials','Brain-Computer\nInterfaces'];
-const connections=[8,7,5,6,4,3,4,3];
-new Chart(ctx,{type:'bar',data:{labels:techs,
-datasets:[{label:'Cross-technology connections',data:connections,
-backgroundColor:[C.accent,C.blue,C.purple,C.green,C.teal,C.amber,C.cyan,C.rose],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' connections to other platforms'}}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
-y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Reinforcing connections',color:C.dim}}}}});
+(()=>{const ctx=document.getElementById('platChart4');
+new Chart(ctx,{type:'line',data:{
+datasets:[
+dxy('Genome sequencing ($/genome)',[2001,2004,2007,2009,2011,2014,2017,2020,2024],[95000000,28000000,8900000,350000,48000,4000,1200,700,200],C.accent),
+dxy('Compute ($/GFLOP)',[2000,2003,2006,2009,2012,2015,2018,2021,2024],[7700,1500,310,60,12,1.2,0.35,0.1,0.03],C.blue),
+dxy('Solar module ($/W)',[2000,2004,2008,2010,2013,2016,2019,2022,2024],[5.00,3.80,3.00,1.80,0.65,0.35,0.25,0.22,0.20],C.green),
+dxy('Launch to LEO ($/kg)',[2000,2006,2010,2013,2016,2020,2024],[54500,54500,18500,5000,2700,2700,2700],C.purple),
+dxy('Launch projected (Starship)',[2024,2028],[2700,100],C.purple,[5,5])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:{...tooltipStyle,callbacks:{label:function(c){var v=c.raw.y,l=c.dataset.label;if(v>=1e6)return l+': $'+(v/1e6).toFixed(0)+'M';if(v>=1000)return l+': $'+Math.round(v).toLocaleString();if(v>=1)return l+': $'+v.toFixed(0);return l+': $'+v.toFixed(2);}}}},
+scales:{x:linX(2000,2028),y:{type:'logarithmic',min:0.01,max:200000000,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:function(v){if(v>=1e6)return'$'+(v/1e6)+'M';if(v>=1e3)return'$'+(v/1e3)+'K';if(v>=1)return'$'+v;if(v>=0.01)return'$'+v;return'';}},title:{display:true,text:'Cost (log scale)',color:C.dim}}}}});
 })();"""
         },
         {
-            'id': 'platChart3', 'figure_num': 3,
-            'title': 'Years From Invention to Mass Adoption',
-            'desc': 'Each generation of platform technology has adopted faster than the last',
-            'source': 'Historical adoption data; Our World in Data',
-            'position': 'before_end',
+            'id': 'platChart5', 'figure_num': 3,
+            'title': 'Where the Money Is Going: VC Investment in Platform Technologies',
+            'desc': 'Capital is pouring into converging technologies at accelerating rates, with AI surging dramatically since 2020',
+            'source': 'PitchBook; CB Insights; Stanford HAI AI Index, 2024',
+            'position': 'after_para_25',
             'js': """
-(()=>{const ctx=document.getElementById('platChart3');
-new Chart(ctx,{type:'bar',data:{labels:['Electricity','Telephone','Automobile','Radio','Television','Computer','Internet','Smartphone','AI assistants'],
-datasets:[{label:'Years to 50M users',data:[46,75,62,22,13,14,4,2,0.5],
-backgroundColor:[C.dim,C.dim,C.dim,C.amber,C.amber,C.blue,C.blue,C.purple,C.accent],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years to 50M users'}}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:45}},
-y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Years to 50 million users',color:C.dim}}}}});
+(()=>{const ctx=document.getElementById('platChart5');
+new Chart(ctx,{type:'bar',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+datasets:[
+{label:'AI',data:[12,15,22,30,40,45,75,50,55,105],backgroundColor:C.accent},
+{label:'Biotech',data:[18,20,22,28,25,30,45,28,22,30],backgroundColor:C.green},
+{label:'Space & Satellite',data:[2,3,4,5,6,8,10,8,8,12],backgroundColor:C.purple},
+{label:'Robotics',data:[3,4,5,6,8,8,12,10,8,12],backgroundColor:C.blue},
+{label:'Quantum',data:[0.1,0.2,0.3,0.5,0.6,0.8,1.5,2,2.5,3],backgroundColor:C.amber}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:{...tooltipStyle,mode:'index',callbacks:{label:function(i){return' '+i.dataset.label+': $'+i.raw+'bn';},footer:function(items){var t=0;for(var j=0;j<items.length;j++)t+=items[j].raw;return'Total: $'+t.toFixed(0)+'bn';}}}},
+scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
+y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return'$'+v+'bn';}},title:{display:true,text:'Global VC investment ($bn)',color:C.dim}}}}});
 })();"""
         },
     ]
