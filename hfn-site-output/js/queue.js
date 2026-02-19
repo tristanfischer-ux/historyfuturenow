@@ -577,7 +577,7 @@
   // ─── Toast ────────────────────────────────────────────────────────────────
   var toastTimer = null;
 
-  function showToast(msg) {
+  function showToast(msg, useHtml) {
     var el = document.getElementById('hfnToast');
     if (!el) {
       el = document.createElement('div');
@@ -585,10 +585,16 @@
       el.className = 'hfn-toast';
       document.body.appendChild(el);
     }
-    el.textContent = msg;
+    if (useHtml) {
+      el.innerHTML = msg;
+      el.classList.add('hfn-toast-interactive');
+    } else {
+      el.textContent = msg;
+      el.classList.remove('hfn-toast-interactive');
+    }
     el.classList.add('visible');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { el.classList.remove('visible'); }, 2200);
+    toastTimer = setTimeout(function () { el.classList.remove('visible'); }, 2800);
   }
 
   // ─── Popover ──────────────────────────────────────────────────────────────

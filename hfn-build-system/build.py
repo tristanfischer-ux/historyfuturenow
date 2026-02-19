@@ -2294,18 +2294,15 @@ def build_charts_page(essays, all_charts):
             safe_js = mod_js.replace("</script>", "<\\/script>")
             deferred_js_lines.append(f"window.__chartInits['{unique_id}'] = function() {{\n{safe_js}\n}};")
 
-            height_class = "charts-canvas-tall" if c.get('tall') else "charts-canvas-normal"
+            chart_copy = dict(c)
+            chart_copy['id'] = unique_id
+            chart_html = make_chart_html(chart_copy)
+
             chart_anchor = f"chart-{orig_id}"
             article_chart_url = f"/articles/{html_mod.escape(slug)}#{chart_anchor}"
             cards_html += f'''  <div class="charts-card" data-section="{part_slug}">
-    <div class="charts-card-inner">
-      <a href="{article_chart_url}" class="charts-canvas-link">
-        <div class="charts-canvas-wrap {height_class}">
-          <canvas id="{unique_id}"></canvas>
-        </div>
-      </a>
-      <a href="{article_chart_url}" class="charts-read-link">Read article &rarr;</a>
-    </div>
+    {chart_html}
+    <a href="{article_chart_url}" class="charts-article-link">Read the full article &rarr;</a>
   </div>
 '''
 
@@ -2329,7 +2326,7 @@ def build_charts_page(essays, all_charts):
     });
   }, { rootMargin: '200px' });
   function startObserving() {
-    var canvases = document.querySelectorAll('.charts-canvas-wrap canvas');
+    var canvases = document.querySelectorAll('.chart-area canvas');
     canvases.forEach(function(c) {
       obs.observe(c);
     });
@@ -2401,6 +2398,7 @@ window.__chartInits = window.__chartInits || {{}};
   }});
 }})();
 </script>
+<script src="/js/share.js"></script>
 </body>
 </html>'''
 
