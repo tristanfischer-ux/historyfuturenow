@@ -45,9 +45,9 @@ What do you think?
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

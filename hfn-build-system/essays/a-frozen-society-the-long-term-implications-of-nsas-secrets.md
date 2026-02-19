@@ -57,9 +57,9 @@ This is not a good thing.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

@@ -103,9 +103,9 @@ China is on that path, whether it wants to be or not.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

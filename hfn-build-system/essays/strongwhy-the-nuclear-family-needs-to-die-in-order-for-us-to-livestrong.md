@@ -86,9 +86,9 @@ There is reason to think that we can adjust.  There is hope.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

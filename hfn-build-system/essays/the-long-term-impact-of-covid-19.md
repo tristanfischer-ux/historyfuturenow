@@ -104,7 +104,7 @@ Finally, there is the practical question of war.  Western countries have discov
 
 So far we have discussed the inevitable macro forces that will be assisted and accelerated by the Covid 19 outbreak.  As has been mentioned before, those inevitable forces are easier to predict.
 
-In this section we look at “broken” history.  These are forces that, prior to Covid 19, seemed to be like an unstoppable freight train steaming down a track.  But the pandemic has caused a dangerous break in the track.  The freight train might continue onwards, bouncing miraculously back onto the track as though nothing had happened.  Equally, the train might be derailed completely.   We start with a discussion on the private sector and government, move on to mass migration, globalisation, mass unemployment  and then onto climate change.  Finally, we discus the wild card of Covid 19, Universal Basic Income.
+In this section we look at “broken” history.  These are forces that, prior to Covid 19, seemed to be like an unstoppable freight train steaming down a track.  But the pandemic has caused a dangerous break in the track.  The freight train might continue onwards, bouncing miraculously back onto the track as though nothing had happened.  Equally, the train might be derailed completely.   We start with a discussion on the private sector and government, move on to mass migration, globalisation, mass unemployment and then onto climate change.  Finally, we discus the wild card of Covid 19, Universal Basic Income.
 
 Over the past thirty years large Western companies have outgrown their national borders and have become global companies.  They have been the champions of globalisation, investing in supply chains overseas in a bid to drive down costs and promoting their brands in order to acquire customers in newly emerging, and hopefully lucrative, markets.
 
@@ -172,7 +172,7 @@ The key concept is that governments will pay every citizen a minimum amount of i
 
 Universal Basic Income has both left and right wing political support.  But there are serious questions. Two obvious ones are how much people should be paid and where the money will come to pay for it.  In addition, some say that Universal Basic Income will make people lazy and reliant on government hand outs.  Yet millions of people work hard today without any income: school children do not earn money and are paid for by their parents, retired people do not earn money and are paid for via pensions and savings and many spouses earn little or no income and are supported by their other spouse.  All those groups contribute to society while they can, either by studying, home making or doing volunteer work.   Looking back historically, very few people worked for money as they predominantly lived in barter and self reliant communities.
 
-The Covid 19 pandemic has given a number of governments the opportunity to trial schemes similar to Universal Basic Income on a mass scale.  The UK government, for example, has introduced a Covid 19 furlough scheme of up to £2,500 per month for employees who would otherwise have been made redundant, due to Covid 19.  It has also introduced a variation of this for self employed people, also for up to £2,500 per month, with essentially no questions asked.  This is not explicitly a Universal Basic Income scheme and will only last for 6 months. Canada has introduced an even simpler system, by inverting the tax receipt system into a cash payout system, of $2000 per adult and $500 per child per month.   The United States has sent cheques, ostentatiously signed by President Trump, to millions of families for similar reasons.  Spain has taken a bigger step and has put in a scheme which is explicitly a Universal Basic Income scheme and is designed to be permanent.  The Scottish government is also pushing for a Universal Basic Income scheme to be put in place.
+The Covid 19 pandemic has given a number of governments the opportunity to trial schemes similar to Universal Basic Income on a mass scale.  The UK government, for example, has introduced a Covid 19 furlough scheme of up to £2,500 per month for employees who would otherwise have been made redundant, due to Covid 19.  It has also introduced a variation of this for self employed people, also for up to £2,500 per month, with essentially no questions asked.  This is not explicitly a Universal Basic Income scheme and will only last for 6 months. Canada has introduced an even simpler system, by inverting the tax receipt system into a cash payout system, of $2000 per adult and $500 per child per month. The United States has sent cheques, ostentatiously signed by President Trump, to millions of families for similar reasons.  Spain has taken a bigger step and has put in a scheme which is explicitly a Universal Basic Income scheme and is designed to be permanent.  The Scottish government is also pushing for a Universal Basic Income scheme to be put in place.
 
 If the Covid 19 pandemic lasts a long time it is likely that some form of Universal Basic Income will be rolled out in many countries.  If job losses due to Covid 19 are large and long lasting, unemployment benefits will be a poor solution.  There will be few jobs for unemployed people to move to and restrictions on working while being on unemployment benefits will discourage people from taking those jobs, unless the wages are significantly better.  Universal Basic Income would provide a simpler way of providing similar levels of benefit and would encourage people to get back to work, which will then stimulate the economy creating more jobs for more people to start working in again.
 
@@ -192,7 +192,7 @@ That is a problem far worse than Covid 19.
 
 ## April 2024 - how did this article age?
 
-The article was written at the start of the Covid 19 pandemic.  What went right and what went wrong with the thesis.
+The article was written at the start of the Covid 19 pandemic. What went right and what went wrong with the thesis.
 
 1. The pandemic has indeed accelerated the shift towards digitalization, remote work, and online services.
 
@@ -202,9 +202,9 @@ The article was written at the start of the Covid 19 pandemic.  What went right 
 
 4. The crisis has exposed the vulnerabilities of global supply chains and the West's reliance on manufacturing in other countries.
 
-1. The claim that the pandemic will significantly reduce military conflicts seems overly optimistic, especially since we have had a war in the Ukraine and a conflict in Israel / Gaza.  While economic challenges may limit military spending, geopolitical tensions and regional disputes may persist.
+1. The claim that the pandemic will significantly reduce military conflicts seems overly optimistic, especially since we have had a war in the Ukraine and a conflict in Israel / Gaza. While economic challenges may limit military spending, geopolitical tensions and regional disputes may persist.
 
-2. The article's prediction of a drastic decline in mass migration was wrong.  While the pandemic  temporarily restricted movement, the underlying factors driving migration, such as economic inequality and political instability, remain.
+2. The article's prediction of a drastic decline in mass migration was wrong. While the pandemic temporarily restricted movement, the underlying factors driving migration, such as economic inequality and political instability, remain.
 
 ## Clash of Titans: How the Warrior Ethos and Judeo-Christian Monotheism Shaped the Soul of the West
 
@@ -212,9 +212,9 @@ The article was written at the start of the Covid 19 pandemic.  What went right 
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

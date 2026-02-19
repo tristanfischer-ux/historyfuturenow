@@ -134,8 +134,8 @@ The choice, for the first time in two thousand years, is real. History suggests 
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:

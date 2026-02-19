@@ -53,9 +53,9 @@ George Orwell was right when he said that "history is written by the winners." Â
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

@@ -88,15 +88,15 @@ What is happening is a really fascinating piece of convergence. Historically the
 
 Vertical farms link the agriculture sector to the new transport and power sector. Cheap batteries and renewables make vertical farming cheaper.  This expands the market for vertical farming which, in turn, create more demand for renewables and batteries, which makes those costs lower for vertical farming.  Round and round it goes.
 
-All three sectors, representing about 80% of global greenhouse gas emissions, are starting to converge.  This is exciting.  The question is whether it will converge fast enough to meet the 1.5 degrees target set at COP26 in 2021.
+All three sectors, representing about 80% of global greenhouse gas emissions, are starting to converge.  This is exciting. The question is whether it will converge fast enough to meet the 1.5 degrees target set at COP26 in 2021.
 
 ## Cassandra: Time To Give Up On Predicting Climate Change?
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

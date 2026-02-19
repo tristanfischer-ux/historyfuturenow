@@ -163,9 +163,9 @@ So encourage your local politicians to stand on a platform of Mediterranean Reun
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

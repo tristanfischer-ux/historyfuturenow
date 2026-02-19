@@ -136,9 +136,9 @@ What choices will they have to make? What choices will your daughters have to m
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

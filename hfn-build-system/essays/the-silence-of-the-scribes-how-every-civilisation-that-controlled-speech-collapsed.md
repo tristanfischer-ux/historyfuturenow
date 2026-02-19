@@ -117,8 +117,8 @@ The only question is which nations will learn from history, and which will repea
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:

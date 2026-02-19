@@ -60,9 +60,9 @@ We already love Chinese food.  Nobody could ever say that about British or Amer
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

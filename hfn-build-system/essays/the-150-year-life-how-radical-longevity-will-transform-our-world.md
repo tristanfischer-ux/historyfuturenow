@@ -75,7 +75,7 @@ We may see the rise of multi-generational households, with grandparents and grea
 
 Longer lifespans could also lead to more fluid and dynamic social relationships. As people move through multiple careers and life stages, they may form new connections and social networks at different points in their lives. The idea of a "lifelong best friend" or a "soulmate" may become less relevant, as individuals adapt to changing circumstances and seek out new companions. This will have significant impacts on family dynamics. Children are likely to lose their significance as individuals may have multiple “litters” with different partners over several decades.
 
-But with these new opportunities come new challenges. Longer lifespans could exacerbate existing inequalities, as those with greater resources and support networks are better able to navigate the complexities of multi-generational living and social change. Already we see significant health variation between richer and poorer members of our societies. The poor today have a greater tendency to be overweight and have lifestyle related health issues.  Health choices mean that they may end up dying at half the age of richer people. The rich will have longer to become even richer. Policymakers and community leaders will need to address these disparities and work to create more inclusive and supportive social structures.
+But with these new opportunities come new challenges. Longer lifespans could exacerbate existing inequalities, as those with greater resources and support networks are better able to navigate the complexities of multi-generational living and social change. Already we see significant health variation between richer and poorer members of our societies. The poor today have a greater tendency to be overweight and have lifestyle related health issues. Health choices mean that they may end up dying at half the age of richer people. The rich will have longer to become even richer. Policymakers and community leaders will need to address these disparities and work to create more inclusive and supportive social structures.
 
 History offers some insight into how societies have adapted to changing family and social dynamics in the past. The 20th century saw a significant shift towards smaller, nuclear families in many parts of the world, as people moved away from extended family structures and towards more independent living arrangements. This change was driven by a combination of economic, social, and cultural factors, including urbanisation, rising education levels, and changing gender roles.
 
@@ -125,13 +125,13 @@ These challenging questions require us to grapple with issues of equity, respons
 
 ### Part 7: The Psychological and Philosophical Implications of Longevity
 
-Finally, it  is crucial to consider not only the practical implications but also the psychological and philosophical ramifications of such a dramatic extension of human life.
+Finally, it is crucial to consider not only the practical implications but also the psychological and philosophical ramifications of such a dramatic extension of human life.
 
 One potential consequence is that people may become more cautious and conservative in their decision-making, seeking to preserve their health and wealth over a much longer time horizon. With the prospect of living for over a century, people may be less willing to take risks or make bold choices, knowing that an early death could mean missing out on many decades of life. This could lead to a society that is more risk-averse and resistant to change, prioritizing stability and security over innovation and exploration.
 
 At the same time, a longer lifespan could also encourage people to adopt a more long-term perspective, recognizing the importance of planning for the future and making decisions with a view to their impact over many decades or even centuries. This could lead to a greater emphasis on sustainable living, as people seek to preserve the planet and its resources not just for themselves but for future generations as well.
 
-However, the prospect of living for 150 years or more could also raise profound questions about the meaning and purpose of life. With so much time on their hands, people may struggle to find fulfillment and avoid boredom or despair. While many people today are frightened of dying and wish to live longer, there are others who find themselves tired of life and welcome the release that death brings. For those in the first group, increased longevity will be a blessing. For those in the second group it will be a curse. This future of longevity will also coincide with other innovations such as advanced Artificial Intelligence and humanoid robots.  Some may choose to end their lives prematurely, feeling that they have already achieved all they set out to do and have nothing left to live for. Others may seek to reinvent themselves multiple times over the course of their long lives, pursuing new passions and experiences in an effort to stay engaged and motivated.
+However, the prospect of living for 150 years or more could also raise profound questions about the meaning and purpose of life. With so much time on their hands, people may struggle to find fulfillment and avoid boredom or despair. While many people today are frightened of dying and wish to live longer, there are others who find themselves tired of life and welcome the release that death brings. For those in the first group, increased longevity will be a blessing. For those in the second group it will be a curse. This future of longevity will also coincide with other innovations such as advanced Artificial Intelligence and humanoid robots. Some may choose to end their lives prematurely, feeling that they have already achieved all they set out to do and have nothing left to live for. Others may seek to reinvent themselves multiple times over the course of their long lives, pursuing new passions and experiences in an effort to stay engaged and motivated.
 
 Ultimately, the impact of a 150-year lifespan on the human psyche and spirit will depend on how we as a society choose to adapt and evolve in response to this new reality. Will we use our extended lifetimes to pursue wisdom, compassion, and personal growth, or will we succumb to cynicism, apathy, or hedonism? Will we find new ways to create meaning and purpose in a world where traditional milestones and timelines no longer apply, or will we struggle to find our place in a radically transformed society?
 
@@ -151,9 +151,9 @@ The future is going to be very interesting.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

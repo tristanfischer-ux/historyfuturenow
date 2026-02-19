@@ -144,9 +144,9 @@ It is by understanding our history that we can best understand the present. By u
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

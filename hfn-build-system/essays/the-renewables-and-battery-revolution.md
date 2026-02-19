@@ -56,7 +56,7 @@ To solve this fuel crisis people started to dig out coal from the ground. The fa
 
 The very first steam engines were created to drive pumps, fuelled by the coal from the mines that they were pumping out. As the mines got deeper and more complex, wood timbers were used support tunnels, which further exasperated the deforestation crisis. Eventually, steam engines were adapted to drive a range of industrial processes and became light enough to be mounted on wheels, bringing about the steam train and ship revolutions.
 
-From the perspective of a company or a country these changes were profound, but not obvious at the outset. Coal was not as good as wood. It was hard to dig out of the ground, while trees were easy to cut down. Once a seam of coal had been mined, it was gone, while trees grew back. You needed a series of expensive, additional inventions that did not yet exist, such as steam powered pumps, in order to maximise the output of a mine. Worst of all, consumers disliked coal and preferred using wood. If you had asked a company to invest in coal at the outset, before large-scale deforestation and before the steam powered pump, the answer would likely have been “No”.  But those companies that did embrace the change and harnessed the opportunities unleashed by coal became very wealthy.
+From the perspective of a company or a country these changes were profound, but not obvious at the outset. Coal was not as good as wood. It was hard to dig out of the ground, while trees were easy to cut down. Once a seam of coal had been mined, it was gone, while trees grew back. You needed a series of expensive, additional inventions that did not yet exist, such as steam powered pumps, in order to maximise the output of a mine. Worst of all, consumers disliked coal and preferred using wood. If you had asked a company to invest in coal at the outset, before large-scale deforestation and before the steam powered pump, the answer would likely have been “No”. But those companies that did embrace the change and harnessed the opportunities unleashed by coal became very wealthy.
 
 The shift to coal had a profound impact on the world economy, beyond being a substitute for burning wood for heating. The first companies to develop technologies based on coal were in Western Europe and the United States. While coal was not as appealing for heating homes, it was more energy dense and could burn hotter than wood, which was critical to many industrial processes such as creating large quantities of low cost iron or driving the machines needed to manufacture high quality, low cost, goods and textiles.
 
@@ -168,9 +168,9 @@ This revolution will change things for a lot of companies and a lot of countries
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

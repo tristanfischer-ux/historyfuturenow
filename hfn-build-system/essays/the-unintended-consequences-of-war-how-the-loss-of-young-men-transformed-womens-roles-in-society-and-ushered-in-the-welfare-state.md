@@ -238,9 +238,9 @@ As we grapple with the challenges posed by these societal shifts, it is essentia
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

@@ -1,5 +1,5 @@
 ---
-description: Every article must deliver delightful enlightenment, hook with wit, and cite sources. Enforced when writing or reviewing essays.
+description: Every article must deliver delightful enlightenment and hook with wit. Enforced when writing or reviewing essays.
 alwaysApply: true
 ---
 
@@ -27,18 +27,8 @@ The reader must finish every article feeling delightedly enlightened — smarter
 - Match length to the argument — a tightly argued 3,000-word piece is better than a padded 5,000-word one
 - Not every topic needs 5,000 words. Some need 3,000. None need 7,000.
 
-## Citations
-
-- Every factual claim, statistic, and historical assertion must have a source
-- Use **inline citations** — (Author, Year) or (Organisation, Year) — within the text
-- Include a **full references section** at the end of the article
-- Named sources, not "studies show" or "experts say"
-- Historical claims cite the primary historian or source text (e.g. Gibbon, Braudel, Herodotus)
-- Data claims cite the dataset or institution (e.g. UN Population Division, World Bank, Eurostat)
-
 ## When Reviewing Articles
 
 - If the article teaches nothing new, it is incomplete
 - If there is no moment of wit in the first third, flag it
-- If claims lack citations, flag them
 - If the article exceeds 5,000 words, ask whether every section earns its place

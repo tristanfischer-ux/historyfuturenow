@@ -507,9 +507,9 @@ And that might be enough for Europe to have a successful revolution.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

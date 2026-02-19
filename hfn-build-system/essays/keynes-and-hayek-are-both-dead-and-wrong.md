@@ -129,9 +129,9 @@ Our politicians must stop thinking of them as Gods, enlightened beings that they
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

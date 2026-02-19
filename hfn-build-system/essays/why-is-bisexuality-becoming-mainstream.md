@@ -116,9 +116,9 @@ Relatively speaking traditional heterosexual couples – who include large numbe
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

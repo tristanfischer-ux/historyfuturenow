@@ -41,7 +41,7 @@ In Europe, the figures are uniformly bleak. Italy: 1.24. Spain: 1.19. Greece: 1.
 
 In East Asia, the collapse is even more extreme. South Korea's total fertility rate of 0.72 is the lowest ever recorded by any nation in human history. Taiwan: 0.87. China: 1.02, with several provinces reporting rates below 0.8. Japan: 1.20. Hong Kong: 0.77. Singapore: 0.97.
 
-The share of global births makes the trajectory visceral — and the true figures are worse than the geographic data suggests. The UN Population Division tracks births by country, not ethnicity. But births *in* Europe are not the same as births *to* European-heritage peoples. In the United Kingdom, 34% of births in 2024 were to foreign-born mothers (ONS, 2024). In Germany, 29% (Destatis, 2024). In Sweden, 27.5% of under-21s have a foreign background (SCB, 2024). Across the EU, roughly one in five births is now to a mother born outside Europe. Conversely, European-heritage births in the United States (49.6% of 3.6 million — now below half for the first time), Canada, Australia, Russia, and Latin America are not captured in the European geographic total at all.
+The share of global births makes the trajectory visceral — and the true figures are worse than the geographic data suggests. The UN Population Division tracks births by country, not ethnicity. But births *in* Europe are not the same as births *to* European-heritage peoples. In the United Kingdom, 34% of births in 2024 were to foreign-born mothers. In Germany, 29%. In Sweden, 27.5% of under-21s have a foreign background. Across the EU, roughly one in five births is now to a mother born outside Europe. Conversely, European-heritage births in the United States (49.6% of 3.6 million — now below half for the first time), Canada, Australia, Russia, and Latin America are not captured in the European geographic total at all.
 
 When you adjust for ethnic composition — counting European-heritage births wherever they occur and excluding non-heritage births within Europe — the builder populations accounted for roughly 37% of all births on Earth in 1960: more than one in three (UN WPP 2024; CDC NCHS; Eurostat; ONS; Statistics Canada; ABS; Russia 2021 Census). By 2025, that share has fallen to approximately 14%. By 2100, on current trajectories, it will be around 7% — roughly one in fifteen. The European-heritage share alone will be just 2.2%. Meanwhile, sub-Saharan Africa's share of global births has risen from 8% in 1960 to over 31% today and is projected to reach 43% by mid-century. The civilisations that invented the scientific method, industrial manufacturing, and the internet are on course to produce a smaller share of the world's children than a single sub-continent.
 
@@ -103,7 +103,7 @@ Detroit peaked at 1.85 million residents in 1950, when the city was 82% white an
 
 The conventional narrative attributes Detroit's collapse to deindustrialisation and the decline of the automobile industry. This is partly true. But deindustrialisation hit many cities — Pittsburgh, Cleveland, Milwaukee, Sheffield, Essen — and most recovered or stabilised. What made Detroit different was the *simultaneous* collapse of its tax base, its professional class, its institutional capacity, and its maintenance culture. White flight was not merely a demographic shift; it was a *transfer of human capital* — the engineers, the managers, the tax-paying professionals — out of the city. The cultural inheritance that knew how to run a modern city left with them, and the population that remained, impoverished by decades of segregation and discrimination, had been systematically excluded from that inheritance.
 
-The same pattern repeats across American cities. Baltimore: population fell from 950,000 (1950) to 570,000 (2024), with a homicide rate of 35.6 per 100,000 — ten times the national average. St. Louis: population halved since 1970, homicide rate of 52.9 per 100,000 — the highest in the nation. Both cities rank in the bottom fifteen of America's seventy-five largest cities for fiscal health (Truth in Accounting, 2024).
+The same pattern repeats across American cities. Baltimore: population fell from 950,000 (1950) to 570,000 (2024), with a homicide rate of 35.6 per 100,000 — ten times the national average. St. Louis: population halved since 1970, homicide rate of 52.9 per 100,000 — the highest in the nation. Both cities rank in the bottom fifteen of America's seventy-five largest cities for fiscal health.
 
 But here is what makes the argument civilisational rather than racial: the same pattern occurred in ancient Rome, involving Europeans inheriting from Europeans. When the Western Roman Empire collapsed in the fifth century, the Germanic peoples who inherited its territory — Franks, Visigoths, Ostrogoths, Vandals — were unable to maintain the infrastructure they acquired. The aqueducts fell into disrepair within a generation. Roads deteriorated. Literacy collapsed. Public sanitation disappeared. Rome's population fell from over a million to fewer than 30,000. The Germanic tribes were European. The failure was not genetic. It was a failure of *cultural transmission* — the inheriting population had not been trained in the institutional knowledge required to operate the systems they had acquired.
 
@@ -148,30 +148,3 @@ If they do not, then the modern world — its electricity, its medicine, its foo
 The builders are dying. The inheritance is not yet secured.
 
 The clock is still ticking.
-
----
-
-## References
-
-- Augustus, *Lex Iulia de maritandis ordinibus* (18 BC) and *Lex Papia Poppaea* (9 AD)
-- Birmingham City Council, Section 114 Notice (September 2023)
-- CDC National Center for Health Statistics, *Births in the United States, 2024*, Data Brief No. 535
-- Destatis (Federal Statistical Office of Germany), *Live births by citizenship of mother*, 2024
-- Eurostat, *Demography of Europe — 2024 edition*
-- Freedom House, *Freedom in the World 2024*
-- International Federation of Robotics, *World Robotics Report 2025*
-- Murray, Charles, *Human Accomplishment: The Pursuit of Excellence in the Arts and Sciences, 800 B.C. to 1950* (HarperCollins, 2003)
-- Needham, Joseph, *Science and Civilisation in China*, 27 vols. (Cambridge University Press, 1954–2015)
-- Nobel Prize Committee, laureate database (through 2024)
-- ONS, *Births by parents' country of birth, England and Wales: 2024*
-- Pomeranz, Kenneth, *The Great Divergence* (Princeton University Press, 2000)
-- Russia 2021 Census, ethnic composition data
-- Statistics Canada, *The contribution of foreign-born mothers to Canadian births, 1997–2024*
-- Statistics Sweden (SCB), *Population by Swedish/foreign background*, December 2024
-- Transparency International, *Corruption Perceptions Index 2024*
-- Truth in Accounting, *Financial State of the Cities 2024*
-- UN Population Division, *World Population Prospects 2024* (median variant)
-- US Census Bureau, Detroit population data (1950–2024)
-- Ward-Perkins, Bryan, *The Fall of Rome and the End of Civilization* (Oxford University Press, 2005)
-- Wirepoints, *2024 Homicide Rankings*, America's 75 largest cities
-- World Bank, *World Development Indicators* (South Africa GDP per capita)

@@ -85,9 +85,9 @@ Column people need to behave in a more responsible manner - it is ultimately in 
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

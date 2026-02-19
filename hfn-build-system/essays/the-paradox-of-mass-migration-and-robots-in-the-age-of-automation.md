@@ -27,7 +27,7 @@ We stand at a pivotal juncture in human history, facing two seemingly contradict
 
 On the other side, the rapid rise of automation, artificial intelligence, and robotics threatens to upend labor markets and displace millions of workers across the skill spectrum. As machines become increasingly capable of performing complex cognitive and physical tasks, the specter of technological unemployment looms large, raising questions about the future of work and the viability of our economic systems.
 
-These competing visions present a perplexing paradox: can the demand for mass migration coexist with the reality of widespread automation? Will the robots take our jobs, or will they create new opportunities for human workers to thrive? To unravel these questions, we must explore the forces driving each phenomenon and consider their implications for the future of labor, inequality, and social cohesion in the age of intelligent machines. This is a prefect subject for History Future Now!  Let's get started.
+These competing visions present a perplexing paradox: can the demand for mass migration coexist with the reality of widespread automation? Will the robots take our jobs, or will they create new opportunities for human workers to thrive? To unravel these questions, we must explore the forces driving each phenomenon and consider their implications for the future of labor, inequality, and social cohesion in the age of intelligent machines. This is a prefect subject for History Future Now! Let's get started.
 
 ### Part 1: The Case for Mass Migration
 
@@ -41,13 +41,13 @@ Migrants, who tend to be younger and more mobile than native-born workers, play 
 
 Without the skills and dynamism that migrants bring, many industries would struggle to find the workers they need to grow and innovate.
 
-Beyond filling immediate labor gaps, migration can provide a powerful boost to long-term economic growth and living standards. A number of  studies have shown that immigration increases productivity, entrepreneurship, and innovation in host countries.
+Beyond filling immediate labor gaps, migration can provide a powerful boost to long-term economic growth and living standards. A number of studies have shown that immigration increases productivity, entrepreneurship, and innovation in host countries.
 
 Many migrants tend to be highly motivated and aspirational, with a strong drive to succeed in their new homes, especially in places like the US. In the U.S., immigrants are twice as likely as native-born citizens to start businesses, and nearly half of America's "unicorn" startups (valued at over $1 billion) have at least one immigrant founder.
 
 At a macroeconomic level, migration increases aggregate demand and expands the tax base, supporting consumption and public finances. A 2018 report by the National Academies of Sciences, Engineering, and Medicine found that immigration had a net positive fiscal impact in the U.S., with immigrants contributing $63 billion more in taxes than they received in public benefits over the past decade.
 
-It is noteworthy that this is not the case for immigration to the European Union, with its more generous welfare levels.  According to a 2023 report by the University of Amsterdam,  immigrants from developed Western countries make substantial positive fiscal contributions to the Netherlands over their lifetimes. Those from North America contribute around €200,000 per person, while immigrants from the UK, Ireland, Scandinavia, and Japan each contribute between €194,000 to €208,000 per person.
+It is noteworthy that this is not the case for immigration to the European Union, with its more generous welfare levels. According to a 2023 report by the University of Amsterdam, immigrants from developed Western countries make substantial positive fiscal contributions to the Netherlands over their lifetimes. Those from North America contribute around €200,000 per person, while immigrants from the UK, Ireland, Scandinavia, and Japan each contribute between €194,000 to €208,000 per person.
 
 In contrast, immigrants from developing non-Western countries impose significant fiscal costs. Those from the Horn of Africa and Sudan have a negative net impact of -€606,000 per person, while immigrants from Morocco (-€542,000), Afghanistan, Iran, Syria and Iraq (-€418,000), and Turkey (-€340,000) also generate large costs. Other Western European countries are likely to have similar results as they also have similar worker protections and high welfare standards.
 
@@ -65,7 +65,7 @@ Without a steady supply of migrant labor, many countries would face a severe sho
 
 In summary, the economic case for immigration in the context of aging populations and labor shortages is strong, particularly in countries with flexible labor markets and modest welfare states like the United States. However, in Europe, with its more extensive worker protections and generous social benefits, the fiscal impact of immigration varies significantly depending on the origin and skill level of the migrants. While highly-skilled immigrants from developed countries tend to make substantial positive contributions, those from developing regions often impose net costs on European welfare systems over their lifetimes.
 
-Yet even as the  case for migration grows stronger in some contexts, the rise of automation and artificial intelligence raises profound questions about the future of work and the ongoing demand for human labor. If machines can perform an ever-expanding range of tasks more efficiently and cheaply than humans, will migrants still be needed to fill gaps in the labor market? Or will they, too, find themselves displaced by the inexorable march of technological progress?
+Yet even as the case for migration grows stronger in some contexts, the rise of automation and artificial intelligence raises profound questions about the future of work and the ongoing demand for human labor. If machines can perform an ever-expanding range of tasks more efficiently and cheaply than humans, will migrants still be needed to fill gaps in the labor market? Or will they, too, find themselves displaced by the inexorable march of technological progress?
 
 ### Part 2: Robots and the Future of Work
 
@@ -97,7 +97,7 @@ As these technologies become more advanced and affordable, the potential for dis
 
 For migrant workers who have long relied on these jobs as a path to economic mobility, the rise of automation presents a daunting challenge. As machines become cheaper and more capable than human labor, the demand for low-skill migrant workers may decline sharply, leaving them with few options for employment.
 
-But it's not just low-skill jobs that are at risk of automation. With the rapid advancement of artificial intelligence, even high-skill cognitive tasks are increasingly within reach of machines.  AI systems can process vast amounts of data, identify patterns, and make decisions with speed and accuracy that surpasses human capabilities. This enables them to take on complex tasks like financial analysis, legal research, and medical diagnosis that were once the exclusive domain of highly-trained professionals.
+But it's not just low-skill jobs that are at risk of automation. With the rapid advancement of artificial intelligence, even high-skill cognitive tasks are increasingly within reach of machines. AI systems can process vast amounts of data, identify patterns, and make decisions with speed and accuracy that surpasses human capabilities. This enables them to take on complex tasks like financial analysis, legal research, and medical diagnosis that were once the exclusive domain of highly-trained professionals.
 
 In fields like finance, law, and medicine, AI systems are beginning to outperform human professionals in tasks like fraud detection, contract review, and disease diagnosis.
 
@@ -115,7 +115,7 @@ The automation of both low-skill and high-skill tasks, coupled with the rise of 
 
 ### Part 3 - Conclusion: The Paradox of Migration and Automation
 
-The demographic realities of the 21st century are stark and unavoidable. With populations aging rapidly and birth rates plummeting, many advanced economies could  face a  future of stagnation and decline without a significant influx of young, productive migrants.  There is an economic case for mass migration.  The US with its more flexible labour market and lower levels of welfare mangers immigrants reasonably well.  In Europe, with its greater labour protections and high welfare standards, the economic case for migration is positive for those coming from other developed countries but generally negative from those from developing countries.
+The demographic realities of the 21st century are stark and unavoidable. With populations aging rapidly and birth rates plummeting, many advanced economies could face a future of stagnation and decline without a significant influx of young, productive migrants. There is an economic case for mass migration. The US with its more flexible labour market and lower levels of welfare mangers immigrants reasonably well. In Europe, with its greater labour protections and high welfare standards, the economic case for migration is positive for those coming from other developed countries but generally negative from those from developing countries.
 
 Yet at the very same time, the accelerating pace of automation and the rise of increasingly capable robots and AI systems are casting doubt on the long-term demand for human labor itself. As machines become more flexible, intelligent, and affordable, they are beginning to encroach on a wider range of tasks and occupations - from low-skill jobs in agriculture and manufacturing to high-skill cognitive work in fields like finance and medicine.
 
@@ -137,9 +137,9 @@ How we choose to respond to these challenges will determine not only the fate of
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

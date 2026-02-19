@@ -61,9 +61,9 @@ In contrast, American, Japanese and European companies handing over core technol
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

@@ -193,8 +193,8 @@ The canary has stopped singing. The question now is what you do about the air in
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:

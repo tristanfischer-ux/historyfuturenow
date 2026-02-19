@@ -187,9 +187,9 @@ As a result, the future is unlikely to see any one country dominate the world so
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

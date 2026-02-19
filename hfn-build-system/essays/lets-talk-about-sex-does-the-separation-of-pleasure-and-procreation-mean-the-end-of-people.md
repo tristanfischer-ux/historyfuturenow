@@ -93,9 +93,9 @@ All of this turmoil thanks to the invention of the Pill and the condom.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

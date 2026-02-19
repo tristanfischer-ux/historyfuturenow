@@ -196,7 +196,7 @@ Rising inequality and the concentration of benefits from technological convergen
 
 ### Part 4: The Long-Term Impact of Platform Technologies over the Next 100 Years
 
-So let’s now look at how these various platform technologies will change humanity over the next 100 years.  Prediction over a long time scale is naturally problematic. We typically think that change will take place faster than it actually does but in the long term we can see that the transformations were even more profound than we originally expected.
+So let’s now look at how these various platform technologies will change humanity over the next 100 years. Prediction over a long time scale is naturally problematic. We typically think that change will take place faster than it actually does but in the long term we can see that the transformations were even more profound than we originally expected.
 
 We have split the next part into 20 year chunks. As time passes some of these changes will be increasingly likely but also increasingly difficult to imagine.
 
@@ -300,9 +300,9 @@ In the meantime, you should start researching which companies are doing pioneeri
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

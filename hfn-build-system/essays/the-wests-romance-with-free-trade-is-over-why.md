@@ -56,7 +56,7 @@ This industrial espionage has a historic echo. China once had monopolies on the 
 
 Back to the present day; one by one Chinese local players emerged that were incredibly competitive and started to beat Western companies at their own game.  Western countries were not able to create new industries faster than the Chinese were able to dominate one manufacturing sector after another.  The theory of comparative advantage was starting to break down.  Not only was China able to produce low value goods, but it was also able to produce high value goods.  The Made in China 2025 policy, which provides significant government support for key next generation industries such as artificial intelligence, robots, autonomous electric vehicles and biotechnology, will push China even further up the value chain.
 
-By 2018 China was the world’s largest manufacturer and the world’s largest exporter.  The Chinese economy increased from $305 billion in 1980 to $12.7 trillion in 2019; exports jumped from $21 billion in 1980 to $2.49 trillion in 2017 (well ahead of the US, in second place); and the economy has grown by an average of 10.2% between 1980 and 2016.   Its products have started to dominate market after market and have driven thousands of Western companies out of business.
+By 2018 China was the world’s largest manufacturer and the world’s largest exporter.  The Chinese economy increased from $305 billion in 1980 to $12.7 trillion in 2019; exports jumped from $21 billion in 1980 to $2.49 trillion in 2017 (well ahead of the US, in second place); and the economy has grown by an average of 10.2% between 1980 and 2016.  Its products have started to dominate market after market and have driven thousands of Western companies out of business.
 
 All of a sudden free trade was starting to look significantly less attractive to Western companies and governments.  This explains why US President Trump has pushed for high tariffs on Chinese imports and Europe is starting to halt Chinese acquisitions of critical European technology companies.
 
@@ -66,9 +66,9 @@ All of a sudden free trade was starting to look significantly less attractive to
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

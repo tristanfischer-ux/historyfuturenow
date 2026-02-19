@@ -60,7 +60,7 @@ These costs fall disproportionately on the years when parents are least able to 
 
 ### The Motherhood Penalty
 
-The economic penalty for becoming a mother is one of the most robust findings in labour economics. In Denmark, which has some of the most generous parental leave in the world, women's earnings drop by approximately 20% after having their first child and never fully recover. Men's earnings are unaffected (Kleven, Landais and Søgaard, 2019). In the United Kingdom, the gap is wider: mothers earn 33% less than equivalent childless women by the time their first child is twelve (Costa Dias, Joyce and Parodi, 2020). In the United States, the penalty is approximately 30% per child (Budig and England, 2001; updated by Correll, Benard and Paik, 2007).
+The economic penalty for becoming a mother is one of the most robust findings in labour economics. In Denmark, which has some of the most generous parental leave in the world, women's earnings drop by approximately 20% after having their first child and never fully recover. Men's earnings are unaffected. In the United Kingdom, the gap is wider: mothers earn 33% less than equivalent childless women by the time their first child is twelve. In the United States, the penalty is approximately 30% per child.
 
 This is not because employers are cartoon villains. It reflects a genuine tension: raising young children requires time, flexibility, and presence. Workplaces are structured around uninterrupted availability. Until this structural mismatch is resolved — not with platitudes about "work-life balance" but with actual policy — mothers will continue to pay an economic price that fathers do not.
 

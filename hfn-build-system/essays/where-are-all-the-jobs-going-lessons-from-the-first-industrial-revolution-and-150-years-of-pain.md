@@ -62,9 +62,9 @@ Like Canute, in our story of the second Industrial Revolution, there is nothing 
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

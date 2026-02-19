@@ -83,9 +83,9 @@ Where do you want to be left standing?
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

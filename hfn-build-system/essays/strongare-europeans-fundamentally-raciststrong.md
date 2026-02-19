@@ -145,7 +145,7 @@ Had the mineral and agricultural wealth of the Americas not been harnessed then 
 
 Finally, after the Second World War came the realisation of horror. The appalling ethnic cleansing of the European Jews radically changed Europe’s casual attitudes to racial superiority and their attitudes to the “other”.
 
-European Jews were almost indistinguishable from their fellow countrymen.  And yet French, Italians, Dutch, Germans, Danes, Poles, Austrians and others all had handed their fellow citizens over to be murdered by Nazis.
+European Jews were almost indistinguishable from their fellow countrymen. And yet French, Italians, Dutch, Germans, Danes, Poles, Austrians and others all had handed their fellow citizens over to be murdered by Nazis.
 
 Europeans have now swung to the opposite end of the racism pendulum and are more open and accepting of “others”, more so than most other non-European nations.  Many Europeans today are terrified of racism and fear being accused of being racist. As a result of this fear they feel that they are not allowed to talk about issues that are legitimate subjects of debate, like immigration and the size of a country’s population.  They use code words, and make references to the “environment” and the “country being full”.
 
@@ -161,9 +161,9 @@ That is not good.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

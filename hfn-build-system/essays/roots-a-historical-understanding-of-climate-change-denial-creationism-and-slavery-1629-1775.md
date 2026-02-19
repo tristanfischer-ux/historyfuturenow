@@ -96,9 +96,9 @@ By understanding the present we are able to understand how our societies will de
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

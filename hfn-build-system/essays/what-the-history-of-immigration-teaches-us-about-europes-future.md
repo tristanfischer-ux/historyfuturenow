@@ -60,7 +60,7 @@ By tracing the male XY and female XX chromosomes of people living in Europe, Ira
 
 Most History Future Now readers will be aware that English is an Indo European language, a family of languages which includes nearly all European languages, such as the Germanic, Greek, Slavic and Romance languages, as well as the languages of North West India, such as Hindi, Urdu, Bengali and Punjabi. About 3.2 billion people speak an Indo European language today, making it the largest linguistic group in the world.
 
-The idea that these languages were linked was first put forward by an English priest and linguist living in India in 1583 who noted the similarities between Latin, Greek and Sanskrit. This was followed up in 1786 by another English linguist called Sir William Jones who spent more time classifying and reconstructing the connections between the various languages From that time it became widely accepted that for these languages to be connected there must have been an original group of people who spoke the language, which linguists called Proto Indo European or PIE for short. Archaeologists and linguists then spent most of the next two centuries coming up with theories of the location of the original homeland of the PIE speaking people, which is now determined to be in the regions north of the Caucus mountains.  They left their original homeland between 10,000 and 4,000 years ago.
+The idea that these languages were linked was first put forward by an English priest and linguist living in India in 1583 who noted the similarities between Latin, Greek and Sanskrit. This was followed up in 1786 by another English linguist called Sir William Jones who spent more time classifying and reconstructing the connections between the various languages From that time it became widely accepted that for these languages to be connected there must have been an original group of people who spoke the language, which linguists called Proto Indo European or PIE for short. Archaeologists and linguists then spent most of the next two centuries coming up with theories of the location of the original homeland of the PIE speaking people, which is now determined to be in the regions north of the Caucus mountains. They left their original homeland between 10,000 and 4,000 years ago.
 
 Archaeologists and linguists have speculated that the combination of the wheel and horses allowed Proto-Indo Europeans to expand rapidly outside of their homeland and penetrate most of Europe and North West India. For a while the theory was that this movement was a cultural and linguistic change - as Proto-Indo Europeans brought superior technologies to other areas peoples in those areas adopted the Proto Indo European culture, centred around the horse and wheel chariots. This is a similar impact to the Europeans moving to Africa and Southern Asia in the 1700-1800s - the cultures may have changed but the underlying peoples remained intact.
 
@@ -296,9 +296,9 @@ Humans coming out of Africa wiped out the indigenous European population 20,000 
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

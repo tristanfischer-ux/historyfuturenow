@@ -117,8 +117,8 @@ The factories are coming back. The question is not whether, but which nations wi
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:

@@ -74,9 +74,9 @@ Conservatives need to seize the cloak of environmentalism away from socialists a
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

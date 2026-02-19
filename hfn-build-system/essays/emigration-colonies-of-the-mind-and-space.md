@@ -77,9 +77,9 @@ But perhaps the only way we will see that is in a virtual world catering for ide
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

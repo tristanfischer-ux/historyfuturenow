@@ -88,7 +88,7 @@ Yet despite its public bluster, Russia has thus far manifestly failed to achieve
 
 Short of full-scale intervention by NATO forces to decisively rout Russia - an unprecedentedly escalatory scenario - an outright military victor capable of unilaterally dictating peace terms seems elusive. The path of imposed peace through overwhelming conquest appears improbable for either side, at least over the foreseeable future.
 
-If military victory remains implausible for now, that leaves only one remaining path out of the morass of Ukraine's conflict - a negotiated diplomatic settlement arduous enough to address the fundamental grievances driving both sides. History has proven that even the most difficult  wars can eventually find resolution through robust peace processes and territorial reorganisation.
+If military victory remains implausible for now, that leaves only one remaining path out of the morass of Ukraine's conflict - a negotiated diplomatic settlement arduous enough to address the fundamental grievances driving both sides. History has proven that even the most difficult wars can eventually find resolution through robust peace processes and territorial reorganisation.
 
 The Treaties of Münster and Osnabrück in 1648, collectively known as the Peace of Westphalia, ended the century of continental carnage triggered by the Thirty Years' War. Through gruelling diplomacy under the auspices of Norway and Sweden as mediators, the settlement reorganised large swathes of Europe's borders, granting sovereignty and religious rights to the warring principalities of the collapsed Holy Roman Empire.
 
@@ -118,9 +118,9 @@ For as History Future Now has continually emphasized, it is only by understandin
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

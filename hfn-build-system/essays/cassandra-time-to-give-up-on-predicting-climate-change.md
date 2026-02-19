@@ -56,9 +56,9 @@ So while we can hope for the best, we must plan for the worst.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

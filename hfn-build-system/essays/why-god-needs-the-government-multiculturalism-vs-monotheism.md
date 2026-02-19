@@ -55,9 +55,9 @@ Monotheism is hard to maintain without the firm backing of the state.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

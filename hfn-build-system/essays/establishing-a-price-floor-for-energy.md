@@ -83,9 +83,9 @@ This is good for industry, consumers and the environment.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

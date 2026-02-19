@@ -115,8 +115,8 @@ Juvenal's question remains unanswered. But for the first time, we may have a gua
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:

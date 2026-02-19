@@ -182,9 +182,9 @@ As we look ahead, the accelerating pace of change, driven by exponential technol
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

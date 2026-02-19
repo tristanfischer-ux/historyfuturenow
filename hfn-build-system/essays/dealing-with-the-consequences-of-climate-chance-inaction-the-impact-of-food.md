@@ -70,9 +70,9 @@ But it is the price we will pay for refusing to address the problem of climate c
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

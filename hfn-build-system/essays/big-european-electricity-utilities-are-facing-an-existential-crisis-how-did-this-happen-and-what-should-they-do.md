@@ -122,9 +122,9 @@ It should be highlighted that this solution is not available for all utilities. 
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

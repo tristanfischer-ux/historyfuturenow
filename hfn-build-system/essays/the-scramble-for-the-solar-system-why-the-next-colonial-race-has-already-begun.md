@@ -123,8 +123,8 @@ The race has already begun. The question, as always, is who will get there first
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:

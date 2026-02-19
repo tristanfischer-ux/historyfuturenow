@@ -51,9 +51,9 @@ While we may not agree with them today, they might be providing the moral guidan
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 

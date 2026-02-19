@@ -3,22 +3,22 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 66
+Total articles: 77
 
 ## Sections
-### Natural Resources (11 articles)
+### Natural Resources (14 articles)
 - URL: https://www.historyfuturenow.com/natural-resources
 - Energy, food, water, land — the physical foundations that every civilisation depends on.
 
-### Global Balance of Power (15 articles)
+### Global Balance of Power (18 articles)
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (12 articles)
+### Jobs & Economy (14 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (28 articles)
+### Society (31 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -241,11 +241,18 @@ Total articles: 66
 - Reading time: 14 min
 - In the quest for immortality, humanity has long dreamed of extending the boundaries of life beyond the confines of our current existence. The tantalizing prospect of living to 150 years or more has ca
 
+### The Atom Returns: Why the World's Most Feared Energy Source Is Its Best Hope [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope
+- Section: Natural Resources
+- Published: 2026-02-19
+- Reading time: 15 min
+- Microsoft signed a deal to restart Three Mile Island for AI power. France generates 70% of its electricity from nuclear at half Germany's carbon intensity. China is building 150 reactors. The atom is 
+
 ### The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next [11 charts]
 - URL: https://www.historyfuturenow.com/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing
 - Section: Society
 - Published: 2026-02-16
-- Reading time: 17 min
+- Reading time: 16 min
 - Between them, European and East Asian civilisations built virtually everything that defines the modern world — the scientific method, industrial manufacturing, semiconductors, the internet, modern med
 
 ### The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth [5 charts]
@@ -255,6 +262,20 @@ Total articles: 66
 - Reading time: 20 min
 - On February 4th 2026, a Washington Post reporter in a warzone in Ukraine learned by text message that she had been laid off. Nearly half the newsroom was gone in a single day. This is not just a story
 
+### The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin
+- Section: Jobs & Economy
+- Published: 2026-02-19
+- Reading time: 15 min
+- The US spent more on interest payments than on defence in 2025 for the first time in history. Spain defaulted six times between 1557 and 1647. France's debt triggered the Revolution. The pattern is al
+
+### The Elephant Awakens: Why India's Rise Will Reshape the World More Than China's Did [5 charts]
+- URL: https://www.historyfuturenow.com/articles/the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did
+- Section: Global Balance of Power
+- Published: 2026-02-19
+- Reading time: 12 min
+- India surpassed China as the world's most populous country in 2023 and landed on the Moon for less than the budget of a Hollywood film. It has 600 million people under 25, a democratic tradition, and 
+
 ### The Empty Cradle Bargain: Why Falling Birth Rates Are Everyone's Problem [7 charts]
 - URL: https://www.historyfuturenow.com/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem
 - Section: Society
@@ -262,12 +283,26 @@ Total articles: 66
 - Reading time: 21 min
 - On a single street in a Western city, five families have one child and two have two. That is nine children where fifteen are needed. Some chose this. Some wanted children and ran out of time. The barr
 
+### The Empty Throne: Why the West No Longer Believes in Its Own Institutions [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions
+- Section: Society
+- Published: 2026-02-19
+- Reading time: 17 min
+- Trust in government, media, science, and the judiciary is at historic lows across the Western world. This is not a passing mood. It is a pattern that preceded every major civilisational transformation
+
 ### The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped [5 charts]
 - URL: https://www.historyfuturenow.com/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped
 - Section: Society
 - Published: 2026-02-16
 - Reading time: 12 min
 - For five thousand years, every successful civilisation tightly controlled who could enter, settle, and become a citizen. Then, in the space of a single generation, the West decided this was bigotry. T
+
+### The Great Divergence: Why Young Men and Women No Longer See the Same World [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world
+- Section: Society
+- Published: 2026-02-19
+- Reading time: 15 min
+- Young women have moved sharply more liberal across the developed world. Young men have not — or have moved more conservative. The gap is historically unprecedented. The political and demographic conse
 
 ### The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People [12 charts]
 - URL: https://www.historyfuturenow.com/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people
@@ -294,8 +329,22 @@ Total articles: 66
 - URL: https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible
 - Section: Society
 - Published: 2026-02-20
-- Reading time: 12 min
+- Reading time: 11 min
 - Guilt societies are ruled by an internal judge; shame societies by the eye of the crowd. The difference shapes corruption, rule of law, and how civilisations understand each other — when they meet, th
+
+### The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed
+- Section: Natural Resources
+- Published: 2026-02-19
+- Reading time: 16 min
+- Water is the one resource for which there is no substitute. Every major civilisation was built on water management — Mesopotamia's canals, Egypt's Nile, Rome's aqueducts. And every civilisation that l
+
+### The Locked Gate: How the West Priced Its Children Out of Existence [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence
+- Section: Society
+- Published: 2026-02-19
+- Reading time: 15 min
+- The average house in England costs 8.9 times the average salary. In Seoul, a young couple saves for 18 years to buy a flat. Every city with extreme housing costs has a fertility rate below 1.5. This i
 
 ### The Long Term Impact of Covid 19 [8 charts]
 - URL: https://www.historyfuturenow.com/articles/the-long-term-impact-of-covid-19
@@ -303,6 +352,20 @@ Total articles: 66
 - Published: 2020-04-01
 - Reading time: 30 min
 - The Covid 19 pandemic is a genuinely historical event. Future historians will analyse the period leading up to the outbreak, searching for clues about why it got so bad so quickly, will then investiga
+
+### The New Literacy: How AI Is Killing The Scribes And What Happens Next [5 charts]
+- URL: https://www.historyfuturenow.com/articles/the-new-literacy
+- Section: Jobs & Economy
+- Published: 2026-02-16
+- Reading time: 15 min
+- For five thousand years, if you could not write, you hired a scribe. If you could not code, you hired a developer. AI has just made everyone literate in the digital scribal arts — coding, design, film
+
+### The New Oil: Why the Race for Critical Minerals Will Define the 21st Century [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century
+- Section: Natural Resources
+- Published: 2026-02-19
+- Reading time: 14 min
+- China banned gallium and germanium exports in 2023 and most Western policymakers had never heard of either element. The energy transition depends on minerals most people cannot name, mined in places m
 
 ### The North African Threat And Mediterranean Reunification [7 charts]
 - URL: https://www.historyfuturenow.com/articles/the-north-african-threat-and-mediterranean-reunification
@@ -360,6 +423,13 @@ Total articles: 66
 - Reading time: 11 min
 - SpaceX is building Starship production lines at scale. China plans a permanent lunar base by 2030. NASA's Artemis programme aims to return Americans to the Moon. India, Japan, and the UAE have all sen
 
+### The Severed Circuit: How the US-China Tech War Is Splitting the World in Two [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two
+- Section: Global Balance of Power
+- Published: 2026-02-19
+- Reading time: 17 min
+- For the first time since the Cold War, the world is bifurcating into two technological civilisations. The US and China are building parallel semiconductor supply chains, separate AI ecosystems, and in
+
 ### The Silence Of The Scribes: How Every Civilisation That Controlled Speech Collapsed [2 charts]
 - URL: https://www.historyfuturenow.com/articles/the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed
 - Section: Society
@@ -387,6 +457,13 @@ Total articles: 66
 - Published: 2019-01-15
 - Reading time: 9 min
 - Donald Trump is marching the US into a trade war with China. Markets are rattled. China is rattled. American companies are rattled. After 100 years of promoting free trade as a way of enriching everyo
+
+### The Young Continent: How Africa's Billion-Person Surge Will Reshape the Global Order [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order
+- Section: Global Balance of Power
+- Published: 2026-02-19
+- Reading time: 17 min
+- The median age in Niger is 15.6 years. In Japan it is 49.9. Africa's population will reach 2.5 billion by 2050 and could hit 4 billion by 2100. One in three humans will be African. This is the demogra
 
 ### Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture [2 charts]
 - URL: https://www.historyfuturenow.com/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture

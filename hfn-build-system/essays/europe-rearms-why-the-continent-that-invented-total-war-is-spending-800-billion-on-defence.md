@@ -171,8 +171,8 @@ The bill has arrived. The answer will define the century.
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:

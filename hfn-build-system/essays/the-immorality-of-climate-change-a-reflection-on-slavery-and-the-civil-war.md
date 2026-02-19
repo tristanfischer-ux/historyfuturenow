@@ -47,9 +47,9 @@ They adjusted, and so should we
 
 ---
 
-## THEN: 
+## THEN:
 
-## NOW: 
+## NOW:
 
-## NEXT: 
+## NEXT:
 
