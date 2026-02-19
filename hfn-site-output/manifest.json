@@ -1,0 +1,15 @@
+{
+  "name": "History Future Now",
+  "short_name": "HFN",
+  "description": "History, data, and the forces shaping the future",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#c43425",
+  "background_color": "#fdfcfb",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
