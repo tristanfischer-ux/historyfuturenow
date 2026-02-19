@@ -21,6 +21,24 @@ MAX_NEW_ARTICLES = 10
 # Discussion scripts and audio files are preserved on disk — just not rendered.
 ENABLE_DISCUSSIONS = False
 
+# Articles pulled from public site for editorial review. They remain accessible
+# at their direct URLs (with noindex) and are listed on a hidden /review/ page.
+REVIEW_SLUGS = {
+    # Issue 16
+    "the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did",
+    "the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions",
+    "the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed",
+    "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible",
+    "when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age",
+    # Issue 15
+    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing",
+    "the-new-literacy",
+    "a-nation-transformed-britains-demographic-revolution-1948-2050",
+    "the-great-offshoring-how-the-worlds-factory-moved-east",
+    # Issue 14
+    "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth",
+}
+
 def truncate_excerpt(text, max_len):
     """Truncate text to max_len characters, adding ellipsis if truncated."""
     if len(text) <= max_len:
@@ -302,7 +320,7 @@ def make_card_controls(essay, pi):
     return f'<div class="card-controls">{bookmark_btn}</div>'
 
 
-def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None, pub_date=None):
+def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None, pub_date=None, noindex=False):
     te = html_mod.escape(title)
     de = html_mod.escape(desc[:300]) if desc else ""
     tc = part_color or "#c43425"
@@ -311,6 +329,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
     og_img = f'<meta property="og:image" content="{SITE_URL}{og_image}">\n<meta name="twitter:image" content="{SITE_URL}{og_image}">' if og_image else ""
     og_date = f'\n<meta property="article:published_time" content="{pub_date}">' if pub_date else ""
     ld = f'<script type="application/ld+json">{json.dumps(json_ld, ensure_ascii=False)}</script>' if json_ld else ""
+    robots = "noindex, nofollow" if noindex else "index, follow"
     return f'''<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{te}</title>
@@ -328,7 +347,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
 <meta name="twitter:title" content="{te}">
 <meta name="twitter:description" content="{de}">
 <meta name="theme-color" content="{tc}">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="{robots}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="alternate" type="application/rss+xml" title="History Future Now" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -859,7 +878,7 @@ def inject_charts_into_body(body_html, charts):
 
     return body_html, script_block
 
-def build_article(essay, all_essays):
+def build_article(essay, all_essays, is_review=False):
     pi = PARTS[essay['part']]
     te = html_mod.escape(essay['title'])
     body = inject_pull_quote(essay['body_html'], essay['pull_quote'])
@@ -1027,7 +1046,7 @@ def build_article(essay, all_essays):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head(f"{essay['title']} — History Future Now", essay['excerpt'], f"/articles/{essay['slug']}", pi['color'], json_ld, og_image=hero_img, pub_date=essay.get('pub_date'))}
+{make_head(f"{essay['title']} — History Future Now", essay['excerpt'], f"/articles/{essay['slug']}", pi['color'], json_ld, og_image=hero_img, pub_date=essay.get('pub_date'), noindex=is_review)}
 </head>
 <body>
 
@@ -1299,9 +1318,16 @@ def build_homepage(essays, new_essays=None):
                 e['mtime'] = 0
     sorted_essays = sorted(essays, key=lambda x: x.get('mtime', 0), reverse=True)
 
-    # ── Current Issue section ──
-    current_issue = get_current_issue()
+    # ── Current Issue section (find latest issue with available articles) ──
     slug_map = {e['slug']: e for e in essays}
+    current_issue = None
+    for candidate in sorted(ISSUES, key=lambda i: i['number'], reverse=True):
+        candidate_essays = [slug_map[s] for s in candidate['articles'] if s in slug_map]
+        if candidate_essays:
+            current_issue = candidate
+            break
+    if current_issue is None:
+        current_issue = get_current_issue()
     ci_essays = [slug_map[s] for s in current_issue['articles'] if s in slug_map]
     ci_num = current_issue['number']
     ci_date_label = current_issue['label']
@@ -1625,6 +1651,44 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 </script>
 </body>
 </html>"""
+
+def build_review_page(review_essays):
+    """Build a hidden review page listing articles pulled from public site."""
+    cards_html = ""
+    for e in review_essays:
+        pi = PARTS[e['part']]
+        hero_img = get_hero_image(e['slug'])
+        img_html = f'<img src="{hero_img}" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0" loading="lazy">' if hero_img else ''
+        has_audio = e.get('has_audio') or e.get('has_discussion')
+        audio_tag = '<span style="color:#059669;font-size:0.85rem">&#9654; Audio</span>' if has_audio else ''
+        cards_html += f'''    <a href="/articles/{html_mod.escape(e['slug'])}" style="display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;transition:box-shadow 0.2s">
+      {img_html}
+      <div style="padding:1rem">
+        <div style="font-size:0.8rem;color:{pi['color']};font-weight:600;margin-bottom:0.25rem">{pi['label']} &middot; {html_mod.escape(e['part'])}</div>
+        <h3 style="margin:0 0 0.5rem;font-size:1.1rem;line-height:1.3">{html_mod.escape(e['title'])}</h3>
+        <p style="margin:0 0 0.5rem;font-size:0.9rem;color:#6b7280;line-height:1.4">{truncate_excerpt(e['excerpt'], 160)}</p>
+        <div style="font-size:0.8rem;color:#9ca3af">{e['reading_time']} min read {audio_tag}</div>
+      </div>
+    </a>\n'''
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+{make_head("Editorial Review — History Future Now", "Articles under editorial review", noindex=True)}
+</head>
+<body style="background:#f9fafb;font-family:'Source Sans 3',sans-serif">
+<div style="max-width:900px;margin:0 auto;padding:2rem 1rem">
+  <div style="margin-bottom:2rem">
+    <a href="/" style="color:#6b7280;text-decoration:none;font-size:0.9rem">&larr; Back to site</a>
+  </div>
+  <h1 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:0.5rem">Editorial Review</h1>
+  <p style="color:#6b7280;margin-bottom:2rem">{len(review_essays)} articles under review. This page is not linked from the public site.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem">
+{cards_html}  </div>
+</div>
+</body>
+</html>'''
+
 
 def build_listen_page(essays):
     """Build the dedicated /listen page with filterable audio catalogue."""
@@ -2134,8 +2198,10 @@ def build_charts_page(essays, all_charts):
 </html>'''
 
 
-def build_issues_archive(essays, all_charts):
+def build_issues_archive(essays, all_charts, issues_list=None):
     """Build the issues archive page: /issues/."""
+    if issues_list is None:
+        issues_list = ISSUES
     slug_map = {e['slug']: e for e in essays}
     from datetime import datetime
 
@@ -2145,7 +2211,7 @@ def build_issues_archive(essays, all_charts):
     ])
 
     issue_cards = ""
-    for issue in sorted(ISSUES, key=lambda i: i['number'], reverse=True):
+    for issue in sorted(issues_list, key=lambda i: i['number'], reverse=True):
         num = issue['number']
         date_label = issue['label']
         article_count = len(issue['articles'])
@@ -2192,7 +2258,7 @@ def build_issues_archive(essays, all_charts):
   <div class="issue-hero-inner">
     {breadcrumbs}
     <h1 class="issue-title">All Issues</h1>
-    <div class="issue-meta">{len(ISSUES)} issues &middot; {len(essays)} articles</div>
+    <div class="issue-meta">{len(issues_list)} issues &middot; {len(essays)} articles</div>
   </div>
 </section>
 
@@ -2224,14 +2290,24 @@ def main():
     original_slugs = load_original_slugs()
     for e in essays:
         e['is_new'] = e['slug'] not in original_slugs
+        e['is_review'] = e['slug'] in REVIEW_SLUGS
+
+    # Split into public and review essays
+    public_essays = [e for e in essays if not e.get('is_review')]
+    review_essays = [e for e in essays if e.get('is_review')]
+
+    if review_essays:
+        print(f"\n  📋 {len(review_essays)} articles under review (hidden from public):")
+        for e in review_essays:
+            print(f"     [{e['part']}] {e['title'][:60]}")
 
     # Resolve file mtime for new articles (needed for FIFO ordering)
-    for e in essays:
+    for e in public_essays:
         if e['is_new']:
             e['mtime'] = os.path.getmtime(e['filepath'])
 
     new_essays = sorted(
-        [e for e in essays if e['is_new']],
+        [e for e in public_essays if e['is_new']],
         key=lambda x: x['mtime'],
         reverse=True
     )[:MAX_NEW_ARTICLES]
@@ -2248,31 +2324,42 @@ def main():
 
     print("\nBuilding article pages...")
     for e in essays:
-        (ARTICLES_DIR / f"{e['slug']}.html").write_text(build_article(e, essays), encoding='utf-8')
-    print(f"  Built {len(essays)} article pages")
+        is_review = e.get('is_review', False)
+        (ARTICLES_DIR / f"{e['slug']}.html").write_text(
+            build_article(e, public_essays, is_review=is_review), encoding='utf-8')
+    print(f"  Built {len(essays)} article pages ({len(review_essays)} with noindex)")
 
     print("Building section pages...")
     for pn, pi in PARTS.items():
-        (OUTPUT_DIR / f"{pi['slug']}.html").write_text(build_section(pn, essays, new_slugs), encoding='utf-8')
+        (OUTPUT_DIR / f"{pi['slug']}.html").write_text(build_section(pn, public_essays, new_slugs), encoding='utf-8')
     print(f"  Built {len(PARTS)} section pages")
+
+    # Filter issues: remove review slugs from article lists, skip empty issues
+    public_issues = []
+    for issue in ISSUES:
+        filtered_articles = [s for s in issue['articles'] if s not in REVIEW_SLUGS]
+        if filtered_articles:
+            public_issue = dict(issue)
+            public_issue['articles'] = filtered_articles
+            public_issues.append(public_issue)
 
     print("Building issue pages...")
     all_charts = get_all_charts()
     issues_dir = OUTPUT_DIR / "issues"
     issues_dir.mkdir(parents=True, exist_ok=True)
-    for issue in ISSUES:
+    for issue in public_issues:
         issue_dir = issues_dir / str(issue['number'])
         issue_dir.mkdir(parents=True, exist_ok=True)
-        (issue_dir / "index.html").write_text(build_issue_page(issue, essays, all_charts), encoding='utf-8')
-    (issues_dir / "index.html").write_text(build_issues_archive(essays, all_charts), encoding='utf-8')
-    print(f"  Built {len(ISSUES)} issue pages + archive")
+        (issue_dir / "index.html").write_text(build_issue_page(issue, public_essays, all_charts), encoding='utf-8')
+    (issues_dir / "index.html").write_text(build_issues_archive(public_essays, all_charts, public_issues), encoding='utf-8')
+    print(f"  Built {len(public_issues)} issue pages + archive (skipped {len(ISSUES) - len(public_issues)} empty)")
 
     print("Building homepage...")
-    (OUTPUT_DIR / "index.html").write_text(build_homepage(essays, new_essays), encoding='utf-8')
+    (OUTPUT_DIR / "index.html").write_text(build_homepage(public_essays, new_essays), encoding='utf-8')
     print("  Built homepage")
 
     print("Building listen page...")
-    (OUTPUT_DIR / "listen.html").write_text(build_listen_page(essays), encoding='utf-8')
+    (OUTPUT_DIR / "listen.html").write_text(build_listen_page(public_essays), encoding='utf-8')
     print("  Built listen page")
 
     print("Building library page...")
@@ -2280,24 +2367,31 @@ def main():
     print("  Built library page")
 
     print("Building charts page...")
-    (OUTPUT_DIR / "charts.html").write_text(build_charts_page(essays, all_charts), encoding='utf-8')
+    (OUTPUT_DIR / "charts.html").write_text(build_charts_page(public_essays, all_charts), encoding='utf-8')
     print("  Built charts page")
+
+    # ── Review page (hidden, not linked) ──
+    print("Building review page...")
+    review_dir = OUTPUT_DIR / "review"
+    review_dir.mkdir(parents=True, exist_ok=True)
+    (review_dir / "index.html").write_text(build_review_page(review_essays), encoding='utf-8')
+    print(f"  Built review page with {len(review_essays)} articles")
 
     # ── SEO files ──
     print("Building SEO files...")
     all_charts = get_all_charts()
 
-    # sitemap.xml
+    # sitemap.xml — only public articles
     urls = [f'  <url><loc>{SITE_URL}/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>']
     urls.append(f'  <url><loc>{SITE_URL}/listen</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     urls.append(f'  <url><loc>{SITE_URL}/library</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>')
     urls.append(f'  <url><loc>{SITE_URL}/issues</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
     urls.append(f'  <url><loc>{SITE_URL}/charts</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
-    for issue in ISSUES:
+    for issue in public_issues:
         urls.append(f'  <url><loc>{SITE_URL}/issues/{issue["number"]}</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>')
     for pi in PARTS.values():
         urls.append(f'  <url><loc>{SITE_URL}/{pi["slug"]}</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>')
-    for e in essays:
+    for e in public_essays:
         lastmod = f'<lastmod>{e["pub_date"]}</lastmod>' if e.get('pub_date') else ''
         urls.append(f'  <url><loc>{SITE_URL}/articles/{e["slug"]}</loc>{lastmod}<priority>0.7</priority><changefreq>monthly</changefreq></url>')
     sitemap = f'''<?xml version="1.0" encoding="UTF-8"?>
@@ -2306,28 +2400,35 @@ def main():
 </urlset>'''
     (OUTPUT_DIR / "sitemap.xml").write_text(sitemap, encoding='utf-8')
 
-    # robots.txt
+    # robots.txt — disallow /review/
     robots = f"""User-agent: *
 Allow: /
+Disallow: /review/
 Sitemap: {SITE_URL}/sitemap.xml
 
 User-agent: GPTBot
 Allow: /
+Disallow: /review/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /review/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /review/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /review/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /review/
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /review/
 """
     (OUTPUT_DIR / "robots.txt").write_text(robots, encoding='utf-8')
 
@@ -2338,13 +2439,13 @@ Allow: /
         "",
         "Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.",
         f"Author: Tristan Fischer",
-        f"Total articles: {len(essays)}",
+        f"Total articles: {len(public_essays)}",
         "",
         "## Sections",
     ]
     for pn in sorted(PARTS.keys(), key=lambda p: PARTS[p]['order']):
         pi = PARTS[pn]
-        se = [e for e in essays if e['part'] == pn]
+        se = [e for e in public_essays if e['part'] == pn]
         llms_lines.append(f"### {pn} ({len(se)} articles)")
         llms_lines.append(f"- URL: {SITE_URL}/{pi['slug']}")
         llms_lines.append(f"- {pi['desc']}")
@@ -2352,7 +2453,7 @@ Allow: /
 
     llms_lines.append("## Articles")
     llms_lines.append("")
-    for e in essays:
+    for e in public_essays:
         n_charts = len(all_charts.get(e['slug'], []))
         chart_note = f" [{n_charts} charts]" if n_charts else ""
         llms_lines.append(f"### {e['title']}{chart_note}")
@@ -2366,9 +2467,9 @@ Allow: /
 
     (OUTPUT_DIR / "llms.txt").write_text("\n".join(llms_lines), encoding='utf-8')
 
-    # search-index.json for client-side search
+    # search-index.json for client-side search — only public articles
     search_index = []
-    for e in essays:
+    for e in public_essays:
         pi = PARTS[e['part']]
         n_charts = len(all_charts.get(e['slug'], []))
         entry = {
@@ -2389,10 +2490,10 @@ Allow: /
     (OUTPUT_DIR / "search-index.json").write_text(
         json.dumps(search_index, ensure_ascii=False), encoding='utf-8')
 
-    # RSS feed (Atom)
+    # RSS feed — only public articles
     from datetime import datetime
     sorted_by_date = sorted(
-        [e for e in essays if e.get('pub_date')],
+        [e for e in public_essays if e.get('pub_date')],
         key=lambda e: e['pub_date'],
         reverse=True
     )
@@ -2437,8 +2538,8 @@ Allow: /
 
     print("  Built sitemap.xml, robots.txt, llms.txt, search-index.json, feed.xml")
 
-    total = len(essays) + len(PARTS) + 1
-    print(f"\n✅ Site built: {total} HTML pages")
+    total = len(essays) + len(PARTS) + 1 + 1  # +1 for review page
+    print(f"\n✅ Site built: {total} HTML pages ({len(public_essays)} public, {len(review_essays)} under review)")
     print(f"   Output: {OUTPUT_DIR}")
 
 if __name__ == "__main__":

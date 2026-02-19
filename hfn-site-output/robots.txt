@@ -1,21 +1,28 @@
 User-agent: *
 Allow: /
+Disallow: /review/
 Sitemap: https://www.historyfuturenow.com/sitemap.xml
 
 User-agent: GPTBot
 Allow: /
+Disallow: /review/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /review/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /review/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /review/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /review/
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /review/

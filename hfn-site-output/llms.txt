@@ -3,22 +3,22 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 77
+Total articles: 67
 
 ## Sections
-### Natural Resources (14 articles)
+### Natural Resources (13 articles)
 - URL: https://www.historyfuturenow.com/natural-resources
 - Energy, food, water, land — the physical foundations that every civilisation depends on.
 
-### Global Balance of Power (18 articles)
+### Global Balance of Power (16 articles)
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (14 articles)
+### Jobs & Economy (13 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (31 articles)
+### Society (25 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -30,13 +30,6 @@ Total articles: 77
 - Published: 2013-09-01
 - Reading time: 3 min
 - History Future Now has been considering the historical and future implications of the NSA files that have been leaked bit by bit by Edward Snowden over the past few months. History Future Now is very 
-
-### A Nation Transformed: Britain's Demographic Revolution, 1948–2050 [6 charts]
-- URL: https://www.historyfuturenow.com/articles/a-nation-transformed-britains-demographic-revolution-1948-2050
-- Section: Society
-- Published: 2026-02-18
-- Reading time: 13 min
-- Britain has undergone one of the most rapid peacetime demographic transformations in European history. It was not planned. It emerged from a sequence of policy decisions — and its long-term trajectory
 
 ### Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do? [2 charts]
 - URL: https://www.historyfuturenow.com/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do
@@ -248,20 +241,6 @@ Total articles: 77
 - Reading time: 16 min
 - Microsoft signed a deal to restart Three Mile Island for AI power. France generates 70% of its electricity from nuclear at half Germany's carbon intensity. China is building 150 reactors. The atom is 
 
-### The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next [11 charts]
-- URL: https://www.historyfuturenow.com/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing
-- Section: Society
-- Published: 2026-02-16
-- Reading time: 17 min
-- Between them, European and East Asian civilisations built virtually everything that defines the modern world — the scientific method, industrial manufacturing, semiconductors, the internet, modern med
-
-### The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth [5 charts]
-- URL: https://www.historyfuturenow.com/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth
-- Section: Society
-- Published: 2026-02-09
-- Reading time: 20 min
-- On February 4th 2026, a Washington Post reporter in a warzone in Ukraine learned by text message that she had been laid off. Nearly half the newsroom was gone in a single day. This is not just a story
-
 ### The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin [3 charts]
 - URL: https://www.historyfuturenow.com/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin
 - Section: Jobs & Economy
@@ -269,26 +248,12 @@ Total articles: 77
 - Reading time: 16 min
 - The US spent more on interest payments than on defence in 2025 for the first time in history. Spain defaulted six times between 1557 and 1647. France's debt triggered the Revolution. The pattern is al
 
-### The Elephant Awakens: Why India's Rise Will Reshape the World More Than China's Did [5 charts]
-- URL: https://www.historyfuturenow.com/articles/the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did
-- Section: Global Balance of Power
-- Published: 2026-02-19
-- Reading time: 12 min
-- India surpassed China as the world's most populous country in 2023 and landed on the Moon for less than the budget of a Hollywood film. It has 600 million people under 25, a democratic tradition, and 
-
 ### The Empty Cradle Bargain: Why Falling Birth Rates Are Everyone's Problem [7 charts]
 - URL: https://www.historyfuturenow.com/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem
 - Section: Society
 - Published: 2026-02-04
 - Reading time: 21 min
 - On a single street in a Western city, five families have one child and two have two. That is nine children where fifteen are needed. Some chose this. Some wanted children and ran out of time. The barr
-
-### The Empty Throne: Why the West No Longer Believes in Its Own Institutions [4 charts]
-- URL: https://www.historyfuturenow.com/articles/the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions
-- Section: Society
-- Published: 2026-02-19
-- Reading time: 17 min
-- Trust in government, media, science, and the judiciary is at historic lows across the Western world. This is not a passing mood. It is a pattern that preceded every major civilisational transformation
 
 ### The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped [5 charts]
 - URL: https://www.historyfuturenow.com/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped
@@ -311,33 +276,12 @@ Total articles: 77
 - Reading time: 12 min
 - In a small town in southern Italy, a school closed last year. Not because of budget cuts. Because there were no children left. That empty classroom is the future of the developed world. No country in 
 
-### The Great Offshoring: How the World's Factory Moved East [5 charts]
-- URL: https://www.historyfuturenow.com/articles/the-great-offshoring-how-the-worlds-factory-moved-east
-- Section: Global Balance of Power
-- Published: 2026-02-18
-- Reading time: 12 min
-- In a single generation, the West gave away the industrial monopoly it had held for two centuries. From the rust belts of the Midlands to the boomtowns of Guangdong, this is the story of the Great Offs
-
 ### The immorality of climate change, a reflection on slavery and the Civil War
 - URL: https://www.historyfuturenow.com/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war
 - Section: Natural Resources
 - Published: 2012-04-15
 - Reading time: 5 min
 - Today, few people look back upon African slavery in the Americas as a good thing. There are no rousing speeches defending slave owners rights over their property, or demands not just to maintain the i
-
-### The Invisible Judge: Why Guilt and Shame Societies Are Incompatible [3 charts]
-- URL: https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible
-- Section: Society
-- Published: 2026-02-20
-- Reading time: 12 min
-- Guilt societies are ruled by an internal judge; shame societies by the eye of the crowd. The difference shapes corruption, rule of law, and how civilisations understand each other — when they meet, th
-
-### The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed [4 charts]
-- URL: https://www.historyfuturenow.com/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed
-- Section: Natural Resources
-- Published: 2026-02-19
-- Reading time: 16 min
-- Water is the one resource for which there is no substitute. Every major civilisation was built on water management — Mesopotamia's canals, Egypt's Nile, Rome's aqueducts. And every civilisation that l
 
 ### The Locked Gate: How the West Priced Its Children Out of Existence [3 charts]
 - URL: https://www.historyfuturenow.com/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence
@@ -352,13 +296,6 @@ Total articles: 77
 - Published: 2020-04-01
 - Reading time: 30 min
 - The Covid 19 pandemic is a genuinely historical event. Future historians will analyse the period leading up to the outbreak, searching for clues about why it got so bad so quickly, will then investiga
-
-### The New Literacy: How AI Is Killing The Scribes And What Happens Next [5 charts]
-- URL: https://www.historyfuturenow.com/articles/the-new-literacy
-- Section: Jobs & Economy
-- Published: 2026-02-16
-- Reading time: 15 min
-- For five thousand years, if you could not write, you hired a scribe. If you could not code, you hired a developer. AI has just made everyone literate in the digital scribal arts — coding, design, film
 
 ### The New Oil: Why the Race for Critical Minerals Will Define the 21st Century [3 charts]
 - URL: https://www.historyfuturenow.com/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century
@@ -492,13 +429,6 @@ Total articles: 77
 - Published: 2013-02-01
 - Reading time: 25 min
 - Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst. That is a problem as it is an important subject which doesn'
-
-### When the Servants Are Silicon: What History's Leisure Classes Reveal About the AI Age [4 charts]
-- URL: https://www.historyfuturenow.com/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age
-- Section: Society
-- Published: 2026-02-20
-- Reading time: 15 min
-- Robots are not stealing jobs. They are replacing the unborn. When the Shadow Workforce handles survival, eight billion people become an aristocracy. Athens used that freedom to invent philosophy. Rome
 
 ### Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain. [3 charts]
 - URL: https://www.historyfuturenow.com/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain
