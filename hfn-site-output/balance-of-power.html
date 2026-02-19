@@ -132,6 +132,9 @@
   </div>
 </div>
 
+<div class="section-progress-wrap" id="sectionProgressWrap" data-section-slugs="[&quot;china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically&quot;, &quot;crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west&quot;, &quot;europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence&quot;, &quot;forging-peace-from-centuries-of-war-to-ukraines-future&quot;, &quot;hinkley-point-decision-is-really-about-china-and-brexit&quot;, &quot;rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china&quot;, &quot;the-great-offshoring-how-the-worlds-factory-moved-east&quot;, &quot;the-north-african-threat-and-mediterranean-reunification&quot;, &quot;the-rise-of-the-west-was-based-on-luck-that-has-run-out&quot;, &quot;the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun&quot;, &quot;the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace&quot;, &quot;the-wests-romance-with-free-trade-is-over-why&quot;, &quot;what-happens-when-china-becomes-the-largest-economy-in-the-world&quot;, &quot;why-china-could-invade-taiwan-and-get-away-with-it&quot;, &quot;why-do-we-need-the-military-securing-energy-supplies-and-trade-routes&quot;]">
+  <p class="section-progress-text" id="sectionProgressText"></p>
+</div>
 <div class="section-card-grid">
     <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="section-featured-card">
       <div class="section-card-img-wrap"><img src="/images/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically/hero.png" alt="" class="section-card-img section-featured-img" loading="lazy" width="1100" height="280"></div>
@@ -402,10 +405,13 @@
   </div>
   <div class="q-list" id="queueList"></div>
 </div>
-<script src="/js/nav.js?v=4e64c9fb"></script>
+<script src="/js/nav.js?v=3a12ff14"></script>
 <script src="/js/search.js?v=a8c0e71d"></script>
 <script src="/js/queue.js?v=805f800c"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
+<script>
+(function(){ var wrap=document.getElementById('sectionProgressWrap'); if(!wrap) return; try { var slugs=JSON.parse(wrap.getAttribute('data-section-slugs')||'[]'); var raw=localStorage.getItem('hfn_read_slugs'); var read=raw?JSON.parse(raw):[]; var set=new Set(read); var n=slugs.filter(function(s){ return set.has(s); }).length; var el=document.getElementById('sectionProgressText'); if(el) el.textContent=n+' of '+slugs.length+' articles in this section read'; } catch(e) {} })();
+</script>
 
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>

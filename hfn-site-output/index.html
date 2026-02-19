@@ -298,6 +298,23 @@
     </div>
   </div>
 </div>
+''' + (f'''
+<div class="might-missed-wrap">
+  <div class="might-missed-inner">
+    <h2 class="might-missed-title">You might have missed</h2>
+    <p class="might-missed-desc">Older pieces that hold up.</p>
+    <div class="might-missed-grid">
+''' + ''.join(
+    f'''      <a href="/articles/is-democracy-the-opium-of-the-masses" class="might-missed-card">
+        <span class="might-missed-kicker" style="color:#7c3aed">Part 4</span>
+        <h3>Is Democracy The Opium Of The Masses?</h3>
+        <span class="might-missed-meta">3 min read</span>
+      </a>
+''' for e in might_missed_essays
+) + '''    </div>
+  </div>
+</div>
+''' if might_missed_essays else '') + '''
 <div class="hero-and-stats-wrap">
   <div class="hero-chart-wrap">
     <div class="hero-chart-inner">
@@ -1016,7 +1033,7 @@
   </div>
   <div class="q-list" id="queueList"></div>
 </div>
-<script src="/js/nav.js?v=4e64c9fb"></script>
+<script src="/js/nav.js?v=3a12ff14"></script>
 <script src="/js/search.js?v=a8c0e71d"></script>
 <script src="/js/queue.js?v=805f800c"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>

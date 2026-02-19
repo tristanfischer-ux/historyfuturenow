@@ -442,6 +442,9 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .footnote-popover-back { margin: 0.5rem 0 0; padding-top: 0.5rem; border-top: 1px solid var(--border-light); }
 .footnote-popover-back a { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); }
 .footnote-popover-back a:hover { color: var(--accent); }
+
+.article-toc-item.toc-done a { color: var(--text-faint); }
+.article-toc-item.toc-done a::after { content: ' ✓'; font-size: 0.75em; color: var(--green); }
 .stat-callout { margin: 1.25rem 0; padding: 1rem 1.25rem; background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; font-size: 0.92rem; line-height: 1.55; }
 .stat-callout strong { color: var(--accent); }
 
@@ -464,6 +467,19 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .up-next-card:hover .up-next-title { color: var(--section-color, var(--accent)); }
 .up-next-meta { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); letter-spacing: 0.03em; }
 .up-next-audio { margin-left: 0.35rem; }
+
+.might-missed-wrap { background: var(--surface); padding: 2rem 1.5rem; border-top: 1px solid var(--border); }
+.might-missed-inner { max-width: 1100px; margin: 0 auto; }
+.might-missed-title { font-family: var(--serif); font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+.might-missed-desc { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1.25rem; }
+.might-missed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.might-missed-card { display: block; padding: 1rem 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+.might-missed-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); transform: translateY(-2px); }
+.might-missed-kicker { font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+.might-missed-card h3 { font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--text); margin: 0.35rem 0 0.25rem; line-height: 1.35; }
+.might-missed-card:hover h3 { color: var(--accent); }
+.might-missed-meta { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); }
+@media (max-width: 768px) { .might-missed-grid { grid-template-columns: 1fr; } }
 
 .related-articles { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
 .related-articles h3 { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: var(--text); margin-bottom: 1.2rem; }
@@ -1100,6 +1116,9 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .issue-title { font-family: var(--serif); font-size: 2.2rem; font-weight: 700; color: var(--text); margin: 0 0 0.5rem; line-height: 1.2; }
 .issue-meta { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.04em; }
 .issue-card-section { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; display: block; margin-bottom: 0.25rem; }
+
+.section-progress-wrap { padding: 0 1.5rem 1rem; max-width: 1100px; margin: 0 auto; }
+.section-progress-text { font-family: var(--mono); font-size: 0.78rem; color: var(--text-faint); }
 
 /* Issue archive grid */
 .issue-archive-grid { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 3rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }

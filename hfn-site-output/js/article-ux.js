@@ -66,15 +66,21 @@
     nav.appendChild(list);
     toc.appendChild(nav);
 
-    // Scroll spy
+    // Scroll spy + section "done" (read) tick
     const observer = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
           const id = entry.target.id;
-          toc.querySelectorAll('.article-toc-item a').forEach(function (a) {
-            a.classList.toggle('active', a.getAttribute('href') === '#' + id);
-          });
+          const link = toc.querySelector('.article-toc-item a[href="#' + id + '"]');
+          if (!link) return;
+          if (entry.isIntersecting) {
+            toc.querySelectorAll('.article-toc-item a').forEach(function (a) {
+              a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+            });
+          }
+          if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+            link.closest('.article-toc-item').classList.add('toc-done');
+          }
         });
       },
       { rootMargin: '-80px 0px -70% 0px', threshold: 0 }

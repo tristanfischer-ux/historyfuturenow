@@ -127,6 +127,39 @@
     });
   }
 
+  function copyChartData(chartFigure) {
+    var canvas = chartFigure.querySelector('canvas');
+    if (!canvas || typeof Chart === 'undefined') {
+      showToast('Chart not ready');
+      return;
+    }
+    var chart = Chart.getChart(canvas);
+    if (!chart || !chart.data) {
+      showToast('No data to copy');
+      return;
+    }
+    var rows = [];
+    var labels = chart.data.labels || [];
+    var datasets = chart.data.datasets || [];
+    if (datasets.length === 0) { showToast('No data to copy'); return; }
+    var header = ['Label'].concat(datasets.map(function(d) { return d.label || 'Value'; }));
+    rows.push(header.join(','));
+    var n = Math.max(labels.length, datasets.reduce(function(m, d) { return Math.max(m, (d.data && d.data.length) || 0); }, 0));
+    for (var i = 0; i < n; i++) {
+      var label = labels[i] !== undefined ? String(labels[i]).replace(/"/g, '""') : '';
+      var vals = datasets.map(function(d) { var v = d.data && d.data[i]; return v !== undefined ? String(v) : ''; });
+      rows.push('"' + label + '",' + vals.join(','));
+    }
+    var csv = rows.join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(csv).then(function() {
+        showToast('Data copied to clipboard');
+      }).catch(function() { showToast('Copy failed'); });
+    } else {
+      showToast('Copy not supported');
+    }
+  }
+
   function copyChartImage(chartFigure) {
     showToast('Copying chart...');
     captureChart(chartFigure, function(canvas) {
@@ -175,6 +208,7 @@
       if (!chartFigure) return;
 
       switch (action) {
+        case 'copy-data':   copyChartData(chartFigure); break;
         case 'download':    downloadChart(chartFigure); break;
         case 'copy-image':  copyChartImage(chartFigure); break;
         case 'x':

@@ -845,6 +845,7 @@ def make_chart_html(chart):
     return f'''
     <div class="chart-figure" id="chart-{chart['id']}" data-chart-id="{chart['id']}" data-chart-title="{html_mod.escape(chart['title'])}" data-chart-source="Source: {html_mod.escape(chart['source'])}">
       <div class="chart-share-bar">
+        <button class="share-btn chart-share-btn" data-chart-share="copy-data" aria-label="Copy chart data" title="Copy data">CSV</button>
         <button class="share-btn chart-share-btn" data-chart-share="download" aria-label="Download chart as image" title="Download image">{download_icon}</button>
         <button class="share-btn chart-share-btn" data-chart-share="copy-image" aria-label="Copy chart as image" title="Copy image">{image_icon}</button>
         <button class="share-btn chart-share-btn" data-chart-share="x" aria-label="Share chart on X" title="Share on X">{_SHARE_ICONS['x']}</button>
@@ -1391,11 +1392,17 @@ def build_section(part_name, essays, new_slugs=None):
 
 {editorial_block}
 
+<div class="section-progress-wrap" id="sectionProgressWrap" data-section-slugs="{html_mod.escape(json.dumps([e['slug'] for e in se]))}">
+  <p class="section-progress-text" id="sectionProgressText"></p>
+</div>
 <div class="section-card-grid">
 {article_items}
 </div>
 
 {make_footer()}
+<script>
+(function(){{ var wrap=document.getElementById('sectionProgressWrap'); if(!wrap) return; try {{ var slugs=JSON.parse(wrap.getAttribute('data-section-slugs')||'[]'); var raw=localStorage.getItem('hfn_read_slugs'); var read=raw?JSON.parse(raw):[]; var set=new Set(read); var n=slugs.filter(function(s){{ return set.has(s); }}).length; var el=document.getElementById('sectionProgressText'); if(el) el.textContent=n+' of '+slugs.length+' articles in this section read'; }} catch(e) {{}} }})();
+</script>
 {editorial_chart_script}
 <script>
 (function(){{
@@ -1499,6 +1506,11 @@ def build_homepage(essays, new_essays=None):
         d = e.get('pub_date', '')
         return d if d else '0000-00-00'
     recent_essays = sorted(essays, key=_sort_key_pub_date, reverse=True)[:20]
+    by_pub = sorted(essays, key=_sort_key_pub_date, reverse=True)
+    might_missed_pool = [e for e in by_pub[8:28] if e.get('pub_date')]
+    random.seed(42)
+    might_missed_essays = random.sample(might_missed_pool, min(3, len(might_missed_pool)))
+    random.seed()  # reset
 
     new_cards_html = ""
     for i, e in enumerate(recent_essays):
@@ -1762,6 +1774,23 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 {new_cards_html}    </div>
   </div>
 </div>
+''' + (f'''
+<div class="might-missed-wrap">
+  <div class="might-missed-inner">
+    <h2 class="might-missed-title">You might have missed</h2>
+    <p class="might-missed-desc">Older pieces that hold up.</p>
+    <div class="might-missed-grid">
+''' + ''.join(
+    f'''      <a href="/articles/{html_mod.escape(e['slug'])}" class="might-missed-card">
+        <span class="might-missed-kicker" style="color:{PARTS[e['part']]['color']}">{PARTS[e['part']]['label']}</span>
+        <h3>{html_mod.escape(e['title'])}</h3>
+        <span class="might-missed-meta">{e['reading_time']} min read</span>
+      </a>
+''' for e in might_missed_essays
+) + '''    </div>
+  </div>
+</div>
+''' if might_missed_essays else '') + '''
 <div class="hero-and-stats-wrap">
   <div class="hero-chart-wrap">
     <div class="hero-chart-inner">

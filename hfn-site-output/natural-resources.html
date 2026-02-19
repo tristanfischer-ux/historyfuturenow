@@ -132,6 +132,9 @@
   </div>
 </div>
 
+<div class="section-progress-wrap" id="sectionProgressWrap" data-section-slugs="[&quot;big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do&quot;, &quot;cassandra-time-to-give-up-on-predicting-climate-change&quot;, &quot;dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food&quot;, &quot;establishing-a-price-floor-for-energy&quot;, &quot;green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition&quot;, &quot;roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775&quot;, &quot;the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war&quot;, &quot;the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century&quot;, &quot;the-renewables-and-battery-revolution&quot;, &quot;vertical-farming-the-electrical-convergence-power-transport-and-agriculture&quot;, &quot;who-are-the-losers-in-the-energy-revolution&quot;, &quot;why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event&quot;]">
+  <p class="section-progress-text" id="sectionProgressText"></p>
+</div>
 <div class="section-card-grid">
     <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="section-featured-card">
       <div class="section-card-img-wrap"><img src="/images/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do/hero.png" alt="" class="section-card-img section-featured-img" loading="lazy" width="1100" height="280"></div>
@@ -363,10 +366,13 @@
   </div>
   <div class="q-list" id="queueList"></div>
 </div>
-<script src="/js/nav.js?v=4e64c9fb"></script>
+<script src="/js/nav.js?v=3a12ff14"></script>
 <script src="/js/search.js?v=a8c0e71d"></script>
 <script src="/js/queue.js?v=805f800c"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
+<script>
+(function(){ var wrap=document.getElementById('sectionProgressWrap'); if(!wrap) return; try { var slugs=JSON.parse(wrap.getAttribute('data-section-slugs')||'[]'); var raw=localStorage.getItem('hfn_read_slugs'); var read=raw?JSON.parse(raw):[]; var set=new Set(read); var n=slugs.filter(function(s){ return set.has(s); }).length; var el=document.getElementById('sectionProgressText'); if(el) el.textContent=n+' of '+slugs.length+' articles in this section read'; } catch(e) {} })();
+</script>
 
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>

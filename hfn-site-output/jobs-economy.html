@@ -132,6 +132,9 @@
   </div>
 </div>
 
+<div class="section-progress-wrap" id="sectionProgressWrap" data-section-slugs="[&quot;debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all&quot;, &quot;jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely&quot;, &quot;keynes-and-hayek-are-both-dead-and-wrong&quot;, &quot;platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future&quot;, &quot;robotics-and-slavery&quot;, &quot;a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story&quot;, &quot;why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society&quot;, &quot;the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin&quot;, &quot;the-new-literacy&quot;, &quot;the-paradox-of-mass-migration-and-robots-in-the-age-of-automation&quot;, &quot;the-perils-of-prediction-lessons-from-history-on-navigating-an-uncertain-future&quot;, &quot;the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering&quot;, &quot;the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap&quot;, &quot;where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain&quot;]">
+  <p class="section-progress-text" id="sectionProgressText"></p>
+</div>
 <div class="section-card-grid">
     <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="section-featured-card">
       <div class="section-card-img-wrap"><img src="/images/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all/hero.png" alt="" class="section-card-img section-featured-img" loading="lazy" width="1100" height="280"></div>
@@ -389,10 +392,13 @@
   </div>
   <div class="q-list" id="queueList"></div>
 </div>
-<script src="/js/nav.js?v=4e64c9fb"></script>
+<script src="/js/nav.js?v=3a12ff14"></script>
 <script src="/js/search.js?v=a8c0e71d"></script>
 <script src="/js/queue.js?v=805f800c"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
+<script>
+(function(){ var wrap=document.getElementById('sectionProgressWrap'); if(!wrap) return; try { var slugs=JSON.parse(wrap.getAttribute('data-section-slugs')||'[]'); var raw=localStorage.getItem('hfn_read_slugs'); var read=raw?JSON.parse(raw):[]; var set=new Set(read); var n=slugs.filter(function(s){ return set.has(s); }).length; var el=document.getElementById('sectionProgressText'); if(el) el.textContent=n+' of '+slugs.length+' articles in this section read'; } catch(e) {} })();
+</script>
 
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
