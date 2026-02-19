@@ -4017,39 +4017,41 @@ label:i=>{const v=i.raw.value;if(!v)return'Minor/no role';return['Minor','Modera
     charts['the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world'] = [
         {
             'id': 'genderChart1', 'figure_num': 1,
-            'title': 'The Gender-Ideology Gap Among 18–29 Year Olds (2000–2024)',
-            'desc': 'Young women have moved dramatically more liberal while young men have held steady or shifted right',
-            'source': 'Gallup; Financial Times/John Burn-Murdoch (2024); European Social Survey',
+            'title': 'The Gender-Ideology Gap Among 18–29 Year Olds (1999–2024)',
+            'desc': 'Young women have moved dramatically more liberal while young men have held steady',
+            'source': 'Gallup Political Ideology surveys (2024); Burn-Murdoch/FT (2024)',
             'position': 'after_para_6',
             'js': """
 (()=>{const ctx=document.getElementById('genderChart1');
-const yrs=[2000,2004,2008,2012,2016,2020,2024];
+const yrs=[1999,2003,2007,2011,2015,2017,2019,2020,2022,2024];
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Young women (US)',yrs,[44,46,50,54,58,65,68],C.rose),
-dxy('Young men (US)',yrs,[42,40,42,40,38,39,43],C.blue),
-dxy('Young women (Germany)',yrs,[null,null,null,48,55,62,68],C.rose,[5,5]),
-dxy('Young men (Germany)',yrs,[null,null,null,44,42,38,38],C.blue,[5,5])
+dxy('Young women (US)',yrs,[30,29,28,32,36,38,40,44,41,40],C.rose),
+dxy('Young men (US)',yrs,[28,27,26,26,25,24,25,25,25,25],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% liberal'}}},
-scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:30,max:75,
-title:{display:true,text:'% identifying as liberal/progressive',color:C.dim}}}}});
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% liberal'}},
+annotation:{annotations:{
+metoo:{type:'label',xValue:2017,yValue:43,content:['#MeToo /','Trump era'],color:C.dim,font:{size:10}},
+roe:{type:'label',xValue:2021.5,yValue:46,content:['Dobbs'],color:C.dim,font:{size:10}}
+}}},
+scales:{x:linX(1999,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:50,
+title:{display:true,text:'% identifying as liberal (Gallup)',color:C.dim}}}}});
 })();"""
         },
         {
             'id': 'genderChart2', 'figure_num': 2,
-            'title': 'Gender Gap on Key Issues (US, 18–29 Year Olds, 2024)',
+            'title': 'Gender Gap on Key Issues (US Gen Z, 2025)',
             'desc': 'The divide is widest on social and cultural issues, narrower on economics',
-            'source': 'The 19th/SurveyMonkey 2025; Gallup',
+            'source': 'The 19th/SurveyMonkey (2025)',
             'position': 'after_para_10',
             'tall': True,
             'js': """
 (()=>{const ctx=document.getElementById('genderChart2');
-const issues=['Toxic masculinity\\nis a problem','Gender-affirming\\ncare for minors','Abortion\\naccess','Immigration\\nlevels too high','Criminal justice\\ntoo lenient','Economic\\npolicy'];
-const womenLib=[78,62,80,32,28,52];
-const menLib=[56,50,63,55,52,48];
+const issues=['Toxic masculinity\\nis a problem','Gender-affirming\\ncare (adults)','Abortion\\naccess','Immigration\\nlevels too high','Criminal justice\\ntoo lenient','Economic\\npolicy'];
+const womenLib=[81,70,76,32,28,52];
+const menLib=[59,49,59,55,52,48];
 new Chart(ctx,{type:'bar',data:{labels:issues,datasets:[
-{label:'Young women agree (%)',data:womenLib,backgroundColor:C.rose+'bb',borderColor:C.rose,borderWidth:1.5,borderRadius:4,borderSkipped:false},
-{label:'Young men agree (%)',data:menLib,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+{label:'Gen Z women agree (%)',data:womenLib,backgroundColor:C.rose+'bb',borderColor:C.rose,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Gen Z men agree (%)',data:menLib,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
 ]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
 scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
@@ -4059,20 +4061,20 @@ title:{display:true,text:'% who agree',color:C.dim}}}}});
         },
         {
             'id': 'genderChart3', 'figure_num': 3,
-            'title': 'University Degree Attainment by Sex (OECD Average, 2000–2024)',
+            'title': 'Tertiary Education Attainment by Sex (OECD Average, 2000–2024)',
             'desc': 'Women now outperform men at every level of education — a structural driver of the ideological gap',
-            'source': 'OECD Education at a Glance 2024',
+            'source': 'OECD Education at a Glance (2010, 2015, 2020, 2024)',
             'position': 'after_para_18',
             'js': """
 (()=>{const ctx=document.getElementById('genderChart3');
-const yrs=[2000,2004,2008,2012,2016,2020,2024];
+const yrs=[2000,2005,2010,2015,2019,2024];
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Women with bachelor\'s+ (%)',yrs,[28,33,38,43,48,53,59.5],C.rose),
-dxy('Men with bachelor\'s+ (%)',yrs,[26,28,30,33,36,40,44],C.blue)
+dxy('Women with tertiary education (%)',yrs,[25,31,36,43,51,53],C.rose),
+dxy('Men with tertiary education (%)',yrs,[25,27,30,34,39,40],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}}},
-scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:20,max:65,
-title:{display:true,text:'% of 25–34 year olds with degree',color:C.dim}}}}});
+scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:60,
+title:{display:true,text:'% of 25–34 year olds with tertiary education',color:C.dim}}}}});
 })();"""
         },
     ]
@@ -4159,7 +4161,7 @@ dxy('Americas',yrs,[339,416,511,614,727,841,942,1029,1060,1085,1118,1129,1123,11
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'M'}},
 annotation:{annotations:{
-cross:{type:'label',xValue:2075,yValue:3500,content:['Africa overtakes','rest-of-Asia combined'],color:C.amber,font:{size:11,weight:'bold'}}
+cross:{type:'label',xValue:2085,yValue:3200,content:['Africa surpasses','3 billion'],color:C.amber,font:{size:11,weight:'bold'}}
 }}},
 scales:{x:linX(1950,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'B':v+'M'},
 title:{display:true,text:'Population (millions)',color:C.dim}}}}});
@@ -4168,13 +4170,13 @@ title:{display:true,text:'Population (millions)',color:C.dim}}}}});
         {
             'id': 'africaChart2', 'figure_num': 2,
             'title': 'Africa\'s Youngest Nations: Median Age (2025)',
-            'desc': 'Half the population of Niger is under 14.5 years old — Europe has not seen demographics like this since the medieval period',
+            'desc': 'Half the population of Niger is under 15.6 years old — Europe has not seen demographics like this since the medieval period',
             'source': 'UN Population Division 2024',
             'position': 'after_para_3',
             'js': """
 (()=>{const ctx=document.getElementById('africaChart2');
 const countries=['Niger','Uganda','Mali','Chad','DRC','Mozambique','Tanzania','Ethiopia','Nigeria','Kenya','South Africa','Japan','Germany'];
-const ages=[14.5,15.7,16.2,16.7,16.7,17.0,17.7,19.5,17.2,20.0,28.3,49.1,46.8];
+const ages=[15.6,15.7,16.2,16.7,16.9,17.0,17.7,19.5,17.2,20.0,28.3,49.9,46.8];
 const colors=countries.map((_,i)=>i<10?C.amber:i<12?C.purple:C.dim);
 new Chart(ctx,{type:'bar',data:{labels:countries,datasets:[{label:'Median age (2025)',data:ages,
 backgroundColor:colors.map(c=>c+'bb'),borderColor:colors,borderWidth:1.5,borderRadius:4,borderSkipped:false}]},
@@ -4196,7 +4198,7 @@ title:{display:true,text:'Median age (years)',color:C.dim}}}}});
 (()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
-const pop={566:224,180:105,231:126,834:67,404:55,800:49,508:34,288:34,12:46,504:38,
+const pop={566:238,180:113,231:136,834:67,404:55,800:49,508:34,288:34,12:46,504:38,
 710:60,24:36,148:18,562:27,466:23,854:23,324:14,894:20,
 818:109,736:47,646:14,270:2.7,768:9,204:13};
 const ctx=document.getElementById('africaMapChart');
@@ -4218,18 +4220,18 @@ label:i=>i.raw.value?i.raw.value+'M people':'No data'}}}}});
         },
         {
             'id': 'africaChart4', 'figure_num': 4,
-            'title': 'The New Scramble: Foreign Direct Investment in Africa by Origin (2024)',
-            'desc': 'China\'s Belt and Road has made it Africa\'s largest trading partner — but others are catching up',
-            'source': 'UNCTAD; China Africa Research Initiative; fDi Markets',
+            'title': 'The New Scramble: Trade and Investment in Africa by Origin',
+            'desc': 'China is Africa\'s largest bilateral trading partner, but the EU\'s collective trade is larger still',
+            'source': 'UNCTAD World Investment Report 2025; CARI; EU Council; USTR; national trade data (2024)',
             'position': 'after_para_18',
             'js': """
 (()=>{const ctx=document.getElementById('africaChart4');
-const investors=['China','EU','United\\nStates','India','Turkey','UAE &\\nSaudi','Russia'];
-const trade=[282,240,65,98,50,42,18];
-const fdi=[40,35,8,12,6,15,3];
+const investors=['EU','China','India','United\\nStates','Turkey','UAE &\\nSaudi','Russia'];
+const trade=[320,296,100,72,37,42,18];
+const fdiStock=[120,42,14,41,8,15,5];
 new Chart(ctx,{type:'bar',data:{labels:investors,datasets:[
-{label:'Bilateral trade ($bn)',data:trade,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
-{label:'Annual FDI ($bn)',data:fdi,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+{label:'Bilateral trade ($bn, 2024)',data:trade,backgroundColor:C.accent+'bb',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'FDI stock ($bn, cumulative)',data:fdiStock,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw+'B'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},

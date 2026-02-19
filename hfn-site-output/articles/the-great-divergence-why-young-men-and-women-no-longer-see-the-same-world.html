@@ -96,6 +96,29 @@
     <img src="/images/articles/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world/hero.png" alt="Editorial illustration for The Great Divergence: Why Young Men and Women No Longer See the Same World" class="article-hero-img" loading="lazy" width="1200" height="675">
   </div>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article <span class="ai-narrated-badge">AI narrated <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4M8 5.5v-.01"/></svg></span></div>
+        <div class="audio-meta">21 min</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-track"><div class="audio-progress-bar" id="audioProgressBar"></div></div>
+        <div class="scrub-thumb" id="audioThumb"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world" data-queue-title="The Great Divergence: Why Young Men and Women No Longer See the Same World" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world.mp3" aria-label="Add to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world.mp3"></audio>
+  </div>
   <div class="share-bar share-bar-top" data-share-url="https://www.historyfuturenow.com/articles/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world" data-share-title="The Great Divergence: Why Young Men and Women No Longer See the Same World" data-share-text="For most of history, men and women disagreed about household chores. They did not disagree about the fundamental nature of society. That era is over.">
     <span class="share-label">Share</span>
     <button class="share-btn" data-share="x" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></button>
@@ -116,7 +139,7 @@
 
 <p>This is the story of how the sexes came to inhabit different political universes, why history offers almost no precedent for what is happening, and what the consequences will be if the gap continues to widen.</p>
 
-    <div class="chart-figure" id="chart-genderChart1" data-chart-id="genderChart1" data-chart-title="The Gender-Ideology Gap Among 18–29 Year Olds (2000–2024)" data-chart-source="Source: Gallup; Financial Times/John Burn-Murdoch (2024); European Social Survey">
+    <div class="chart-figure" id="chart-genderChart1" data-chart-id="genderChart1" data-chart-title="The Gender-Ideology Gap Among 18–29 Year Olds (1999–2024)" data-chart-source="Source: Gallup Political Ideology surveys (2024); Burn-Murdoch/FT (2024)">
       <div class="chart-share-bar">
         <button class="share-btn chart-share-btn" data-chart-share="download" aria-label="Download chart as image" title="Download image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
         <button class="share-btn chart-share-btn" data-chart-share="copy-image" aria-label="Copy chart as image" title="Copy image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></button>
@@ -125,10 +148,10 @@
         <button class="share-btn chart-share-btn" data-chart-share="whatsapp" aria-label="Share chart on WhatsApp" title="Share on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
       </div>
       <div class="chart-figure-label">Figure 1</div>
-      <h4>The Gender-Ideology Gap Among 18–29 Year Olds (2000–2024)</h4>
-      <p class="chart-desc">Young women have moved dramatically more liberal while young men have held steady or shifted right</p>
+      <h4>The Gender-Ideology Gap Among 18–29 Year Olds (1999–2024)</h4>
+      <p class="chart-desc">Young women have moved dramatically more liberal while young men have held steady</p>
       <div class="chart-area"><canvas id="genderChart1"></canvas></div>
-      <p class="chart-source">Source: Gallup; Financial Times/John Burn-Murdoch (2024); European Social Survey</p>
+      <p class="chart-source">Source: Gallup Political Ideology surveys (2024); Burn-Murdoch/FT (2024)</p>
     </div>
 
 <h3>The Data: A Chasm Across the Developed World</h3>
@@ -137,7 +160,7 @@
 <p>The European Social Survey tells a similar story. In Germany, young women aged 18-29 are 30 percentage points more likely than young men to describe themselves as left-leaning (European Social Survey, 2023). In the United Kingdom, the gap among the same age cohort is 25 points. In Sweden — a country that once prided itself on gender consensus — it is 22 points (Burn-Murdoch, 2024). Across nearly every European nation where reliable data exists, the pattern holds: young women moving left, young men remaining where they were or shifting right.</p>
 <p>The disagreements cluster around a specific set of issues. On gender identity, immigration, social justice, and criminal justice, the gap between young men and young women ranges from 15 to 30 percentage points in most Western democracies (Pew Research Center, 2024). On narrowly economic questions — taxation, government spending, pensions — the gap is much smaller, typically five to ten points. This is not a conventional left-right split. It is a values split, centred on identity, culture, and the role of institutions in adjudicating between competing claims to fairness.</p>
 
-    <div class="chart-figure" id="chart-genderChart2" data-chart-id="genderChart2" data-chart-title="Gender Gap on Key Issues (US, 18–29 Year Olds, 2024)" data-chart-source="Source: The 19th/SurveyMonkey 2025; Gallup">
+    <div class="chart-figure" id="chart-genderChart2" data-chart-id="genderChart2" data-chart-title="Gender Gap on Key Issues (US Gen Z, 2025)" data-chart-source="Source: The 19th/SurveyMonkey (2025)">
       <div class="chart-share-bar">
         <button class="share-btn chart-share-btn" data-chart-share="download" aria-label="Download chart as image" title="Download image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
         <button class="share-btn chart-share-btn" data-chart-share="copy-image" aria-label="Copy chart as image" title="Copy image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></button>
@@ -146,10 +169,10 @@
         <button class="share-btn chart-share-btn" data-chart-share="whatsapp" aria-label="Share chart on WhatsApp" title="Share on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
       </div>
       <div class="chart-figure-label">Figure 2</div>
-      <h4>Gender Gap on Key Issues (US, 18–29 Year Olds, 2024)</h4>
+      <h4>Gender Gap on Key Issues (US Gen Z, 2025)</h4>
       <p class="chart-desc">The divide is widest on social and cultural issues, narrower on economics</p>
       <div class="chart-area tall"><canvas id="genderChart2"></canvas></div>
-      <p class="chart-source">Source: The 19th/SurveyMonkey 2025; Gallup</p>
+      <p class="chart-source">Source: The 19th/SurveyMonkey (2025)</p>
     </div>
 
 <p>Richard Reeves, in <em>Of Boys and Men</em> (2022), was among the first to frame this divergence as a structural phenomenon rather than a passing mood. Young men and young women, he argued, are not simply choosing different political teams. They are responding rationally to different lived experiences. Women are outperforming men academically at every level. They are entering professional careers in greater numbers. They have legitimate grievances about harassment, safety, and reproductive autonomy. Men — particularly men without university degrees — are falling behind economically, dying younger, struggling in education, and receiving almost no institutional sympathy for any of it. Both sexes have genuine reasons for discontent. The tragedy is that their discontents now point in opposite directions.</p>
@@ -162,7 +185,7 @@
 <p>The deeper historical forces that reshaped women&rsquo;s political identity were material, not ideological. Two world wars slaughtered roughly 80 million people, the overwhelming majority of them young men. The loss was so catastrophic that it physically reorganised society. In France after the First World War, 10.5 per cent of the male labour force was dead and another 30 per cent wounded (Becker, 2010). In the Soviet Union after the Second, the sex ratio among those born between 1920 and 1925 was 0.59 — fewer than six surviving men for every ten women (Andreev et al., 2002). Women did not enter the workforce because they had read feminist theory. They entered because there were not enough men left alive to run the factories, staff the hospitals, or drive the trains. Necessity accomplished what ideology had merely imagined.</p>
 <p>But the single most transformative event in the history of gender relations was pharmacological, not political. The approval of the combined oral contraceptive pill in 1960 — and its subsequent mass adoption across the developed world — severed the link between sex and reproduction more completely than any social movement could have managed. Claudia Goldin, who won the 2023 Nobel Prize in Economics for her work on women&rsquo;s labour market participation, demonstrated that the pill did not merely allow women to delay childbirth. It fundamentally altered their investment horizon (Goldin, 2023). A woman who could reliably control her fertility could invest in a long professional education — law school, medical school, a PhD — knowing that a pregnancy would not derail her plans. The downstream consequences — women&rsquo;s rising educational attainment, their growing economic independence, their shifting political priorities — all trace back, in substantial part, to a small packet of synthetic oestrogen.</p>
 
-    <div class="chart-figure" id="chart-genderChart3" data-chart-id="genderChart3" data-chart-title="University Degree Attainment by Sex (OECD Average, 2000–2024)" data-chart-source="Source: OECD Education at a Glance 2024">
+    <div class="chart-figure" id="chart-genderChart3" data-chart-id="genderChart3" data-chart-title="Tertiary Education Attainment by Sex (OECD Average, 2000–2024)" data-chart-source="Source: OECD Education at a Glance (2010, 2015, 2020, 2024)">
       <div class="chart-share-bar">
         <button class="share-btn chart-share-btn" data-chart-share="download" aria-label="Download chart as image" title="Download image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
         <button class="share-btn chart-share-btn" data-chart-share="copy-image" aria-label="Copy chart as image" title="Copy image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></button>
@@ -171,10 +194,10 @@
         <button class="share-btn chart-share-btn" data-chart-share="whatsapp" aria-label="Share chart on WhatsApp" title="Share on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
       </div>
       <div class="chart-figure-label">Figure 3</div>
-      <h4>University Degree Attainment by Sex (OECD Average, 2000–2024)</h4>
+      <h4>Tertiary Education Attainment by Sex (OECD Average, 2000–2024)</h4>
       <p class="chart-desc">Women now outperform men at every level of education — a structural driver of the ideological gap</p>
       <div class="chart-area"><canvas id="genderChart3"></canvas></div>
-      <p class="chart-source">Source: OECD Education at a Glance 2024</p>
+      <p class="chart-source">Source: OECD Education at a Glance (2010, 2015, 2020, 2024)</p>
     </div>
 
 <p>There is, however, another historical pattern worth considering — one rather less edifying. Sex-ratio imbalances have, throughout history, been profoundly destabilising. Societies with a substantial surplus of young men tend to be more violent, more politically volatile, and more prone to authoritarian movements. The American frontier in the nineteenth century, with its extreme male-to-female ratio, was not a model of democratic deliberation. It was a shooting gallery. Post-revolutionary France, with its population of surplus men returning from the Napoleonic Wars, was convulsed by political instability for decades (Hudson and den Boer, 2004). Modern China, where the one-child policy produced an estimated 30-40 million &ldquo;surplus&rdquo; males, faces challenges of social cohesion that its leadership discusses only in euphemisms (Hvistendahl, 2011). The parallel is imperfect — the current Western divergence is ideological, not numerical — but the underlying mechanism rhymes. When large numbers of young men feel they have no stake in the prevailing social order, they do not politely request reforms. They vote for disruptors, retreat into subcultures, or — in the worst cases — turn to violence. The populist surges that have convulsed Western democracies since 2016 are disproportionately male phenomena. Trump, Brexit, Bolsonaro, Meloni, Milei — in each case, the strongest support came from men who felt the system had left them behind. The gender divergence is not separate from the populist moment. It is one of its primary engines.</p>
@@ -237,20 +260,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
+      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age" class="related-card">
+      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age</span>
-        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -346,25 +369,27 @@ const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={}
 
 
 (()=>{const ctx=document.getElementById('genderChart1');
-const yrs=[2000,2004,2008,2012,2016,2020,2024];
+const yrs=[1999,2003,2007,2011,2015,2017,2019,2020,2022,2024];
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Young women (US)',yrs,[44,46,50,54,58,65,68],C.rose),
-dxy('Young men (US)',yrs,[42,40,42,40,38,39,43],C.blue),
-dxy('Young women (Germany)',yrs,[null,null,null,48,55,62,68],C.rose,[5,5]),
-dxy('Young men (Germany)',yrs,[null,null,null,44,42,38,38],C.blue,[5,5])
+dxy('Young women (US)',yrs,[30,29,28,32,36,38,40,44,41,40],C.rose),
+dxy('Young men (US)',yrs,[28,27,26,26,25,24,25,25,25,25],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% liberal'}}},
-scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:30,max:75,
-title:{display:true,text:'% identifying as liberal/progressive',color:C.dim}}}}});
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% liberal'}},
+annotation:{annotations:{
+metoo:{type:'label',xValue:2017,yValue:43,content:['#MeToo /','Trump era'],color:C.dim,font:{size:10}},
+roe:{type:'label',xValue:2021.5,yValue:46,content:['Dobbs'],color:C.dim,font:{size:10}}
+}}},
+scales:{x:linX(1999,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:50,
+title:{display:true,text:'% identifying as liberal (Gallup)',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('genderChart2');
-const issues=['Toxic masculinity\nis a problem','Gender-affirming\ncare for minors','Abortion\naccess','Immigration\nlevels too high','Criminal justice\ntoo lenient','Economic\npolicy'];
-const womenLib=[78,62,80,32,28,52];
-const menLib=[56,50,63,55,52,48];
+const issues=['Toxic masculinity\nis a problem','Gender-affirming\ncare (adults)','Abortion\naccess','Immigration\nlevels too high','Criminal justice\ntoo lenient','Economic\npolicy'];
+const womenLib=[81,70,76,32,28,52];
+const menLib=[59,49,59,55,52,48];
 new Chart(ctx,{type:'bar',data:{labels:issues,datasets:[
-{label:'Young women agree (%)',data:womenLib,backgroundColor:C.rose+'bb',borderColor:C.rose,borderWidth:1.5,borderRadius:4,borderSkipped:false},
-{label:'Young men agree (%)',data:menLib,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+{label:'Gen Z women agree (%)',data:womenLib,backgroundColor:C.rose+'bb',borderColor:C.rose,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Gen Z men agree (%)',data:menLib,backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false}
 ]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
 scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
@@ -373,17 +398,128 @@ title:{display:true,text:'% who agree',color:C.dim}}}}});
 })();
 
 (()=>{const ctx=document.getElementById('genderChart3');
-const yrs=[2000,2004,2008,2012,2016,2020,2024];
+const yrs=[2000,2005,2010,2015,2019,2024];
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Women with bachelor's+ (%)',yrs,[28,33,38,43,48,53,59.5],C.rose),
-dxy('Men with bachelor's+ (%)',yrs,[26,28,30,33,36,40,44],C.blue)
+dxy('Women with tertiary education (%)',yrs,[25,31,36,43,51,53],C.rose),
+dxy('Men with tertiary education (%)',yrs,[25,27,30,34,39,40],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}}},
-scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:20,max:65,
-title:{display:true,text:'% of 25–34 year olds with degree',color:C.dim}}}}});
+scales:{x:linX(2000,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:60,
+title:{display:true,text:'% of 25–34 year olds with tertiary education',color:C.dim}}}}});
 })();
 </script>
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId,thumbId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    var thumb=document.getElementById(thumbId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=0;
+    var dragging=false;
 
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    function seekTo(e){
+      if(!audio.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+      audio.currentTime=pct*audio.duration;
+      updateBar(pct);
+    }
+
+    function seekToTouch(e){
+      if(!audio.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var touch=e.touches[0];
+      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
+      audio.currentTime=pct*audio.duration;
+      updateBar(pct);
+    }
+
+    function updateBar(pct){
+      var p=(pct*100)+'%';
+      bar.style.width=p;
+      if(thumb)thumb.style.left=p;
+    }
+
+    btn.onclick=function(){
+      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
+      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+    };
+
+    audio.ontimeupdate=function(){
+      if(dragging)return;
+      if(audio.duration){
+        var pct=audio.currentTime/audio.duration;
+        updateBar(pct);
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      iconPlay.style.display='block';iconPause.style.display='none';
+      updateBar(0);
+    };
+
+    wrap.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekTo(e);
+      function onMove(ev){seekTo(ev);}
+      function onUp(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('mousemove',onMove);
+        document.removeEventListener('mouseup',onUp);
+      }
+      document.addEventListener('mousemove',onMove);
+      document.addEventListener('mouseup',onUp);
+    });
+
+    wrap.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekToTouch(e);
+      function onTouchMove(ev){ev.preventDefault();seekToTouch(ev);}
+      function onTouchEnd(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('touchmove',onTouchMove);
+        document.removeEventListener('touchend',onTouchEnd);
+      }
+      document.addEventListener('touchmove',onTouchMove,{passive:false});
+      document.addEventListener('touchend',onTouchEnd);
+    });
+
+    if(speedEl){
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        audio.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
+  if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
+})();
+</script>
 <script src="/js/share.js"></script>
 </body>
 </html>

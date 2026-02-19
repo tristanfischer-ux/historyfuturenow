@@ -1,0 +1,63 @@
+# Chart Fact-Checking Protocol
+
+Every data point in every chart MUST be verifiable against a named, published source. Charts are arguments made visible — if the data is wrong, the argument is wrong, and the publication's credibility is damaged.
+
+## Before Adding Any Chart Data
+
+For EVERY numerical value in a chart definition:
+
+1. **Search for the actual figure** from the cited source (or the most authoritative source for that data)
+2. **Record the exact value** from the source, not a rounded or estimated version
+3. **Compare** your chart value against the source value
+4. **If it differs by more than 5%**, stop and fix it before proceeding
+
+## Common Errors to Prevent
+
+| Error | Example | How to Prevent |
+|-------|---------|----------------|
+| **Stock vs flow confusion** | Showing cumulative FDI stock as "annual FDI" | Always check whether a figure is a total (stock) or per-year (flow). Label accordingly. |
+| **Fabricated absolute values** | Showing 68% when Gallup says 40% | Never extrapolate or estimate. Use the actual published number. |
+| **Stale data labelled as current** | Using 2023 trade data but labelling it "2024" | Always check what year the data actually covers. Match the label to the data year. |
+| **Metric conflation** | Using "% of degrees awarded to women" as "% of women with degrees" | These are different metrics. Ensure the chart label exactly describes what the data measures. |
+| **Reporter vs partner asymmetry** | EU reports €355B trade; African side reports $240B | Choose one consistent data source. Note which perspective is used. |
+| **Wrong comparator framing** | Annotation says "A overtakes B" when the chart's own data shows otherwise | Always check annotations against the chart's own data points. |
+| **Adults vs minors conflation** | Using poll data about adults to label a bar about minors | Read the exact survey question. Match the chart label to the question asked. |
+
+## Required Source Verification Checklist
+
+Before any chart is committed, verify:
+
+- [ ] Every data point matches a published source to within 5%
+- [ ] The chart title accurately describes the data shown
+- [ ] The y-axis label exactly matches the metric being plotted
+- [ ] The source citation names specific publications, not vague attributions
+- [ ] Time periods in titles/labels match the actual data years
+- [ ] Annotations are mathematically consistent with the plotted data
+- [ ] Units are correct and consistent (millions vs billions, % vs absolute, stock vs flow)
+- [ ] Where data is from a specific revision (e.g. UN WPP 2024 vs 2022), the revision is stated
+- [ ] The article text and the chart data are consistent with each other
+
+## When You Cannot Find an Exact Source
+
+If a data point cannot be verified against a published source:
+
+1. **Do not invent a plausible number.** This is how fabricated data enters charts.
+2. **Flag it** with a comment: `# UNVERIFIED: [data point] — needs source`
+3. **Use the closest verifiable figure** and adjust the label to reflect what you actually have
+4. **Never round aggressively** — if the source says 15.6, use 15.6, not 14.5
+
+## Preferred Authoritative Sources
+
+| Domain | Primary Source | Secondary Source |
+|--------|---------------|-----------------|
+| Population | UN World Population Prospects (latest revision) | Worldometers, Our World in Data |
+| Trade | UNCTAD; national trade ministries | World Bank WITS |
+| FDI | UNCTAD World Investment Report; CARI (for China-Africa) | fDi Markets |
+| Education | OECD Education at a Glance | UNESCO Institute for Statistics |
+| Political attitudes | Gallup; Pew Research | European Social Survey; national polls |
+| Energy | IEA; Ember; IAEA PRIS | BP Statistical Review |
+| Economics | World Bank; IMF WEO | OECD Economic Outlook |
+
+## When Reviewing Charts
+
+If any chart data point cannot be traced to a named source within 60 seconds of searching, flag the chart as requiring fact-checking before it can ship.
