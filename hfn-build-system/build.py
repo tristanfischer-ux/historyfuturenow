@@ -293,6 +293,7 @@ def make_card_controls(essay, pi):
     bookmark_btn = (
         f'<button class="card-bookmark-btn" data-bookmark-slug="{slug}" '
         f'data-bookmark-title="{title_esc}" data-bookmark-url="{article_url}" '
+        f'data-bookmark-section="{section_label}" data-bookmark-color="{color}" '
         f'aria-label="Bookmark">'
         '<svg class="bk-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
         '<svg class="bk-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
@@ -732,9 +733,10 @@ _SHARE_ICONS = {
     'copy': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
 }
 
-def make_share_bar(essay, position='top'):
-    """Generate share button bar HTML for an article."""
-    url = f"{SITE_URL}/articles/{essay['slug']}"
+def make_share_bar(essay, position='top', pi=None):
+    """Generate share button bar HTML for an article, with optional bookmark button."""
+    slug = html_mod.escape(essay['slug'])
+    url = f"{SITE_URL}/articles/{slug}"
     title = html_mod.escape(essay['title'])
     text = html_mod.escape(essay.get('share_summary', '') or essay['excerpt'][:140])
     pos_class = 'share-bar-top' if position == 'top' else 'share-bar-bottom'
@@ -744,9 +746,23 @@ def make_share_bar(essay, position='top'):
         label = {'x': 'Share on X', 'linkedin': 'Share on LinkedIn', 'whatsapp': 'Share on WhatsApp', 'email': 'Share via email', 'copy': 'Copy link'}[platform]
         buttons += f'<button class="share-btn" data-share="{platform}" aria-label="{label}" title="{label}">{icon}</button>\n'
 
+    bookmark_html = ''
+    if pi:
+        section_label = html_mod.escape(f"{pi['label']} \u00b7 {essay['part']}")
+        bookmark_html = (
+            f'<button class="card-bookmark-btn share-bookmark-btn" '
+            f'data-bookmark-slug="{slug}" data-bookmark-title="{title}" '
+            f'data-bookmark-url="/articles/{slug}" '
+            f'data-bookmark-section="{section_label}" data-bookmark-color="{pi["color"]}" '
+            f'aria-label="Bookmark">'
+            '<svg class="bk-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
+            '<svg class="bk-filled" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
+            '</button>'
+        )
+
     return f'''<div class="share-bar {pos_class}" data-share-url="{url}" data-share-title="{title}" data-share-text="{text}">
     <span class="share-label">Share</span>
-    {buttons}
+    {buttons}{bookmark_html}
   </div>'''
 
 def make_chart_html(chart):
@@ -1109,7 +1125,7 @@ def build_article(essay, all_essays, is_review=False):
     </div>{chart_badge}
   </header>{hero_img_html}
 {audio_player}
-  {make_share_bar(essay, 'top')}
+  {make_share_bar(essay, 'top', pi)}
   <div class="article-body">
     {body_before_refs}
   </div>
@@ -1117,7 +1133,7 @@ def build_article(essay, all_essays, is_review=False):
   <div class="article-references">
     {body_refs}
   </div>
-  {make_share_bar(essay, 'bottom')}
+  {make_share_bar(essay, 'bottom', pi)}
 
   <div class="article-footer">
     <a href="/{pi['slug']}" class="back-to-section" style="color:{pi['color']}">&larr; All {html_mod.escape(essay['part'])} articles</a>
@@ -2129,9 +2145,17 @@ def build_saved():
     empty.style.display = 'none';
     grid.style.display = 'grid';
     grid.innerHTML = list.map(function (b) {{
+      var sectionHtml = b.section
+        ? '<span class="saved-card-section" style="color:' + escapeHtml(b.color || '') + '">' + escapeHtml(b.section) + '</span>'
+        : '';
       return '<article class="saved-card">' +
-        '<a href="' + escapeHtml(b.url) + '" class="saved-card-link">' + escapeHtml(b.title) + '</a>' +
-        '<button type="button" class="saved-card-remove" aria-label="Remove from saved" data-slug="' + escapeHtml(b.slug) + '">×</button>' +
+        '<div class="saved-card-info">' +
+          sectionHtml +
+          '<a href="' + escapeHtml(b.url) + '" class="saved-card-link">' + escapeHtml(b.title) + '</a>' +
+        '</div>' +
+        '<button type="button" class="saved-card-remove" aria-label="Remove from saved" data-slug="' + escapeHtml(b.slug) + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>' +
+        '</button>' +
       '</article>';
     }}).join('');
     grid.querySelectorAll('.saved-card-remove').forEach(function (btn) {{

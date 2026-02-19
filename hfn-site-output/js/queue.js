@@ -541,7 +541,7 @@
     } catch (e) { /* quota exceeded */ }
   }
 
-  function toggleBookmark(slug, title, url) {
+  function toggleBookmark(slug, title, url, section, color) {
     var idx = -1;
     for (var i = 0; i < bookmarks.length; i++) {
       if (bookmarks[i].slug === slug) { idx = i; break; }
@@ -552,7 +552,10 @@
       updateBookmarkIcons();
       return false;
     }
-    bookmarks.push({ slug: slug, title: title, url: url, savedAt: Date.now() });
+    var entry = { slug: slug, title: title, url: url, savedAt: Date.now() };
+    if (section) entry.section = section;
+    if (color) entry.color = color;
+    bookmarks.push(entry);
     saveBookmarks();
     updateBookmarkIcons();
     return true;
@@ -572,6 +575,21 @@
       btn.classList.toggle('bookmarked', saved);
       btn.setAttribute('aria-label', saved ? 'Remove bookmark' : 'Bookmark');
     });
+  }
+
+  function updateSavedBadge() {
+    var link = document.querySelector('.nav-links a[href="/saved"]');
+    if (!link) return;
+    var dot = link.querySelector('.saved-badge-dot');
+    if (bookmarks.length > 0) {
+      if (!dot) {
+        dot = document.createElement('span');
+        dot.className = 'saved-badge-dot';
+        link.appendChild(dot);
+      }
+    } else if (dot) {
+      dot.remove();
+    }
   }
 
   // ─── Toast ────────────────────────────────────────────────────────────────
@@ -708,9 +726,13 @@
       if (count > 0) showToast(count + ' added to queue');
       return count;
     },
-    bookmark: function (slug, title, url) {
-      var added = toggleBookmark(slug, title, url);
-      showToast(added ? 'Bookmarked' : 'Bookmark removed');
+    bookmark: function (slug, title, url, section, color) {
+      var added = toggleBookmark(slug, title, url, section, color);
+      showToast(
+        added ? 'Saved \u2014 <a href="/saved" class="hfn-toast-link">View saved articles</a>' : 'Removed from saved',
+        added
+      );
+      updateSavedBadge();
     },
     isBookmarked: isBookmarked,
   };
@@ -749,7 +771,9 @@
         HFNQueue.bookmark(
           this.dataset.bookmarkSlug,
           this.dataset.bookmarkTitle,
-          this.dataset.bookmarkUrl
+          this.dataset.bookmarkUrl,
+          this.dataset.bookmarkSection || '',
+          this.dataset.bookmarkColor || ''
         );
       });
     });
@@ -785,6 +809,7 @@
     bindQueueButtons();
     updateBadges();
     updateBookmarkIcons();
+    updateSavedBadge();
     renderQueueList();
   });
 })();

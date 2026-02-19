@@ -182,9 +182,17 @@
     empty.style.display = 'none';
     grid.style.display = 'grid';
     grid.innerHTML = list.map(function (b) {
+      var sectionHtml = b.section
+        ? '<span class="saved-card-section" style="color:' + escapeHtml(b.color || '') + '">' + escapeHtml(b.section) + '</span>'
+        : '';
       return '<article class="saved-card">' +
-        '<a href="' + escapeHtml(b.url) + '" class="saved-card-link">' + escapeHtml(b.title) + '</a>' +
-        '<button type="button" class="saved-card-remove" aria-label="Remove from saved" data-slug="' + escapeHtml(b.slug) + '">×</button>' +
+        '<div class="saved-card-info">' +
+          sectionHtml +
+          '<a href="' + escapeHtml(b.url) + '" class="saved-card-link">' + escapeHtml(b.title) + '</a>' +
+        '</div>' +
+        '<button type="button" class="saved-card-remove" aria-label="Remove from saved" data-slug="' + escapeHtml(b.slug) + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6L6 18M6 6l12 12"/></svg>' +
+        '</button>' +
       '</article>';
     }).join('');
     grid.querySelectorAll('.saved-card-remove').forEach(function (btn) {
