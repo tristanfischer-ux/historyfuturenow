@@ -28,7 +28,7 @@ This publication takes a different approach. We started with a question: what di
 
 The answer is remarkably consistent. From the Nile Delta to the Swiss Alps, from Republican Rome to Edo-period Japan, the civilisations that lasted the longest and produced the most — culturally, economically, intellectually — shared a set of structural features so uniform that they begin to look less like policy preferences and more like engineering requirements. The positions this publication holds are derived from that evidence. They are not conservative or progressive. They are not left or right. They are what the historical record says, read without flinching.
 
-If this makes us populists — a label the administrative class deploys the way medieval priests used "heretic" — then Pericles was the original Reform Party member, and Augustus ran on a platform of controlled borders and fiscal discipline. We shall manage the company.
+If this makes us populists — a label the administrative class deploys the way medieval priests used "heretic" — then Pericles was the original Reform Party member, and Augustus ran on a platform of controlled borders and fiscal discipline. We are content with the company.
 
 ## The Measure of Success
 

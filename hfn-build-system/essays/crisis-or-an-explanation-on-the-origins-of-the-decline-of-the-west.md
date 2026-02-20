@@ -208,7 +208,7 @@ Financial services deregulation
 
 In October 1986 a new wave of deregulation took place in the financial services sector in the United Kingdom, dubbed the “Big Bang”.  The rationale behind Big Bang was that London’s place as a financial center had been undermined by competition from New York. The London banking sector was deemed as over-regulated and dominated by a cosy wine-at-lunch, old-school-tie network of public school boys.  Which was true.
 
-One of the reasons for the 1929 Wall Street crash was that banks had used deposits from retail customers to speculate on the stock market.  A solution to this was the Glass-Steagall Act of 1932 which forcibly separated retail banks (where individuals deposited their money) from speculative investment banks.
+One of the reasons for the 1929 Wall Street crash was that banks had used deposits from retail customers to speculate on the stock market.  A solution to this was the Glass-Steagall Act of 1933 which forcibly separated retail banks (where individuals deposited their money) from speculative investment banks.
 
 There was no equivalent Glass-Steagall Act in the UK and merchant banks (as investment banks were called) remained as partnerships, with partners in the banks being personally liable for any of the losses incurred by their firms.  This reduced UK merchant bank’s appetites to do anything that would risk wiping out their partners financially.
 

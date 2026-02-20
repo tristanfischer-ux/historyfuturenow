@@ -1071,16 +1071,19 @@ def inject_charts_into_body(body_html, charts):
     return body_html, script_block
 
 def build_further_reading_html(sources):
-    """Render a 'Further Reading' section from a list of book titles, cross-referenced with the library."""
+    """Render a 'Further Reading' section from a list of book titles, cross-referenced with the library.
+
+    Returns (html_string, list_of_missing_titles).
+    """
     if not sources:
-        return ''
+        return '', []
     from library_data import BOOKS
     import urllib.parse
 
-    # Build a lookup: normalised title -> book record
     book_lookup = {b['title'].lower().strip(): b for b in BOOKS}
 
     items = []
+    missing = []
     for title in sources:
         book = book_lookup.get(title.lower().strip())
         if book:
@@ -1095,7 +1098,7 @@ def build_further_reading_html(sources):
                 f'</div>'
             )
         else:
-            # Book not in library yet — render without Amazon link as a reminder
+            missing.append(title)
             items.append(
                 f'<div class="further-reading-item further-reading-missing">'
                 f'<span class="further-reading-title">{html_mod.escape(title)}</span>'
@@ -1103,7 +1106,7 @@ def build_further_reading_html(sources):
             )
 
     if not items:
-        return ''
+        return '', missing
 
     items_html = '\n'.join(items)
     return f'''
@@ -1113,7 +1116,7 @@ def build_further_reading_html(sources):
     <div class="further-reading-list">
 {items_html}
     </div>
-  </section>'''
+  </section>''', missing
 
 
 def build_article(essay, all_essays, is_review=False):
@@ -1294,7 +1297,7 @@ def build_article(essay, all_essays, is_review=False):
 
     end_of_article_cta = discussion_player + share_cta
 
-    further_reading_html = build_further_reading_html(essay.get('sources', []))
+    further_reading_html, further_reading_missing = build_further_reading_html(essay.get('sources', []))
 
     issue = get_issue_for_slug(essay['slug'])
     issue_badge_html = ''
