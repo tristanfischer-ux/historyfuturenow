@@ -26,7 +26,7 @@
 <link rel="alternate" type="application/rss+xml" title="History Future Now" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=343ddc7b">
+<link rel="stylesheet" href="/css/style.css?v=15664d94">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PS9DYS2PZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-6PS9DYS2PZ');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
@@ -335,23 +335,29 @@
     </div>
   </div>
 </div>
-''' + (f'''
 <div class="might-missed-wrap">
   <div class="might-missed-inner">
     <h2 class="might-missed-title">You might have missed</h2>
     <p class="might-missed-desc">Older pieces that hold up.</p>
     <div class="might-missed-grid">
-''' + ''.join(
-    f'''      <a href="/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age" class="might-missed-card">
+      <a href="/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing" class="might-missed-card">
         <span class="might-missed-kicker" style="color:#7c3aed">Part 4</span>
-        <h3>When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age</h3>
-        <span class="might-missed-meta">15 min read</span>
+        <h3>The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</h3>
+        <span class="might-missed-meta">16 min read</span>
       </a>
-''' for e in might_missed_essays
-) + '''    </div>
+      <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="might-missed-card">
+        <span class="might-missed-kicker" style="color:#0d9a5a">Part 1</span>
+        <h3>The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</h3>
+        <span class="might-missed-meta">10 min read</span>
+      </a>
+      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="might-missed-card">
+        <span class="might-missed-kicker" style="color:#b8751a">Part 3</span>
+        <h3>The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</h3>
+        <span class="might-missed-meta">10 min read</span>
+      </a>
+    </div>
   </div>
 </div>
-''' if might_missed_essays else '') + '''
 <div class="hero-and-stats-wrap">
   <div class="hero-chart-wrap">
     <div class="hero-chart-inner">
@@ -377,50 +383,24 @@
   <div class="listen-inner">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.3rem;">
       <div>
-        <h2 class="listen-title">Listen to History</h2>
+        <h2 class="listen-title">Press Play</h2>
         <p class="listen-intro" style="margin-bottom:0">Every article, narrated in full. Queue them up and listen on the go.</p>
       </div>
-      <button class="q-play-all" id="queueAllBtn" data-items="[{&quot;slug&quot;: &quot;are-europeans-fundamentally-racist&quot;, &quot;title&quot;: &quot;Are Europeans Fundamentally Racist?&quot;, &quot;section&quot;: &quot;Part 4 \u00b7 Society&quot;, &quot;color&quot;: &quot;#7c3aed&quot;, &quot;url&quot;: &quot;/audio/are-europeans-fundamentally-racist.mp3&quot;}, {&quot;slug&quot;: &quot;cassandra-time-to-give-up-on-predicting-climate-change&quot;, &quot;title&quot;: &quot;Cassandra: Time To Give Up On Predicting Climate Change?&quot;, &quot;section&quot;: &quot;Part 1 \u00b7 Natural Resources&quot;, &quot;color&quot;: &quot;#0d9a5a&quot;, &quot;url&quot;: &quot;/audio/cassandra-time-to-give-up-on-predicting-climate-change.mp3&quot;}, {&quot;slug&quot;: &quot;crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west&quot;, &quot;title&quot;: &quot;Crisis: Or An Explanation On The Origins Of The Decline Of The West&quot;, &quot;section&quot;: &quot;Part 2 \u00b7 Global Balance of Power&quot;, &quot;color&quot;: &quot;#2563eb&quot;, &quot;url&quot;: &quot;/audio/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west.mp3&quot;}, {&quot;slug&quot;: &quot;when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age&quot;, &quot;title&quot;: &quot;When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age&quot;, &quot;section&quot;: &quot;Part 4 \u00b7 Society&quot;, &quot;color&quot;: &quot;#7c3aed&quot;, &quot;url&quot;: &quot;/audio/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age.mp3&quot;}, {&quot;slug&quot;: &quot;what-the-history-of-immigration-teaches-us-about-europes-future&quot;, &quot;title&quot;: &quot;What The History Of Immigration Teaches Us About Europe\u2019s Future&quot;, &quot;section&quot;: &quot;Part 4 \u00b7 Society&quot;, &quot;color&quot;: &quot;#7c3aed&quot;, &quot;url&quot;: &quot;/audio/what-the-history-of-immigration-teaches-us-about-europes-future.mp3&quot;}]">
+      <button class="q-play-all" id="queueAllBtn" data-items="[{&quot;slug&quot;: &quot;the-invisible-judge-why-guilt-and-shame-societies-are-incompatible&quot;, &quot;title&quot;: &quot;The Invisible Judge: Why Guilt and Shame Societies Are Incompatible&quot;, &quot;section&quot;: &quot;Part 4 \u00b7 Society&quot;, &quot;color&quot;: &quot;#7c3aed&quot;, &quot;url&quot;: &quot;/audio/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible.mp3&quot;}, {&quot;slug&quot;: &quot;when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age&quot;, &quot;title&quot;: &quot;When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age&quot;, &quot;section&quot;: &quot;Part 4 \u00b7 Society&quot;, &quot;color&quot;: &quot;#7c3aed&quot;, &quot;url&quot;: &quot;/audio/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age.mp3&quot;}, {&quot;slug&quot;: &quot;the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope&quot;, &quot;title&quot;: &quot;The Atom Returns: Why the World&#x27;s Most Feared Energy Source Is Its Best Hope&quot;, &quot;section&quot;: &quot;Part 1 \u00b7 Natural Resources&quot;, &quot;color&quot;: &quot;#0d9a5a&quot;, &quot;url&quot;: &quot;/audio/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope.mp3&quot;}, {&quot;slug&quot;: &quot;the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed&quot;, &quot;title&quot;: &quot;The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed&quot;, &quot;section&quot;: &quot;Part 1 \u00b7 Natural Resources&quot;, &quot;color&quot;: &quot;#0d9a5a&quot;, &quot;url&quot;: &quot;/audio/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed.mp3&quot;}, {&quot;slug&quot;: &quot;the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century&quot;, &quot;title&quot;: &quot;The New Oil: Why the Race for Critical Minerals Will Define the 21st Century&quot;, &quot;section&quot;: &quot;Part 1 \u00b7 Natural Resources&quot;, &quot;color&quot;: &quot;#0d9a5a&quot;, &quot;url&quot;: &quot;/audio/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century.mp3&quot;}]">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         Queue All
       </button>
     </div>
     <div class="listen-scroll">
-      <a href="/articles/are-europeans-fundamentally-racist" class="listen-card" style="--card-accent:#7c3aed">
+      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="listen-card" style="--card-accent:#7c3aed">
         <div class="listen-card-top">
           <svg class="listen-card-play" viewBox="0 0 24 24" fill="#7c3aed"><path d="M8 5v14l11-7z"/></svg>
-          <span class="listen-card-time">24 min</span>
+          <span class="listen-card-time">15 min</span>
         </div>
-        <div class="listen-card-title">Are Europeans Fundamentally Racist?</div>
+        <div class="listen-card-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</div>
         <div class="listen-card-kicker" style="color:#7c3aed">Part 4 &middot; Society</div>
         <span class="listen-card-type">Narration</span>
-        <button class="q-add-btn" data-queue-slug="are-europeans-fundamentally-racist" data-queue-title="Are Europeans Fundamentally Racist?" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/are-europeans-fundamentally-racist.mp3" aria-label="Add to queue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          <span class="q-add-label">Add to Queue</span>
-        </button>
-      </a>
-      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="listen-card" style="--card-accent:#0d9a5a">
-        <div class="listen-card-top">
-          <svg class="listen-card-play" viewBox="0 0 24 24" fill="#0d9a5a"><path d="M8 5v14l11-7z"/></svg>
-          <span class="listen-card-time">5 min</span>
-        </div>
-        <div class="listen-card-title">Cassandra: Time To Give Up On Predicting Climate Change?</div>
-        <div class="listen-card-kicker" style="color:#0d9a5a">Part 1 &middot; Natural Resources</div>
-        <span class="listen-card-type">Narration</span>
-        <button class="q-add-btn" data-queue-slug="cassandra-time-to-give-up-on-predicting-climate-change" data-queue-title="Cassandra: Time To Give Up On Predicting Climate Change?" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/cassandra-time-to-give-up-on-predicting-climate-change.mp3" aria-label="Add to queue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          <span class="q-add-label">Add to Queue</span>
-        </button>
-      </a>
-      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="listen-card" style="--card-accent:#2563eb">
-        <div class="listen-card-top">
-          <svg class="listen-card-play" viewBox="0 0 24 24" fill="#2563eb"><path d="M8 5v14l11-7z"/></svg>
-          <span class="listen-card-time">50 min</span>
-        </div>
-        <div class="listen-card-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</div>
-        <div class="listen-card-kicker" style="color:#2563eb">Part 2 &middot; Global Balance of Power</div>
-        <span class="listen-card-type">Narration</span>
-        <button class="q-add-btn" data-queue-slug="crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" data-queue-title="Crisis: Or An Explanation On The Origins Of The Decline Of The West" data-queue-section="Part 2 · Global Balance of Power" data-queue-color="#2563eb" data-queue-url="/audio/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west.mp3" aria-label="Add to queue">
+        <button class="q-add-btn" data-queue-slug="the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" data-queue-title="The Invisible Judge: Why Guilt and Shame Societies Are Incompatible" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible.mp3" aria-label="Add to queue">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           <span class="q-add-label">Add to Queue</span>
         </button>
@@ -438,15 +418,41 @@
           <span class="q-add-label">Add to Queue</span>
         </button>
       </a>
-      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="listen-card" style="--card-accent:#7c3aed">
+      <a href="/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope" class="listen-card" style="--card-accent:#0d9a5a">
         <div class="listen-card-top">
-          <svg class="listen-card-play" viewBox="0 0 24 24" fill="#7c3aed"><path d="M8 5v14l11-7z"/></svg>
-          <span class="listen-card-time">33 min</span>
+          <svg class="listen-card-play" viewBox="0 0 24 24" fill="#0d9a5a"><path d="M8 5v14l11-7z"/></svg>
+          <span class="listen-card-time">13 min</span>
         </div>
-        <div class="listen-card-title">What The History Of Immigration Teaches Us About Europe’s Future</div>
-        <div class="listen-card-kicker" style="color:#7c3aed">Part 4 &middot; Society</div>
+        <div class="listen-card-title">The Atom Returns: Why the World&#x27;s Most Feared Energy Source Is Its Best Hope</div>
+        <div class="listen-card-kicker" style="color:#0d9a5a">Part 1 &middot; Natural Resources</div>
         <span class="listen-card-type">Narration</span>
-        <button class="q-add-btn" data-queue-slug="what-the-history-of-immigration-teaches-us-about-europes-future" data-queue-title="What The History Of Immigration Teaches Us About Europe’s Future" data-queue-section="Part 4 · Society" data-queue-color="#7c3aed" data-queue-url="/audio/what-the-history-of-immigration-teaches-us-about-europes-future.mp3" aria-label="Add to queue">
+        <button class="q-add-btn" data-queue-slug="the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope" data-queue-title="The Atom Returns: Why the World&#x27;s Most Feared Energy Source Is Its Best Hope" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope.mp3" aria-label="Add to queue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          <span class="q-add-label">Add to Queue</span>
+        </button>
+      </a>
+      <a href="/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed" class="listen-card" style="--card-accent:#0d9a5a">
+        <div class="listen-card-top">
+          <svg class="listen-card-play" viewBox="0 0 24 24" fill="#0d9a5a"><path d="M8 5v14l11-7z"/></svg>
+          <span class="listen-card-time">13 min</span>
+        </div>
+        <div class="listen-card-title">The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed</div>
+        <div class="listen-card-kicker" style="color:#0d9a5a">Part 1 &middot; Natural Resources</div>
+        <span class="listen-card-type">Narration</span>
+        <button class="q-add-btn" data-queue-slug="the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed" data-queue-title="The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed.mp3" aria-label="Add to queue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          <span class="q-add-label">Add to Queue</span>
+        </button>
+      </a>
+      <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="listen-card" style="--card-accent:#0d9a5a">
+        <div class="listen-card-top">
+          <svg class="listen-card-play" viewBox="0 0 24 24" fill="#0d9a5a"><path d="M8 5v14l11-7z"/></svg>
+          <span class="listen-card-time">13 min</span>
+        </div>
+        <div class="listen-card-title">The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</div>
+        <div class="listen-card-kicker" style="color:#0d9a5a">Part 1 &middot; Natural Resources</div>
+        <span class="listen-card-type">Narration</span>
+        <button class="q-add-btn" data-queue-slug="the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" data-queue-title="The New Oil: Why the Race for Critical Minerals Will Define the 21st Century" data-queue-section="Part 1 · Natural Resources" data-queue-color="#0d9a5a" data-queue-url="/audio/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century.mp3" aria-label="Add to queue">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           <span class="q-add-label">Add to Queue</span>
         </button>
@@ -1120,7 +1126,7 @@
   <div class="q-list" id="queueList"></div>
 </div>
 <script src="/js/nav.js?v=8b7a75e0"></script>
-<script src="/js/search.js?v=9cdbd12a"></script>
+<script src="/js/search.js?v=c662002b"></script>
 <script src="/js/queue.js?v=6660f595"></script>
 <script src="/js/soft-nav.js?v=c3b71dce"></script>
 <script src="/js/pwa-install.js?v=0b4e8e6f" defer></script>
@@ -1146,6 +1152,8 @@ if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=fals
 const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
+const _xy=xy;
+const _yt=yearTick;
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
 const _chartReg=[];

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagefind Search Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-top: 0;
+    }
+    .test-section {
+      margin: 30px 0;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    .test-section h2 {
+      margin-top: 0;
+      color: #666;
+      font-size: 18px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-height: 100px;
+    }
+    .result-item {
+      padding: 10px;
+      margin: 10px 0;
+      background: #f0f8ff;
+      border-left: 3px solid #007bff;
+    }
+    .result-title {
+      font-weight: bold;
+      color: #333;
+    }
+    .result-excerpt {
+      color: #666;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    .status.loading {
+      background: #fff3cd;
+      color: #856404;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Pagefind Search Test</h1>
+    <p>This page tests the Pagefind search functionality independently of the main site.</p>
+
+    <div class="test-section">
+      <h2>Test 1: Search for "Bismarck"</h2>
+      <button onclick="testSearch('Bismarck', 'test1')">Run Test</button>
+      <div id="test1-status"></div>
+      <div id="test1-results" class="results"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Test 2: Search for "aqueduct"</h2>
+      <button onclick="testSearch('aqueduct', 'test2')">Run Test</button>
+      <div id="test2-status"></div>
+      <div id="test2-results" class="results"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Test 3: Search for "nuclear"</h2>
+      <button onclick="testSearch('nuclear', 'test3')">Run Test</button>
+      <div id="test3-status"></div>
+      <div id="test3-results" class="results"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>Custom Search</h2>
+      <input type="text" id="customSearch" placeholder="Enter search term...">
+      <button onclick="testSearch(document.getElementById('customSearch').value, 'custom')">Search</button>
+      <div id="custom-status"></div>
+      <div id="custom-results" class="results"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    let pagefind = null;
+
+    async function initPagefind() {
+      if (pagefind) return;
+      
+      try {
+        const pf = await import('/pagefind/pagefind.js');
+        pagefind = pf;
+        await pagefind.init();
+        console.log('Pagefind initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize Pagefind:', error);
+        throw error;
+      }
+    }
+
+    window.testSearch = async function(query, testId) {
+      const statusEl = document.getElementById(`${testId}-status`);
+      const resultsEl = document.getElementById(`${testId}-results`);
+      
+      statusEl.innerHTML = '<div class="status loading">Searching...</div>';
+      resultsEl.innerHTML = '';
+      
+      try {
+        await initPagefind();
+        
+        const search = await pagefind.search(query);
+        
+        if (search.results.length === 0) {
+          statusEl.innerHTML = '<div class="status error">No results found</div>';
+          resultsEl.innerHTML = '<p>No articles found for this search term.</p>';
+          return;
+        }
+        
+        statusEl.innerHTML = `<div class="status success">Found ${search.results.length} result(s)</div>`;
+        
+        // Load the first 10 results
+        const toLoad = search.results.slice(0, 10);
+        const loaded = await Promise.all(toLoad.map(r => r.data()));
+        
+        let html = '';
+        loaded.forEach(result => {
+          const title = result.meta?.title || 'Untitled';
+          const url = result.url || '#';
+          const excerpt = result.excerpt || '';
+          
+          html += `
+            <div class="result-item">
+              <div class="result-title"><a href="${url}" target="_blank">${title}</a></div>
+              <div class="result-excerpt">${excerpt}</div>
+            </div>
+          `;
+        });
+        
+        resultsEl.innerHTML = html;
+        
+        console.log(`Search for "${query}":`, search.results.length, 'results');
+        
+      } catch (error) {
+        console.error('Search error:', error);
+        statusEl.innerHTML = '<div class="status error">Search failed: ' + error.message + '</div>';
+        resultsEl.innerHTML = '<p>An error occurred during search.</p>';
+      }
+    };
+
+    // Auto-run all tests on load
+    window.addEventListener('load', async () => {
+      console.log('Running automated tests...');
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      await testSearch('Bismarck', 'test1');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      await testSearch('aqueduct', 'test2');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      await testSearch('nuclear', 'test3');
+      
+      console.log('All tests complete');
+    });
+  </script>
+</body>
+</html>

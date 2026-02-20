@@ -38,6 +38,12 @@ if [ "$SKIP_BUILD" = false ]; then
     echo "  ✓ Build complete"
 
     echo ""
+    echo "▸ Building search index (Pagefind)..."
+    cd "$ROOT_DIR"
+    npx pagefind --site hfn-site-output --output-subdir pagefind
+    echo "  ✓ Search index built"
+
+    echo ""
     echo "▸ Generating chart images for social sharing..."
     cd "$BUILD_DIR"
     python3 generate_chart_images.py || echo "  ⚠ Chart image generation had errors (non-blocking)"

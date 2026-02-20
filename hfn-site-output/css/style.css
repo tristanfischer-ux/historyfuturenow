@@ -1009,6 +1009,8 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .search-result .card-controls { flex-shrink: 0; }
 .search-result-kicker { font-family: var(--mono); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
 .search-result-title { font-family: var(--serif); font-size: 0.95rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+.search-result-excerpt { font-size: 0.78rem; color: var(--text-light); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.search-result-excerpt mark { background: rgba(255, 200, 50, 0.35); color: inherit; border-radius: 2px; padding: 0 1px; }
 .search-result-meta { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); }
 .search-badge { font-size: 0.5rem; padding: 0.1em 0.35em; border-radius: 3px; letter-spacing: 0.04em; font-weight: 500; color: #fff; }
 .search-badge-chart { background: var(--accent); }

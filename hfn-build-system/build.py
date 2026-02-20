@@ -1322,12 +1322,12 @@ def build_article(essay, all_essays, is_review=False):
 
 {make_search_overlay()}
 
-<article class="page-container">
+<article class="page-container" data-pagefind-body>
   {breadcrumbs}
   <header class="article-header">
-    <div class="article-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(essay['part'])}</div>{issue_badge_html}
-    <h1>{te}</h1>
-    <div class="article-meta">
+    <div class="article-kicker" style="color:{pi['color']}" data-pagefind-meta="section:{html_mod.escape(essay['part'])}" data-pagefind-filter="section:{html_mod.escape(essay['part'])}">{pi['label']} &middot; {html_mod.escape(essay['part'])}</div>{issue_badge_html}
+    <h1 data-pagefind-meta="title">{te}</h1>
+    <div class="article-meta" data-pagefind-ignore>
       <span class="article-reading-time">{essay['reading_time']} min read</span>
       {f'<span class="meta-sep">&middot;</span><time class="article-date" datetime="{essay["pub_date"]}">{format_date_human(essay["pub_date"])}</time>' if essay.get('pub_date') else ''}
     </div>{chart_badge}
@@ -1337,6 +1337,7 @@ def build_article(essay, all_essays, is_review=False):
   <div class="article-body">
     {body_before_refs}
   </div>
+<div data-pagefind-ignore>
 {further_reading_html}
 {end_of_article_cta}
   <div class="article-references">
@@ -1350,6 +1351,7 @@ def build_article(essay, all_essays, is_review=False):
   </div>
 {up_next_html}
 {rel_html}
+</div>
 </article>
 
 {make_footer()}
@@ -1464,7 +1466,6 @@ def _build_section_editorial(part_name, pi):
 <script>
 (function(){{
 {CHART_COLORS}
-const _xy=(xs,ys)=>xs.map((x,i)=>({{x:+x,y:ys[i]}}));
 {all_js}
 }})();
 </script>'''
@@ -1661,6 +1662,29 @@ def build_homepage(essays, new_essays=None):
     might_missed_essays = random.sample(might_missed_pool, min(3, len(might_missed_pool)))
     random.seed()  # reset
 
+    if might_missed_essays:
+        _mm_cards = ''.join(
+            f'      <a href="/articles/{html_mod.escape(e["slug"])}" class="might-missed-card">\n'
+            f'        <span class="might-missed-kicker" style="color:{PARTS[e["part"]]["color"]}">{PARTS[e["part"]]["label"]}</span>\n'
+            f'        <h3>{html_mod.escape(e["title"])}</h3>\n'
+            f'        <span class="might-missed-meta">{e["reading_time"]} min read</span>\n'
+            f'      </a>\n'
+            for e in might_missed_essays
+        )
+        might_missed_html = (
+            '<div class="might-missed-wrap">\n'
+            '  <div class="might-missed-inner">\n'
+            '    <h2 class="might-missed-title">You might have missed</h2>\n'
+            '    <p class="might-missed-desc">Older pieces that hold up.</p>\n'
+            '    <div class="might-missed-grid">\n'
+            f'{_mm_cards}'
+            '    </div>\n'
+            '  </div>\n'
+            '</div>'
+        )
+    else:
+        might_missed_html = ''
+
     new_cards_html = ""
     for i, e in enumerate(recent_essays):
         pi = PARTS[e['part']]
@@ -1771,7 +1795,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
 {cards}    </div>
   </div>\n\n"""
 
-    # ── Listen to History teaser (homepage) ──
+    # ── Press Play teaser (homepage) ──
     # Show 5 newest audio articles as cards + CTA to /listen
     audio_essays = [e for e in essays if e.get('has_audio') or e.get('has_discussion')]
     audio_essays.sort(key=lambda e: (PARTS.get(e['part'], {}).get('order', 99), e['title']))
@@ -1786,9 +1810,9 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
             total_listen_mins += 10
     total_listen_hours = round(total_listen_mins / 60)
 
-    # Pick 5 newest audio articles (by mtime) for the teaser
-    audio_by_mtime = sorted(audio_essays, key=lambda e: e.get('mtime', 0), reverse=True)
-    teaser_essays = audio_by_mtime[:5]
+    # Pick 5 newest audio articles (by pub_date) for the teaser
+    audio_by_date = sorted(audio_essays, key=lambda e: e.get('pub_date', '') or '0000-00-00', reverse=True)
+    teaser_essays = audio_by_date[:5]
 
     teaser_cards_html = ""
     teaser_queue_items = []
@@ -1842,7 +1866,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
   <div class="listen-inner">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.3rem;">
       <div>
-        <h2 class="listen-title">Listen to History</h2>
+        <h2 class="listen-title">Press Play</h2>
         <p class="listen-intro" style="margin-bottom:0">Every article, narrated in full. Queue them up and listen on the go.</p>
       </div>
       <button class="q-play-all" id="queueAllBtn" data-items="{teaser_queue_json}">
@@ -1921,23 +1945,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
 {new_cards_html}    </div>
   </div>
 </div>
-''' + (f'''
-<div class="might-missed-wrap">
-  <div class="might-missed-inner">
-    <h2 class="might-missed-title">You might have missed</h2>
-    <p class="might-missed-desc">Older pieces that hold up.</p>
-    <div class="might-missed-grid">
-''' + ''.join(
-    f'''      <a href="/articles/{html_mod.escape(e['slug'])}" class="might-missed-card">
-        <span class="might-missed-kicker" style="color:{PARTS[e['part']]['color']}">{PARTS[e['part']]['label']}</span>
-        <h3>{html_mod.escape(e['title'])}</h3>
-        <span class="might-missed-meta">{e['reading_time']} min read</span>
-      </a>
-''' for e in might_missed_essays
-) + '''    </div>
-  </div>
-</div>
-''' if might_missed_essays else '') + '''
+{might_missed_html}
 <div class="hero-and-stats-wrap">
   <div class="hero-chart-wrap">
     <div class="hero-chart-inner">
@@ -2204,7 +2212,7 @@ def build_listen_page(essays):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head("Listen to History — History Future Now", f"{audio_count} articles available as audio narration. {total_hours}+ hours of content.", "/listen")}
+{make_head("Press Play — History Future Now", f"{audio_count} articles available as audio narration. {total_hours}+ hours of content.", "/listen")}
 </head>
 <body>
 
@@ -2215,7 +2223,7 @@ def build_listen_page(essays):
 <section class="lp-hero">
   <div class="lp-hero-inner">
     {breadcrumbs}
-    <h1 class="lp-hero-title">Listen to History</h1>
+    <h1 class="lp-hero-title">Press Play</h1>
     <p class="lp-hero-desc">Every article, narrated in full with two alternating British voices. Queue them up and listen on the go.</p>
     <div class="lp-hero-stats">
       <span class="lp-stat"><strong>{audio_count}</strong> articles</span>
