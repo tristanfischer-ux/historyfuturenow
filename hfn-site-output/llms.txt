@@ -3,10 +3,10 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 69
+Total articles: 70
 
 ## Sections
-### Natural Resources (12 articles)
+### Natural Resources (13 articles)
 - URL: https://www.historyfuturenow.com/natural-resources
 - Energy, food, water, land — the physical foundations that every civilisation depends on.
 
@@ -240,6 +240,13 @@ Total articles: 69
 - Published: 2024-06-01
 - Reading time: 14 min
 - In the quest for immortality, humanity has long dreamed of extending the boundaries of life beyond the confines of our current existence. The tantalizing prospect of living to 150 years or more has ca
+
+### The Atom Returns: Why the World's Most Feared Energy Source Is Its Best Hope [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope
+- Section: Natural Resources
+- Published: 2026-02-19
+- Reading time: 10 min
+- Microsoft signed a deal to restart Three Mile Island for AI power. France generates 70% of its electricity from nuclear at half Germany's carbon intensity. China is building 150 reactors. The atom is 
 
 ### The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next [11 charts]
 - URL: https://www.historyfuturenow.com/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing
