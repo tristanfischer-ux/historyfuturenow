@@ -2268,7 +2268,7 @@ def build_listen_page(essays):
   <div class="lp-hero-inner">
     {breadcrumbs}
     <h1 class="lp-hero-title">Press Play</h1>
-    <p class="lp-hero-desc">Every article, narrated in full with two alternating British voices. Queue them up and listen on the go.</p>
+    <p class="lp-hero-desc">Every article, narrated in full with two alternating voices. Queue them up and listen on the go.</p>
     <div class="lp-hero-stats">
       <span class="lp-stat"><strong>{audio_count}</strong> articles</span>
       <span class="lp-stat-sep">&middot;</span>

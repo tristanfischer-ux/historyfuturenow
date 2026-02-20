@@ -3,7 +3,7 @@
 History Future Now — Audio Narration Generator
 
 Generates MP3 narrations for all essays using Gemini TTS.
-Two alternating British voices (male + female) read the article straight through,
+Two alternating voices (male + female) read the article straight through,
 switching at section boundaries for a varied listening experience.
 
 Prerequisites:
