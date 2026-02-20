@@ -42,7 +42,7 @@ The speed of this decline is perhaps more alarming than the current levels. In 1
 
 
 
-Even within Europe, the picture is uniformly bleak. Not a single European country is at replacement level. France, long held up as the continent's fertility champion thanks to generous family policies, has dropped to 1.68 and falling. The Mediterranean countries are in freefall. Eastern Europe is emptying out through a combination of low births and emigration.
+Even within Europe, the picture is uniformly bleak. Not a single European country is at replacement level. France, long held up as the continent's fertility champion thanks to generous family policies, has dropped to 1.62 and falling. The Mediterranean countries are in freefall. Eastern Europe is emptying out through a combination of low births and emigration.
 
 
 
@@ -136,7 +136,7 @@ For the left, it requires admitting that mass immigration, far from being a huma
 
 For the right, it requires admitting that market forces alone will not produce enough children, and that the traditional family structures they champion have been hollowed out by the very economic system they defend. You cannot celebrate deregulated housing markets and then wonder why young people cannot afford a home large enough for a family. You cannot applaud the gig economy and then be puzzled that people delay marriage and children.
 
-Augustus tried to legislate his way out of Rome's fertility crisis. He failed. Modern governments have tried to subsidise their way out with baby bonuses, parental leave, and tax credits. Hungary, which has implemented the most aggressive pro-natalist policies in Europe, has managed to nudge its fertility rate from 1.23 to 1.50. Heroic effort. Still half a child short of survival.
+Augustus tried to legislate his way out of Rome's fertility crisis. He failed. Modern governments have tried to subsidise their way out with baby bonuses, parental leave, and tax credits. Hungary, which has implemented the most aggressive pro-natalist policies in Europe, managed to nudge its fertility rate from 1.23 to 1.61 — before it fell back to 1.39 in 2024. Heroic effort, and now unravelling. Still more than half a child short of survival.
 
 Nobody knows how to reverse a fertility decline once a society has passed below a certain threshold. That is not a political opinion. It is an empirical observation. No country in human history has recovered from a sustained rate below 1.5. The forces that drive the decline, urbanisation, education, contraception, female workforce participation, the cost of housing and childcare, the cultural elevation of individual fulfilment over familial obligation, are not easily reversible. They are, in many cases, things we call progress.
 

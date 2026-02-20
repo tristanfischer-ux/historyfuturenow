@@ -10,7 +10,7 @@ part: Society
 slug: >-
   the-locked-gate-how-the-west-priced-its-children-out-of-existence
 excerpt: >-
-  The average house in England costs 8.9 times the average salary. In
+  The average house in England costs 7.7 times the median salary. In
   Seoul, a young couple saves for 18 years to buy a flat. Every city
   with extreme housing costs has a fertility rate below 1.5. This is
   not coincidence. It is causation.
@@ -24,7 +24,7 @@ sources:
 ---
 # The Locked Gate: How the West Priced Its Children Out of Existence
 
-The average house in England now costs 8.9 times the average annual pre-tax salary. In London the ratio reaches 13.5. In Sydney it is 13.3; Vancouver 12.3; Hong Kong 16.7. A young couple in Seoul, saving every penny of both salaries, would need eighteen years to afford a modest flat — a period so long that by the time they moved in, any children they had hoped to raise there would be applying to university. For most of the twentieth century, a house in Britain cost between three and four times the average income. A single earner on a median wage could reasonably expect to buy a home, raise a family, and retire with something to leave behind. That world has vanished so completely that describing it to someone under thirty feels like recounting a fairy tale — one in which the prince not only gets the castle but can actually afford the mortgage.
+The average house in England now costs 7.7 times the median annual pre-tax salary. In London the ratio reaches 12.5. In Sydney it is 13.3; Vancouver 12.3; Hong Kong 16.7. A young couple in Seoul, saving every penny of both salaries, would need eighteen years to afford a modest flat — a period so long that by the time they moved in, any children they had hoped to raise there would be applying to university. For most of the twentieth century, a house in Britain cost between three and four times the average income. A single earner on a median wage could reasonably expect to buy a home, raise a family, and retire with something to leave behind. That world has vanished so completely that describing it to someone under thirty feels like recounting a fairy tale — one in which the prince not only gets the castle but can actually afford the mortgage.
 
 The consequences are what any student of history would predict. Every city where housing costs have reached extreme levels has a fertility rate below 1.5 — well beneath the 2.1 replacement threshold required to maintain a stable population. Seoul recorded 0.72 in 2023, the lowest of any major country in recorded history. Hong Kong reported 0.77. Italy 1.20. England and Wales 1.49, the lowest since records began in 1938. The Romans would have found this familiar. Augustus tried to bribe citizens into having children with the *Lex Papia Poppaea* of AD 9 — tax penalties for the childless, inheritance rewards for the fertile. It worked about as well as modern baby bonuses, which is to say not at all. The Roman plebeians could not afford decent housing in the capital either.
 

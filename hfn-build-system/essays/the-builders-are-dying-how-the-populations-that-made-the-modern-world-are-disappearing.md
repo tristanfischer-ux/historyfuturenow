@@ -28,7 +28,7 @@ sources:
 
 In 2018, the Swiss alpine village of Albinen made international headlines by offering families 25,000 Swiss francs per child to move there. The commune was desperate — its school was dying, its population ageing, its future evaporating. Across Germany, over 200 primary schools closed between 2020 and 2024. In South Korea, 3,800 schools now operate at less than half capacity. In rural Japan, entire school districts have been consolidated into single buildings, with children bussed in from depopulated villages where the median resident is over seventy.
 
-Meanwhile, six thousand miles to the east, a Foxconn factory in Zhengzhou — the one that assembles most of the world's iPhones — is replacing production lines with robotic arms. Not because robots are fashionable, but because there are no longer enough young Chinese workers willing to do the job. China's working-age population has been shrinking since 2012. The factory that once employed 300,000 people at peak production is quietly automating its way through a labour force that no longer exists.
+Meanwhile, six thousand miles to the east, a Foxconn factory in Zhengzhou — the one that assembles most of the world's iPhones — is replacing production lines with robotic arms. Not because robots are fashionable, but because there are no longer enough young Chinese workers willing to do the job. China's working-age population has been shrinking since 2011. The factory that once employed 300,000 people at peak production is quietly automating its way through a labour force that no longer exists.
 
 Between them, Europeans and East Asians invented practically everything you are using to read this sentence — the semiconductor, the internet protocol, the LCD screen, the alphabet, the printing press, and quite possibly the chair you are sitting in. They are also, collectively, going extinct.
 
@@ -40,7 +40,7 @@ The word "extinction" is not hyperbole. It is mathematics.
 
 For a population to sustain itself, women must bear an average of 2.1 children — one to replace the mother, one the father, and a fraction to account for mortality before reproductive age. Every European nation and every East Asian nation is below this line. Most are far below it.
 
-In Europe, the figures are uniformly bleak. Italy: 1.24. Spain: 1.19. Greece: 1.30. Germany: 1.35. Poland: 1.29. The United Kingdom: 1.49. France, long the continent's fertility champion thanks to generous family policies, has dropped to 1.68 and is falling. Not a single European country is at replacement level. Eastern Europe is emptying through a double blow: low births compounded by mass emigration of the young to the West.
+In Europe, the figures are uniformly bleak. Italy: 1.20. Spain: 1.12. Greece: 1.32. Germany: 1.39. Poland: 1.16. The United Kingdom: 1.49. France, long the continent's fertility champion thanks to generous family policies, has dropped to 1.62 and is falling. Not a single European country is at replacement level. Eastern Europe is emptying through a double blow: low births compounded by mass emigration of the young to the West.
 
 In East Asia, the collapse is even more extreme. South Korea's total fertility rate of 0.72 is the lowest ever recorded by any nation in human history. Taiwan: 0.87. China: 1.02, with several provinces reporting rates below 0.8. Japan: 1.20. Hong Kong: 0.77. Singapore: 0.97.
 

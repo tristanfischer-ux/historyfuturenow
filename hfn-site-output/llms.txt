@@ -323,7 +323,7 @@ Total articles: 72
 - Section: Society
 - Published: 2026-02-19
 - Reading time: 10 min
-- The average house in England costs 8.9 times the average salary. In Seoul, a young couple saves for 18 years to buy a flat. Every city with extreme housing costs has a fertility rate below 1.5. This i
+- The average house in England costs 7.7 times the median salary. In Seoul, a young couple saves for 18 years to buy a flat. Every city with extreme housing costs has a fertility rate below 1.5. This is
 
 ### The Long Term Impact of Covid 19 [8 charts]
 - URL: https://www.historyfuturenow.com/articles/the-long-term-impact-of-covid-19

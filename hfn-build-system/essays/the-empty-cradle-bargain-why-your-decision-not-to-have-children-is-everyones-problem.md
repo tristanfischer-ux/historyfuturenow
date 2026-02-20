@@ -48,7 +48,7 @@ Before examining why this matters at civilisational scale, let us be honest abou
 
 ### Housing: The Foundational Barrier
 
-In 1970, the average house in the United Kingdom cost approximately 3.6 times the average annual salary. Today it costs roughly 8.3 times. In London, the ratio exceeds 12. In Sydney, 13. In Vancouver, 12. In Munich, 11. These are not marginal increases. They represent a fundamental restructuring of what young adults can afford.
+In 1970, the average house in the United Kingdom cost approximately 3.6 times the average annual salary. Today it costs roughly 7.7 times. In London, the ratio exceeds 12. In Sydney, 13. In Vancouver, 12. In Munich, 11. These are not marginal increases. They represent a fundamental restructuring of what young adults can afford.
 
 You cannot raise three children in a one-bedroom flat. You struggle with two in a two-bedroom flat. Yet for millions of young couples in Western cities, a three-bedroom home — the bare minimum for a family of four — requires either inherited wealth, two high incomes, or a move to a town where neither partner can find work in their profession. Housing policy is fertility policy, whether governments acknowledge it or not.
 
@@ -92,7 +92,7 @@ This is not a failure of individual women. It is a failure of education, of publ
 
 For many who discover too late that natural conception is no longer possible, IVF appears as a safety net. It is not. It is an expensive, physically demanding, emotionally devastating process with success rates that most people dramatically overestimate.
 
-The live birth rate per IVF cycle in the United Kingdom for women aged 35-37 is approximately 29%. For women aged 38-39, it drops to 20%. For women aged 40-42, it is 11%. For women over 42, it is 4%. These are per-cycle figures. Most women require multiple cycles. Each cycle costs between £4,000 and £6,000 in the UK for those paying privately — and the majority do pay privately, since NHS-funded cycles are rationed, inconsistent by postcode, and in many areas limited to one or two attempts. In the United States, the average cost is $15,000-$20,000 per cycle, and insurance coverage is patchy at best.
+The live birth rate per IVF cycle in the United Kingdom for women aged 35-37 is approximately 25%. For women aged 38-39, it drops to 20%. For women aged 40-42, it is 11%. For women over 42, it is 4%. These are per-cycle figures. Most women require multiple cycles. Each cycle costs between £4,000 and £6,000 in the UK for those paying privately — and the majority do pay privately, since NHS-funded cycles are rationed, inconsistent by postcode, and in many areas limited to one or two attempts. In the United States, the average cost is $15,000-$20,000 per cycle, and insurance coverage is patchy at best.
 
 The physical toll is considerable: daily hormone injections for two to four weeks, often causing bloating, mood swings, headaches, and in some cases ovarian hyperstimulation syndrome. The emotional toll is worse. Each failed cycle is a bereavement. Couples who go through three or four failed cycles describe it as the most difficult experience of their lives — worse than divorce, worse than job loss, worse than the death of a parent. Relationships fracture under the strain. One in three couples undergoing IVF report significant relationship difficulties during treatment.
 
@@ -152,13 +152,13 @@ Here is what the evidence actually shows.
 
 Since 2010, Hungary under Viktor Orbán has implemented the most comprehensive pro-natalist policy package in the Western world. It includes: a lifetime personal income tax exemption for women who have four or more children; subsidised housing loans forgiven after the birth of a third child; a "grandparent leave" scheme that allows grandparents to take paid leave to care for grandchildren; subsidised IVF; and preferential car purchase schemes for large families.
 
-The results: Hungary's fertility rate rose from 1.23 in 2011 to 1.59 in 2021 — the largest sustained increase in any European country in recent decades. It has since settled at approximately 1.53. This is still below replacement. But it represents a reversal of a decline that demographers had assumed was irreversible. The lesson is not that Hungary has solved the problem. It is that the problem responds to policy — if the policy is ambitious enough.
+The results: Hungary's fertility rate rose from 1.23 in 2011 to 1.61 in 2021 — the largest sustained increase in any European country in recent decades. It has since fallen back to 1.39 in 2024, suggesting the gains may not be durable. This is still below replacement. But it represents a reversal of a decline that demographers had assumed was irreversible. The lesson is not that Hungary has solved the problem. It is that the problem responds to policy — if the policy is ambitious enough.
 
 ### France: The Power of Universal Childcare
 
 France maintained the highest fertility rate in continental Europe for decades — hovering around 2.0 from 1999 to 2014 — largely thanks to a system of universal, subsidised crèches that made childcare available from age one at a fraction of market cost. French mothers returned to work earlier, earned more, and had more children than their counterparts in Germany, Italy, or Spain, where such provision did not exist.
 
-The lesson cuts both ways. Since 2014, as budgets have tightened and crèche places have not kept pace with demand, French fertility has fallen to 1.68 and declining. Universal childcare works when it is genuinely universal and adequately funded. When it is neither, the effect fades.
+The lesson cuts both ways. Since 2014, as budgets have tightened and crèche places have not kept pace with demand, French fertility has fallen to 1.62 and declining. Universal childcare works when it is genuinely universal and adequately funded. When it is neither, the effect fades.
 
 ### The Nordic Model: Necessary but Not Sufficient
 
