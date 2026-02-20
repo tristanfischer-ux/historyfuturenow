@@ -5724,7 +5724,7 @@ window.__chartInits['chart_a-nation-transformed-britains-demographic-revolution-
 _regChart('nationChart5',()=>{const ctx=document.getElementById('chart_a-nation-transformed-britains-demographic-revolution-1948-2050_nationChart5_4');
 const yrs=[1964,1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2016,2017,2018,2019,2020,2021,2022,2023];
 const imm=[280,270,230,270,290,320,340,480,560,591,630,630,580,625,650,580,510,1050,1200];
-const emm=[230,230,270,250,260,270,290,330,360,341,300,300,330,345,350,320,340,550,528];
+const emm=[-230,-230,-270,-250,-260,-270,-290,-330,-360,-341,-300,-300,-330,-345,-350,-320,-340,-550,-528];
 const net=[50,40,-40,20,30,50,50,150,200,250,330,330,250,280,300,260,170,500,672];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('Immigration (inflow)',yrs,imm,C.green),
@@ -5737,7 +5737,7 @@ v73:{type:'line',xMin:1973,xMax:1973,borderColor:C.dim,borderWidth:1,borderDash:
 v04:{type:'line',xMin:2004,xMax:2004,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'EU A8',position:'start',font:{size:9}}},
 v16:{type:'line',xMin:2016,xMax:2016,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Brexit',position:'start',font:{size:9}}}
 }},
-scales:{x:linX(1964,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'k'},title:{display:true,text:'Thousands per year',color:C.dim},min:-60,max:1300}}}});
+scales:{x:linX(1964,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'k'},title:{display:true,text:'Thousands per year',color:C.dim},min:-600,max:1300}}}});
 });
 };
 window.__chartInits['chart_a-nation-transformed-britains-demographic-revolution-1948-2050_nationChart6_5'] = function() {
