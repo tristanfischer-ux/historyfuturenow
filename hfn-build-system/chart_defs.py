@@ -3659,7 +3659,7 @@ label:i=>i.raw.value?'Water stress: '+i.raw.value.toFixed(1)+'/5.0':'No data'}}}
             'title': 'Trust in Government Over Time: US, UK, France, Germany (1960–2025)',
             'desc': 'A sixty-year collapse in the most fundamental measure of democratic legitimacy',
             'source': 'Pew Research Center; Eurobarometer; Edelman Trust Barometer',
-            'position': 'after_para_16',
+            'position': 'after_para_3',
             'js': """
 _regChart('trustChart1',()=>{const ctx=document.getElementById('trustChart1');
 const yrs=[1960,1965,1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025];
@@ -3679,7 +3679,7 @@ title:{display:true,text:'% who trust the government',color:C.dim}}}}});
             'title': 'Trust Across Institutions: The Universal Decline (Latest Data)',
             'desc': 'No institution has been spared — government, media, business, science, and religion all face a credibility crisis',
             'source': 'Edelman Trust Barometer 2025; Gallup',
-            'position': 'after_para_20',
+            'position': 'after_para_6',
             'tall': True,
             'js': """
 _regChart('trustChart2',()=>{const ctx=document.getElementById('trustChart2');
@@ -3701,11 +3701,31 @@ title:{display:true,text:'% who trust this institution',color:C.dim}}}}});
 });"""
         },
         {
-            'id': 'trustChart3', 'figure_num': 3,
+            'id': 'trustChart5', 'figure_num': 3,
+            'title': 'The Growth of the State: Government Spending as % of GDP (1900–2024)',
+            'desc': 'In a single century the state grew from a night-watchman into a colossus consuming nearly half of everything citizens produce',
+            'source': 'Tanzi & Schuknecht (2000); OECD; IMF Fiscal Monitor',
+            'position': 'after_para_15',
+            'js': """
+_regChart('trustChart5',()=>{const ctx=document.getElementById('trustChart5');
+const yrs=[1900,1913,1920,1937,1950,1960,1970,1980,1990,2000,2010,2020,2024];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('United States',yrs,[3,2,7,9,21,27,30,31,33,33,40,44,36],C.blue),
+dxy('United Kingdom',yrs,[12,13,26,24,34,32,37,43,39,36,47,50,44],C.accent),
+dxy('France',yrs,[12,13,28,23,28,35,38,46,50,51,56,62,57],C.purple),
+dxy('Germany',yrs,[14,15,25,34,30,32,38,47,45,45,47,51,47],C.amber)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% of GDP'}}},
+scales:{x:linX(1900,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:70,
+title:{display:true,text:'Government spending as % of GDP',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'trustChart3', 'figure_num': 4,
             'title': 'How Far They Have Fallen: US Institutional Confidence, Peak vs. 2025',
             'desc': 'Every major American institution has lost the majority of the public confidence it once commanded',
             'source': 'Gallup Confidence in Institutions (1973–2025)',
-            'position': 'after_para_24',
+            'position': 'after_para_17',
             'tall': True,
             'js': """
 _regChart('trustChart3',()=>{const ctx=document.getElementById('trustChart3');
@@ -3723,11 +3743,11 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 });"""
         },
         {
-            'id': 'trustChart4', 'figure_num': 4,
+            'id': 'trustChart4', 'figure_num': 5,
             'title': 'Populist Party Vote Share in Europe (2000–2024)',
             'desc': 'Populism is not an aberration — it is the predictable response to institutional failure',
             'source': 'ParlGov database; national election data',
-            'position': 'after_para_28',
+            'position': 'after_para_27',
             'js': """
 _regChart('trustChart4',()=>{const ctx=document.getElementById('trustChart4');
 const yrs=[2000,2004,2008,2012,2016,2020,2024];

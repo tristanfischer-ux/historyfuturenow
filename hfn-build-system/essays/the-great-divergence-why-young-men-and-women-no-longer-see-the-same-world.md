@@ -36,7 +36,7 @@ For most of human history, men and women disagreed about household chores and wh
 
 The scale of the divergence is remarkable not for its existence — small gender gaps in political attitude have been measured since at least the 1960s — but for its velocity and breadth.
 
-In the United States, Gallup's ideology tracking shows that forty-four per cent of women aged eighteen to twenty-nine identified as liberal in 2023, compared with twenty-five per cent of men in the same cohort — a nineteen-point gap that has roughly tripled since 2000. Among Americans over fifty, the gender gap is four to six points. The divergence is generational, not biological.
+In the United States, Gallup's ideology tracking shows that forty per cent of women aged eighteen to twenty-nine identified as liberal in 2023, compared with twenty-five per cent of men in the same cohort — a fifteen-point gap that has roughly tripled since 2000. Among Americans over fifty, the gender gap is four to six points. The divergence is generational, not biological.
 
 The European Social Survey tells a similar story across the continent. In Germany, young women are thirty percentage points more likely than young men to describe themselves as left-leaning. In the United Kingdom, the gap is twenty-five points. In Sweden — historically one of the most egalitarian societies on Earth — it is twenty-two points. The disagreements cluster around a specific set of issues: gender identity, immigration, social justice, criminal justice, and the relative weight given to individual rights versus collective solidarity. This is a values split, not a conventional left-right economic divide over taxation and spending. It is deeper, more personal, and far harder to bridge.
 
