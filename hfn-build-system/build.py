@@ -28,6 +28,7 @@ REVIEW_SLUGS = {
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
+    'the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration',
 }
 
 # Articles that were under review and have been released to the public site.
@@ -804,7 +805,7 @@ def auto_wrap_chart(chart_def, auto_id):
     """Produce a mini-chart JS from a full chart definition by swapping canvas ID.
 
     Visual stripping (axes, legends, tooltips, annotations) is handled globally
-    by the dsMini Chart.js plugin registered before these scripts run.
+    by the sparklineMode Chart.js plugin registered in chart_defs.COLORS.
     """
     original_id = chart_def.get('id', '')
     if not original_id:

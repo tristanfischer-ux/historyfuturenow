@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 75
+Total articles: 74
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -18,7 +18,7 @@ Total articles: 75
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (32 articles)
+### Society (31 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -374,13 +374,6 @@ Total articles: 75
 - Reading time: 20 min
 - Can we truly predict the future, or are we destined to repeat the mistakes of the past? This question has captivated minds for millennia, from ancient prophets to writers like History Future Now. Desp
 
-### The Price of Admission: What the Netherlands and Denmark Reveal About the True Cost of Immigration [4 charts]
-- URL: https://www.historyfuturenow.com/articles/the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration
-- Section: Society
-- Published: 2026-02-20
-- Reading time: 10 min
-- The Netherlands and Denmark are the two best-documented case studies on the fiscal and social costs of immigration in Europe. Both are small, wealthy, high-trust welfare states with meticulous statist
-
 ### The renewables and battery revolution. What history teaches us about the future. [9 charts]
 - URL: https://www.historyfuturenow.com/articles/the-renewables-and-battery-revolution
 - Section: Natural Resources
@@ -472,7 +465,7 @@ Total articles: 75
 - Reading time: 25 min
 - Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst. That is a problem as it is an important subject which doesn'
 
-### What Worked: Five Thousand Years of Evidence for How Civilisations Flourish [4 charts]
+### What Worked: Five Thousand Years of Evidence for How Civilisations Flourish [5 charts]
 - URL: https://www.historyfuturenow.com/articles/what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish
 - Section: Society
 - Published: 2026-02-20

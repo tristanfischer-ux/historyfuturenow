@@ -4838,6 +4838,12 @@ scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000)+'
 });"""
         },
         {
+            'data_story': True,
+            'headline': 'Ancient Egypt lasted 3,000 years. The Soviet Union lasted 69',
+            'chart_id': 'heroWhatWorked',
+            'js': """_regChart('heroWhatWorked',()=>{const ctx=document.getElementById('heroWhatWorked');new Chart(ctx,{type:'bar',data:{labels:['China','Anc. Egypt','Japan','Yugoslavia','USSR'],datasets:[{data:[4000,3070,1500,73,69],backgroundColor:['#c43425','#b8751a','#5b8a8a','#b85c5ccc','#b85c5c99'],borderRadius:3,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw.toLocaleString()+' years'}}},scales:{x:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v>=1000?(v/1000)+'k':v}},y:{grid:{display:false},ticks:{color:'#8a8479',font:{size:9}}}}}});});"""
+        },
+        {
             'id': 'wwChart2', 'figure_num': 2,
             'title': 'The Debasement of the Roman Denarius',
             'desc': 'Silver content of Rome\'s principal coin declined from 97% to 0.5% as the empire spent beyond its means',
