@@ -1923,6 +1923,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
   <h1>History Future <em>Now</em></h1>
   <p class="hero-sub">Data-driven analysis of the structural forces &mdash; demographic, technological, economic &mdash;<br>that will shape the next century.</p>
   <hr class="hero-rule">
+  <p class="hero-intro"><strong>By Tristan Fischer.</strong> A lifelong fascination with history, science, and technology led to a simple observation: the deeper you understand how the past unfolded, the more clearly you can see the future. These essays trace historical patterns and technological trajectories to work out what comes next.</p>
 </section>
 
 <div class="latest-wrap">
