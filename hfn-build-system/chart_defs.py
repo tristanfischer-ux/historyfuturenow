@@ -5007,8 +5007,8 @@ scales:{x:linX(1820,2025,{title:{display:true,text:'Year',color:C.dim}}),y:{min:
             'tall': True,
             'js': """
 _regChart('ladderChart2',()=>{const ctx=document.getElementById('ladderChart2');
-const yrs=[1945,1950,1955,1960,1965,1970,1975,1976,1980,1985,1990,1995,2000,2005,2006,2010,2015,2020,2025];
-const bal=[7.0,2.2,2.9,3.5,4.9,2.6,0.9,-6.1,-19.4,-121.9,-80.9,-96.4,-378.8,-714.2,-762.0,-500.0,-500.4,-676.7,-918.4];
+const yrs=[1945,1950,1955,1960,1965,1970,1971,1973,1975,1976,1980,1985,1990,1995,2000,2005,2006,2010,2015,2020,2025];
+const bal=[7.0,2.2,2.9,3.5,4.9,2.6,-2.3,0.9,8.9,-6.1,-19.4,-121.9,-80.9,-96.4,-378.8,-714.2,-762.0,-500.0,-500.4,-676.7,-918.4];
 new Chart(ctx,{type:'line',data:{datasets:[{label:'US trade balance ($bn)',data:xy(yrs,bal),
 borderColor:C.accent,backgroundColor:function(ctx2){const v=ctx2.raw;return v&&v.y>=0?C.green+'30':C.accent+'18';},
 fill:true,tension:.3,pointRadius:3,pointBackgroundColor:C.accent,borderWidth:2.5}]},
@@ -5016,10 +5016,10 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw.y+'bn'}},
 annotation:{annotations:{
 zeroLine:{type:'line',yMin:0,yMax:0,borderColor:C.dim,borderWidth:1,borderDash:[4,4]},
-marshall:{type:'label',xValue:1948,yValue:5,content:'Marshall Plan',font:{size:10},..._al},
-gatt:{type:'label',xValue:1965,yValue:8,content:'GATT Kennedy\\nRound',font:{size:10},..._al},
-deficit:{type:'label',xValue:1976,yValue:-15,content:'First deficit\\n(1976)',font:{size:10},..._al},
-china:{type:'label',xValue:2001,yValue:-200,content:'China joins\\nWTO (2001)',font:{size:10},..._al}
+marshall:{type:'label',xValue:1948,yValue:90,content:'Marshall Plan',font:{size:10},..._al,callout:{display:true,borderColor:C.dim,borderWidth:1,margin:4}},
+gatt:{type:'label',xValue:1965,yValue:90,content:'GATT Kennedy\\nRound',font:{size:10},..._al,callout:{display:true,borderColor:C.dim,borderWidth:1,margin:4}},
+deficit:{type:'label',xValue:1978,yValue:80,content:'First deficit (1971)',font:{size:10},..._al,callout:{display:true,borderColor:C.dim,borderWidth:1,margin:4}},
+china:{type:'label',xValue:2001,yValue:-100,content:'China joins\\nWTO (2001)',font:{size:10},..._al,callout:{display:true,borderColor:C.dim,borderWidth:1,margin:4}}
 }}},
 scales:{x:linX(1945,2025,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'bn'},title:{display:true,text:'Trade balance ($ billions)',color:C.dim}}}}});
 });"""
@@ -5049,14 +5049,14 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
             'js': """
 _regChart('ladderChart4',()=>{const ctx=document.getElementById('ladderChart4');
 const yrs=[1940,1945,1950,1955,1960,1965,1970,1975,1979,1985,1990,1995,2000,2005,2010,2015,2020,2025];
-const emp=[10.9,15.5,15.2,16.8,16.8,18.1,19.3,18.3,19.5,17.8,17.7,17.2,17.3,14.2,11.5,12.3,12.2,13.0];
+const emp=[10.9,15.5,15.2,16.8,16.8,18.1,19.3,18.3,19.6,17.8,17.7,17.2,17.3,14.2,11.5,12.3,12.2,13.0];
 new Chart(ctx,{type:'line',data:{datasets:[{label:'Manufacturing employment (millions)',data:xy(yrs,emp),
 borderColor:C.accent,backgroundColor:C.accent+'18',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:C.accent,borderWidth:2.5}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw.y+'M jobs'}},
 annotation:{annotations:{
-peak:{type:'point',xValue:1979,yValue:19.5,radius:6,borderColor:C.accent,backgroundColor:C.accent+'40',borderWidth:2},
-peakLabel:{type:'label',xValue:1979,yValue:21,content:'Peak: 19.5M (1979)',font:{size:11,weight:'bold'},..._al},
+peak:{type:'point',xValue:1979,yValue:19.6,radius:6,borderColor:C.accent,backgroundColor:C.accent+'40',borderWidth:2},
+peakLabel:{type:'label',xValue:1979,yValue:21,content:'Peak: 19.6M (1979)',font:{size:11,weight:'bold'},..._al},
 trough:{type:'label',xValue:2010,yValue:9.5,content:'Trough: 11.5M\\n(2010)',font:{size:10},..._al}
 }}},
 scales:{x:linX(1940,2025,{title:{display:true,text:'Year',color:C.dim}}),y:{min:8,max:22,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Manufacturing jobs (millions)',color:C.dim}}}}});
