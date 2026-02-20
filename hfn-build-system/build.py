@@ -4,7 +4,7 @@ History Future Now — Static Site Builder v2
 Enhanced: reading time, related articles, pull quotes, OG tags, section theming, favicon
 """
 
-import os, re, yaml, markdown, json, math, random, hashlib
+import os, re, sys, yaml, markdown, json, math, random, hashlib
 import html as html_mod
 from pathlib import Path
 from chart_defs import get_all_charts, COLORS as CHART_COLORS
@@ -2823,6 +2823,22 @@ def main():
             print(f"     [{e['part']}] {e['title'][:60]}")
     else:
         print("\n  No new articles found.")
+
+    # ── Validate sources against library_data ──
+    from library_data import BOOKS as _LIB_BOOKS
+    _book_titles = {b['title'].lower().strip() for b in _LIB_BOOKS}
+    _missing_books = []  # list of (article_title, book_title)
+    for e in essays:
+        for src in e.get('sources', []):
+            if src.lower().strip() not in _book_titles:
+                _missing_books.append((e['title'], src))
+
+    if _missing_books:
+        print(f"\n  ❌ {len(_missing_books)} book(s) in article sources not found in library_data.py:")
+        for article_title, book_title in _missing_books:
+            print(f"     • \"{book_title}\" (in: {article_title[:55]})")
+        print("     Add missing books to BOOKS in library_data.py before deploying.\n")
+        sys.exit(1)
 
     ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
 
