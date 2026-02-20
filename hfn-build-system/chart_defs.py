@@ -2183,8 +2183,8 @@ dxy('Japan',yrs,[2.00,2.14,2.13,1.91,1.75,1.76,1.54,1.42,1.36,1.26,1.39,1.45,1.3
 dxy('South Korea',yrs,[6.00,5.63,4.53,3.47,2.83,1.67,1.59,1.65,1.48,1.09,1.23,1.24,0.84,0.72],C.amber,[5,5]),
 dxy('China',yrs,[5.76,6.13,5.81,3.57,2.63,2.52,2.51,1.86,1.60,1.62,1.54,1.62,1.28,1.02],C.purple,[5,5])
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
-title:{display:true,text:'Fertility Rates 1960-2024: The Long Decline',color:C.text,font:{size:14}}},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:6,left:8,right:8,top:8}},plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:10},color:C.dim}},tooltip:tooltipStyle,
+title:{display:false}},
 scales:{y:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(1960,2024,{grid:{display:false},ticks:{color:C.dim}})}}});
 });"""
@@ -2262,7 +2262,7 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
             'source': 'INSEE, Volant, Pison & Héran, Population & Societies no. 568 (2019).',
             'position': 'after_para_29',
             'js': """_regChart('emptyChart6',()=>{const ctx=document.getElementById('emptyChart6');
-const _lbl=(c,y,t,xAdj)=>({type:'label',xValue:'1961-65',yValue:y,content:t,color:c,font:{size:9,weight:'600'},backgroundColor:'transparent',padding:0,xAdjust:xAdj||0,yAdjust:0});
+const _lbl=(c,y,t,xAdj,yAdj)=>({type:'label',xValue:'1961-65',yValue:y,content:t,color:c,font:{size:9,weight:'600'},backgroundColor:'rgba(255,255,255,0.92)',padding:{top:1,bottom:1,left:2,right:2},xAdjust:xAdj||0,yAdjust:yAdj||0});
 new Chart(ctx,{type:'line',data:{labels:['1931-35','1936-40','1941-45','1946-50','1951-55','1956-60','1961-65'],
 datasets:[
 ds('Maghreb immigrants',[4.90,4.50,4.10,3.60,3.20,2.95,2.85],C.accent),
@@ -2273,7 +2273,7 @@ ds('Native-born French',[2.42,2.35,2.25,2.12,2.03,1.95,1.90],C.blue,[8,4])
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:80,top:8}},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Immigrant Fertility Converges to Host Country, France',color:C.text,font:{size:14}},
 annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}},
-lblM:_lbl(C.accent,2.85,'Maghreb',6),lblA:_lbl(C.green,2.50,'All immigrant',6),lblE:_lbl(C.teal,2.00,'European',6),lblN:_lbl(C.blue,1.90,'Native French',6)}}},
+lblM:_lbl(C.accent,2.85,'Maghreb',6,-10),lblA:_lbl(C.green,2.50,'All immigrant',6,-10),lblE:_lbl(C.teal,2.00,'European',6,-12),lblN:_lbl(C.blue,1.90,'Native French',6,10)}}},
 scales:{y:{title:{display:true,text:'Children per Woman',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:1.5},
 x:{title:{display:true,text:'Birth Cohort',color:C.dim},grid:{display:false},ticks:{color:C.dim}}}}});
 });"""
