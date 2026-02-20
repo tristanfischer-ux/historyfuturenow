@@ -41,6 +41,11 @@
     <div class="nav-top-row">
       <a class="nav-logo" href="/">History Future <span>Now</span></a>
       <div class="nav-right">
+        <button class="nav-theme-btn" id="themeToggle" aria-label="Switch theme">
+          <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="themeIconBook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
         <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </button>
@@ -199,7 +204,7 @@
 <p>But triggers are not causes. The structural cause is the same as in Rome and the medieval Church: institutions captured by their own personnel, serving their own interests rather than the public&rsquo;s. In the United States, over sixty per cent of former members of Congress who left office between 2000 and 2020 became lobbyists or advisers to the very industries they had overseen — a revolving door so brazen it would have embarrassed a Roman senator. Ronald Inglehart, in <em>Cultural Evolution</em>, demonstrated that trust has fallen fastest among those without university degrees, in rural areas, and among those whose real wages have stagnated — the people who feel, often with justification, that the system is rigged.</p>
 <h2>What Fills the Vacuum</h2>
 <p>The empty throne never stays empty. In Rome, the vacuum was filled by strongmen — Marius, Sulla, Caesar, Augustus. In Reformation Europe, by new institutions — national churches, nation-states, parliamentary democracy, the free press. In the modern West, three forces are rushing in.</p>
-<p>The first is populist leadership. Trump, Orbán, Meloni, Milei — whatever their differences in policy, they share a single appeal: they are not the establishment. Their voters are not voting for a programme. They are voting against the institutions they no longer trust.</p>
+<p>The first is democratic renewal through leaders who actually listen to voters. Trump, Orbán, Meloni, Milei — whatever their differences in policy, they share a single appeal: they promise to govern for the people who elected them rather than for the bureaucracy that preceded them. Their voters are not merely voting against the establishment. They are voting for the basic democratic proposition that government should do what the electorate wants — a proposition that the administrative class had quietly abandoned.</p>
 <p>The second is alternative epistemologies. When people stop trusting institutions to tell them the truth, they seek truth elsewhere. Conspiracy theories, alternative medicine, partisan media, and algorithmic echo chambers are not causes of the trust collapse; they are symptoms of it. To characterise these responses as &ldquo;disinformation&rdquo; or &ldquo;post-truth&rdquo; locates the problem in the public rather than in the institutions. But the Romans who supported Caesar were not deluded. The Germans who read Luther were not victims of misinformation. They were people responding rationally to institutional failure.</p>
 
     <div class="chart-figure" id="chart-trustChart3" data-chart-id="trustChart3" data-chart-title="How Far They Have Fallen: US Institutional Confidence, Peak vs. 2025" data-chart-source="Source: Gallup Confidence in Institutions (1973–2025)">
@@ -296,20 +301,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
-        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age</span>
+        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -330,12 +335,26 @@
       <li><a href="/library">Library</a></li>
       <li><a href="/saved">Saved</a></li>
     </ul>
-    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
+    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="reading" aria-pressed="false">Reading</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
 <script>
-(function(){ var key='hfn_theme'; var root=document.documentElement; function apply(t){ root.dataset.theme=t||'default'; document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.theme===t); b.setAttribute('aria-pressed',b.dataset.theme===t); }); } try{ var s=localStorage.getItem(key); if(s)apply(s); }catch(e){} document.querySelectorAll('.theme-btn').forEach(function(b){ b.addEventListener('click',function(){ var t=this.dataset.theme; try{ localStorage.setItem(key,t); }catch(e){} apply(t); }); }); })();
+(function(){
+  var key='hfn_theme',root=document.documentElement,themes=['default','reading','dark'];
+  var icons={default:'themeIconSun',reading:'themeIconBook',dark:'themeIconMoon'};
+  function apply(t){
+    if(t==='sepia')t='reading';
+    if(themes.indexOf(t)<0)t='default';
+    root.dataset.theme=t||'default';
+    document.querySelectorAll('.theme-btn').forEach(function(b){b.classList.toggle('active',b.dataset.theme===t);b.setAttribute('aria-pressed',b.dataset.theme===t);});
+    for(var k in icons){var el=document.getElementById(icons[k]);if(el)el.style.display=k===t?'':'none';}
+  }
+  try{var s=localStorage.getItem(key);if(s)apply(s);}catch(e){}
+  document.querySelectorAll('.theme-btn').forEach(function(b){b.addEventListener('click',function(){var t=this.dataset.theme;try{localStorage.setItem(key,t);}catch(e){}apply(t);});});
+  var tb=document.getElementById('themeToggle');
+  if(tb)tb.addEventListener('click',function(){var cur=root.dataset.theme||'default';var i=themes.indexOf(cur);var next=themes[(i+1)%themes.length];try{localStorage.setItem(key,next);}catch(e){}apply(next);});
+})();
 </script>
 
 <div class="queue-bar" id="queueBar">

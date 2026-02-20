@@ -112,7 +112,7 @@ The pattern is consistent: nations that shift from production to intermediation 
 
 We are now thirty years into the Great Offshoring, and the bill is arriving in three envelopes.
 
-The first envelope contains the social costs: the hollowed-out industrial towns, the opioid epidemic in America, the political disintegration of the centre in Europe, the rise of populism from São Paulo to Stockholm. These costs were not on the original spreadsheets, but they are real, and they are large.
+The first envelope contains the social costs: the hollowed-out industrial towns, the opioid epidemic in America, the collapse of communities that once had purpose and dignity. These costs were not on the original spreadsheets, but they are real, and they are large. That voters in these regions turned to parties willing to challenge the consensus that destroyed their livelihoods is not a cost — it is the only rational democratic response available to them.
 
 The second envelope contains the strategic costs: dependence on Chinese manufacturing for everything from pharmaceuticals to semiconductors, a defence-industrial base that cannot produce artillery shells at the rate Ukraine consumes them, and a green energy transition that requires components — batteries, solar cells, rare earth magnets — that the West cannot make in sufficient quantity.
 

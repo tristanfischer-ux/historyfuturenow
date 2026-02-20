@@ -41,6 +41,11 @@
     <div class="nav-top-row">
       <a class="nav-logo" href="/">History Future <span>Now</span></a>
       <div class="nav-right">
+        <button class="nav-theme-btn" id="themeToggle" aria-label="Switch theme">
+          <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="themeIconBook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
         <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </button>
@@ -272,20 +277,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Paradox of Mass Migration and Robots in the Age of Automation</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
         <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-new-literacy" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">The New Literacy: How AI Is Killing The Scribes And What Happens Next</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -306,12 +311,26 @@
       <li><a href="/library">Library</a></li>
       <li><a href="/saved">Saved</a></li>
     </ul>
-    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
+    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="reading" aria-pressed="false">Reading</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
 <script>
-(function(){ var key='hfn_theme'; var root=document.documentElement; function apply(t){ root.dataset.theme=t||'default'; document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.theme===t); b.setAttribute('aria-pressed',b.dataset.theme===t); }); } try{ var s=localStorage.getItem(key); if(s)apply(s); }catch(e){} document.querySelectorAll('.theme-btn').forEach(function(b){ b.addEventListener('click',function(){ var t=this.dataset.theme; try{ localStorage.setItem(key,t); }catch(e){} apply(t); }); }); })();
+(function(){
+  var key='hfn_theme',root=document.documentElement,themes=['default','reading','dark'];
+  var icons={default:'themeIconSun',reading:'themeIconBook',dark:'themeIconMoon'};
+  function apply(t){
+    if(t==='sepia')t='reading';
+    if(themes.indexOf(t)<0)t='default';
+    root.dataset.theme=t||'default';
+    document.querySelectorAll('.theme-btn').forEach(function(b){b.classList.toggle('active',b.dataset.theme===t);b.setAttribute('aria-pressed',b.dataset.theme===t);});
+    for(var k in icons){var el=document.getElementById(icons[k]);if(el)el.style.display=k===t?'':'none';}
+  }
+  try{var s=localStorage.getItem(key);if(s)apply(s);}catch(e){}
+  document.querySelectorAll('.theme-btn').forEach(function(b){b.addEventListener('click',function(){var t=this.dataset.theme;try{localStorage.setItem(key,t);}catch(e){}apply(t);});});
+  var tb=document.getElementById('themeToggle');
+  if(tb)tb.addEventListener('click',function(){var cur=root.dataset.theme||'default';var i=themes.indexOf(cur);var next=themes[(i+1)%themes.length];try{localStorage.setItem(key,next);}catch(e){}apply(next);});
+})();
 </script>
 
 <div class="queue-bar" id="queueBar">

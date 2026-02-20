@@ -41,6 +41,11 @@
     <div class="nav-top-row">
       <a class="nav-logo" href="/">History Future <span>Now</span></a>
       <div class="nav-right">
+        <button class="nav-theme-btn" id="themeToggle" aria-label="Switch theme">
+          <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="themeIconBook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
         <button class="nav-search-btn" id="searchOpen" aria-label="Search articles">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </button>
@@ -235,7 +240,7 @@
 <p>In Britain, every major survey since the 1960s has shown that a majority of the public wants immigration reduced. Ipsos MORI&rsquo;s long-running tracker shows that immigration has been named as one of the top issues facing the country in every survey since 2001, and &ldquo;too much immigration&rdquo; has been the majority view for as long as the question has been asked. The 2016 Brexit vote was, at its core, a vote about immigration — and it was won by the side that promised to reduce it.</p>
 <p>In the United States, Gallup polling shows that the percentage of Americans who want immigration decreased has exceeded those who want it increased in every year since 1965 — the very year the Hart-Celler Act was passed. As of 2024, 55% of Americans want immigration reduced, versus 16% who want it increased.</p>
 <p>In Germany, the <em>Willkommenskultur</em> of 2015 evaporated within months. By 2016, Merkel&rsquo;s approval ratings had collapsed, and the anti-immigration Alternative for Germany (AfD) had become the country&rsquo;s third-largest party. By 2024, it was polling as the second-largest.</p>
-<p>The pattern is universal across the Western world: governments pursue high immigration; publics oppose it; governments ignore the opposition; populist parties emerge; mainstream parties belatedly adopt restrictionist rhetoric while changing little in practice.</p>
+<p>The pattern is universal across the Western world: governments pursue high immigration; publics oppose it; governments ignore the opposition; new parties emerge that actually listen to voters; the establishment labels them &ldquo;populist&rdquo; as though democratic responsiveness were a disease; mainstream parties belatedly adopt restrictionist rhetoric while changing little in practice.</p>
 <h2>What the Data Shows: Integration, Fiscal Impact, and Social Trust</h2>
 <p>The debate about immigration is often conducted in moral terms — compassion versus cruelty, openness versus bigotry. But the data tells a more complicated story.</p>
 <h3>The Integration Problem</h3>
@@ -327,20 +332,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
+      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Long Term Impact of Covid 19</span>
-        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
+      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
+      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -361,12 +366,26 @@
       <li><a href="/library">Library</a></li>
       <li><a href="/saved">Saved</a></li>
     </ul>
-    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="sepia" aria-pressed="false">Sepia</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
+    <p class="footer-theme">Theme: <button type="button" class="theme-btn active" data-theme="default" aria-pressed="true">Default</button> <button type="button" class="theme-btn" data-theme="reading" aria-pressed="false">Reading</button> <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button></p>
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
 <script>
-(function(){ var key='hfn_theme'; var root=document.documentElement; function apply(t){ root.dataset.theme=t||'default'; document.querySelectorAll('.theme-btn').forEach(function(b){ b.classList.toggle('active',b.dataset.theme===t); b.setAttribute('aria-pressed',b.dataset.theme===t); }); } try{ var s=localStorage.getItem(key); if(s)apply(s); }catch(e){} document.querySelectorAll('.theme-btn').forEach(function(b){ b.addEventListener('click',function(){ var t=this.dataset.theme; try{ localStorage.setItem(key,t); }catch(e){} apply(t); }); }); })();
+(function(){
+  var key='hfn_theme',root=document.documentElement,themes=['default','reading','dark'];
+  var icons={default:'themeIconSun',reading:'themeIconBook',dark:'themeIconMoon'};
+  function apply(t){
+    if(t==='sepia')t='reading';
+    if(themes.indexOf(t)<0)t='default';
+    root.dataset.theme=t||'default';
+    document.querySelectorAll('.theme-btn').forEach(function(b){b.classList.toggle('active',b.dataset.theme===t);b.setAttribute('aria-pressed',b.dataset.theme===t);});
+    for(var k in icons){var el=document.getElementById(icons[k]);if(el)el.style.display=k===t?'':'none';}
+  }
+  try{var s=localStorage.getItem(key);if(s)apply(s);}catch(e){}
+  document.querySelectorAll('.theme-btn').forEach(function(b){b.addEventListener('click',function(){var t=this.dataset.theme;try{localStorage.setItem(key,t);}catch(e){}apply(t);});});
+  var tb=document.getElementById('themeToggle');
+  if(tb)tb.addEventListener('click',function(){var cur=root.dataset.theme||'default';var i=themes.indexOf(cur);var next=themes[(i+1)%themes.length];try{localStorage.setItem(key,next);}catch(e){}apply(next);});
+})();
 </script>
 
 <div class="queue-bar" id="queueBar">

@@ -3921,17 +3921,17 @@ title:{display:true,text:'House price / median income',color:C.dim}}}}});
             'position': 'after_para_16',
             'js': """
 (()=>{const ctx=document.getElementById('housingChart2');
-const cities=['Seoul','Hong Kong','London','Sydney','Vancouver','Tokyo','New York','Vienna','Singapore','Houston'];
-const priceIncome=[18,20.7,13.5,12.2,11.0,10.5,9.5,7.0,5.5,4.0];
-const tfr=[0.72,0.75,1.38,1.55,1.30,1.20,1.40,1.50,1.04,1.85];
-new Chart(ctx,{type:'scatter',data:{datasets:[{
-label:'City',data:cities.map((c,i)=>({x:priceIncome[i],y:tfr[i]})),
-backgroundColor:cities.map((_,i)=>i<5?C.accent+'bb':C.blue+'bb'),
-borderColor:cities.map((_,i)=>i<5?C.accent:C.blue),
-pointRadius:8,pointHoverRadius:10,borderWidth:2}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
-title:items=>{const i=items[0]?.dataIndex;return i!=null?cities[i]:'';},
+const asian=['Seoul','Hong Kong','Tokyo','Singapore'];
+const asianPI=[18,20.7,10.5,5.5];const asianTFR=[0.72,0.75,1.20,1.04];
+const western=['London','Sydney','Vancouver','New York','Vienna','Houston'];
+const westernPI=[13.5,12.2,11.0,9.5,7.0,4.0];const westernTFR=[1.38,1.55,1.30,1.40,1.50,1.85];
+const labelPlugin={id:'housingLabels',afterDatasetsDraw(chart){const c=chart.ctx;c.save();c.font='10px system-ui,sans-serif';c.textAlign='center';c.textBaseline='bottom';[[asian,C.accent],[western,C.blue]].forEach(([names,col],di)=>{const meta=chart.getDatasetMeta(di);c.fillStyle=col;meta.data.forEach((pt,i)=>{c.fillText(names[i],pt.x,pt.y-12);});});c.restore();}};
+new Chart(ctx,{type:'scatter',plugins:[labelPlugin],data:{datasets:[
+{label:'Asian cities',data:asian.map((_,i)=>({x:asianPI[i],y:asianTFR[i]})),backgroundColor:C.accent+'bb',borderColor:C.accent,pointRadius:8,pointHoverRadius:10,borderWidth:2},
+{label:'Western cities',data:western.map((_,i)=>({x:westernPI[i],y:westernTFR[i]})),backgroundColor:C.blue+'bb',borderColor:C.blue,pointRadius:8,pointHoverRadius:10,borderWidth:2}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:8,top:20}},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>{const i=items[0];if(!i)return'';return(i.datasetIndex===0?asian:western)[i.dataIndex]||'';},
 label:i=>'Price/income: '+i.raw.x+'x | TFR: '+i.raw.y}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'x'},min:2,max:22,
 title:{display:true,text:'House price / median income ratio',color:C.dim}},

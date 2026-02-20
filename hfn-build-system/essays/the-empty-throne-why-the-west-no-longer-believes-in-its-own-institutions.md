@@ -78,7 +78,7 @@ But triggers are not causes. The structural cause is the same as in Rome and the
 
 The empty throne never stays empty. In Rome, the vacuum was filled by strongmen — Marius, Sulla, Caesar, Augustus. In Reformation Europe, by new institutions — national churches, nation-states, parliamentary democracy, the free press. In the modern West, three forces are rushing in.
 
-The first is populist leadership. Trump, Orbán, Meloni, Milei — whatever their differences in policy, they share a single appeal: they are not the establishment. Their voters are not voting for a programme. They are voting against the institutions they no longer trust.
+The first is democratic renewal through leaders who actually listen to voters. Trump, Orbán, Meloni, Milei — whatever their differences in policy, they share a single appeal: they promise to govern for the people who elected them rather than for the bureaucracy that preceded them. Their voters are not merely voting against the establishment. They are voting for the basic democratic proposition that government should do what the electorate wants — a proposition that the administrative class had quietly abandoned.
 
 The second is alternative epistemologies. When people stop trusting institutions to tell them the truth, they seek truth elsewhere. Conspiracy theories, alternative medicine, partisan media, and algorithmic echo chambers are not causes of the trust collapse; they are symptoms of it. To characterise these responses as "disinformation" or "post-truth" locates the problem in the public rather than in the institutions. But the Romans who supported Caesar were not deluded. The Germans who read Luther were not victims of misinformation. They were people responding rationally to institutional failure.
 

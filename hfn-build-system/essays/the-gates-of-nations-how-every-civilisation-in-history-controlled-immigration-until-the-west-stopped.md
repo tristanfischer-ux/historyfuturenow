@@ -106,7 +106,7 @@ In the United States, Gallup polling shows that the percentage of Americans who 
 
 In Germany, the *Willkommenskultur* of 2015 evaporated within months. By 2016, Merkel's approval ratings had collapsed, and the anti-immigration Alternative for Germany (AfD) had become the country's third-largest party. By 2024, it was polling as the second-largest.
 
-The pattern is universal across the Western world: governments pursue high immigration; publics oppose it; governments ignore the opposition; populist parties emerge; mainstream parties belatedly adopt restrictionist rhetoric while changing little in practice.
+The pattern is universal across the Western world: governments pursue high immigration; publics oppose it; governments ignore the opposition; new parties emerge that actually listen to voters; the establishment labels them "populist" as though democratic responsiveness were a disease; mainstream parties belatedly adopt restrictionist rhetoric while changing little in practice.
 
 ## What the Data Shows: Integration, Fiscal Impact, and Social Trust
 
