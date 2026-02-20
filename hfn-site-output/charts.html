@@ -26,7 +26,7 @@
 <link rel="alternate" type="application/rss+xml" title="History Future Now" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=15664d94">
+<link rel="stylesheet" href="/css/style.css?v=36d477ea">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PS9DYS2PZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-6PS9DYS2PZ');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
@@ -93,12 +93,19 @@
     <h1 class="charts-title">Charts</h1>
     <p class="charts-intro">Interactive data visualisations from every article. Hover for details. Click through to read the analysis.</p>
     <div class="charts-filters">
-      <button class="charts-filter-btn active" data-filter="all">All</button><button class="charts-filter-btn" data-filter="natural-resources">Part 1</button><button class="charts-filter-btn" data-filter="balance-of-power">Part 2</button><button class="charts-filter-btn" data-filter="jobs-economy">Part 3</button><button class="charts-filter-btn" data-filter="society">Part 4</button>
+      <button class="charts-filter-btn active" data-filter="all">All</button><button class="charts-filter-btn" data-filter="natural-resources">Natural Resources <span class="charts-filter-count">38</span></button><button class="charts-filter-btn" data-filter="balance-of-power">Global Balance of Power <span class="charts-filter-count">31</span></button><button class="charts-filter-btn" data-filter="jobs-economy">Jobs &amp; Economy <span class="charts-filter-count">33</span></button><button class="charts-filter-btn" data-filter="society">Society <span class="charts-filter-count">92</span></button>
     </div>
   </div>
 </section>
 
 <div class="charts-grid">
+  <div class="charts-section-header" data-section="natural-resources">
+    <span class="charts-section-accent" style="background:#0d9a5a"></span>
+    <div>
+      <h2 class="charts-section-title">Natural Resources</h2>
+      <p class="charts-section-desc">Energy, food, water, land — the physical foundations that every civilisation depends on.</p>
+    </div>
+  </div>
   <div class="charts-card" data-section="natural-resources">
     
     <div class="chart-figure" id="chart-chart_big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do_utilChart1_0" data-chart-id="chart_big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do_utilChart1_0" data-chart-title="European Utility Share Prices: The Collapse" data-chart-source="Source: Bloomberg, company filings">
@@ -859,6 +866,13 @@
 
     <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event#chart-landDealsMap" class="charts-article-link">Read the full article &rarr;</a>
   </div>
+  <div class="charts-section-header" data-section="balance-of-power">
+    <span class="charts-section-accent" style="background:#2563eb"></span>
+    <div>
+      <h2 class="charts-section-title">Global Balance of Power</h2>
+      <p class="charts-section-desc">How nations rise, compete, and decline — from colonial empires to modern China.</p>
+    </div>
+  </div>
   <div class="charts-card" data-section="balance-of-power">
     
     <div class="chart-figure" id="chart-chart_china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically_chinaColChart1_0" data-chart-id="chart_china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically_chinaColChart1_0" data-chart-title="Colonial Powers Through History" data-chart-source="Source: Historical analysis from this article">
@@ -1478,6 +1492,13 @@
     </div>
 
     <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes#chart-milChart2" class="charts-article-link">Read the full article &rarr;</a>
+  </div>
+  <div class="charts-section-header" data-section="jobs-economy">
+    <span class="charts-section-accent" style="background:#b8751a"></span>
+    <div>
+      <h2 class="charts-section-title">Jobs &amp; Economy</h2>
+      <p class="charts-section-desc">Automation, trade, debt, and the future of work in an age of intelligent machines.</p>
+    </div>
   </div>
   <div class="charts-card" data-section="jobs-economy">
     
@@ -2138,6 +2159,13 @@
     </div>
 
     <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society#chart-cheapChart2" class="charts-article-link">Read the full article &rarr;</a>
+  </div>
+  <div class="charts-section-header" data-section="society">
+    <span class="charts-section-accent" style="background:#7c3aed"></span>
+    <div>
+      <h2 class="charts-section-title">Society</h2>
+      <p class="charts-section-desc">Democracy, religion, migration, identity — the human systems that bind us together.</p>
+    </div>
   </div>
   <div class="charts-card" data-section="society">
     
@@ -7097,6 +7125,7 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
 (function(){
   const btns = document.querySelectorAll('.charts-filter-btn');
   const cards = document.querySelectorAll('.charts-card');
+  const headers = document.querySelectorAll('.charts-section-header');
   btns.forEach(btn => {
     btn.addEventListener('click', () => {
       const f = btn.dataset.filter;
@@ -7105,6 +7134,10 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
       cards.forEach(c => {
         const show = f === 'all' || c.dataset.section === f;
         c.style.display = show ? '' : 'none';
+      });
+      headers.forEach(h => {
+        const show = f === 'all' || h.dataset.section === f;
+        h.style.display = show ? '' : 'none';
       });
     });
   });

@@ -2575,27 +2575,41 @@ def build_charts_page(essays, all_charts):
     part_order = {pn: PARTS[pn]['order'] for pn in PARTS}
     articles_with_charts.sort(key=lambda x: (part_order.get(x['part'], 99), x['essay']['title']))
 
-    # Filter buttons
+    # Filter buttons — use subject names, not "Part N"
     filter_buttons = '<button class="charts-filter-btn active" data-filter="all">All</button>'
     for pn in sorted(PARTS.keys(), key=lambda p: PARTS[p]['order']):
         pi = PARTS[pn]
-        count = sum(1 for a in articles_with_charts if a['part'] == pn)
-        if count > 0:
-            filter_buttons += f'<button class="charts-filter-btn" data-filter="{pi["slug"]}">{pi["label"]}</button>'
+        chart_count = sum(len(a['charts']) for a in articles_with_charts if a['part'] == pn)
+        if chart_count > 0:
+            filter_buttons += f'<button class="charts-filter-btn" data-filter="{pi["slug"]}">{html_mod.escape(pn)} <span class="charts-filter-count">{chart_count}</span></button>'
 
     # Check if any chart needs the geo library
     needs_geo = any(c.get('geo') for item in articles_with_charts for c in item['charts'])
     geo_script_tag = '\n<script src="/js/chartjs-chart-geo.umd.min.js"></script>' if needs_geo else ''
     geo_data_var = '\nvar _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());' if needs_geo else ''
 
-    # Build chart cards; wrap each chart's JS in a deferred init for lazy loading
+    # Build chart cards grouped by section with headers
     deferred_js_lines = []
     cards_html = ""
+    current_section = None
     for item in articles_with_charts:
         e = item['essay']
         pi = item['pi']
         slug = e['slug']
         part_slug = pi['slug']
+        part_name = item['part']
+
+        if part_name != current_section:
+            current_section = part_name
+            section_color = pi['color']
+            cards_html += f'''  <div class="charts-section-header" data-section="{part_slug}">
+    <span class="charts-section-accent" style="background:{section_color}"></span>
+    <div>
+      <h2 class="charts-section-title">{html_mod.escape(part_name)}</h2>
+      <p class="charts-section-desc">{html_mod.escape(pi['desc'])}</p>
+    </div>
+  </div>
+'''
 
         for idx, c in enumerate(item['charts']):
             orig_id = c['id']
@@ -2695,6 +2709,7 @@ window.__chartInits = window.__chartInits || {{}};
 (function(){{
   const btns = document.querySelectorAll('.charts-filter-btn');
   const cards = document.querySelectorAll('.charts-card');
+  const headers = document.querySelectorAll('.charts-section-header');
   btns.forEach(btn => {{
     btn.addEventListener('click', () => {{
       const f = btn.dataset.filter;
@@ -2703,6 +2718,10 @@ window.__chartInits = window.__chartInits || {{}};
       cards.forEach(c => {{
         const show = f === 'all' || c.dataset.section === f;
         c.style.display = show ? '' : 'none';
+      }});
+      headers.forEach(h => {{
+        const show = f === 'all' || h.dataset.section === f;
+        h.style.display = show ? '' : 'none';
       }});
     }});
   }});

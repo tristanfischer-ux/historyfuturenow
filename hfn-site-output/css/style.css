@@ -1212,8 +1212,15 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .charts-filter-btn { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.4rem 0.9rem; border: 1px solid var(--border); background: var(--bg); color: var(--text-body); border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.15s, border-color 0.15s; }
 .charts-filter-btn:hover { border-color: var(--accent); color: var(--accent); }
 .charts-filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.charts-filter-btn .charts-filter-count { display: inline-block; font-size: 0.6rem; background: rgba(0,0,0,0.08); border-radius: 3px; padding: 0.1rem 0.35rem; margin-left: 0.3rem; font-weight: 700; }
+.charts-filter-btn.active .charts-filter-count { background: rgba(255,255,255,0.25); }
 
 .charts-grid { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 3rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.charts-section-header { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 0.75rem; padding: 1.5rem 0 0.25rem; border-bottom: 1px solid var(--border); margin-bottom: 0.25rem; }
+.charts-section-header:first-child { padding-top: 0; }
+.charts-section-accent { width: 4px; min-height: 2.2rem; border-radius: 2px; flex-shrink: 0; margin-top: 0.15rem; }
+.charts-section-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 700; color: var(--text); margin: 0 0 0.15rem; line-height: 1.25; }
+.charts-section-desc { font-size: 0.85rem; color: var(--text-body); margin: 0; line-height: 1.5; }
 .charts-card { position: relative; }
 .charts-card .chart-figure { margin: 0; }
 .charts-article-link { display: block; font-size: 0.82rem; font-weight: 600; text-decoration: none; color: var(--accent); margin-top: 0.5rem; text-align: right; }
@@ -1222,6 +1229,7 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 @media (max-width: 768px) {
   .charts-grid { grid-template-columns: 1fr; }
   .charts-filters { gap: 0.4rem; }
+  .charts-section-title { font-size: 1.15rem; }
 }
 
 /* ─── PWA Install Banner ─── */
