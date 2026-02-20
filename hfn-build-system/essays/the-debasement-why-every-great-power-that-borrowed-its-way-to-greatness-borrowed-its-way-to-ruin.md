@@ -11,7 +11,7 @@ part: Jobs & Economy
 slug: >-
   the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin
 excerpt: >-
-  The US spent more on interest payments than on defence in 2025 for the
+  The US spent more on interest payments than on defence in 2024 for the
   first time in history. Spain defaulted six times between 1557 and 1647.
   France's debt triggered the Revolution. The pattern is always the same.
 share_summary: >-
@@ -24,7 +24,7 @@ sources:
 ---
 # The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin
 
-In 2025, the United States government spent more on interest payments than on national defence for the first time in its history. Net interest on the federal debt crossed one trillion dollars, surpassing the 886-billion-dollar defence budget. The most powerful military in the history of the world now costs less to maintain than the interest on the borrowing that was, in part, used to build it. This is the kind of milestone that ought to concentrate minds. It has not. Congress continued to pass spending bills. The Treasury continued to auction bonds. The Federal Reserve continued to manage the consequences. The prevailing attitude in Washington — shared, it must be said, by both parties — is that sovereign debt is a problem for another decade, another administration, another generation. There is always a war to fund, a crisis to bail out, a voter base to placate. The bill is sent forward.
+In 2024, the United States government spent more on interest payments than on national defence for the first time in its history. Net interest on the federal debt reached 881 billion dollars — surpassing the 874-billion-dollar defence budget — and by 2025 had climbed to 970 billion, closing in on the trillion-dollar threshold. The most powerful military in the history of the world now costs less to maintain than the interest on the borrowing that was, in part, used to build it. This is the kind of milestone that ought to concentrate minds. It has not. Congress continued to pass spending bills. The Treasury continued to auction bonds. The Federal Reserve continued to manage the consequences. The prevailing attitude in Washington — shared, it must be said, by both parties — is that sovereign debt is a problem for another decade, another administration, another generation. There is always a war to fund, a crisis to bail out, a voter base to placate. The bill is sent forward.
 
 Philip II of Spain would have recognised the instinct immediately. He commanded the largest empire the world had ever seen, drew the silver of Potosí and the gold of the Americas into his treasury, and still managed to go bankrupt four times — in 1557, 1560, 1575, and 1596. The man had a literal mountain of silver and could not make the sums add up. One rather suspects that if Philip had been offered a credit card, he would have maxed it out funding the Armada and then applied for a second one to cover the minimum payment on the first. He is not the exception in the history of great-power finance. He is the template.
 

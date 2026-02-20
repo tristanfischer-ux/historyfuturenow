@@ -243,7 +243,7 @@
       <div class="chart-figure-label">Figure 4</div>
       <h4>The Economics of Parenthood</h4>
       <p class="chart-desc">Hospital services have risen 230%, college tuition 180%, and childcare 142% since 2000 — while wages rose just 85%.</p>
-      <div class="chart-area"><canvas id="emptyChart4"></canvas></div>
+      <div class="chart-area tall"><canvas id="emptyChart4"></canvas></div>
       <p class="chart-source">Source: Bureau of Labor Statistics, Consumer Price Index.</p>
     </div>
 
@@ -430,20 +430,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
+      <a href="/articles/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Great Divergence: Why Young Men and Women No Longer See the Same World</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="related-card">
+      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</span>
-        <span class="related-time">51 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -636,6 +636,7 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
 });
 _regChart('emptyChart4',()=>{const ctx=document.getElementById('emptyChart4');
 const yrs=[2000,2003,2005,2008,2010,2013,2015,2018,2020,2022,2024];
+const cLeg={display:true,position:'bottom',labels:{padding:10,usePointStyle:true,pointStyle:'circle',font:{size:10},color:C.dim}};
 new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('Hospital Services (+230%)',yrs,[0,15,25,40,50,70,90,120,160,200,230],C.accent),
@@ -645,7 +646,7 @@ dxy('Average Wages (+85%)',yrs,[0,8,12,18,22,28,32,42,55,70,85],C.blue,[8,4]),
 dxy('Food (+75%)',yrs,[0,5,8,15,18,22,25,30,45,60,75],C.green),
 dxy('Electronics (-94%)',yrs,[0,-15,-30,-40,-55,-65,-75,-82,-88,-92,-94],C.teal,[3,3])
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:cLeg,tooltip:tooltipStyle,
 title:{display:true,text:'Cost of Raising Children vs Wages Since 2000',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% Change Since 2000',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}}},
 x:linX(2000,2024,{grid:{display:false},ticks:{color:C.dim}})}}});

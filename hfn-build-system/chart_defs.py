@@ -2196,8 +2196,10 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
             'desc': 'Hospital services have risen 230%, college tuition 180%, and childcare 142% since 2000 — while wages rose just 85%.',
             'source': 'Bureau of Labor Statistics, Consumer Price Index.',
             'position': 'after_para_19',
+            'tall': True,
             'js': """_regChart('emptyChart4',()=>{const ctx=document.getElementById('emptyChart4');
 const yrs=[2000,2003,2005,2008,2010,2013,2015,2018,2020,2022,2024];
+const cLeg={display:true,position:'bottom',labels:{padding:10,usePointStyle:true,pointStyle:'circle',font:{size:10},color:C.dim}};
 new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('Hospital Services (+230%)',yrs,[0,15,25,40,50,70,90,120,160,200,230],C.accent),
@@ -2207,7 +2209,7 @@ dxy('Average Wages (+85%)',yrs,[0,8,12,18,22,28,32,42,55,70,85],C.blue,[8,4]),
 dxy('Food (+75%)',yrs,[0,5,8,15,18,22,25,30,45,60,75],C.green),
 dxy('Electronics (-94%)',yrs,[0,-15,-30,-40,-55,-65,-75,-82,-88,-92,-94],C.teal,[3,3])
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:cLeg,tooltip:tooltipStyle,
 title:{display:true,text:'Cost of Raising Children vs Wages Since 2000',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'% Change Since 2000',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}}},
 x:linX(2000,2024,{grid:{display:false},ticks:{color:C.dim}})}}});
