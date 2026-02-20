@@ -26,7 +26,7 @@
 <link rel="alternate" type="application/rss+xml" title="History Future Now" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=546ddd87">
+<link rel="stylesheet" href="/css/style.css?v=656085e3">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PS9DYS2PZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-6PS9DYS2PZ');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
@@ -4257,6 +4257,19 @@ for(var j=0;j<parts.length;j++){if(parts[j].length>mc)mc=parts[j].length;}}}
 var lpw=mc*fs*0.62;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
 if(lpw>wpl*0.75){s.ticks.maxRotation=45;s.ticks.minRotation=25;s.ticks.font.size=lpw>wpl*1.8?Math.max(8,fs-2):fs;}
 else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=null?orig.mnr:0;s.ticks.font.size=fs;}}
+}});
+Chart.register({id:'sparklineMode',beforeInit(chart){
+var el=chart.canvas;if(!el||!el.closest)return;
+if(!el.closest('.ds-chart')&&!el.closest('.sec-chart-preview'))return;
+var o=chart.options;
+if(!o.plugins)o.plugins={};
+o.plugins.legend=Object.assign(o.plugins.legend||{},{display:false});
+o.plugins.tooltip=Object.assign(o.plugins.tooltip||{},{enabled:false});
+if(o.plugins.annotation)o.plugins.annotation.annotations={};
+if(o.plugins.datalabels)o.plugins.datalabels.display=false;
+var sc=o.scales;if(sc){for(var k in sc){if(sc[k])sc[k].display=false;}}
+o.layout=o.layout||{};o.layout.padding=4;
+(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;});
 }});
 
 window.__chartInits = window.__chartInits || {};

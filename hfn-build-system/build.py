@@ -801,18 +801,17 @@ def _charts_for_article(slug):
 
 
 def auto_wrap_chart(chart_def, auto_id):
-    """Produce a mini-chart JS from a full chart definition by swapping canvas ID and applying small-canvas defaults."""
+    """Produce a mini-chart JS from a full chart definition by swapping canvas ID.
+
+    Visual stripping (axes, legends, tooltips, annotations) is handled globally
+    by the dsMini Chart.js plugin registered before these scripts run.
+    """
     original_id = chart_def.get('id', '')
     if not original_id:
         return ""
     js = _fix_js_string_newlines(chart_def.get('js', ''))
     js = js.replace(f"getElementById('{original_id}')", f"getElementById('{auto_id}')")
-    return f"""(()=>{{
-const _origFontSize = (Chart.defaults.font && Chart.defaults.font.size) || 12;
-if (Chart.defaults.font) Chart.defaults.font.size = 9;
-{js.strip()}
-if (Chart.defaults.font) Chart.defaults.font.size = _origFontSize;
-}})();"""
+    return js
 
 
 def collect_data_stories(essays, all_charts):
@@ -1708,7 +1707,24 @@ def build_homepage(essays, new_essays=None):
 
     # Build data stories HTML
     stories_html = ""
-    stories_js = ""
+    # Register a Chart.js plugin that strips axes/legends/tooltips from
+    # charts rendered inside the small .ds-chart preview containers.
+    stories_js = """Chart.register({id:'dsMini',beforeInit(chart){
+const p=chart.canvas.parentElement;
+if(!p||!p.classList.contains('ds-chart'))return;
+const o=chart.options;
+o.plugins=o.plugins||{};
+o.plugins.legend={display:false};
+o.plugins.tooltip={enabled:false};
+if(o.plugins.annotation)o.plugins.annotation={annotations:{}};
+if(o.scales){Object.keys(o.scales).forEach(k=>{o.scales[k].display=false});}
+o.layout={padding:4};
+(chart.data.datasets||[]).forEach(ds=>{
+if(ds.pointRadius!=null)ds.pointRadius=Math.min(ds.pointRadius,2);
+if(ds.pointHoverRadius!=null)ds.pointHoverRadius=Math.min(ds.pointHoverRadius,3);
+});
+}});
+"""
     for ds in data_stories:
         stories_html += f"""      <a href="/articles/{ds['slug']}" class="ds-card">
         <div class="ds-chart"><canvas id="{ds['chart_id']}"></canvas></div>

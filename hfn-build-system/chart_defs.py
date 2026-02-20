@@ -59,6 +59,19 @@ var lpw=mc*fs*0.62;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
 if(lpw>wpl*0.75){s.ticks.maxRotation=45;s.ticks.minRotation=25;s.ticks.font.size=lpw>wpl*1.8?Math.max(8,fs-2):fs;}
 else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=null?orig.mnr:0;s.ticks.font.size=fs;}}
 }});
+Chart.register({id:'sparklineMode',beforeInit(chart){
+var el=chart.canvas;if(!el||!el.closest)return;
+if(!el.closest('.ds-chart')&&!el.closest('.sec-chart-preview'))return;
+var o=chart.options;
+if(!o.plugins)o.plugins={};
+o.plugins.legend=Object.assign(o.plugins.legend||{},{display:false});
+o.plugins.tooltip=Object.assign(o.plugins.tooltip||{},{enabled:false});
+if(o.plugins.annotation)o.plugins.annotation.annotations={};
+if(o.plugins.datalabels)o.plugins.datalabels.display=false;
+var sc=o.scales;if(sc){for(var k in sc){if(sc[k])sc[k].display=false;}}
+o.layout=o.layout||{};o.layout.padding=4;
+(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;});
+}});
 """
 
 def get_all_charts():
@@ -3900,6 +3913,12 @@ label:{..._al,display:true,content:'World War II',color:C.dim,font:{size:10},pos
 scales:{x:linX(1900,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},
 title:{display:true,text:'Government debt (% of GDP)',color:C.dim}}}}});
 });"""
+        },
+        {
+            'data_story': True,
+            'headline': 'US debt hit 124% of GDP — peacetime borrowing rivals WW2',
+            'chart_id': 'heroDebasement',
+            'js': """_regChart('heroDebasement',()=>{const ctx=document.getElementById('heroDebasement');new Chart(ctx,{type:'line',data:{datasets:[{data:_xy([1900,1930,1945,1960,1980,2000,2010,2025],[10,18,120,45,32,55,95,124]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:2,pointBackgroundColor:'#c43425',borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.parsed.y+'% of GDP'}}},scales:{x:{type:'linear',min:1900,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});});"""
         },
         {
             'id': 'debtChart2', 'figure_num': 2,
