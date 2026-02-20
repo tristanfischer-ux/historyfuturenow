@@ -9,8 +9,8 @@ const SHELL_URLS = [
   '/js/nav.js',
   '/js/share.js',
   '/js/search.js',
-  '/js/article-ux.js',
-  '/js/view-transitions.js',
+  '/js/queue.js',
+  '/js/soft-nav.js',
   '/favicon.svg',
   '/manifest.json',
 ];

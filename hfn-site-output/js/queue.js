@@ -750,8 +750,14 @@
     },
     isBookmarked: isBookmarked,
     openPopover: openPopover,
+    _reloadBookmarks: function () {
+      loadBookmarks();
+      updateBookmarkIcons();
+      updateSavedBadge();
+    },
     rebind: function () {
       if (!document.getElementById('queueBar')) return;
+      loadBookmarks();
       initDOM();
       if (queue.length > 0) {
         showBar();

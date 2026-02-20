@@ -2224,6 +2224,9 @@ def build_saved():
     var arr = getBookmarks().filter(function (b) {{ return b.slug !== slug; }});
     setBookmarks(arr);
     render();
+    if (window.HFNQueue && typeof HFNQueue._reloadBookmarks === 'function') {{
+      HFNQueue._reloadBookmarks();
+    }}
   }}
 
   function render() {{
