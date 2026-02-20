@@ -28,11 +28,11 @@ This article explores the hard-learned lessons from how the major conflagrations
 
 Among the potential paths to peace, the imposition of official neutrality has proven to be an effective, if often unpalatable, resolution to conflicts spanning centuries. The precedents are numerous:
 
-In the aftermath of the War of the Spanish Succession (1701-1714), the Treaty of Utrecht in 1713 established Belgian territories as a "Perpetually Neutral State" to act as a buffer zone between France and the Dutch Republic. This enforced neutrality ultimately paved the way for an independent Belgian nation over a century later.
+In the aftermath of Belgium's independence from the Netherlands in 1830, the Treaty of London in 1839 established Belgium as a "Perpetually Neutral State" to act as a buffer zone between France and the great powers. This enforced neutrality, guaranteed by Britain, France, Prussia, Austria, and Russia, lasted until Germany violated it in 1914 — an act that helped draw Britain into the First World War.
 
 In the aftermath of the Napoleonic Wars, the Congress of Vienna reorganized Europe's political geography in 1815, enshrining the principle of neutrality for Switzerland. Despite being at the heart of the continent's power struggles, the Swiss Confederation was prohibited from joining future military alliances and hosting foreign armies – a status it maintains to this day.
 
-A century later, the armistice that ended World War I's bloodletting enforced strict demilitarization and neutrality on the Netherlands. Under the terms of the 1919 settlement, the Dutch were barred from joining military alliances, while their sovereign territory was subject to allied oversight to uphold the restrictive peace terms.
+After the First World War, Finland's independence from Russia in 1917 led to a neutrality policy that endured for decades, balancing between Western and Soviet spheres. The Finns maintained their independence through pragmatic non-alignment — a concept that became known as "Finlandisation" — accepting constraints on foreign policy in exchange for Soviet recognition of Finnish sovereignty and democratic self-governance.
 
 More recently, the Austrian State Treaty of 1955 paved the way for a fully independent and officially neutral Austria after a decade of four-power occupation following World War II. The settlement prohibited union with Germany and barred Austria from hosting foreign military forces – a controversial condition given the Soviet fears of a remilitarised, U.S.-aligned stronghold on their borders.
 
@@ -40,7 +40,7 @@ Could a similar policy of legally-enshrined permanent neutrality be the key to r
 
 In exchange, Russia would be compelled to withdraw its forces from all internationally-recognized Ukrainian territory aside from Crimea, while robust international security guarantees – potentially involving U.N. peacekeepers to monitor the demilitarized borders – would preserve Ukraine's sovereignty and territorial integrity.
 
-Yet as the Dutch and Austrian examples illustrate, any such settlement would constitute a bitter concession for Ukraine. Having fought and bled to defend its independence, being forced to relinquish its sovereign right to self-determination on future alliances could prove an unacceptable price. There is also the risk that a neutrality agreement, however legally binding, may only delay rather than permanently resolve the Russia-Ukraine conflict if residual grievances fester.
+Yet as the Finnish and Austrian examples illustrate, any such settlement would constitute a bitter concession for Ukraine. Having fought and bled to defend its independence, being forced to relinquish its sovereign right to self-determination on future alliances could prove an unacceptable price. There is also the risk that a neutrality agreement, however legally binding, may only delay rather than permanently resolve the Russia-Ukraine conflict if residual grievances fester.
 
 Ultimately, while flawed, the model of imposed neutrality stands as one of the few historically-proven formulas for halting even the most protracted and vicious wars through pragmatic compromise. As the coming sections explore, it is merely one of several potential pathways the world may choose to pursue in its quest to forge a sustainable peace in Ukraine.
 
@@ -60,7 +60,7 @@ Yet if federalisation prevented even a fraction of the devastation witnessed in 
 
 At the bleakest nadir of ceaseless war, when all other options have been exhausted, a final resolution historically remains: the permanent ethnic or territorial partition of the disputed lands themselves. By acceding to the divisions that fueled the original conflict, such partitions have repeatedly allowed warring peoples to extricate themselves into separate sovereign realities.
 
-One of the earliest and most seismic examples was the 1667 Partition of the Polish-Lithuanian Commonwealth following years of Russian invasion and civil strife. The settlement formally divided the once-powerful kingdom along the Dnieper River, with the western Polonized territories becoming a Russian satellite while Lithuania proper fell under Swedish control. The partition formalized the diverging futures of the slavic peoples.
+One of the earliest and most seismic examples was the Truce of Andrusovo in 1667, following thirteen years of war between Russia and the Polish-Lithuanian Commonwealth over control of Ukraine. The settlement divided Ukraine along the Dnieper River: Russia took Left-bank Ukraine and the strategically vital city of Kiev, while Poland-Lithuania retained Right-bank Ukraine. The partition formalised the diverging futures of the Ukrainian lands and established Russian power over territories it would never relinquish.
 
 Over two centuries later, the traumatic Partition of India in 1947 ended the Indian independence movement at the cost of unspeakable violence. As British colonial rule fractured, the new dominions of India and Pakistan were established by carving apart the subcontinent along religious lines. Over 10 million people were uprooted and up to 2 million perished in sectarian bloodshed, but the partition established the foundations of the modern nation-states.
 
