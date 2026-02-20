@@ -311,7 +311,7 @@ BOOKS = [
     {"title": "The Chrysanthemum and the Sword", "author": "Ruth Benedict", "year": 2026, "source": "kindle", "themes": ["world"]},
     {"title": "Africans: The History of a Continent", "author": "John Iliffe", "year": 2026, "source": "kindle", "themes": ["world"]},
     {"title": "Migrations and Cultures", "author": "Thomas Sowell", "year": 2023, "source": "audible", "themes": ["world", "economics"]},
-    {"title": "Borderless Welfare State", "author": "Jan van de Beek et al.", "year": 2023, "source": "kindle", "themes": ["world", "economics"]},
+    {"title": "Borderless Welfare State", "author": "Jan van de Beek et al.", "year": 2023, "source": "kindle", "themes": ["world", "economics"], "url": "https://www.boekenbestellen.nl/boek/grenzeloze-verzorgingsstaat/9789083334806"},
     {"title": "India After Gandhi", "author": "Ramachandra Guha", "year": 2026, "source": "kindle", "themes": ["world", "geopolitics"]},
     {"title": "The Argumentative Indian", "author": "Amartya Sen", "year": 2026, "source": "kindle", "themes": ["world", "politics"]},
     {"title": "Early Indians", "author": "Tony Joseph", "year": 2026, "source": "kindle", "themes": ["world"]},

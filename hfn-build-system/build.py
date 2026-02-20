@@ -1088,13 +1088,18 @@ def build_further_reading_html(sources):
         book = book_lookup.get(title.lower().strip())
         if book:
             author = book['author']
-            q = urllib.parse.quote_plus(f'{book["title"]} {book["author"]}')
-            amazon_url = f'https://www.amazon.co.uk/s?k={q}'
+            custom_url = book.get('url')
+            if custom_url:
+                buy_link = f'<a class="further-reading-amazon further-reading-direct" href="{html_mod.escape(custom_url)}" target="_blank" rel="noopener noreferrer">Buy</a>'
+            else:
+                q = urllib.parse.quote_plus(f'{book["title"]} {book["author"]}')
+                amazon_url = f'https://www.amazon.co.uk/s?k={q}'
+                buy_link = f'<a class="further-reading-amazon" href="{amazon_url}" data-query="{q}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>'
             items.append(
                 f'<div class="further-reading-item">'
                 f'<span class="further-reading-title">{html_mod.escape(book["title"])}</span>'
                 f'<span class="further-reading-author">{html_mod.escape(author)}</span>'
-                f'<a class="further-reading-amazon" href="{amazon_url}" data-query="{q}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>'
+                f'{buy_link}'
                 f'</div>'
             )
         else:
@@ -2333,11 +2338,16 @@ def build_library():
         book_items = ""
         for b in books:
             import urllib.parse
-            search_query = urllib.parse.quote_plus(f'{b["title"]} {b["author"]}')
+            custom_url = b.get('url')
+            if custom_url:
+                buy_link = f'<a class="lib-book-amazon lib-book-direct" href="{html_mod.escape(custom_url)}" target="_blank" rel="noopener noreferrer">Buy</a>'
+            else:
+                search_query = urllib.parse.quote_plus(f'{b["title"]} {b["author"]}')
+                buy_link = f'<a class="lib-book-amazon" href="https://www.amazon.co.uk/s?k={search_query}" data-query="{search_query}" target="_blank" rel="noopener noreferrer">Amazon</a>'
             book_items += f'''      <div class="lib-book-item">
         <span class="lib-book-title">{html_mod.escape(b["title"])}</span>
         <span class="lib-book-author">{html_mod.escape(b["author"])}</span>
-        <a class="lib-book-amazon" href="https://www.amazon.co.uk/s?k={search_query}" data-query="{search_query}" target="_blank" rel="noopener noreferrer">Amazon</a>
+        {buy_link}
       </div>\n'''
 
         theme_cards += f'''    <div class="lib-theme-card" style="--theme-color:{theme["color"]}">
