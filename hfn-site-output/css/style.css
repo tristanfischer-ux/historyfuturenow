@@ -623,9 +623,12 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
   .article-body > p:first-child::first-letter { font-size: 2.8rem; }
   .pull-quote { font-size: 1.05rem; margin: 1.25rem 0; }
   .audio-player-inner { flex-wrap: wrap; gap: 0.5rem; padding: 0.6rem 0.75rem; }
-  .audio-info { order: 1; }
   .audio-play-btn { order: 0; width: 36px; height: 36px; }
-  .audio-progress-wrap { order: 3; flex-basis: 100%; }
+  .audio-player-inner > .q-add-btn-light { order: 1; }
+  .audio-speed { order: 2; margin-left: auto; }
+  .audio-info { order: 3; flex-basis: 100%; }
+  .audio-progress-wrap { order: 4; flex-basis: 0; }
+  .audio-time { order: 5; min-width: auto; }
   .discussion-player-inner { flex-wrap: wrap; gap: 0.5rem; padding: 0.6rem 0.75rem; }
   .discussion-info { order: 1; }
   .discussion-play-btn { order: 0; width: 36px; height: 36px; }
@@ -633,8 +636,6 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
   .discussion-meta { max-width: none; }
   .article-end-cta { padding: 1.25rem 1rem; margin: 1.5rem 0 0; }
   .cta-prompt { font-size: 0.85rem; }
-  .audio-time { order: 2; min-width: auto; }
-  .audio-speed { order: 4; }
   .hero-chart-wrap { padding: 0 1rem 1rem; }
   .hero-chart-inner { padding: 1rem; }
   .hero-chart-box { height: 220px; }

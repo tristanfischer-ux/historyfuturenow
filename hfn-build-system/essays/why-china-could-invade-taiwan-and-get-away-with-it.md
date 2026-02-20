@@ -50,7 +50,7 @@ For much of the post war period Taiwan was in a state of marshal law with the ex
 
 Mainland China took the opportunity of the election to intimidate the Taiwanese electorate with a series of missile tests in the Taiwan Strait, forcing the US, under President Clinton, to send two aircraft carrier task forces to Taiwan to “monitor the situation”.  China stopped the missile tests.
 
-Over the past two decades Taiwan has gradually become more democratic, despite assassination attempts and corruption charges on its political elites.  In 2004 the People’s Republic of China enacted an anti-secession law that allows the use of force against Taiwan in the event that the Republic of China formally declares independence from the mainland.
+Over the past two decades Taiwan has gradually become more democratic, despite assassination attempts and corruption charges on its political elites.  In 2005 the People’s Republic of China enacted an anti-secession law that allows the use of force against Taiwan in the event that the Republic of China formally declares independence from the mainland.
 
 Becoming one China, again
 
