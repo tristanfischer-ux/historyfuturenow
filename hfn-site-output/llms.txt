@@ -3,14 +3,14 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 76
+Total articles: 75
 
 ## Sections
 ### Natural Resources (14 articles)
 - URL: https://www.historyfuturenow.com/natural-resources
 - Energy, food, water, land — the physical foundations that every civilisation depends on.
 
-### Global Balance of Power (16 articles)
+### Global Balance of Power (15 articles)
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
@@ -317,13 +317,6 @@ Total articles: 76
 - Published: 2026-02-20
 - Reading time: 11 min
 - Guilt societies are ruled by an internal judge; shame societies by the eye of the crowd. The difference shapes corruption, rule of law, and how civilisations understand each other — when they meet, th
-
-### The Ladder and the Lie: Why Every Great Economy Was Built on Tariffs and Free Trade Only Serves the Already Dominant [4 charts]
-- URL: https://www.historyfuturenow.com/articles/the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant
-- Section: Global Balance of Power
-- Published: 2026-02-20
-- Reading time: 10 min
-- Every great economy in history was built behind tariff walls. Britain, America, Germany, Japan, South Korea, China — all protected domestic industry while it grew, then preached free trade once domina
 
 ### The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed [4 charts]
 - URL: https://www.historyfuturenow.com/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed

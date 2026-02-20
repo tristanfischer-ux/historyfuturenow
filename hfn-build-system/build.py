@@ -28,6 +28,7 @@ REVIEW_SLUGS = {
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
+    'the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant',
 }
 
 # Articles that were under review and have been released to the public site.
@@ -272,7 +273,8 @@ def parse_essay(filepath):
         'sources': sources,
     }
 
-def get_related(essay, all_essays, n=3):
+def get_related(essay, all_essays, n=1):
+    """Return n random articles from the same section (deterministic per slug)."""
     same = [e for e in all_essays if e['part'] == essay['part'] and e['slug'] != essay['slug']]
     random.seed(hash(essay['slug']))
     return random.sample(same, min(n, len(same)))
@@ -1136,41 +1138,51 @@ def build_article(essay, all_essays, is_review=False):
     body, chart_script = inject_charts_into_body(body, article_charts)
     chart_count = len(article_charts)
 
-    rel_html = ""
-    if related:
-        cards = ""
-        for r in related:
-            rp = PARTS[r['part']]
-            audio_tag = ' <span class="related-audio">Audio</span>' if (r.get('has_audio') or r.get('has_discussion')) else ''
-            cards += f'''      <a href="/articles/{html_mod.escape(r['slug'])}" class="related-card">
-        <span class="related-kicker" style="color:{rp['color']}">{rp['label']}</span>
-        <span class="related-title">{html_mod.escape(r['title'])}</span>
-        <span class="related-time">{r['reading_time']} min read{audio_tag}</span>
-      </a>\n'''
-        rel_html = f'''
-  <section class="related-articles">
-    <h3>Continue reading in {html_mod.escape(essay['part'])}</h3>
-    <div class="related-grid">
-{cards}    </div>
-  </section>'''
+    # Build the two-card "Read next" section: same-section pick + newest article
+    read_next_cards = []
 
-    up_next_html = ''
+    # Card 1: same section
+    if related:
+        r = related[0]
+        rp = PARTS[r['part']]
+        r_hero = get_hero_image(r['slug'])
+        r_img = f'<img src="{r_hero}" alt="" class="read-next-img" loading="lazy" width="600" height="338">' if r_hero else ''
+        r_audio = ' <span class="read-next-audio">Audio</span>' if (r.get('has_audio') or r.get('has_discussion')) else ''
+        read_next_cards.append(f'''      <a href="/articles/{html_mod.escape(r['slug'])}" class="read-next-card" style="--section-color:{rp['color']}">
+        <div class="read-next-img-wrap">{r_img}</div>
+        <div class="read-next-body">
+          <span class="read-next-label">More in {html_mod.escape(essay['part'])}</span>
+          <span class="read-next-kicker" style="color:{rp['color']}">{rp['label']}</span>
+          <h3 class="read-next-title">{html_mod.escape(r['title'])}</h3>
+          <span class="read-next-meta">{r['reading_time']} min read{r_audio}</span>
+        </div>
+      </a>''')
+
+    # Card 2: newest article
     if next_essay:
         np = PARTS[next_essay['part']]
-        next_audio = ' <span class="up-next-audio">Audio</span>' if (next_essay.get('has_audio') or next_essay.get('has_discussion')) else ''
-        next_hero = get_hero_image(next_essay['slug'])
-        next_img = f'<img src="{next_hero}" alt="" class="up-next-img" loading="lazy" width="800" height="450">' if next_hero else ''
-        up_next_html = f'''
-  <section class="up-next-section" aria-label="Up next">
-    <h2 class="up-next-heading">Up next</h2>
-    <a href="/articles/{html_mod.escape(next_essay['slug'])}" class="up-next-card" style="--section-color:{np['color']}">
-      <div class="up-next-img-wrap">{next_img}</div>
-      <div class="up-next-text">
-        <span class="up-next-kicker" style="color:{np['color']}">{np['label']}</span>
-        <h3 class="up-next-title">{html_mod.escape(next_essay['title'])}</h3>
-        <span class="up-next-meta">{next_essay['reading_time']} min read{next_audio}</span>
-      </div>
-    </a>
+        n_hero = get_hero_image(next_essay['slug'])
+        n_img = f'<img src="{n_hero}" alt="" class="read-next-img" loading="lazy" width="600" height="338">' if n_hero else ''
+        n_audio = ' <span class="read-next-audio">Audio</span>' if (next_essay.get('has_audio') or next_essay.get('has_discussion')) else ''
+        read_next_cards.append(f'''      <a href="/articles/{html_mod.escape(next_essay['slug'])}" class="read-next-card" style="--section-color:{np['color']}">
+        <div class="read-next-img-wrap">{n_img}</div>
+        <div class="read-next-body">
+          <span class="read-next-label">Latest</span>
+          <span class="read-next-kicker" style="color:{np['color']}">{np['label']}</span>
+          <h3 class="read-next-title">{html_mod.escape(next_essay['title'])}</h3>
+          <span class="read-next-meta">{next_essay['reading_time']} min read{n_audio}</span>
+        </div>
+      </a>''')
+
+    read_next_html = ''
+    if read_next_cards:
+        cards_joined = '\n'.join(read_next_cards)
+        read_next_html = f'''
+  <section class="read-next-section" aria-label="Read next">
+    <h2 class="read-next-heading">Read next</h2>
+    <div class="read-next-grid">
+{cards_joined}
+    </div>
   </section>'''
 
     chart_badge = f'\n    <div class="article-chart-badge">{chart_count} interactive charts</div>' if chart_count > 0 else ''
@@ -1354,8 +1366,7 @@ def build_article(essay, all_essays, is_review=False):
     <a href="/{pi['slug']}" class="back-to-section" style="color:{pi['color']}">&larr; All {html_mod.escape(essay['part'])} articles</a>
     <a href="#" class="back-to-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}});return false;">&uarr; Back to top</a>
   </div>
-{up_next_html}
-{rel_html}
+{read_next_html}
 </div>
 </article>
 
