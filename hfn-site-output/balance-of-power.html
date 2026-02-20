@@ -484,7 +484,6 @@ if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,f
 else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
-const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 
 _regChart('crisisChart2',()=>{const ctx=document.getElementById('crisisChart2');
 const yrs=[1750,1800,1850,1900,1950,1980,2000,2010,2025];

@@ -2679,8 +2679,6 @@ def build_charts_page(essays, all_charts):
 <script>
 (function(){{
 {CHART_COLORS}
-const _xy=(xs,ys)=>xs.map((x,i)=>({{x:+x,y:ys[i]}}));
-const _yt=v=>String(v);
 window.__chartInits = window.__chartInits || {{}};
 {"\n".join(deferred_js_lines)}
 }})();

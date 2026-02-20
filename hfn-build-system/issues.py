@@ -181,6 +181,7 @@ ISSUES = [
         "date": "2026-03-01",
         "label": "March 2026",
         "articles": [
+            "what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish",
             "the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century",
             "the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order",
             "the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world",
@@ -188,7 +189,6 @@ ISSUES = [
             "the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two",
             "the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin",
             "the-locked-gate-how-the-west-priced-its-children-out-of-existence",
-            "what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish",
         ],
     },
 ]

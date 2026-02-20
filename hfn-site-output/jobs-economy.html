@@ -471,7 +471,6 @@ if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,f
 else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
-const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 
 _regChart('robotBargainChart1',()=>{const ctx=document.getElementById('robotBargainChart1');
 new Chart(ctx,{type:'scatter',data:{

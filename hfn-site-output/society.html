@@ -692,7 +692,6 @@ if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,f
 else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
-const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 _regChart('emptyChart1',()=>{const ctx=document.getElementById('emptyChart1');
 new Chart(ctx,{type:'bar',data:{labels:['S. Korea','China','Poland','Spain','Italy','Japan','Greece','Finland','Germany','UK','Sweden','Australia','Denmark','USA','France','Turkey','Mexico','India','Indonesia','S. Africa','Philippines','Egypt','Iraq','Nigeria','Niger'],
 datasets:[{label:'Fertility Rate',data:[0.72,1.02,1.10,1.13,1.20,1.20,1.22,1.26,1.36,1.44,1.53,1.58,1.55,1.62,1.68,1.76,1.80,2.00,2.15,2.33,2.78,3.20,3.55,5.20,6.80],
