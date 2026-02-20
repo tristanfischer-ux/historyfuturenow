@@ -1076,6 +1076,25 @@ Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+Chart.register({id:'autoLabelFit',beforeUpdate(chart){
+if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
+for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
+var sc=chart.options.scales;if(!sc)return;
+var horiz=chart.options.indexAxis==='y';
+for(var k in sc){var s=sc[k];if(!s)continue;
+if(s.type==='linear'||k==='y'||k[0]==='y'||horiz)continue;
+var labels=chart.data&&chart.data.labels;if(!labels||!labels.length)continue;
+var cw=(chart.canvas.parentElement?chart.canvas.parentElement.clientWidth:600)-40;
+var wpl=cw/labels.length;
+var orig=chart._alf[k]||{};var fs=orig.fs||(s.ticks&&s.ticks.font?s.ticks.font.size:11);
+var mc=0;for(var i=0;i<labels.length;i++){var lb=labels[i];
+if(Array.isArray(lb)){for(var j=0;j<lb.length;j++){var n=String(lb[j]).length;if(n>mc)mc=n;}}
+else{var parts=(typeof lb==='string'?lb:String(lb)).split('\n');
+for(var j=0;j<parts.length;j++){if(parts[j].length>mc)mc=parts[j].length;}}}
+var lpw=mc*fs*0.55;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
+if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,fs-2):fs;}
+else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
+}});
 
 (()=>{const ctx=document.getElementById('heroBuilders');new Chart(ctx,{type:'line',data:{datasets:[{label:'Builder share',data:_xy([1960,1980,2000,2025,2050,2100],[37,28.8,21.6,14.4,10.4,7.1]),borderColor:'#7c3aed',fill:true,backgroundColor:'#7c3aed18',tension:.3,pointRadius:2,borderWidth:2.5},{label:'Rest of world',data:_xy([1960,1980,2000,2025,2050,2100],[63,71.2,78.4,85.6,89.6,92.9]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of global births'}}},scales:{x:{type:'linear',min:1960,max:2100,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0,max:100}}}});})();
 (()=>{const ctx=document.getElementById('heroRobot');const yrs=[2010,2015,2018,2020,2022,2024,2027,2030];new Chart(ctx,{type:'line',data:{datasets:[{label:'Robot cost/hr',data:_xy(yrs,[15,10,7,5,3.5,2.5,1.5,1]),borderColor:'#b8751a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Human min wage',data:_xy(yrs,[7.25,7.25,7.25,7.25,7.25,7.25,7.25,7.25]),borderColor:'#c43425',fill:false,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[5,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:2010,max:2030,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'$'+v},min:0}}}});})();

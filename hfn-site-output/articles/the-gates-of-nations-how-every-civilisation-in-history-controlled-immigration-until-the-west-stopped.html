@@ -327,20 +327,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
+      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Long Term Impact of Covid 19</span>
+        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
         <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
+      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -450,6 +450,25 @@ Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+Chart.register({id:'autoLabelFit',beforeUpdate(chart){
+if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
+for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
+var sc=chart.options.scales;if(!sc)return;
+var horiz=chart.options.indexAxis==='y';
+for(var k in sc){var s=sc[k];if(!s)continue;
+if(s.type==='linear'||k==='y'||k[0]==='y'||horiz)continue;
+var labels=chart.data&&chart.data.labels;if(!labels||!labels.length)continue;
+var cw=(chart.canvas.parentElement?chart.canvas.parentElement.clientWidth:600)-40;
+var wpl=cw/labels.length;
+var orig=chart._alf[k]||{};var fs=orig.fs||(s.ticks&&s.ticks.font?s.ticks.font.size:11);
+var mc=0;for(var i=0;i<labels.length;i++){var lb=labels[i];
+if(Array.isArray(lb)){for(var j=0;j<lb.length;j++){var n=String(lb[j]).length;if(n>mc)mc=n;}}
+else{var parts=(typeof lb==='string'?lb:String(lb)).split('\n');
+for(var j=0;j<parts.length;j++){if(parts[j].length>mc)mc=parts[j].length;}}}
+var lpw=mc*fs*0.55;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
+if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,fs-2):fs;}
+else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
+}});
 
 
 (()=>{const ctx=document.getElementById('gatesChart1');

@@ -324,20 +324,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
+      <a href="/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-title">The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
+      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
+        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -447,6 +447,25 @@ Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+Chart.register({id:'autoLabelFit',beforeUpdate(chart){
+if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
+for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
+var sc=chart.options.scales;if(!sc)return;
+var horiz=chart.options.indexAxis==='y';
+for(var k in sc){var s=sc[k];if(!s)continue;
+if(s.type==='linear'||k==='y'||k[0]==='y'||horiz)continue;
+var labels=chart.data&&chart.data.labels;if(!labels||!labels.length)continue;
+var cw=(chart.canvas.parentElement?chart.canvas.parentElement.clientWidth:600)-40;
+var wpl=cw/labels.length;
+var orig=chart._alf[k]||{};var fs=orig.fs||(s.ticks&&s.ticks.font?s.ticks.font.size:11);
+var mc=0;for(var i=0;i<labels.length;i++){var lb=labels[i];
+if(Array.isArray(lb)){for(var j=0;j<lb.length;j++){var n=String(lb[j]).length;if(n>mc)mc=n;}}
+else{var parts=(typeof lb==='string'?lb:String(lb)).split('\n');
+for(var j=0;j<parts.length;j++){if(parts[j].length>mc)mc=parts[j].length;}}}
+var lpw=mc*fs*0.55;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
+if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,fs-2):fs;}
+else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
+}});
 
 (()=>{const ctx=document.getElementById('rearmChart1');
 const yrs=[1650,1700,1750,1815,1850,1870,1900,1914,1920,1932,1938,1945,1955,1985,1991,2000,2014,2022,2026];

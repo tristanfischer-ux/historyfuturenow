@@ -255,20 +255,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Cassandra: Time To Give Up On Predicting Climate Change?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -376,6 +376,25 @@ Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+Chart.register({id:'autoLabelFit',beforeUpdate(chart){
+if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
+for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
+var sc=chart.options.scales;if(!sc)return;
+var horiz=chart.options.indexAxis==='y';
+for(var k in sc){var s=sc[k];if(!s)continue;
+if(s.type==='linear'||k==='y'||k[0]==='y'||horiz)continue;
+var labels=chart.data&&chart.data.labels;if(!labels||!labels.length)continue;
+var cw=(chart.canvas.parentElement?chart.canvas.parentElement.clientWidth:600)-40;
+var wpl=cw/labels.length;
+var orig=chart._alf[k]||{};var fs=orig.fs||(s.ticks&&s.ticks.font?s.ticks.font.size:11);
+var mc=0;for(var i=0;i<labels.length;i++){var lb=labels[i];
+if(Array.isArray(lb)){for(var j=0;j<lb.length;j++){var n=String(lb[j]).length;if(n>mc)mc=n;}}
+else{var parts=(typeof lb==='string'?lb:String(lb)).split('\n');
+for(var j=0;j<parts.length;j++){if(parts[j].length>mc)mc=parts[j].length;}}}
+var lpw=mc*fs*0.55;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
+if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,fs-2):fs;}
+else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
+}});
 
 
 (()=>{const ctx=document.getElementById('vfChart1');
