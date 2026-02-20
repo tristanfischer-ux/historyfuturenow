@@ -8,7 +8,7 @@ import os, re, sys, yaml, markdown, json, math, random, hashlib
 import html as html_mod
 from pathlib import Path
 from chart_defs import get_all_charts, COLORS as CHART_COLORS
-from issues import ISSUES, get_issue_for_slug, get_current_issue, build_slug_to_issue_map
+from issues import ISSUES, get_issue_for_slug, get_issue_by_number, get_current_issue, build_slug_to_issue_map
 
 ESSAYS_DIR = Path(__file__).parent / "essays"
 OUTPUT_DIR = Path(__file__).parent.parent / "hfn-site-output"
@@ -1630,7 +1630,6 @@ def build_homepage(essays, new_essays=None):
     # ── Previous issue teaser ──
     prev_issue_html = ""
     if ci_num > 1:
-        from issues import get_issue_by_number
         prev = get_issue_by_number(ci_num - 1)
         if prev:
             prev_label = prev['label']
@@ -2081,6 +2080,14 @@ def build_listen_page(essays):
         pn = ae['part']
         section_counts[pn] = section_counts.get(pn, 0) + 1
 
+    # Count by issue
+    slug_to_issue = build_slug_to_issue_map()
+    issue_counts = {}
+    for ae in audio_essays:
+        iss_num = slug_to_issue.get(ae['slug'])
+        if iss_num is not None:
+            issue_counts[iss_num] = issue_counts.get(iss_num, 0) + 1
+
     # Build queue-all data
     all_queue_items = []
     for ae in audio_essays:
@@ -2099,13 +2106,21 @@ def build_listen_page(essays):
         })
     queue_all_json = html_mod.escape(json.dumps(all_queue_items))
 
-    # Build filter tabs
+    # Build section filter tabs
     filter_tabs = '<button class="lp-tab active" data-filter="all">All</button>\n'
     for pn in sorted(PARTS.keys(), key=lambda p: PARTS[p]['order']):
         pi = PARTS[pn]
         count = section_counts.get(pn, 0)
         if count > 0:
             filter_tabs += f'      <button class="lp-tab" data-filter="{html_mod.escape(pi["slug"])}" style="--tab-color:{pi["color"]}">{pi["label"].replace("Part ", "").strip()}: {html_mod.escape(pn)} <span class="lp-tab-count">{count}</span></button>\n'
+
+    # Build issue filter tabs (descending order — newest first)
+    issue_tabs = '<button class="lp-tab active" data-issue="all">All</button>\n'
+    for iss_num in sorted(issue_counts.keys(), reverse=True):
+        iss = get_issue_by_number(iss_num)
+        if iss:
+            count = issue_counts[iss_num]
+            issue_tabs += f'      <button class="lp-tab" data-issue="{iss_num}">Issue {iss_num} <span class="lp-tab-count">{count}</span></button>\n'
 
     # Build list rows
     rows_html = ""
@@ -2135,7 +2150,8 @@ def build_listen_page(essays):
         excerpt_text = truncate_excerpt(ae.get('excerpt', ''), 120)
 
         lp_controls = make_card_controls(ae, pi)
-        rows_html += f'''    <a href="/articles/{html_mod.escape(ae['slug'])}" class="lp-row" data-section="{html_mod.escape(pi['slug'])}" data-audio-type="{audio_type_filter}">
+        row_issue = slug_to_issue.get(ae['slug'], '')
+        rows_html += f'''    <a href="/articles/{html_mod.escape(ae['slug'])}" class="lp-row" data-section="{html_mod.escape(pi['slug'])}" data-audio-type="{audio_type_filter}" data-issue="{row_issue}">
       <svg class="lp-row-play" viewBox="0 0 24 24" fill="{pi['color']}"><path d="M8 5v14l11-7z"/></svg>
       <div class="lp-row-main">
         <div class="lp-row-title">{html_mod.escape(ae['title'])}</div>
@@ -2154,32 +2170,44 @@ def build_listen_page(essays):
 
     filter_script = '''<script>
 (function(){
-  var tabs = document.querySelectorAll('.lp-tab');
+  var sectionTabs = document.querySelectorAll('.lp-section-tabs .lp-tab');
+  var issueTabs = document.querySelectorAll('.lp-issue-tabs .lp-tab');
   var typeBtns = document.querySelectorAll('.lp-type-btn');
   var rows = document.querySelectorAll('.lp-row');
   var countEl = document.getElementById('lpVisibleCount');
   var currentSection = 'all';
+  var currentIssue = 'all';
   var currentType = 'all';
 
   function applyFilters(){
     var visible = 0;
     rows.forEach(function(r){
       var matchSection = currentSection === 'all' || r.dataset.section === currentSection;
+      var matchIssue = currentIssue === 'all' || r.dataset.issue === currentIssue;
       var matchType = currentType === 'all' || r.dataset.audioType === currentType || (currentType === 'narration' && r.dataset.audioType === 'both') || (currentType === 'discussion' && r.dataset.audioType === 'both');
-      if(matchSection && matchType){ r.style.display = ''; visible++; }
+      if(matchSection && matchIssue && matchType){ r.style.display = ''; visible++; }
       else { r.style.display = 'none'; }
     });
     if(countEl) countEl.textContent = visible;
   }
 
-  tabs.forEach(function(t){
+  sectionTabs.forEach(function(t){
     t.addEventListener('click', function(){
-      tabs.forEach(function(x){ x.classList.remove('active'); });
+      sectionTabs.forEach(function(x){ x.classList.remove('active'); });
       t.classList.add('active');
       currentSection = t.dataset.filter;
       applyFilters();
-      var hash = currentSection === 'all' ? '' : '#' + currentSection;
-      history.replaceState(null, '', '/listen' + hash);
+      updateHash();
+    });
+  });
+
+  issueTabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      issueTabs.forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      currentIssue = t.dataset.issue;
+      applyFilters();
+      updateHash();
     });
   });
 
@@ -2192,14 +2220,30 @@ def build_listen_page(essays):
     });
   });
 
-  // Restore filter from URL hash
+  function updateHash(){
+    var parts = [];
+    if(currentSection !== 'all') parts.push('section=' + currentSection);
+    if(currentIssue !== 'all') parts.push('issue=' + currentIssue);
+    var hash = parts.length ? '#' + parts.join('&') : '';
+    history.replaceState(null, '', '/listen' + hash);
+  }
+
+  // Restore filters from URL hash
   var hash = location.hash.replace('#','');
   if(hash){
-    tabs.forEach(function(t){
-      if(t.dataset.filter === hash){
-        t.click();
+    hash.split('&').forEach(function(pair){
+      var kv = pair.split('=');
+      if(kv[0] === 'section' && kv[1]){
+        sectionTabs.forEach(function(t){ if(t.dataset.filter === kv[1]) t.click(); });
+      }
+      if(kv[0] === 'issue' && kv[1]){
+        issueTabs.forEach(function(t){ if(t.dataset.issue === kv[1]) t.click(); });
       }
     });
+    // Legacy support: bare hash without key=value is a section filter
+    if(hash.indexOf('=') === -1){
+      sectionTabs.forEach(function(t){ if(t.dataset.filter === hash) t.click(); });
+    }
   }
 
   // Stop control button clicks from navigating to the article
@@ -2231,6 +2275,8 @@ def build_listen_page(essays):
       <span class="lp-stat"><strong>{total_hours}+</strong> hours</span>
       <span class="lp-stat-sep">&middot;</span>
       <span class="lp-stat"><strong>4</strong> sections</span>
+      <span class="lp-stat-sep">&middot;</span>
+      <span class="lp-stat"><strong>{len(issue_counts)}</strong> issues</span>
     </div>
     <button class="q-play-all lp-queue-all" id="queueAllBtn" data-items="{queue_all_json}">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -2241,9 +2287,13 @@ def build_listen_page(essays):
 
 <div class="lp-filters">
   <div class="lp-filters-inner">
-    <div class="lp-filter-group">
+    <div class="lp-filter-group lp-section-tabs">
       <span class="lp-filter-label">Section</span>
       {filter_tabs}
+    </div>
+    <div class="lp-filter-group lp-issue-tabs">
+      <span class="lp-filter-label">Issue</span>
+      {issue_tabs}
     </div>
     {'<div class="lp-filter-group"><span class="lp-filter-label">Type</span><button class="lp-type-btn active" data-type="all">All</button><button class="lp-type-btn" data-type="narration">Narration</button><button class="lp-type-btn" data-type="discussion">Discussion</button></div>' if ENABLE_DISCUSSIONS else ''}
   </div>
