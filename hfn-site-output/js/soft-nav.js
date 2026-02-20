@@ -106,7 +106,7 @@
         // Clear current body and insert new content
         document.body.innerHTML = '';
         document.body.style.overflow = '';
-        document.body.classList.remove('nav-focus-hidden');
+        document.body.classList.remove('nav-focus-hidden', 'search-open');
         while (newBody.firstChild) {
           document.body.appendChild(newBody.firstChild);
         }
