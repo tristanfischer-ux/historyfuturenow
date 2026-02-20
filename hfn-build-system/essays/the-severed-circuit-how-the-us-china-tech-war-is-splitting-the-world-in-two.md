@@ -18,6 +18,8 @@ share_summary: >-
   The Cold War divided the world into two economies. The tech war is
   dividing it into two internets. The stakes may be higher.
 signal: ''
+sources:
+  - "Chip War"
 ---
 # The Severed Circuit: How the US-China Tech War Is Splitting the World in Two
 

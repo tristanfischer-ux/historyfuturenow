@@ -17,6 +17,10 @@ share_summary: >-
   Two ways of keeping people honest: the invisible judge and the eye of
   the crowd. They don't mix. Why it matters.
 signal: ''
+sources:
+  - "The Chrysanthemum and the Sword"
+  - "Shame and Necessity"
+  - "Cultural Evolution"
 ---
 # The Invisible Judge: Why Guilt and Shame Societies Are Incompatible
 

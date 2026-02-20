@@ -18,6 +18,8 @@ share_summary: >-
   Germany spent €500bn on renewables then burned Russian gas. France
   drank wine powered by the atom and said nothing. The atom is back.
 signal: ''
+sources:
+  - "The Rise of Nuclear Fear"
 ---
 # The Atom Returns: Why the World's Most Feared Energy Source Is Its Best Hope
 

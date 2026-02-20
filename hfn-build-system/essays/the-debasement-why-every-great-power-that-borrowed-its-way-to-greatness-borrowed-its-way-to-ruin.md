@@ -18,6 +18,9 @@ share_summary: >-
   Philip II had the world's largest empire and the gold of the Americas.
   He still went bankrupt four times. The US debt ceiling, meet history.
 signal: ''
+sources:
+  - "The Cash Nexus"
+  - "This Time Is Different"
 ---
 # The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin
 

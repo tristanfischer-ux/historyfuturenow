@@ -19,6 +19,10 @@ share_summary: >-
   Europeans stopped trusting the Church, they got the Reformation.
   What comes next?
 signal: ''
+sources:
+  - "Trust"
+  - "Bowling Alone"
+  - "Cultural Evolution"
 ---
 # The Empty Throne: Why the West No Longer Believes in Its Own Institutions
 

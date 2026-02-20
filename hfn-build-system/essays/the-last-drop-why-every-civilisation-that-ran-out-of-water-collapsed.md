@@ -19,6 +19,9 @@ share_summary: >-
   The Romans built aqueducts that still work after 2,000 years. We
   built cities in deserts and act surprised when the taps run dry.
 signal: ''
+sources:
+  - "Water: The Epic Struggle for Wealth, Power, and Civilization"
+  - "Oriental Despotism"
 ---
 # The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed
 

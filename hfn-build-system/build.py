@@ -255,6 +255,9 @@ def parse_essay(filepath):
     # Prefer date from frontmatter, fall back to hardcoded mapping
     pub_date = meta.get('date', '') or ARTICLE_DATES.get(slug, '')
 
+    # Sources: list of book titles cited in this article
+    sources = meta.get('sources', []) or []
+
     return {
         'title': title, 'slug': slug, 'part': part, 'excerpt': excerpt,
         'body_html': body_html, 'reading_time': reading_time,
@@ -262,6 +265,7 @@ def parse_essay(filepath):
         'has_audio': has_audio, 'has_discussion': has_discussion,
         'share_summary': share_summary,
         'pub_date': pub_date,
+        'sources': sources,
     }
 
 def get_related(essay, all_essays, n=3):
@@ -978,6 +982,52 @@ def inject_charts_into_body(body_html, charts):
 
     return body_html, script_block
 
+def build_further_reading_html(sources):
+    """Render a 'Further Reading' section from a list of book titles, cross-referenced with the library."""
+    if not sources:
+        return ''
+    from library_data import BOOKS
+    import urllib.parse
+
+    # Build a lookup: normalised title -> book record
+    book_lookup = {b['title'].lower().strip(): b for b in BOOKS}
+
+    items = []
+    for title in sources:
+        book = book_lookup.get(title.lower().strip())
+        if book:
+            author = book['author']
+            q = urllib.parse.quote_plus(f'{book["title"]} {book["author"]}')
+            amazon_url = f'https://www.amazon.co.uk/s?k={q}'
+            items.append(
+                f'<div class="further-reading-item">'
+                f'<span class="further-reading-title">{html_mod.escape(book["title"])}</span>'
+                f'<span class="further-reading-author">{html_mod.escape(author)}</span>'
+                f'<a class="further-reading-amazon" href="{amazon_url}" data-query="{q}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>'
+                f'</div>'
+            )
+        else:
+            # Book not in library yet — render without Amazon link as a reminder
+            items.append(
+                f'<div class="further-reading-item further-reading-missing">'
+                f'<span class="further-reading-title">{html_mod.escape(title)}</span>'
+                f'</div>'
+            )
+
+    if not items:
+        return ''
+
+    items_html = '\n'.join(items)
+    return f'''
+  <section class="further-reading">
+    <h2 class="further-reading-heading">Further Reading</h2>
+    <p class="further-reading-desc">Books cited or drawn upon in this article.</p>
+    <div class="further-reading-list">
+{items_html}
+    </div>
+  </section>'''
+
+
 def build_article(essay, all_essays, is_review=False):
     pi = PARTS[essay['part']]
     te = html_mod.escape(essay['title'])
@@ -1156,6 +1206,8 @@ def build_article(essay, all_essays, is_review=False):
 
     end_of_article_cta = discussion_player + share_cta
 
+    further_reading_html = build_further_reading_html(essay.get('sources', []))
+
     issue = get_issue_for_slug(essay['slug'])
     issue_badge_html = ''
     if issue:
@@ -1194,6 +1246,7 @@ def build_article(essay, all_essays, is_review=False):
   <div class="article-body">
     {body_before_refs}
   </div>
+{further_reading_html}
 {end_of_article_cta}
   <div class="article-references">
     {body_refs}
@@ -1212,6 +1265,7 @@ def build_article(essay, all_essays, is_review=False):
 {chart_script}
 {make_audio_player_script() if (has_audio or has_discussion) else ''}
 <script src="/js/share.js?v={_js_hash('share.js')}"></script>
+{'<script>(function(){var isUK=false;try{var tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";isUK=tz==="Europe/London"||tz==="Europe/Belfast"||tz==="Europe/Guernsey"||tz==="Europe/Isle_of_Man"||tz==="Europe/Jersey";}catch(e){}if(!isUK){var links=document.querySelectorAll(".further-reading-amazon");for(var i=0;i<links.length;i++){var q=links[i].getAttribute("href").split("?k=")[1];if(q)links[i].href="https://www.amazon.com/s?k="+q;}}})();</script>' if essay.get('sources') else ''}
 </body>
 </html>'''
 

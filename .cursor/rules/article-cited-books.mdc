@@ -1,0 +1,65 @@
+# Cited Books: Library and Amazon Links
+
+When an article cites a book — by name, in the body text — that book must be in the library and linked from the article.
+
+## The Rule
+
+**Every book named in an article must appear in both:**
+1. `hfn-build-system/library_data.py` — the `BOOKS` list
+2. The article's `sources` frontmatter field
+
+## Step 1: Add the Book to `library_data.py`
+
+Add an entry to the `BOOKS` list in the appropriate theme section:
+
+```python
+{"title": "The Cash Nexus", "author": "Niall Ferguson", "year": 2026, "source": "kindle", "themes": ["economics", "empire"]},
+```
+
+Fields:
+- `title` — exact title as it appears in the article
+- `author` — full author name(s)
+- `year` — year you read/acquired it (use current year if unknown)
+- `source` — `"audible"`, `"kindle"`, or `"physical"`
+- `themes` — list of theme keys from `THEMES` dict (first entry is the primary theme)
+
+The build system automatically generates an Amazon search link from title + author. No manual ASIN or URL needed.
+
+## Step 2: Add the Book to the Article's `sources` Frontmatter
+
+In the article's YAML frontmatter, add or append to the `sources` field:
+
+```yaml
+signal: ''
+sources:
+  - "The Cash Nexus"
+  - "This Time Is Different"
+```
+
+The title must **exactly match** the `title` field in `library_data.py`.
+
+The build system cross-references `sources` with `library_data.py` and renders a **"Further Reading"** section at the end of the article with:
+- Book title (italic)
+- Author name
+- "Buy on Amazon" link (amazon.co.uk for UK visitors, amazon.com for others)
+
+## What Counts as "Citing a Book"
+
+A book is cited if:
+- Its title appears in *italics* in the article body (e.g., `*Chip War*`)
+- It is mentioned with an author attribution (e.g., "as Francis Fukuyama argues in *Trust*")
+- A specific argument or data point is attributed to the book
+
+Academic papers, journals, newspapers, and government reports are NOT books and do not need to be added to the library.
+
+## When Reviewing or Editing Articles
+
+- Scan the article body for italicised titles and named books
+- Check each one against `library_data.py`
+- If missing from the library, add it
+- If missing from `sources` frontmatter, add it
+- An article that cites books but has no `sources` field is incomplete
+
+## The Library Page
+
+The `/library` page at `library.html` is built from `library_data.py`. It displays all books grouped by theme, each with an Amazon link. Adding a book to `library_data.py` is sufficient to include it in the library — no further action needed.

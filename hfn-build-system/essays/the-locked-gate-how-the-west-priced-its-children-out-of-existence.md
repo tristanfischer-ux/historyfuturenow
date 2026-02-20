@@ -19,6 +19,8 @@ share_summary: >-
   The West is doing the same. Except this time the revolution is
   demographic collapse.
 signal: ''
+sources:
+  - "Capital in the Twenty-First Century"
 ---
 # The Locked Gate: How the West Priced Its Children Out of Existence
 

@@ -20,6 +20,9 @@ share_summary: >-
   The civilisations that built the modern world are going extinct. Who
   maintains it after they're gone?
 signal: ''
+sources:
+  - "Human Accomplishment"
+  - "Science and Civilisation in China"
 ---
 # The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next
 

@@ -19,6 +19,8 @@ share_summary: >-
   They did not disagree about the fundamental nature of society. That
   era is over.
 signal: ''
+sources:
+  - "Of Boys and Men"
 ---
 # The Great Divergence: Why Young Men and Women No Longer See the Same World
 

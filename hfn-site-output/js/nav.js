@@ -35,68 +35,6 @@ function initNav() {
   var links = document.querySelector('.nav-links');
   if (links) links.classList.remove('open');
 
-  // Back-to-section bar: show when scrolled past article header
-  var backBar = document.getElementById('backBar');
-  var articleHeader = document.querySelector('.article-header');
-  if (backBar && articleHeader) {
-    var ticking = false;
-    var onScroll = function () {
-      if (!ticking) {
-        window.requestAnimationFrame(function () {
-          var rect = articleHeader.getBoundingClientRect();
-          backBar.classList.toggle('visible', rect.bottom < 0);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    _hfnScrollCleanup.push(function () { window.removeEventListener('scroll', onScroll); });
-  }
-
-  // Focus mode: hide nav when scrolling down on article pages
-  var articleBody = document.querySelector('article .article-body');
-  if (articleBody) {
-    var lastY = window.scrollY;
-    var menuBtn = null;
-    var threshold = 400;
-    var tickingFocus = false;
-    var onScrollFocus = function () {
-      if (!tickingFocus) {
-        window.requestAnimationFrame(function () {
-          var y = window.scrollY;
-          if (y > threshold) {
-            if (y > lastY) document.body.classList.add('nav-focus-hidden');
-            else document.body.classList.remove('nav-focus-hidden');
-          } else {
-            document.body.classList.remove('nav-focus-hidden');
-          }
-          lastY = y;
-          if (document.body.classList.contains('nav-focus-hidden')) {
-            if (!menuBtn) {
-              menuBtn = document.createElement('button');
-              menuBtn.type = 'button';
-              menuBtn.className = 'focus-menu-btn';
-              menuBtn.setAttribute('aria-label', 'Show menu');
-              menuBtn.textContent = 'Menu';
-              menuBtn.onclick = function () {
-                document.body.classList.remove('nav-focus-hidden');
-              };
-              document.body.appendChild(menuBtn);
-            }
-            menuBtn.style.display = '';
-          } else if (menuBtn) menuBtn.style.display = 'none';
-          tickingFocus = false;
-        });
-        tickingFocus = true;
-      }
-    };
-    window.addEventListener('scroll', onScrollFocus, { passive: true });
-    _hfnScrollCleanup.push(function () {
-      window.removeEventListener('scroll', onScrollFocus);
-      if (menuBtn && menuBtn.parentNode) menuBtn.parentNode.removeChild(menuBtn);
-    });
-  }
 }
 
 // Event delegation for nav clicks — bound once on document, survives DOM replacement

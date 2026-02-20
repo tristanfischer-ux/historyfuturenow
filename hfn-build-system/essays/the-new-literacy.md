@@ -22,6 +22,8 @@ share_summary: >-
  AI is doing to coders what the printing press did to scribes.
  The flourishing has begun — but dependency always follows.
 signal: ''
+sources:
+  - "The Shallows"
 ---
 # The New Literacy: How AI Is Killing The Scribes And What Happens Next
 

@@ -185,6 +185,11 @@ BOOKS = [
     {"title": "A Cultural History of Civil Examinations in Late Imperial China", "author": "Benjamin Elman", "year": 2025, "source": "kindle", "themes": ["civilisation", "ideology"]},
     {"title": "The Ladder of Success in Imperial China", "author": "Ping-ti Ho", "year": 2025, "source": "kindle", "themes": ["civilisation"]},
     {"title": "The Theory of the Leisure Class", "author": "Thorstein Veblen", "year": 2025, "source": "kindle", "themes": ["economics", "civilisation"]},
+    {"title": "The Chrysanthemum and the Sword", "author": "Ruth Benedict", "year": 2026, "source": "kindle", "themes": ["civilisation", "ideology"]},
+    {"title": "Africans: The History of a Continent", "author": "John Iliffe", "year": 2026, "source": "kindle", "themes": ["civilisation"]},
+    {"title": "Science and Civilisation in China", "author": "Joseph Needham", "year": 2026, "source": "kindle", "themes": ["civilisation", "technology"]},
+    {"title": "Human Accomplishment", "author": "Charles Murray", "year": 2026, "source": "kindle", "themes": ["civilisation", "cognition"]},
+    {"title": "Bowling Alone", "author": "Robert D. Putnam", "year": 2026, "source": "kindle", "themes": ["civilisation", "ideology"]},
 
     # ═══════════════════════════════════════════════════════════════
     # EMPIRE LIFECYCLE & FAILURE MODES
@@ -365,6 +370,8 @@ BOOKS = [
     {"title": "Company of One", "author": "Paul Jarvis", "year": 2025, "source": "audible", "themes": ["economics"]},
     {"title": "Pattern Breakers", "author": "Mike Maples Jr. & Peter Ziebelman", "year": 2024, "source": "audible", "themes": ["economics"]},
     {"title": "Democracy: The God That Failed", "author": "Hans-Hermann Hoppe", "year": 2023, "source": "audible", "themes": ["economics", "ideology"]},
+    {"title": "The Cash Nexus", "author": "Niall Ferguson", "year": 2026, "source": "kindle", "themes": ["economics", "empire"]},
+    {"title": "This Time Is Different", "author": "Carmen Reinhart & Kenneth Rogoff", "year": 2026, "source": "kindle", "themes": ["economics"]},
 
     # ═══════════════════════════════════════════════════════════════
     # IDEOLOGY & NARRATIVE CAPTURE
@@ -453,6 +460,7 @@ BOOKS = [
     {"title": "The Industrial Revolution", "author": "Patrick N. Allitt", "year": 2020, "source": "audible", "themes": ["technology", "civilisation"]},
     {"title": "The Clockwork Universe", "author": "Edward Dolnick", "year": 2023, "source": "audible", "themes": ["technology"]},
     {"title": "Creating the Twentieth Century", "author": "Vaclav Smil", "year": 2014, "source": "kindle", "themes": ["technology", "civilisation"]},
+    {"title": "The Rise of Nuclear Fear", "author": "Spencer Weart", "year": 2026, "source": "kindle", "themes": ["technology"]},
 
     # ═══════════════════════════════════════════════════════════════
     # COGNITIVE & RHETORICAL UPGRADES
@@ -485,6 +493,8 @@ BOOKS = [
     {"title": "A Theory of Justice", "author": "John Rawls", "year": 2020, "source": "physical", "themes": ["cognition", "ideology"]},
     {"title": "The Better Angels of Our Nature", "author": "Steven Pinker", "year": 2012, "source": "kindle", "themes": ["cognition", "civilisation"]},
     {"title": "The Pattern Seekers", "author": "Simon Baron-Cohen", "year": 2024, "source": "kindle", "themes": ["cognition", "biology"]},
+    {"title": "The Shallows", "author": "Nicholas Carr", "year": 2026, "source": "kindle", "themes": ["cognition", "technology"]},
+    {"title": "Shame and Necessity", "author": "Bernard Williams", "year": 2026, "source": "kindle", "themes": ["cognition", "ideology"]},
 
     # ═══════════════════════════════════════════════════════════════
     # BIOLOGY & HUMAN NATURE

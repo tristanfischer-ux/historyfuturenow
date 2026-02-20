@@ -20,6 +20,8 @@ share_summary: >-
   and 2.5 billion people by 2050. The continent Europe treated as a mine
   is becoming an economic force on its own terms.
 signal: ''
+sources:
+  - "Africans: The History of a Continent"
 ---
 # The Young Continent: How Africa's Billion-Person Surge Will Reshape the Global Order
 
