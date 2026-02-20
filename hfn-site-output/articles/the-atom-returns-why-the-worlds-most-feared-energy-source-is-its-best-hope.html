@@ -28,7 +28,7 @@
 <link rel="alternate" type="application/rss+xml" title="History Future Now" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css?v=36d477ea">
+<link rel="stylesheet" href="/css/style.css?v=546ddd87">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PS9DYS2PZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-6PS9DYS2PZ');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
@@ -279,20 +279,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
+      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Cassandra: Time To Give Up On Predicting Climate Change?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+      <a href="/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
-        <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="related-card">
+      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Establishing A Price Floor For Energy</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -424,7 +424,7 @@ function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
 new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
-for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
+for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,mnr:sc[k].ticks.minRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
 var sc=chart.options.scales;if(!sc)return;
 var horiz=chart.options.indexAxis==='y';
 for(var k in sc){var s=sc[k];if(!s)continue;
@@ -437,9 +437,9 @@ var mc=0;for(var i=0;i<labels.length;i++){var lb=labels[i];
 if(Array.isArray(lb)){for(var j=0;j<lb.length;j++){var n=String(lb[j]).length;if(n>mc)mc=n;}}
 else{var parts=(typeof lb==='string'?lb:String(lb)).split('\n');
 for(var j=0;j<parts.length;j++){if(parts[j].length>mc)mc=parts[j].length;}}}
-var lpw=mc*fs*0.55;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
-if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,fs-2):fs;}
-else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
+var lpw=mc*fs*0.62;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
+if(lpw>wpl*0.75){s.ticks.maxRotation=45;s.ticks.minRotation=25;s.ticks.font.size=lpw>wpl*1.8?Math.max(8,fs-2):fs;}
+else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=null?orig.mnr:0;s.ticks.font.size=fs;}}
 }});
 
 

@@ -1226,6 +1226,11 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .charts-article-link { display: block; font-size: 0.82rem; font-weight: 600; text-decoration: none; color: var(--accent); margin-top: 0.5rem; text-align: right; }
 .charts-article-link:hover { text-decoration: underline; }
 
+.charts-bottom-nav { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.5rem 2.5rem; border-top: 1px solid var(--border); }
+.charts-bottom-nav-inner { text-align: center; }
+.charts-bottom-nav-label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0 0 0.75rem; font-weight: 600; }
+.charts-filters-bottom { justify-content: center; }
+
 @media (max-width: 768px) {
   .charts-grid { grid-template-columns: 1fr; }
   .charts-filters { gap: 0.4rem; }

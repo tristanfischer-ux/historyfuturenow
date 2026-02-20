@@ -42,7 +42,7 @@ function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
 new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
-for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
+for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,mnr:sc[k].ticks.minRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
 var sc=chart.options.scales;if(!sc)return;
 var horiz=chart.options.indexAxis==='y';
 for(var k in sc){var s=sc[k];if(!s)continue;
@@ -55,9 +55,9 @@ var mc=0;for(var i=0;i<labels.length;i++){var lb=labels[i];
 if(Array.isArray(lb)){for(var j=0;j<lb.length;j++){var n=String(lb[j]).length;if(n>mc)mc=n;}}
 else{var parts=(typeof lb==='string'?lb:String(lb)).split('\\n');
 for(var j=0;j<parts.length;j++){if(parts[j].length>mc)mc=parts[j].length;}}}
-var lpw=mc*fs*0.55;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
-if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,fs-2):fs;}
-else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
+var lpw=mc*fs*0.62;if(!s.ticks)s.ticks={};if(!s.ticks.font)s.ticks.font={};
+if(lpw>wpl*0.75){s.ticks.maxRotation=45;s.ticks.minRotation=25;s.ticks.font.size=lpw>wpl*1.8?Math.max(8,fs-2):fs;}
+else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=null?orig.mnr:0;s.ticks.font.size=fs;}}
 }});
 """
 
@@ -2419,7 +2419,7 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return '$'+i.raw.toLocaleString()+' per kg'}}}},
 scales:{y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return '$'+v.toLocaleString()}},
 title:{display:true,text:'USD per kg (log scale)',color:C.dim}},
-x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}}}}});
+x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 });"""
         },
         {

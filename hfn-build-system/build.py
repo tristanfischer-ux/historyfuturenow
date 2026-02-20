@@ -2694,6 +2694,15 @@ def build_charts_page(essays, all_charts):
 <div class="charts-grid">
 {cards_html}</div>
 
+<section class="charts-bottom-nav">
+  <div class="charts-bottom-nav-inner">
+    <p class="charts-bottom-nav-label">Jump to section</p>
+    <div class="charts-filters charts-filters-bottom">
+      {filter_buttons}
+    </div>
+  </div>
+</section>
+
 {make_footer()}
 <script>
 (function(){{{geo_data_var}
@@ -2710,19 +2719,25 @@ window.__chartInits = window.__chartInits || {{}};
   const btns = document.querySelectorAll('.charts-filter-btn');
   const cards = document.querySelectorAll('.charts-card');
   const headers = document.querySelectorAll('.charts-section-header');
+  const grid = document.querySelector('.charts-grid');
+  function applyFilter(f) {{
+    btns.forEach(b => {{
+      if (b.dataset.filter === f) b.classList.add('active');
+      else b.classList.remove('active');
+    }});
+    cards.forEach(c => {{
+      c.style.display = (f === 'all' || c.dataset.section === f) ? '' : 'none';
+    }});
+    headers.forEach(h => {{
+      h.style.display = (f === 'all' || h.dataset.section === f) ? '' : 'none';
+    }});
+  }}
   btns.forEach(btn => {{
     btn.addEventListener('click', () => {{
-      const f = btn.dataset.filter;
-      btns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      cards.forEach(c => {{
-        const show = f === 'all' || c.dataset.section === f;
-        c.style.display = show ? '' : 'none';
-      }});
-      headers.forEach(h => {{
-        const show = f === 'all' || h.dataset.section === f;
-        h.style.display = show ? '' : 'none';
-      }});
+      applyFilter(btn.dataset.filter);
+      if (btn.closest('.charts-filters-bottom') && grid) {{
+        grid.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+      }}
     }});
   }});
 }})();
