@@ -2716,11 +2716,11 @@ label:i=>i.parsed.y+'% literate'
 }},
 annotation:{annotations:{
 alph:{type:'label',..._al,xValue:-800,yValue:12,content:['Phoenician','alphabet'],color:C.blue,font:{size:10,weight:'bold'}},
-press:{type:'line',xMin:1440,xMax:1440,yMin:0,yMax:100,borderColor:C.green,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Printing press (1440)',position:'start',color:C.green,font:{size:10}}},
-edu:{type:'line',xMin:1870,xMax:1870,yMin:0,yMax:100,borderColor:C.purple,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Compulsory education (1870s)',position:'start',color:C.purple,font:{size:10}}},
-ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'AI coding literacy? (2024)',position:'start',color:C.amber,font:{size:10}}}
+press:{type:'line',xMin:1440,xMax:1440,yMin:0,yMax:100,borderColor:C.green,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:'Printing press (1440)',position:'end',color:C.green,font:{size:10}}},
+edu:{type:'line',xMin:1870,xMax:1870,yMin:0,yMax:100,borderColor:C.purple,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:['Compulsory','education (1870s)'],position:'center',color:C.purple,font:{size:10}}},
+ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWidth:1.5,borderDash:[5,3],label:{..._al,display:true,content:['AI coding','literacy? (2024)'],position:'start',yAdjust:-10,color:C.amber,font:{size:10}}}
 }}},
-scales:{x:{type:'linear',min:-3200,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BCE':v===0?'0':v+' CE',stepSize:500}},
+scales:{x:{type:'linear',min:-3200,max:2100,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},maxRotation:45,callback:v=>v<0?Math.abs(v)+' BCE':v===0?'0':v+' CE',stepSize:800}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},min:0,max:100,title:{display:true,text:'Population literate (%)',color:C.dim}}}}});
 });"""
         },
@@ -2805,7 +2805,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:100,title:{d
             'position': 'after_para_18',
             'js': """
 _regChart('newLitChart5',()=>{const ctx=document.getElementById('newLitChart5');
-const sectors=['IT services &\\nsoftware dev','Creative &\\nadvertising','Legal\\nservices','Accounting &\\nfinance','Marketing &\\nPR'];
+const sectors=['IT services & software dev','Creative & advertising','Legal services','Accounting & finance','Marketing & PR'];
 const sizes=[1240,620,380,340,280];
 const automatable=[65,55,45,60,70];
 new Chart(ctx,{type:'bar',data:{labels:sectors,datasets:[
@@ -2813,7 +2813,7 @@ new Chart(ctx,{type:'bar',data:{labels:sectors,datasets:[
 {label:'% automatable by AI',data:automatable,backgroundColor:C.accent+'88',borderColor:C.accent,borderWidth:2,borderRadius:3,borderSkipped:false,yAxisID:'y1',type:'line',tension:.3,pointRadius:5,pointBackgroundColor:C.accent,fill:false,order:0}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{if(i.datasetIndex===0)return'Market size: $'+i.raw+'B';return'Automatable: '+i.raw+'%'}}}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:35,minRotation:20}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v+'B'},title:{display:true,text:'Market size ($B)',color:C.dim},min:0,position:'left'},
 y1:{grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% automatable by AI',color:C.accent},min:0,max:100,position:'right'}
 }}});
