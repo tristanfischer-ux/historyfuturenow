@@ -4768,6 +4768,79 @@ label:i=>{const v=i.raw.value;if(v==null)return'No data';return'Population growt
 });"""
     })
 
+    # ─── WHAT WORKED: FIVE THOUSAND YEARS OF EVIDENCE ───
+    charts['what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish'] = [
+        {
+            'id': 'wwChart1', 'figure_num': 1,
+            'title': 'Civilisation Longevity: The Durable vs. the Disposable',
+            'desc': 'Duration of major civilisations and states in years — culturally cohesive, locally governed polities dominate the top of the chart',
+            'source': 'Various historical sources; dates are approximate and use conventional periodisation',
+            'position': 'after_para_7',
+            'tall': True,
+            'js': """
+_regChart('wwChart1',()=>{const ctx=document.getElementById('wwChart1');
+new Chart(ctx,{type:'bar',data:{
+labels:['Ancient Egypt','China (cont.)','Japan (cultural)','Byzantine Empire','Republic of Venice','Roman Rep. + Empire','Swiss Confederation','Ottoman Empire','Habsburg Empire','Czechoslovakia','Yugoslavia','Soviet Union'],
+datasets:[{label:'Duration (years)',data:[3070,4000,1500,1123,1100,1009,735,623,636,75,73,69],
+backgroundColor:[C.amber,C.accent,C.teal,C.purple,C.blue,C.accent+'cc',C.green,C.amber+'cc',C.dim,C.rose,C.rose+'cc',C.rose+'99'],borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw.toLocaleString()+' years'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000)+'k':v},title:{display:true,text:'Duration (years)',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+});"""
+        },
+        {
+            'id': 'wwChart2', 'figure_num': 2,
+            'title': 'The Debasement of the Roman Denarius',
+            'desc': 'Silver content of Rome\'s principal coin declined from 97% to 0.5% as the empire spent beyond its means',
+            'source': 'Numismatic data from Harl (1996), Walker (1976); percentages are silver purity by weight',
+            'position': 'after_para_26',
+            'js': """
+_regChart('wwChart2',()=>{const ctx=document.getElementById('wwChart2');
+const years=[14,64,96,138,161,193,218,238,253,260,268];
+const silver=[97,93.5,92,89,83,56,46.5,42,40,20,0.5];
+const labels=['Augustus†','Nero','Domitian','Hadrian','M. Aurelius','Sept. Severus','Elagabalus','Gordian III','Valerian','Gallienus','Gallienus†'];
+new Chart(ctx,{type:'line',data:{labels:years.map(y=>'AD '+y),
+datasets:[{label:'Silver content (%)',data:silver,borderColor:C.accent,backgroundColor:C.accent+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.accent,borderWidth:2.5}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:items=>{const i=items[0].dataIndex;return labels[i]+' ('+items[0].label+')';},label:i=>i.raw+'% silver'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},maxRotation:45}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Silver purity (%)',color:C.dim},min:0,max:100}}}});
+});"""
+        },
+        {
+            'id': 'wwChart3', 'figure_num': 3,
+            'title': 'The Growth of the State: Government Spending as % of GDP, 1900–2025',
+            'desc': 'Total government expenditure has grown from roughly 10% to over 40% of GDP across every major Western economy',
+            'source': 'Tanzi & Schuknecht (2000), IMF Fiscal Monitor, OECD Government at a Glance',
+            'position': 'after_para_30',
+            'js': """
+_regChart('wwChart3',()=>{const ctx=document.getElementById('wwChart3');
+const yrs=[1900,1913,1920,1937,1960,1980,2000,2010,2025];
+new Chart(ctx,{type:'line',data:{labels:yrs.map(String),
+datasets:[
+ds('United Kingdom',[14,13,26,30,32,43,36,47,44],C.accent),
+ds('France',[13,17,28,29,35,46,51,57,57],C.blue),
+ds('Germany',[14,18,25,34,32,48,45,48,47],C.amber),
+ds('United States',[3,8,7,20,27,32,34,41,36],C.teal),
+ds('Japan',[8,8,15,25,18,32,39,42,44],C.purple)]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% of GDP'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Government spending (% of GDP)',color:C.dim},min:0,max:65}}}});
+});"""
+        },
+        {
+            'id': 'wwChart4', 'figure_num': 4,
+            'title': 'The Bureaucratic Ratchet: US Code of Federal Regulations',
+            'desc': 'Total pages in the Code of Federal Regulations — the cumulative weight of the regulatory state',
+            'source': 'Federal Register / National Archives; George Washington University Regulatory Studies Center',
+            'position': 'after_para_31',
+            'js': """
+_regChart('wwChart4',()=>{const ctx=document.getElementById('wwChart4');
+new Chart(ctx,{type:'bar',data:{labels:['1950','1960','1970','1980','1990','2000','2010','2020','2024'],
+datasets:[{label:'Pages (thousands)',data:[10,22,54,102,128,138,152,185,188],
+backgroundColor:function(ctx){const v=ctx.raw;return v>150?C.accent:v>100?C.amber:v>50?C.blue:C.teal;},borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+',000 pages'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'k'},title:{display:true,text:'Total pages (thousands)',color:C.dim}}}}});
+});"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

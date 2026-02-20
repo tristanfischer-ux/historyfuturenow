@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 73
+Total articles: 74
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -18,7 +18,7 @@ Total articles: 73
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (30 articles)
+### Society (31 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -464,6 +464,13 @@ Total articles: 73
 - Published: 2013-02-01
 - Reading time: 25 min
 - Immigration is a political hot potato. It is hard to talk about it in the West without appearing to be uncaring at best or racist at worst. That is a problem as it is an important subject which doesn'
+
+### What Worked: Five Thousand Years of Evidence for How Civilisations Flourish [4 charts]
+- URL: https://www.historyfuturenow.com/articles/what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish
+- Section: Society
+- Published: 2026-02-20
+- Reading time: 13 min
+- Most political positions are argued from ideology. History Future Now's are argued from evidence. Five thousand years of civilisational data — from Sumer to Singapore — points consistently in the same
 
 ### When the Servants Are Silicon: What History's Leisure Classes Reveal About the AI Age [4 charts]
 - URL: https://www.historyfuturenow.com/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age
