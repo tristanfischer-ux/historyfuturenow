@@ -33,6 +33,7 @@
 
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
+<script src="/js/chartjs-chart-geo.umd.min.js"></script>
 </head>
 <body>
 
@@ -4073,6 +4074,7 @@
 <script src="/js/pwa-install.js?v=0b4e8e6f" defer></script>
 <script>
 (function(){
+var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
 function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
 function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {

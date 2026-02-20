@@ -2583,6 +2583,11 @@ def build_charts_page(essays, all_charts):
         if count > 0:
             filter_buttons += f'<button class="charts-filter-btn" data-filter="{pi["slug"]}">{pi["label"]}</button>'
 
+    # Check if any chart needs the geo library
+    needs_geo = any(c.get('geo') for item in articles_with_charts for c in item['charts'])
+    geo_script_tag = '\n<script src="/js/chartjs-chart-geo.umd.min.js"></script>' if needs_geo else ''
+    geo_data_var = '\nvar _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());' if needs_geo else ''
+
     # Build chart cards; wrap each chart's JS in a deferred init for lazy loading
     deferred_js_lines = []
     cards_html = ""
@@ -2653,7 +2658,7 @@ def build_charts_page(essays, all_charts):
 <head>
 {make_head("Charts — History Future Now", f"Browse {total_charts} interactive data visualisations from History Future Now. Every chart links to its source article.", "/charts", "#c43425")}
 <script src="/js/chart.umd.min.js"></script>
-<script src="/js/chartjs-plugin-annotation.min.js"></script>
+<script src="/js/chartjs-plugin-annotation.min.js"></script>{geo_script_tag}
 </head>
 <body>
 
@@ -2677,7 +2682,7 @@ def build_charts_page(essays, all_charts):
 
 {make_footer()}
 <script>
-(function(){{
+(function(){{{geo_data_var}
 {CHART_COLORS}
 window.__chartInits = window.__chartInits || {{}};
 {"\n".join(deferred_js_lines)}
