@@ -261,15 +261,15 @@
         <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
         <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
+      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
+        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
+      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -389,7 +389,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;

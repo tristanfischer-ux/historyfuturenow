@@ -406,20 +406,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
+      <a href="/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
-        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age</span>
+        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
+      <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The 150 Year Life: How Radical Longevity Will Transform Our World</span>
+        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="related-card">
+      <a href="/articles/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Great Divergence: Why Young Men and Women No Longer See the Same World</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -541,7 +541,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;

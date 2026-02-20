@@ -281,20 +281,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
+      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
+      <a href="/articles/the-150-year-life-how-radical-longevity-will-transform-our-world" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The 150 Year Life: How Radical Longevity Will Transform Our World</span>
+        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
+      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -414,7 +414,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;

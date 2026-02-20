@@ -1149,7 +1149,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;

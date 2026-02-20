@@ -254,20 +254,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
+      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
+      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
+        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -387,7 +387,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;

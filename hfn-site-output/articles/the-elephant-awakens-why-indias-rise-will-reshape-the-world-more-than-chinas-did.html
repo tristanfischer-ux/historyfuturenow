@@ -303,20 +303,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
+      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
-        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Scramble For The Solar System: Why The Next Colonial Race Has Already Begun</span>
+        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
         <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</span>
+        <span class="related-time">38 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -438,7 +438,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;

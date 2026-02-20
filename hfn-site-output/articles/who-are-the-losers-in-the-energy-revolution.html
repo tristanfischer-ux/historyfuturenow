@@ -254,15 +254,15 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
+      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
@@ -387,7 +387,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;

@@ -275,15 +275,15 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
+      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
@@ -408,7 +408,7 @@ const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,t
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
+const _al={backgroundColor:'transparent',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const _xy=xy;
