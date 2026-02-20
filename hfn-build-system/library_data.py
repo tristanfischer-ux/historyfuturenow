@@ -318,6 +318,8 @@ BOOKS = [
     {"title": "Water: The Epic Struggle for Wealth, Power, and Civilization", "author": "Steven Solomon", "year": 2026, "source": "kindle", "themes": ["world"]},
     {"title": "Oriental Despotism", "author": "Karl Wittfogel", "year": 2026, "source": "kindle", "themes": ["world"]},
     {"title": "The Scientific Life", "author": "Steven Shapin", "year": 2025, "source": "kindle", "themes": ["world", "science"]},
+    {"title": "The Collapse of Complex Societies", "author": "Joseph A. Tainter", "year": 2026, "source": "kindle", "themes": ["world"]},
+    {"title": "Fiscal Regimes and the Political Economy of Premodern States", "author": "Andrew Monson & Walter Scheidel (eds.)", "year": 2026, "source": "kindle", "themes": ["world", "economics"]},
     {"title": "The Industrial Revolution", "author": "Patrick N. Allitt", "year": 2020, "source": "audible", "themes": ["world", "science"]},
     {"title": "Creating the Twentieth Century", "author": "Vaclav Smil", "year": 2014, "source": "kindle", "themes": ["world", "science"]},
 
