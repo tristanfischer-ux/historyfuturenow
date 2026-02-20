@@ -3522,7 +3522,7 @@ title:{display:true,text:'Working-age population (15–64) as % of total',color:
             'position': 'after_para_7',
             'geo': True,
             'js': """
-(()=>{
+_regChart('indiaMapChart',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const medianAges={356:28.4,156:39.6,840:38.5,392:49.1,410:44.5,276:46.8,250:42.3,826:40.6,76:34.4,360:30.2,
@@ -3625,7 +3625,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:5.5,title:{display:true,tex
             'position': 'after_para_16',
             'geo': True,
             'js': """
-(()=>{
+_regChart('waterMapChart',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const stress={682:4.8,634:4.5,414:4.9,784:4.3,512:4.5,48:4.6,400:4.5,376:4.2,275:4.6,760:4.3,
@@ -3818,7 +3818,7 @@ title:{display:true,text:'Global market share (%)',color:C.dim}}}}});
             'position': 'after_para_20',
             'geo': True,
             'js': """
-(()=>{
+_regChart('techwarMapChart',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const blocs={840:1,124:1,826:1,276:1,250:1,380:1,724:1,620:1,528:1,56:1,40:1,756:1,752:1,246:1,
@@ -4073,7 +4073,7 @@ title:{display:true,text:'Demand growth by 2040 (%)',color:C.dim}}}}});
             'position': 'after_para_12',
             'geo': True,
             'js': """
-(()=>{
+_regChart('mineralsMapChart',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const mineral={156:5,36:4,152:4,180:4,360:3,76:3,710:3,566:2,706:2,508:2,
@@ -4279,7 +4279,7 @@ title:{display:true,text:'Median age (years)',color:C.dim}}}}});
             'position': 'after_para_8',
             'geo': True,
             'js': """
-(()=>{
+_regChart('africaMapChart',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const pop={566:238,180:113,231:136,834:67,404:55,800:49,508:34,288:34,12:46,504:38,
@@ -4338,7 +4338,7 @@ title:{display:true,text:'$ billions',color:C.dim}}}}});
         'position': 'after_para_4',
         'geo': True,
         'js': """
-(()=>{
+_regChart('emptyingMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const tfr={410:0.72,158:0.87,392:1.20,380:1.24,724:1.19,300:1.30,616:1.29,
@@ -4375,7 +4375,7 @@ label:i=>i.raw.value?'TFR: '+i.raw.value.toFixed(2)+' children per woman':'No da
         'position': 'after_para_8',
         'geo': True,
         'js': """
-(()=>{
+_regChart('buildersMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const chg={392:-17,410:-12,380:-11,724:-8,300:-10,616:-15,642:-18,
@@ -4413,7 +4413,7 @@ label:i=>{const v=i.raw.value;if(v==null)return'No data';return(v>=0?'+':'')+v+'
         'position': 'after_heading:The New Map',
         'geo': True,
         'js': """
-(()=>{
+_regChart('offshoringMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const mfg={156:28,704:25,764:25,410:26,158:22,360:20,458:22,50:21,
@@ -4448,7 +4448,7 @@ label:i=>i.raw.value?'Manufacturing: '+i.raw.value+'% of GDP':'No data'}}}}});
         'position': 'after_para_12',
         'geo': True,
         'js': """
-(()=>{
+_regChart('rearmsMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const def={840:3.4,643:5.5,156:1.7,826:2.3,250:2.1,276:1.5,380:1.5,
@@ -4484,7 +4484,7 @@ label:i=>i.raw.value?'Defence: '+i.raw.value+'% of GDP':'No data'}}}}});
         'position': 'after_para_7',
         'geo': True,
         'js': """
-(()=>{
+_regChart('renewablesMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const ren={578:98,352:100,76:85,124:68,554:87,40:80,752:70,208:84,
@@ -4521,7 +4521,7 @@ label:i=>i.raw.value!=null?'Renewables: '+i.raw.value+'% of electricity':'No dat
         'position': 'after_para_4',
         'geo': True,
         'js': """
-(()=>{
+_regChart('cradleMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const tfr={410:0.72,158:0.87,392:1.20,380:1.24,724:1.19,300:1.30,616:1.29,
@@ -4562,7 +4562,7 @@ label:i=>i.raw.value?'TFR: '+i.raw.value.toFixed(2)+' children per woman':'No da
         'position': 'after_para_6',
         'geo': True,
         'js': """
-(()=>{
+_regChart('landDealsMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const land={736:4.0,231:3.5,508:2.8,834:2.5,288:1.5,450:1.2,566:1.0,
@@ -4594,7 +4594,7 @@ label:i=>i.raw.value?i.raw.value.toFixed(1)+' million hectares acquired':'No sig
         'position': 'after_heading:The Modern Anomaly',
         'geo': True,
         'js': """
-(()=>{
+_regChart('gatesMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const fb={784:88,634:77,414:72,682:38,376:23,756:30,36:30,124:22,
@@ -4630,7 +4630,7 @@ label:i=>i.raw.value!=null?'Foreign-born: '+i.raw.value+'% of population':'No da
         'position': 'after_para_10',
         'geo': True,
         'js': """
-(()=>{
+_regChart('covidMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const mort={643:800,76:700,484:600,604:700,380:300,840:350,826:280,
@@ -4666,7 +4666,7 @@ label:i=>i.raw.value?'Excess deaths: ~'+i.raw.value+' per 100,000':'No data'}}}}
         'position': 'after_para_6',
         'geo': True,
         'js': """
-(()=>{
+_regChart('chinaColonialMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const bri={586:62,360:25,76:15,643:20,458:18,804:8,566:15,
@@ -4702,7 +4702,7 @@ label:i=>i.raw.value?'~$'+i.raw.value+'B in BRI investment/lending':'Minimal or 
         'position': 'after_para_8',
         'geo': True,
         'js': """
-(()=>{
+_regChart('foodMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const fi={246:85,372:84,826:82,840:80,124:82,578:84,752:83,208:82,
@@ -4739,7 +4739,7 @@ label:i=>i.raw.value?'Food Security Index: '+i.raw.value+'/100':'No data'}}}}});
         'position': 'after_para_8',
         'geo': True,
         'js': """
-(()=>{
+_regChart('northAfricaMap',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const gr={566:2.4,562:3.7,818:1.7,504:1.2,12:1.5,788:0.9,434:0.8,

@@ -280,15 +280,15 @@
         <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
+      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The North African Threat And Mediterranean Reunification</span>
         <span class="related-time">17 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -466,7 +466,7 @@ x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,stacked:tru
 title:{display:true,text:'Global market share (%)',color:C.dim}}}}});
 });
 
-(()=>{
+_regChart('techwarMapChart',()=>{
 _geoDataPromise.then(worldData=>{
 const countries=ChartGeo.topojson.feature(worldData,worldData.objects.countries).features;
 const blocs={840:1,124:1,826:1,276:1,250:1,380:1,724:1,620:1,528:1,56:1,40:1,756:1,752:1,246:1,
