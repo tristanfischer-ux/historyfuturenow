@@ -401,20 +401,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
+      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Long Term Impact of Covid 19</span>
+        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem" class="related-card">
+      <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Empty Cradle Bargain: Why Falling Birth Rates Are Everyone&#x27;s Problem</span>
-        <span class="related-time">21 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What Does It Take To Get Europeans To Have A Revolution?</span>
+        <span class="related-time">48 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -516,26 +516,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -557,7 +562,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('immChart1');
+_regChart('immChart1',()=>{const ctx=document.getElementById('immChart1');
 new Chart(ctx,{type:'bar',data:{
 labels:['Switzerland','Austria','Sweden','Germany','UK','France','Spain','Italy','Ireland','Netherlands'],
 datasets:[
@@ -565,9 +570,9 @@ datasets:[
 {label:'2020',data:[30,19,20,17,14,13,14,11,18,14],backgroundColor:C.accent+'cc',borderRadius:3}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Foreign-born as % of population',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('immChart2');
+_regChart('immChart2',()=>{const ctx=document.getElementById('immChart2');
 const yrs=[1950,1960,1970,1980,1990,2000,2005,2010,2015,2020];
 new Chart(ctx,{type:'line',data:{
 datasets:[
@@ -577,9 +582,9 @@ datasets:[
 scales:{x:linX(1950,2020),
 y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v+'M'},min:0,title:{display:true,text:'Foreign-born (millions)',color:C.accent}},
 y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,callback:v=>v+'%'},min:0,title:{display:true,text:'Share of EU population (%)',color:C.blue}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('immChart3');
+_regChart('immChart3',()=>{const ctx=document.getElementById('immChart3');
 new Chart(ctx,{type:'bar',data:{labels:['1950s-60s\nReconstruction','1970s-80s\nFamily reunion','1990s\nPost-Cold War','2000s\nEU expansion','2010s\nRefugee crisis'],
 datasets:[
 {label:'Intra-European',data:[50,30,40,55,25],backgroundColor:C.blue+'bb',borderRadius:2,borderSkipped:false},
@@ -590,7 +595,7 @@ datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:tooltipStyle},
 scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share by source (%)',color:C.dim}}}}});
-})();
+});
 })();
 </script>
 <script>

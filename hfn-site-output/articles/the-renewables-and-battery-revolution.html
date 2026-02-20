@@ -397,20 +397,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
+      <a href="/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
+      <a href="/articles/why-land-deals-in-africa-could-make-the-great-irish-famine-a-minor-event" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Cassandra: Time To Give Up On Predicting Climate Change?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Land Deals In Africa Could Make The Great Irish Famine A Minor Event</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
-        <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -514,26 +514,31 @@
 <script>
 (function(){
 var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -555,7 +560,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('renChart1');
+_regChart('renChart1',()=>{const ctx=document.getElementById('renChart1');
 const yr=['1800','1850','1900','1920','1950','1970','1990','2000','2010','2020','2025'];
 new Chart(ctx,{type:'line',data:{labels:yr,datasets:[
 ds('Biomass/Wood',[95,85,50,35,20,12,10,10,9,8,7],C.green),
@@ -565,33 +570,33 @@ ds('Natural Gas',[0,0,1,2,8,15,20,22,22,24,23],C.amber),
 ds('Nuclear',[0,0,0,0,0,0.5,6,6,5,4,4],C.purple),
 ds('Renewables (modern)',[0,0,0,0,1,1,1,1,3,7,14],C.teal)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global primary energy (%)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('renChart2');
+_regChart('renChart2',()=>{const ctx=document.getElementById('renChart2');
 new Chart(ctx,{type:'line',data:{
 datasets:[{label:'$/watt (2023 dollars)',data:xy([1976,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025],[106,30,12,8,5.5,3.5,2.5,1.5,0.5,0.25,0.20]),
 borderColor:C.amber,backgroundColor:C.amber+'15',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.amber,borderWidth:3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.parsed.y+'/watt'}}},
 scales:{x:linX(1976,2025),y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'Cost per watt (log scale, 2023$)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('renChart3');
+_regChart('renChart3',()=>{const ctx=document.getElementById('renChart3');
 new Chart(ctx,{type:'line',data:{labels:['2010','2012','2014','2016','2018','2020','2022','2024'],
 datasets:[{label:'$/kWh',data:[1200,700,500,290,180,140,151,115],
 borderColor:C.teal,backgroundColor:C.teal+'15',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:C.teal,borderWidth:3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'/kWh'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'Price per kWh',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('renChart4');
+_regChart('renChart4',()=>{const ctx=document.getElementById('renChart4');
 new Chart(ctx,{type:'bar',data:{labels:['Wood','Coal','Crude Oil','Natural Gas','Li-ion Battery','Hydrogen'],
 datasets:[{label:'MJ/kg',data:[16,24,42,55,0.9,142],
 backgroundColor:[C.green,C.dim,C.accent,C.amber,C.teal,C.purple],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' MJ/kg'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Energy density (MJ/kg)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('renChart5');
+_regChart('renChart5',()=>{const ctx=document.getElementById('renChart5');
 new Chart(ctx,{type:'bar',data:{
 labels:['Wood Era\n(pre-1800)','Coal Era\n(1800-1920)','Oil Era\n(1920-2020)','Renewable Era\n(2020+)'],
 datasets:[
@@ -599,17 +604,17 @@ datasets:[
 {label:'Empires created/destroyed',data:[1,3,4,1],backgroundColor:C.blue+'cc',borderRadius:3},
 {label:'Global trade shifts',data:[1,3,4,3],backgroundColor:C.amber+'cc',borderRadius:3}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,stepSize:1}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('renChart6');
+_regChart('renChart6',()=>{const ctx=document.getElementById('renChart6');
 new Chart(ctx,{type:'line',data:{labels:['1840','1850','1860','1870','1880','1890','1900'],
 datasets:[
 ds('Whale oil production (index)',[100,95,80,45,25,15,5],C.blue),
 ds('Petroleum production (index)',[0,0,5,30,65,85,100],C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Production (indexed, peak=100)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('renChart7');
+_regChart('renChart7',()=>{const ctx=document.getElementById('renChart7');
 const yrs=[1800,1850,1880,1900,1920,1940,1950,1960,1970,1980,1990,2000,2010,2020,2025];
 const xyF=(d)=>xy(yrs,d);
 new Chart(ctx,{type:'line',data:{
@@ -622,7 +627,7 @@ datasets:[
 {label:'Renewables',data:xyF([0,0,0,0,0,0,0,1,1,2,3,4,6,11,16]),borderColor:C.green,backgroundColor:C.green+'30',fill:true,tension:.35,pointRadius:0,borderWidth:1.5}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
 scales:{x:linX(1800,2025),y:{stacked:false,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,title:{display:true,text:'Share of global primary energy (%)',color:C.dim}}}}});
-})();
+});
 
 (()=>{
 _geoDataPromise.then(worldData=>{
@@ -649,7 +654,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value!=null?'Renewables: '+i.raw.value+'% of electricity':'No data'}}}}});
 });
-})();
+});
 })();
 </script>
 <script>

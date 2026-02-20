@@ -328,20 +328,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age" class="related-card">
+      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age</span>
-        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
+      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Are Europeans Fundamentally Racist?</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</span>
+        <span class="related-time">16 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -443,26 +443,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -484,7 +489,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('nationChart1');
+_regChart('nationChart1',()=>{const ctx=document.getElementById('nationChart1');
 const yrs=[1961,1971,1981,1991,2001,2011,2021,2031,2041,2051,2061];
 const pct=[97,95.5,93,90,87.5,80.5,74.4,68,62,56,51];
 new Chart(ctx,{type:'line',data:{datasets:[
@@ -492,9 +497,9 @@ new Chart(ctx,{type:'line',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
 annotation:{annotations:{proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Census | Projection →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
 scales:{x:linX(1960,2065),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of population',color:C.dim},min:45,max:100}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('nationChart2');
+_regChart('nationChart2',()=>{const ctx=document.getElementById('nationChart2');
 const yrs=[1950,1960,1970,1980,1991,2001,2011,2021];
 const birmingham=[0,2,6,15,22,29.6,42,51];
 const bradford=[0,1,4,12,28,36,50,55];
@@ -516,9 +521,9 @@ dxy('Newham',yrs,newham,C.indigo)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
 annotation:{annotations:{census:{type:'line',xMin:1991,xMax:1991,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Est. | Census →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}}}},
 scales:{x:linX(1950,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Non-White British %',color:C.dim},min:0,max:80}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('nationChart3');
+_regChart('nationChart3',()=>{const ctx=document.getElementById('nationChart3');
 const yrs=[1971,1981,1991,2001,2011,2021];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('White British',yrs,[2.0,1.8,1.7,1.6,1.6,1.5],C.blue),
@@ -527,17 +532,17 @@ dxy('Black African',yrs,[3.2,2.8,2.6,2.4,2.3,2.1],C.green),
 {label:'Replacement (2.1)',data:xy([1971,2021],[2.1,2.1]),borderColor:C.dim,borderWidth:1,borderDash:[6,4],pointRadius:0,fill:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+(i.dataset.borderDash&&i.dataset.borderDash.length?'':': '+i.parsed.y)}}},
 scales:{x:linX(1970,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Total fertility rate',color:C.dim},min:1.2,max:5.5}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('nationChart4');
+_regChart('nationChart4',()=>{const ctx=document.getElementById('nationChart4');
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('24-year interval (e.g. Pakistani/Bangladeshi median)',[0,24,48,72,96,100],[0,1,2,3,4,4.17],C.purple),
 dxy('30-year interval (e.g. White British median)',[0,30,60,90,100],[0,1,2,3,3.33,3.33],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>'Generation '+i.parsed.y.toFixed(2)+' at year '+i.parsed.x}}},
 scales:{x:linX(0,100,{title:{display:true,text:'Years',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,stepSize:1},title:{display:true,text:'Cumulative generations',color:C.dim},min:0,max:5}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('nationChart5');
+_regChart('nationChart5',()=>{const ctx=document.getElementById('nationChart5');
 const yrs=[1964,1970,1975,1980,1985,1990,1995,2000,2005,2010,2015,2016,2017,2018,2019,2020,2021,2022,2023];
 const imm=[280,270,230,270,290,320,340,480,560,591,630,630,580,625,650,580,510,1050,1200];
 const emm=[230,230,270,250,260,270,290,330,360,341,300,300,330,345,350,320,340,550,528];
@@ -554,9 +559,9 @@ v04:{type:'line',xMin:2004,xMax:2004,borderColor:C.dim,borderWidth:1,borderDash:
 v16:{type:'line',xMin:2016,xMax:2016,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Brexit',position:'start',font:{size:9}}}
 }},
 scales:{x:linX(1964,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'k'},title:{display:true,text:'Thousands per year',color:C.dim},min:-60,max:1300}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('nationChart6');
+_regChart('nationChart6',()=>{const ctx=document.getElementById('nationChart6');
 const yrs=[1961,1971,1981,1991,2001,2011,2021,2030,2040,2050,2060,2070,2080,2090,2100];
 const popShare=[97,95.5,93,90,87.5,80.5,74.4,70,65,58,52,47,43,40,38];
 const birthShare=[96,92,88,85,80,72,58,55,50,45,42,40,38,37,36];
@@ -572,7 +577,7 @@ proj:{type:'line',xMin:2021,xMax:2021,borderColor:C.dim,borderWidth:1,borderDash
 interaction:{intersect:false,mode:'index'},
 scales:{x:linX(1960,2100),y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'White British % (population and births)',color:C.dim},min:30,max:100},
 y1:{type:'linear',position:'right',grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'m'},title:{display:true,text:'UK population (millions)',color:C.accent},min:50,max:75}}}});
-})();
+});
 })();
 </script>
 <script>

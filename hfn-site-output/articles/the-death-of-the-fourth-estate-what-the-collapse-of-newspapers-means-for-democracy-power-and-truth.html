@@ -340,20 +340,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
+      <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/emigration-colonies-of-the-mind-and-space" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Emigration: Colonies Of The Mind And Space</span>
+        <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
+      <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Long Term Impact of Covid 19</span>
-        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What Does It Take To Get Europeans To Have A Revolution?</span>
+        <span class="related-time">48 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -455,26 +455,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -495,7 +500,7 @@ if(lpw>wpl*0.85){s.ticks.maxRotation=45;s.ticks.font.size=lpw>wpl*2?Math.max(8,f
 else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
-(()=>{const ctx=document.getElementById('pressChart1');
+_regChart('pressChart1',()=>{const ctx=document.getElementById('pressChart1');
 new Chart(ctx,{type:'bar',data:{labels:['Printing Press\n1450-1648','Cheap Press\n1830-1900','Radio/TV\n1920-1950','Internet\n1995-2025','AI\n2023-?'],
 datasets:[{label:'Years of chaos before new institutions',data:[198,70,30,30,null],
 backgroundColor:[C.blue,C.green,C.amber,C.accent,C.purple+'55'],borderColor:[C.blue,C.green,C.amber,C.accent,C.purple],borderWidth:2}]},
@@ -503,8 +508,8 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 title:{display:true,text:'Information Revolutions: Years of Chaos Before Stability',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Years of Instability',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},beginAtZero:true},
 x:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
-})();
-(()=>{const ctx=document.getElementById('pressChart2');
+});
+_regChart('pressChart2',()=>{const ctx=document.getElementById('pressChart2');
 const yrs=[1990,1995,2000,2004,2008,2010,2012,2014,2016,2018,2020,2022,2024,2025];
 new Chart(ctx,{type:'line',data:{
 datasets:[{label:'Total newspaper jobs (thousands)',data:xy(yrs,[458,400,412,380,310,260,230,200,183,160,140,120,92,87]),
@@ -515,8 +520,8 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:tooltipStyle,title:{display:true,text:'US Newspaper Employment: 80% Decline in 35 Years',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Thousands',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(1990,2025,{grid:{display:false},ticks:{color:C.dim,font:{size:9}}})}}});
-})();
-(()=>{const ctx=document.getElementById('pressChart3');
+});
+_regChart('pressChart3',()=>{const ctx=document.getElementById('pressChart3');
 new Chart(ctx,{type:'bar',data:{labels:['2000','2003','2006','2008','2010','2012','2014','2016','2018','2020','2022','2023'],
 datasets:[{label:'Print advertising ($B)',data:[44,40,46,35,23,19,16,13,11,7,6,5],backgroundColor:C.accent,borderRadius:4},
 {label:'Digital advertising ($B)',data:[1,1.5,3,3.5,3,3.4,3.5,3.5,3.5,2.5,2.5,2.8],backgroundColor:C.green,borderRadius:4}]},
@@ -524,8 +529,8 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:tooltipStyle,title:{display:true,text:'US Newspaper Advertising Revenue: The Cliff',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Billions USD',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},stacked:true,beginAtZero:true},
 x:{grid:{display:false},ticks:{color:C.dim},stacked:true}}}});
-})();
-(()=>{const ctx=document.getElementById('pressChart4');
+});
+_regChart('pressChart4',()=>{const ctx=document.getElementById('pressChart4');
 const yrs=[2013,2015,2017,2019,2021,2023,2025,2026];
 new Chart(ctx,{type:'line',data:{
 datasets:[{label:'NYT digital subscribers (M)',data:xy(yrs,[0.8,1.1,2.6,4.7,8.3,10.4,12.8,12.8]),
@@ -536,7 +541,7 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:tooltipStyle,title:{display:true,text:'Digital Subscribers: NYT Soaring vs WaPo Collapsing',color:C.text,font:{size:14}}},
 scales:{y:{title:{display:true,text:'Millions',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(2013,2026,{grid:{display:false},ticks:{color:C.dim}})}}});
-})();
+});
 })();
 </script>
 <script>

@@ -416,20 +416,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
+        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="related-card">
+      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
+      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -533,26 +533,31 @@
 <script>
 (function(){
 var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -574,7 +579,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('covChart1');
+_regChart('covChart1',()=>{const ctx=document.getElementById('covChart1');
 const yrs=[1870,1900,1913,1945,1960,1980,1990,2000,2010,2020,2025];
 new Chart(ctx,{type:'line',data:{
 datasets:[
@@ -582,17 +587,17 @@ dxy('West (% of world GDP)',yrs,[55,55,58,50,48,42,40,38,33,30,28],C.blue),
 dxy('East Asia (% of world GDP)',yrs,[18,15,12,8,10,14,18,22,28,32,35],C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1870,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('covChart2');
+_regChart('covChart2',()=>{const ctx=document.getElementById('covChart2');
 new Chart(ctx,{type:'bar',data:{labels:['Medieval\nEngland','Industrial\nBritain','WW1\nBritain','WW2\nBritain','1970s\nUK','2000s\nUK','Covid-19\nUK'],
 datasets:[{label:'Implied value of one life',data:[0.001,0.01,0.05,0.1,0.5,2,11],
 backgroundColor:[C.dim,C.dim,C.amber,C.amber,C.blue,C.blue,C.accent],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw+'M per life'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'M'},title:{display:true,text:'Implied value per life, £M (log scale)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('covChart3');
+_regChart('covChart3',()=>{const ctx=document.getElementById('covChart3');
 const labels=['E-commerce\nshare of retail','Remote\nworkers','Streaming\nsubscriptions','Online\neducation','Telemedicine\nvisits'];
 const pre=[16,5,600,200,10];
 const during=[27,42,1100,400,90];
@@ -602,9 +607,9 @@ datasets:[
 {label:'Growth factor (2020 vs 2019)',data:growth,backgroundColor:[C.blue,C.accent,C.purple,C.green,C.amber].map(c=>c+'cc'),borderRadius:4,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const idx=i.dataIndex;return labels[idx].replace('\n',' ')+': '+pre[idx]+' → '+during[idx]+' ('+growth[idx]+'x)'}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'x'},min:0,title:{display:true,text:'Growth factor (2020 vs 2019)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('covChart4');
+_regChart('covChart4',()=>{const ctx=document.getElementById('covChart4');
 const forces=[
 {l:'Digital acceleration',s:9,t:'inevitable'},{l:'Location irrelevance',s:8,t:'inevitable'},
 {l:'Rise of East Asia',s:7,t:'inevitable'},{l:'Value of human life',s:8,t:'inevitable'},
@@ -618,9 +623,9 @@ datasets:[{data:forces.map(f=>f.s),backgroundColor:forces.map(f=>f.t==='inevitab
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[forces[i[0].dataIndex].l],label:i=>'Impact: '+i.raw+'/10 ('+forces[i.dataIndex].t+')'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:10,title:{display:true,text:'Impact strength (1-10)',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('covChart5');
+_regChart('covChart5',()=>{const ctx=document.getElementById('covChart5');
 new Chart(ctx,{type:'bar',data:{labels:['South\nKorea','Taiwan','Japan','Germany','France','UK','US'],
 datasets:[
 {label:'Deaths per 100k (2020)',data:[6,0.3,12,40,90,100,105],backgroundColor:C.accent+'bb',borderRadius:3,borderSkipped:false,yAxisID:'y'},
@@ -629,16 +634,16 @@ datasets:[
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v},min:0,title:{display:true,text:'Deaths per 100k',color:C.accent}},
 y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,callback:v=>v+'%'},min:0,max:12,title:{display:true,text:'GDP decline %',color:C.blue}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('covChart6');
+_regChart('covChart6',()=>{const ctx=document.getElementById('covChart6');
 new Chart(ctx,{type:'bar',data:{labels:['United\nStates','Japan','Germany','United\nKingdom','France','Italy','Canada'],
 datasets:[{label:'Additional Covid borrowing ($bn)',data:[4500,2200,600,500,400,350,300],
 backgroundColor:[C.accent,C.purple,C.amber,C.blue,C.teal,C.green,C.cyan],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'bn'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?'$'+(v/1000)+'T':'$'+v+'bn'},title:{display:true,text:'Additional government borrowing',color:C.dim}}}}});
-})();
+});
 
 (()=>{
 _geoDataPromise.then(worldData=>{
@@ -664,7 +669,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value?'Excess deaths: ~'+i.raw.value+' per 100,000':'No data'}}}}});
 });
-})();
+});
 })();
 </script>
 <script>

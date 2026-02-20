@@ -279,20 +279,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
-        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/the-great-offshoring-how-the-worlds-factory-moved-east" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The Great Offshoring: How the World&#x27;s Factory Moved East</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -396,26 +396,31 @@
 <script>
 (function(){
 var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -437,23 +442,23 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('chinaColChart1');
+_regChart('chinaColChart1',()=>{const ctx=document.getElementById('chinaColChart1');
 const powers=[{l:'Phoenicia',y:800},{l:'Greek city-states',y:600},{l:'Rome',y:500},{l:'Germanic tribes',y:200},{l:'Spanish Empire',y:350},{l:'British Empire',y:400},{l:'French Empire',y:200},{l:'Chinese expansion',y:50}];
 new Chart(ctx,{type:'bar',data:{labels:powers.map(p=>p.l),
 datasets:[{label:'Duration (years)',data:powers.map(p=>p.y),
 backgroundColor:[C.teal,C.blue,C.purple,C.dim,C.amber,C.blue,C.accent,C.accent],borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years of colonial expansion'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Duration of colonial period (years)',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('chinaColChart2');
+_regChart('chinaColChart2',()=>{const ctx=document.getElementById('chinaColChart2');
 new Chart(ctx,{type:'bar',data:{labels:['Sub-Saharan\nAfrica','SE Asia','Central\nAsia','Latin\nAmerica','Middle\nEast','Europe','Pacific\nIslands'],
 datasets:[{label:'Chinese lending ($bn)',data:[150,120,65,55,40,30,10],
 backgroundColor:[C.accent,C.amber,C.purple,C.green,C.teal,C.blue,C.cyan],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'bn in Chinese loans'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'bn'},title:{display:true,text:'Cumulative Chinese lending ($bn)',color:C.dim}}}}});
-})();
+});
 
 (()=>{
 _geoDataPromise.then(worldData=>{
@@ -479,7 +484,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value?'~$'+i.raw.value+'B in BRI investment/lending':'Minimal or no BRI activity'}}}}});
 });
-})();
+});
 })();
 </script>
 <script>

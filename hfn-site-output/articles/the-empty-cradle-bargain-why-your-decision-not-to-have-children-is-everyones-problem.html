@@ -405,20 +405,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+      <a href="/articles/a-nation-transformed-britains-demographic-revolution-1948-2050" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Nation Transformed: Britain&#x27;s Demographic Revolution, 1948–2050</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
+      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
-        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
+      <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">What Does It Take To Get Europeans To Have A Revolution?</span>
+        <span class="related-time">48 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -522,26 +522,31 @@
 <script>
 (function(){
 var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -563,7 +568,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('cradleChart1');
+_regChart('cradleChart1',()=>{const ctx=document.getElementById('cradleChart1');
 const gens=['Gen 0\n(Today)','Gen 1\n(2055)','Gen 2\n(2085)','Gen 3\n(2115)','Gen 4\n(2145)','Gen 5\n(2175)'];
 new Chart(ctx,{type:'line',data:{labels:gens,
 datasets:[
@@ -573,9 +578,9 @@ datasets:[
 ]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% of original'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:110,title:{display:true,text:'Population (% of starting)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('cradleChart2');
+_regChart('cradleChart2',()=>{const ctx=document.getElementById('cradleChart2');
 const yrs=[1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2024];
 new Chart(ctx,{type:'line',data:{
 datasets:[
@@ -584,9 +589,9 @@ dxy('Childcare cost index',yrs,[100,108,118,132,155,190,240,290,340,380,420],C.p
 dxy('Real median wages (index)',yrs,[100,102,108,115,113,125,130,128,126,130,132],C.green)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const l=i.dataset.label;if(l.includes('ratio'))return l+': '+i.raw+' ('+[3.6,3.9,3.8,4.4,3.4,4.4,5.8,6.7,7.4,7.9,8.3][i.dataIndex]+'x)';return l+': '+i.raw}}}},
 scales:{x:linX(1975,2024),y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,title:{display:true,text:'Index (1975 = 100)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('cradleChart3');
+_regChart('cradleChart3',()=>{const ctx=document.getElementById('cradleChart3');
 const ages=['20','25','28','30','32','35','37','38','40','42','43','45'];
 const natural=[25,25,22,20,18,15,12,10,5,3,2,1];
 const ivf=[null,33,33,32,30,29,25,20,11,6,4,2];
@@ -598,9 +603,9 @@ datasets:[
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
 annotation:{annotations:{cliff:{type:'line',xMin:'35',xMax:'35',borderColor:C.dim+'80',borderWidth:1.5,borderDash:[4,4],label:{..._al,display:true,content:'Sharp decline begins',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:"Woman's age",color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:40,title:{display:true,text:'Probability (%)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('cradleChart4');
+_regChart('cradleChart4',()=>{const ctx=document.getElementById('cradleChart4');
 const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025];
 const yrsP=[2025,2030,2040,2050,2060,2070,2080,2090,2100];
 const eurH=[22,20,18,15,13.5,11,10,8.5,7.5];
@@ -622,9 +627,9 @@ annotation:{annotations:{
 today:{type:'line',yMin:14.4,yMax:14.4,borderColor:C.dim+'40',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Today ≈ 14% combined',position:'start',color:C.dim,font:{size:10}}}
 }}},
 scales:{x:linX(1950,2100,{title:{display:true,text:'Year',color:C.dim}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:45,title:{display:true,text:'Share of global births (%)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('cradleChart5');
+_regChart('cradleChart5',()=>{const ctx=document.getElementById('cradleChart5');
 const countries=['Japan','S. Korea','Italy','Germany','China','UK','France','US'];
 const dep2020=[48,23,37,34,17,30,33,26];
 const dep2050=[70,69,62,55,47,40,43,36];
@@ -634,9 +639,9 @@ datasets:[
 {label:'2050 (projected)',data:dep2050,backgroundColor:C.accent,borderRadius:3,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+' retirees per 100 workers'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Retirees per 100 working-age adults',color:C.dim},max:80}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('cradleChart6');
+_regChart('cradleChart6',()=>{const ctx=document.getElementById('cradleChart6');
 const countries=['Hungary\n(2010-2024)','France\n(1995-2024)','Sweden\n(2005-2024)','Israel\n(2000-2024)'];
 const before=[1.23,1.73,1.85,2.95];
 const after=[1.53,1.68,1.45,2.90];
@@ -647,7 +652,7 @@ datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(2)+' TFR'}},
 annotation:{annotations:{repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green,borderWidth:2,borderDash:[6,3],label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.green,font:{size:10}}}}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},min:0,max:3.5,title:{display:true,text:'Total Fertility Rate (TFR)',color:C.dim}}}}});
-})();
+});
 
 (()=>{
 _geoDataPromise.then(worldData=>{
@@ -674,7 +679,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value?'TFR: '+i.raw.value.toFixed(2)+' children per woman':'No data'}}}}});
 });
-})();
+});
 })();
 </script>
 <script>

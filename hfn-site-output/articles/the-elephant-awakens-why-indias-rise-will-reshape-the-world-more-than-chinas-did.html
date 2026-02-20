@@ -302,20 +302,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
+      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -419,26 +419,31 @@
 <script>
 (function(){
 var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -460,7 +465,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('indiaChart1');
+_regChart('indiaChart1',()=>{const ctx=document.getElementById('indiaChart1');
 const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080,2090,2100];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('India',yrs,[376,449,555,697,873,1057,1234,1396,1442,1485,1545,1533,1487,1416,1330,1237,1143],C.amber),
@@ -475,9 +480,9 @@ label:{..._al,display:true,content:'India passes China (2023)',position:'start',
 }}},
 scales:{x:linX(1950,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000).toFixed(1)+'B':v+'M'},
 title:{display:true,text:'Population (millions)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('indiaChart2');
+_regChart('indiaChart2',()=>{const ctx=document.getElementById('indiaChart2');
 const countries=['India','Indonesia','Brazil','United States','China','EU Average','South Korea','Japan'];
 const age2025=[28.4,30.2,34.4,38.5,39.6,44.4,44.5,49.1];
 const age2050=[35.2,37.8,42.1,42.3,50.7,51.2,56.5,54.7];
@@ -488,9 +493,9 @@ new Chart(ctx,{type:'bar',data:{labels:countries,datasets:[
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+' years'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:45}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},min:20,max:60,title:{display:true,text:'Median age (years)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('indiaChart3');
+_regChart('indiaChart3',()=>{const ctx=document.getElementById('indiaChart3');
 const yrs=[2000,2005,2010,2015,2020,2025,2030,2035,2040,2045,2050];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('United States',yrs,[10.3,13.0,15.0,18.2,21.1,28.8,33.5,38.1,43.2,48.5,54.3],C.blue),
@@ -506,9 +511,9 @@ label:{..._al,display:true,content:'Projected →',position:'start',color:C.dim,
 }}},
 scales:{x:linX(2000,2050),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'T'},
 title:{display:true,text:'GDP ($ trillions, nominal)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('indiaChart4');
+_regChart('indiaChart4',()=>{const ctx=document.getElementById('indiaChart4');
 const yrs=[1950,1960,1970,1980,1990,2000,2010,2020,2025,2030,2040,2050,2060,2070,2080];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('India',yrs,[56.3,55.2,55.1,56.8,58.5,61.2,64.9,67.5,68.2,68.9,69.5,67.8,64.5,62.1,60.8],C.amber),
@@ -523,7 +528,7 @@ label:{..._al,display:true,content:"India's dividend window",color:C.amber,font:
 }}},
 scales:{x:linX(1950,2080),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:45,max:75,
 title:{display:true,text:'Working-age population (15–64) as % of total',color:C.dim}}}}});
-})();
+});
 
 (()=>{
 _geoDataPromise.then(worldData=>{
@@ -549,7 +554,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value?'Median age: '+i.raw.value+' years':'No data'}}}}});
 });
-})();
+});
 })();
 </script>
 <script>

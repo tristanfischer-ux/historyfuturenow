@@ -313,15 +313,15 @@
         <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
+      <a href="/articles/why-is-bisexuality-becoming-mainstream" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why Is Bisexuality Becoming Mainstream?</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing" class="related-card">
+      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</span>
-        <span class="related-time">16 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -423,26 +423,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -464,7 +469,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('siliconChart1');
+_regChart('siliconChart1',()=>{const ctx=document.getElementById('siliconChart1');
 const yrs=[2000,2010,2020,2030,2040,2050,2060];
 const needed=[66,72,75,80,87,90,92];
 const available=[86,81,75,68,59,52,45];
@@ -478,9 +483,9 @@ shadowLabel:{type:'label',..._al,xValue:2040,yValue:72,content:['Shadow Workforc
 }}},
 scales:{x:linX(2000,2060),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},
 title:{display:true,text:'Working-age adults (millions)',color:C.dim},min:40,max:95}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('siliconChart2');
+_regChart('siliconChart2',()=>{const ctx=document.getElementById('siliconChart2');
 const periods=['1600–\n1650','1650–\n1700','1700–\n1750','1750–\n1800','1800–\n1850','1850–\n1900','1900–\n1950','1950–\n2000'];
 const amateur=[55,65,70,60,45,25,8,2];
 const professional=[45,35,30,40,55,75,92,98];
@@ -492,9 +497,9 @@ plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': 
 scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,
 title:{display:true,text:'Share of major discoveries (%)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('siliconChart3');
+_regChart('siliconChart3',()=>{const ctx=document.getElementById('siliconChart3');
 const groups=['1850 English\nFactory Worker','5th-c BC\nAthenian Citizen','1780 English\nGentleman','2050 AI-Supported\nCitizen (projected)'];
 new Chart(ctx,{type:'bar',data:{labels:groups,datasets:[
 {label:'Survival labour',data:[13,2,0,0],backgroundColor:C.accent,borderRadius:4,borderSkipped:false},
@@ -509,9 +514,9 @@ tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': ~'+i.raw+' hrs'}
 scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'h'},max:24,
 title:{display:true,text:'Hours per day',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('siliconChart4');
+_regChart('siliconChart4',()=>{const ctx=document.getElementById('siliconChart4');
 const labels=['Athens (5th c BC)','Rome (1st c AD)','English Great House (1780)','Qing Scholar-Gentry (1800)','2050 Household (projected)'];
 const ratios=[3,5,30,15,50];
 const colors=[C.amber,C.accent,C.purple,C.teal,C.blue];
@@ -525,7 +530,7 @@ projLabel:{type:'label',..._al,xValue:52,yValue:4,content:['Robots + AI agents',
 scales:{y:{grid:{display:false},ticks:{color:C.dim,font:{size:11},autoSkip:false}},
 x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},
 title:{display:true,text:'Workers per citizen / household',color:C.dim},min:0,max:60}}}});
-})();
+});
 })();
 </script>
 <script>

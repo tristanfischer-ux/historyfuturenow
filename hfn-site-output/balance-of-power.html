@@ -437,26 +437,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -479,7 +484,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 
 const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 
-(()=>{const ctx=document.getElementById('crisisChart2');
+_regChart('crisisChart2',()=>{const ctx=document.getElementById('crisisChart2');
 const yrs=[1750,1800,1850,1900,1950,1980,2000,2010,2025];
 new Chart(ctx,{type:'line',data:{
 datasets:[
@@ -487,8 +492,8 @@ dxy('China + India',yrs,[73,68,40,12,5,8,18,30,42],C.accent),
 dxy('Europe + N. America',yrs,[22,28,55,82,85,70,62,48,38],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1750,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of global manufacturing (%)',color:C.dim}}}}});
-})();
-(()=>{const ctx=document.getElementById('rearmChart3');
+});
+_regChart('rearmChart3',()=>{const ctx=document.getElementById('rearmChart3');
 const colors=['#c0392b','#c0392b','#c0392b','#c0392b','#e67e22','#e67e22','#2980b9','#2980b9','#2980b9','#2980b9','#7f8c8d','#7f8c8d','#7f8c8d'];
 new Chart(ctx,{type:'bar',data:{labels:['Poland','Lithuania','Estonia','Latvia','Finland','Greece','UK','France','Germany','Netherlands','Italy','Belgium','Spain'],
 datasets:[{label:'% GDP',data:[4.7,3.9,3.4,3.4,2.4,3.1,2.3,2.1,2.1,2.0,1.6,1.3,1.3],backgroundColor:colors,borderRadius:4}]},
@@ -496,9 +501,9 @@ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding
 title:{display:true,text:'Defence Spending % GDP (2025): Proximity to Russia Matters',color:C.text,font:{size:13}}},
 scales:{x:{title:{display:true,text:'% of GDP',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},beginAtZero:true,max:5.5},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('luckChart3');
+_regChart('luckChart3',()=>{const ctx=document.getElementById('luckChart3');
 const yrs=[1,1000,1500,1600,1700,1820,1870,1913,1950,1973,2000,2025];
 new Chart(ctx,{type:'line',data:{
 datasets:[
@@ -507,9 +512,9 @@ dxy('China',yrs,[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
 dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('techwarChart1');
+_regChart('techwarChart1',()=>{const ctx=document.getElementById('techwarChart1');
 new Chart(ctx,{type:'bar',data:{labels:['Design\n(fabless)','Fabrication\n(<10nm)','Lithography\n(EUV)','Packaging\n(advanced)','Memory\n(DRAM)'],
 datasets:[
 {label:'US',data:[65,0,0,5,0],backgroundColor:C.blue+'bb',borderColor:C.blue,borderWidth:1.5,borderRadius:4,borderSkipped:false},
@@ -521,7 +526,7 @@ datasets:[
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% market share'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:105,title:{display:true,text:'Market share (%)',color:C.dim}}}}});
-})();
+});
 })();
 </script>
 <script>

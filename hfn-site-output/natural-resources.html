@@ -411,26 +411,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -453,39 +458,39 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 
 const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 
-(()=>{const ctx=document.getElementById('renChart6');
+_regChart('renChart6',()=>{const ctx=document.getElementById('renChart6');
 new Chart(ctx,{type:'line',data:{labels:['1840','1850','1860','1870','1880','1890','1900'],
 datasets:[
 ds('Whale oil production (index)',[100,95,80,45,25,15,5],C.blue),
 ds('Petroleum production (index)',[0,0,5,30,65,85,100],C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Production (indexed, peak=100)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('renChart2');
+_regChart('renChart2',()=>{const ctx=document.getElementById('renChart2');
 new Chart(ctx,{type:'line',data:{
 datasets:[{label:'$/watt (2023 dollars)',data:xy([1976,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025],[106,30,12,8,5.5,3.5,2.5,1.5,0.5,0.25,0.20]),
 borderColor:C.amber,backgroundColor:C.amber+'15',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.amber,borderWidth:3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.parsed.y+'/watt'}}},
 scales:{x:linX(1976,2025),y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'Cost per watt (log scale, 2023$)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('landChart1');
+_regChart('landChart1',()=>{const ctx=document.getElementById('landChart1');
 new Chart(ctx,{type:'bar',data:{
 labels:['Ethiopia','Sudan','Tanzania','Mozambique','DRC','Madagascar','Sierra Leone','Ghana'],
 datasets:[{label:'Land acquired (M hectares)',data:[3.6,3.2,2.5,2.2,1.8,1.5,1.1,0.9],
 backgroundColor:C.accent,borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'M hectares'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M ha'},title:{display:true,text:'Hectares (millions)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('foodChart1');
+_regChart('foodChart1',()=>{const ctx=document.getElementById('foodChart1');
 new Chart(ctx,{type:'line',data:{labels:['2000','2010','2020','2030','2040','2050'],
 datasets:[
 ds('World population (bn)',[6.1,6.9,7.8,8.5,9.2,10],C.accent),
 ds('Sustainable food capacity (bn)',[7,6.5,6,5.5,5.2,5],C.green,[5,3])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'bn'},title:{display:true,text:'Billions of people',color:C.dim}}}}});
-})();
+});
 })();
 </script>
 <script>

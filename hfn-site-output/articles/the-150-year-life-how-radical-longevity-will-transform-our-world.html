@@ -303,20 +303,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed" class="related-card">
+      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Silence Of The Scribes: How Every Civilisation That Controlled Speech Collapsed</span>
+        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
+      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
-        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
+        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state" class="related-card">
+      <a href="/articles/a-nation-transformed-britains-demographic-revolution-1948-2050" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Unintended Consequences of War: How the Loss of Young Men Transformed Women&#x27;s Roles in Society and ushered in the Welfare State</span>
-        <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Nation Transformed: Britain&#x27;s Demographic Revolution, 1948–2050</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -418,26 +418,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -459,15 +464,15 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('longChart1');
+_regChart('longChart1',()=>{const ctx=document.getElementById('longChart1');
 new Chart(ctx,{type:'bar',data:{labels:['Stone\nAge','Classical\nAntiquity','Medieval\nEurope','1800','1900','1950','2000','2025','2050?','2100?'],
 datasets:[{label:'Life expectancy',data:[30,35,40,40,50,60,70,78,90,150],
 backgroundColor:[C.dim,C.dim,C.dim,C.dim,C.amber,C.amber,C.blue,C.blue,C.green+'aa',C.green],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' years'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Life expectancy (years)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('longChart2');
+_regChart('longChart2',()=>{const ctx=document.getElementById('longChart2');
 new Chart(ctx,{type:'bar',data:{
 labels:['Traditional\n(80yr life)','Extended\n(150yr life)'],
 datasets:[
@@ -479,16 +484,16 @@ datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{display:false},ticks:{color:C.dim}},y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Years of life',color:C.dim}}},
 datasets:{bar:{stacked:true}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('longChart3');
+_regChart('longChart3',()=>{const ctx=document.getElementById('longChart3');
 new Chart(ctx,{type:'bar',data:{labels:['1950\n(life: 50)','2000\n(life: 75)','2025\n(life: 80)','2075\n(life: 100)','2150\n(life: 150)'],
 datasets:[{label:'Workers per retiree',data:[8,5,3.5,2,0.8],
 backgroundColor:[C.green,C.green,C.amber,C.accent,C.accent],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+' workers per retiree'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Workers per retiree',color:C.dim},min:0}}}});
-})();
+});
 })();
 </script>
 <script>

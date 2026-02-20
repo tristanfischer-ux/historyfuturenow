@@ -326,20 +326,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/rome-vs-persia-and-the-transfer-of-strategic-technologies-to-china" class="related-card">
+      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Rome Vs. Persia And The Transfer Of Strategic Technologies To China</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The North African Threat And Mediterranean Reunification</span>
         <span class="related-time">17 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
-        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -443,26 +443,31 @@
 <script>
 (function(){
 var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -484,7 +489,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('offshoringChart1');
+_regChart('offshoringChart1',()=>{const ctx=document.getElementById('offshoringChart1');
 const yrs=[1990,1995,2000,2005,2010,2015,2020,2024];
 const g7=[67,63,57,52,46,42,38,40];
 const asia=[7,10,14,21,28,35,41,46];
@@ -494,9 +499,9 @@ dxy('Emerging Asia',yrs,asia,C.accent)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}},
 annotation:{annotations:{crossover:{type:'line',xMin:2020,xMax:2020,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],label:{..._al,display:true,content:'Crossover',color:C.dim,font:{size:11},position:'start'}}}}},
 scales:{x:linX(1990,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% of global manufacturing value added',color:C.dim},min:0,max:75}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('offshoringChart2');
+_regChart('offshoringChart2',()=>{const ctx=document.getElementById('offshoringChart2');
 const yrs=[1990,1992,1994,1996,1998,2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020,2022,2024];
 const emp=[17.7,16.8,17.0,17.2,17.6,17.3,15.3,14.3,14.2,13.4,11.5,11.9,12.2,12.3,12.7,12.2,12.8,12.9];
 const out=[100,98,106,111,118,121,112,116,120,117,105,114,118,119,124,113,126,130];
@@ -506,9 +511,9 @@ new Chart(ctx,{type:'line',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+(i.dataset.yAxisID==='y'?i.parsed.y+'M':i.parsed.y)}}},
 scales:{x:linX(1990,2024),y:{type:'linear',position:'left',grid:{color:C.grid},ticks:{color:C.accent,font:{size:11},callback:v=>v+'M'},title:{display:true,text:'Employment (millions)',color:C.accent},min:10,max:20},
 y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.blue,font:{size:11}},title:{display:true,text:'Output index (1990 = 100)',color:C.blue},min:80,max:140}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('offshoringChart3');
+_regChart('offshoringChart3',()=>{const ctx=document.getElementById('offshoringChart3');
 const countries=['UK','US','Germany','China','Vietnam'];
 const d1990=[16.5,16.6,26,33,12];
 const d2024=[8.5,10.4,19,27,25];
@@ -517,9 +522,9 @@ new Chart(ctx,{type:'bar',data:{labels:countries,datasets:[
 {label:'2024',data:d2024,backgroundColor:C.accent,borderRadius:4,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:12}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Manufacturing as % of GDP',color:C.dim},min:0,max:40}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('offshoringChart4');
+_regChart('offshoringChart4',()=>{const ctx=document.getElementById('offshoringChart4');
 const yrs=['1990','1995','2000','2005','2010','2015','2020','2024'];
 const g7=[67,63,57,52,46,42,38,40];
 const china=[3,5,7,12,18,25,31,31];
@@ -532,7 +537,7 @@ new Chart(ctx,{type:'bar',data:{labels:yrs,datasets:[
 {label:'Rest of world',data:restWorld,backgroundColor:C.dim,borderRadius:0,borderSkipped:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
 scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of global manufacturing value added',color:C.dim},min:0,max:100}}}});
-})();
+});
 
 (()=>{
 _geoDataPromise.then(worldData=>{
@@ -557,7 +562,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value?'Manufacturing: '+i.raw.value+'% of GDP':'No data'}}}}});
 });
-})();
+});
 })();
 </script>
 <script>

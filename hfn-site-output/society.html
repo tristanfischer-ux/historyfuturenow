@@ -606,26 +606,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -647,7 +652,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
-(()=>{const ctx=document.getElementById('emptyChart1');
+_regChart('emptyChart1',()=>{const ctx=document.getElementById('emptyChart1');
 new Chart(ctx,{type:'bar',data:{labels:['S. Korea','China','Poland','Spain','Italy','Japan','Greece','Finland','Germany','UK','Sweden','Australia','Denmark','USA','France','Turkey','Mexico','India','Indonesia','S. Africa','Philippines','Egypt','Iraq','Nigeria','Niger'],
 datasets:[{label:'Fertility Rate',data:[0.72,1.02,1.10,1.13,1.20,1.20,1.22,1.26,1.36,1.44,1.53,1.58,1.55,1.62,1.68,1.76,1.80,2.00,2.15,2.33,2.78,3.20,3.55,5.20,6.80],
 backgroundColor:function(c){var v=c.raw;if(v<1.3)return C.accent;if(v<1.5)return C.amber;if(v<2.1)return C.amber+'aa';if(v<3.0)return C.green;return C.blue},
@@ -657,9 +662,9 @@ title:{display:true,text:'Total Fertility Rate by Country (2023-2024)',color:C.t
 annotation:{annotations:{replacement:{type:'line',xMin:2.1,xMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'start',color:C.dim,font:{size:10}}}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:9}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('gatesChart1');
+_regChart('gatesChart1',()=>{const ctx=document.getElementById('gatesChart1');
 const yrs=['1900','1910','1920','1930','1940','1950','1960','1970','1980','1990','2000','2010','2020','2025','2030'];
 new Chart(ctx,{type:'line',data:{labels:yrs,datasets:[
 ds('United States',[13.6,14.7,13.2,11.6,8.8,6.9,5.4,4.7,6.2,7.9,11.1,12.9,13.7,14.3,15.1],C.blue,[]),
@@ -670,9 +675,9 @@ ds('France',[2.7,2.8,3.9,6.6,5.1,4.1,5.4,6.5,7.4,7.4,7.4,8.6,10.2,11.0,12.0],C.a
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{projLine:{type:'line',xMin:'2020',xMax:'2020',borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Projected →',position:'start',font:{size:10},color:C.dim}}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Foreign-born % of population',color:C.dim},min:0,max:25}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('scribesChart1');
+_regChart('scribesChart1',()=>{const ctx=document.getElementById('scribesChart1');
 new Chart(ctx,{type:'bar',data:{
 labels:['India','Turkey','Russia','South Korea','France','Germany','Brazil','United States','UK','Australia'],
 datasets:[{label:'Content removal requests (thousands)',data:[78.5,15.3,14.8,12.1,9.7,8.4,7.2,5.9,4.8,2.1],
@@ -681,9 +686,9 @@ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.raw+'K requests'}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'K'}},title:{display:true,text:'Requests (thousands)',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('genderChart1');
+_regChart('genderChart1',()=>{const ctx=document.getElementById('genderChart1');
 const yrs=[1999,2003,2007,2011,2015,2017,2019,2020,2022,2024];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('Young women (US)',yrs,[30,29,28,32,36,38,40,44,41,40],C.rose),
@@ -696,7 +701,7 @@ roe:{type:'label',..._al,xValue:2021.5,yValue:46,content:['Dobbs'],color:C.dim,f
 }}},
 scales:{x:linX(1999,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:50,
 title:{display:true,text:'% identifying as liberal (Gallup)',color:C.dim}}}}});
-})();
+});
 })();
 </script>
 <script>

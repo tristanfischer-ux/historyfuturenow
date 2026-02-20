@@ -276,20 +276,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
+      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -391,26 +391,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -432,7 +437,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('debtChart1');
+_regChart('debtChart1',()=>{const ctx=document.getElementById('debtChart1');
 const yrs=[1900,1910,1920,1930,1940,1945,1950,1960,1970,1980,1990,2000,2010,2020,2025];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('United States',yrs,[10,8,30,18,50,120,80,45,28,32,55,55,95,134,124],C.blue),
@@ -447,9 +452,9 @@ label:{..._al,display:true,content:'World War II',color:C.dim,font:{size:10},pos
 }}},
 scales:{x:linX(1900,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},
 title:{display:true,text:'Government debt (% of GDP)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('debtChart2');
+_regChart('debtChart2',()=>{const ctx=document.getElementById('debtChart2');
 const yrs=[2000,2005,2008,2010,2012,2015,2018,2020,2022,2024,2025];
 new Chart(ctx,{type:'line',data:{datasets:[
 dxy('Net interest payments',yrs,[223,184,253,196,220,223,325,345,475,870,1050],C.accent),
@@ -462,9 +467,9 @@ label:{..._al,display:true,content:'Interest exceeds defence',position:'start',c
 }}},
 scales:{x:linX(2000,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
 title:{display:true,text:'$ billions',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('debtChart3');
+_regChart('debtChart3',()=>{const ctx=document.getElementById('debtChart3');
 const yrs=[-27,14,54,69,96,138,161,193,218,260,300];
 const labels=['Augustus\n27 BC','Tiberius\n14 AD','Nero\n54','Vespasian\n69','Trajan\n96','Hadrian\n138','M. Aurelius\n161','Septimius\nSeverus 193','Elagabalus\n218','Gallienus\n260','Diocletian\n300'];
 const silver=[97,97,93.5,90,93,90,83.5,56.5,43,5,4];
@@ -475,7 +480,7 @@ plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% s
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:9},maxRotation:45}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:100,
 title:{display:true,text:'Silver content of denarius (%)',color:C.dim}}}}});
-})();
+});
 })();
 </script>
 <script>

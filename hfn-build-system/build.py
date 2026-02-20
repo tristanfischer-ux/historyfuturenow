@@ -1617,32 +1617,30 @@ def build_homepage(essays, new_essays=None):
 
     # ── Hero chart: West vs East GDP ──
     hero_chart_js = """
-const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
-const _yt=v=>String(v);
-(()=>{const ctx=document.getElementById('heroChart');
+_regChart('heroChart',()=>{const ctx=document.getElementById('heroChart');
 const yrs=[1,1000,1500,1600,1700,1820,1870,1913,1950,1973,2000,2025];
 new Chart(ctx,{type:'line',data:{
 datasets:[
-{label:'West (Europe + US)',data:_xy(yrs,[12,12,18,22,24,30,42,50,52,48,42,30]),borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#2563eb',borderWidth:2.5},
-{label:'China',data:_xy(yrs,[26,22,25,29,22,33,17,9,5,5,12,20]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#c43425',borderWidth:2.5},
-{label:'India',data:_xy(yrs,[32,28,24,22,24,16,12,8,4,3,5,8]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#b8751a',borderWidth:2.5}
+{label:'West (Europe + US)',data:xy(yrs,[12,12,18,22,24,30,42,50,52,48,42,30]),borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#2563eb',borderWidth:2.5},
+{label:'China',data:xy(yrs,[26,22,25,29,22,33,17,9,5,5,12,20]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#c43425',borderWidth:2.5},
+{label:'India',data:xy(yrs,[32,28,24,22,24,16,12,8,4,3,5,8]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#b8751a',borderWidth:2.5}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{
-legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11}}},
-tooltip:{backgroundColor:'#1a1815ee',titleFont:{size:12},bodyFont:{size:11},padding:8,cornerRadius:5,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of world GDP'}}},
-scales:{x:{type:'linear',min:1,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:_yt}},
-y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:'#8a8479',font:{size:11}},max:55}}}});
-})();"""
+legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11},color:C.dim}},
+tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of world GDP'}}},
+scales:{x:{type:'linear',min:1,max:2025,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:yearTick}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim,font:{size:11}},max:55}}}});
+});"""
 
     # ── Section teasers ──
     section_chart_picks = {
         'Natural Resources': {'slug':'the-renewables-and-battery-revolution','chart_id':'secChart1',
-         'js':"""(()=>{const ctx=document.getElementById('secChart1');new Chart(ctx,{type:'line',data:{labels:['2010','2012','2014','2016','2018','2020','2022','2024'],datasets:[{data:[1100,700,500,350,200,140,110,90],borderColor:'#0d9a5a',backgroundColor:'#0d9a5a18',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});})();"""},
+         'js':"""_regChart('secChart1',()=>{const ctx=document.getElementById('secChart1');new Chart(ctx,{type:'line',data:{labels:['2010','2012','2014','2016','2018','2020','2022','2024'],datasets:[{data:[1100,700,500,350,200,140,110,90],borderColor:'#0d9a5a',backgroundColor:'#0d9a5a18',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});});"""},
         'Global Balance of Power': {'slug':'the-long-term-impact-of-covid-19','chart_id':'secChart2',
-         'js':"""(()=>{const ctx=document.getElementById('secChart2');const yrs=[1870,1913,1950,1973,2000,2025];new Chart(ctx,{type:'line',data:{datasets:[{data:_xy(yrs,[55,58,52,48,42,30]),borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:_xy(yrs,[18,12,5,5,12,35]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{type:'linear',display:false},y:{display:false}}}});})();"""},
+         'js':"""_regChart('secChart2',()=>{const ctx=document.getElementById('secChart2');const yrs=[1870,1913,1950,1973,2000,2025];new Chart(ctx,{type:'line',data:{datasets:[{data:_xy(yrs,[55,58,52,48,42,30]),borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:_xy(yrs,[18,12,5,5,12,35]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{type:'linear',display:false},y:{display:false}}}});});"""},
         'Jobs & Economy': {'slug':'robotics-and-slavery','chart_id':'secChart3',
-         'js':"""(()=>{const ctx=document.getElementById('secChart3');const yrs=[2020,2022,2024,2026,2028,2030,2032,2035];new Chart(ctx,{type:'line',data:{datasets:[{data:_xy(yrs,[15,13,11,8,6,4,3,2]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:_xy(yrs,[50,30,18,12,8,5,3,2]),borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{type:'linear',display:false},y:{display:false}}}});})();"""},
+         'js':"""_regChart('secChart3',()=>{const ctx=document.getElementById('secChart3');const yrs=[2020,2022,2024,2026,2028,2030,2032,2035];new Chart(ctx,{type:'line',data:{datasets:[{data:_xy(yrs,[15,13,11,8,6,4,3,2]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:0,borderWidth:2},{data:_xy(yrs,[50,30,18,12,8,5,3,2]),borderColor:'#7c3aed',backgroundColor:'#7c3aed18',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{type:'linear',display:false},y:{display:false}}}});});"""},
         'Society': {'slug':'what-does-it-take-to-get-europeans-to-have-a-revolution','chart_id':'secChart4',
-         'js':"""(()=>{const ctx=document.getElementById('secChart4');new Chart(ctx,{type:'bar',data:{labels:['1640s','1680s','1770s','1780s','1820s','1840s','1910s','1980s'],datasets:[{data:[1,1,1,2,3,8,4,6],backgroundColor:['#2563eb88','#2563eb88','#c4342588','#c4342588','#7c3aed88','#c4342588','#c4342588','#0d9a5a88'],borderRadius:2,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});})();"""},
+         'js':"""_regChart('secChart4',()=>{const ctx=document.getElementById('secChart4');new Chart(ctx,{type:'bar',data:{labels:['1640s','1680s','1770s','1780s','1820s','1840s','1910s','1980s'],datasets:[{data:[1,1,1,2,3,8,4,6],backgroundColor:['#2563eb88','#2563eb88','#c4342588','#c4342588','#7c3aed88','#c4342588','#c4342588','#0d9a5a88'],borderRadius:2,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});});"""},
     }
 
     sec_chart_js = ""
@@ -1897,8 +1895,8 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 {make_footer()}
 <script>
 (function(){{
-{hero_chart_js}
 {CHART_COLORS}
+{hero_chart_js}
 {stories_js}
 {sec_chart_js}
 }})();

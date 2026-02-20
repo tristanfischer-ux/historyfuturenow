@@ -321,15 +321,15 @@ The scribal monopoly was broken in three stages, each of which triggered a flour
         <span class="related-title">A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our Story</span>
         <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
+      <a href="/articles/jobs-first-get-rid-of-expensive-westerners-second-get-rid-of-people-entirely" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Jobs: First, Get Rid Of Expensive Westerners. Second, Get Rid Of People Entirely</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin</span>
         <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -431,26 +431,31 @@ The scribal monopoly was broken in three stages, each of which triggered a flour
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -472,7 +477,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('newLitChart1');
+_regChart('newLitChart1',()=>{const ctx=document.getElementById('newLitChart1');
 const yrs=['-3000','-2500','-2000','-1500','-1000','-800','-500','-300','0','500','800','1000','1200','1400','1500','1600','1700','1800','1850','1900','1950','1980','2000','2020'];
 const rates=[0.1,0.2,0.4,0.5,0.8,1.5,3,5,5,3,4,5,6,8,9,12,18,38,45,56,80,88,93,88];
 new Chart(ctx,{type:'line',data:{datasets:[
@@ -490,9 +495,9 @@ ai:{type:'line',xMin:2024,xMax:2024,yMin:0,yMax:100,borderColor:C.amber,borderWi
 }}},
 scales:{x:{type:'linear',min:-3200,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v<0?Math.abs(v)+' BCE':v===0?'0':v+' CE',stepSize:500}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},min:0,max:100,title:{display:true,text:'Population literate (%)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('newLitChart2');
+_regChart('newLitChart2',()=>{const ctx=document.getElementById('newLitChart2');
 const cats=['Custom app','Video advert','Brand identity','Marketing strategy','Book illustration'];
 const specialist=[45000,25000,8000,15000,5000];
 const aiTool=[2000,500,200,100,300];
@@ -503,9 +508,9 @@ new Chart(ctx,{type:'bar',data:{labels:cats,datasets:[
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw;return i.dataset.label+': $'+v.toLocaleString()}}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v.toLocaleString()},title:{display:true,text:'Estimated cost (USD)',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('newLitChart3');
+_regChart('newLitChart3',()=>{const ctx=document.getElementById('newLitChart3');
 const yrs=['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'];
 const devs=[21,22,23,24,25,26,27,27,28,28,29,30,30,31,31,32];
 const aiCreators=[0,0,0,0,0,0,0.5,2,8,20,45,80,120,180,250,320];
@@ -517,9 +522,9 @@ dxy('AI-assisted (projected)',['2025','2026','2027','2028','2029','2030'],[45,80
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'M people'}}},
 scales:{x:{type:'linear',min:2015,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,stepSize:2}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'M'},min:0,title:{display:true,text:'People who can produce functional software (millions)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('newLitChart4');
+_regChart('newLitChart4',()=>{const ctx=document.getElementById('newLitChart4');
 const gen=['0','1','2','3','4'];
 const writing=[30,90,85,70,60];
 const arithmetic=[50,80,60,35,30];
@@ -540,9 +545,9 @@ dep:{type:'label',..._al,xValue:2.5,yValue:18,content:['Dependency','zone'],colo
 }}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'Gen '+v},title:{display:true,text:'Generations after tool adoption',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},min:0,max:100,title:{display:true,text:'Skill level / creative output (index)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('newLitChart5');
+_regChart('newLitChart5',()=>{const ctx=document.getElementById('newLitChart5');
 const sectors=['IT services &\nsoftware dev','Creative &\nadvertising','Legal\nservices','Accounting &\nfinance','Marketing &\nPR'];
 const sizes=[1240,620,380,340,280];
 const automatable=[65,55,45,60,70];
@@ -555,7 +560,7 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}
 y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>'$'+v+'B'},title:{display:true,text:'Market size ($B)',color:C.dim},min:0,position:'left'},
 y1:{grid:{display:false},ticks:{color:C.accent,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'% automatable by AI',color:C.accent},min:0,max:100,position:'right'}
 }}});
-})();
+});
 })();
 </script>
 <script>

@@ -413,20 +413,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="related-card">
+      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">What The History Of Immigration Teaches Us About Europe’s Future</span>
-        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</span>
         <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -528,26 +528,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -569,40 +574,40 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 }});
 
 
-(()=>{const ctx=document.getElementById('warChart1');
+_regChart('warChart1',()=>{const ctx=document.getElementById('warChart1');
 new Chart(ctx,{type:'bar',data:{labels:["Thirty Years'\nWar","Napoleonic\nWars","Crimean\nWar","American\nCivil War","World\nWar I","World\nWar II"],
 datasets:[{label:'Male deaths (millions)',data:[8,5,0.48,0.69,10,19],backgroundColor:[C.dim,C.amber,C.teal,C.blue,C.accent,C.purple],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'M deaths'}}},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Deaths (millions)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('warChart2');
+_regChart('warChart2',()=>{const ctx=document.getElementById('warChart2');
 new Chart(ctx,{type:'bar',data:{
 labels:['Soviet Union\n(WW2)','Germany\n(WW2)','Germany\n(WW1)','Confederate\nStates','Russia\n(WW1)','Russia\n(Crimea)','Union\nStates','France\n(WW1)','Ottoman\n(Crimea)'],
 datasets:[{label:'% killed',data:[49,45,28,19,18.7,7.5,13,17,3.7],
 backgroundColor:[C.accent,C.accent+'cc',C.purple,C.blue,C.purple+'cc',C.teal,C.blue+'cc',C.amber,C.teal+'cc'],borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of males 18-30 killed'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of males aged 18-30',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('warChart3');
+_regChart('warChart3',()=>{const ctx=document.getElementById('warChart3');
 new Chart(ctx,{type:'bar',data:{
 labels:['China (WW2)','Soviet Union (WW2)','Germany (WW2)','Am. Civil War (Union)','Am. Civil War (Confed.)','Crimean War'],
 datasets:[{label:'Male deaths per female death',data:[30,16,12.8,11,6,3.5],
 backgroundColor:[C.accent,C.purple,C.amber,C.blue,C.blue+'99',C.teal],borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+':1 male-to-female ratio'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Male deaths per 1 female combat death',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('warChart4');
+_regChart('warChart4',()=>{const ctx=document.getElementById('warChart4');
 const yrs=[1900,1910,1920,1930,1940,1943,1945,1950,1960,1970,1980,1990,2000,2020];
 new Chart(ctx,{type:'line',data:{
 datasets:[
 dxy('US women in labor force (%)',yrs,[20,23,24,24,27,37,34,30,35,43,52,57,60,57],C.purple),
 dxy('UK women in labor force (%)',yrs,[29,30,28,29,31,46,42,35,38,44,52,58,60,58],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},scales:{x:linX(1900,2020),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:65,title:{display:true,text:'% of women in workforce',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('warChart5');
+_regChart('warChart5',()=>{const ctx=document.getElementById('warChart5');
 const milestones=[
 {y:1806,l:'France: Conseil de Famille',c:C.blue},
 {y:1854,l:'UK: Royal Patriotic Fund',c:C.purple},
@@ -619,18 +624,18 @@ const milestones=[
 new Chart(ctx,{type:'bar',data:{labels:milestones.map(m=>m.y),datasets:[{data:milestones.map((_,i)=>i+1),backgroundColor:milestones.map(m=>m.c),borderRadius:4,borderSkipped:false,barPercentage:.6}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:i=>[milestones[i[0].dataIndex].l],label:i=>'Year: '+milestones[i.dataIndex].y}}},
 scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('warChart6');
+_regChart('warChart6',()=>{const ctx=document.getElementById('warChart6');
 const yrs=[1618,1650,1803,1815,1853,1856,1861,1865,1914,1918,1939,1945];
 new Chart(ctx,{type:'line',data:{
 datasets:[{label:'Cumulative male dead (millions)',data:xy(yrs,[0,8,8,13,13,13.5,13.5,14.2,14.2,24.2,24.2,43.2]),
 borderColor:C.accent,backgroundColor:C.accent+'15',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:C.accent,borderWidth:3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.parsed.y+'M cumulative deaths'}}},
 scales:{x:linX(1610,1950,{ticks:{color:C.dim,maxRotation:45}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Cumulative deaths (millions)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('warChart7');
+_regChart('warChart7',()=>{const ctx=document.getElementById('warChart7');
 const items=[
 {l:'Augsburg widows fund',y1:1618,y2:1648,c:C.dim},
 {l:'France: Conseil de Famille',y1:1806,y2:1830,c:C.amber},
@@ -648,7 +653,7 @@ datasets:[{label:'Period',data:items.map(i=>[i.y1,i.y2]),backgroundColor:items.m
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
 title:i=>[items[i[0].dataIndex].l],label:i=>{const d=items[i.dataIndex];return d.y1+' — '+(d.y2>=2025?'ongoing':d.y2)}}}},
 scales:{x:{type:'linear',min:1600,max:2030,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
-})();
+});
 })();
 </script>
 <script>

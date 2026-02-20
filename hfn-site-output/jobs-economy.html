@@ -424,26 +424,31 @@
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
 (function(){
+function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
+function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
-  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
+  purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:_gc('--text-dim','#8a8479'),
   rose:'#e11d48', indigo:'#4f46e5', emerald:'#059669', slate:'#475569',
-  text:'#1a1815', grid:'#f2eeea'
+  text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
-const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12}}};
+const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
 const noLegend={display:false};
-const tooltipStyle={backgroundColor:'#1a1815ee',titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
+const tooltipStyle={backgroundColor:C.text+'ee',titleColor:C.bg,bodyColor:C.bg,titleFont:{size:13},bodyFont:{size:12},padding:10,cornerRadius:6};
 Chart.defaults.plugins.tooltip.callbacks.title=function(items){if(!items.length)return'';const l=items[0].label;return typeof l==='string'&&/^[\d,]+$/.test(l.trim())?l.replace(/,/g,''):l;};
 const chartPad={bottom:20,left:8,right:8,top:8};
 if(Chart.defaults.plugins.annotation)Chart.defaults.plugins.annotation.clip=false;
-const _al={backgroundColor:'rgba(255,255,255,0.92)',padding:4,borderRadius:3};
+const _al={backgroundColor:C.bg+'eb',padding:4,borderRadius:3,color:C.text};
 Chart.defaults.scales.category.ticks.autoSkip=false;
 const xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 const dxy=(l,xs,ys,c,da)=>({label:l,data:xy(xs,ys),borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
 const linX=(min,max,extra)=>{const e=extra||{};const t=e.ticks||{};const rest={};for(const k in e)if(k!=='ticks')rest[k]=e[k];return{type:'linear',min,max,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,...t},...rest};};
+const _chartReg=[];
+function _regChart(id,fn){_chartReg.push({id:id,fn:fn});fn();}
+new MutationObserver(function(){_refreshC();_chartReg.forEach(function(r){var cv=document.getElementById(r.id);if(cv){var inst=Chart.getChart(cv);if(inst)inst.destroy();}r.fn();});}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 Chart.register({id:'autoLabelFit',beforeUpdate(chart){
 if(!chart._alf){chart._alf={};var sc=chart.options.scales||{};
 for(var k in sc){if(sc[k]&&sc[k].ticks)chart._alf[k]={mr:sc[k].ticks.maxRotation,fs:sc[k].ticks.font&&sc[k].ticks.font.size};}}
@@ -466,7 +471,7 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.font.size=fs;}}
 
 const _xy=(xs,ys)=>xs.map((x,i)=>({x:+x,y:ys[i]}));
 
-(()=>{const ctx=document.getElementById('robotBargainChart1');
+_regChart('robotBargainChart1',()=>{const ctx=document.getElementById('robotBargainChart1');
 new Chart(ctx,{type:'scatter',data:{
 datasets:[
 {label:'Japan',data:[{x:1.20,y:419}],backgroundColor:C.accent,pointRadius:8,pointHoverRadius:10},
@@ -482,9 +487,9 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.dataset.label+': TFR '+i.parsed.x+', '+i.parsed.y+' robots/10k workers'}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate (children per woman)',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},reverse:true,min:0.5,max:2.2},
 y:{title:{display:true,text:'Industrial Robots per 10,000 Workers',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('robotChart2');
+_regChart('robotChart2',()=>{const ctx=document.getElementById('robotChart2');
 const yrs=[2020,2022,2024,2026,2028,2030,2035];
 new Chart(ctx,{type:'line',data:{
 datasets:[
@@ -493,9 +498,9 @@ dxy('US minimum wage ($/hr)',yrs,[7.25,7.25,7.25,8,9,10,12],C.blue,[5,3]),
 dxy('China factory wage ($/hr)',yrs,[3.5,4,4.5,5,5.5,6,7],C.amber,[3,3])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(2020,2035),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'/hr'},title:{display:true,text:'Cost per working hour ($)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('jobsHistChart2');
+_regChart('jobsHistChart2',()=>{const ctx=document.getElementById('jobsHistChart2');
 const yrs=[1760,1780,1800,1810,1820,1830,1840,1850,1860,1880,1900,1910];
 new Chart(ctx,{type:'line',data:{
 datasets:[
@@ -504,9 +509,9 @@ dxy('Real wages (index)',yrs,[100,100,95,90,90,92,95,100,110,130,160,180],C.acce
 dxy('Artisan income (index)',yrs,[100,90,70,55,45,40,38,40,50,65,80,90],C.dim,[5,5])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1760,1910),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Index (1850=100 for output)',color:C.dim}}}}});
-})();
+});
 
-(()=>{const ctx=document.getElementById('factoryChart1');
+_regChart('factoryChart1',()=>{const ctx=document.getElementById('factoryChart1');
 const yrs=['1970','1980','1990','2000','2005','2010','2015','2020','2025'];
 new Chart(ctx,{type:'line',data:{labels:yrs,
 datasets:[
@@ -520,7 +525,7 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 scales:{y:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}},
 title:{display:true,text:'Manufacturing % of GDP',color:C.dim},min:5,max:40},
 x:{grid:{display:false},ticks:{color:C.dim}}}}});
-})();
+});
 })();
 </script>
 <script>
