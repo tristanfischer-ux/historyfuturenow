@@ -188,6 +188,7 @@ ISSUES = [
             "the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two",
             "the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin",
             "the-locked-gate-how-the-west-priced-its-children-out-of-existence",
+            "what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish",
         ],
     },
 ]
