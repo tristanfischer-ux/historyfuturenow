@@ -3956,19 +3956,20 @@ const allX=asianPI.concat(westernPI),allY=asianTFR.concat(westernTFR),n=allX.len
 let sx=0,sy=0,sxy=0,sx2=0;for(let i=0;i<n;i++){sx+=allX[i];sy+=allY[i];sxy+=allX[i]*allY[i];sx2+=allX[i]*allX[i];}
 const slope=(n*sxy-sx*sy)/(n*sx2-sx*sx),intercept=(sy-slope*sx)/n;
 const trendData=[{x:2,y:+(slope*2+intercept).toFixed(2)},{x:22,y:+(slope*22+intercept).toFixed(2)}];
-const labelPlugin={id:'housingLabels',afterDatasetsDraw(chart){const c=chart.ctx;c.save();c.font='10px system-ui,sans-serif';c.textAlign='center';c.textBaseline='bottom';[[asian,C.accent],[western,C.blue]].forEach(([names,col],di)=>{const meta=chart.getDatasetMeta(di);c.fillStyle=col;meta.data.forEach((pt,i)=>{c.fillText(names[i],pt.x,pt.y-12);});});c.restore();}};
+const labelOffsets={Seoul:[0,-16],['Hong Kong']:[0,-16],Tokyo:[0,-16],Singapore:[0,-16],London:[0,-16],Sydney:[-20,-16],Vancouver:[0,-16],['New York']:[0,-16],Vienna:[0,-16],Houston:[0,-16]};
+const labelPlugin={id:'housingLabels',afterDatasetsDraw(chart){const c=chart.ctx;c.save();c.font='bold 13px system-ui,sans-serif';c.textBaseline='bottom';[[asian,C.accent],[western,C.blue]].forEach(([names,col],di)=>{const meta=chart.getDatasetMeta(di);c.fillStyle=col;meta.data.forEach((pt,i)=>{const off=labelOffsets[names[i]]||[0,-16];c.textAlign='center';c.fillText(names[i],pt.x+off[0],pt.y+off[1]);});});c.restore();}};
 new Chart(ctx,{type:'scatter',plugins:[labelPlugin],data:{datasets:[
 {label:'Trend',type:'line',data:trendData,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],pointRadius:0,pointHoverRadius:0,fill:false,tension:0,order:3},
 {label:'Asian cities',data:asian.map((_,i)=>({x:asianPI[i],y:asianTFR[i]})),backgroundColor:C.accent+'bb',borderColor:C.accent,pointRadius:8,pointHoverRadius:10,borderWidth:2,order:1},
 {label:'Western cities',data:western.map((_,i)=>({x:westernPI[i],y:westernTFR[i]})),backgroundColor:C.blue+'bb',borderColor:C.blue,pointRadius:8,pointHoverRadius:10,borderWidth:2,order:2}
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:8,top:20}},
-plugins:{legend:{display:true,position:'bottom',labels:{padding:16,usePointStyle:true,font:{size:12},filter:item=>item.text!=='Trend'}},tooltip:{...tooltipStyle,filter:item=>item.datasetIndex!==0,callbacks:{
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:8,top:28}},
+plugins:{legend:{display:true,position:'bottom',labels:{padding:16,usePointStyle:true,font:{size:13},filter:item=>item.text!=='Trend'}},tooltip:{...tooltipStyle,filter:item=>item.datasetIndex!==0,callbacks:{
 title:items=>{const i=items[0];if(!i)return'';const di=i.datasetIndex-1;return(di===0?asian:western)[i.dataIndex]||'';},
 label:i=>'Price/income: '+i.raw.x+'x | TFR: '+i.raw.y}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'x'},min:2,max:22,
-title:{display:true,text:'House price / median income ratio',color:C.dim}},
-y:{grid:{color:C.grid},ticks:{color:C.dim},min:0.5,max:2.1,
-title:{display:true,text:'Total fertility rate',color:C.dim}}}}});
+scales:{x:{grid:{color:C.grid},ticks:{color:C.text,font:{size:12},callback:v=>v+'x'},min:2,max:22,
+title:{display:true,text:'House price / median income ratio',color:C.text,font:{size:13}}},
+y:{grid:{color:C.grid},ticks:{color:C.text,font:{size:12}},min:0.5,max:2.1,
+title:{display:true,text:'Total fertility rate',color:C.text,font:{size:13}}}}}})
 });"""
         },
         {
