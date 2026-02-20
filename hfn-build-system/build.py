@@ -568,7 +568,12 @@ def inject_pull_quote(body_html, pq):
     return body_html
 
 def make_audio_player_script():
-    """Inline JavaScript for the article audio player (narration + discussion)."""
+    """Inline JavaScript for the article audio player (narration + discussion).
+
+    The narration player routes through the queue bar so a persistent bottom
+    player appears while the reader scrolls.  The discussion player (currently
+    disabled) keeps standalone playback as a fallback.
+    """
     return '''<script>
 (function(){
   function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId,thumbId){
@@ -587,28 +592,26 @@ def make_audio_player_script():
     var si=1;
     var dragging=false;
 
+    var qRouted=false;
+    var qAudio=null;
+    var qMeta=null;
+
+    if(audioId==='audioElement'&&window.HFNQueue&&HFNQueue._getAudio){
+      var qBtn=document.querySelector('.q-add-btn-light[data-queue-slug]');
+      if(qBtn){
+        qMeta={slug:qBtn.dataset.queueSlug,title:qBtn.dataset.queueTitle,
+               section:qBtn.dataset.queueSection||'',color:qBtn.dataset.queueColor||'',
+               url:qBtn.dataset.queueUrl};
+      }
+    }
+
+    function cur(){return qRouted&&qAudio?qAudio:audio;}
+
     function fmt(s){
       if(isNaN(s))return'0:00';
       var m=Math.floor(s/60);
       var sec=Math.floor(s%60);
       return m+':'+(sec<10?'0':'')+sec;
-    }
-
-    function seekTo(e){
-      if(!audio.duration)return;
-      var rect=wrap.getBoundingClientRect();
-      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-      audio.currentTime=pct*audio.duration;
-      updateBar(pct);
-    }
-
-    function seekToTouch(e){
-      if(!audio.duration)return;
-      var rect=wrap.getBoundingClientRect();
-      var touch=e.touches[0];
-      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
-      audio.currentTime=pct*audio.duration;
-      updateBar(pct);
     }
 
     function updateBar(pct){
@@ -617,23 +620,89 @@ def make_audio_player_script():
       if(thumb)thumb.style.left=p;
     }
 
+    function seekTo(e){
+      var a=cur();if(!a.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+      a.currentTime=pct*a.duration;
+      updateBar(pct);
+    }
+
+    function seekToTouch(e){
+      var a=cur();if(!a.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var touch=e.touches[0];
+      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
+      a.currentTime=pct*a.duration;
+      updateBar(pct);
+    }
+
+    function syncIcons(playing){
+      iconPlay.style.display=playing?'none':'block';
+      iconPause.style.display=playing?'block':'none';
+    }
+
+    function bindQueueEvents(){
+      qAudio.addEventListener('timeupdate',function(){
+        if(dragging)return;
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()!==qMeta.slug)return;
+        if(!qAudio.duration)return;
+        var pct=qAudio.currentTime/qAudio.duration;
+        updateBar(pct);
+        timeEl.textContent=fmt(qAudio.currentTime)+' / '+fmt(qAudio.duration);
+      });
+      qAudio.addEventListener('play',function(){
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug)syncIcons(true);
+      });
+      qAudio.addEventListener('pause',function(){
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug)syncIcons(false);
+      });
+      qAudio.addEventListener('ended',function(){syncIcons(false);updateBar(0);});
+    }
+
+    function routeToQueue(){
+      if(qRouted||!qMeta)return false;
+      HFNQueue.playNow(qMeta.slug,qMeta.title,qMeta.section,qMeta.color,qMeta.url);
+      qAudio=HFNQueue._getAudio();
+      if(!qAudio){return false;}
+      qRouted=true;
+      if(speedEl){qAudio.playbackRate=speeds[si];}
+      syncIcons(true);
+      bindQueueEvents();
+      return true;
+    }
+
+    // On load: if queue is already playing this track, sync to it
+    if(qMeta&&window.HFNQueue&&HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug&&HFNQueue._getAudio){
+      qAudio=HFNQueue._getAudio();
+      qRouted=true;
+      syncIcons(!qAudio.paused);
+      bindQueueEvents();
+      if(qAudio.duration){
+        var pct0=qAudio.currentTime/qAudio.duration;
+        updateBar(pct0);
+        timeEl.textContent=fmt(qAudio.currentTime)+' / '+fmt(qAudio.duration);
+      }
+    }
+
     btn.onclick=function(){
-      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
-      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+      if(qMeta&&!qRouted){if(routeToQueue())return;}
+      var a=cur();
+      if(a.paused){a.play().then(function(){syncIcons(true);}).catch(function(){});}
+      else{a.pause();syncIcons(false);}
     };
 
     audio.ontimeupdate=function(){
-      if(dragging)return;
+      if(qRouted||dragging)return;
       if(audio.duration){
-        var pct=audio.currentTime/audio.duration;
-        updateBar(pct);
+        updateBar(audio.currentTime/audio.duration);
         timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
       }
     };
 
     audio.onended=function(){
-      iconPlay.style.display='block';iconPause.style.display='none';
-      updateBar(0);
+      if(qRouted)return;
+      syncIcons(false);updateBar(0);
     };
 
     wrap.addEventListener('mousedown',function(e){
@@ -669,11 +738,12 @@ def make_audio_player_script():
     });
 
     if(speedEl){
-      audio.playbackRate=speeds[si];
+      var a0=cur();a0.playbackRate=speeds[si];
       speedEl.textContent=speeds[si]+'\\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
-        audio.playbackRate=speeds[si];
+        var a=cur();
+        a.playbackRate=speeds[si];
         speedEl.textContent=speeds[si]+'\\u00d7';
       };
     }

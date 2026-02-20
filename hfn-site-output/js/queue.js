@@ -755,6 +755,10 @@
       updateBookmarkIcons();
       updateSavedBadge();
     },
+    _getAudio: function () { return audio; },
+    getCurrentSlug: function () {
+      return currentIndex >= 0 && currentIndex < queue.length ? queue[currentIndex].slug : null;
+    },
     rebind: function () {
       if (!document.getElementById('queueBar')) return;
       loadBookmarks();
@@ -787,8 +791,7 @@
 
   // ─── Bind data-attribute buttons ────────────────────────────────────────────
   function bindQueueButtons() {
-    // Legacy "Add to Queue" buttons (q-add-btn with data attributes)
-    document.querySelectorAll('.q-add-btn[data-queue-slug]').forEach(function (btn) {
+    document.querySelectorAll('.q-add-btn[data-queue-slug], .q-add-btn-light[data-queue-slug]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();

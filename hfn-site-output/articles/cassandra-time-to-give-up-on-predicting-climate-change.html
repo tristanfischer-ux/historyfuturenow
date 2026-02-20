@@ -202,15 +202,15 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="related-card">
+      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
@@ -309,7 +309,7 @@
 </div>
 <script src="/js/nav.js?v=8b7a75e0"></script>
 <script src="/js/search.js?v=a8c0e71d"></script>
-<script src="/js/queue.js?v=0c2b1085"></script>
+<script src="/js/queue.js?v=6660f595"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
 <script src="/js/pwa-install.js?v=0b4e8e6f" defer></script>
 
@@ -331,28 +331,26 @@
     var si=1;
     var dragging=false;
 
+    var qRouted=false;
+    var qAudio=null;
+    var qMeta=null;
+
+    if(audioId==='audioElement'&&window.HFNQueue&&HFNQueue._getAudio){
+      var qBtn=document.querySelector('.q-add-btn-light[data-queue-slug]');
+      if(qBtn){
+        qMeta={slug:qBtn.dataset.queueSlug,title:qBtn.dataset.queueTitle,
+               section:qBtn.dataset.queueSection||'',color:qBtn.dataset.queueColor||'',
+               url:qBtn.dataset.queueUrl};
+      }
+    }
+
+    function cur(){return qRouted&&qAudio?qAudio:audio;}
+
     function fmt(s){
       if(isNaN(s))return'0:00';
       var m=Math.floor(s/60);
       var sec=Math.floor(s%60);
       return m+':'+(sec<10?'0':'')+sec;
-    }
-
-    function seekTo(e){
-      if(!audio.duration)return;
-      var rect=wrap.getBoundingClientRect();
-      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-      audio.currentTime=pct*audio.duration;
-      updateBar(pct);
-    }
-
-    function seekToTouch(e){
-      if(!audio.duration)return;
-      var rect=wrap.getBoundingClientRect();
-      var touch=e.touches[0];
-      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
-      audio.currentTime=pct*audio.duration;
-      updateBar(pct);
     }
 
     function updateBar(pct){
@@ -361,23 +359,89 @@
       if(thumb)thumb.style.left=p;
     }
 
+    function seekTo(e){
+      var a=cur();if(!a.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+      a.currentTime=pct*a.duration;
+      updateBar(pct);
+    }
+
+    function seekToTouch(e){
+      var a=cur();if(!a.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var touch=e.touches[0];
+      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
+      a.currentTime=pct*a.duration;
+      updateBar(pct);
+    }
+
+    function syncIcons(playing){
+      iconPlay.style.display=playing?'none':'block';
+      iconPause.style.display=playing?'block':'none';
+    }
+
+    function bindQueueEvents(){
+      qAudio.addEventListener('timeupdate',function(){
+        if(dragging)return;
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()!==qMeta.slug)return;
+        if(!qAudio.duration)return;
+        var pct=qAudio.currentTime/qAudio.duration;
+        updateBar(pct);
+        timeEl.textContent=fmt(qAudio.currentTime)+' / '+fmt(qAudio.duration);
+      });
+      qAudio.addEventListener('play',function(){
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug)syncIcons(true);
+      });
+      qAudio.addEventListener('pause',function(){
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug)syncIcons(false);
+      });
+      qAudio.addEventListener('ended',function(){syncIcons(false);updateBar(0);});
+    }
+
+    function routeToQueue(){
+      if(qRouted||!qMeta)return false;
+      HFNQueue.playNow(qMeta.slug,qMeta.title,qMeta.section,qMeta.color,qMeta.url);
+      qAudio=HFNQueue._getAudio();
+      if(!qAudio){return false;}
+      qRouted=true;
+      if(speedEl){qAudio.playbackRate=speeds[si];}
+      syncIcons(true);
+      bindQueueEvents();
+      return true;
+    }
+
+    // On load: if queue is already playing this track, sync to it
+    if(qMeta&&window.HFNQueue&&HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug&&HFNQueue._getAudio){
+      qAudio=HFNQueue._getAudio();
+      qRouted=true;
+      syncIcons(!qAudio.paused);
+      bindQueueEvents();
+      if(qAudio.duration){
+        var pct0=qAudio.currentTime/qAudio.duration;
+        updateBar(pct0);
+        timeEl.textContent=fmt(qAudio.currentTime)+' / '+fmt(qAudio.duration);
+      }
+    }
+
     btn.onclick=function(){
-      if(audio.paused){audio.play();iconPlay.style.display='none';iconPause.style.display='block';}
-      else{audio.pause();iconPlay.style.display='block';iconPause.style.display='none';}
+      if(qMeta&&!qRouted){if(routeToQueue())return;}
+      var a=cur();
+      if(a.paused){a.play().then(function(){syncIcons(true);}).catch(function(){});}
+      else{a.pause();syncIcons(false);}
     };
 
     audio.ontimeupdate=function(){
-      if(dragging)return;
+      if(qRouted||dragging)return;
       if(audio.duration){
-        var pct=audio.currentTime/audio.duration;
-        updateBar(pct);
+        updateBar(audio.currentTime/audio.duration);
         timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
       }
     };
 
     audio.onended=function(){
-      iconPlay.style.display='block';iconPause.style.display='none';
-      updateBar(0);
+      if(qRouted)return;
+      syncIcons(false);updateBar(0);
     };
 
     wrap.addEventListener('mousedown',function(e){
@@ -413,11 +477,12 @@
     });
 
     if(speedEl){
-      audio.playbackRate=speeds[si];
+      var a0=cur();a0.playbackRate=speeds[si];
       speedEl.textContent=speeds[si]+'\u00d7';
       speedEl.onclick=function(){
         si=(si+1)%speeds.length;
-        audio.playbackRate=speeds[si];
+        var a=cur();
+        a.playbackRate=speeds[si];
         speedEl.textContent=speeds[si]+'\u00d7';
       };
     }
