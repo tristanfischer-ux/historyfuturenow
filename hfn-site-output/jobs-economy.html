@@ -396,6 +396,7 @@
 <script src="/js/search.js?v=a8c0e71d"></script>
 <script src="/js/queue.js?v=0c2b1085"></script>
 <script src="/js/soft-nav.js?v=99d1dccb"></script>
+<script src="/js/pwa-install.js?v=0b4e8e6f" defer></script>
 <script>
 (function(){ var wrap=document.getElementById('sectionProgressWrap'); if(!wrap) return; try { var slugs=JSON.parse(wrap.getAttribute('data-section-slugs')||'[]'); var raw=localStorage.getItem('hfn_read_slugs'); var read=raw?JSON.parse(raw):[]; var set=new Set(read); var n=slugs.filter(function(s){ return set.has(s); }).length; var el=document.getElementById('sectionProgressText'); if(el) el.textContent=n+' of '+slugs.length+' articles in this section read'; } catch(e) {} })();
 </script>

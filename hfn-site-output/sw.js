@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'hfn-v1';
+const CACHE_VERSION = 'hfn-v2';
 const SHELL_CACHE = `shell-${CACHE_VERSION}`;
 const CONTENT_CACHE = `content-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
@@ -11,6 +11,7 @@ const SHELL_URLS = [
   '/js/search.js',
   '/js/queue.js',
   '/js/soft-nav.js',
+  '/js/pwa-install.js',
   '/favicon.svg',
   '/manifest.json',
 ];

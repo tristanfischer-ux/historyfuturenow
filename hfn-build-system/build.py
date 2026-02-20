@@ -274,23 +274,13 @@ def get_related(essay, all_essays, n=3):
     return random.sample(same, min(n, len(same)))
 
 
-def get_next_in_section(essay, all_essays):
-    """Next article in the same section when ordered by pub_date descending (newest first)."""
-    section = [e for e in all_essays if e['part'] == essay['part']]
-    if len(section) < 2:
+def get_newest_article(essay, all_essays):
+    """Most recently published article across all sections (excluding the current one)."""
+    others = [e for e in all_essays if e['slug'] != essay['slug'] and e.get('pub_date')]
+    if not others:
         return None
-    # Sort by pub_date desc (newest first); no date = end
-    def sort_key(e):
-        d = e.get('pub_date') or ''
-        return (d == '', d)
-    section_sorted = sorted(section, key=sort_key, reverse=True)
-    try:
-        idx = next(i for i, e in enumerate(section_sorted) if e['slug'] == essay['slug'])
-    except StopIteration:
-        return None
-    if idx + 1 < len(section_sorted):
-        return section_sorted[idx + 1]
-    return None
+    others.sort(key=lambda e: e['pub_date'], reverse=True)
+    return others[0]
 
 IMAGES_DIR = OUTPUT_DIR / "images" / "articles"
 
@@ -508,6 +498,7 @@ def make_footer():
     search_v = _js_hash("search.js")
     queue_v = _js_hash("queue.js")
     softnav_v = _js_hash("soft-nav.js")
+    pwa_v = _js_hash("pwa-install.js")
     return '''<footer class="site-footer">
   <div class="footer-inner">
     <p class="footer-tagline">The longer the run-up, the further the leap.</p>
@@ -534,7 +525,8 @@ def make_footer():
 <script src="/js/nav.js?v={nav_v}"></script>
 <script src="/js/search.js?v={search_v}"></script>
 <script src="/js/queue.js?v={queue_v}"></script>
-<script src="/js/soft-nav.js?v={softnav_v}"></script>'''
+<script src="/js/soft-nav.js?v={softnav_v}"></script>
+<script src="/js/pwa-install.js?v={pwa_v}" defer></script>'''
 
 def inject_pull_quote(body_html, pq):
     if not pq: return body_html
@@ -1033,7 +1025,7 @@ def build_article(essay, all_essays, is_review=False):
     te = html_mod.escape(essay['title'])
     body = inject_pull_quote(essay['body_html'], essay['pull_quote'])
     related = get_related(essay, all_essays)
-    next_essay = get_next_in_section(essay, all_essays)
+    next_essay = get_newest_article(essay, all_essays)
 
     # Inject charts if available for this article (exclude data_story entries — they are for homepage carousel only)
     article_charts = [c for c in ALL_CHARTS.get(essay['slug'], []) if not c.get('data_story')]
@@ -1065,8 +1057,8 @@ def build_article(essay, all_essays, is_review=False):
         next_hero = get_hero_image(next_essay['slug'])
         next_img = f'<img src="{next_hero}" alt="" class="up-next-img" loading="lazy" width="800" height="450">' if next_hero else ''
         up_next_html = f'''
-  <section class="up-next-section" aria-label="Up next in this section">
-    <h2 class="up-next-heading">Up next in {html_mod.escape(essay['part'])}</h2>
+  <section class="up-next-section" aria-label="Up next">
+    <h2 class="up-next-heading">Up next</h2>
     <a href="/articles/{html_mod.escape(next_essay['slug'])}" class="up-next-card" style="--section-color:{np['color']}">
       <div class="up-next-img-wrap">{next_img}</div>
       <div class="up-next-text">
