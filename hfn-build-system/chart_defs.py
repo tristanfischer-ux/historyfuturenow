@@ -1332,7 +1332,7 @@ datasets:[
 dxy('World average',yrs,[5.0,4.7,3.7,3.2,2.7,2.5,2.3,2.3,2.1,1.8],C.accent),
 dxy('Europe',yrs,[2.6,2.3,1.9,1.7,1.4,1.5,1.5,1.4,1.4,1.5],C.blue),
 dxy('Sub-Saharan Africa',yrs,[6.7,6.8,6.8,6.4,5.8,5.2,4.5,4.2,3.0,2.1],C.amber),
-{label:'Replacement level',data:xy(yrs,Array(10).fill(2.1)),borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],pointRadius:0,fill:false}
+{label:'Replacement level (2.1)',data:xy(yrs,Array(10).fill(2.1)),borderColor:C.dim,borderWidth:1.5,borderDash:[5,3],pointRadius:0,pointStyle:'line',fill:false}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim},title:{display:true,text:'Children per woman (TFR)',color:C.dim}}}}});
 });"""
@@ -2936,17 +2936,15 @@ const eaPct=[23.7,23.2,18.1,18.6,13.9,12.9,10.4,8.9,7.9,7.0,6.6,6.2,5.8,5.6,5.2,
 const builderPct=eurPct.map((v,i)=>v+eaPct[i]);
 const restPct=builderPct.map(v=>+(100-v).toFixed(1));
 new Chart(ctx,{type:'line',data:{datasets:[
-{...dxy('European heritage (adj.)',yrs,eurPct,C.blue),fill:true,backgroundColor:C.blue+'30'},
-{...dxy('East Asia (China/Japan/Korea)',yrs,eaPct,C.accent),fill:true,backgroundColor:C.accent+'30'},
+dxy('European heritage (adj.)',yrs,eurPct,C.blue),
+dxy('East Asia (China/Japan/Korea)',yrs,eaPct,C.accent),
 {...dxy('Builder total',yrs,builderPct,C.purple,[6,4]),borderWidth:3},
 {...dxy('Rest of world',yrs,restPct,C.green),borderWidth:3}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of global births'}},
 annotation:{annotations:{
-proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
-peak:{type:'label',..._al,xValue:1975,yValue:42,content:['37% — more than','1 in 3 births'],color:C.purple,font:{size:11,weight:'bold'}},
-nadir:{type:'label',..._al,xValue:2075,yValue:4,content:['~7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}},
-restLabel:{type:'label',..._al,xValue:2070,yValue:95,content:['Rest of world: 93%'],color:C.green,font:{size:10,style:'italic'}},
-eurNote:{type:'label',..._al,xValue:2060,yValue:1,content:['European heritage: 2.2%'],color:C.blue,font:{size:9,style:'italic'}}
+proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim,borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+peak:{type:'label',..._al,xValue:1970,yValue:42,content:['37% — 1 in 3'],color:C.purple,font:{size:11,weight:'bold'}},
+nadir:{type:'label',..._al,xValue:2080,yValue:11,content:['7% — 1 in 15'],color:C.purple,font:{size:11,weight:'bold'}}
 }}},
 scales:{x:linX(1960,2100),y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Share of global births (%)',color:C.dim},min:0,max:100}}}});
 });"""
