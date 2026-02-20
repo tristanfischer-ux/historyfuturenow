@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'hfn-v2';
+const CACHE_VERSION = 'hfn-v3';
 const SHELL_CACHE = `shell-${CACHE_VERSION}`;
 const CONTENT_CACHE = `content-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;

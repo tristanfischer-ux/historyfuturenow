@@ -342,6 +342,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
     og_date = f'\n<meta property="article:published_time" content="{pub_date}">' if pub_date else ""
     ld = f'<script type="application/ld+json">{json.dumps(json_ld, ensure_ascii=False)}</script>' if json_ld else ""
     robots = "noindex, nofollow" if noindex else "index, follow"
+    css_v = _asset_hash("css", "style.css")
     return f'''<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>{te}</title>
@@ -367,7 +368,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
 <link rel="alternate" type="application/rss+xml" title="History Future Now" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css?v={css_v}">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PS9DYS2PZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag('js',new Date());gtag('config','G-6PS9DYS2PZ');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
@@ -494,12 +495,15 @@ def make_queue_bar():
 </div>'''
 
 
-def _js_hash(filename):
-    """Short content hash for cache-busting JS files."""
-    p = OUTPUT_DIR / "js" / filename
+def _asset_hash(subdir, filename):
+    """Short content hash for cache-busting static assets."""
+    p = OUTPUT_DIR / subdir / filename
     if p.exists():
         return hashlib.md5(p.read_bytes()).hexdigest()[:8]
     return "0"
+
+def _js_hash(filename):
+    return _asset_hash("js", filename)
 
 def make_footer():
     nav_v = _js_hash("nav.js")
