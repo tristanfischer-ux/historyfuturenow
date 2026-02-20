@@ -1297,19 +1297,21 @@ y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.b
         },
         {
             'id': 'immChartMigBg', 'figure_num': 3,
-            'title': 'The Hidden Scale: Foreign-Born vs. Total Migration Background',
-            'desc': 'Official foreign-born figures undercount Europe\u2019s immigration-origin population \u2014 second-generation immigrants roughly double the total',
-            'source': 'Eurostat, OECD, Destatis (Germany Mikrozensus), national statistics offices; c.\u20092020\u20132023',
+            'title': 'The Full Picture: Foreign-Born and Their Descendants in the EU',
+            'desc': 'The foreign-born line from Figure 2 tells only half the story \u2014 add their children born in Europe and the immigration-origin population is far larger',
+            'source': 'Eurostat, OECD, national statistics offices; second-generation estimates from Mikrozensus (DE), CBS (NL), INSEE (FR), ONS (UK)',
             'position': 'before_end',
             'js': """
 _regChart('immChartMigBg',()=>{const ctx=document.getElementById('immChartMigBg');
-new Chart(ctx,{type:'bar',data:{
-labels:['Switzerland','Sweden','Austria','Germany','Belgium','Netherlands','UK','France','Spain','Italy'],
+const yrs=[1950,1960,1970,1980,1990,2000,2005,2010,2015,2020];
+const fb=[10,14,18,20,23,33,40,47,54,55];
+const sg=[2,4,8,12,17,22,25,28,31,35];
+new Chart(ctx,{type:'line',data:{
 datasets:[
-{label:'Foreign-born only',data:[30,20,19,17,17,14,14,13,14,11],backgroundColor:C.blue+'aa',borderRadius:3},
-{label:'Including 2nd generation',data:[39,28,26,27,26,25,22,26,17,14],backgroundColor:C.accent+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of national population (%)',color:C.dim},min:0}}}});
+{label:'2nd generation (born in Europe to immigrant parents)',data:xy(yrs,fb.map((v,i)=>v+sg[i])),borderColor:C.amber,backgroundColor:C.amber+'30',fill:1,tension:.35,pointRadius:3,pointBackgroundColor:C.amber,borderWidth:2.5},
+{label:'Foreign-born (1st generation)',data:xy(yrs,fb),borderColor:C.accent,backgroundColor:C.accent+'30',fill:'origin',tension:.35,pointRadius:3,pointBackgroundColor:C.accent,borderWidth:2.5}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:function(i){if(i.datasetIndex===0)return'Total migration background: '+i.raw+'M';return'Foreign-born: '+i.raw+'M';}}}},
+scales:{x:linX(1950,2020),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},min:0,title:{display:true,text:'Population (millions)',color:C.dim}}}}});
 });"""
         },
         {
