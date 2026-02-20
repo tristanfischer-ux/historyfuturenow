@@ -154,9 +154,9 @@ const milestones=[
 {y:1945,l:'UK: Family Allowances Act',c:C.purple},
 {y:1948,l:'UK: National Health Service',c:C.purple}
 ];
-new Chart(ctx,{type:'bar',data:{labels:milestones.map(m=>m.y),datasets:[{data:milestones.map((_,i)=>i+1),backgroundColor:milestones.map(m=>m.c),borderRadius:4,borderSkipped:false,barPercentage:.6}]},
+new Chart(ctx,{type:'bar',data:{labels:milestones.map(m=>m.y+' — '+m.l),datasets:[{data:milestones.map(m=>m.y),backgroundColor:milestones.map(m=>m.c),borderRadius:4,borderSkipped:false,barPercentage:.6}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{title:i=>[milestones[i[0].dataIndex].l],label:i=>'Year: '+milestones[i.dataIndex].y}}},
-scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+scales:{x:{type:'linear',min:1800,max:1960,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 });"""
         },
         {
