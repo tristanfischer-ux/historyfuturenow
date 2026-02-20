@@ -1708,21 +1708,27 @@ def build_homepage(essays, new_essays=None):
 
     # Build data stories HTML
     stories_html = ""
-    # Register a Chart.js plugin that strips axes/legends/tooltips from
-    # charts rendered inside the small .ds-chart preview containers.
+    # Register a Chart.js plugin that simplifies charts rendered inside the
+    # .ds-chart preview containers: compact legend, clean axes, no tooltips.
     stories_js = """Chart.register({id:'dsMini',beforeInit(chart){
 const p=chart.canvas.parentElement;
 if(!p||!p.classList.contains('ds-chart'))return;
 const o=chart.options;
 o.plugins=o.plugins||{};
-o.plugins.legend={display:false};
+o.plugins.legend={display:true,position:'bottom',labels:{padding:6,usePointStyle:true,pointStyle:'circle',font:{size:9},boxWidth:8}};
 o.plugins.tooltip={enabled:false};
 if(o.plugins.annotation)o.plugins.annotation={annotations:{}};
-if(o.scales){Object.keys(o.scales).forEach(k=>{o.scales[k].display=false});}
-o.layout={padding:4};
+if(o.scales){Object.keys(o.scales).forEach(k=>{
+const s=o.scales[k];
+s.display=true;
+s.ticks=Object.assign(s.ticks||{},{font:{size:9},maxTicksLimit:5,color:'#8a8479'});
+if(s.title)s.title.display=false;
+s.grid=Object.assign(s.grid||{},{color:'#f2eeea'});
+});}
+o.layout={padding:6};
 (chart.data.datasets||[]).forEach(ds=>{
-if(ds.pointRadius!=null)ds.pointRadius=Math.min(ds.pointRadius,2);
-if(ds.pointHoverRadius!=null)ds.pointHoverRadius=Math.min(ds.pointHoverRadius,3);
+if(ds.pointRadius!=null)ds.pointRadius=Math.min(ds.pointRadius,3);
+if(ds.pointHoverRadius!=null)ds.pointHoverRadius=Math.min(ds.pointHoverRadius,4);
 });
 }});
 """

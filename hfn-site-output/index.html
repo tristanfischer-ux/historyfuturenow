@@ -1211,14 +1211,20 @@ const p=chart.canvas.parentElement;
 if(!p||!p.classList.contains('ds-chart'))return;
 const o=chart.options;
 o.plugins=o.plugins||{};
-o.plugins.legend={display:false};
+o.plugins.legend={display:true,position:'bottom',labels:{padding:6,usePointStyle:true,pointStyle:'circle',font:{size:9},boxWidth:8}};
 o.plugins.tooltip={enabled:false};
 if(o.plugins.annotation)o.plugins.annotation={annotations:{}};
-if(o.scales){Object.keys(o.scales).forEach(k=>{o.scales[k].display=false});}
-o.layout={padding:4};
+if(o.scales){Object.keys(o.scales).forEach(k=>{
+const s=o.scales[k];
+s.display=true;
+s.ticks=Object.assign(s.ticks||{},{font:{size:9},maxTicksLimit:5,color:'#8a8479'});
+if(s.title)s.title.display=false;
+s.grid=Object.assign(s.grid||{},{color:'#f2eeea'});
+});}
+o.layout={padding:6};
 (chart.data.datasets||[]).forEach(ds=>{
-if(ds.pointRadius!=null)ds.pointRadius=Math.min(ds.pointRadius,2);
-if(ds.pointHoverRadius!=null)ds.pointHoverRadius=Math.min(ds.pointHoverRadius,3);
+if(ds.pointRadius!=null)ds.pointRadius=Math.min(ds.pointRadius,3);
+if(ds.pointHoverRadius!=null)ds.pointHoverRadius=Math.min(ds.pointHoverRadius,4);
 });
 }});
 _regChart('heroGates',()=>{const ctx=document.getElementById('heroGates');new Chart(ctx,{type:'line',data:{datasets:[{label:'UK',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[4.3,5.8,6.2,6.5,8.3,12.0,14.4,15.8]),borderColor:'#c43425',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Germany',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[2.8,6.6,7.5,8.4,12.5,13.0,18.8,20.2]),borderColor:'#0d9a5a',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'US',data:_xy([1960,1970,1980,1990,2000,2010,2020,2025],[5.4,4.7,6.2,7.9,11.1,12.9,13.7,14.3]),borderColor:'#2563eb',fill:false,tension:.3,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'circle',font:{size:9}}},tooltip:{backgroundColor:'#1a1815ee'}},scales:{x:{type:'linear',min:1960,max:2025,grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:_yt}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>v+'%'},min:0}}}});});
