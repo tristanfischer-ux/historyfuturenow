@@ -72,14 +72,14 @@ def get_all_charts():
     charts['the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state'] = [
         {
             'id': 'warChart1', 'figure_num': 1,
-            'title': 'Estimated Male Deaths by Major Conflict',
-            'desc': 'Total military/male deaths in millions across six centuries of warfare',
+            'title': 'Military Deaths by Major Conflict',
+            'desc': 'Military deaths in millions — including disease and privation in the field',
             'source': 'Various historical sources; ranges shown as midpoint estimates',
             'position': 'after_para_6',
             'js': """
 _regChart('warChart1',()=>{const ctx=document.getElementById('warChart1');
 new Chart(ctx,{type:'bar',data:{labels:["Thirty Years'\\nWar","Napoleonic\\nWars","Crimean\\nWar","American\\nCivil War","World\\nWar I","World\\nWar II"],
-datasets:[{label:'Male deaths (millions)',data:[8,5,0.48,0.69,10,19],backgroundColor:[C.dim,C.amber,C.teal,C.blue,C.accent,C.purple],borderRadius:4,borderSkipped:false}]},
+datasets:[{label:'Military deaths (millions)',data:[4,3.5,0.48,0.69,10,24],backgroundColor:[C.dim,C.amber,C.teal,C.blue,C.accent,C.purple],borderRadius:4,borderSkipped:false}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'M deaths'}}},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},title:{display:true,text:'Deaths (millions)',color:C.dim}}}}});
 });"""
         },
