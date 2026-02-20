@@ -3309,16 +3309,17 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
             'position': 'after_para_16',
             'js': """
 _regChart('guiltChart3',()=>{const ctx=document.getElementById('guiltChart3');
-const groups=['Guilt-dominant','Mixed /\\nTransitional','Shame-dominant'];
+const groups=['Guilt-dominant','Mixed / Transitional','Shame-dominant'];
 const means=[60,35,40];
 new Chart(ctx,{type:'bar',data:{labels:groups,datasets:[{label:'Mean GII score',data:means,
 backgroundColor:[C.blue+'99',C.amber+'99',C.accent+'99'],borderColor:[C.blue,C.amber,C.accent],borderWidth:2,borderRadius:6,borderSkipped:false,barPercentage:0.55}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:48,left:8,right:8,top:8}},plugins:{legend:noLegend,
 tooltip:{...tooltipStyle,callbacks:{label:i=>'Mean GII: '+i.raw}},
 annotation:{annotations:{
 guiltNote:{type:'label',..._al,xValue:0,yValue:67,content:['e.g. Switzerland 1st,','Sweden 2nd, US 3rd, UK 6th'],color:C.blue,font:{size:12,weight:'bold'}},
+mixedNote:{type:'label',..._al,xValue:1,yValue:42,content:['e.g. India, Brazil, Turkey'],color:C.amber,font:{size:12,weight:'bold'}},
 shameNote:{type:'label',..._al,xValue:2,yValue:48,content:['S. Korea 4th, Singapore','5th raise the average'],color:C.accent,font:{size:12,weight:'bold'}},
-caveat:{type:'label',..._al,xValue:1,yValue:5,content:['Note: shame-dominant outliers (S. Korea, Japan)','adopted guilt-culture institutions'],color:C.text,font:{size:11,weight:'bold'}}
+caveat:{type:'label',..._al,xValue:1,yValue:-7,content:['Note: shame-dominant outliers (S. Korea, Japan) adopted guilt-culture institutions'],color:C.dim,font:{size:11,style:'italic'}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Mean GII score',color:C.dim},min:0,max:75}}}});
 });"""
