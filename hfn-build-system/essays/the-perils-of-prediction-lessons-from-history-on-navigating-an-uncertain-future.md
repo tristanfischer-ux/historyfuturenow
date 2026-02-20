@@ -23,6 +23,8 @@ share_summary: >-
   predicting the future. Yet we keep trying — and the stakes keep
   rising.
 signal: ''
+sources:
+  - "The Innovator's Dilemma"
 ---
 # The Perils of Prediction: Lessons from History on Navigating an Uncertain Future
 

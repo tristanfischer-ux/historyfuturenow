@@ -20,6 +20,9 @@ share_summary: >-
   Socrates and gladiators. The robots are coming. Are we Athens
   or Rome?
 signal: ''
+sources:
+  - "On the Origin of Species"
+  - "Oresteia"
 ---
 # When the Servants Are Silicon: What History's Leisure Classes Reveal About the AI Age
 

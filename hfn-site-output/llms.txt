@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 70
+Total articles: 71
 
 ## Sections
 ### Natural Resources (13 articles)
@@ -18,7 +18,7 @@ Total articles: 70
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (28 articles)
+### Society (29 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -310,6 +310,13 @@ Total articles: 70
 - Published: 2026-02-20
 - Reading time: 11 min
 - Guilt societies are ruled by an internal judge; shame societies by the eye of the crowd. The difference shapes corruption, rule of law, and how civilisations understand each other — when they meet, th
+
+### The Locked Gate: How the West Priced Its Children Out of Existence [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence
+- Section: Society
+- Published: 2026-02-19
+- Reading time: 10 min
+- The average house in England costs 8.9 times the average salary. In Seoul, a young couple saves for 18 years to buy a flat. Every city with extreme housing costs has a fertility rate below 1.5. This i
 
 ### The Long Term Impact of Covid 19 [8 charts]
 - URL: https://www.historyfuturenow.com/articles/the-long-term-impact-of-covid-19

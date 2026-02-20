@@ -14,6 +14,10 @@ share_summary: >-
   Governments still argue over Keynes vs Hayek. Both predate the
   internet, globalisation, and demographic collapse. Both are wrong.
 signal: ''
+sources:
+  - "The Road to Serfdom"
+  - "The Economic Consequences of the Peace"
+  - "The Means to Prosperity"
 ---
 # Keynes And Hayek Are Both Dead, And Wrong
 

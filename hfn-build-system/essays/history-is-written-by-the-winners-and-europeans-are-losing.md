@@ -14,6 +14,9 @@ share_summary: >-
   History is written by the winners. For 500 years, that meant
   Europeans. Not any more.
 signal: ''
+sources:
+  - "The Three Musketeers"
+  - "The Count of Monte Cristo"
 ---
 # History is written by the winners. And Europeans are losing.
 

@@ -30,7 +30,6 @@ REVIEW_SLUGS = {
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
     'the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world',
-    'the-locked-gate-how-the-west-priced-its-children-out-of-existence',
 }
 
 def truncate_excerpt(text, max_len):

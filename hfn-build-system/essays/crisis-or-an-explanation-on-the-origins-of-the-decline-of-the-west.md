@@ -21,6 +21,8 @@ share_summary: >-
   The West made a Faustian bargain: short-term wealth in exchange for
   long-term decline. The devil is now collecting.
 signal: ''
+sources:
+  - "Democracy in America"
 ---
 # Crisis: Or An Explanation On The Origins Of The Decline Of The West
 

@@ -190,6 +190,7 @@ BOOKS = [
     {"title": "Science and Civilisation in China", "author": "Joseph Needham", "year": 2026, "source": "kindle", "themes": ["civilisation", "technology"]},
     {"title": "Human Accomplishment", "author": "Charles Murray", "year": 2026, "source": "kindle", "themes": ["civilisation", "cognition"]},
     {"title": "Bowling Alone", "author": "Robert D. Putnam", "year": 2026, "source": "kindle", "themes": ["civilisation", "ideology"]},
+    {"title": "Democracy in America", "author": "Alexis de Tocqueville", "year": 2026, "source": "kindle", "themes": ["civilisation", "ideology"]},
 
     # ═══════════════════════════════════════════════════════════════
     # EMPIRE LIFECYCLE & FAILURE MODES
@@ -372,6 +373,8 @@ BOOKS = [
     {"title": "Democracy: The God That Failed", "author": "Hans-Hermann Hoppe", "year": 2023, "source": "audible", "themes": ["economics", "ideology"]},
     {"title": "The Cash Nexus", "author": "Niall Ferguson", "year": 2026, "source": "kindle", "themes": ["economics", "empire"]},
     {"title": "This Time Is Different", "author": "Carmen Reinhart & Kenneth Rogoff", "year": 2026, "source": "kindle", "themes": ["economics"]},
+    {"title": "The Economic Consequences of the Peace", "author": "John Maynard Keynes", "year": 2026, "source": "kindle", "themes": ["economics"]},
+    {"title": "The Means to Prosperity", "author": "John Maynard Keynes", "year": 2026, "source": "kindle", "themes": ["economics"]},
 
     # ═══════════════════════════════════════════════════════════════
     # IDEOLOGY & NARRATIVE CAPTURE
@@ -522,6 +525,7 @@ BOOKS = [
     {"title": "The Origin and Evolution of Earth", "author": "Robert M. Hazen", "year": 2015, "source": "audible", "themes": ["biology"]},
     {"title": "The Invention of the Jewish People", "author": "Shlomo Sand", "year": 2024, "source": "audible", "themes": ["biology", "ideology"]},
     {"title": "The Broken Spears", "author": "Miguel León-Portilla", "year": 2024, "source": "audible", "themes": ["biology", "empire"]},
+    {"title": "On the Origin of Species", "author": "Charles Darwin", "year": 2026, "source": "kindle", "themes": ["biology"]},
 
     # ═══════════════════════════════════════════════════════════════
     # FICTION AS CIVILISATIONAL SIMULATION
@@ -576,6 +580,7 @@ BOOKS = [
     {"title": "A Tale of Two Cities", "author": "Charles Dickens", "year": 2018, "source": "audible", "themes": ["fiction"]},
     {"title": "Wuthering Heights", "author": "Emily Brontë", "year": 2017, "source": "audible", "themes": ["fiction"]},
     {"title": "Circe", "author": "Madeline Miller", "year": 2020, "source": "audible", "themes": ["fiction"]},
+    {"title": "Oresteia", "author": "Aeschylus", "year": 2026, "source": "kindle", "themes": ["fiction"]},
     {"title": "The Odyssey", "author": "Homer", "year": 2023, "source": "audible", "themes": ["fiction"]},
     {"title": "Life After Life", "author": "Kate Atkinson", "year": 2015, "source": "kindle", "themes": ["fiction"]},
     {"title": "Lord of the Flies", "author": "William Golding", "year": 2023, "source": "audible", "themes": ["fiction"]},
