@@ -25,7 +25,7 @@ signal: ''
 
 In the summer of 1932, the German military budget was a rounding error. The Weimar Republic, shackled by the Treaty of Versailles, spent less than 1% of its national income on defence. Its army was capped at 100,000 men. It possessed no tanks, no military aircraft, no submarines. Germany was, on paper, the most thoroughly disarmed major nation in European history.
 
-Seven years later it had the most powerful military machine the world had ever seen. Defence spending had reached 23% of GDP. The Wehrmacht fielded 4.5 million men, 3,600 tanks, and over 4,000 combat aircraft. The transformation from pacifist republic to continental war machine took less time than it takes to pay off a car loan.
+Seven years later it had the most powerful military machine the world had ever seen. Defence spending had reached 23% of GDP. The Wehrmacht fielded 3.7 million men, over 3,000 tanks, and more than 4,000 combat aircraft. The transformation from pacifist republic to continental war machine took less time than it takes to pay off a car loan.
 
 This is not an anomaly in European history. It is the pattern.
 
@@ -75,7 +75,7 @@ This went far beyond sensible post-Cold War adjustment. What happened was the de
 
 The consequences became brutally apparent after Russia's invasion of Ukraine. When the EU pledged to deliver one million artillery shells to Ukraine within a year, it could not meet the target. Rheinmetall, one of Europe's largest defence companies, was producing around 70,000 artillery shells per year. Russia was producing an estimated 3 million. The EU's combined GDP was over ten times Russia's, but it could produce a fraction of Russia's military output. The problem was not money. It was capacity.
 
-To put this in historical context, during World War II the United States went from producing 800 military aircraft in 1939 to over 96,000 in 1944. Britain went from 3,000 to 26,000. Even the Soviet Union, which lost most of its industrial heartland to the German invasion, relocated over 1,500 factories east of the Urals and was outproducing Germany by 1943. Today's Europe, with all its wealth, cannot produce enough basic ammunition for a single war in Ukraine.
+To put this in historical context, during World War II the United States went from producing fewer than 3,000 military aircraft in 1939 to over 96,000 in 1944. Britain went from 3,000 to 26,000. Even the Soviet Union, which lost most of its industrial heartland to the German invasion, relocated over 1,500 factories east of the Urals and was outproducing Germany by 1943. Today's Europe, with all its wealth, cannot produce enough basic ammunition for a single war in Ukraine.
 
 This is what three decades of peace dividend actually bought: an atrophied industrial base, a hollowed-out military, and the comfortable assumption that serious conflict in Europe was over for good.
 
