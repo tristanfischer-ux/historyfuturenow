@@ -3169,7 +3169,7 @@
   </div>
   <div class="charts-card" data-section="society">
     
-    <div class="chart-figure" id="chart-chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart10_9" data-chart-id="chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart10_9" data-chart-title="The Coming Burden: Old-Age Dependency Ratios" data-chart-source="Source: UN Population Division, World Population Prospects (2024 revision).">
+    <div class="chart-figure" id="chart-chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart10_9" data-chart-id="chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart10_9" data-chart-title="How Many Retirees Must Every 100 Workers Support?" data-chart-source="Source: UN Population Division, World Population Prospects (2024 revision).">
       <div class="chart-share-bar">
         <button class="share-btn chart-share-btn" data-chart-share="copy-data" aria-label="Copy chart data" title="Copy data">CSV</button>
         <button class="share-btn chart-share-btn" data-chart-share="download" aria-label="Download chart as image" title="Download image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
@@ -3179,7 +3179,7 @@
         <button class="share-btn chart-share-btn" data-chart-share="whatsapp" aria-label="Share chart on WhatsApp" title="Share on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
       </div>
       <div class="chart-figure-label">Figure 10</div>
-      <h4>The Coming Burden: Old-Age Dependency Ratios</h4>
+      <h4>How Many Retirees Must Every 100 Workers Support?</h4>
       <p class="chart-desc">By 2050, Japan will have 70 retirees for every 100 workers. China&#x27;s ratio will nearly triple. Pension systems cannot survive these numbers.</p>
       <div class="chart-area"><canvas id="chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart10_9"></canvas></div>
       <p class="chart-source">Source: UN Population Division, World Population Prospects (2024 revision).</p>
@@ -6416,7 +6416,7 @@ x:{title:{display:true,text:'Birth Cohort',color:C.dim},grid:{display:false},tic
 window.__chartInits['chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart7_6'] = function() {
 _regChart('emptyChart7',()=>{const ctx=document.getElementById('chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart7_6');
 new Chart(ctx,{type:'bar',data:{labels:['Native Finnish','Western countries','South Asia','East Asia','E. Europe & Caucasia','All foreign-born','Latin America','Sub-Saharan Africa','SE Asia','Middle East & N. Africa'],
-datasets:[{label:'Net fiscal impact per person',data:[2060,0,-1250,-4500,-5390,-6900,-7320,-9010,-11960,-17180],
+datasets:[{label:'Net fiscal impact per person',data:[2060,-510,-1250,-4500,-5390,-6900,-7320,-9010,-11960,-17180],
 backgroundColor:function(c){const v=c.raw;if(v>0)return C.green;if(v>=-1000)return C.amber;if(v>-7000)return C.amber+'cc';return C.accent},
 borderRadius:3}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:function(c){const v=c.raw;const sign=v>0?'+':'';return sign+'€'+v.toLocaleString()+' vs. native Finnish'}}},
@@ -6461,9 +6461,14 @@ dxy('China',yrs,[10,12,17,21,26,38,47,55],C.purple,[5,5]),
 dxy('United States',yrs,[19,20,26,29,33,37,39,42],C.green),
 dxy('India',yrs,[8,8,10,10,11,15,19,24],C.amber)
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
-title:{display:true,text:'Old-Age Dependency Ratios: Who Will Pay?',color:C.text,font:{size:14}}},
-scales:{y:{title:{display:true,text:'65+ per 100 Working-Age',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,
+tooltip:{...tooltipStyle,callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y+' retirees per 100 workers';}}},
+title:{display:true,text:'Retirees (65+) Every 100 Workers Must Support',color:C.text,font:{size:14}},
+annotation:{annotations:{
+proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+threshold:{type:'line',yMin:50,yMax:50,borderColor:C.accent+'60',borderWidth:1.5,borderDash:[6,4],label:{..._al,display:true,content:'1 retiree per 2 workers',position:'end',color:C.accent,font:{size:10}}}
+}}},
+scales:{y:{title:{display:true,text:'Retirees per 100 workers',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(2000,2060,{grid:{display:false},ticks:{color:C.dim}})}}});
 });
 };

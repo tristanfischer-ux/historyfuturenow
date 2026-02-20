@@ -2263,7 +2263,7 @@ x:{title:{display:true,text:'Birth Cohort',color:C.dim},grid:{display:false},tic
             'position': 'after_para_33',
             'js': """_regChart('emptyChart7',()=>{const ctx=document.getElementById('emptyChart7');
 new Chart(ctx,{type:'bar',data:{labels:['Native Finnish','Western countries','South Asia','East Asia','E. Europe & Caucasia','All foreign-born','Latin America','Sub-Saharan Africa','SE Asia','Middle East & N. Africa'],
-datasets:[{label:'Net fiscal impact per person',data:[2060,0,-1250,-4500,-5390,-6900,-7320,-9010,-11960,-17180],
+datasets:[{label:'Net fiscal impact per person',data:[2060,-510,-1250,-4500,-5390,-6900,-7320,-9010,-11960,-17180],
 backgroundColor:function(c){const v=c.raw;if(v>0)return C.green;if(v>=-1000)return C.amber;if(v>-7000)return C.amber+'cc';return C.accent},
 borderRadius:3}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:function(c){const v=c.raw;const sign=v>0?'+':'';return sign+'\u20ac'+v.toLocaleString()+' vs. native Finnish'}}},
@@ -2312,7 +2312,7 @@ x:linX(1950,2025,{grid:{display:false},ticks:{color:C.dim}})}}});
         {
             'id': 'emptyChart10',
             'figure_num': 10,
-            'title': 'The Coming Burden: Old-Age Dependency Ratios',
+            'title': 'How Many Retirees Must Every 100 Workers Support?',
             'desc': "By 2050, Japan will have 70 retirees for every 100 workers. China's ratio will nearly triple. Pension systems cannot survive these numbers.",
             'source': 'UN Population Division, World Population Prospects (2024 revision).',
             'position': 'after_para_48',
@@ -2326,9 +2326,14 @@ dxy('China',yrs,[10,12,17,21,26,38,47,55],C.purple,[5,5]),
 dxy('United States',yrs,[19,20,26,29,33,37,39,42],C.green),
 dxy('India',yrs,[8,8,10,10,11,15,19,24],C.amber)
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
-title:{display:true,text:'Old-Age Dependency Ratios: Who Will Pay?',color:C.text,font:{size:14}}},
-scales:{y:{title:{display:true,text:'65+ per 100 Working-Age',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,
+tooltip:{...tooltipStyle,callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y+' retirees per 100 workers';}}},
+title:{display:true,text:'Retirees (65+) Every 100 Workers Must Support',color:C.text,font:{size:14}},
+annotation:{annotations:{
+proj:{type:'line',xMin:2025,xMax:2025,borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'← Actual | Projected →',position:'start',backgroundColor:C.dim+'cc',color:'#fff',font:{size:10}}},
+threshold:{type:'line',yMin:50,yMax:50,borderColor:C.accent+'60',borderWidth:1.5,borderDash:[6,4],label:{..._al,display:true,content:'1 retiree per 2 workers',position:'end',color:C.accent,font:{size:10}}}
+}}},
+scales:{y:{title:{display:true,text:'Retirees per 100 workers',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
 x:linX(2000,2060,{grid:{display:false},ticks:{color:C.dim}})}}});
 });"""
         },
