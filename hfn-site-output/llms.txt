@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 74
+Total articles: 75
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -18,7 +18,7 @@ Total articles: 74
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (31 articles)
+### Society (32 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -373,6 +373,13 @@ Total articles: 74
 - Published: 2023-06-01
 - Reading time: 20 min
 - Can we truly predict the future, or are we destined to repeat the mistakes of the past? This question has captivated minds for millennia, from ancient prophets to writers like History Future Now. Desp
+
+### The Price of Admission: What the Netherlands and Denmark Reveal About the True Cost of Immigration [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration
+- Section: Society
+- Published: 2026-02-20
+- Reading time: 10 min
+- The Netherlands and Denmark are the two best-documented case studies on the fiscal and social costs of immigration in Europe. Both are small, wealthy, high-trust welfare states with meticulous statist
 
 ### The renewables and battery revolution. What history teaches us about the future. [9 charts]
 - URL: https://www.historyfuturenow.com/articles/the-renewables-and-battery-revolution

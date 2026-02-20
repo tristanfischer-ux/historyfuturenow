@@ -4872,6 +4872,82 @@ scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{col
         },
     ]
 
+    # ─── THE PRICE OF ADMISSION (NL & DK Immigration) ───
+    charts['the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration'] = [
+        {
+            'id': 'priceChart1', 'figure_num': 1,
+            'title': 'Netherlands: Lifetime Fiscal Impact per Immigrant by Origin',
+            'desc': 'Net lifetime fiscal contribution (taxes paid minus benefits received) — Van de Beek et al., 2023',
+            'source': 'University of Amsterdam, "Borderless Welfare State" (2023), using Statistics Netherlands microdata',
+            'position': 'after_para_4',
+            'tall': True,
+            'js': """
+_regChart('priceChart1',()=>{const ctx=document.getElementById('priceChart1');
+new Chart(ctx,{type:'bar',data:{labels:['N. America,\\nJapan, UK','Western\\naverage','Labour\\nmigrants','Intl\\nstudents','Family\\nmigrants','Non-Western\\naverage','Turkey','Afghanistan,\\nSyria, Iraq','Asylum\\nseekers avg','Morocco','Horn of\\nAfrica, Sudan'],
+datasets:[{label:'Net lifetime fiscal impact (€ thousands)',data:[200,25,100,-75,-237,-275,-340,-418,-475,-542,-606],
+backgroundColor:function(ctx){return ctx.raw>=0?C.teal:ctx.raw>-300?C.amber:C.accent;},borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{...chartPad,left:16}},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw;return (v>=0?'+':'')+v+',000 (€'+Math.abs(v)+'k)'}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>(v>=0?'+':'')+v+'k'},title:{display:true,text:'Net lifetime contribution (€ thousands)',color:C.dim}},
+y:{grid:{display:false},ticks:{color:C.text,font:{size:11}}}}}});
+});"""
+        },
+        {
+            'id': 'priceChart2', 'figure_num': 2,
+            'title': 'Denmark: Annual Fiscal Cost of Immigration by Origin Group (2018)',
+            'desc': 'Net annual fiscal cost in billions of Danish kroner — MENAPT countries account for 77% of the total',
+            'source': 'Danish Ministry of Immigration and Integration (2021); The Local Denmark',
+            'position': 'after_heading_The Danish Ledger',
+            'js': """
+_regChart('priceChart2',()=>{const ctx=document.getElementById('priceChart2');
+new Chart(ctx,{type:'bar',data:{labels:['MENAPT countries\\n(Middle East, N. Africa,\\nPakistan, Turkey)','Other non-Western\\ncountries','Western\\ncountries'],
+datasets:[{label:'Annual fiscal impact (billion DKK)',data:[-24,-7,3],
+backgroundColor:[C.accent,C.amber,C.teal],borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw;return (v>=0?'+':'')+v+' billion DKK'+(v<0?' (net cost)':' (net contribution)')}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>(v>=0?'+':'')+v+'bn'},title:{display:true,text:'Annual net fiscal impact (billion DKK)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'priceChart3', 'figure_num': 3,
+            'title': 'Denmark: Employment Rates by Origin Group (2015 vs 2022)',
+            'desc': 'Employment gap has narrowed to a record low of 15.3 percentage points — but persists',
+            'source': 'Statistics Denmark; The Local Denmark (2023, 2024)',
+            'position': 'after_para_16',
+            'js': """
+_regChart('priceChart3',()=>{const ctx=document.getElementById('priceChart3');
+new Chart(ctx,{type:'bar',data:{labels:['Ethnic Danish\\nmen','Ethnic Danish\\nwomen','Western\\nimmigrants','Non-Western\\nmen','Non-Western\\nwomen'],
+datasets:[{label:'2015',data:[80,78,66,53,45],backgroundColor:C.dim+'99',borderRadius:4,borderSkipped:false},
+{label:'2022',data:[81,79,75,69,58],backgroundColor:C.blue,borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
+y:{min:30,max:90,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},title:{display:true,text:'Employment rate (%)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'priceChart4', 'figure_num': 4,
+            'title': 'Netherlands: Projected Population by Origin to 2050',
+            'desc': 'Dutch-origin share projected to fall from 73% to between 58% and 66% depending on migration levels',
+            'source': 'Statistics Netherlands (CBS), Population Outlook 2050 (2024)',
+            'position': 'after_para_11',
+            'js': """
+_regChart('priceChart4',()=>{const ctx=document.getElementById('priceChart4');
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Dutch-origin (low migration)',[2023,2030,2035,2040,2045,2050],[73,70,68,65,63,58],C.accent,[5,5]),
+dxy('Dutch-origin (high migration)',[2023,2030,2035,2040,2045,2050],[73,71,69,68,67,66],C.amber,[5,5]),
+dxy('Born abroad',[2023,2030,2035,2040,2045,2050],[17,19,20,22,23,26],C.blue),
+dxy('Second generation',[2023,2030,2035,2040,2045,2050],[12,13,14,15,16,17],C.teal)]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend},tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
+annotation:{annotations:{projLine:{type:'line',xMin:2023,xMax:2023,borderColor:C.dim,borderWidth:1,borderDash:[4,4],
+label:{display:true,content:'Projections →',position:'start',..._al}}}}},
+scales:{x:linX(2023,2050),y:{min:0,max:80,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of population (%)',color:C.dim}}}}});
+});"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):
