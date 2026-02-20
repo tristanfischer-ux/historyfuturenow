@@ -189,6 +189,8 @@ ISSUES = [
             "the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two",
             "the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin",
             "the-locked-gate-how-the-west-priced-its-children-out-of-existence",
+            "the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant",
+            "the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration",
         ],
     },
 ]
