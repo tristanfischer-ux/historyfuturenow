@@ -1,0 +1,105 @@
+# Article Fact-Checking Protocol
+
+Every verifiable claim in every article MUST be checked against an authoritative source before publication. The credibility of this publication depends on getting the facts right. An AI writing historical essays is particularly prone to confident fabrication — stating falsehoods with authority. This protocol exists to prevent that.
+
+## The Core Discipline
+
+**Get the information. Think about whether it is true. Verify it. Only then include it.**
+
+This is a three-step process, not one. Retrieving a fact from memory or training data is step one. The agent MUST then pause and critically evaluate: does this sound right? Is this the kind of claim an AI might fabricate? Then verify it against a published source. Only after verification does the claim enter the article.
+
+## Claim Types Requiring Verification
+
+Every instance of the following in article prose must be verified:
+
+| Claim Type | Example | Why It Needs Checking |
+|------------|---------|----------------------|
+| **Specific statistics** | "Fertility rate fell to 0.72" | AI frequently generates plausible but wrong numbers |
+| **Historical dates** | "The treaty was signed in 1648" | Dates are easy to confuse or conflate with nearby events |
+| **Event chronology** | "X happened before Y" | Sequencing errors distort causal arguments |
+| **Casualty and population figures** | "The war killed 20-40% of the population" | Ranges vary widely across sources; precision matters |
+| **Attributed arguments** | "As Fukuyama argues in *The End of History*..." | Misattribution destroys credibility with readers who know the source |
+| **Causal claims** | "No country has recovered from below 1.5 fertility" | These are often oversimplified or wrong |
+| **Comparative claims** | "China overtook the US in GDP PPP in 2014" | The year and metric must both be correct |
+| **Quotes from named individuals** | "Suleyman predicted that 'most, if not all'..." | Misquoting a named person is defamatory territory |
+| **Absolute or superlative claims** | "The largest / first / only / never before..." | These are almost always wrong or misleading |
+
+## Verification Process
+
+For EVERY verifiable claim in article prose:
+
+1. **Search** for the claim using web search against an authoritative source
+2. **Compare** the search result with what you wrote — does the figure, date, or assertion match?
+3. **If confirmed:** proceed
+4. **If the figure differs by more than 10%:** correct the article text to match the verified figure
+5. **If the claim is wrong:** correct it. Do not leave known errors in the text.
+6. **If unverifiable:** flag with `<!-- UNVERIFIED: [claim] — could not find authoritative source -->` and tell the user
+7. **If contested among scholars:** rewrite to present it as debated ("estimates range from X to Y" or "historians disagree on whether...")
+
+For claims that are **central to the article's thesis**, cross-reference against a **second independent source**. The thesis must not rest on a single unverified data point.
+
+## Common Error Patterns
+
+| Error | Example | How to Prevent |
+|-------|---------|----------------|
+| **Plausible fabrication** | Asserting "Rome's population fell 60% by 500 AD" when no reliable figure exists | If you cannot find the exact number from a named source, do not state it as fact. Use qualified language or a range. |
+| **Misattributed arguments** | Claiming Author X argued Y when they actually argued Z | Search for what the author actually said. Read summaries or reviews of the cited work. |
+| **Conflated events** | Merging two separate treaties or battles into one | Verify each event independently — name, date, participants, outcome. |
+| **Confident assertion of contested claims** | Stating as settled fact something historians actively debate | Search for counterarguments. If serious scholars disagree, present it as a debate. |
+| **Range compression** | Writing "killed 30%" when estimates range from 15% to 45% | Always check whether the figure is a consensus or one end of a range. If a range, present the range. |
+| **Survivorship bias** | Using Rome and Britain as "proof" of a universal pattern while ignoring counterexamples | Actively search for counterexamples. If they exist, acknowledge them. |
+| **Anachronistic framing** | Describing a medieval economy in terms of GDP | Note when modern concepts are being applied retrospectively and flag the limitations. |
+| **Stale data presented as current** | Using 2020 figures labelled as "today" in a 2026 article | Check what year the data covers. Use the latest available and label the year. |
+| **Misquotation** | Paraphrasing a quote inaccurately or attributing it to the wrong person | Search for the exact quote. Verify the speaker and context. |
+
+## Preferred Authoritative Sources
+
+| Domain | Primary Sources | Secondary Sources |
+|--------|----------------|-------------------|
+| Historical demographics | UN World Population Prospects (latest revision) | Our World in Data, Angus Maddison Project |
+| Historical events and dates | Encyclopaedia Britannica, Oxford Reference | Cambridge Histories, peer-reviewed journals |
+| Economic history | Maddison Project Database, World Bank historical | IMF WEO, OECD |
+| Military history and casualties | Correlates of War project, IISS Military Balance | Encyclopaedia Britannica, peer-reviewed estimates |
+| Political attitudes and polling | Gallup, Pew Research Center | European Social Survey, national statistical offices |
+| Energy and environment | IEA, Ember, IAEA PRIS | BP Statistical Review, IRENA |
+| Trade and FDI | UNCTAD, national trade ministries | World Bank WITS, fDi Markets |
+| Education | OECD Education at a Glance | UNESCO Institute for Statistics |
+| Attributed arguments and quotes | The cited book or paper itself | Publisher summaries, major book reviews |
+
+## When You Cannot Verify a Claim
+
+1. **Do not invent a plausible figure.** This is the single most dangerous failure mode.
+2. **Do not assume your training data is correct.** It frequently is not, especially for historical statistics.
+3. **Flag it** with an HTML comment: `<!-- UNVERIFIED: [claim] — needs source -->`
+4. **Rewrite to hedge:** "estimates suggest..." or "by some accounts..." rather than stating as fact
+5. **Tell the user** that the claim could not be verified and needs manual review
+
+## Required Verification Checklist
+
+Before any article is published, verify:
+
+- [ ] Every specific statistic matches a published source to within 10%
+- [ ] Every historical date has been confirmed against an authoritative reference
+- [ ] Every attributed argument accurately represents what the cited author actually wrote
+- [ ] Every direct quote has been verified for accuracy and correct attribution
+- [ ] Superlative claims ("the first", "the largest", "never before") have been checked for counterexamples
+- [ ] Causal claims are supported by evidence, not just correlation or narrative convenience
+- [ ] Contested claims are presented as debated, not settled
+- [ ] Population and casualty figures use ranges where scholarly estimates vary
+- [ ] Data presented as "current" or "today" states the actual year of the data
+- [ ] The article's thesis does not depend on any single unverified claim
+
+## When Reviewing Existing Articles
+
+When retroactively fact-checking published articles:
+
+1. Extract all verifiable claims (statistics, dates, attributed arguments, causal assertions, quotes)
+2. Verify each against authoritative sources using web search
+3. Fix errors directly in the essay markdown
+4. Flag claims that cannot be verified with HTML comments
+5. Report all changes to the user with before/after comparisons
+6. Rebuild and deploy after each batch of corrections
+
+## Interaction with Chart Fact-Checking
+
+This rule covers **article prose**. Chart data is covered by `chart-fact-checking.mdc`. Both rules apply: a statistic that appears in both the text and a chart must be consistent across both, and verified in both places.

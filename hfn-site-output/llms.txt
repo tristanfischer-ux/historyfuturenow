@@ -3,10 +3,10 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 71
+Total articles: 72
 
 ## Sections
-### Natural Resources (13 articles)
+### Natural Resources (14 articles)
 - URL: https://www.historyfuturenow.com/natural-resources
 - Energy, food, water, land — the physical foundations that every civilisation depends on.
 
@@ -310,6 +310,13 @@ Total articles: 71
 - Published: 2026-02-20
 - Reading time: 11 min
 - Guilt societies are ruled by an internal judge; shame societies by the eye of the crowd. The difference shapes corruption, rule of law, and how civilisations understand each other — when they meet, th
+
+### The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed
+- Section: Natural Resources
+- Published: 2026-02-19
+- Reading time: 10 min
+- Water is the one resource for which there is no substitute. Every major civilisation was built on water management — Mesopotamia's canals, Egypt's Nile, Rome's aqueducts. And every civilisation that l
 
 ### The Locked Gate: How the West Priced Its Children Out of Existence [4 charts]
 - URL: https://www.historyfuturenow.com/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence

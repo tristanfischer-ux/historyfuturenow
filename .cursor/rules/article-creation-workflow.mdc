@@ -11,6 +11,14 @@ When writing a new article (or significantly rewriting an existing one), the age
 - At least one chuckle hook in the first third
 - 3,000–5,000 words
 
+### 1.5. Fact-Check Article Claims
+- Extract all verifiable claims: statistics, dates, attributed arguments, causal assertions, quotes, superlatives
+- Verify each against at least one authoritative source using web search (see `article-fact-checking.mdc` for source hierarchy)
+- Cross-reference claims central to the article's thesis against a second independent source
+- Correct any errors found; rewrite contested claims to present the debate rather than assert one side
+- Flag any claims that cannot be verified with `<!-- UNVERIFIED: [claim] -->` and tell the user
+- This step is NOT optional — no article proceeds to charts until its prose claims are verified
+
 ### 2. Define Charts
 - Add chart definitions to `hfn-build-system/chart_defs.py`
 - Minimum 1 chart, target 2–5 per article
@@ -54,6 +62,7 @@ If `GEMINI_API_KEY` is not available in the environment, the audio steps (5, 6, 
 
 Before marking an article task as done, verify:
 - [ ] Article markdown exists with full frontmatter
+- [ ] All verifiable claims fact-checked against authoritative sources (see `article-fact-checking.mdc`)
 - [ ] Charts defined in `chart_defs.py`
 - [ ] Hero image in place
 - [ ] Site built successfully

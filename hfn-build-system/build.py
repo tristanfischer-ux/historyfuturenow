@@ -24,12 +24,17 @@ ENABLE_DISCUSSIONS = False
 # Articles pulled from public site for editorial review. They remain accessible
 # at their direct URLs (with noindex) and are listed on a hidden /review/ page.
 REVIEW_SLUGS = {
-    'the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed',
     'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
     'the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world',
+}
+
+# Articles that were under review and have been released to the public site.
+RELEASED_FROM_REVIEW = {
+    'the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope',
+    'the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed',
 }
 
 def truncate_excerpt(text, max_len):
@@ -1903,24 +1908,49 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
 </body>
 </html>"""
 
-def build_review_page(review_essays):
-    """Build a hidden review page listing articles pulled from public site."""
-    cards_html = ""
-    for e in review_essays:
-        pi = PARTS[e['part']]
-        hero_img = get_hero_image(e['slug'])
-        img_html = f'<img src="{hero_img}" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0" loading="lazy">' if hero_img else ''
-        has_audio = e.get('has_audio') or e.get('has_discussion')
-        audio_tag = '<span style="color:#059669;font-size:0.85rem">&#9654; Audio</span>' if has_audio else ''
-        cards_html += f'''    <a href="/articles/{html_mod.escape(e['slug'])}" style="display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;transition:box-shadow 0.2s">
+def _review_card(e, badge_html=""):
+    """Render a single review card."""
+    pi = PARTS[e['part']]
+    hero_img = get_hero_image(e['slug'])
+    img_html = f'<img src="{hero_img}" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0" loading="lazy">' if hero_img else ''
+    has_audio = e.get('has_audio') or e.get('has_discussion')
+    audio_tag = '<span style="color:#059669;font-size:0.85rem">&#9654; Audio</span>' if has_audio else ''
+    return f'''    <a href="/articles/{html_mod.escape(e['slug'])}" style="display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;transition:box-shadow 0.2s">
       {img_html}
       <div style="padding:1rem">
+        {badge_html}
         <div style="font-size:0.8rem;color:{pi['color']};font-weight:600;margin-bottom:0.25rem">{pi['label']} &middot; {html_mod.escape(e['part'])}</div>
         <h3 style="margin:0 0 0.5rem;font-size:1.1rem;line-height:1.3">{html_mod.escape(e['title'])}</h3>
         <p style="margin:0 0 0.5rem;font-size:0.9rem;color:#6b7280;line-height:1.4">{truncate_excerpt(e['excerpt'], 160)}</p>
         <div style="font-size:0.8rem;color:#9ca3af">{e['reading_time']} min read {audio_tag}</div>
       </div>
     </a>\n'''
+
+
+def build_review_page(review_essays, released_essays=None):
+    """Build a hidden review page listing articles under review and recently released."""
+    released_essays = released_essays or []
+
+    # Under review section
+    review_cards = ""
+    for e in review_essays:
+        review_cards += _review_card(e)
+
+    # Released section
+    released_cards = ""
+    for e in released_essays:
+        badge = '<div style="display:inline-block;background:#059669;color:#fff;font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:4px;margin-bottom:0.5rem;letter-spacing:0.03em">LIVE</div>'
+        released_cards += _review_card(e, badge_html=badge)
+
+    released_section = ""
+    if released_essays:
+        released_section = f'''
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin:2.5rem 0 0.5rem;color:#059669">Released</h2>
+  <p style="color:#6b7280;margin-bottom:1.5rem">{len(released_essays)} article{"s" if len(released_essays) != 1 else ""} approved and live on the public site.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem">
+{released_cards}  </div>'''
+
+    total = len(review_essays) + len(released_essays)
 
     return f'''<!DOCTYPE html>
 <html lang="en">
@@ -1933,9 +1963,13 @@ def build_review_page(review_essays):
     <a href="/" style="color:#6b7280;text-decoration:none;font-size:0.9rem">&larr; Back to site</a>
   </div>
   <h1 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:0.5rem">Editorial Review</h1>
-  <p style="color:#6b7280;margin-bottom:2rem">{len(review_essays)} articles under review. This page is not linked from the public site.</p>
+  <p style="color:#6b7280;margin-bottom:0.5rem">{total} articles in this batch &mdash; {len(released_essays)} released, {len(review_essays)} under review.</p>
+
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin:2rem 0 0.5rem;color:#b45309">Under Review</h2>
+  <p style="color:#6b7280;margin-bottom:1.5rem">{len(review_essays)} article{"s" if len(review_essays) != 1 else ""} awaiting approval. Not visible on the public site.</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem">
-{cards_html}  </div>
+{review_cards}  </div>
+{released_section}
 </div>
 </body>
 </html>'''
@@ -2769,10 +2803,11 @@ def main():
 
     # ── Review page (hidden, not linked) ──
     print("Building review page...")
+    released_essays = [e for e in public_essays if e['slug'] in RELEASED_FROM_REVIEW]
     review_dir = OUTPUT_DIR / "review"
     review_dir.mkdir(parents=True, exist_ok=True)
-    (review_dir / "index.html").write_text(build_review_page(review_essays), encoding='utf-8')
-    print(f"  Built review page with {len(review_essays)} articles")
+    (review_dir / "index.html").write_text(build_review_page(review_essays, released_essays), encoding='utf-8')
+    print(f"  Built review page with {len(review_essays)} under review, {len(released_essays)} released")
 
     # ── SEO files ──
     print("Building SEO files...")
