@@ -6584,7 +6584,7 @@ const allX=asianPI.concat(westernPI),allY=asianTFR.concat(westernTFR),n=allX.len
 let sx=0,sy=0,sxy=0,sx2=0;for(let i=0;i<n;i++){sx+=allX[i];sy+=allY[i];sxy+=allX[i]*allY[i];sx2+=allX[i]*allX[i];}
 const slope=(n*sxy-sx*sy)/(n*sx2-sx*sx),intercept=(sy-slope*sx)/n;
 const trendData=[{x:2,y:+(slope*2+intercept).toFixed(2)},{x:22,y:+(slope*22+intercept).toFixed(2)}];
-const labelOffsets={Seoul:[0,-16],['Hong Kong']:[0,-16],Tokyo:[0,-16],Singapore:[0,-16],London:[0,-16],Sydney:[-20,-16],Vancouver:[0,-16],['New York']:[0,-16],Vienna:[0,-16],Houston:[0,-16]};
+const labelOffsets={Seoul:[-30,-14],['Hong Kong']:[0,18],Tokyo:[0,-16],Singapore:[0,-16],London:[-35,-14],Sydney:[0,-16],Vancouver:[0,-16],['New York']:[0,-16],Vienna:[0,-16],Houston:[0,-16]};
 const labelPlugin={id:'housingLabels',afterDatasetsDraw(chart){const c=chart.ctx;c.save();c.font='bold 13px system-ui,sans-serif';c.textBaseline='bottom';[[asian,C.accent],[western,C.blue]].forEach(([names,col],di)=>{const meta=chart.getDatasetMeta(di+1);c.fillStyle=col;meta.data.forEach((pt,i)=>{const off=labelOffsets[names[i]]||[0,-16];c.textAlign='center';c.fillText(names[i],pt.x+off[0],pt.y+off[1]);});});c.restore();}};
 new Chart(ctx,{type:'scatter',plugins:[labelPlugin],data:{datasets:[
 {label:'Trend',type:'line',data:trendData,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],pointRadius:0,pointHoverRadius:0,fill:false,tension:0,order:3},

@@ -293,20 +293,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/a-frozen-society-the-long-term-implications-of-nsas-secrets" class="related-card">
+      <a href="/articles/a-nation-transformed-britains-demographic-revolution-1948-2050" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">A Frozen Society: The Long Term Implications Of NSA’s Secrets</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Nation Transformed: Britain&#x27;s Demographic Revolution, 1948–2050</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
+      <a href="/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Long Term Impact of Covid 19</span>
-        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why The Nuclear Family Needs To Die, In Order For Us To Live</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people" class="related-card">
+      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -480,7 +480,7 @@ const allX=asianPI.concat(westernPI),allY=asianTFR.concat(westernTFR),n=allX.len
 let sx=0,sy=0,sxy=0,sx2=0;for(let i=0;i<n;i++){sx+=allX[i];sy+=allY[i];sxy+=allX[i]*allY[i];sx2+=allX[i]*allX[i];}
 const slope=(n*sxy-sx*sy)/(n*sx2-sx*sx),intercept=(sy-slope*sx)/n;
 const trendData=[{x:2,y:+(slope*2+intercept).toFixed(2)},{x:22,y:+(slope*22+intercept).toFixed(2)}];
-const labelOffsets={Seoul:[0,-16],['Hong Kong']:[0,-16],Tokyo:[0,-16],Singapore:[0,-16],London:[0,-16],Sydney:[-20,-16],Vancouver:[0,-16],['New York']:[0,-16],Vienna:[0,-16],Houston:[0,-16]};
+const labelOffsets={Seoul:[-30,-14],['Hong Kong']:[0,18],Tokyo:[0,-16],Singapore:[0,-16],London:[-35,-14],Sydney:[0,-16],Vancouver:[0,-16],['New York']:[0,-16],Vienna:[0,-16],Houston:[0,-16]};
 const labelPlugin={id:'housingLabels',afterDatasetsDraw(chart){const c=chart.ctx;c.save();c.font='bold 13px system-ui,sans-serif';c.textBaseline='bottom';[[asian,C.accent],[western,C.blue]].forEach(([names,col],di)=>{const meta=chart.getDatasetMeta(di+1);c.fillStyle=col;meta.data.forEach((pt,i)=>{const off=labelOffsets[names[i]]||[0,-16];c.textAlign='center';c.fillText(names[i],pt.x+off[0],pt.y+off[1]);});});c.restore();}};
 new Chart(ctx,{type:'scatter',plugins:[labelPlugin],data:{datasets:[
 {label:'Trend',type:'line',data:trendData,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],pointRadius:0,pointHoverRadius:0,fill:false,tension:0,order:3},
