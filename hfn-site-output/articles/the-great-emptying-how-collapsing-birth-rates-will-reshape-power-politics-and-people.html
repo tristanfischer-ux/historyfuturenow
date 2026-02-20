@@ -430,20 +430,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
         <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-long-term-impact-of-covid-19" class="related-card">
+      <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Long Term Impact of Covid 19</span>
-        <span class="related-time">30 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</span>
+        <span class="related-time">51 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -662,6 +662,7 @@ scales:{y:{title:{display:true,text:'Age',color:C.dim},grid:{color:C.grid},ticks
 x:{grid:{display:false},ticks:{color:C.dim}}}}});
 });
 _regChart('emptyChart6',()=>{const ctx=document.getElementById('emptyChart6');
+const _lbl=(c,y,t,xAdj)=>({type:'label',xValue:'1961-65',yValue:y,content:t,color:c,font:{size:9,weight:'600'},backgroundColor:'transparent',padding:0,xAdjust:xAdj||0,yAdjust:0});
 new Chart(ctx,{type:'line',data:{labels:['1931-35','1936-40','1941-45','1946-50','1951-55','1956-60','1961-65'],
 datasets:[
 ds('Maghreb immigrants',[4.90,4.50,4.10,3.60,3.20,2.95,2.85],C.accent),
@@ -669,9 +670,10 @@ ds('All immigrant women',[3.30,3.15,2.95,2.70,2.55,2.50,2.50],C.green),
 ds('European immigrants',[2.45,2.40,2.30,2.15,2.05,2.00,2.00],C.teal),
 ds('Native-born French',[2.42,2.35,2.25,2.12,2.03,1.95,1.90],C.blue,[8,4])
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:80,top:8}},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Immigrant Fertility Converges to Host Country, France',color:C.text,font:{size:14}},
-annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}},
+lblM:_lbl(C.accent,2.85,'Maghreb',6),lblA:_lbl(C.green,2.50,'All immigrant',6),lblE:_lbl(C.teal,2.00,'European',6),lblN:_lbl(C.blue,1.90,'Native French',6)}}},
 scales:{y:{title:{display:true,text:'Children per Woman',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:1.5},
 x:{title:{display:true,text:'Birth Cohort',color:C.dim},grid:{display:false},ticks:{color:C.dim}}}}});
 });

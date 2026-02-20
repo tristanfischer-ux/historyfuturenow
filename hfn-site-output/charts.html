@@ -1782,7 +1782,7 @@
   </div>
   <div class="charts-card" data-section="jobs-economy">
     
-    <div class="chart-figure" id="chart-chart_the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin_debtChart2_1" data-chart-id="chart_the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin_debtChart2_1" data-chart-title="US Federal Interest Payments vs. Defence Spending (2000–2025)" data-chart-source="Source: CBO; US Treasury; OMB">
+    <div class="chart-figure" id="chart-chart_the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin_debtChart2_1" data-chart-id="chart_the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin_debtChart2_1" data-chart-title="US Federal Interest Payments vs. Defence Spending (1900–2026)" data-chart-source="Source: Historical Statistics of the US; OMB; CBO; US Treasury (FRED)">
       <div class="chart-share-bar">
         <button class="share-btn chart-share-btn" data-chart-share="copy-data" aria-label="Copy chart data" title="Copy data">CSV</button>
         <button class="share-btn chart-share-btn" data-chart-share="download" aria-label="Download chart as image" title="Download image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
@@ -1792,10 +1792,10 @@
         <button class="share-btn chart-share-btn" data-chart-share="whatsapp" aria-label="Share chart on WhatsApp" title="Share on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
       </div>
       <div class="chart-figure-label">Figure 2</div>
-      <h4>US Federal Interest Payments vs. Defence Spending (2000–2025)</h4>
-      <p class="chart-desc">In 2025, for the first time in American history, interest costs exceeded the defence budget</p>
+      <h4>US Federal Interest Payments vs. Defence Spending (1900–2026)</h4>
+      <p class="chart-desc">For a century, interest on the national debt was invisible — a rounding error next to the defence budget. In 2024, for the first time in American history, it exceeded it</p>
       <div class="chart-area"><canvas id="chart_the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin_debtChart2_1"></canvas></div>
-      <p class="chart-source">Source: CBO; US Treasury; OMB</p>
+      <p class="chart-source">Source: Historical Statistics of the US; OMB; CBO; US Treasury (FRED)</p>
     </div>
 
     <a href="/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin#chart-debtChart2" class="charts-article-link">Read the full article &rarr;</a>
@@ -5376,17 +5376,18 @@ title:{display:true,text:'Government debt (% of GDP)',color:C.dim}}}}});
 window.__chartInits['chart_the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin_debtChart2_1'] = function() {
 
 _regChart('debtChart2',()=>{const ctx=document.getElementById('chart_the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin_debtChart2_1');
-const yrs=[2000,2005,2008,2010,2012,2015,2018,2020,2022,2024,2025];
+const yrs=[1900,1910,1918,1920,1930,1940,1945,1950,1955,1960,1968,1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2022,2024,2025,2026];
+const proj=s=>s.p1DataIndex===24?[5,3]:[];
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Net interest payments',yrs,[223,184,253,196,220,223,325,345,475,870,1050],C.accent),
-dxy('Defence spending',yrs,[295,495,616,689,677,597,631,714,767,874,895],C.blue)
+{...dxy('Net interest payments',yrs,[0.04,0.02,0.2,1,0.7,0.9,3.1,4.8,4.9,6.9,11,23,53,130,184,232,223,184,196,223,345,476,881,970,1050],C.accent),segment:{borderDash:proj}},
+{...dxy('Defence spending',yrs,[0.2,0.25,7,4,0.7,1.7,83,14,43,48,82,87,134,253,299,272,295,495,694,590,714,767,874,895,920],C.blue),segment:{borderDash:proj}}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'B'}},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw.y;return i.dataset.label+': '+(v>=1?'$'+Math.round(v)+'B':'$'+Math.round(v*1000)+'M')}}},
 annotation:{annotations:{
 cross:{type:'line',xMin:2024,xMax:2024,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
 label:{..._al,display:true,content:'Interest exceeds defence',position:'start',color:C.accent,font:{size:10}}}
 }}},
-scales:{x:linX(2000,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
+scales:{x:linX(1900,2026),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
 title:{display:true,text:'$ billions',color:C.dim}}}}});
 });
 };
@@ -6399,6 +6400,7 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
 };
 window.__chartInits['chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart6_5'] = function() {
 _regChart('emptyChart6',()=>{const ctx=document.getElementById('chart_the-great-emptying-how-collapsing-birth-rates-will-reshape-power-politics-and-people_emptyChart6_5');
+const _lbl=(c,y,t,xAdj)=>({type:'label',xValue:'1961-65',yValue:y,content:t,color:c,font:{size:9,weight:'600'},backgroundColor:'transparent',padding:0,xAdjust:xAdj||0,yAdjust:0});
 new Chart(ctx,{type:'line',data:{labels:['1931-35','1936-40','1941-45','1946-50','1951-55','1956-60','1961-65'],
 datasets:[
 ds('Maghreb immigrants',[4.90,4.50,4.10,3.60,3.20,2.95,2.85],C.accent),
@@ -6406,9 +6408,10 @@ ds('All immigrant women',[3.30,3.15,2.95,2.70,2.55,2.50,2.50],C.green),
 ds('European immigrants',[2.45,2.40,2.30,2.15,2.05,2.00,2.00],C.teal),
 ds('Native-born French',[2.42,2.35,2.25,2.12,2.03,1.95,1.90],C.blue,[8,4])
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:80,top:8}},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Immigrant Fertility Converges to Host Country, France',color:C.text,font:{size:14}},
-annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}},
+lblM:_lbl(C.accent,2.85,'Maghreb',6),lblA:_lbl(C.green,2.50,'All immigrant',6),lblE:_lbl(C.teal,2.00,'European',6),lblN:_lbl(C.blue,1.90,'Native French',6)}}},
 scales:{y:{title:{display:true,text:'Children per Woman',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:1.5},
 x:{title:{display:true,text:'Birth Cohort',color:C.dim},grid:{display:false},ticks:{color:C.dim}}}}});
 });

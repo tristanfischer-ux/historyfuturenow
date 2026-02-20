@@ -2240,6 +2240,7 @@ x:{grid:{display:false},ticks:{color:C.dim}}}}});
             'source': 'INSEE, Volant, Pison & Héran, Population & Societies no. 568 (2019).',
             'position': 'after_para_29',
             'js': """_regChart('emptyChart6',()=>{const ctx=document.getElementById('emptyChart6');
+const _lbl=(c,y,t,xAdj)=>({type:'label',xValue:'1961-65',yValue:y,content:t,color:c,font:{size:9,weight:'600'},backgroundColor:'transparent',padding:0,xAdjust:xAdj||0,yAdjust:0});
 new Chart(ctx,{type:'line',data:{labels:['1931-35','1936-40','1941-45','1946-50','1951-55','1956-60','1961-65'],
 datasets:[
 ds('Maghreb immigrants',[4.90,4.50,4.10,3.60,3.20,2.95,2.85],C.accent),
@@ -2247,9 +2248,10 @@ ds('All immigrant women',[3.30,3.15,2.95,2.70,2.55,2.50,2.50],C.green),
 ds('European immigrants',[2.45,2.40,2.30,2.15,2.05,2.00,2.00],C.teal),
 ds('Native-born French',[2.42,2.35,2.25,2.12,2.03,1.95,1.90],C.blue,[8,4])
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:legend,tooltip:tooltipStyle,
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:80,top:8}},plugins:{legend:noLegend,tooltip:tooltipStyle,
 title:{display:true,text:'Immigrant Fertility Converges to Host Country, France',color:C.text,font:{size:14}},
-annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}}}}},
+annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:1.5,label:{..._al,display:true,content:'Replacement (2.1)',position:'end',color:C.dim,font:{size:10}}},
+lblM:_lbl(C.accent,2.85,'Maghreb',6),lblA:_lbl(C.green,2.50,'All immigrant',6),lblE:_lbl(C.teal,2.00,'European',6),lblN:_lbl(C.blue,1.90,'Native French',6)}}},
 scales:{y:{title:{display:true,text:'Children per Woman',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:1.5},
 x:{title:{display:true,text:'Birth Cohort',color:C.dim},grid:{display:false},ticks:{color:C.dim}}}}});
 });"""
@@ -3881,23 +3883,24 @@ title:{display:true,text:'Government debt (% of GDP)',color:C.dim}}}}});
         },
         {
             'id': 'debtChart2', 'figure_num': 2,
-            'title': 'US Federal Interest Payments vs. Defence Spending (2000–2025)',
-            'desc': 'In 2025, for the first time in American history, interest costs exceeded the defence budget',
-            'source': 'CBO; US Treasury; OMB',
+            'title': 'US Federal Interest Payments vs. Defence Spending (1900–2026)',
+            'desc': 'For a century, interest on the national debt was invisible — a rounding error next to the defence budget. In 2024, for the first time in American history, it exceeded it',
+            'source': 'Historical Statistics of the US; OMB; CBO; US Treasury (FRED)',
             'position': 'after_para_3',
             'js': """
 _regChart('debtChart2',()=>{const ctx=document.getElementById('debtChart2');
-const yrs=[2000,2005,2008,2010,2012,2015,2018,2020,2022,2024,2025];
+const yrs=[1900,1910,1918,1920,1930,1940,1945,1950,1955,1960,1968,1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2022,2024,2025,2026];
+const proj=s=>s.p1DataIndex===24?[5,3]:[];
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Net interest payments',yrs,[223,184,253,196,220,223,325,345,475,870,1050],C.accent),
-dxy('Defence spending',yrs,[295,495,616,689,677,597,631,714,767,874,895],C.blue)
+{...dxy('Net interest payments',yrs,[0.04,0.02,0.2,1,0.7,0.9,3.1,4.8,4.9,6.9,11,23,53,130,184,232,223,184,196,223,345,476,881,970,1050],C.accent),segment:{borderDash:proj}},
+{...dxy('Defence spending',yrs,[0.2,0.25,7,4,0.7,1.7,83,14,43,48,82,87,134,253,299,272,295,495,694,590,714,767,874,895,920],C.blue),segment:{borderDash:proj}}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': $'+i.raw.y+'B'}},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw.y;return i.dataset.label+': '+(v>=1?'$'+Math.round(v)+'B':'$'+Math.round(v*1000)+'M')}}},
 annotation:{annotations:{
 cross:{type:'line',xMin:2024,xMax:2024,borderColor:C.dim,borderDash:[4,4],borderWidth:1.5,
 label:{..._al,display:true,content:'Interest exceeds defence',position:'start',color:C.accent,font:{size:10}}}
 }}},
-scales:{x:linX(2000,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
+scales:{x:linX(1900,2026),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'B'},
 title:{display:true,text:'$ billions',color:C.dim}}}}});
 });"""
         },
