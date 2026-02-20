@@ -4007,7 +4007,10 @@ const allX=devAge.concat(advAge),allY=devTFR.concat(advTFR),n=allX.length;
 let sx=0,sy=0,sxy=0,sx2=0;for(let i=0;i<n;i++){sx+=allX[i];sy+=allY[i];sxy+=allX[i]*allY[i];sx2+=allX[i]*allX[i];}
 const slope=(n*sxy-sx*sy)/(n*sx2-sx*sx),intercept=(sy-slope*sx)/n;
 const trendData=[{x:19,y:+(slope*19+intercept).toFixed(2)},{x:35,y:+(slope*35+intercept).toFixed(2)}];
-const labelPlugin={id:'marriageLabels',afterDatasetsDraw(chart){const c=chart.ctx;c.save();c.font='10px system-ui,sans-serif';c.textAlign='center';c.textBaseline='bottom';[[developing,C.blue],[developed,C.accent]].forEach(([names,col],di)=>{const meta=chart.getDatasetMeta(di+1);c.fillStyle=col;meta.data.forEach((pt,i)=>{c.fillText(names[i],pt.x,pt.y-12);});});c.restore();}};
+const labelPlugin={id:'marriageLabels',afterDatasetsDraw(chart){const c=chart.ctx;c.save();c.font='600 11px system-ui,sans-serif';c.textBaseline='middle';c.strokeStyle='rgba(255,255,255,0.92)';c.lineWidth=3;c.lineJoin='round';
+const devOff=[[0,-16,'center'],[-10,4,'right'],[10,-16,'left'],[0,-16,'center'],[0,-16,'center'],[0,-16,'center'],[0,18,'center']];
+const advOff=[[10,-16,'left'],[10,18,'left'],[-8,18,'right'],[0,-16,'center'],[0,18,'center'],[12,4,'left'],[-12,-16,'right'],[-8,18,'right'],[12,4,'left']];
+[[developing,C.blue,devOff],[developed,C.accent,advOff]].forEach(([names,col,offs],di)=>{const meta=chart.getDatasetMeta(di+1);c.fillStyle=col;meta.data.forEach((pt,i)=>{const o=offs[i];c.textAlign=o[2];c.strokeText(names[i],pt.x+o[0],pt.y+o[1]);c.fillText(names[i],pt.x+o[0],pt.y+o[1]);});});c.restore();}};
 new Chart(ctx,{type:'scatter',plugins:[labelPlugin],data:{datasets:[
 {label:'Trend',type:'line',data:trendData,borderColor:C.dim,borderWidth:1.5,borderDash:[6,4],pointRadius:0,pointHoverRadius:0,fill:false,tension:0,order:3},
 {label:'Developing',data:developing.map((_,i)=>({x:devAge[i],y:devTFR[i]})),backgroundColor:C.blue+'bb',borderColor:C.blue,pointRadius:7,pointHoverRadius:9,borderWidth:2,order:1},
