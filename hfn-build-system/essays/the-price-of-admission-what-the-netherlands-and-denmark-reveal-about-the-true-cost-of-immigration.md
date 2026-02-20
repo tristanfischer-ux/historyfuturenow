@@ -68,7 +68,7 @@ The 2018 figures: non-Western immigration cost the Danish state 31 billion DKK â
 
 The drivers are straightforward: lower employment rates combined with universal welfare. In 2022, ethnic Danish men had an employment rate of 81%, ethnic Danish women 79%. Non-Western immigrant men had reached 69% â€” up from 53% in 2015, a genuine improvement. Non-Western immigrant women: 58%, up from 45%. The gap has narrowed to a record low of 15.3 percentage points. But a 15-point employment gap applied to hundreds of thousands of people still generates billions in welfare expenditure and lost tax revenue.
 
-Denmark's long-term demographic projection is sobering. Statistics Denmark projects that immigrants and descendants will account for 13.1% of the population by 2060, up from the current 16.3% total (Western and non-Western combined). The more striking number comes from longer-range modelling: by 2096, the majority of Denmark's population could consist of immigrants or their descendants. Ethnic Danes would become a minority in their own country within the lifetimes of children born today.
+Denmark's long-term demographic projection is sobering. Immigrants and descendants already account for 16.3% of the population (Western and non-Western combined). Statistics Denmark projects that the non-Western share alone will reach 13.1% by 2060, up from roughly 9% today. The more striking number comes from longer-range modelling: by 2096, the majority of Denmark's population could consist of immigrants or their descendants. Ethnic Danes would become a minority in their own country within the lifetimes of children born today.
 
 ## The Danish Response: A Paradigm Shift
 
