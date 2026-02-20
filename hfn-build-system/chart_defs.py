@@ -1260,19 +1260,20 @@ y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.b
     charts['what-the-history-of-immigration-teaches-us-about-europes-future'] = [
         {
             'id': 'immChart1', 'figure_num': 1,
-            'title': 'Foreign-Born Population in European Countries',
-            'desc': 'The share of foreign-born residents has risen dramatically since 1960',
-            'source': 'OECD, Eurostat, national statistics',
+            'title': 'Population with Migration Background in European Countries',
+            'desc': 'Foreign-born residents plus their descendants born in the host country — the true scale of demographic change far exceeds the foreign-born figures alone',
+            'source': 'OECD, Eurostat, Destatis Mikrozensus, CBS Netherlands, INSEE France, national statistics (2020–2023)',
             'position': 'after_para_8',
             'js': """
 _regChart('immChart1',()=>{const ctx=document.getElementById('immChart1');
 new Chart(ctx,{type:'bar',data:{
 labels:['Switzerland','Austria','Sweden','Germany','UK','France','Spain','Italy','Ireland','Netherlands'],
 datasets:[
-{label:'1960',data:[10,5,4,3,4,7,0.5,0.5,2,4],backgroundColor:C.blue+'88',borderRadius:3},
-{label:'2020',data:[30,19,20,17,14,13,14,11,18,14],backgroundColor:C.accent+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Foreign-born as % of population',color:C.dim}}}}});
+{label:'1960 Foreign-born',data:[10,5,4,3,4,7,0.5,0.5,2,4],backgroundColor:C.blue+'88',borderRadius:3,stack:'a'},
+{label:'2020 Foreign-born',data:[30,19,20,17,14,13,14,11,18,14],backgroundColor:C.accent+'cc',borderRadius:0,borderSkipped:false,stack:'b'},
+{label:'2020 2nd generation',data:[8,7,7,12,9,12,3,3,5,12],backgroundColor:C.amber+'bb',borderRadius:3,stack:'b'}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{afterBody:function(items){if(items[0].datasetIndex>=1){const i=items[0].dataIndex;const fb=[30,19,20,17,14,13,14,11,18,14];const sg=[8,7,7,12,9,12,3,3,5,12];return 'Total migration background: '+(fb[i]+sg[i])+'%';}return '';}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of population (%)',color:C.dim}}}}});
 });"""
         },
         {
@@ -1295,7 +1296,24 @@ y1:{type:'linear',position:'right',grid:{drawOnChartArea:false},ticks:{color:C.b
 });"""
         },
         {
-            'id': 'immChart3', 'figure_num': 3,
+            'id': 'immChartMigBg', 'figure_num': 3,
+            'title': 'The Hidden Scale: Foreign-Born vs. Total Migration Background',
+            'desc': 'Official foreign-born figures undercount Europe\u2019s immigration-origin population \u2014 second-generation immigrants roughly double the total',
+            'source': 'Eurostat, OECD, Destatis (Germany Mikrozensus), national statistics offices; c.\u20092020\u20132023',
+            'position': 'before_end',
+            'js': """
+_regChart('immChartMigBg',()=>{const ctx=document.getElementById('immChartMigBg');
+new Chart(ctx,{type:'bar',data:{
+labels:['Switzerland','Sweden','Austria','Germany','Belgium','Netherlands','UK','France','Spain','Italy'],
+datasets:[
+{label:'Foreign-born only',data:[30,20,19,17,17,14,14,13,14,11],backgroundColor:C.blue+'aa',borderRadius:3},
+{label:'Including 2nd generation',data:[39,28,26,27,26,25,22,26,17,14],backgroundColor:C.accent+'cc',borderRadius:3}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of national population (%)',color:C.dim},min:0}}}});
+});"""
+        },
+        {
+            'id': 'immChart3', 'figure_num': 4,
             'title': 'Immigration Waves: Source Regions by Era',
             'desc': 'The composition of immigration to Europe has shifted dramatically',
             'source': 'Analysis from this article; Eurostat',

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>History Future Now</title>
-<meta name="description" content="Data-driven analysis of the forces shaping our future — demographics, technology, energy, geopolitics. 74 articles with 211 interactive charts.">
+<meta name="description" content="Data-driven analysis of the forces shaping our future — demographics, technology, energy, geopolitics. 74 articles with 212 interactive charts.">
 <link rel="canonical" href="https://www.historyfuturenow.com/">
 <meta property="og:title" content="History Future Now">
-<meta property="og:description" content="Data-driven analysis of the forces shaping our future — demographics, technology, energy, geopolitics. 74 articles with 211 interactive charts.">
+<meta property="og:description" content="Data-driven analysis of the forces shaping our future — demographics, technology, energy, geopolitics. 74 articles with 212 interactive charts.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="History Future Now">
 <meta property="og:locale" content="en_GB">
@@ -16,7 +16,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="History Future Now">
-<meta name="twitter:description" content="Data-driven analysis of the forces shaping our future — demographics, technology, energy, geopolitics. 74 articles with 211 interactive charts.">
+<meta name="twitter:description" content="Data-driven analysis of the forces shaping our future — demographics, technology, energy, geopolitics. 74 articles with 212 interactive charts.">
 <meta name="theme-color" content="#c43425">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -30,7 +30,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6PS9DYS2PZ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-6PS9DYS2PZ');</script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "History Future Now", "url": "https://www.historyfuturenow.com", "description": "Data-driven analysis of the forces shaping our future. 74 articles with 211 interactive charts covering demographics, energy, geopolitics, and economics.", "author": {"@type": "Person", "name": "Tristan Fischer"}, "publisher": {"@type": "Organization", "name": "History Future Now"}, "inLanguage": "en-GB"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "History Future Now", "url": "https://www.historyfuturenow.com", "description": "Data-driven analysis of the forces shaping our future. 74 articles with 212 interactive charts covering demographics, energy, geopolitics, and economics.", "author": {"@type": "Person", "name": "Tristan Fischer"}, "publisher": {"@type": "Organization", "name": "History Future Now"}, "inLanguage": "en-GB"}</script>
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 </head>
@@ -371,7 +371,7 @@
   <div class="stats-bar">
     <div class="stats-inner">
       <div class="stat"><span class="stat-num">74</span><span class="stat-label">Articles</span></div>
-      <div class="stat"><span class="stat-num">211</span><span class="stat-label">Interactive Charts</span></div>
+      <div class="stat"><span class="stat-num">212</span><span class="stat-label">Interactive Charts</span></div>
       <div class="stat"><span class="stat-num">16+</span><span class="stat-label">Hours of Analysis</span></div>
       <div class="stat"><span class="stat-num">500</span><span class="stat-label">Years of History</span></div>
       <div class="stat"><span class="stat-num">74</span><span class="stat-label">Audio Articles</span></div>
@@ -650,7 +650,7 @@
       <a href="/articles/what-the-history-of-immigration-teaches-us-about-europes-future" class="ds-card">
         <div class="ds-chart"><canvas id="dsAuto4"></canvas></div>
         <div class="ds-text">
-          <p class="ds-headline">Foreign-Born Population in European Countries</p>
+          <p class="ds-headline">Population with Migration Background in European Countries</p>
           <p class="ds-sub">What The History Of Immigration Teaches Us About Europe’s Future &rarr;</p>
         </div>
       </a>
@@ -1289,10 +1289,11 @@ _regChart('immChart1',()=>{const ctx=document.getElementById('dsAuto4');
 new Chart(ctx,{type:'bar',data:{
 labels:['Switzerland','Austria','Sweden','Germany','UK','France','Spain','Italy','Ireland','Netherlands'],
 datasets:[
-{label:'1960',data:[10,5,4,3,4,7,0.5,0.5,2,4],backgroundColor:C.blue+'88',borderRadius:3},
-{label:'2020',data:[30,19,20,17,14,13,14,11,18,14],backgroundColor:C.accent+'cc',borderRadius:3}
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Foreign-born as % of population',color:C.dim}}}}});
+{label:'1960 Foreign-born',data:[10,5,4,3,4,7,0.5,0.5,2,4],backgroundColor:C.blue+'88',borderRadius:3,stack:'a'},
+{label:'2020 Foreign-born',data:[30,19,20,17,14,13,14,11,18,14],backgroundColor:C.accent+'cc',borderRadius:0,borderSkipped:false,stack:'b'},
+{label:'2020 2nd generation',data:[8,7,7,12,9,12,3,3,5,12],backgroundColor:C.amber+'bb',borderRadius:3,stack:'b'}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{afterBody:function(items){if(items[0].datasetIndex>=1){const i=items[0].dataIndex;const fb=[30,19,20,17,14,13,14,11,18,14];const sg=[8,7,7,12,9,12,3,3,5,12];return 'Total migration background: '+(fb[i]+sg[i])+'%';}return '';}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of population (%)',color:C.dim}}}}});
 });
 if (Chart.defaults.font) Chart.defaults.font.size = _origFontSize;
 })();
