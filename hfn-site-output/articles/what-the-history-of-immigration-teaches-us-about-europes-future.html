@@ -419,19 +419,19 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="related-card">
+      <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</span>
-        <span class="related-time">51 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state" class="related-card">
+      <a href="/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">When the Servants Are Silicon: What History&#x27;s Leisure Classes Reveal About the AI Age</span>
+        <span class="related-time">15 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish" class="related-card">
+      <a href="/articles/a-nation-transformed-britains-demographic-revolution-1948-2050" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">What Worked: Five Thousand Years of Evidence for How Civilisations Flourish</span>
+        <span class="related-title">A Nation Transformed: Britain&#x27;s Demographic Revolution, 1948–2050</span>
         <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
@@ -584,15 +584,18 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=n
 Chart.register({id:'sparklineMode',beforeInit(chart){
 var el=chart.canvas;if(!el||!el.closest)return;
 if(!el.closest('.ds-chart')&&!el.closest('.sec-chart-preview'))return;
-var o=chart.options;
+var targets=[chart.options];
+if(chart.config&&chart.config._config&&chart.config._config.options)targets.push(chart.config._config.options);
+targets.forEach(function(o){
 if(!o.plugins)o.plugins={};
-o.plugins.legend=Object.assign(o.plugins.legend||{},{display:false});
-o.plugins.tooltip=Object.assign(o.plugins.tooltip||{},{enabled:false});
-if(o.plugins.annotation)o.plugins.annotation.annotations={};
-if(o.plugins.datalabels)o.plugins.datalabels.display=false;
-var sc=o.scales;if(sc){for(var k in sc){if(sc[k])sc[k].display=false;}}
-o.layout=o.layout||{};o.layout.padding=4;
-(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;});
+o.plugins.legend={display:false};
+o.plugins.tooltip={enabled:false};
+o.plugins.annotation={annotations:{}};
+o.plugins.datalabels={display:false};
+if(o.scales){for(var k in o.scales){if(o.scales[k])o.scales[k].display=false;}}
+o.layout={padding:4};
+});
+(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;d.borderWidth=Math.min(d.borderWidth||2,2);});
 }});
 
 

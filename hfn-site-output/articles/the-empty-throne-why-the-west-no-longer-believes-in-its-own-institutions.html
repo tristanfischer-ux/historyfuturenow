@@ -329,20 +329,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state" class="related-card">
+      <a href="/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Unintended Consequences of War: How the Loss of Young Men Transformed Women&#x27;s Roles in Society and ushered in the Welfare State</span>
-        <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Locked Gate: How the West Priced Its Children Out of Existence</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/is-democracy-the-opium-of-the-masses" class="related-card">
+      <a href="/articles/a-nation-transformed-britains-demographic-revolution-1948-2050" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Is Democracy The Opium Of The Masses?</span>
-        <span class="related-time">3 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Nation Transformed: Britain&#x27;s Demographic Revolution, 1948–2050</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing" class="related-card">
+      <a href="/articles/why-god-needs-the-government-multiculturalism-vs-monotheism" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</span>
-        <span class="related-time">16 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why God Needs The Government: Multiculturalism Vs Monotheism</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -494,15 +494,18 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=n
 Chart.register({id:'sparklineMode',beforeInit(chart){
 var el=chart.canvas;if(!el||!el.closest)return;
 if(!el.closest('.ds-chart')&&!el.closest('.sec-chart-preview'))return;
-var o=chart.options;
+var targets=[chart.options];
+if(chart.config&&chart.config._config&&chart.config._config.options)targets.push(chart.config._config.options);
+targets.forEach(function(o){
 if(!o.plugins)o.plugins={};
-o.plugins.legend=Object.assign(o.plugins.legend||{},{display:false});
-o.plugins.tooltip=Object.assign(o.plugins.tooltip||{},{enabled:false});
-if(o.plugins.annotation)o.plugins.annotation.annotations={};
-if(o.plugins.datalabels)o.plugins.datalabels.display=false;
-var sc=o.scales;if(sc){for(var k in sc){if(sc[k])sc[k].display=false;}}
-o.layout=o.layout||{};o.layout.padding=4;
-(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;});
+o.plugins.legend={display:false};
+o.plugins.tooltip={enabled:false};
+o.plugins.annotation={annotations:{}};
+o.plugins.datalabels={display:false};
+if(o.scales){for(var k in o.scales){if(o.scales[k])o.scales[k].display=false;}}
+o.layout={padding:4};
+});
+(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;d.borderWidth=Math.min(d.borderWidth||2,2);});
 }});
 
 

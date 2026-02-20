@@ -292,20 +292,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition" class="related-card">
+      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Establishing A Price Floor For Energy</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="related-card">
+      <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Cassandra: Time To Give Up On Predicting Climate Change?</span>
-        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
-        <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -459,15 +459,18 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=n
 Chart.register({id:'sparklineMode',beforeInit(chart){
 var el=chart.canvas;if(!el||!el.closest)return;
 if(!el.closest('.ds-chart')&&!el.closest('.sec-chart-preview'))return;
-var o=chart.options;
+var targets=[chart.options];
+if(chart.config&&chart.config._config&&chart.config._config.options)targets.push(chart.config._config.options);
+targets.forEach(function(o){
 if(!o.plugins)o.plugins={};
-o.plugins.legend=Object.assign(o.plugins.legend||{},{display:false});
-o.plugins.tooltip=Object.assign(o.plugins.tooltip||{},{enabled:false});
-if(o.plugins.annotation)o.plugins.annotation.annotations={};
-if(o.plugins.datalabels)o.plugins.datalabels.display=false;
-var sc=o.scales;if(sc){for(var k in sc){if(sc[k])sc[k].display=false;}}
-o.layout=o.layout||{};o.layout.padding=4;
-(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;});
+o.plugins.legend={display:false};
+o.plugins.tooltip={enabled:false};
+o.plugins.annotation={annotations:{}};
+o.plugins.datalabels={display:false};
+if(o.scales){for(var k in o.scales){if(o.scales[k])o.scales[k].display=false;}}
+o.layout={padding:4};
+});
+(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;d.borderWidth=Math.min(d.borderWidth||2,2);});
 }});
 
 

@@ -341,20 +341,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/lets-talk-about-sex-does-the-separation-of-pleasure-and-procreation-mean-the-end-of-people" class="related-card">
+      <a href="/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Let&#x27;s Talk About Sex: Does The Separation Of Pleasure And Procreation Mean The End Of People?</span>
+        <span class="related-title">The Locked Gate: How the West Priced Its Children Out of Existence</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state" class="related-card">
+      <a href="/articles/who-benefits-from-our-increased-social-fragmentation" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Unintended Consequences of War: How the Loss of Young Men Transformed Women&#x27;s Roles in Society and ushered in the Welfare State</span>
-        <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Who Benefits From Our Increased Social Fragmentation?</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing" class="related-card">
+      <a href="/articles/clash-of-titans-how-the-warrior-ethos-and-judeo-christian-monotheism-shaped-the-soul-of-the-west" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</span>
-        <span class="related-time">16 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Clash Of Titans: How The Warrior Ethos And Judeo-Christian Monotheism Shaped The Soul Of The West</span>
+        <span class="related-time">51 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -506,15 +506,18 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=n
 Chart.register({id:'sparklineMode',beforeInit(chart){
 var el=chart.canvas;if(!el||!el.closest)return;
 if(!el.closest('.ds-chart')&&!el.closest('.sec-chart-preview'))return;
-var o=chart.options;
+var targets=[chart.options];
+if(chart.config&&chart.config._config&&chart.config._config.options)targets.push(chart.config._config.options);
+targets.forEach(function(o){
 if(!o.plugins)o.plugins={};
-o.plugins.legend=Object.assign(o.plugins.legend||{},{display:false});
-o.plugins.tooltip=Object.assign(o.plugins.tooltip||{},{enabled:false});
-if(o.plugins.annotation)o.plugins.annotation.annotations={};
-if(o.plugins.datalabels)o.plugins.datalabels.display=false;
-var sc=o.scales;if(sc){for(var k in sc){if(sc[k])sc[k].display=false;}}
-o.layout=o.layout||{};o.layout.padding=4;
-(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;});
+o.plugins.legend={display:false};
+o.plugins.tooltip={enabled:false};
+o.plugins.annotation={annotations:{}};
+o.plugins.datalabels={display:false};
+if(o.scales){for(var k in o.scales){if(o.scales[k])o.scales[k].display=false;}}
+o.layout={padding:4};
+});
+(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;d.borderWidth=Math.min(d.borderWidth||2,2);});
 }});
 
 _regChart('pressChart1',()=>{const ctx=document.getElementById('pressChart1');

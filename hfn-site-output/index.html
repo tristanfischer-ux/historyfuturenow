@@ -1181,15 +1181,18 @@ else{s.ticks.maxRotation=orig.mr!=null?orig.mr:0;s.ticks.minRotation=orig.mnr!=n
 Chart.register({id:'sparklineMode',beforeInit(chart){
 var el=chart.canvas;if(!el||!el.closest)return;
 if(!el.closest('.ds-chart')&&!el.closest('.sec-chart-preview'))return;
-var o=chart.options;
+var targets=[chart.options];
+if(chart.config&&chart.config._config&&chart.config._config.options)targets.push(chart.config._config.options);
+targets.forEach(function(o){
 if(!o.plugins)o.plugins={};
-o.plugins.legend=Object.assign(o.plugins.legend||{},{display:false});
-o.plugins.tooltip=Object.assign(o.plugins.tooltip||{},{enabled:false});
-if(o.plugins.annotation)o.plugins.annotation.annotations={};
-if(o.plugins.datalabels)o.plugins.datalabels.display=false;
-var sc=o.scales;if(sc){for(var k in sc){if(sc[k])sc[k].display=false;}}
-o.layout=o.layout||{};o.layout.padding=4;
-(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;});
+o.plugins.legend={display:false};
+o.plugins.tooltip={enabled:false};
+o.plugins.annotation={annotations:{}};
+o.plugins.datalabels={display:false};
+if(o.scales){for(var k in o.scales){if(o.scales[k])o.scales[k].display=false;}}
+o.layout={padding:4};
+});
+(chart.config.data.datasets||[]).forEach(function(d){d.pointRadius=0;d.pointHitRadius=0;d.borderWidth=Math.min(d.borderWidth||2,2);});
 }});
 
 
