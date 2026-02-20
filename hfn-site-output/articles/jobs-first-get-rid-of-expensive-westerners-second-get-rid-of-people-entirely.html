@@ -273,15 +273,15 @@
         <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Why Buying Cheap Imported Products Is More Expensive For Individuals And Not Just Society</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -367,6 +367,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -415,6 +416,7 @@ ds('US deficit with China ($bn)',[84,103,162,234,268,273,315,345,347,419,311],C.
 ds('EU deficit with China ($bn)',[35,40,70,120,170,150,130,140,160,185,165],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw+'bn deficit'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v+'bn'},title:{display:true,text:'Annual trade deficit ($bn)',color:C.dim}}}}});
+})();
 })();
 </script>
 <script>

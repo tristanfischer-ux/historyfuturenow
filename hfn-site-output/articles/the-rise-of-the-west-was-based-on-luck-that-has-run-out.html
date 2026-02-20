@@ -317,19 +317,19 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
+      <a href="/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">The War in Ukraine: Escalation, Miscalculation, and the Path to Peace</span>
+        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/why-do-we-need-the-military-securing-energy-supplies-and-trade-routes" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">Why Do We Need The Military? Securing Energy Supplies And Trade Routes</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/the-great-offshoring-how-the-worlds-factory-moved-east" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">The Great Offshoring: How the World&#x27;s Factory Moved East</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
         <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
@@ -416,6 +416,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -480,6 +481,7 @@ dxy('China',yrs,[26,22,25,29,22,33,17,9,5,5,12,20],C.accent),
 dxy('India',yrs,[32,28,24,22,24,16,12,8,4,3,5,8],C.amber)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:linX(1,2025),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim},max:55}}}});
+})();
 })();
 </script>
 <script>

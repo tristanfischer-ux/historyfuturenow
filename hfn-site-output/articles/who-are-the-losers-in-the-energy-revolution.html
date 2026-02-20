@@ -247,15 +247,15 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
+        <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
@@ -346,6 +346,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -385,6 +386,7 @@ datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of known reserves'}}},
 scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,maxRotation:0}},
 y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Share of known reserves (%)',color:C.dim},max:100}}}});
+})();
 })();
 </script>
 <script>

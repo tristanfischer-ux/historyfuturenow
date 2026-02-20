@@ -3939,6 +3939,35 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:85,
 title:{display:true,text:'Homeownership rate (%)',color:C.dim}}}}});
 })();"""
         },
+        {
+            'id': 'housingChart4', 'figure_num': 4,
+            'title': 'Later Marriage, Fewer Children: Women\u2019s Age at First Marriage vs. Fertility Rate',
+            'desc': 'The Hajnal mechanism made visible \u2014 across every income level, later marriage means fewer births',
+            'source': 'UN Population Division; World Bank; national statistics offices (latest available, 2022\u20132024)',
+            'position': 'after_para_17',
+            'js': """
+(()=>{const ctx=document.getElementById('housingChart4');
+const countries=['Nigeria','India','Indonesia','Mexico','Turkey','Brazil','China','United States','Japan','Singapore','Australia','S. Korea','Germany','UK','Italy','Spain'];
+const age=[20.4,22.0,22.3,23.3,24.8,27.0,28.0,28.6,29.7,30.4,30.8,31.3,32.0,32.1,32.5,33.2];
+const tfr=[5.10,2.00,2.13,1.80,1.62,1.65,1.00,1.62,1.20,0.97,1.58,0.72,1.36,1.49,1.24,1.16];
+const split=7;
+const labelPlugin={id:'marriageLabels',afterDatasetsDraw(chart){const meta=chart.getDatasetMeta(0);const c=chart.ctx;c.save();c.font='10px system-ui,sans-serif';c.textBaseline='bottom';meta.data.forEach((pt,i)=>{c.fillStyle=i<split?C.blue:C.accent;c.textAlign='center';c.fillText(countries[i],pt.x,pt.y-12);});c.restore();}};
+new Chart(ctx,{type:'scatter',data:{datasets:[{
+label:'Country',data:countries.map((_,i)=>({x:age[i],y:tfr[i]})),
+backgroundColor:countries.map((_,i)=>i<split?C.blue+'bb':C.accent+'bb'),
+borderColor:countries.map((_,i)=>i<split?C.blue:C.accent),
+pointRadius:7,pointHoverRadius:9,borderWidth:2}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24,left:8,right:8,bottom:8}},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>{const i=items[0]?.dataIndex;return i!=null?countries[i]:'';},
+label:i=>'Marriage age: '+i.raw.x+' | TFR: '+i.raw.y}},
+annotation:{annotations:{replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderWidth:1,borderDash:[6,4],label:{display:true,content:'Replacement level (2.1)',position:'end',color:C.dim,font:{size:10},backgroundColor:'rgba(0,0,0,0)'}}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},min:19,max:35,
+title:{display:true,text:'Mean age at first marriage (women)',color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim},min:0.5,max:5.5,
+title:{display:true,text:'Total fertility rate',color:C.dim}}}},plugins:[labelPlugin]});
+})();"""
+        },
     ]
 
     # ─── THE NEW OIL: CRITICAL MINERALS ───

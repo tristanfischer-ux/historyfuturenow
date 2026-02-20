@@ -328,20 +328,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
+        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
+        <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/who-are-the-losers-in-the-energy-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
         <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
-        <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
-        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -427,8 +427,9 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script src="/js/chartjs-chart-geo.umd.min.js"></script>
-<script>let _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());</script>
 <script>
+(function(){
+var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -489,6 +490,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value?i.raw.value.toFixed(1)+' million hectares acquired':'No significant acquisitions'}}}}});
 });
+})();
 })();
 </script>
 <script>

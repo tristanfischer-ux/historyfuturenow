@@ -377,6 +377,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -432,6 +433,7 @@ ds('World population (bn)',[6.1,6.9,7.8,8.5,9.2,10],C.accent),
 ds('Sustainable food capacity (bn)',[7,6.5,6,5.5,5.2,5],C.green,[5,3])
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:tooltipStyle},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'bn'},title:{display:true,text:'Billions of people',color:C.dim}}}}});
+})();
 })();
 </script>
 <script>

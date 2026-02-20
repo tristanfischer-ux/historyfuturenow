@@ -585,6 +585,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -656,6 +657,7 @@ roe:{type:'label',..._al,xValue:2021.5,yValue:46,content:['Dobbs'],color:C.dim,f
 }}},
 scales:{x:linX(1999,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:50,
 title:{display:true,text:'% identifying as liberal (Gallup)',color:C.dim}}}}});
+})();
 })();
 </script>
 <script>

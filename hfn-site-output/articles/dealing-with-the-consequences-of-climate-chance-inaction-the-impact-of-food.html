@@ -296,15 +296,15 @@
         <span class="related-title">Who Are The Losers In The Energy Revolution?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-immorality-of-climate-change-a-reflection-on-slavery-and-the-civil-war" class="related-card">
+      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">The immorality of climate change, a reflection on slavery and the Civil War</span>
-        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/establishing-a-price-floor-for-energy" class="related-card">
+      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Establishing A Price Floor For Energy</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -390,8 +390,9 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script src="/js/chartjs-chart-geo.umd.min.js"></script>
-<script>let _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());</script>
 <script>
+(function(){
+var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -483,6 +484,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>i.raw.value?'Food Security Index: '+i.raw.value+'/100':'No data'}}}}});
 });
+})();
 })();
 </script>
 <script>

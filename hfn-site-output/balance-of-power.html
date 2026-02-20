@@ -416,6 +416,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -481,6 +482,7 @@ datasets:[
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% market share'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:105,title:{display:true,text:'Market share (%)',color:C.dim}}}}});
+})();
 })();
 </script>
 <script>

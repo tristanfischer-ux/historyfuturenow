@@ -400,20 +400,20 @@
   <section class="related-articles">
     <h3>Continue reading in Society</h3>
     <div class="related-grid">
-      <a href="/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth" class="related-card">
-        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</span>
-        <span class="related-time">20 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/history-is-written-by-the-winners-and-europeans-are-losing" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
         <span class="related-title">History Is Written By The Winners. And Europeans Are Losing.</span>
         <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/are-europeans-fundamentally-racist" class="related-card">
+      <a href="/articles/a-nation-transformed-britains-demographic-revolution-1948-2050" class="related-card">
         <span class="related-kicker" style="color:#7c3aed">Part 4</span>
-        <span class="related-title">Are Europeans Fundamentally Racist?</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">A Nation Transformed: Britain&#x27;s Demographic Revolution, 1948–2050</span>
+        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/dont-confuse-what-is-legal-with-what-is-morally-right" class="related-card">
+        <span class="related-kicker" style="color:#7c3aed">Part 4</span>
+        <span class="related-title">Don&#x27;t Confuse What Is Legal With What Is Morally Right</span>
+        <span class="related-time">4 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -499,8 +499,9 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script src="/js/chartjs-chart-geo.umd.min.js"></script>
-<script>let _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());</script>
 <script>
+(function(){
+var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -681,6 +682,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>{const v=i.raw.value;if(v==null)return'No data';return(v>=0?'+':'')+v+'% population change (2025–2050)'}}}}}});
 });
+})();
 })();
 </script>
 <script>

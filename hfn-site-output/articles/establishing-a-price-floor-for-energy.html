@@ -245,20 +245,20 @@
   <section class="related-articles">
     <h3>Continue reading in Natural Resources</h3>
     <div class="related-grid">
-      <a href="/articles/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition" class="related-card">
+      <a href="/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition</span>
-        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The New Oil: Why the Race for Critical Minerals Will Define the 21st Century</span>
+        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/big-european-electricity-utilities-are-facing-an-existential-crisis-how-did-this-happen-and-what-should-they-do" class="related-card">
+      <a href="/articles/dealing-with-the-consequences-of-climate-chance-inaction-the-impact-of-food" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Big European Electricity Utilities Are Facing An Existential Crisis. How Did This Happen And What Should They Do?</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Dealing With The Consequences Of Climate Change Inaction: The Impact Of Food</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/vertical-farming-the-electrical-convergence-power-transport-and-agriculture" class="related-card">
+      <a href="/articles/the-renewables-and-battery-revolution" class="related-card">
         <span class="related-kicker" style="color:#0d9a5a">Part 1</span>
-        <span class="related-title">Vertical Farming: The Electrical Convergence of Power, Transport and Agriculture</span>
-        <span class="related-time">8 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The renewables and battery revolution. What history teaches us about the future.</span>
+        <span class="related-time">25 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -344,6 +344,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -383,6 +384,7 @@ ds('Consumer price with floor ($/bbl)',[100,110,100,100,100,100,100,100],C.accen
 ds('Tax/rebate buffer ($)',[0,0,20,25,40,10,30,45],C.green)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>'$'+i.raw}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v},title:{display:true,text:'$/barrel',color:C.dim},min:0,max:130}}}});
+})();
 })();
 </script>
 <script>

@@ -353,20 +353,20 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence" class="related-card">
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Europe Rearms: Why The Continent That Invented Total War Is Spending €800 Billion On Defence</span>
-        <span class="related-time">18 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/what-happens-when-china-becomes-the-largest-economy-in-the-world" class="related-card">
+        <span class="related-kicker" style="color:#2563eb">Part 2</span>
+        <span class="related-title">What Happens When China Becomes The Largest Economy In The World?</span>
+        <span class="related-time">5 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/china-has-many-of-the-characteristics-of-an-emerging-colonial-power-how-does-it-compare-historically" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
         <span class="related-title">China Has Many Of The Characteristics Of An Emerging Colonial Power. How Does It Compare Historically?</span>
         <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/hinkley-point-decision-is-really-about-china-and-brexit" class="related-card">
-        <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Hinkley Point Decision Is Really About China And Brexit</span>
-        <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -452,8 +452,9 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script src="/js/chartjs-chart-geo.umd.min.js"></script>
-<script>let _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());</script>
 <script>
+(function(){
+var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -559,6 +560,7 @@ plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
 title:items=>items[0]?.raw?.feature?.properties?.name||'',
 label:i=>{const v=i.raw.value;if(v==null)return'No data';return'Population growth: '+(v>=0?'+':'')+v.toFixed(1)+'% per year';}}}}}});
 });
+})();
 })();
 </script>
 <script>

@@ -247,15 +247,15 @@
   <section class="related-articles">
     <h3>Continue reading in Global Balance of Power</h3>
     <div class="related-grid">
-      <a href="/articles/forging-peace-from-centuries-of-war-to-ukraines-future" class="related-card">
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">Forging Peace: From Centuries of War to Ukraine&#x27;s Future</span>
-        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The West’s romance with Free Trade is ending. Why?</span>
+        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out" class="related-card">
+      <a href="/articles/why-china-could-invade-taiwan-and-get-away-with-it" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
-        <span class="related-title">The Rise of the West Was Based on Luck. That Has Run Out.</span>
-        <span class="related-time">23 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Why China Could Invade Taiwan – And Get Away With It</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
       <a href="/articles/the-north-african-threat-and-mediterranean-reunification" class="related-card">
         <span class="related-kicker" style="color:#2563eb">Part 2</span>
@@ -346,6 +346,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -378,6 +379,7 @@ tooltip:{...tooltipStyle,callbacks:{label:function(i){return '$'+i.raw.toLocaleS
 scales:{y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return '$'+v.toLocaleString()}},
 title:{display:true,text:'USD per kg (log scale)',color:C.dim}},
 x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:0}}}}});
+})();
 })();
 </script>
 <script>

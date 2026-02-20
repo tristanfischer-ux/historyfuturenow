@@ -965,13 +965,15 @@ def inject_charts_into_body(body_html, charts):
     all_js = '\n'.join(_fix_js_string_newlines(ch['js']) for ch in charts)
     needs_geo = any(ch.get('geo') for ch in charts)
     geo_scripts = '\n<script src="/js/chartjs-chart-geo.umd.min.js"></script>' if needs_geo else ''
-    geo_data = '\n<script>let _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());</script>' if needs_geo else ''
+    geo_data = '\nvar _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());' if needs_geo else ''
     script_block = f'''
 <script src="/js/chart.umd.min.js"></script>
-<script src="/js/chartjs-plugin-annotation.min.js"></script>{geo_scripts}{geo_data}
+<script src="/js/chartjs-plugin-annotation.min.js"></script>{geo_scripts}
 <script>
+(function(){{{geo_data}
 {CHART_COLORS}
 {all_js}
+}})();
 </script>'''
 
     return body_html, script_block
@@ -1315,9 +1317,11 @@ def _build_section_editorial(part_name, pi):
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){{
 {CHART_COLORS}
 const _xy=(xs,ys)=>xs.map((x,i)=>({{x:+x,y:ys[i]}}));
 {all_js}
+}})();
 </script>'''
 
     return editorial_block, chart_script
@@ -1828,10 +1832,12 @@ y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:10},callback:v=>v+'%
 
 {make_footer()}
 <script>
+(function(){{
 {hero_chart_js}
 {CHART_COLORS}
 {stories_js}
 {sec_chart_js}
+}})();
 </script>
 </body>
 </html>"""
@@ -2491,11 +2497,13 @@ def build_charts_page(essays, all_charts):
 
 {make_footer()}
 <script>
+(function(){{
 {CHART_COLORS}
 const _xy=(xs,ys)=>xs.map((x,i)=>({{x:+x,y:ys[i]}}));
 const _yt=v=>String(v);
 window.__chartInits = window.__chartInits || {{}};
 {"\n".join(deferred_js_lines)}
+}})();
 </script>
 <script>
 {lazy_observer_script}

@@ -254,20 +254,20 @@ The demographic crisis facing the modern West is not unprecedented.</p></aside>
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
+      <a href="/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin</span>
+        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
+      </a>
       <a href="/articles/robotics-and-slavery" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">Robotics And Slavery</span>
         <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/platform-technologies-how-foundational-technologies-of-the-past-show-us-the-foundational-technologies-of-the-future" class="related-card">
+      <a href="/articles/debt-jubilees-and-hyperinflation-why-history-shows-that-this-might-be-the-way-forward-for-us-all" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Fusion of Revolutionary Technologies: Unlocking Humanity&#x27;s Greatest Transformation</span>
-        <span class="related-time">9 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
-        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">Debt Jubilees And Hyperinflation – Why History Shows That This Might Be The Way Forward For Us All</span>
+        <span class="related-time">6 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -353,6 +353,7 @@ The demographic crisis facing the modern West is not unprecedented.</p></aside>
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -391,6 +392,7 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 tooltip:{...tooltipStyle,callbacks:{label:function(i){return i.dataset.label+': TFR '+i.parsed.x+', '+i.parsed.y+' robots/10k workers'}}}},
 scales:{x:{title:{display:true,text:'Total Fertility Rate (children per woman)',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},reverse:true,min:0.5,max:2.2},
 y:{title:{display:true,text:'Industrial Robots per 10,000 Workers',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0}}}});
+})();
 })();
 </script>
 <script>

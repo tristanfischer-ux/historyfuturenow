@@ -272,20 +272,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
-        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
-      </a>
-      <a href="/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/the-new-literacy" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">The New Literacy: How AI Is Killing The Scribes And What Happens Next</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/where-are-all-the-jobs-going-lessons-from-the-first-industrial-revolution-and-150-years-of-pain" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Where Are All The Jobs Going? Lessons From The First Industrial Revolution. And 150 Years Of Pain.</span>
+        <span class="related-time">7 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/robotics-and-slavery" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Robotics And Slavery</span>
+        <span class="related-time">27 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -371,6 +371,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -427,6 +428,7 @@ datasets:[
 plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:{...tooltipStyle,mode:'index',callbacks:{label:function(i){return' '+i.dataset.label+': $'+i.raw+'bn';},footer:function(items){var t=0;for(var j=0;j<items.length;j++)t+=items[j].raw;return'Total: $'+t.toFixed(0)+'bn';}}}},
 scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
 y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return'$'+v+'bn';}},title:{display:true,text:'Global VC investment ($bn)',color:C.dim}}}}});
+})();
 })();
 </script>
 <script>

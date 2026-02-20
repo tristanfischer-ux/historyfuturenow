@@ -252,20 +252,20 @@
   <section class="related-articles">
     <h3>Continue reading in Jobs &amp; Economy</h3>
     <div class="related-grid">
-      <a href="/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin" class="related-card">
-        <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin</span>
-        <span class="related-time">11 min read <span class="related-audio">Audio</span></span>
-      </a>
       <a href="/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
         <span class="related-title">The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</span>
         <span class="related-time">10 min read <span class="related-audio">Audio</span></span>
       </a>
-      <a href="/articles/the-paradox-of-mass-migration-and-robots-in-the-age-of-automation" class="related-card">
+      <a href="/articles/the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap" class="related-card">
         <span class="related-kicker" style="color:#b8751a">Part 3</span>
-        <span class="related-title">The Paradox of Mass Migration and Robots in the Age of Automation</span>
-        <span class="related-time">13 min read <span class="related-audio">Audio</span></span>
+        <span class="related-title">The Robot Bargain: How AI Will Save Ageing Nations From The Immigration Trap</span>
+        <span class="related-time">12 min read <span class="related-audio">Audio</span></span>
+      </a>
+      <a href="/articles/keynes-and-hayek-are-both-dead-and-wrong" class="related-card">
+        <span class="related-kicker" style="color:#b8751a">Part 3</span>
+        <span class="related-title">Keynes And Hayek Are Both Dead, And Wrong</span>
+        <span class="related-time">14 min read <span class="related-audio">Audio</span></span>
       </a>
     </div>
   </section>
@@ -351,6 +351,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -406,6 +407,7 @@ datasets:[
 {label:'AI & automation?',data:xyF([0,0,0,0,0,0,0,1,5,25]),borderColor:C.accent,backgroundColor:C.accent+'20',fill:true,tension:.35,pointRadius:2,borderWidth:2,borderDash:[5,5]}
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:{...legend,labels:{...legend.labels,font:{size:10}}},tooltip:tooltipStyle},
 scales:{x:linX(1800,2040,{ticks:{color:C.dim,callback:v=>v===2040?v+'?':''+v}}),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of workforce',color:C.dim},max:80}}}});
+})();
 })();
 </script>
 <script>

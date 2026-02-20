@@ -403,6 +403,7 @@
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 <script>
+(function(){
 const C = {
   accent:'#c43425', blue:'#2563eb', green:'#0d9a5a', amber:'#b8751a',
   purple:'#7c3aed', teal:'#0c8f8f', cyan:'#0284c7', dim:'#8a8479',
@@ -480,6 +481,7 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plu
 scales:{y:{grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v+'%'}},
 title:{display:true,text:'Manufacturing % of GDP',color:C.dim},min:5,max:40},
 x:{grid:{display:false},ticks:{color:C.dim}}}}});
+})();
 })();
 </script>
 <script>
