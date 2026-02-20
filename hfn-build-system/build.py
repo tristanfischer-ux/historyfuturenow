@@ -28,7 +28,6 @@ REVIEW_SLUGS = {
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
-    'the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant',
 }
 
 # Articles that were under review and have been released to the public site.
@@ -37,6 +36,7 @@ RELEASED_FROM_REVIEW = {
     'the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed',
     'the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world',
     'the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration',
+    'the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant',
 }
 
 def truncate_excerpt(text, max_len):
