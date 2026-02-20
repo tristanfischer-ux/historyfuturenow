@@ -193,6 +193,7 @@
   if (closeBtn) closeBtn.addEventListener('click', close);
   overlay.addEventListener('click', function (e) {
     if (e.target === overlay) close();
+    if (e.target.closest('.search-result-link')) close();
   });
 
   input.addEventListener('input', onInput);
