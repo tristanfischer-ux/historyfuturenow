@@ -44,6 +44,7 @@
 [data-theme="reading"] .page-container { max-width: 660px; }
 html { scroll-behavior: smooth; }
 body { font-family: var(--sans); background: var(--bg); color: var(--text-body); line-height: 1.78; font-size: 1.05rem; -webkit-font-smoothing: antialiased; }
+body.search-open { overflow: hidden; }
 a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--text); }
 img { max-width: 100%; height: auto; }

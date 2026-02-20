@@ -20,7 +20,7 @@
   function open() {
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('search-open');
     input.value = '';
     results.innerHTML = HINT_HTML;
     activeIdx = -1;
@@ -31,7 +31,7 @@
   function close() {
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    document.body.classList.remove('search-open');
     activeIdx = -1;
   }
 
