@@ -1,11 +1,10 @@
 ---
 title: Don't Confuse What Is Legal With What Is Morally Right
-url: >-
-  https://www.historyfuturenow.com/part-4-society/strongdont-confuse-what-is-legal-with-what-is-morally-rightstrong
+url: "https://www.historyfuturenow.com/articles/dont-confuse-what-is-legal-with-what-is-morally-right"
 image: "/images/legal-vs-moral.png"
 type: article
 part: Society
-slug: strongdont-confuse-what-is-legal-with-what-is-morally-rightstrong
+slug: dont-confuse-what-is-legal-with-what-is-morally-right
 excerpt: >-
   Most people think of themselves as being “law abiding” citizens. People
   admonish those that break the law and feel that it is reasonable that

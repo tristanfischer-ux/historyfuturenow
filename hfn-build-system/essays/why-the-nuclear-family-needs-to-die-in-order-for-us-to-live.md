@@ -1,11 +1,10 @@
 ---
 title: 'Why The Nuclear Family Needs To Die, In Order For Us To Live'
-url: >-
-  https://www.historyfuturenow.com/part-4-society/strongwhy-the-nuclear-family-needs-to-die-in-order-for-us-to-livestrong
+url: "https://www.historyfuturenow.com/articles/why-the-nuclear-family-needs-to-die-in-order-for-us-to-live"
 image: "/images/end-of-nuclear-family.png"
 type: article
 part: Society
-slug: strongwhy-the-nuclear-family-needs-to-die-in-order-for-us-to-livestrong
+slug: why-the-nuclear-family-needs-to-die-in-order-for-us-to-live
 excerpt: >-
   The concept of a nuclear family is relatively recent – it is first mentioned
   in The Oxford English Dictionary in 1925 – and refers to a household that

@@ -1,11 +1,10 @@
 ---
 title: Are Europeans Fundamentally Racist?
-url: >-
-  https://www.historyfuturenow.com/part-4-society/strongare-europeans-fundamentally-raciststrong
+url: "https://www.historyfuturenow.com/articles/are-europeans-fundamentally-racist"
 image: "/images/europeans-racist.png"
 type: article
 part: Society
-slug: strongare-europeans-fundamentally-raciststrong
+slug: are-europeans-fundamentally-racist
 excerpt: >-
   Switzerland has a unique form of democracy which allows for referendums to be
   held on any issue so long as the proponents gather a minimum of 100,000

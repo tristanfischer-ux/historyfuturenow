@@ -2,13 +2,11 @@
 title: >-
   A Lost Generation: Why The Personal Story Of The Beautiful Yulia Is Also Our
   Story
-url: >-
-  https://www.historyfuturenow.com/part-3-jobs-and-the-economy/stronga-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-storystrong
+url: "https://www.historyfuturenow.com/articles/a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story"
 image: "/images/lost-generation-yulia.png"
 type: article
 part: Jobs & Economy
-slug: >-
-  stronga-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-storystrong
+slug: a-lost-generation-why-the-personal-story-of-the-beautiful-yulia-is-also-our-story
 excerpt: >-
   Many years ago HFN spent a wonderful day in the company of a beautiful Russian
   woman. She had a warm smile and long legs that never seemed to stop. She was

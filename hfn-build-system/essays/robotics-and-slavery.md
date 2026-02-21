@@ -1,10 +1,10 @@
 ---
-title: "Robotics And Slavery&nbsp;"
-url: "https://www.historyfuturenow.com/part-5-the-future/robotics-and-slaverynbsp"
+title: "Robotics And Slavery"
+url: "https://www.historyfuturenow.com/articles/robotics-and-slavery"
 image: "/images/robotics-slavery.png"
 type: article
 part: Jobs & Economy
-slug: robotics-and-slaverynbsp
+slug: robotics-and-slavery
 excerpt: >-
   Rapid advancements in humanoid robotics and artificial intelligence are
   bringing us closer to a reality once confined to the realm of science fiction.

@@ -2,13 +2,11 @@
 title: >-
   Why Buying Cheap Imported Products Is More Expensive For Individuals And Not
   Just Society
-url: >-
-  https://www.historyfuturenow.com/part-3-jobs-and-the-economy/strongwhy-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-societystrong
+url: "https://www.historyfuturenow.com/articles/why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society"
 image: "/images/cheap-imports-cost.png"
 type: article
 part: Jobs & Economy
-slug: >-
-  strongwhy-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-societystrong
+slug: why-buying-cheap-imported-products-is-more-expensive-for-individuals-and-not-just-society
 excerpt: >-
   Why do so many Western politicians and economists promote a trading system
   that increases Western unemployment levels and results in a gigantic transfer
