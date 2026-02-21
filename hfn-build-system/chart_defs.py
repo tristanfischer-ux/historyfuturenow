@@ -5169,28 +5169,54 @@ title:{display:true,text:'% of recommended content',color:C.dim}}}}});
         {
             'id': 'scissorsChart5', 'figure_num': 5,
             'title': 'The Control Group: Gender Ideology Gap vs. Female Economic Independence',
-            'desc': 'The scissors only open where women are economically independent — developing countries with low female workforce participation show no gap',
-            'source': 'Source: FT/Burn-Murdoch (2024); World Bank (2024); Arab Barometer (2024); CSDS-Lokniti (2024); Ipsos (2025)',
+            'desc': 'The scissors only open where women are economically independent in modern economies — Africa has the highest female workforce participation on Earth but no gap, because subsistence agriculture is not economic independence',
+            'source': 'Source: FT/Burn-Murdoch (2024); World Bank (2024); Arab Barometer (2024); Afrobarometer (2024); CSDS-Lokniti (2024); Ipsos (2025)',
             'position': 'after_heading:The Control Group',
             'tall': True,
             'js': """
 _regChart('scissorsChart5',()=>{const ctx=document.getElementById('scissorsChart5');
-const countries=['India','Indonesia','Egypt','Jordan','Morocco','Japan','USA','UK','Germany','France','Denmark','Finland','Sweden','S. Korea'];
-const femLFP=[24,54,15,14,22,54,57,58,57,52,58,56,62,53];
-const ideoGap=[3,4,0,-5,-8,18,15,25,30,20,24,26,22,50];
-const devStatus=countries.map((_,i)=>i<5?'developing':'developed');
-const pts=countries.map((c,i)=>({x:femLFP[i],y:ideoGap[i]}));
-const devColors=pts.map((_,i)=>devStatus[i]==='developing'?C.amber+'cc':C.purple+'cc');
-new Chart(ctx,{type:'scatter',data:{datasets:[
-{label:'Developing / MENA',data:pts.filter((_,i)=>devStatus[i]==='developing'),backgroundColor:C.amber+'cc',pointRadius:9,pointHoverRadius:12},
-{label:'Developed / East Asian',data:pts.filter((_,i)=>devStatus[i]==='developed'),backgroundColor:C.purple+'cc',pointRadius:9,pointHoverRadius:12}
-]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+const countries=['India','Egypt','Jordan','Morocco','Indonesia','Nigeria','S. Africa','Rwanda','Bolivia','Argentina','Japan','USA','UK','France','Germany','Denmark','Finland','Sweden','S. Korea'];
+const femLFP=[28,15,14,22,54,50,46,52,65,49,54,57,58,52,57,58,56,62,53];
+const ideoGap=[3,0,-5,-8,4,1,5,8,1,10,18,15,25,20,30,24,26,22,50];
+const grp=['mena','mena','mena','mena','devping','africa','africa','africa','latam','latam','dev','dev','dev','dev','dev','dev','dev','dev','dev'];
+const gc={mena:C.amber+'cc',devping:C.amber+'cc',africa:C.green+'cc',latam:C.teal+'cc',dev:C.purple+'cc'};
+const gl={mena:'MENA / South Asia',devping:'SE Asia',africa:'Sub-Saharan Africa',latam:'Latin America',dev:'Developed / East Asian'};
+const groups=['mena','africa','latam','dev'];
+const ds=groups.map(g=>({label:gl[g]||g,data:countries.map((c,i)=>grp[i]===g||(g==='mena'&&grp[i]==='devping')?{x:femLFP[i],y:ideoGap[i]}:null).filter(Boolean),backgroundColor:gc[g]||gc.mena,pointRadius:9,pointHoverRadius:12}));
+const nameMap={};groups.forEach(g=>{nameMap[g]=countries.filter((_,i)=>grp[i]===g||(g==='mena'&&grp[i]==='devping'))});
+new Chart(ctx,{type:'scatter',data:{datasets:ds},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{
-title:items=>{const ds=items[0].datasetIndex;const idx=items[0].dataIndex;const devC=countries.filter((_,i)=>devStatus[i]===(ds===0?'developing':'developed'));return devC[idx]},
+title:items=>{const g=groups[items[0].datasetIndex];const names=nameMap[g];return names[items[0].dataIndex]||''},
 label:i=>'Female LFP: '+i.raw.x+'% | Ideology gap: '+i.raw.y+'pp'}}},
 scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:10,max:70,
 title:{display:true,text:'Female labour force participation (%)',color:C.dim}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'pp'},min:-15,max:55,
+title:{display:true,text:'Gender ideology gap (pp)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'scissorsChart6', 'figure_num': 6,
+            'title': 'The War Test: Demographic Shock and the Gender Ideology Gap',
+            'desc': 'Countries that experienced mass male casualties in the twentieth century show the widest gender ideology gaps today — countries that did not show no gap, regardless of development level',
+            'source': 'Source: War casualty data from national records and Britannica; gender gap data from FT/Burn-Murdoch (2024), Arab Barometer (2024), Afrobarometer (2024)',
+            'position': 'after_heading:The Seedbed: Demographic Shock',
+            'tall': True,
+            'js': """
+_regChart('scissorsChart6',()=>{const ctx=document.getElementById('scissorsChart6');
+const countries=['Germany','Rwanda','S. Korea','France','Japan','UK','China','Argentina','Nigeria','India','Egypt','Indonesia','Bolivia'];
+const warDead=[15,18,10,8,6,5,4,0,0,0,0,0,0];
+const ideoGap=[30,8,50,20,18,25,5,10,1,3,0,4,1];
+const hadWar=countries.map((_,i)=>warDead[i]>2);
+new Chart(ctx,{type:'scatter',data:{datasets:[
+{label:'Major demographic shock',data:countries.map((c,i)=>hadWar[i]?{x:warDead[i],y:ideoGap[i]}:null).filter(Boolean),backgroundColor:C.rose+'cc',pointRadius:10,pointHoverRadius:13},
+{label:'No major demographic shock',data:countries.map((c,i)=>!hadWar[i]?{x:warDead[i],y:ideoGap[i]}:null).filter(Boolean),backgroundColor:C.blue+'cc',pointRadius:10,pointHoverRadius:13}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>{const w=items[0].datasetIndex===0;const names=countries.filter((_,i)=>hadWar[i]===w);return names[items[0].dataIndex]||''},
+label:i=>'War dead ~'+i.raw.x+'% of males | Ideology gap: '+i.raw.y+'pp'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:-1,max:20,
+title:{display:true,text:'Male war dead as approx. % of male population (20th century)',color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'pp'},min:-5,max:55,
 title:{display:true,text:'Gender ideology gap (pp)',color:C.dim}}}}});
 });"""
         },
