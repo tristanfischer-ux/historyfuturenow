@@ -72,6 +72,8 @@ So sure, a consumable product or service may be 10-15% cheaper using outsourced 
 
 By examining the life-cycle cost this way it is clear that the cost of high levels of unemployment is more expensive to a citizen than the benefit of importing lower priced products.
 
+Free trade advocates — Milton Friedman foremost among them — frame tariffs as a tax on the consumer and free trade as an expression of individual liberty: the right to buy from whomever offers the best product at the best price. They are correct that a tariff raises the price at the checkout. But the consumer is also a worker, a taxpayer, and a citizen. The same person who saves £15 on a printer pays over £2,000 per year in additional taxes to fund the unemployment those cheap imports helped create. The saving is visible at the point of purchase; the cost is invisible, spread across tax returns, reduced public services, and diminished prospects. The freedom to buy a cheap television is a thin kind of freedom when it comes at the cost of the freedom to earn a decent living.
+
 A final note.
 
 This chapter focuses on the underlying cost of cheap versus the cost of high unemployment levels.
