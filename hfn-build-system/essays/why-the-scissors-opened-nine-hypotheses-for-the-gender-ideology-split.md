@@ -160,7 +160,7 @@ Noah Zucker's research on "breadwinner backlash" identifies the mechanism: when 
 
 ## Tier 2: The Amplifiers
 
-These forces did not create the divergence. They accelerated it, beginning around 2012–2015, when smartphone adoption among teenagers reached critical mass.
+These forces did not create the divergence. They accelerated it, beginning around 2012–2015, when smartphone adoption among teenagers reached critical mass. Critically, they also *synchronised* it — carrying ideas between culturally similar societies at a speed that made the scissors appear to open simultaneously across the entire West.
 
 ### Hypothesis 4: Algorithmic Divergence
 
@@ -179,6 +179,16 @@ Jordan Peterson's *12 Rules for Life* sold over five million copies, predominant
 The pathway: economic anxiety leads to self-improvement content, which leads to masculinity content, which leads to the manosphere, which leads to right-wing politics. The influencer pipeline explains how economic grievance converts to coherent political identity.
 
 *Developing-world test:* Peterson and Tate content circulates globally, including in MENA and South Asia. Yet these countries show no comparable male rightward shift on gender issues — because the female leftward movement that creates the perceived threat does not exist there. The pipeline requires a target. **Supported as conversion mechanism, not root cause.**
+
+### The Contagion Channel
+
+The amplifiers do not operate within national borders. They operate across them — and they travel fastest between countries that share language, media ecosystems, and cultural proximity. Research on the diffusion of democratic norms (Cambridge, 2022) found that nations with shared linguistic and religious ancestry develop more similar political trajectories, even after controlling for geography. Ideas spread along cultural lines.
+
+This explains a pattern the structural hypotheses alone cannot: the synchronisation of the scissors across the West. The United States, Britain, Canada, and Australia opened the scissors at almost the same moment — not because they independently developed identical structural conditions on identical timelines, but because they share an English-language media ecosystem that propagates ideas in hours. MeToo went from a Hollywood hashtag to a global movement across eighty-five countries within days, generating twelve million uses on its first day alone. The 4B movement travelled from South Korean feminist forums to American TikTok within weeks of the 2024 election — a non-Western idea resonating instantly in a structurally similar Western society.
+
+The contagion also flows in the other direction. Tate's content reaches Indian teenagers, Kenyan men, Nigerian youth. In India, children as young as twelve are adopting manosphere language. In Kenya, women's rights organisations report men in previously stable relationships becoming hostile after consuming masculinity-influencer content, with manosphere mentions averaging over four thousand per day on X in 2023. The ideas land. Individual behaviour changes. But no systemic gender ideology *split* emerges — because the structural preconditions that convert individual radicalisation into political divergence are absent.
+
+This is the distinction the contagion evidence forces: ideas travel globally, but their systemic impact is gated by structural conditions in the receiving society. The spark reaches everywhere. It only starts a fire where the tinder is dry.
 
 ## Tier 3: The Crystallisation
 
@@ -252,7 +262,7 @@ India is the most revealing single case for understanding why the split is absen
 
 India has high social media penetration, a large young population, rising educational attainment, and a politically active democracy. Yet the CSDS-Lokniti post-election survey (2024) found the BJP drawing thirty-seven per cent of men and thirty-six per cent of women — a one-point gap. The Ipsos 2025 survey found Indians "among the world's most progressive on gender equality," with seventy-seven per cent of men and eighty per cent of women agreeing it is personally important. The three-point gap is negligible by Western standards.
 
-Why? Because India's female labour-force participation rate remains below thirty per cent by international measures — among the lowest in the world for a major economy. The Economist (2024) calls it "the mystery of India's female labour-force participation rate": even as GDP rises, women are not entering the formal workforce at rates seen elsewhere. Cultural factors, safety concerns, and inadequate childcare keep the participation rate low despite economic growth and rising education.
+Why? Because India's female labour-force participation rate remains below thirty per cent by international measures — among the lowest in the world for a major economy. The Economist (2024) calls it "the mystery of India's female labour-force participation rate": even as GDP rises, women are not entering the formal workforce at rates seen elsewhere. Cultural factors, safety concerns, and inadequate childcare keep the participation rate low despite economic growth and rising education. Meanwhile, the manosphere has arrived: Indian teenagers are adopting Tate's language, masculinity influencers command millions of followers, and boys as young as twelve use terms like "beta male" in school. The ideological content has crossed the border. The systemic split has not followed — because the structural preconditions to convert individual attitude change into political divergence are missing.
 
 India also reveals an alternative model of the state-to-women relationship. The BJP under Modi has dramatically increased its support among women through targeted welfare transfers — the Ujjwala scheme providing cooking gas connections, the Ladki Bahin scheme providing monthly cash payments to low-income women. These programmes create a direct relationship between women and the state — superficially similar to the Western welfare state — but they reinforce traditional gender roles rather than enabling independence. Women vote for the party that provides domestic assistance, not the party that represents a distinct ideological worldview. The welfare state that opens the scissors is one that enables women to live independently of men. India's welfare transfers make domestic life more comfortable without altering the structural dependency.
 
@@ -278,7 +288,7 @@ The **seedbed** is the demographic shock of total war — the forced entry of wo
 
 **Layer two** is the education inversion and male economic displacement — two slow-moving forces that sent men and women on diverging life trajectories. Where the education inversion has not occurred (Sub-Saharan Africa, MENA), the gap does not appear — even where female workforce participation is high.
 
-**Layer three** is algorithmic social media and the influencer pipeline — the amplification machinery that, from 2012 onward, sorted pre-existing tendencies into gender-segregated information realities. The algorithms cannot create the divergence. They can only accelerate what the structural preconditions have already made possible — which is why Indonesia, with high social media penetration and no preconditions, shows no gap.
+**Layer three** is algorithmic social media, the influencer pipeline, and cross-national social contagion — the amplification and synchronisation machinery that, from 2012 onward, sorted pre-existing tendencies into gender-segregated information realities and carried them between culturally similar societies at unprecedented speed. The algorithms cannot create the divergence. They can only accelerate and synchronise what the structural preconditions have already made possible — which is why Indonesia, with high social media penetration and no preconditions, shows no gap, and why the Anglosphere opened the scissors in near-unison.
 
 **Layer four** is political shock mobilisation — the specific events (Trump, MeToo, Dobbs, and their equivalents) that converted latent progressive identity in women into active, durable political commitment.
 
@@ -286,7 +296,7 @@ The **seedbed** is the demographic shock of total war — the forced entry of wo
 
 **Layer six** is the moral foundations asymmetry — the deepest structural reality, which every preceding layer has progressively unmasked. The Africa paradox confirms it most powerfully: where women remain economically dependent on men — even where they work at the highest rates on Earth — the underlying moral divergence remains suppressed. The Arab Barometer's "working relatives" data reveals the mechanism: it is the experience of women working in modern economies, visible to their families, that releases the constraint. Remove the constraint, and the divergence expresses itself. Maintain it, and both genders remain aligned — or, under economic stress, converge further toward traditional norms.
 
-The model explains why the gap appeared where it did (countries shaped by total war), why it is absent where it is absent (the precondition stack is incomplete), why it accelerated when it did (smartphone adoption and algorithms from 2012), why it spiked when it did (political shocks from 2016–2022), why it is self-reinforcing (feedback loops), why it is widest in the most equal societies (the Nordic Paradox, explained by moral foundations theory), and — the contribution of the global evidence — why it is not a universal feature of modernity but the product of a specific, contingent, and historically traceable chain of causes.
+The model explains why the gap appeared where it did (countries shaped by total war), why it is absent where it is absent (the precondition stack is incomplete), why it accelerated when it did (smartphone adoption and algorithms from 2012), why it appeared to open simultaneously across the West (cross-national social contagion through shared media ecosystems), why it spiked when it did (political shocks from 2016–2022), why it is self-reinforcing (feedback loops), why it is widest in the most equal societies (the Nordic Paradox, explained by moral foundations theory), and — the contribution of the global evidence — why it is not a universal feature of modernity but the product of a specific, contingent, and historically traceable chain of causes.
 
 ## What the Data Cannot Yet Prove
 
