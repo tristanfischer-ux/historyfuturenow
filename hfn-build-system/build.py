@@ -560,7 +560,8 @@ def make_footer():
 
 def inject_pull_quote(body_html, pq):
     if not pq: return body_html
-    pq_html = f'<aside class="pull-quote"><p>{html_mod.escape(pq)}</p></aside>'
+    pq_clean = html_mod.unescape(pq)
+    pq_html = f'<aside class="pull-quote"><p>{html_mod.escape(pq_clean)}</p></aside>'
     count, pos = 0, 0
     while count < 4:
         idx = body_html.find('</p>', pos)
