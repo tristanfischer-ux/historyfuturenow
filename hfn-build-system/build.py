@@ -29,6 +29,7 @@ REVIEW_SLUGS = {
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
     'why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split',
+    'the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world',
 }
 
 # Articles that were under review and have been released to the public site.

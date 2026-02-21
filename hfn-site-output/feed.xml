@@ -5,22 +5,13 @@
     <link>https://www.historyfuturenow.com</link>
     <description>Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sat, 21 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Feb 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.historyfuturenow.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://www.historyfuturenow.com/favicon.svg</url>
       <title>History Future Now</title>
       <link>https://www.historyfuturenow.com</link>
     </image>
-    <item>
-      <title>The Narrow Lens: How What Britain Teaches Its Children Shapes How Adults See the World</title>
-      <link>https://www.historyfuturenow.com/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world</link>
-      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world</guid>
-      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
-      <description>Britain teaches its children a remarkably narrow slice of history — the Tudors, the World Wars, and the Holocaust — and then wonders why adults reach for the same historical analogies every time. The result is a nation that can spot a fascist at five hundred yards but cannot recognise a Stalinist at five feet. What you learn at school does not stay at school. It becomes the lens through which you see the world.</description>
-      <category>Society</category>
-      <enclosure url="https://www.historyfuturenow.com/images/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world/hero.png" type="image/png" />
-    </item>
     <item>
       <title>The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</title>
       <link>https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible</link>
@@ -191,6 +182,15 @@
       <description>In February 2026, the United States signed a trade deal with Taiwan that included $250 billion in semiconductor investment pledges. Tariffs are back. Industrial policy is back. After forty years of being told that manufacturing didn&#x27;t matter, every serious nation on Earth is scrambling to rebuild its factories. History explains why — and what comes next.</description>
       <category>Jobs &amp; Economy</category>
       <enclosure url="https://www.historyfuturenow.com/images/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering/hero.png" type="image/png" />
+    </item>
+    <item>
+      <title>Who Guards The Guards? Bureaucracy, Empire, And The Eternal Struggle To Control The State</title>
+      <link>https://www.historyfuturenow.com/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state</link>
+      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state</guid>
+      <pubDate>Sat, 07 Feb 2026 00:00:00 +0000</pubDate>
+      <description>Elon Musk&#x27;s DOGE initiative has identified $215 billion in US government savings and aims for $2 trillion. The EU&#x27;s regulatory apparatus grows by thousands of pages each year. Every civilisation in history has faced the same problem: the people hired to run the state eventually capture it. The question is whether AI can break the pattern.</description>
+      <category>Society</category>
+      <enclosure url="https://www.historyfuturenow.com/images/articles/who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state/hero.png" type="image/png" />
     </item>
   </channel>
 </rss>

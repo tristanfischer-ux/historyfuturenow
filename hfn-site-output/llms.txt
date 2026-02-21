@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 77
+Total articles: 76
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -18,7 +18,7 @@ Total articles: 77
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (33 articles)
+### Society (32 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -331,13 +331,6 @@ Total articles: 77
 - Published: 2020-04-01
 - Reading time: 30 min
 - The Covid 19 pandemic is a genuinely historical event. Future historians will analyse the period leading up to the outbreak, searching for clues about why it got so bad so quickly, will then investiga
-
-### The Narrow Lens: How What Britain Teaches Its Children Shapes How Adults See the World [3 charts]
-- URL: https://www.historyfuturenow.com/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world
-- Section: Society
-- Published: 2026-02-21
-- Reading time: 12 min
-- Britain teaches its children a remarkably narrow slice of history — the Tudors, the World Wars, and the Holocaust — and then wonders why adults reach for the same historical analogies every time. The 
 
 ### The New Literacy: How AI Is Killing The Scribes And What Happens Next [5 charts]
 - URL: https://www.historyfuturenow.com/articles/the-new-literacy
