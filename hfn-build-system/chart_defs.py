@@ -5166,88 +5166,32 @@ y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:10
 title:{display:true,text:'% of recommended content',color:C.dim}}}}});
 });"""
         },
-    ]
-
-    # ─── THE NARROW LENS ───
-    charts['the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world'] = [
         {
-            'id': 'nlChart1', 'figure_num': 1,
-            'title': 'What British A-Level Students Study: Most Popular History Topics',
-            'desc': 'Percentage of OCR A-level centres offering each topic (506 schools, 2015–16)',
-            'source': 'Dunn, Darlington & Benton, Cambridge Assessment Research Matters 22, 2016',
-            'position': 'after_para_8',
+            'id': 'scissorsChart5', 'figure_num': 5,
+            'title': 'The Control Group: Gender Ideology Gap vs. Female Economic Independence',
+            'desc': 'The scissors only open where women are economically independent — developing countries with low female workforce participation show no gap',
+            'source': 'Source: FT/Burn-Murdoch (2024); World Bank (2024); Arab Barometer (2024); CSDS-Lokniti (2024); Ipsos (2025)',
+            'position': 'after_heading:The Control Group',
             'tall': True,
             'js': """
-_regChart('nlChart1',()=>{const ctx=document.getElementById('nlChart1');
-new Chart(ctx,{type:'bar',data:{
-labels:['Civil Rights\\nUSA','Russia &\\nits Rulers','Germany\\n1919-1963','Early\\nTudors','Britain\\n1930-1997','Russia\\n1894-1941','French\\nRevolution','Later\\nTudors','Cold War\\nEurope','China\\n1839-1989','Middle\\nEast','Mughal\\nEmpire','Rise of\\nIslam'],
-datasets:[{label:'% of schools',data:[29.4,26.3,21.3,19.4,19.0,14.6,14.2,14.0,8.7,1.8,2.8,0.2,0],
-backgroundColor:[C.blue,C.accent,C.accent,C.purple,C.blue,C.accent+'cc',C.amber,C.purple+'cc',C.teal,C.dim,C.teal+'99',C.dim+'99',C.dim+'66'],
-borderRadius:4,borderSkipped:false}]},
-options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of schools'}},
-annotation:{annotations:{
-gap:{type:'label',..._al,xValue:25,yValue:9.5,content:['China: 1.8%','Rise of Islam: 0%','— the blind spot'],color:C.accent,font:{size:11,weight:'bold'}}
-}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'% of schools offering topic',color:C.dim}},
-y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
-});"""
-        },
-        {
-            'id': 'nlChart2', 'figure_num': 2,
-            'title': 'The Education Funnel: How Many Britons Study History',
-            'desc': 'Proportion of students studying history at each stage of education',
-            'source': 'Historical Association 2021; Cambridge Assessment 2022; Royal Historical Society 2024',
-            'position': 'after_para_7',
-            'js': """
-_regChart('nlChart2',()=>{const ctx=document.getElementById('nlChart2');
-new Chart(ctx,{type:'bar',data:{
-labels:['Key Stage 3\\n(ages 11-14)','GCSE\\n(ages 14-16)','A-Level\\n(ages 16-18)'],
-datasets:[{label:'% studying history',data:[100,40,5.3],
-backgroundColor:[C.purple,C.amber,C.accent],borderRadius:6,borderSkipped:false,
-barPercentage:0.6}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of students'}},
-annotation:{annotations:{
-a1:{type:'label',..._al,xValue:0,yValue:90,content:'Compulsory',color:C.purple,font:{size:11,weight:'bold'}},
-a2:{type:'label',..._al,xValue:1,yValue:34,content:'Optional — 60%',color:C.amber,font:{size:10}},
-a3:{type:'label',..._al,xValue:1,yValue:28,content:'never study',color:C.amber,font:{size:10}},
-a4:{type:'label',..._al,xValue:1,yValue:22,content:'history again',color:C.amber,font:{size:10}},
-a5:{type:'label',..._al,xValue:2,yValue:12,content:'47,297 students',color:C.accent,font:{size:10}},
-a6:{type:'label',..._al,xValue:2,yValue:6,content:'(2024)',color:C.accent,font:{size:10}}
-}}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},
-y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:110,
-title:{display:true,text:'% of age cohort',color:C.dim}}}}});
-});"""
-        },
-        {
-            'id': 'nlChart3', 'figure_num': 3,
-            'title': 'The Deaths They Don\'t Teach: 20th-Century Atrocities by Regime Type',
-            'desc': 'Estimated deaths from major 20th-century atrocities — scholarly midpoint estimates',
-            'source': 'Dikötter 2010; Qian 2024; Heuveline 2015; Soviet Archives (declassified 1991); USHMM',
-            'position': 'after_para_14',
-            'tall': True,
-            'js': """
-_regChart('nlChart3',()=>{const ctx=document.getElementById('nlChart3');
-const labels=['Holocaust','Great Leap\\nForward','Holodomor','Gulag\\nDeaths','Khmer\\nRouge'];
-const deaths=[6,30,3.9,1.7,1.9];
-const taught=['Compulsory','Not taught','Not taught','Not taught','Not taught'];
-const cols=[C.purple,C.accent,C.accent,C.accent,C.accent];
-new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Deaths (millions)',data:deaths,
-backgroundColor:cols.map((c,i)=>i===0?c:c+'cc'),borderColor:cols,borderWidth:1.5,borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'M deaths — '+taught[i.dataIndex]}},
-annotation:{annotations:{
-tag0:{type:'label',..._al,xValue:0,yValue:7.2,content:'TAUGHT',color:C.purple,font:{size:10,weight:'bold'}},
-tag1:{type:'label',..._al,xValue:1,yValue:31.5,content:'NOT TAUGHT',color:C.accent,font:{size:10,weight:'bold'}},
-tag2:{type:'label',..._al,xValue:2,yValue:5.1,content:'NOT TAUGHT',color:C.accent,font:{size:10,weight:'bold'}},
-tag3:{type:'label',..._al,xValue:3,yValue:3.0,content:'NOT TAUGHT',color:C.accent,font:{size:10,weight:'bold'}},
-tag4:{type:'label',..._al,xValue:4,yValue:3.2,content:'NOT TAUGHT',color:C.accent,font:{size:10,weight:'bold'}}
-}}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
-y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'M'},
-title:{display:true,text:'Deaths (millions, midpoint estimates)',color:C.dim}}}}});
+_regChart('scissorsChart5',()=>{const ctx=document.getElementById('scissorsChart5');
+const countries=['India','Indonesia','Egypt','Jordan','Morocco','Japan','USA','UK','Germany','France','Denmark','Finland','Sweden','S. Korea'];
+const femLFP=[24,54,15,14,22,54,57,58,57,52,58,56,62,53];
+const ideoGap=[3,4,0,-5,-8,18,15,25,30,20,24,26,22,50];
+const devStatus=countries.map((_,i)=>i<5?'developing':'developed');
+const pts=countries.map((c,i)=>({x:femLFP[i],y:ideoGap[i]}));
+const devColors=pts.map((_,i)=>devStatus[i]==='developing'?C.amber+'cc':C.purple+'cc');
+new Chart(ctx,{type:'scatter',data:{datasets:[
+{label:'Developing / MENA',data:pts.filter((_,i)=>devStatus[i]==='developing'),backgroundColor:C.amber+'cc',pointRadius:9,pointHoverRadius:12},
+{label:'Developed / East Asian',data:pts.filter((_,i)=>devStatus[i]==='developed'),backgroundColor:C.purple+'cc',pointRadius:9,pointHoverRadius:12}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>{const ds=items[0].datasetIndex;const idx=items[0].dataIndex;const devC=countries.filter((_,i)=>devStatus[i]===(ds===0?'developing':'developed'));return devC[idx]},
+label:i=>'Female LFP: '+i.raw.x+'% | Ideology gap: '+i.raw.y+'pp'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:10,max:70,
+title:{display:true,text:'Female labour force participation (%)',color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'pp'},min:-15,max:55,
+title:{display:true,text:'Gender ideology gap (pp)',color:C.dim}}}}});
 });"""
         },
     ]
