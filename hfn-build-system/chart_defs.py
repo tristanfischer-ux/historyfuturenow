@@ -5198,7 +5198,7 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
             'title': 'The Education Funnel: How Many Britons Study History',
             'desc': 'Proportion of students studying history at each stage of education',
             'source': 'Historical Association 2021; Cambridge Assessment 2022; Royal Historical Society 2024',
-            'position': 'after_para_5',
+            'position': 'after_para_7',
             'js': """
 _regChart('nlChart2',()=>{const ctx=document.getElementById('nlChart2');
 new Chart(ctx,{type:'bar',data:{
