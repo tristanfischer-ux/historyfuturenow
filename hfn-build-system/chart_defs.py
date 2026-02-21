@@ -5064,6 +5064,110 @@ scales:{x:linX(1940,2025,{title:{display:true,text:'Year',color:C.dim}}),y:{min:
         },
     ]
 
+    # ─── WHY THE SCISSORS OPENED: GENDER IDEOLOGY CAUSATION ───
+    charts['why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split'] = [
+        {
+            'id': 'scissorsChart1', 'figure_num': 1,
+            'title': 'The Scissors: Liberal Identification Among 18–29 Year Olds (1999–2024)',
+            'desc': 'Women moved sharply left while men stayed remarkably stable — the divergence is asymmetric',
+            'source': 'Source: Gallup Political Ideology surveys (1999–2024); PRRI (2024)',
+            'position': 'after_heading:The Reframing',
+            'js': """
+_regChart('scissorsChart1',()=>{const ctx=document.getElementById('scissorsChart1');
+const yrs=[1999,2002,2004,2006,2008,2010,2012,2014,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Young women (% liberal)',yrs,[30,29,28,28,29,30,32,33,35,38,39,40,44,44,41,40,40],C.rose),
+dxy('Young men (% liberal)',yrs,[27,27,26,26,27,26,26,25,25,24,25,25,25,25,25,25,25],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'%'}},
+annotation:{annotations:{
+gap00:{type:'label',..._al,xValue:2000,yValue:24,content:['Gap: 3pp'],color:C.dim,font:{size:10}},
+gap24:{type:'label',..._al,xValue:2023,yValue:44,content:['Gap: 15pp'],color:C.accent,font:{size:11,weight:'bold'}},
+metoo:{type:'line',xMin:2017,xMax:2017,yMin:15,yMax:42,borderColor:C.dim+'66',borderWidth:1,borderDash:[4,4]},
+metooL:{type:'label',..._al,xValue:2017,yValue:17,content:['#MeToo'],color:C.dim,font:{size:9}}
+}}},
+scales:{x:linX(1999,2024),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:50,
+title:{display:true,text:'% identifying as liberal',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'scissorsChart2', 'figure_num': 2,
+            'title': 'The Nordic Paradox: Gender Equality vs. Gender Ideology Gap',
+            'desc': 'More gender-equal countries show wider ideological gaps — equality unmasks divergence rather than closing it',
+            'source': 'Source: World Economic Forum Gender Gap Index (2024); FT/Burn-Murdoch (2024); Lahtinen (2023)',
+            'position': 'after_heading:The Nordic Paradox',
+            'js': """
+_regChart('scissorsChart2',()=>{const ctx=document.getElementById('scissorsChart2');
+const countries=['South Korea','Japan','Italy','France','USA','UK','Germany','Denmark','Finland','Sweden'];
+const genderEqScore=[0.727,0.647,0.735,0.791,0.748,0.792,0.815,0.841,0.863,0.879];
+const ideoGap=[50,18,12,20,15,25,30,24,26,22];
+const pts=countries.map((c,i)=>({x:genderEqScore[i],y:ideoGap[i]}));
+new Chart(ctx,{type:'scatter',data:{datasets:[
+{label:'Country',data:pts,backgroundColor:pts.map(p=>p.y>=25?C.accent+'cc':C.blue+'cc'),
+pointRadius:8,pointHoverRadius:11}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>{const i=items[0].dataIndex;return countries[i]},
+label:i=>'Equality: '+i.raw.x.toFixed(3)+' | Ideology gap: '+i.raw.y+'pp'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim},min:0.63,max:0.9,
+title:{display:true,text:'Gender Equality Index score (higher = more equal)',color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'pp'},min:0,max:55,
+title:{display:true,text:'Gender ideology gap (percentage points)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'scissorsChart3', 'figure_num': 3,
+            'title': 'The Education Engine: Women\'s Degree Attainment and the Ideology Gap',
+            'desc': 'As the education gap widened, the ideology gap followed — education explains roughly half the divergence',
+            'source': 'Source: OECD Education at a Glance (2024); Gallup; EdWorkingPapers (2025)',
+            'position': 'after_heading:Hypothesis 2',
+            'js': """
+_regChart('scissorsChart3',()=>{const ctx=document.getElementById('scissorsChart3');
+const yrs=[1990,1995,2000,2005,2010,2015,2020,2024];
+const womenDeg=[25,28,32,36,40,46,51,53];
+const menDeg=[25,26,27,29,32,35,39,40];
+const gap=[2,2,3,4,6,10,14,15];
+new Chart(ctx,{type:'line',data:{datasets:[
+{label:'Women with degrees (%)',data:yrs.map((y,i)=>({x:y,y:womenDeg[i]})),borderColor:C.rose,backgroundColor:C.rose+'22',fill:'+1',tension:0.3,pointRadius:4,borderWidth:2.5},
+{label:'Men with degrees (%)',data:yrs.map((y,i)=>({x:y,y:menDeg[i]})),borderColor:C.blue,backgroundColor:'transparent',tension:0.3,pointRadius:4,borderWidth:2.5},
+{label:'Ideology gap (pp)',data:yrs.map((y,i)=>({x:y,y:gap[i]})),borderColor:C.accent,borderDash:[6,4],tension:0.3,pointRadius:4,borderWidth:2,yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const u=i.dataset.yAxisID==='y1'?'pp':'%';return i.dataset.label+': '+i.raw.y+u}}}},
+scales:{x:linX(1990,2024),
+y:{position:'left',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:15,max:60,title:{display:true,text:'Tertiary attainment (% of 25–34)',color:C.dim}},
+y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:C.accent,callback:v=>v+'pp'},min:0,max:20,title:{display:true,text:'Ideology gap (pp)',color:C.accent}}
+}}});
+});"""
+        },
+        {
+            'id': 'scissorsChart4', 'figure_num': 4,
+            'title': 'The Algorithm Machine: How TikTok Sorts Content by Gender',
+            'desc': 'Male-presenting accounts saw misogynistic content rise from 13% to 56% of recommendations in just five days',
+            'source': 'Source: UCL/Dublin City University quasi-experimental study (2024)',
+            'position': 'after_heading:Hypothesis 4',
+            'tall': True,
+            'js': """
+_regChart('scissorsChart4',()=>{const ctx=document.getElementById('scissorsChart4');
+const days=['Day 1','Day 2','Day 3','Day 4','Day 5'];
+const misog=[13,24,38,48,56];
+const neutral=[62,48,32,25,20];
+const positive=[25,28,30,27,24];
+new Chart(ctx,{type:'bar',data:{labels:days,datasets:[
+{label:'Misogynistic content',data:misog,backgroundColor:C.accent+'cc',borderColor:C.accent,borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Neutral content',data:neutral,backgroundColor:C.dim+'66',borderColor:C.dim+'99',borderWidth:1.5,borderRadius:4,borderSkipped:false},
+{label:'Positive/educational',data:positive,backgroundColor:C.teal+'99',borderColor:C.teal,borderWidth:1.5,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
+annotation:{annotations:{
+note:{type:'label',..._al,xValue:3.5,yValue:95,content:['Accounts started with mild','fitness / self-improvement content'],color:C.dim,font:{size:10}}
+}}},
+scales:{x:{stacked:true,grid:{display:false},ticks:{color:C.dim}},
+y:{stacked:true,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},max:100,
+title:{display:true,text:'% of recommended content',color:C.dim}}}}});
+});"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

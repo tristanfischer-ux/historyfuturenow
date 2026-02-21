@@ -191,6 +191,7 @@ ISSUES = [
             "the-locked-gate-how-the-west-priced-its-children-out-of-existence",
             "the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant",
             "the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration",
+            "why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split",
         ],
     },
 ]

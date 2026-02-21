@@ -28,6 +28,7 @@ REVIEW_SLUGS = {
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
+    'why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split',
 }
 
 # Articles that were under review and have been released to the public site.
