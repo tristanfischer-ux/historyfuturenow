@@ -257,55 +257,55 @@ def generate_tts_chunk(chunk: list[tuple[str, str]], max_retries: int = 6) -> by
                 response = requests.post(
                     url, params={"key": api_key}, json=payload, timeout=360,
                 )
-            except requests.exceptions.Timeout:
-                wait = 15 + (attempt * 10)
-                print(f"      [{model_short}] Timeout (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+
+                if response.status_code == 429:
+                    err_msg = response.json().get("error", {}).get("message", "")
+                    if "per_day" in err_msg or "limit: 0" in err_msg:
+                        print(f"      [{model_short}] Daily quota exhausted, trying next model...")
+                        break
+                    wait = 30 + (attempt * 30)
+                    print(f"      [{model_short}] Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                    time.sleep(wait)
+                    last_error = "Rate limited"
+                    continue
+
+                if response.status_code in (500, 503):
+                    wait = 10 + (attempt * 10)
+                    print(f"      [{model_short}] Server error {response.status_code} (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                    time.sleep(wait)
+                    last_error = f"HTTP {response.status_code}"
+                    continue
+
+                if response.status_code != 200:
+                    raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
+
+                data = response.json()
+                candidates = data.get("candidates", [])
+                if not candidates:
+                    wait = 15 + (attempt * 10)
+                    print(f"      [{model_short}] No candidates (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                    time.sleep(wait)
+                    last_error = "No candidates"
+                    continue
+
+                inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
+                if not inline_data:
+                    finish_reason = candidates[0].get("finishReason", "unknown")
+                    wait = 15 + (attempt * 10)
+                    print(f"      [{model_short}] No audio (finishReason={finish_reason}, attempt {attempt+1}/{max_retries}), waiting {wait}s...")
+                    time.sleep(wait)
+                    last_error = f"No audio (finishReason={finish_reason})"
+                    continue
+
+                return base64.b64decode(inline_data.get("data", ""))
+
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError, ConnectionResetError, ConnectionAbortedError) as e:
+                wait = 15 + (attempt * 15)
+                print(f"      [{model_short}] Connection error (attempt {attempt+1}/{max_retries}), waiting {wait}s: {type(e).__name__}")
                 time.sleep(wait)
-                last_error = "Timeout"
+                last_error = str(e)
                 continue
-
-            if response.status_code == 429:
-                err_msg = response.json().get("error", {}).get("message", "")
-                if "per_day" in err_msg or "limit: 0" in err_msg:
-                    print(f"      [{model_short}] Daily quota exhausted, trying next model...")
-                    break  # Break inner loop to try next model
-                wait = 30 + (attempt * 30)
-                print(f"      [{model_short}] Rate limited (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-                time.sleep(wait)
-                last_error = "Rate limited"
-                continue
-
-            if response.status_code in (500, 503):
-                wait = 10 + (attempt * 10)
-                print(f"      [{model_short}] Server error {response.status_code} (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-                time.sleep(wait)
-                last_error = f"HTTP {response.status_code}"
-                continue
-
-            if response.status_code != 200:
-                raise RuntimeError(f"Gemini TTS error {response.status_code}: {response.text[:500]}")
-
-            data = response.json()
-            candidates = data.get("candidates", [])
-            if not candidates:
-                wait = 15 + (attempt * 10)
-                print(f"      [{model_short}] No candidates (attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-                time.sleep(wait)
-                last_error = "No candidates"
-                continue
-
-            inline_data = candidates[0].get("content", {}).get("parts", [{}])[0].get("inlineData", {})
-            if not inline_data:
-                finish_reason = candidates[0].get("finishReason", "unknown")
-                wait = 15 + (attempt * 10)
-                print(f"      [{model_short}] No audio (finishReason={finish_reason}, attempt {attempt+1}/{max_retries}), waiting {wait}s...")
-                time.sleep(wait)
-                last_error = f"No audio (finishReason={finish_reason})"
-                continue
-
-            return base64.b64decode(inline_data.get("data", ""))
         else:
-            # All retries exhausted for this model — try next
             continue
 
     raise RuntimeError(f"TTS failed on all models after retries: {last_error}")
