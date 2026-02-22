@@ -133,12 +133,16 @@
           if (nw && cur) cur.setAttribute('content', nw.getAttribute('content'));
         });
 
-        // Execute new page scripts sequentially, then rebind queue
-        executeScripts(document.body, function () {
-          if (window.HFNQueue && window.HFNQueue.rebind) {
-            window.HFNQueue.rebind();
-          }
-          navigating = false;
+        // Execute new page scripts sequentially, then rebind queue.
+        // Use requestAnimationFrame so layout is complete before chart scripts run
+        // (avoids zero-height canvas when Chart.js initialises).
+        requestAnimationFrame(function () {
+          executeScripts(document.body, function () {
+            if (window.HFNQueue && window.HFNQueue.rebind) {
+              window.HFNQueue.rebind();
+            }
+            navigating = false;
+          });
         });
 
         if (!isPopstate) {

@@ -508,8 +508,8 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .chart-figure-label { font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; margin-bottom: 0.15rem; }
 .chart-figure h4 { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.1rem; }
 .chart-figure .chart-desc { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.4rem; font-weight: 300; line-height: 1.45; }
-.chart-area { position: relative; width: 100%; aspect-ratio: 1.8 / 1; }
-.chart-area.tall { aspect-ratio: 4 / 3; }
+.chart-area { position: relative; width: 100%; aspect-ratio: 1.8 / 1; min-height: 200px; }
+.chart-area.tall { aspect-ratio: 4 / 3; min-height: 240px; }
 .chart-figure .chart-source { font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); margin-top: 0.25rem; padding-top: 0.2rem; border-top: 1px solid var(--border-light); }
 
 /* SPIRAL */
