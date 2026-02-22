@@ -1705,14 +1705,19 @@ tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of global advanced chips'}
             'tall': True,
             'js': """
 _regChart('rootsChart1',()=>{const ctx=document.getElementById('rootsChart1');
-new Chart(ctx,{type:'bar',data:{
-labels:['Wave 1: Puritans\\n(1629-1640)','Wave 2: Cavaliers\\n(1642-1675)','Wave 3: Quakers\\n(1675-1715)','Wave 4: Borderers\\n(1717-1775)'],
-datasets:[{label:'Settlement region',data:[1,1,1,1],
-backgroundColor:[C.blue,C.accent,C.green,C.amber],borderRadius:4,borderSkipped:false}]},
+const W=[
+{l:'Puritans',from:'East Anglia',to:'New England',n:'~21,000',v:'Education, community, covenant',s:1629,e:1640,c:C.blue},
+{l:'Cavaliers',from:'SW England',to:'Virginia & Maryland',n:'~45,000',v:'Hierarchy, honour, slavery',s:1642,e:1675,c:C.accent},
+{l:'Quakers',from:'N. Midlands',to:'Delaware Valley',n:'~23,000',v:'Egalitarian, pacifist, anti-slavery',s:1675,e:1715,c:C.green},
+{l:'Borderers',from:'Scottish borders',to:'Appalachia',n:'~250,000',v:'Individualist, warrior culture',s:1717,e:1775,c:C.amber}
+];
+new Chart(ctx,{type:'bar',data:{labels:W.map(w=>w.l),
+datasets:[{data:W.map(w=>[w.s,w.e]),backgroundColor:W.map(w=>w.c+'cc'),borderColor:W.map(w=>w.c),borderWidth:1,borderRadius:3,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{
-title:i=>[['Puritans → New England','Cavaliers → Virginia/Maryland','Quakers → Delaware Valley','Borderers → Appalachia'][i[0].dataIndex]],
-label:i=>['From East Anglia. Education, community, covenant.','From SW England. Hierarchy, honour, slavery.','From N. Midlands. Egalitarian, pacifist, anti-slavery.','From Scottish borders. Individualist, warrior culture.'][i.dataIndex]}}},
-scales:{x:{display:false},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+title:i=>{const w=W[i[0].dataIndex];return w.l+' ('+w.s+'\u2013'+w.e+')';},
+label:i=>{const w=W[i.dataIndex];return [w.from+' \u2192 '+w.to,w.n+' migrants',w.v];}}}},
+scales:{x:{type:'linear',min:1620,max:1785,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},
+y:{grid:{display:false},ticks:{color:C.dim,font:{size:12}}}}}});
 });"""
         },
         {
