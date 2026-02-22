@@ -725,7 +725,8 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .new-cards-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 1.5rem;
+  row-gap: 1.5rem;
+  column-gap: 2.5rem;
 }
 .new-cards-grid .card-featured { grid-column: span 3; }
 .new-cards-grid .card:not(.card-featured) { grid-column: span 2; }

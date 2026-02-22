@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChartGeo Test</title>
+    <script src="/js/chart.umd.min.js"></script>
+    <script src="/js/chartjs-plugin-annotation.min.js"></script>
+    <script src="/js/chartjs-chart-geo.umd.min.js"></script>
+</head>
+<body>
+    <h1>ChartGeo Test</h1>
+    <canvas id="testChart" width="800" height="400"></canvas>
+    
+    <div id="output"></div>
+    
+    <script>
+        const output = document.getElementById('output');
+        
+        // Check if libraries loaded
+        output.innerHTML += '<p>Chart.js loaded: ' + (typeof Chart !== 'undefined') + '</p>';
+        output.innerHTML += '<p>ChartGeo loaded: ' + (typeof ChartGeo !== 'undefined') + '</p>';
+        
+        if (typeof ChartGeo !== 'undefined') {
+            output.innerHTML += '<p>ChartGeo.topojson exists: ' + (typeof ChartGeo.topojson !== 'undefined') + '</p>';
+            
+            if (ChartGeo.topojson) {
+                output.innerHTML += '<p>ChartGeo.topojson.feature exists: ' + (typeof ChartGeo.topojson.feature === 'function') + '</p>';
+            }
+            
+            // List ChartGeo properties
+            output.innerHTML += '<p>ChartGeo properties: ' + Object.keys(ChartGeo).join(', ') + '</p>';
+        }
+        
+        // Try to load and render a map
+        fetch('/js/countries-110m.json')
+            .then(r => r.json())
+            .then(worldData => {
+                output.innerHTML += '<p>World data loaded: ' + (worldData ? 'yes' : 'no') + '</p>';
+                output.innerHTML += '<p>World data type: ' + worldData.type + '</p>';
+                output.innerHTML += '<p>World data objects: ' + Object.keys(worldData.objects).join(', ') + '</p>';
+                
+                try {
+                    const countries = ChartGeo.topojson.feature(worldData, worldData.objects.countries).features;
+                    output.innerHTML += '<p style="color: green;">✓ Successfully extracted ' + countries.length + ' countries</p>';
+                    
+                    // Try to create a simple choropleth
+                    const ctx = document.getElementById('testChart');
+                    new Chart(ctx, {
+                        type: 'choropleth',
+                        data: {
+                            labels: countries.map(d => d.properties.name),
+                            datasets: [{
+                                label: 'Test',
+                                data: countries.map(d => ({
+                                    feature: d,
+                                    value: Math.random() * 100
+                                })),
+                                outline: countries
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            showOutline: true,
+                            showGraticule: false,
+                            scales: {
+                                projection: {
+                                    axis: 'x',
+                                    projection: 'equalEarth'
+                                }
+                            }
+                        }
+                    });
+                    output.innerHTML += '<p style="color: green;">✓ Chart created successfully</p>';
+                } catch (err) {
+                    output.innerHTML += '<p style="color: red;">✗ Error: ' + err.message + '</p>';
+                    output.innerHTML += '<pre>' + err.stack + '</pre>';
+                }
+            })
+            .catch(err => {
+                output.innerHTML += '<p style="color: red;">✗ Failed to load world data: ' + err.message + '</p>';
+            });
+    </script>
+</body>
+</html>

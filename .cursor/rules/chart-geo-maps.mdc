@@ -1,0 +1,44 @@
+---
+description: Prevent recurring choropleth/geo map rendering failures
+alwaysApply: true
+---
+
+# Choropleth Map Charts — Known Failure Modes
+
+Map charts (type `choropleth`) have broken repeatedly. Every time you touch charts, the build system, or page layouts, run through this checklist.
+
+## How Geo Charts Work
+
+1. Charts with `'geo': True` in `chart_defs.py` use the `chartjs-chart-geo` plugin
+2. `build.py` conditionally includes the geo script tag and `_geoDataPromise` only when `needs_geo` is true
+3. The geo data is fetched async from `/js/countries-110m.json`
+4. Chart JS code calls `ChartGeo.topojson.feature()` inside `_geoDataPromise.then()`
+
+## Recurring Failures (all have happened before)
+
+### 1. Missing geo script tag on a page
+- **Cause:** `build.py` has TWO separate `needs_geo` checks — one for article pages (~line 1068) and one for the charts gallery page (~line 2582). They can drift independently.
+- **Fix:** When modifying either, check both. Search for `needs_geo` in `build.py` and verify both paths include the script tag.
+
+### 2. Chart wrapper regex breaks geo IIFEs
+- **Cause:** Build-time regex that wraps chart JS in `_regChart()` or IIFEs can mangle the geo chart pattern `_regChart('id',()=>{ _geoDataPromise.then(... })`.
+- **Fix:** After any regex-based JS transformation in the build, verify a geo chart's output JS is syntactically valid. Check that `_geoDataPromise.then()` and `ChartGeo.topojson.feature()` survive intact.
+
+### 3. Layout changes break map rendering
+- **Cause:** Choropleth charts need a container with explicit dimensions. Unlike regular Chart.js charts that respect `aspect-ratio`, geo charts can silently fail to render when the canvas has zero height or is in a grid cell with no intrinsic size.
+- **Fix:** After any CSS layout change to `.charts-grid`, `.chart-area`, or `.charts-card`, verify that map charts still have non-zero canvas dimensions. Test by scrolling to a map chart on the charts page.
+
+## Pre-Flight Checklist
+
+Before deploying any change that touches:
+- `build.py` chart rendering logic
+- `chart_defs.py` (adding/modifying geo charts)
+- CSS for `.chart-area`, `.charts-grid`, or `.charts-card`
+- Chart page HTML structure
+
+Verify:
+- [ ] `chartjs-chart-geo.umd.min.js` script tag is present in both article pages and charts.html
+- [ ] `_geoDataPromise` declaration is present in both article and charts page script blocks
+- [ ] `/js/countries-110m.json` exists in `hfn-site-output/js/`
+- [ ] At least one geo chart's JS in the built HTML contains intact `ChartGeo.topojson.feature()` call
+- [ ] Canvas elements for map charts have a container with non-zero height
