@@ -378,7 +378,7 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
   margin-right: 0.35em;
   vertical-align: middle;
 }
-.home-section .cards { gap: 1.5rem; }
+.home-section .cards { row-gap: 1.5rem; column-gap: 2.5rem; }
 .home-section .cards .home-section-card {
   overflow: hidden;
   border-radius: 12px;
@@ -725,8 +725,7 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .new-cards-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  row-gap: 1.5rem;
-  column-gap: 2.5rem;
+  gap: 1.5rem;
 }
 .new-cards-grid .card-featured { grid-column: span 3; }
 .new-cards-grid .card:not(.card-featured) { grid-column: span 2; }
