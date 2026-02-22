@@ -1682,33 +1682,7 @@ def build_homepage(essays, new_essays=None):
         return d if d else '0000-00-00'
     recent_essays = sorted(essays, key=_sort_key_pub_date, reverse=True)[:20]
     by_pub = sorted(essays, key=_sort_key_pub_date, reverse=True)
-    might_missed_pool = [e for e in by_pub[8:28] if e.get('pub_date')]
-    random.seed(42)
-    might_missed_essays = random.sample(might_missed_pool, min(3, len(might_missed_pool)))
-    random.seed()  # reset
-
-    if might_missed_essays:
-        _mm_cards = ''.join(
-            f'      <a href="/articles/{html_mod.escape(e["slug"])}" class="might-missed-card">\n'
-            f'        <span class="might-missed-kicker" style="color:{PARTS[e["part"]]["color"]}">{PARTS[e["part"]]["label"]}</span>\n'
-            f'        <h3>{html_mod.escape(e["title"])}</h3>\n'
-            f'        <span class="might-missed-meta">{e["reading_time"]} min read</span>\n'
-            f'      </a>\n'
-            for e in might_missed_essays
-        )
-        might_missed_html = (
-            '<div class="might-missed-wrap">\n'
-            '  <div class="might-missed-inner">\n'
-            '    <h2 class="might-missed-title">You might have missed</h2>\n'
-            '    <p class="might-missed-desc">Older pieces that hold up.</p>\n'
-            '    <div class="might-missed-grid">\n'
-            f'{_mm_cards}'
-            '    </div>\n'
-            '  </div>\n'
-            '</div>'
-        )
-    else:
-        might_missed_html = ''
+    # "You might have missed" section removed
 
     new_cards_html = ""
     for i, e in enumerate(recent_essays):
@@ -1729,21 +1703,7 @@ def build_homepage(essays, new_essays=None):
         {controls_html}
       </a>\n"""
 
-    # ── Hero chart: West vs East GDP ──
-    hero_chart_js = """
-_regChart('heroChart',()=>{const ctx=document.getElementById('heroChart');
-const yrs=[1,1000,1500,1600,1700,1820,1870,1913,1950,1973,2000,2025];
-new Chart(ctx,{type:'line',data:{
-datasets:[
-{label:'West (Europe + US)',data:xy(yrs,[12,12,18,22,24,30,42,50,52,48,42,30]),borderColor:'#2563eb',backgroundColor:'#2563eb18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#2563eb',borderWidth:2.5},
-{label:'China',data:xy(yrs,[26,22,25,29,22,33,17,9,5,5,12,20]),borderColor:'#c43425',backgroundColor:'#c4342518',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#c43425',borderWidth:2.5},
-{label:'India',data:xy(yrs,[32,28,24,22,24,16,12,8,4,3,5,8]),borderColor:'#b8751a',backgroundColor:'#b8751a18',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#b8751a',borderWidth:2.5}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{
-legend:{display:true,position:'bottom',labels:{padding:14,usePointStyle:true,pointStyle:'circle',font:{size:11},color:C.dim}},
-tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'% of world GDP'}}},
-scales:{x:{type:'linear',min:1,max:2025,grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:yearTick}},
-y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},title:{display:true,text:'Share of world GDP (%)',color:C.dim,font:{size:11}},max:55}}}});
-});"""
+    # Hero chart removed
 
     # ── Section teasers ──
     section_chart_picks = {
@@ -1953,27 +1913,6 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
 {new_cards_html}    </div>
   </div>
 </div>
-{might_missed_html}
-<div class="hero-and-stats-wrap">
-  <div class="hero-chart-wrap">
-    <div class="hero-chart-inner">
-      <div class="hero-chart-label">The Big Picture</div>
-      <h2 class="hero-chart-title">Who Runs the World Economy?</h2>
-      <p class="hero-chart-desc">Western dominance was a 200-year anomaly. The world is reverting to the historical mean.</p>
-      <div class="hero-chart-box"><canvas id="heroChart"></canvas></div>
-      <p class="hero-chart-source">Source: Maddison Project, IMF &middot; <a href="/articles/the-rise-of-the-west-was-based-on-luck-that-has-run-out">Read the full analysis &rarr;</a></p>
-    </div>
-  </div>
-  <div class="stats-bar">
-    <div class="stats-inner">
-      <div class="stat"><span class="stat-num">{total_articles}</span><span class="stat-label">Articles</span></div>
-      <div class="stat"><span class="stat-num">{total_charts}</span><span class="stat-label">Interactive Charts</span></div>
-      <div class="stat"><span class="stat-num">{total_hours}+</span><span class="stat-label">Hours of Analysis</span></div>
-      <div class="stat"><span class="stat-num">500</span><span class="stat-label">Years of History</span></div>
-      {"" if audio_article_count == 0 else f'<div class="stat"><span class="stat-num">{audio_article_count}</span><span class="stat-label">Audio Articles</span></div>'}
-    </div>
-  </div>
-</div>
 {listen_section_html}
 
 <div class="section-grid">
@@ -1985,7 +1924,6 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
 <script>
 (function(){{
 {CHART_COLORS}
-{hero_chart_js}
 {sec_chart_js}
 }})();
 </script>
