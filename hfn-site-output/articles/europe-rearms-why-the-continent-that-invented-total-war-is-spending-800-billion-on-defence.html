@@ -165,8 +165,8 @@
       </div>
       <div class="chart-figure-label">Figure 1</div>
       <h4>Europe&#x27;s Six Rearmament Cycles</h4>
-      <p class="chart-desc">European defence spending as a share of GDP across six cycles of disarmament and rearmament. Each follows the same pattern: devastating war, peace dividend, new threat, frantic rearmament.</p>
-      <div class="chart-area"><canvas id="rearmChart1"></canvas></div>
+      <p class="chart-desc">European defence spending as a share of GDP across six cycles of disarmament and rearmament. Each follows the same pattern: devastating war, peace dividend, new threat, frantic rearmament. The y-axis is capped at 12% to reveal the smaller cycles; the WWII peak reached 45%.</p>
+      <div class="chart-area tall"><canvas id="rearmChart1"></canvas></div>
       <p class="chart-source">Source: EH.net, NATO, IISS, Kiel Institute.</p>
     </div>
 
@@ -318,13 +318,13 @@
   <section class="read-next-section" aria-label="Read next">
     <h2 class="read-next-heading">Read next</h2>
     <div class="read-next-grid">
-      <a href="/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west" class="read-next-card" style="--section-color:#2563eb">
-        <div class="read-next-img-wrap"><img src="/images/articles/crisis-or-an-explanation-on-the-origins-of-the-decline-of-the-west/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
+      <a href="/articles/the-wests-romance-with-free-trade-is-over-why" class="read-next-card" style="--section-color:#2563eb">
+        <div class="read-next-img-wrap"><img src="/images/articles/the-wests-romance-with-free-trade-is-over-why/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
         <div class="read-next-body">
           <span class="read-next-label">More in Global Balance of Power</span>
           <span class="read-next-kicker" style="color:#2563eb">Part 2</span>
-          <h3 class="read-next-title">Crisis: Or An Explanation On The Origins Of The Decline Of The West</h3>
-          <span class="read-next-meta">38 min read <span class="read-next-audio">Audio</span></span>
+          <h3 class="read-next-title">The West’s romance with Free Trade is ending. Why?</h3>
+          <span class="read-next-meta">9 min read <span class="read-next-audio">Audio</span></span>
         </div>
       </a>
       <a href="/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible" class="read-next-card" style="--section-color:#7c3aed">
@@ -508,14 +508,31 @@ o.layout={padding:4};
 }});
 
 _regChart('rearmChart1',()=>{const ctx=document.getElementById('rearmChart1');
-const yrs=[1650,1700,1750,1815,1850,1870,1900,1914,1920,1932,1938,1945,1955,1985,1991,2000,2014,2022,2026];
-new Chart(ctx,{type:'line',data:{
-datasets:[{label:'W. Europe avg defence % GDP',data:xy(yrs,[8,5,3,2.5,2,3,3.5,4.5,4,1.5,6,45,5,3.2,2.4,1.8,1.4,1.5,2.5]),
-borderColor:C.blue,backgroundColor:C.blue+'22',fill:true,tension:0.3,pointRadius:3}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:tooltipStyle,
-title:{display:true,text:'400 Years of European Defence Spending: The Cycle Repeats',color:C.text,font:{size:14}}},
-scales:{y:{title:{display:true,text:'% of GDP',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim},min:0},
-x:linX(1650,2030,{grid:{display:false},ticks:{color:C.dim,maxRotation:45,font:{size:9}}})}}});
+const yrs=[1648,1660,1680,1700,1714,1720,1750,1789,1805,1815,1825,1840,1850,1854,1860,1871,1880,1890,1900,1910,1914,1918,1920,1925,1932,1936,1939,1943,1945,1950,1955,1965,1975,1985,1991,1995,2000,2005,2010,2014,2018,2022,2026,2030];
+const raw=[10,7,5,4.5,7,4,3,4,8,9,3.5,2.5,2,3.5,3,4,3.5,3.5,3.5,4,5,30,4,2,1.5,4,12,45,40,6,5,4.5,3.5,3.2,2.4,2,1.8,1.6,1.5,1.4,1.4,1.5,2.5,3.5];
+const cap=12;const vals=raw.map(v=>Math.min(v,cap));
+new Chart(ctx,{type:'line',data:{datasets:[
+{label:'Defence spending',data:xy(yrs,vals),borderColor:C.blue,backgroundColor:C.blue+'18',fill:true,tension:0.3,pointRadius:2,pointBackgroundColor:C.blue,borderWidth:2.5}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:20,left:8,right:8,top:8}},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:function(c){var i=yrs.indexOf(c.parsed.x);return 'Defence: '+(i>=0?raw[i]:c.parsed.y)+'% of GDP';}}},
+title:{display:true,text:'400 Years of European Defence Spending: The Cycle Repeats',color:C.text,font:{size:14}},
+annotation:{annotations:{
+c1:{type:'box',xMin:1648,xMax:1714,backgroundColor:C.blue+'0C',borderWidth:0},
+c1l:{type:'label',xValue:1681,yValue:11.3,content:['1. Post-','Westphalia'],color:C.dim,font:{size:7.5,weight:'bold'},textAlign:'center'},
+c2:{type:'box',xMin:1815,xMax:1856,backgroundColor:C.accent+'0C',borderWidth:0},
+c2l:{type:'label',xValue:1835,yValue:11.3,content:['2. Post-','Napoleon'],color:C.dim,font:{size:7.5,weight:'bold'},textAlign:'center'},
+c3:{type:'box',xMin:1871,xMax:1914,backgroundColor:C.blue+'0C',borderWidth:0},
+c3l:{type:'label',xValue:1893,yValue:11.3,content:['3. Imperial','Arms Race'],color:C.dim,font:{size:7.5,weight:'bold'},textAlign:'center'},
+c4:{type:'box',xMin:1918,xMax:1945,backgroundColor:C.accent+'0C',borderWidth:0},
+c4l:{type:'label',xValue:1931,yValue:11.3,content:['4. Interwar','& WWII'],color:C.dim,font:{size:7.5,weight:'bold'},textAlign:'center'},
+c5:{type:'box',xMin:1991,xMax:2022,backgroundColor:C.blue+'0C',borderWidth:0},
+c5l:{type:'label',xValue:2006,yValue:11.3,content:['5. Peace','Dividend'],color:C.dim,font:{size:7.5,weight:'bold'},textAlign:'center'},
+c6:{type:'box',xMin:2022,xMax:2030,backgroundColor:C.accent+'0C',borderWidth:0},
+c6l:{type:'label',xValue:2026,yValue:11.3,content:'6. Rearm',color:C.dim,font:{size:7.5,weight:'bold'}},
+pk:{type:'label',xValue:1943,yValue:12,yAdjust:-16,content:'\u2191 WWII peak: 45%',color:C.accent,font:{size:9,weight:'bold'},backgroundColor:'white',padding:{top:2,bottom:2,left:4,right:4}},
+pk2:{type:'label',xValue:1918,yValue:12,yAdjust:-16,content:'\u2191 WWI: 30%',color:C.accent,font:{size:8,weight:'bold'},backgroundColor:'white',padding:{top:2,bottom:2,left:3,right:3}}
+}}},scales:{y:{title:{display:true,text:'% of GDP',color:C.dim},grid:{color:C.grid},ticks:{color:C.dim,callback:function(v){return v===12?'12+':v;}},min:0,max:12},
+x:linX(1648,2030,{grid:{display:false},ticks:{color:C.dim,maxRotation:45,font:{size:9}}})}}});
 });
 _regChart('rearmChart2',()=>{const ctx=document.getElementById('rearmChart2');
 new Chart(ctx,{type:'bar',data:{labels:['Germany','France','UK','Italy','Poland','Netherlands'],

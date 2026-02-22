@@ -1,0 +1,62 @@
+---
+description: Prevent recurring Chart.js rendering failures — blank charts, soft-nav breakage, silent errors
+alwaysApply: true
+---
+
+# Chart Rendering — Known Failure Modes
+
+Charts have gone blank without error messages. Every time you touch `chart_defs.py`, `build.py`, `soft-nav.js`, or `.chart-area` CSS, run through this checklist.
+
+## How Chart Rendering Works
+
+1. `chart_defs.py` defines each chart as `_regChart('id', ()=>{ new Chart(ctx, {...}); })`
+2. `build.py` injects canvas elements and a script block into article HTML
+3. The script block runs in an IIFE: Chart.js loads first, then `_regChart` calls `fn()` immediately
+4. On **soft navigation**, `soft-nav.js` fetches new HTML, clears the body, and re-executes scripts via `executeScripts()` — chart JS runs again after a `requestAnimationFrame` to allow layout to complete
+5. On **theme change**, a `MutationObserver` on `document.documentElement` destroys and recreates every registered chart
+
+## Recurring Failures (all have happened before)
+
+### 1. One chart error silences all subsequent charts
+
+- **Cause:** `_regChart` calls `fn()` in a single IIFE. Without error isolation, a throw in chart N prevents charts N+1 through end from ever running. The blank canvas gives no visible error.
+- **Fix:** `_regChart` must wrap `fn()` in `try/catch`. The current implementation in `chart_defs.py` is:
+  ```js
+  function _regChart(id,fn){_chartReg.push({id:id,fn:fn});try{fn();}catch(e){console.error('[chart]',id,e);}}
+  ```
+  **Do not remove this try/catch.**
+
+### 2. Canvas has zero dimensions when Chart.js initialises
+
+- **Cause:** `.chart-area` uses `aspect-ratio: 1.8/1` which requires the parent to have a computed width. During soft navigation (body cleared and rebuilt), the browser may not have performed layout before the chart script runs. Chart.js then creates a 0×0 chart that never redraws.
+- **Fix 1 (CSS):** `.chart-area` has `min-height: 200px` as a fallback. Do not remove this.
+- **Fix 2 (JS):** `soft-nav.js` wraps `executeScripts()` in `requestAnimationFrame()` to defer chart init until after layout. Do not remove the rAF wrapper.
+
+### 3. Soft-nav skips Chart.js when navigating from a page without charts
+
+- **Cause:** `isAlreadyLoaded()` in `soft-nav.js` returns `true` if `window.Chart` exists. If the user's first page never loaded Chart.js, the builders article would skip loading it and the inline script would throw `Chart is not defined`.
+- **Fix:** `isAlreadyLoaded` only skips if the global is present — this is correct. Do not change this logic to always skip.
+
+### 4. All charts in an article are blank (not just some)
+
+- **Cause:** Usually a JavaScript error in the COLORS/setup block (before any `_regChart` call), or Chart.js failing to load. Check DevTools → Network for chart.umd.min.js returning non-200, or Console for an error before the first `[chart]` message.
+- **Fix:** Verify all three JS files exist and serve 200:
+  - `/js/chart.umd.min.js`
+  - `/js/chartjs-plugin-annotation.min.js`
+  - `/js/chartjs-chart-geo.umd.min.js`
+
+## Pre-Flight Checklist
+
+Before deploying any change that touches:
+- `chart_defs.py` — COLORS block, `_regChart`, or MutationObserver
+- `build.py` — chart injection, script block structure
+- `soft-nav.js` — `executeScripts`, `isAlreadyLoaded`, or the `navigateTo` body-swap flow
+- CSS for `.chart-area` — any change to `aspect-ratio`, `height`, `min-height`, or `display`
+
+Verify:
+- [ ] `_regChart` wraps `fn()` in `try/catch` and logs `console.error('[chart]', id, e)`
+- [ ] `MutationObserver` theme-change handler also wraps `r.fn()` in `try/catch`
+- [ ] `.chart-area` has both `aspect-ratio: 1.8/1` AND `min-height: 200px`
+- [ ] `executeScripts` in `soft-nav.js` is called inside `requestAnimationFrame`
+- [ ] After build, spot-check the built article HTML: `_regChart` definition must include the try/catch
+- [ ] Open at least one article with charts in a browser; confirm charts render on both full load and soft nav
