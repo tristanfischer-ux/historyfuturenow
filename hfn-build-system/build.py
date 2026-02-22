@@ -1729,24 +1729,6 @@ def build_homepage(essays, new_essays=None):
         {controls_html}
       </a>\n"""
 
-    # ── Data Stories: auto-collected from chart_defs (curated first, then auto-generated) ──
-    data_stories = collect_data_stories(sorted_essays, all_charts)
-
-    # Build data stories HTML
-    stories_html = ""
-    # Chart simplification for .ds-chart cards is handled by the
-    # sparklineMode plugin registered in chart_defs.COLORS.
-    stories_js = ""
-    for ds in data_stories:
-        stories_html += f"""      <a href="/articles/{ds['slug']}" class="ds-card">
-        <div class="ds-chart"><canvas id="{ds['chart_id']}"></canvas></div>
-        <div class="ds-text">
-          <p class="ds-headline">{ds['headline']}</p>
-          <p class="ds-sub">{ds['sub']} &rarr;</p>
-        </div>
-      </a>\n"""
-        stories_js += ds['js'] + "\n"
-
     # ── Hero chart: West vs East GDP ──
     hero_chart_js = """
 _regChart('heroChart',()=>{const ctx=document.getElementById('heroChart');
@@ -1993,14 +1975,6 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
   </div>
 </div>
 {listen_section_html}
-<div class="data-stories-wrap">
-  <div class="data-stories-inner">
-    <h2 class="ds-title">Data Stories</h2>
-    <p class="ds-intro">Every article backed by interactive data visualisations. Explore the numbers behind history.</p>
-    <div class="ds-scroll">
-{stories_html}    </div>
-  </div>
-</div>
 
 <div class="section-grid">
 
@@ -2012,7 +1986,6 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:10},callback:v=>v+'%'},titl
 (function(){{
 {CHART_COLORS}
 {hero_chart_js}
-{stories_js}
 {sec_chart_js}
 }})();
 </script>
