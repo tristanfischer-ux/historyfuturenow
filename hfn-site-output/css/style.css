@@ -326,7 +326,7 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 
 /* Section page: card grid (featured first, then 3-column) */
 .card-grid-section { background: var(--surface); }
-.section-card-grid { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 3rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 3rem; }
+.section-card-grid { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 3rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2.5rem; }
 .section-featured-card { grid-column: 1 / -1; display: block; text-decoration: none; border-radius: 12px; overflow: hidden; background: var(--bg); border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.1); transition: box-shadow 0.2s, transform 0.2s; }
 .section-featured-card:hover { box-shadow: 0 10px 32px rgba(0,0,0,0.16); transform: translateY(-3px); }
 .section-featured-card .section-card-img-wrap { position: relative; width: auto; height: 280px; overflow: hidden; margin: 0.75rem 0.75rem 0; border-radius: 8px; }
@@ -345,7 +345,7 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .section-card .section-card-text p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 0.5rem; }
 .section-card-meta { font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; display: flex; gap: 1rem; }
 @media (max-width: 900px) {
-  .section-card-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 2.5rem; }
+  .section-card-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; }
 }
 @media (max-width: 640px) {
   .section-card-grid { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem 1rem 2rem; }
@@ -693,12 +693,11 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 .latest-title { color: var(--text); font-family: var(--serif); font-size: 1.5rem; margin: 0; }
 .latest-pulse { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(196,52,37,0.6); } 50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(196,52,37,0); } }
-.latest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-.latest-card { display: block; padding: 1.25rem; text-decoration: none; transition: background 0.2s; border-bottom: 1px solid var(--border-light); overflow: hidden; }
-.latest-card:hover { background: var(--surface); }
-.latest-hero { grid-column: 1 / -1; border-bottom: 1px solid var(--accent); padding-bottom: 1.5rem; }
-.latest-secondary { border-right: 1px solid var(--border-light); }
-.latest-secondary:last-child { border-right: none; }
+.latest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2.5rem; }
+.latest-card { display: block; padding: 1.25rem; text-decoration: none; transition: background 0.2s, box-shadow 0.2s, transform 0.2s; overflow: hidden; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.1); background: var(--bg); }
+.latest-card:hover { background: var(--surface); box-shadow: 0 10px 32px rgba(0,0,0,0.16); transform: translateY(-3px); }
+.latest-hero { grid-column: 1 / -1; margin-bottom: 0; }
+.latest-secondary { }
 .latest-kicker { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
 .latest-new { background: var(--accent); color: #fff; padding: 0.15rem 0.5rem; border-radius: 3px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; }
 .latest-badge { background: var(--surface); color: var(--text-dim); padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.68rem; }
@@ -709,7 +708,6 @@ body.nav-focus-hidden .site-nav { transform: translateY(-100%); }
 @media (max-width: 640px) {
   .latest-grid { grid-template-columns: 1fr; }
   .latest-hero h3 { font-size: 1.3rem; }
-  .latest-secondary { border-right: none; }
   .latest-card-img { height: 180px; }
   .latest-hero .latest-card-img { height: 220px; }
 }
