@@ -1564,8 +1564,10 @@ def build_section(part_name, essays, new_slugs=None):
 <div class="section-progress-wrap" id="sectionProgressWrap" data-section-slugs="{html_mod.escape(json.dumps([e['slug'] for e in se]))}">
   <p class="section-progress-text" id="sectionProgressText"></p>
 </div>
+<div class="card-grid-section">
 <div class="section-card-grid">
 {article_items}
+</div>
 </div>
 
 {make_footer()}
@@ -2611,8 +2613,10 @@ def build_issue_page(issue, essays, all_charts):
   </div>
 </section>
 
+<div class="card-grid-section">
 <div class="section-card-grid">
 {article_cards}
+</div>
 </div>
 
 {issue_nav}
