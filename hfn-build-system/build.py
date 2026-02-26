@@ -48,10 +48,10 @@ def truncate_excerpt(text, max_len):
     return html_mod.escape(text[:max_len].rstrip()) + '&hellip;'
 
 PARTS = {
-    "Natural Resources": {"order": 1, "slug": "natural-resources", "color": "#0d9a5a", "color_soft": "#effaf4", "label": "Part 1", "icon": "🌍", "desc": "Energy, food, water, land — the physical foundations that every civilisation depends on."},
-    "Global Balance of Power": {"order": 2, "slug": "balance-of-power", "color": "#2563eb", "color_soft": "#eff4ff", "label": "Part 2", "icon": "⚖️", "desc": "How nations rise, compete, and decline — from colonial empires to modern China."},
-    "Jobs & Economy": {"order": 3, "slug": "jobs-economy", "color": "#b8751a", "color_soft": "#fef8ee", "label": "Part 3", "icon": "⚙️", "desc": "Automation, trade, debt, and the future of work in an age of intelligent machines."},
-    "Society": {"order": 4, "slug": "society", "color": "#7c3aed", "color_soft": "#f5f0ff", "label": "Part 4", "icon": "🏛️", "desc": "Democracy, religion, migration, identity — the human systems that bind us together."},
+    "Natural Resources": {"order": 1, "slug": "natural-resources", "color": "#0d9a5a", "color_soft": "#effaf4", "label": "Natural Resources", "icon": "🌍", "desc": "Energy, food, water, land — the physical foundations that every civilisation depends on."},
+    "Global Balance of Power": {"order": 2, "slug": "balance-of-power", "color": "#2563eb", "color_soft": "#eff4ff", "label": "Global Balance of Power", "icon": "⚖️", "desc": "How nations rise, compete, and decline — from colonial empires to modern China."},
+    "Jobs & Economy": {"order": 3, "slug": "jobs-economy", "color": "#b8751a", "color_soft": "#fef8ee", "label": "Jobs & Economy", "icon": "⚙️", "desc": "Automation, trade, debt, and the future of work in an age of intelligent machines."},
+    "Society": {"order": 4, "slug": "society", "color": "#7c3aed", "color_soft": "#f5f0ff", "label": "Society", "icon": "🏛️", "desc": "Democracy, religion, migration, identity — the human systems that bind us together."},
 }
 
 PART_ALIASES = {
@@ -304,7 +304,7 @@ def make_card_controls(essay, pi):
     """Generate play button + bookmark HTML for article cards."""
     slug = html_mod.escape(essay['slug'])
     title_esc = html_mod.escape(essay['title'])
-    section_label = html_mod.escape(f"{pi['label']} · {essay['part']}")
+    section_label = html_mod.escape(essay['part'])
     color = pi['color']
     article_url = f"/articles/{slug}"
 
@@ -516,12 +516,7 @@ def make_footer():
     queue_v = _js_hash("queue.js")
     softnav_v = _js_hash("soft-nav.js")
     pwa_v = _js_hash("pwa-install.js")
-    return '''<section class="about-author">
-  <div class="about-author-inner">
-    <p><strong>By Tristan Fischer.</strong> A lifelong fascination with history, science, and technology led to a simple observation: the deeper you understand how the past unfolded, the more clearly you can see the future. These essays trace historical patterns and technological trajectories to work out what comes next.</p>
-  </div>
-</section>
-<footer class="site-footer">
+    return '''<footer class="site-footer">
   <div class="footer-inner">
     <p class="footer-tagline">The longer the run-up, the further the leap.</p>
     <ul class="footer-links">
@@ -540,6 +535,11 @@ def make_footer():
     <p>&copy; 2012&ndash;2026 History Future Now &middot; Tristan Fischer</p>
   </div>
 </footer>
+<section class="about-author">
+  <div class="about-author-inner">
+    <p><strong>By Tristan Fischer.</strong> A lifelong fascination with history, science, and technology led to a simple observation: the deeper you understand how the past unfolded, the more clearly you can see the future. These essays trace historical patterns and technological trajectories to work out what comes next.</p>
+  </div>
+</section>
 <script>
 (function(){
   var key='hfn_theme',root=document.documentElement,themes=['default','reading','dark'];
@@ -892,7 +892,7 @@ def make_share_bar(essay, position='top', pi=None):
 
     bookmark_html = ''
     if pi:
-        section_label = html_mod.escape(f"{pi['label']} \u00b7 {essay['part']}")
+        section_label = html_mod.escape(essay['part'])
         bookmark_html = (
             f'<button class="card-bookmark-btn share-bookmark-btn" '
             f'data-bookmark-slug="{slug}" data-bookmark-title="{title}" '
@@ -1201,7 +1201,7 @@ def build_article(essay, all_essays, is_review=False):
     est_listen = max(1, round(essay['reading_time'] * 250 / 189))  # reading_time is at 250wpm, voice is ~189wpm
     audio_player = ''
     if has_audio:
-        section_label = f"{pi['label']} · {essay['part']}"
+        section_label = essay['part']
         audio_player = f'''
   <div class="audio-player" id="audioPlayer">
     <div class="audio-player-inner">
@@ -1232,7 +1232,7 @@ def build_article(essay, all_essays, is_review=False):
     has_discussion = discussion_file.exists() and ENABLE_DISCUSSIONS
     discussion_player = ''
     if has_discussion:
-        discussion_section_label = f"{pi['label']} · {essay['part']}"
+        discussion_section_label = essay['part']
         discussion_player = f'''
   <div class="discussion-player" id="discussionPlayer">
     <div class="discussion-player-inner">
@@ -1350,7 +1350,7 @@ def build_article(essay, all_essays, is_review=False):
 <article class="page-container" data-pagefind-body>
   {breadcrumbs}
   <header class="article-header">
-    <div class="article-kicker" style="color:{pi['color']}" data-pagefind-meta="section:{html_mod.escape(essay['part'])}" data-pagefind-filter="section:{html_mod.escape(essay['part'])}">{pi['label']} &middot; {html_mod.escape(essay['part'])}</div>{issue_badge_html}
+    <div class="article-kicker" style="color:{pi['color']}" data-pagefind-meta="section:{html_mod.escape(essay['part'])}" data-pagefind-filter="section:{html_mod.escape(essay['part'])}">{html_mod.escape(essay['part'])}</div>{issue_badge_html}
     <h1 data-pagefind-meta="title">{te}</h1>
     <div class="article-meta" data-pagefind-ignore>
       <span class="article-reading-time">{essay['reading_time']} min read</span>
@@ -1540,13 +1540,13 @@ def build_section(part_name, essays, new_slugs=None):
 
     breadcrumbs = make_breadcrumbs([
         ('Home', '/'),
-        (f'{pi["label"]}: {part_name}', None),
+        (part_name, None),
     ])
 
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head(f"{pi['label']}: {part_name} — History Future Now", pi['desc'], f"/{pi['slug']}", pi['color'])}
+{make_head(f"{part_name} — History Future Now", pi['desc'], f"/{pi['slug']}", pi['color'])}
 </head>
 <body>
 
@@ -1558,7 +1558,7 @@ def build_section(part_name, essays, new_slugs=None):
   <div class="section-hero-inner">
     {breadcrumbs}
     <span class="section-icon">{pi['icon']}</span>
-    <h1>{pi['label']}: {html_mod.escape(part_name)}</h1>
+    <h1>{html_mod.escape(part_name)}</h1>
     <p class="section-hero-desc">{html_mod.escape(pi['desc'])}</p>
     <div class="section-hero-count">{len(se)} articles</div>
   </div>
@@ -1646,7 +1646,7 @@ def build_homepage(essays, new_essays=None):
         size_class = "latest-hero" if i == 0 else "latest-secondary"
         ci_cards_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
         {img_html}
-        <div class="latest-kicker">{pi['label']} &middot; {html_mod.escape(e['part'])} {chart_badge} {audio_badge}</div>
+        <div class="latest-kicker">{html_mod.escape(e['part'])} {chart_badge} {audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{truncate_excerpt(e['excerpt'], 200)}</p>
         <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
@@ -1696,7 +1696,7 @@ def build_homepage(essays, new_essays=None):
         size_class = "latest-hero" if i == 0 else "latest-secondary"
         new_cards_html += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="latest-card {size_class}" style="--accent:{pi['color']}">
         {img_html}
-        <div class="latest-kicker">{pi['label']} &middot; {html_mod.escape(e['part'])} {chart_badge} {audio_badge}</div>
+        <div class="latest-kicker">{html_mod.escape(e['part'])} {chart_badge} {audio_badge}</div>
         <h3>{html_mod.escape(e['title'])}</h3>
         <p>{truncate_excerpt(e['excerpt'], 200)}</p>
         <span class="latest-meta">{e['reading_time']} min read &rarr;</span>
@@ -1731,7 +1731,7 @@ def build_homepage(essays, new_essays=None):
             audio_badge = ' <span class="card-audio">Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
             hero_img = get_hero_image(e['slug'])
             img_html = f'<img src="{hero_img}" alt="" class="home-section-card-img" loading="lazy">' if hero_img else ''
-            part_badge = f'<span class="card-part-badge" style="--part-color:{pi["color"]}">{pi["label"]}</span>'
+            part_badge = f'<span class="card-part-badge" style="--part-color:{pi["color"]}">{html_mod.escape(pn)}</span>'
             cards += f"""      <a href="/articles/{html_mod.escape(e['slug'])}" class="card home-section-card" data-section="{pi['slug']}">
         {img_html}
         <div class="card-kicker" style="color:{pi['color']}">{part_badge}{chart_badge}{audio_badge}</div>
@@ -1754,7 +1754,7 @@ def build_homepage(essays, new_essays=None):
       <div class="home-section-title-row">
         {chart_preview}
         <div>
-          <h2><span class="home-section-icon">{pi['icon']}</span> <a href="/{pi['slug']}">{pi['label']}: {html_mod.escape(pn)}</a></h2>
+          <h2><span class="home-section-icon">{pi['icon']}</span> <a href="/{pi['slug']}">{html_mod.escape(pn)}</a></h2>
           <p class="section-desc">{html_mod.escape(pi['desc'])}</p>
         </div>
       </div>
@@ -1787,7 +1787,7 @@ def build_homepage(essays, new_essays=None):
     teaser_queue_items = []
     for ae in teaser_essays:
         pi = PARTS.get(ae['part'], PARTS['Society'])
-        section_label = f"{pi['label']} · {ae['part']}"
+        section_label = ae['part']
         has_narration = ae.get('has_audio', False)
         has_disc = ae.get('has_discussion', False)
 
@@ -1811,7 +1811,7 @@ def build_homepage(essays, new_essays=None):
           <span class="listen-card-time">{listen_time} min</span>
         </div>
         <div class="listen-card-title">{html_mod.escape(ae['title'])}</div>
-        <div class="listen-card-kicker" style="color:{pi['color']}">{pi['label']} &middot; {html_mod.escape(ae['part'])}</div>
+        <div class="listen-card-kicker" style="color:{pi['color']}">{html_mod.escape(ae['part'])}</div>
         {type_badge}
         <button class="q-add-btn" data-queue-slug="{html_mod.escape(ae['slug'])}" data-queue-title="{html_mod.escape(ae['title'])}" data-queue-section="{html_mod.escape(section_label)}" data-queue-color="{pi['color']}" data-queue-url="{queue_url}" aria-label="Add to queue">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
@@ -1941,7 +1941,7 @@ def _review_card(e, badge_html=""):
       {img_html}
       <div style="padding:1rem">
         {badge_html}
-        <div style="font-size:0.8rem;color:{pi['color']};font-weight:600;margin-bottom:0.25rem">{pi['label']} &middot; {html_mod.escape(e['part'])}</div>
+        <div style="font-size:0.8rem;color:{pi['color']};font-weight:600;margin-bottom:0.25rem">{html_mod.escape(e['part'])}</div>
         <h3 style="margin:0 0 0.5rem;font-size:1.1rem;line-height:1.3">{html_mod.escape(e['title'])}</h3>
         <p style="margin:0 0 0.5rem;font-size:0.9rem;color:#6b7280;line-height:1.4">{truncate_excerpt(e['excerpt'], 160)}</p>
         <div style="font-size:0.8rem;color:#9ca3af">{e['reading_time']} min read {audio_tag}</div>
@@ -2030,7 +2030,7 @@ def build_listen_page(essays):
     all_queue_items = []
     for ae in audio_essays:
         pi = PARTS.get(ae['part'], PARTS['Society'])
-        section_label = f"{pi['label']} · {ae['part']}"
+        section_label = ae['part']
         if ae.get('has_audio'):
             queue_url = f"/audio/{ae['slug']}.mp3"
         else:
@@ -2050,7 +2050,7 @@ def build_listen_page(essays):
         pi = PARTS[pn]
         count = section_counts.get(pn, 0)
         if count > 0:
-            filter_tabs += f'      <button class="lp-tab" data-filter="{html_mod.escape(pi["slug"])}" style="--tab-color:{pi["color"]}">{pi["label"].replace("Part ", "").strip()}: {html_mod.escape(pn)} <span class="lp-tab-count">{count}</span></button>\n'
+            filter_tabs += f'      <button class="lp-tab" data-filter="{html_mod.escape(pi["slug"])}" style="--tab-color:{pi["color"]}">{html_mod.escape(pn)} <span class="lp-tab-count">{count}</span></button>\n'
 
     # Build issue filter tabs (descending order — newest first)
     issue_tabs = '<button class="lp-tab active" data-issue="all">All</button>\n'
@@ -2064,7 +2064,7 @@ def build_listen_page(essays):
     rows_html = ""
     for ae in audio_essays:
         pi = PARTS.get(ae['part'], PARTS['Society'])
-        section_label = f"{pi['label']} · {ae['part']}"
+        section_label = ae['part']
         has_narration = ae.get('has_audio', False)
         has_disc = ae.get('has_discussion', False)
 
@@ -2095,7 +2095,7 @@ def build_listen_page(essays):
         <div class="lp-row-title">{html_mod.escape(ae['title'])}</div>
         <div class="lp-row-excerpt">{excerpt_text}</div>
       </div>
-      <span class="lp-row-section" style="color:{pi['color']};border-color:{pi['color']}">{html_mod.escape(pi['label'])}</span>
+      <span class="lp-row-section" style="color:{pi['color']};border-color:{pi['color']}">{html_mod.escape(ae['part'])}</span>
       <span class="lp-row-duration">{listen_time} min</span>
       <span class="lp-row-type">{type_label}</span>
       {lp_controls}
@@ -2468,7 +2468,7 @@ def build_issue_page(issue, essays, all_charts):
         chart_tag = f'<span>{chart_count} chart{"s" if chart_count != 1 else ""}</span>' if chart_count > 0 else ''
         audio_tag = '<span>Audio</span>' if (e.get('has_audio') or e.get('has_discussion')) else ''
         hero_img = get_hero_image(e['slug'])
-        section_badge = f'<span class="issue-card-section" style="color:{pi["color"]}">{pi["label"]}: {html_mod.escape(e["part"])}</span>'
+        section_badge = f'<span class="issue-card-section" style="color:{pi["color"]}">{html_mod.escape(e["part"])}</span>'
 
         if featured:
             img_html = f'<img src="{hero_img}" alt="" class="section-card-img section-featured-img" loading="lazy" width="1100" height="280">' if hero_img else ''
