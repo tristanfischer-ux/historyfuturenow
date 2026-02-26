@@ -5,13 +5,31 @@
     <link>https://www.historyfuturenow.com</link>
     <description>Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.</description>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 20 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Feb 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.historyfuturenow.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://www.historyfuturenow.com/favicon.svg</url>
       <title>History Future Now</title>
       <link>https://www.historyfuturenow.com</link>
     </image>
+    <item>
+      <title>The Narrow Lens: How What Britain Teaches Its Children Shapes How Adults See the World</title>
+      <link>https://www.historyfuturenow.com/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world</link>
+      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world</guid>
+      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
+      <description>Britain teaches its children a remarkably narrow slice of history — the Tudors, the World Wars, and the Holocaust — and then wonders why adults reach for the same historical analogies every time. The result is a nation that can spot a fascist at five hundred yards but cannot recognise a Stalinist at five feet. What you learn at school does not stay at school. It becomes the lens through which you see the world.</description>
+      <category>Society</category>
+      <enclosure url="https://www.historyfuturenow.com/images/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world/hero.png" type="image/png" />
+    </item>
+    <item>
+      <title>Why the Scissors Opened: Nine Hypotheses for the Gender Ideology Split</title>
+      <link>https://www.historyfuturenow.com/articles/why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split</link>
+      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split</guid>
+      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
+      <description>The gender ideology gap runs 15 to 50 points across the developed world — yet it does not exist in the Middle East, India, Sub-Saharan Africa, or Indonesia. African women have the highest workforce participation on Earth but no ideology gap. This article traces the split across five continents, from the demographic shock of two world wars through nine causal hypotheses, tested against three falsification tools: the Nordic Paradox, the developing world, and the war itself.</description>
+      <category>Society</category>
+      <enclosure url="https://www.historyfuturenow.com/images/articles/why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split/hero.png" type="image/png" />
+    </item>
     <item>
       <title>The Invisible Judge: Why Guilt and Shame Societies Are Incompatible</title>
       <link>https://www.historyfuturenow.com/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible</link>
@@ -173,24 +191,6 @@
       <description>In 1932, Germany spent less than 1% of GDP on its military. By 1939, that figure was 23%. The transformation took just seven years. Today, Europe is embarking on the fastest rearmament since the Cold War. History suggests that once the machine starts, it is very hard to stop.</description>
       <category>Global Balance of Power</category>
       <enclosure url="https://www.historyfuturenow.com/images/articles/europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence/hero.png" type="image/png" />
-    </item>
-    <item>
-      <title>The Death Of The Fourth Estate: What The Collapse Of Newspapers Means For Democracy, Power, And Truth</title>
-      <link>https://www.historyfuturenow.com/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth</link>
-      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth</guid>
-      <pubDate>Mon, 09 Feb 2026 00:00:00 +0000</pubDate>
-      <description>On February 4th 2026, a Washington Post reporter in a warzone in Ukraine learned by text message that she had been laid off. Nearly half the newsroom was gone in a single day. This is not just a story about one newspaper. Every revolution in information technology has overthrown the existing power structure. Every single one.</description>
-      <category>Society</category>
-      <enclosure url="https://www.historyfuturenow.com/images/articles/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth/hero.png" type="image/png" />
-    </item>
-    <item>
-      <title>The Return of the State Factory: Why Nations That Forgot How To Make Things Are Remembering</title>
-      <link>https://www.historyfuturenow.com/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering</link>
-      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering</guid>
-      <pubDate>Sun, 08 Feb 2026 00:00:00 +0000</pubDate>
-      <description>In February 2026, the United States signed a trade deal with Taiwan that included $250 billion in semiconductor investment pledges. Tariffs are back. Industrial policy is back. After forty years of being told that manufacturing didn&#x27;t matter, every serious nation on Earth is scrambling to rebuild its factories. History explains why — and what comes next.</description>
-      <category>Jobs &amp; Economy</category>
-      <enclosure url="https://www.historyfuturenow.com/images/articles/the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering/hero.png" type="image/png" />
     </item>
   </channel>
 </rss>

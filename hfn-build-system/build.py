@@ -27,8 +27,6 @@ REVIEW_SLUGS = {
     'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
-    'why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split',
-    'the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world',
 }
 
 # Articles that were under review and have been released to the public site.
@@ -39,6 +37,8 @@ RELEASED_FROM_REVIEW = {
     'the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration',
     'the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant',
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
+    'why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split',
+    'the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world',
 }
 
 def truncate_excerpt(text, max_len):
