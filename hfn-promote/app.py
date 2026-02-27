@@ -1739,30 +1739,22 @@ def _start_auto_poster():
 
         # Post LinkedIn first (no Chrome conflict)
         for p in li_posts:
-            from poster import post_to_linkedin
-            text = p["caption"]
-            if p.get("article_url"): text += "\n" + p["article_url"]
-            ok = post_to_linkedin(text, p.get("image_path"))
-            if ok:
-                db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
-                log(f"Posted #{p['id']} to LinkedIn"); _record("linkedin", p["id"], True)
-            else:
-                log(f"Failed #{p['id']} LinkedIn"); _record("linkedin", p["id"], False, "post failed")
-
-        # For X posts: close Chrome, post, reopen Chrome
-        if x_posts:
-            chrome_was_running = False
             try:
-                result = subprocess.run(["pgrep", "-x", "Google Chrome"], capture_output=True)
-                chrome_was_running = result.returncode == 0
-            except: pass
+                from poster import post_to_linkedin
+                text = p["caption"]
+                if p.get("article_url"): text += "\n" + p["article_url"]
+                ok = post_to_linkedin(text, p.get("image_path"))
+                if ok:
+                    db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
+                    log(f"Posted #{p['id']} to LinkedIn"); _record("linkedin", p["id"], True)
+                else:
+                    log(f"Failed #{p['id']} LinkedIn"); _record("linkedin", p["id"], False, "post failed")
+            except Exception as ex:
+                log(f"Error #{p['id']} LinkedIn: {ex}"); _record("linkedin", p["id"], False, str(ex))
 
-            if chrome_was_running:
-                log("Closing Chrome for X posting...")
-                subprocess.run(["osascript", "-e", 'tell application "Google Chrome" to quit'], capture_output=True)
-                import time; time.sleep(3)
-
-            for p in x_posts:
+        # Post to X (post_to_x handles Chrome close/reopen internally)
+        for p in x_posts:
+            try:
                 from poster import post_to_x
                 text = p["caption"]
                 if p.get("article_url"): text += "\n" + p["article_url"]
@@ -1772,10 +1764,8 @@ def _start_auto_poster():
                     log(f"Posted #{p['id']} to X"); _record("x", p["id"], True)
                 else:
                     log(f"Failed #{p['id']} X"); _record("x", p["id"], False, "post failed")
-
-            if chrome_was_running:
-                log("Reopening Chrome...")
-                subprocess.Popen(["open", "-a", "Google Chrome"])
+            except Exception as ex:
+                log(f"Error #{p['id']} X: {ex}"); _record("x", p["id"], False, str(ex))
     bg = BackgroundScheduler()
     bg.add_job(post_due, trigger=IntervalTrigger(minutes=5), id="ap")
     bg.start()

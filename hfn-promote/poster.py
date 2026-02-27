@@ -105,7 +105,8 @@ def post_to_x(text, image_path=None):
 
             if "login" in page.url.lower():
                 print("  [!] Not logged in to X. Run: python3 poster.py x")
-                page.screenshot(path=str(SESSIONS_DIR / "x_debug.png"))
+                try: page.screenshot(path=str(SESSIONS_DIR / "x_debug.png"))
+                except: pass
                 return False
 
             editor = page.get_by_test_id("primaryColumn").get_by_test_id("tweetTextarea_0")
@@ -146,7 +147,8 @@ def post_to_x(text, image_path=None):
             time.sleep(3)
             return True
         except Exception as ex:
-            page.screenshot(path=str(SESSIONS_DIR / "x_debug.png"))
+            try: page.screenshot(path=str(SESSIONS_DIR / "x_debug.png"))
+            except: pass
             print(f"  [!] X error: {ex}")
             return False
         finally:
