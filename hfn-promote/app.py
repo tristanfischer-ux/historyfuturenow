@@ -1,4 +1,5 @@
-"""HFN Promote v3.9 — Queue: richer cards, drag-and-drop, HFN editorial design."""
+"""HFN Promote v3.11 — Library: Promote Article to generate posts."""
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort
@@ -6,6 +7,12 @@ import db
 from config import (FLASK_PORT, MAX_X_PER_DAY, MAX_LI_PER_DAY,
                     HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES, MONITOR_INTERVAL,
                     MATCH_MODEL, GEN_MODEL, SESSIONS_DIR)
+
+# Import issues from build system
+_build_sys = str(Path(__file__).resolve().parent.parent / "hfn-build-system")
+if _build_sys not in sys.path:
+    sys.path.insert(0, _build_sys)
+from issues import ISSUES, build_slug_to_issue_map
 
 app = Flask(__name__)
 activity_log = []
@@ -104,6 +111,9 @@ HTML = r"""<!DOCTYPE html>
 .tl-slot .sl-type{font-size:.55rem;background:var(--bg);padding:2px 6px;border-radius:3px;color:var(--dim);font-weight:700;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px}
 .tl-slot .sl-rm{cursor:pointer;color:var(--red);font-size:.7rem;opacity:.5;padding-top:1px}.tl-slot .sl-rm:hover{opacity:1}
 .tl-slot .sl-gen{padding:2px 5px;font-size:.6rem;opacity:.6;flex-shrink:0}.tl-slot .sl-gen:hover{opacity:1}
+.tl-slot.queued{opacity:.55;border-left-style:solid!important;pointer-events:none}
+.tl-slot.queued .sl-badge{font-size:.52rem;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;background:#dcfce7;color:#166534}
+.tl-slot.generated .sl-badge{font-size:.52rem;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;background:#fef9c3;color:#854d0e}
 .tl-empty{font-size:.68rem;color:var(--dim);padding:8px;text-align:center;font-style:italic}
 .tl-time-sel{display:flex;gap:4px;margin-top:4px}
 .tl-time-sel select{font-size:.7rem;padding:2px 4px}
@@ -202,6 +212,12 @@ HTML = r"""<!DOCTYPE html>
 .lib-search-box{padding:10px;border-bottom:1px solid var(--border)}
 .lib-search-box input{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:7px;font-size:.78rem;font-family:inherit}
 .lib-search-box input:focus{outline:none;border-color:var(--accent)}
+.lib-filters{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid var(--border);align-items:center}
+.lib-filter-select{padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:.7rem;font-family:var(--mono);background:var(--card);color:var(--text);flex:1;min-width:0}
+.lib-filter-select:focus{outline:none;border-color:var(--accent)}
+.lib-post-count{font-size:.58rem;font-weight:600;padding:1px 6px;border-radius:8px;white-space:nowrap}
+.lib-post-count.has-posts{background:#dcfce7;color:#166534}
+.lib-post-count.no-posts{background:#f5f5f4;color:var(--dim)}
 .lib-stats{padding:6px 12px;font-size:.65rem;color:var(--dim);border-bottom:1px solid var(--border)}
 .lib-list{flex:1;overflow-y:auto;padding:6px}
 .lib-item{padding:8px 10px;border-radius:7px;cursor:pointer;margin-bottom:3px;transition:all .1s}
@@ -225,6 +241,10 @@ HTML = r"""<!DOCTYPE html>
 .lib-chart-source{font-size:.62rem;color:var(--dim)}
 .lib-chart-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
 .lib-chart-tag{font-size:.58rem;padding:2px 6px;background:#f5f5f4;border-radius:3px;color:#555}
+.lib-promote-btn{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:7px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;font-size:.72rem;font-weight:600;font-family:inherit;transition:all .12s}
+.lib-promote-btn:hover{background:#a82d20}.lib-promote-btn:disabled{opacity:.5;cursor:wait}
+.lib-chart-promote{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:5px;border:1px solid var(--border);background:var(--card);color:var(--accent);cursor:pointer;font-size:.62rem;font-weight:600;font-family:inherit;transition:all .12s}
+.lib-chart-promote:hover{border-color:var(--accent);background:var(--accent-soft)}.lib-chart-promote:disabled{opacity:.5;cursor:wait}
 /* Heatmap */
 .heatmap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:12px}
 .hm-card{border-radius:8px;overflow:hidden;border:1px solid var(--border);text-align:center;font-size:.62rem}
@@ -266,7 +286,9 @@ body.dark .pp-img,body.dark .ai-img,body.dark .lib-chart-card img{background:#1a
 body.dark .btn{background:var(--card);color:var(--text);border-color:var(--border)}
 body.dark .btn.primary{background:var(--accent);color:#fff}
 body.dark .toast{background:#e8e4de;color:#1a1815}
-body.dark input,body.dark select{background:var(--card);color:var(--text);border-color:var(--border)}
+body.dark input,body.dark select,body.dark .lib-filter-select{background:var(--card);color:var(--text);border-color:var(--border)}
+body.dark .lib-post-count.has-posts{background:#1a3a2a;color:#4ade80}
+body.dark .lib-post-count.no-posts{background:#2a2825;color:#666}
 body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:var(--li);color:var(--text)}
 .rq-card.rq-focused{outline:2px solid var(--accent);outline-offset:2px}
 .tl-slot[draggable]{cursor:grab}.tl-slot.dragging{opacity:.4}
@@ -359,13 +381,14 @@ body.dark .qcal-article{color:var(--text)}
       <div class="tl-day">
         <div class="tl-dayhead {{ 'today' if day.is_today else '' }}">
           <span>{{ 'Today' if day.is_today else day.label }} {{day.date}}</span>
-          <span style="font-size:.65rem;color:var(--dim)" id="day-count-{{day.idx}}"></span>
+          <span style="font-size:.65rem;color:var(--dim)" id="day-count-{{day.idx}}">{% if day.posts|length > 0 %}{{day.posts|length}} post{{ 's' if day.posts|length != 1 else '' }}{% endif %}</span>
         </div>
         <div class="tl-slots" id="day-{{day.idx}}"
              ondragover="event.preventDefault();this.classList.add('over')"
              ondragleave="this.classList.remove('over')"
              ondrop="dropOnDay(event,{{day.idx}},'{{day.iso}}')">
           {% for sp in day.posts %}
+          {% if sp.status == 'planned' %}
           <div class="tl-slot {{sp.platform}}" id="sl-{{sp.id}}">
             <span class="sl-time">{{sp.time}}</span>
             <span class="plat {{sp.platform}}" style="font-size:.58rem">{{ '𝕏' if sp.platform=='x' else 'LI' }}</span>
@@ -377,7 +400,20 @@ body.dark .qcal-article{color:var(--text)}
             <button class="btn sm sl-gen" onclick="generateOne({{sp.id}},this)" title="Generate this post">✍️</button>
             <span class="sl-rm" onclick="removePlan({{sp.id}})">✕</span>
           </div>
+          {% else %}
+          <div class="tl-slot {{sp.platform}} {{sp.status}}" title="{{sp.status|title}} — managed in {{('Review' if sp.status=='generated' else 'Queue')}} tab">
+            <span class="sl-time">{{sp.time}}</span>
+            <span class="plat {{sp.platform}}" style="font-size:.58rem">{{ '𝕏' if sp.platform=='x' else 'LI' }}</span>
+            <div class="sl-body">
+              <div class="sl-title">{{sp.chart_title[:50] if sp.chart_title else 'Post'}}</div>
+              <div class="sl-hook">{% if sp.news_title %}📰 {{sp.news_title[:60]}}{% else %}{{sp.hook[:80] if sp.hook else (sp.caption[:80] if sp.caption else '')}}{% endif %}</div>
+            </div>
+            <span class="sl-type">{{sp.post_type|upper if sp.post_type else 'SHORT'}}</span>
+            <span class="sl-badge">{{ '✅ queued' if sp.status=='queued' else '📝 review' }}</span>
+          </div>
+          {% endif %}
           {% endfor %}
+          {% set plan_only = day.posts|selectattr('status','equalto','planned')|list %}
           {% if not day.posts %}<div class="tl-empty" id="empty-{{day.idx}}">{% if day.is_today %}← Click a story, pick a chart, drag here{% else %}Drop here{% endif %}</div>{% endif %}
         </div>
       </div>
@@ -524,7 +560,20 @@ body.dark .qcal-article{color:var(--text)}
 <div class="lib-wrap">
   <div class="lib-sidebar" id="lib-sidebar">
     <div class="lib-search-box">
-      <input type="text" id="lib-search" placeholder="Search articles..." oninput="filterLibrary(this.value)">
+      <input type="text" id="lib-search" placeholder="Search articles..." oninput="filterLibrary()">
+    </div>
+    <div class="lib-filters">
+      <select id="lib-filter-issue" class="lib-filter-select" onchange="filterLibrary()">
+        <option value="">All issues</option>
+        {% for iss in issues %}{% if iss.number in issues_with_articles %}<option value="{{iss.number}}">Issue {{iss.number}} — {{iss.label}} ({{issues_with_articles[iss.number]}})</option>{% endif %}{% endfor %}
+      </select>
+      <select id="lib-filter-genre" class="lib-filter-select" onchange="filterLibrary()">
+        <option value="">All genres</option>
+        <option value="global balance of power">Global Balance of Power</option>
+        <option value="jobs & economy">Jobs &amp; Economy</option>
+        <option value="natural resources">Natural Resources</option>
+        <option value="society">Society</option>
+      </select>
     </div>
     <div class="lib-stats" style="display:flex;justify-content:space-between;align-items:center">
       <span>{{articles_with_charts|length}} articles · {{total_charts}} charts ({{total_images}} with images)</span>
@@ -537,12 +586,13 @@ body.dark .qcal-article{color:var(--text)}
     </div>
     <div class="lib-list" id="lib-list">
       {% for a in articles_with_charts %}
-      <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}">
+      <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}" data-issue="{{a.issue_num}}" data-genre="{{(a.part or '')|lower}}">
         <div class="lib-item-title">{{a.title}}</div>
         <div class="lib-item-meta">
-          {% if a.part %}<span class="lib-part">Part {{a.part}}</span>{% endif %}
+          {% if a.part %}<span class="lib-part">{{a.part}}</span>{% endif %}
           <span>📊 {{a.image_count or 0}} charts</span>
           {% if a.chart_count and not a.image_count %}<span style="color:var(--dim)">(text only)</span>{% endif %}
+          <span class="lib-post-count {{ 'has-posts' if a.post_count > 0 else 'no-posts' }}">📤 {{a.post_count}}</span>
         </div>
       </div>
       {% endfor %}
@@ -798,11 +848,25 @@ async function saveRqEdit(id){
 }
 
 // ── Library ──
-function filterLibrary(q){
-  q=q.toLowerCase();
+function filterLibrary(){
+  const q=(document.getElementById('lib-search').value||'').toLowerCase();
+  const issue=document.getElementById('lib-filter-issue').value;
+  const genre=document.getElementById('lib-filter-genre').value;
+  let shown=0;
   document.querySelectorAll('.lib-item').forEach(el=>{
-    el.style.display=el.dataset.search.includes(q)?'':'none';
+    const matchText=!q||el.dataset.search.includes(q);
+    const matchIssue=!issue||el.dataset.issue===issue;
+    const matchGenre=!genre||el.dataset.genre===genre;
+    const vis=matchText&&matchIssue&&matchGenre;
+    el.style.display=vis?'':'none';
+    if(vis)shown++;
   });
+  // Update stats count
+  const total=document.querySelectorAll('.lib-item').length;
+  const statsEl=document.querySelector('.lib-stats span');
+  if(statsEl&&(q||issue||genre)){
+    statsEl.textContent=shown+' of '+total+' articles';
+  }
 }
 async function selectArticle(slug){
   document.querySelectorAll('.lib-item').forEach(el=>el.classList.remove('sel'));
@@ -812,11 +876,18 @@ async function selectArticle(slug){
   try{
     const r=await fetch('/api/library/'+encodeURIComponent(slug));
     const d=await r.json();
+    // Get post count from sidebar item
+    const sideItem=document.querySelector(`.lib-item[data-slug="${slug}"]`);
+    const postCount=sideItem?sideItem.querySelector('.lib-post-count')?.textContent.replace(/[^0-9]/g,''):'0';
+    const issueNum=sideItem?sideItem.dataset.issue:'';
     let html=`<div class="lib-article-head">
-      <h2>${d.article.title}${d.article.part?' <span class="lib-part">Part '+d.article.part+'</span>':''}</h2>
+      <h2>${d.article.title}${d.article.part?' <span class="lib-part">'+d.article.part+'</span>':''}</h2>
       ${d.article.excerpt?'<div class="lib-excerpt">'+d.article.excerpt+'</div>':''}
       ${d.article.url?'<a class="lib-url" href="'+d.article.url+'" target="_blank">'+d.article.url+'</a>':''}
-      <div style="font-size:.7rem;color:var(--dim);margin-top:6px">${d.charts.length} chart(s) · ${d.charts.filter(c=>c.image_path).length} with images</div>
+      <div style="font-size:.7rem;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:10px">
+        <span>${d.charts.length} chart(s) · ${d.charts.filter(c=>c.image_path).length} with images · 📤 ${postCount} post(s)${issueNum?' · Issue '+issueNum:''}</span>
+        ${d.charts.some(c=>c.image_path)?'<button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button>':''}
+      </div>
     </div>`;
     if(d.charts.length){
       html+='<div class="lib-charts-grid">';
@@ -831,6 +902,7 @@ async function selectArticle(slug){
               <span class="lib-chart-tag">ID: ${c.id}</span>
               ${c.image_path?'<span class="lib-chart-tag" style="background:#dcfce7;color:#166534">✓ Image</span>':'<span class="lib-chart-tag" style="background:#fef2f2;color:#991b1b">✕ No image</span>'}
               ${c.times_used>0?'<span class="lib-chart-tag" style="background:#ede9fe;color:#5b21b6">Used '+c.times_used+'x</span>':''}
+              ${c.image_path?'<button class="lib-chart-promote" onclick="event.stopPropagation();promoteArticle(\''+slug+'\','+c.id+',this)">📤 Promote</button>':''}
             </div>
           </div>
         </div>`;
@@ -841,6 +913,17 @@ async function selectArticle(slug){
     }
     detail.innerHTML=html;
   }catch(e){detail.innerHTML='<div class="lib-placeholder"><div>Error loading article</div></div>';}
+}
+
+async function promoteArticle(slug,chartId,btn){
+  if(btn){btn.disabled=true;btn.textContent='⏳ Generating...';}
+  toast('Generating posts from article...',30000);
+  try{
+    const r=await fetch('/api/promote_article',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,chart_id:chartId||null})});
+    const d=await r.json();
+    if(d.ok){toast(d.msg,4000,true);setTimeout(()=>{document.querySelector('.tab[data-t="review"]')?.click()},1500);}
+    else{toast(d.msg||'Failed',4000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
+  }catch(e){toast('Network error',3000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
 }
 
 // ── Regenerate caption ──
@@ -1178,14 +1261,22 @@ def dashboard():
     generated = db.get_generated_posts()
     queued = db.get_queued_posts()
 
-    # Calendar for plan (only show 'planned' items in the drag area)
+    # Calendar for plan — show planned, generated, AND queued items
     today = datetime.now().date()
     cal_days = []
     day_names = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+    # Combine all active posts with their status
+    all_plan_posts = []
+    for s in planned:
+        all_plan_posts.append({**s, "_status": "planned"})
+    for s in generated:
+        all_plan_posts.append({**s, "_status": "generated"})
+    for s in queued:
+        all_plan_posts.append({**s, "_status": "queued"})
     for i in range(7):
         d = today + timedelta(days=i)
         day_posts = []
-        for s in planned:
+        for s in all_plan_posts:
             sa = s.get("scheduled_at","")
             if sa:
                 try:
@@ -1196,8 +1287,11 @@ def dashboard():
                             "post_type": s.get("post_type","short"),
                             "caption": s.get("caption",""),
                             "chart_title": s.get("chart_title",""),
+                            "article_title": s.get("article_title",""),
+                            "news_title": s.get("news_title",""),
                             "hook": s.get("hook","") or s.get("article_context",""),
-                            "time": st.strftime("%H:%M")})
+                            "time": st.strftime("%H:%M"),
+                            "status": s["_status"]})
                 except: pass
         day_posts.sort(key=lambda x: x["time"])
         cal_days.append({"date": d.strftime("%d %b"), "label": day_names[d.weekday()],
@@ -1254,6 +1348,30 @@ def dashboard():
     total_charts = sum(a.get("chart_count", 0) for a in articles_with_charts)
     total_images = sum(a.get("image_count", 0) for a in articles_with_charts)
 
+    # Enrich with issue info and post counts
+    slug_to_issue = build_slug_to_issue_map()
+    issue_labels = {iss["number"]: iss["label"] for iss in ISSUES}
+    # Post counts per article slug via charts join
+    conn = db.get_db()
+    post_count_rows = conn.execute("""
+        SELECT c.article_slug, COUNT(p.id) as cnt
+        FROM posts p
+        JOIN charts c ON p.chart_id = c.id
+        WHERE p.status NOT IN ('rejected','deleted')
+        GROUP BY c.article_slug
+    """).fetchall()
+    conn.close()
+    post_counts = {r[0]: r[1] for r in post_count_rows}
+    issues_with_articles = {}  # issue_number → count of articles in DB
+    for a in articles_with_charts:
+        slug = a.get("slug", "")
+        inum = slug_to_issue.get(slug)
+        a["issue_num"] = inum or 0
+        a["issue_label"] = issue_labels.get(inum, "") if inum else ""
+        a["post_count"] = post_counts.get(slug, 0)
+        if inum:
+            issues_with_articles[inum] = issues_with_articles.get(inum, 0) + 1
+
     return render_template_string(HTML,
         sched=scheduler_on,
         match_model=MATCH_MODEL.split("-")[1] if "-" in MATCH_MODEL else MATCH_MODEL[:15],
@@ -1268,6 +1386,7 @@ def dashboard():
         n_generated=len(generated), n_queued=len(queued),
         articles_with_charts=articles_with_charts,
         total_charts=total_charts, total_images=total_images,
+        issues=ISSUES, issues_with_articles=issues_with_articles,
         alog=activity_log[:30], img_url=img_url)
 
 @app.route("/api/act", methods=["POST"])
@@ -1447,6 +1566,45 @@ def api_quick_post():
     else:
         log(f"Quick post generation failed for news #{news_id}")
         return jsonify({"ok": False, "msg": "Created but generation failed — try generating manually"})
+
+@app.route("/api/promote_article", methods=["POST"])
+def api_promote_article():
+    """Promote an article from Library: pick chart, match to news, generate posts for Review."""
+    from generator import gen_from_chart
+    d = request.json
+    slug = d.get("slug")
+    chart_id = d.get("chart_id")
+    if not slug:
+        return jsonify({"ok": False, "msg": "No article slug"})
+    article = db.get_article_by_slug(slug)
+    if not article:
+        return jsonify({"ok": False, "msg": "Article not found"})
+    charts = db.get_charts_for_article(slug)
+    charts_with_images = [c for c in charts if c.get("image_path")]
+    if not charts_with_images:
+        return jsonify({"ok": False, "msg": "No charts with images for this article"})
+    # Pick chart: specific one if requested, otherwise least-used with image
+    if chart_id:
+        target = next((c for c in charts_with_images if c["id"] == chart_id), None)
+        if not target:
+            return jsonify({"ok": False, "msg": "Chart not found or has no image"})
+    else:
+        # Pick least-used chart
+        for c in charts_with_images:
+            c["_uses"] = len(db.get_posts_for_chart(c["id"]))
+        charts_with_images.sort(key=lambda c: c["_uses"])
+        target = charts_with_images[0]
+    # Generate for both platforms using gen_from_chart (handles news matching + generation)
+    results = []
+    for platform in ["x", "linkedin"]:
+        result = gen_from_chart(target["id"], platform, "short")
+        if result:
+            results.append(result)
+    if results:
+        log(f"Promoted '{article['title'][:40]}' — {len(results)} post(s) created")
+        return jsonify({"ok": True, "count": len(results),
+                        "msg": f"{len(results)} post(s) created — check Review"})
+    return jsonify({"ok": False, "msg": "Generation failed — check API key and news feed"})
 
 @app.route("/api/plan_reorder", methods=["POST"])
 def api_plan_reorder():
