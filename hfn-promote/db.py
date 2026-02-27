@@ -653,6 +653,15 @@ def confirm_post(post_id):
     conn.commit()
     conn.close()
 
+def confirm_all():
+    """Confirm all generated posts (move to queued)."""
+    conn = get_db()
+    cur = conn.execute("UPDATE posts SET status='queued' WHERE status='generated'")
+    n = cur.rowcount
+    conn.commit()
+    conn.close()
+    return n
+
 def confirm_day(date_iso):
     """Confirm all generated posts for a specific day."""
     conn = get_db()

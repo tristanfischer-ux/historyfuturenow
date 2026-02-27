@@ -1,4 +1,4 @@
-"""HFN Promote v3.7 — Dashboard improvements, session health, auto-poster status."""
+"""HFN Promote v3.8 — Polish: keyboard shortcuts, undo, drag reorder, CSV export."""
 from datetime import datetime, timedelta
 from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort
@@ -234,6 +234,11 @@ body.dark .btn.primary{background:var(--accent);color:#fff}
 body.dark .toast{background:#e8e4de;color:#1a1815}
 body.dark input,body.dark select{background:var(--card);color:var(--text);border-color:var(--border)}
 body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:var(--li);color:var(--text)}
+.rq-card.rq-focused{outline:2px solid var(--accent);outline-offset:2px}
+.tl-slot[draggable]{cursor:grab}.tl-slot.dragging{opacity:.4}
+.img-fallback{display:flex;align-items:center;justify-content:center;background:#f5f5f4;border:1px dashed var(--border);border-radius:6px;color:var(--dim);font-size:.72rem;padding:16px;min-height:60px}
+body.dark .img-fallback{background:#2a2825}
+.toast a{color:#60a5fa;text-decoration:underline;margin-left:8px;cursor:pointer}
 </style></head><body>
 
 <div class="topbar">
@@ -241,6 +246,7 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
   <div class="r" style="display:flex;align-items:center;gap:10px">
         <span class="sess-indicator" title="X session"><span class="dot off" id="dot-x"></span> 𝕏</span>
         <span class="sess-indicator" title="LinkedIn session"><span class="dot off" id="dot-li"></span> LI</span>
+        <span class="sess-indicator" title="Rate limits today" style="margin-left:4px;font-size:.64rem;color:#a8a29e">𝕏 {{xt}}/{{mx}} · LI {{lt}}/{{ml}}</span>
         <button class="btn sm" onclick="toggleDark()" id="dark-btn" style="font-size:.9rem;padding:4px 8px" title="Toggle dark mode">🌙</button>
         <button class="btn sm" onclick="toggleAutoPost()" id="auto-btn"
           style="font-size:.78rem;padding:5px 14px;border-radius:6px;
@@ -337,7 +343,10 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
     <!-- Review & Queue section -->
     <div class="rq-head">
       <span>📬 Review & Queue</span>
-      <span class="ph-sub">{{n_generated}} to review · {{n_queued}} queued</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="ph-sub">{{n_generated}} to review · {{n_queued}} queued</span>
+        {% if n_generated > 0 %}<button class="btn bsv sm" onclick="confirmAll()">✅ Confirm All</button>{% endif %}
+      </div>
     </div>
     <div class="pl-body rq-body" id="review-queue">
       {% if not review_days and not queue_days %}
@@ -369,7 +378,7 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
               </div>
             </div>
             <div class="rq-caption" id="rqcap-{{p.id}}" contenteditable="false" ondblclick="startRqEdit(this,{{p.id}})" oninput="updateCharCount(this,{{p.id}})">{{p.caption if p.caption else '(no text)'}}</div>
-            {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="this.style.display='none'">{% endif %}
+            {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="imgFallback(this)">{% endif %}
             {% if p.article_url %}<a class="pp-link" href="{{p.article_url}}" target="_blank">{{p.article_url}}</a>{% endif %}
             <div class="pp-charcount" id="rqcc-{{p.id}}">
               {{(p.caption|length) if p.caption else 0}}/{{280 if p.platform=='x' else 3000}} chars
@@ -415,7 +424,7 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
               </div>
             </div>
             <div class="pp-text">{{p.caption if p.caption else ''}}</div>
-            {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="this.style.display='none'">{% endif %}
+            {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="imgFallback(this)">{% endif %}
             {% if p.article_url %}<a class="pp-link" href="{{p.article_url}}" target="_blank">{{p.article_url}}</a>{% endif %}
             <div class="pp-charcount">{{(p.caption|length) if p.caption else 0}}/{{280 if p.platform=='x' else 3000}} chars
               {% if p.caption and ((p.platform=='x' and p.caption|length > 280) or (p.platform=='linkedin' and p.caption|length > 3000)) %}
@@ -453,6 +462,7 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
       <option value="90">Last 90 days</option>
     </select>
     <span id="pf-count" style="font-size:.72rem;color:var(--dim)"></span>
+    <button class="btn sm" onclick="exportPosted()" style="margin-left:auto">📥 Export CSV</button>
   </div>
   <div id="posted-calendar"></div>
   <div style="text-align:center;padding:12px">
@@ -469,6 +479,11 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
     </div>
     <div class="lib-stats" style="display:flex;justify-content:space-between;align-items:center">
       <span>{{articles_with_charts|length}} articles · {{total_charts}} charts ({{total_images}} with images)</span>
+      <select id="heatmap-sort" style="font-size:.6rem;padding:2px 4px;border:1px solid var(--border);border-radius:4px;font-family:inherit;display:none" onchange="toggleHeatmap(true)">
+        <option value="most">Most used</option>
+        <option value="least">Least used</option>
+        <option value="alpha">Alphabetical</option>
+      </select>
       <button class="btn sm" onclick="toggleHeatmap()" id="heatmap-btn" style="font-size:.6rem">🔥 Heatmap</button>
     </div>
     <div class="lib-list" id="lib-list">
@@ -527,6 +542,11 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
 <script>
 // ── Globals ──
 let dragData = null;
+let pendingRemove = null;
+let rqFocusIdx = -1;
+
+// ── Image fallback ──
+function imgFallback(img){const d=document.createElement('div');d.className='img-fallback';d.innerHTML='🖼 Image not available';img.parentNode.replaceChild(d,img)}
 
 // ── Tabs ──
 function stab(el,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.tc').forEach(t=>t.classList.remove('on'));el.classList.add('on');document.getElementById('t-'+id).classList.add('on')}
@@ -551,7 +571,7 @@ async function selectNews(newsId){
     box.innerHTML=matches.map(m=>`
       <div class="ai${m.text_only?' text-only':''}" draggable="true" ondragstart="startDrag(event,${JSON.stringify(m).replace(/"/g,'&quot;')})"
            data-news="${m.news_id}" data-chart="${m.chart_id}">
-        ${m.image_url?'<img class="ai-img" src="'+m.image_url+'" onerror="this.style.display=\'none\'">':''}
+        ${m.image_url?'<img class="ai-img" src="'+m.image_url+'" onerror="imgFallback(this)">':''}
         ${m.text_only?'<div style="padding:20px 16px 12px;text-align:center"><div style="font-size:2rem">📝</div><div style="font-size:.7rem;color:var(--dim);margin-top:4px">Text-only post (no chart image)</div></div>':''}
         <div class="ai-body">
           <div class="ai-article">📄 ${m.article_part?'Part '+m.article_part+': ':''}${m.article_title||''}</div>
@@ -664,6 +684,11 @@ async function confirmPost(id){
   await fetch('/api/confirm_post',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
   toast('Confirmed — queued for posting',3000,true);setTimeout(()=>location.reload(),800);
 }
+async function confirmAll(){
+  if(!confirm('Confirm all generated posts?'))return;
+  await fetch('/api/confirm_all',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
+  toast('All confirmed — queued for posting',3000,true);setTimeout(()=>location.reload(),800);
+}
 async function confirmDay(iso){
   if(!confirm('Confirm all posts for '+iso+'?'))return;
   await fetch('/api/confirm_day',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:iso})});
@@ -674,9 +699,21 @@ async function unqueuePost(id){
   toast('Moved back to review',3000,true);setTimeout(()=>location.reload(),800);
 }
 async function removeReview(id){
-  if(!confirm('Remove this post?'))return;
-  await fetch('/api/plan_remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-  document.getElementById('rq-'+id)?.remove();toast('Removed');
+  // If another remove is pending, execute it immediately
+  if(pendingRemove){clearTimeout(pendingRemove.timeout);fetch('/api/plan_remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:pendingRemove.id})});pendingRemove=null}
+  const card=document.getElementById('rq-'+id);if(!card)return;
+  card.style.display='none';
+  const t=document.getElementById('toast');
+  t.innerHTML='Removed — <a onclick="undoRemove()">Undo</a>';t.classList.add('show');
+  pendingRemove={id,card,timeout:setTimeout(()=>{
+    fetch('/api/plan_remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+    card.remove();pendingRemove=null;t.classList.remove('show');
+  },5000)};
+}
+function undoRemove(){
+  if(!pendingRemove)return;clearTimeout(pendingRemove.timeout);
+  pendingRemove.card.style.display='';pendingRemove=null;
+  const t=document.getElementById('toast');t.classList.remove('show');toast('Restored');
 }
 function startRqEdit(el,id){
   el.contentEditable='true';el.style.webkitLineClamp='unset';el.focus();
@@ -720,7 +757,7 @@ async function selectArticle(slug){
       html+='<div class="lib-charts-grid">';
       for(const c of d.charts){
         html+=`<div class="lib-chart-card">
-          ${c.image_url?'<img src="'+c.image_url+'" onerror="this.style.display=\'none\'">':'<div style="padding:30px;text-align:center;color:var(--dim)">No image</div>'}
+          ${c.image_url?'<img src="'+c.image_url+'" onerror="imgFallback(this)">':'<div style="padding:30px;text-align:center;color:var(--dim)">No image</div>'}
           <div class="lib-chart-body">
             <div class="lib-chart-title">Fig ${c.figure_num}: ${c.title||'Untitled'}</div>
             ${c.description?'<div class="lib-chart-desc">'+c.description.substring(0,200)+'</div>':''}
@@ -753,23 +790,28 @@ async function regenerateCaption(id,btn){
 
 // ── Heatmap ──
 let heatmapVisible=false;
-async function toggleHeatmap(){
+async function toggleHeatmap(forceRefresh){
   const detail=document.getElementById('lib-detail');
-  if(heatmapVisible){
+  const sortSel=document.getElementById('heatmap-sort');
+  if(heatmapVisible&&!forceRefresh){
     heatmapVisible=false;detail.innerHTML='<div class="lib-placeholder"><div style="font-size:2.5rem;margin-bottom:12px">📚</div><div style="font-size:.9rem;font-weight:600">Select an article</div></div>';
-    document.getElementById('heatmap-btn').style.background='';return;
+    document.getElementById('heatmap-btn').style.background='';sortSel.style.display='none';return;
   }
-  heatmapVisible=true;document.getElementById('heatmap-btn').style.background='#fef3c7';
+  heatmapVisible=true;document.getElementById('heatmap-btn').style.background='#fef3c7';sortSel.style.display='';
   detail.innerHTML='<div class="lib-placeholder"><div>Loading heatmap...</div></div>';
   try{
-    const r=await fetch('/api/chart_usage');const stats=await r.json();
+    const r=await fetch('/api/chart_usage');let stats=await r.json();
+    const sort=sortSel.value;
+    if(sort==='least')stats.sort((a,b)=>(a.uses_30d||0)-(b.uses_30d||0));
+    else if(sort==='alpha')stats.sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+    else stats.sort((a,b)=>(b.uses_30d||0)-(a.uses_30d||0));
     let html='<div style="padding:12px"><h3 style="font-size:.85rem;margin-bottom:8px">Chart Usage Heatmap <span style="font-size:.65rem;color:var(--dim)">(30 days)</span></h3>';
     html+='<div style="font-size:.65rem;color:var(--dim);margin-bottom:8px">🟢 unused → 🟡 light → 🟠 moderate → 🔴 heavy</div>';
     html+='<div class="heatmap-grid">';
     for(const s of stats){
       const u=s.uses_30d||0;const heat=u===0?0:u<=2?1:u<=5?2:3;
       html+=`<div class="hm-card hm-${heat}">
-        ${s.image_url?'<img src="'+s.image_url+'" onerror="this.style.display=\'none\'">':'<div style="height:80px;display:flex;align-items:center;justify-content:center;color:var(--dim)">No img</div>'}
+        ${s.image_url?'<img src="'+s.image_url+'" onerror="imgFallback(this)">':'<div style="height:80px;display:flex;align-items:center;justify-content:center;color:var(--dim)">No img</div>'}
         <div class="hm-label">${(s.title||'').substring(0,40)}</div>
         <div style="font-size:.58rem;padding:0 4px 4px;color:var(--dim)">${s.uses_7d||0} (7d) · ${u} (30d)</div>
       </div>`;
@@ -779,7 +821,13 @@ async function toggleHeatmap(){
 }
 
 // ── Post Now ──
-async function postNow(id){if(!confirm('Post now?'))return;toast('Posting...',15000);const r=await fetch('/api/post_now',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});const d=await r.json();toast(d.msg||'Done',3000,true);if(d.ok)setTimeout(()=>location.reload(),1500)}
+async function postNow(id){
+  const card=document.getElementById('rq-'+id);
+  const platEl=card?card.querySelector('.plat'):null;
+  const platName=platEl&&platEl.classList.contains('li')?'LinkedIn':'X';
+  if(!confirm('Post to '+platName+' now?'))return;
+  toast('Posting to '+platName+'...',15000);const r=await fetch('/api/post_now',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});const d=await r.json();toast(d.msg||'Done',3000,true);if(d.ok)setTimeout(()=>location.reload(),1500)
+}
 
 // ── Quick Post ──
 async function quickPost(newsId){
@@ -859,11 +907,17 @@ async function loadPosted(reset=true){
       const time=p.posted_at?p.posted_at.substring(11,16):'';
       container.innerHTML+=`<div class="post-cal-item">
         <span class="plat ${p.platform}" style="font-size:.58rem">${p.platform==='x'?'𝕏':'LI'}</span>
-        ${p.image_url?'<img src="'+p.image_url+'" onerror="this.style.display=\'none\'">':''}
+        ${p.image_url?'<img src="'+p.image_url+'" onerror="imgFallback(this)">':''}
         <div class="post-cal-caption">${(p.caption||'').substring(0,200)}</div>
         <span style="font-size:.65rem;color:var(--dim);white-space:nowrap">${time}</span>
       </div>`;
     }
+  }
+  // Auto-expand today's date group
+  if(reset){
+    const today=new Date().toISOString().substring(0,10);
+    const todayEl=document.getElementById('pcal-'+today);
+    if(todayEl){const posts=todayEl.querySelector('.post-cal-posts');if(posts)posts.classList.add('open')}
   }
   const more=document.getElementById('pf-more');
   more.style.display=(postedOffset+d.posts.length<d.total)?'':'none';
@@ -882,7 +936,7 @@ async function loadSessionStatus(){
     document.getElementById('dot-li').className='dot '+(d.linkedin?'on':'off');
   }catch(e){}
 }
-loadSessionStatus();
+loadSessionStatus();setInterval(loadSessionStatus,300000);
 
 // ── Auto-poster status ──
 async function loadAutoStatus(){
@@ -920,6 +974,73 @@ function toggleDark(){
   document.getElementById('dark-btn').textContent=isDark?'☀️':'🌙';
 }
 if(localStorage.getItem('hfn-dark')==='1'){document.body.classList.add('dark');document.getElementById('dark-btn').textContent='☀️'}
+
+// ── Keyboard shortcuts (Item 1) ──
+document.addEventListener('keydown',e=>{
+  // Skip if editing or if Planner tab not visible
+  if(e.target.isContentEditable||e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
+  if(!document.getElementById('t-planner').classList.contains('on'))return;
+  const cards=document.querySelectorAll('#review-queue .rq-card');
+  if(!cards.length)return;
+  if(e.key==='j'){e.preventDefault();rqFocusIdx=Math.min(rqFocusIdx+1,cards.length-1);updateRqFocus(cards)}
+  else if(e.key==='k'){e.preventDefault();rqFocusIdx=Math.max(rqFocusIdx-1,0);updateRqFocus(cards)}
+  else if(e.key==='c'&&rqFocusIdx>=0&&cards[rqFocusIdx]){const b=cards[rqFocusIdx].querySelector('.rq-actions .btn.bsv');if(b)b.click()}
+  else if(e.key==='e'&&rqFocusIdx>=0&&cards[rqFocusIdx]){const b=cards[rqFocusIdx].querySelector('.rq-actions .btn:not(.bsv):not(.rej):not(.bx):not(.bli)');if(b&&b.textContent.includes('Edit'))b.click()}
+  else if(e.key==='d'&&rqFocusIdx>=0&&cards[rqFocusIdx]){const b=cards[rqFocusIdx].querySelector('.rq-actions .btn.rej');if(b)b.click()}
+  else if(e.key==='p'&&rqFocusIdx>=0&&cards[rqFocusIdx]){const b=cards[rqFocusIdx].querySelector('.rq-actions .btn.bx,.rq-actions .btn.bli');if(b)b.click()}
+});
+function updateRqFocus(cards){cards.forEach(c=>c.classList.remove('rq-focused'));if(rqFocusIdx>=0&&cards[rqFocusIdx]){cards[rqFocusIdx].classList.add('rq-focused');cards[rqFocusIdx].scrollIntoView({block:'nearest',behavior:'smooth'})}}
+
+// ── Drag reorder timeline (Item 8) ──
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.tl-slot').forEach(sl=>{
+    sl.draggable=true;
+    sl.addEventListener('dragstart',e=>{sl.classList.add('dragging');e.dataTransfer.setData('text/plain',sl.id);e.dataTransfer.effectAllowed='move'});
+    sl.addEventListener('dragend',()=>sl.classList.remove('dragging'));
+  });
+});
+async function reorderSlot(slotId,newIso,dayIdx){
+  const id=parseInt(slotId.replace('sl-',''));
+  const existing=document.getElementById('day-'+dayIdx).querySelectorAll('.tl-slot').length;
+  const hours=['09:00','13:00','17:00','20:00'];
+  const time=hours[Math.min(existing,hours.length-1)];
+  const scheduledAt=newIso+'T'+time;
+  const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,scheduled_at:scheduledAt})});
+  const d=await r.json();
+  if(d.ok){
+    const slot=document.getElementById(slotId);if(slot){
+      slot.querySelector('.sl-time').textContent=time;
+      const target=document.getElementById('day-'+dayIdx);
+      const emp=document.getElementById('empty-'+dayIdx);if(emp)emp.remove();
+      target.appendChild(slot);
+    }
+    toast('Moved');
+  }
+}
+// Patch dropOnDay to handle reorder drops too
+const origDropOnDay=dropOnDay;
+dropOnDay=function(event,dayIdx,dayIso){
+  const slotId=event.dataTransfer.getData('text/plain');
+  if(slotId&&slotId.startsWith('sl-')){
+    event.preventDefault();document.getElementById('day-'+dayIdx).classList.remove('over');
+    reorderSlot(slotId,dayIso,dayIdx);return;
+  }
+  origDropOnDay(event,dayIdx,dayIso);
+};
+
+// ── Export posted CSV (Item 10) ──
+async function exportPosted(){
+  toast('Exporting...',5000);
+  const r=await fetch('/api/posted?limit=1000');const d=await r.json();
+  const rows=[['ID','Platform','Posted At','Caption','Article','Chart','News']];
+  for(const p of d.posts){
+    rows.push([p.id,p.platform,p.posted_at||'',(p.caption||'').replace(/"/g,'""'),p.article_title||'',p.chart_title||'',p.news_title||'']);
+  }
+  const csv=rows.map(r=>r.map(c=>'"'+String(c)+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hfn-posted-'+new Date().toISOString().substring(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(a.href);toast('Downloaded');
+}
 </script></body></html>"""
 
 # ── Routes ──
@@ -1207,6 +1328,17 @@ def api_quick_post():
         log(f"Quick post generation failed for news #{news_id}")
         return jsonify({"ok": False, "msg": "Created but generation failed — try generating manually"})
 
+@app.route("/api/plan_reorder", methods=["POST"])
+def api_plan_reorder():
+    d = request.json
+    post_id = d["id"]
+    scheduled_at = d["scheduled_at"]
+    conn = db.get_db()
+    conn.execute("UPDATE posts SET scheduled_at=? WHERE id=?", (scheduled_at, post_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"ok": True})
+
 @app.route("/api/plan_clear", methods=["POST"])
 def api_plan_clear():
     db.delete_planned()
@@ -1216,6 +1348,11 @@ def api_plan_clear():
 def api_confirm_post():
     db.confirm_post(request.json["id"])
     return jsonify({"ok":True})
+
+@app.route("/api/confirm_all", methods=["POST"])
+def api_confirm_all():
+    n = db.confirm_all()
+    return jsonify({"ok": True, "count": n})
 
 @app.route("/api/confirm_day", methods=["POST"])
 def api_confirm_day():
