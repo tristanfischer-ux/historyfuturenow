@@ -206,7 +206,34 @@ HTML = r"""<!DOCTYPE html>
 .toast.show{transform:translateY(0);opacity:1}
 .logbox{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;max-height:300px;overflow-y:auto;font-size:.78rem;margin:12px 20px}
 .logr{padding:3px 0;border-bottom:1px solid #f5f5f4}.logt{color:var(--dim);font-family:monospace;font-size:.7rem;margin-right:8px}
-@media(max-width:900px){.planner{flex-direction:column}.pl-col{width:100%!important;height:auto;border-right:none;border-bottom:1px solid var(--border)}.pl-body{max-height:300px}.grid{grid-template-columns:1fr}}
+@media(max-width:900px){
+.planner{flex-direction:column}.pl-col{width:100%!important;height:auto;border-right:none;border-bottom:1px solid var(--border)}.pl-body{max-height:300px}
+.tabs-bar{flex-wrap:wrap}.tab{padding:8px 10px;font-size:.75rem}
+.lib-wrap{flex-direction:column}.lib-sidebar{width:100%;min-width:0;max-height:250px;border-right:none;border-bottom:1px solid var(--border)}
+.lib-charts-grid{grid-template-columns:1fr}
+.btn,.opt-pill{min-height:44px;min-width:44px}
+.post-cal-item img{width:60px;height:45px}
+.heatmap-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+.rq-card,.post-preview{max-width:100%}
+.pp-img,.rq-img{max-width:100%}
+}
+
+/* Lightbox */
+#lightbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:200;cursor:zoom-out;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px}
+.pp-img,.ai-img,.lib-chart-card img,.post-cal-item img{cursor:zoom-in}
+
+/* Dark mode */
+body.dark{--bg:#1a1815;--card:#252220;--border:#3a3632;--text:#e8e4de;--dim:#8a8479;--accent:#e05545}
+body.dark .topbar{background:#0f0e0c}
+body.dark .post-preview{background:var(--card);border-color:var(--border)}
+body.dark .pp-img,.dark .ai-img,.dark .lib-chart-card img{background:#1a1815;border-color:var(--border)}
+body.dark .btn{background:var(--card);color:var(--text);border-color:var(--border)}
+body.dark .btn.primary{background:var(--accent);color:#fff}
+body.dark .toast{background:#e8e4de;color:#1a1815}
+body.dark input,body.dark select{background:var(--card);color:var(--text);border-color:var(--border)}
+body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:var(--li)}
 </style></head><body>
 
 <div class="topbar">
@@ -214,6 +241,7 @@ HTML = r"""<!DOCTYPE html>
   <div class="r" style="display:flex;align-items:center;gap:10px">
         <span class="sess-indicator" title="X session"><span class="dot off" id="dot-x"></span> 𝕏</span>
         <span class="sess-indicator" title="LinkedIn session"><span class="dot off" id="dot-li"></span> LI</span>
+        <button class="btn sm" onclick="toggleDark()" id="dark-btn" style="font-size:.9rem;padding:4px 8px" title="Toggle dark mode">🌙</button>
         <button class="btn sm" onclick="toggleAutoPost()" id="auto-btn"
           style="font-size:.78rem;padding:5px 14px;border-radius:6px;
           {% if sched %}background:#166534;color:#4ade80;border-color:#22863a{% else %}background:#7f1d1d;color:#fca5a5;border-color:#991b1b{% endif %}">
@@ -494,6 +522,7 @@ HTML = r"""<!DOCTYPE html>
 </div><!-- /main -->
 
 <div class="toast" id="toast"></div>
+<div id="lightbox" onclick="closeLightbox()"><img id="lb-img" src=""></div>
 <script>
 // ── Globals ──
 let dragData = null;
@@ -860,6 +889,24 @@ async function loadAutoStatus(){
   }catch(e){}
 }
 loadAutoStatus();setInterval(loadAutoStatus,60000);
+
+// ── Lightbox ──
+function openLightbox(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open')}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.getElementById('lb-img').src=''}
+document.addEventListener('click',e=>{
+  const img=e.target.closest('.pp-img,.ai-img,.lib-chart-card img,.post-cal-item img');
+  if(img&&img.src){e.preventDefault();openLightbox(img.src)}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
+
+// ── Dark mode ──
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  const isDark=document.body.classList.contains('dark');
+  localStorage.setItem('hfn-dark',isDark?'1':'0');
+  document.getElementById('dark-btn').textContent=isDark?'☀️':'🌙';
+}
+if(localStorage.getItem('hfn-dark')==='1'){document.body.classList.add('dark');document.getElementById('dark-btn').textContent='☀️'}
 </script></body></html>"""
 
 # ── Routes ──
