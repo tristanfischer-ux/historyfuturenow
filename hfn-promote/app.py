@@ -144,26 +144,9 @@ HTML = r"""<!DOCTYPE html>
 .pp-link{display:block;font-size:.7rem;color:#2563eb;text-decoration:none;word-break:break-all;margin-bottom:4px}.pp-link:hover{text-decoration:underline}
 .pp-charcount{font-size:.62rem;color:var(--dim);text-align:right}
 
-/* Curate cards (reused from v3.3) */
-.curate-wrap{padding:16px 20px;overflow-y:auto;height:100%}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.card:hover{box-shadow:0 3px 12px rgba(0,0,0,.05)}.card.faded{opacity:.15;pointer-events:none}
-.card-img{width:100%;display:block;border-bottom:1px solid var(--border);object-fit:contain;background:#fafaf9}
-.card-body{padding:12px}.card-top{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+/* Platform badges (shared) */
 .plat{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.62rem;font-weight:700;text-transform:uppercase}
 .plat.x{background:var(--xblk);color:#fff}.plat.li{background:var(--li);color:#fff}
-.ptype{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.62rem;font-weight:600;text-transform:uppercase}
-.ptype.short{background:#fef3c7;color:#92400e}.ptype.long{background:#ede9fe;color:#5b21b6}
-.chtitle{font-size:.72rem;color:var(--accent);font-weight:600;margin-bottom:4px}
-.caption{font-size:.85rem;line-height:1.5;margin-bottom:8px;white-space:pre-wrap}
-.caption[contenteditable="true"]{outline:none;border:1px solid var(--li);border-radius:6px;padding:8px;background:#f0f7ff}
-.ctx{font-size:.78rem;color:var(--dim);font-style:italic;margin-bottom:6px;padding:8px 10px;background:#fafaf9;border-radius:6px;border-left:3px solid var(--accent)}
-.lnk{font-size:.75rem;color:#2563eb;text-decoration:none;word-break:break-all}
-.newstag{font-size:.68rem;color:var(--dim);margin-top:6px;padding-top:5px;border-top:1px solid var(--border)}
-.card-act{padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-.reject-reason{display:none;padding:6px 12px;border-top:1px solid #fecaca;background:#fef2f2}
-.reject-reason input{width:100%;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:.78rem}
 
 .empty{text-align:center;padding:40px;color:var(--dim)}.empty .ei{font-size:2rem;margin-bottom:8px}
 
@@ -218,7 +201,6 @@ HTML = r"""<!DOCTYPE html>
 
 <div class="tabs-bar">
   <div class="tab on" data-tab="planner" onclick="stab(this,'planner')">📋 Planner</div>
-  <div class="tab" data-tab="curate" onclick="stab(this,'curate')">✍️ Curate{% if nd > 0 %} ({{nd}}){% endif %}</div>
   <div class="tab" data-tab="posted" onclick="stab(this,'posted')">✅ Posted{% if np > 0 %} ({{np}}){% endif %}</div>
   <div class="tab" data-tab="library" onclick="stab(this,'library')">📚 Library ({{na}} articles, {{nc}} charts)</div>
   <div class="tab" data-tab="settings" onclick="stab(this,'settings')">⚙️</div>
@@ -349,6 +331,7 @@ HTML = r"""<!DOCTYPE html>
           <div class="rq-actions">
             <button class="btn bsv sm" onclick="confirmPost({{p.id}})">✅ Confirm</button>
             <button class="btn sm" onclick="startRqEdit(document.getElementById('rqcap-{{p.id}}'),{{p.id}})">✏️ Edit</button>
+            <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 Post Now</button>
             <button class="btn rej sm" onclick="removeReview({{p.id}})">✕ Remove</button>
           </div>
         </div>
@@ -389,6 +372,7 @@ HTML = r"""<!DOCTYPE html>
             </div>
           </div>
           <div class="rq-actions">
+            <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 Post Now</button>
             <button class="btn sm" onclick="unqueuePost({{p.id}})">↩ Edit</button>
             <button class="btn rej sm" onclick="removeReview({{p.id}})">✕ Remove</button>
           </div>
@@ -398,49 +382,6 @@ HTML = r"""<!DOCTYPE html>
       {% endfor %}
     </div>
   </div>
-</div>
-</div>
-
-<!-- ═══ CURATE ═══ -->
-<div class="tc" id="t-curate">
-<div class="curate-wrap">
-  <div class="actions" style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
-    <button class="btn sm" onclick="act('generate')">✍️ Generate from matches</button>
-    <span style="color:var(--border)">│</span>
-    <span style="font-size:.78rem;font-weight:600">Bulk:</span>
-    <input type="datetime-local" id="bulk-start"><select id="bulk-gap"><option value="360">6h</option><option value="480" selected>8h</option><option value="720">12h</option></select>
-    <button class="btn bsc sm" onclick="bulkSchedule()">📅 All</button>
-  </div>
-  {% if drafts %}
-  <div class="grid">
-  {% for p in drafts %}
-  <div class="card" id="c-{{p.id}}">
-    {% if p.image_path %}<img class="card-img" src="{{img_url(p.image_path)}}" onerror="this.style.display='none'">{% endif %}
-    <div class="card-body">
-      <div class="card-top">
-        <span class="plat {{ 'x' if p.platform=='x' else 'li' }}">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
-        <span class="ptype {{p.post_type or 'short'}}">{{p.post_type or 'short'}}</span>
-      </div>
-      {% if p.chart_title %}<div class="chtitle">📊 {{p.chart_title}}</div>{% endif %}
-      <div class="caption" id="cap-{{p.id}}" contenteditable="false" ondblclick="startEdit(this,{{p.id}})">{{p.caption}}</div>
-      {% if p.article_context %}<div class="ctx" id="ctx-{{p.id}}">{{p.article_context}}</div>{% endif %}
-      {% if p.article_url %}<a class="lnk" href="{{p.article_url}}" target="_blank">{{p.article_url}}</a>{% endif %}
-      {% if p.news_title %}<div class="newstag">📰 {{p.news_title}}</div>{% endif %}
-    </div>
-    <div class="card-act" id="act-{{p.id}}">
-      <button class="btn sm" onclick="startEdit(document.getElementById('cap-{{p.id}}'),{{p.id}})">✏️</button>
-      <input type="datetime-local" id="dt-{{p.id}}" style="max-width:155px">
-      <button class="btn bsc sm" onclick="sched({{p.id}})">📅</button>
-      <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">Post</button>
-      <button class="btn rej sm" onclick="showReject({{p.id}})">✕</button>
-    </div>
-    <div class="reject-reason" id="rr-{{p.id}}">
-      <input type="text" placeholder="Why? (helps AI learn)" onkeydown="if(event.key==='Enter')rej({{p.id}},this.value)">
-      <button class="btn rej sm" style="margin-top:4px" onclick="rej({{p.id}},document.querySelector('#rr-{{p.id}} input').value)">Delete</button>
-    </div>
-  </div>
-  {% endfor %}</div>
-  {% else %}<div class="empty"><div class="ei">📭</div>No drafts</div>{% endif %}
 </div>
 </div>
 
@@ -721,14 +662,8 @@ async function selectArticle(slug){
   }catch(e){detail.innerHTML='<div class="lib-placeholder"><div>Error loading article</div></div>';}
 }
 
-// ── Curate ──
-function startEdit(el,id){el.contentEditable='true';el.focus();const a=document.getElementById('act-'+id);if(!document.getElementById('sv-'+id)){const s=document.createElement('button');s.id='sv-'+id;s.className='btn bsv sm';s.textContent='💾';s.onclick=()=>saveEdit(id);a.prepend(s)}}
-async function saveEdit(id){const c=document.getElementById('cap-'+id),x=document.getElementById('ctx-'+id);c.contentEditable='false';document.getElementById('sv-'+id)?.remove();await fetch('/api/edit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,caption:c.innerText.trim(),context:x?x.innerText.trim():''})});toast('Saved')}
-function showReject(id){const r=document.getElementById('rr-'+id);r.style.display=r.style.display==='block'?'none':'block'}
-async function rej(id,reason){await fetch('/api/reject',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,reason})});toast('Deleted');document.getElementById('c-'+id).classList.add('faded')}
-async function sched(id){const dt=document.getElementById('dt-'+id);if(!dt?.value){toast('Pick time');return};await fetch('/api/schedule',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,scheduled_at:dt.value})});document.getElementById('c-'+id).classList.add('faded');toast('Scheduled')}
-async function bulkSchedule(){const s=document.getElementById('bulk-start').value;if(!s){toast('Pick time');return};await fetch('/api/bulk_schedule',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({start:s,gap_minutes:parseInt(document.getElementById('bulk-gap').value)})});toast('Done');setTimeout(()=>location.reload(),1500)}
-async function postNow(id){if(!confirm('Post now?'))return;toast('Posting...',15000);await fetch('/api/post_now',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});document.getElementById('c-'+id).classList.add('faded');toast('Done')}
+// ── Post Now ──
+async function postNow(id){if(!confirm('Post now?'))return;toast('Posting...',15000);const r=await fetch('/api/post_now',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});const d=await r.json();toast(d.msg||'Done');if(d.ok)setTimeout(()=>location.reload(),1500)}
 
 // ── Quick Post ──
 async function quickPost(newsId){
@@ -779,7 +714,6 @@ def dashboard():
     import json as jsonmod
     articles = db.get_all_articles()
     charts = db.get_all_charts()
-    drafts = db.get_drafts()
     posted = db.get_posted()
     scheduled = db.get_scheduled()
     planned = db.get_planned_posts()
@@ -869,11 +803,11 @@ def dashboard():
         match_model=MATCH_MODEL.split("-")[1] if "-" in MATCH_MODEL else MATCH_MODEL[:15],
         gen_model=GEN_MODEL.split("-")[1] if "-" in GEN_MODEL else GEN_MODEL[:15],
         na=len(articles), nc=len(charts), nn=nn, nm=nm,
-        nd=len(drafts), ns=len(generated)+len(queued)+len(planned), np=len(posted),
+        ns=len(generated)+len(queued)+len(planned), np=len(posted),
         xt=db.posts_today("x"), lt=db.posts_today("linkedin"),
         mx=MAX_X_PER_DAY, ml=MAX_LI_PER_DAY,
         news=news,
-        drafts=drafts, posted=posted[:30], cal_days=cal_days,
+        posted=posted[:30], cal_days=cal_days,
         review_days=review_days, queue_days=queue_days,
         n_generated=len(generated), n_queued=len(queued),
         articles_with_charts=articles_with_charts,
@@ -1050,31 +984,23 @@ def api_reject():
             original_caption=post["caption"][:500],platform=post["platform"],post_type=post.get("post_type",""))
     db.delete_post(d["id"]); return jsonify({"ok":True})
 
-@app.route("/api/schedule", methods=["POST"])
-def api_schedule():
-    d = request.json; db.schedule_post(d["id"],d["scheduled_at"]); return jsonify({"ok":True})
-
-@app.route("/api/bulk_schedule", methods=["POST"])
-def api_bulk():
-    d = request.json
-    try: start = datetime.fromisoformat(d["start"])
-    except: return jsonify({"ok":False,"msg":"Bad date"})
-    drafts = db.get_drafts(); current = start
-    for p in drafts: db.schedule_post(p["id"],current.strftime("%Y-%m-%dT%H:%M")); current += timedelta(minutes=d.get("gap_minutes",480))
-    return jsonify({"ok":True,"msg":f"Scheduled {len(drafts)}"})
-
 @app.route("/api/post_now", methods=["POST"])
 def api_post_now():
     post = db.get_post(request.json["id"])
-    if not post: return jsonify({"ok":False})
+    if not post: return jsonify({"ok":False,"msg":"Post not found"})
+    if post["status"] not in ("draft","generated","queued"):
+        return jsonify({"ok":False,"msg":f"Cannot post — status is '{post['status']}'"})
+    prev_status = post["status"]
     db.update_post_status(post["id"],"approved")
     from poster import post_to_x, post_to_linkedin
     text = post["caption"]
-    if post.get("article_context"): text += "\n\n" + post["article_context"]
     if post.get("article_url"): text += "\n" + post["article_url"]
     ok = (post_to_x if post["platform"]=="x" else post_to_linkedin)(text, post.get("image_path"))
-    if ok: db.update_post_status(post["id"],"posted"); db.log_post(post["platform"],post["id"]); return jsonify({"ok":True,"msg":"Posted!"})
-    db.update_post_status(post["id"],"draft"); return jsonify({"ok":False,"msg":"Failed"})
+    if ok:
+        db.update_post_status(post["id"],"posted"); db.log_post(post["platform"],post["id"])
+        return jsonify({"ok":True,"msg":"Posted!"})
+    db.update_post_status(post["id"], prev_status)
+    return jsonify({"ok":False,"msg":"Failed — check session"})
 
 
 # ── Auto-start scheduler on boot ──
