@@ -193,6 +193,13 @@ HTML = r"""<!DOCTYPE html>
 .lib-chart-source{font-size:.62rem;color:var(--dim)}
 .lib-chart-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
 .lib-chart-tag{font-size:.58rem;padding:2px 6px;background:#f5f5f4;border-radius:3px;color:#555}
+/* Heatmap */
+.heatmap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:12px}
+.hm-card{border-radius:8px;overflow:hidden;border:1px solid var(--border);text-align:center;font-size:.62rem}
+.hm-card img{width:100%;height:80px;object-fit:contain;background:#fafaf9;display:block}
+.hm-card .hm-label{padding:4px 6px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-0{background:#f0fdf4}.hm-1{background:#fef9c3}.hm-2{background:#fed7aa}.hm-3{background:#fecaca}
+
 .qp-btn{float:right;font-size:.62rem!important;padding:1px 6px!important;background:#fff3e0!important;border-color:#f59e0b!important;color:#92400e!important}
 .qp-btn:hover{background:#fde68a!important}
 .toast{position:fixed;bottom:20px;right:20px;background:var(--text);color:#fff;padding:10px 18px;border-radius:10px;font-size:.82rem;transform:translateY(80px);opacity:0;transition:all .3s;z-index:100}
@@ -431,7 +438,10 @@ HTML = r"""<!DOCTYPE html>
     <div class="lib-search-box">
       <input type="text" id="lib-search" placeholder="Search articles..." oninput="filterLibrary(this.value)">
     </div>
-    <div class="lib-stats">{{articles_with_charts|length}} articles · {{total_charts}} charts ({{total_images}} with images)</div>
+    <div class="lib-stats" style="display:flex;justify-content:space-between;align-items:center">
+      <span>{{articles_with_charts|length}} articles · {{total_charts}} charts ({{total_images}} with images)</span>
+      <button class="btn sm" onclick="toggleHeatmap()" id="heatmap-btn" style="font-size:.6rem">🔥 Heatmap</button>
+    </div>
     <div class="lib-list" id="lib-list">
       {% for a in articles_with_charts %}
       <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}">
@@ -490,8 +500,9 @@ let dragData = null;
 
 // ── Tabs ──
 function stab(el,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.tc').forEach(t=>t.classList.remove('on'));el.classList.add('on');document.getElementById('t-'+id).classList.add('on')}
-function toast(m,d){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d||3000)}
-async function act(a){toast('Running '+a+'...',10000);const r=await fetch('/api/act',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({a})});const d=await r.json();toast(d.msg||'Done');setTimeout(()=>location.reload(),1500)}
+function toast(m,d,persist){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d||3000);if(persist)sessionStorage.setItem('hfn-toast',m)}
+(function(){const pt=sessionStorage.getItem('hfn-toast');if(pt){sessionStorage.removeItem('hfn-toast');toast(pt,3000)}})();
+async function act(a){toast('Running '+a+'...',10000);const r=await fetch('/api/act',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({a})});const d=await r.json();toast(d.msg||'Done',3000,true);setTimeout(()=>location.reload(),1500)}
 function refreshNews(){act('monitor')}
 
 // ── Planner: Col 1 — News Selection ──
@@ -601,7 +612,7 @@ async function generatePlan(){
   document.getElementById('gen-btn').textContent='⏳ Generating...';
   toast('Generating... this may take a minute',60000);
   const r=await fetch('/api/plan_generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
-  const d=await r.json();toast(d.msg||'Done');setTimeout(()=>location.reload(),1500);
+  const d=await r.json();toast(d.msg||'Done',3000,true);setTimeout(()=>location.reload(),1500);
 }
 async function generateOne(id,btn){
   btn.disabled=true;btn.textContent='⏳';
@@ -615,22 +626,22 @@ async function generateOne(id,btn){
 async function clearPlan(){
   if(!confirm('Clear the entire plan?'))return;
   await fetch('/api/plan_clear',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
-  toast('Cleared');setTimeout(()=>location.reload(),800);
+  toast('Cleared',3000,true);setTimeout(()=>location.reload(),800);
 }
 
 // ── Review & Queue ──
 async function confirmPost(id){
   await fetch('/api/confirm_post',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-  toast('Confirmed — queued for posting');setTimeout(()=>location.reload(),800);
+  toast('Confirmed — queued for posting',3000,true);setTimeout(()=>location.reload(),800);
 }
 async function confirmDay(iso){
   if(!confirm('Confirm all posts for '+iso+'?'))return;
   await fetch('/api/confirm_day',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:iso})});
-  toast('Day confirmed');setTimeout(()=>location.reload(),800);
+  toast('Day confirmed',3000,true);setTimeout(()=>location.reload(),800);
 }
 async function unqueuePost(id){
   await fetch('/api/unqueue_post',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-  toast('Moved back to review');setTimeout(()=>location.reload(),800);
+  toast('Moved back to review',3000,true);setTimeout(()=>location.reload(),800);
 }
 async function removeReview(id){
   if(!confirm('Remove this post?'))return;
@@ -699,8 +710,36 @@ async function selectArticle(slug){
   }catch(e){detail.innerHTML='<div class="lib-placeholder"><div>Error loading article</div></div>';}
 }
 
+// ── Heatmap ──
+let heatmapVisible=false;
+async function toggleHeatmap(){
+  const detail=document.getElementById('lib-detail');
+  if(heatmapVisible){
+    heatmapVisible=false;detail.innerHTML='<div class="lib-placeholder"><div style="font-size:2.5rem;margin-bottom:12px">📚</div><div style="font-size:.9rem;font-weight:600">Select an article</div></div>';
+    document.getElementById('heatmap-btn').style.background='';return;
+  }
+  heatmapVisible=true;document.getElementById('heatmap-btn').style.background='#fef3c7';
+  detail.innerHTML='<div class="lib-placeholder"><div>Loading heatmap...</div></div>';
+  try{
+    const r=await fetch('/api/chart_usage');const stats=await r.json();
+    const max30=Math.max(1,...stats.map(s=>s.uses_30d||0));
+    let html='<div style="padding:12px"><h3 style="font-size:.85rem;margin-bottom:8px">Chart Usage Heatmap <span style="font-size:.65rem;color:var(--dim)">(30 days)</span></h3>';
+    html+='<div style="font-size:.65rem;color:var(--dim);margin-bottom:8px">🟢 unused → 🟡 light → 🟠 moderate → 🔴 heavy</div>';
+    html+='<div class="heatmap-grid">';
+    for(const s of stats){
+      const u=s.uses_30d||0;const heat=u===0?0:u<=2?1:u<=5?2:3;
+      html+=`<div class="hm-card hm-${heat}">
+        ${s.image_url?'<img src="'+s.image_url+'" onerror="this.style.display=\'none\'">':'<div style="height:80px;display:flex;align-items:center;justify-content:center;color:var(--dim)">No img</div>'}
+        <div class="hm-label">${(s.title||'').substring(0,40)}</div>
+        <div style="font-size:.58rem;padding:0 4px 4px;color:var(--dim)">${s.uses_7d||0} (7d) · ${u} (30d)</div>
+      </div>`;
+    }
+    html+='</div></div>';detail.innerHTML=html;
+  }catch(e){detail.innerHTML='<div class="lib-placeholder"><div>Error loading heatmap</div></div>';}
+}
+
 // ── Post Now ──
-async function postNow(id){if(!confirm('Post now?'))return;toast('Posting...',15000);const r=await fetch('/api/post_now',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});const d=await r.json();toast(d.msg||'Done');if(d.ok)setTimeout(()=>location.reload(),1500)}
+async function postNow(id){if(!confirm('Post now?'))return;toast('Posting...',15000);const r=await fetch('/api/post_now',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});const d=await r.json();toast(d.msg||'Done',3000,true);if(d.ok)setTimeout(()=>location.reload(),1500)}
 
 // ── Quick Post ──
 async function quickPost(newsId){
@@ -710,7 +749,7 @@ async function quickPost(newsId){
     const r=await fetch('/api/quick_post',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({news_id:newsId})});
     const d=await r.json();
-    if(d.ok){toast(d.msg||'Quick post created — check Review');setTimeout(()=>location.reload(),1500);}
+    if(d.ok){toast(d.msg||'Quick post created — check Review',3000,true);setTimeout(()=>location.reload(),1500);}
     else{toast(d.msg||'Failed');btn.disabled=false;btn.textContent='⚡ Quick';}
   }catch(e){toast('Error');btn.disabled=false;btn.textContent='⚡ Quick';}
 }
@@ -989,6 +1028,14 @@ def api_autoposter_status():
         "next_post": next_post,
         "last_result": last_post_result
     })
+
+@app.route("/api/chart_usage")
+def api_chart_usage():
+    """Chart usage stats for library heatmap."""
+    stats = db.get_chart_usage_stats()
+    for s in stats:
+        s["image_url"] = img_url(s.get("image_path",""))
+    return jsonify(stats)
 
 @app.route("/api/posted")
 def api_posted():

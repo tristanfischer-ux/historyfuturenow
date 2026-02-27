@@ -427,6 +427,22 @@ def get_charts_used_recently(days=3):
     conn.close()
     return {r[0] for r in rows}
 
+def get_chart_usage_stats():
+    """Usage counts per chart for the heatmap: 7d and 30d."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT c.id, c.title, c.article_slug, c.image_path,
+            SUM(CASE WHEN p.posted_at >= datetime('now','-7 days') THEN 1 ELSE 0 END) as uses_7d,
+            SUM(CASE WHEN p.posted_at >= datetime('now','-30 days') THEN 1 ELSE 0 END) as uses_30d
+        FROM charts c
+        LEFT JOIN posts p ON p.chart_id = c.id AND p.status = 'posted'
+        WHERE c.image_path != ''
+        GROUP BY c.id
+        ORDER BY uses_30d DESC, c.article_slug, c.figure_num
+    """).fetchall())
+    conn.close()
+    return rows
+
 def get_charts_for_article(article_slug):
     conn = get_db()
     rows = _dicts(conn.execute(
