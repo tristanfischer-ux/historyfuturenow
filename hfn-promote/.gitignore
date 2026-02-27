@@ -1,0 +1,10 @@
+.env
+*.db
+*.log
+*.bak
+*.bak.*
+venv/
+__pycache__/
+*.pyc
+sessions/
+composer_debug*.png
