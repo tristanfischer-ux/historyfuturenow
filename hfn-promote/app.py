@@ -382,6 +382,7 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
           <div class="rq-actions">
             <button class="btn bsv sm" onclick="confirmPost({{p.id}})">✅ Confirm</button>
             <button class="btn sm" onclick="startRqEdit(document.getElementById('rqcap-{{p.id}}'),{{p.id}})">✏️ Edit</button>
+            <button class="btn sm" onclick="regenerateCaption({{p.id}},this)" title="Regenerate caption">🔄</button>
             <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 Post Now</button>
             <button class="btn rej sm" onclick="removeReview({{p.id}})">✕ Remove</button>
           </div>
@@ -737,6 +738,16 @@ async function selectArticle(slug){
     }
     detail.innerHTML=html;
   }catch(e){detail.innerHTML='<div class="lib-placeholder"><div>Error loading article</div></div>';}
+}
+
+// ── Regenerate caption ──
+async function regenerateCaption(id,btn){
+  btn.disabled=true;btn.textContent='⏳';
+  toast('Regenerating caption...',30000);
+  const r=await fetch('/api/plan_generate_one',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+  const d=await r.json();
+  if(d.ok){toast(d.msg||'Regenerated',3000,true);setTimeout(()=>location.reload(),1000);}
+  else{toast(d.msg||'Failed');btn.disabled=false;btn.textContent='🔄';}
 }
 
 // ── Heatmap ──
