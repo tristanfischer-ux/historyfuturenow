@@ -320,7 +320,7 @@ def get_due_posts():
         FROM posts p
         LEFT JOIN charts c ON p.chart_id = c.id
         LEFT JOIN articles a ON p.article_id = a.id
-        WHERE p.status='queued' AND replace(p.scheduled_at,'T',' ') <= datetime('now')
+        WHERE p.status IN ('queued','scheduled') AND replace(p.scheduled_at,'T',' ') <= datetime('now')
         ORDER BY p.scheduled_at ASC
     """).fetchall())
     conn.close()

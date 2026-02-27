@@ -582,7 +582,6 @@ function dropOnDay(event,dayIdx,dayIso){
     addToPlan(dragData,plat,dragData.post_type,dayIso,time,dayIdx);
   }
   dragData=null;
-  function toggleAutoPost(){fetch("/api/act",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({a:"schedule"})}).then(r=>r.json()).then(d=>{alert(d.msg||"Toggled");location.reload()})}
 updateGenButton();
 }
 async function addToPlan(match,platform,postType,dayIso,time,dayIdx){
@@ -611,7 +610,6 @@ async function addToPlan(match,platform,postType,dayIso,time,dayIdx){
 async function removePlan(id){
   await fetch('/api/plan_remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
   const el=document.getElementById('sl-'+id);if(el)el.remove();
-  function toggleAutoPost(){fetch("/api/act",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({a:"schedule"})}).then(r=>r.json()).then(d=>{alert(d.msg||"Toggled");location.reload()})}
 updateGenButton();toast('Removed');
 }
 function updateGenButton(){
@@ -980,23 +978,26 @@ def api_quick_post():
         sched = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0)
     sched_str = sched.strftime("%Y-%m-%dT%H:%M")
     # Create planned post for both platforms
-    platform = "linkedin"  # Default to LinkedIn
-    pid = db.insert_planned_post(
-        news_item_id=best.get("news_id", news_id),
-        chart_id=best.get("chart_id") or best.get("id", 0),
-        article_id=best.get("article_id", 0),
-        platform=platform, post_type="short",
-        scheduled_at=sched_str,
-        image_path=best.get("image_path", ""),
-        article_url=best.get("article_url", ""),
-        hook=best.get("hook", ""))
-    # Generate immediately
-    ok = generate_single(pid)
-    if ok:
-        log(f"Quick post #{pid} generated from news #{news_id}")
-        return jsonify({"ok": True, "msg": f"Post generated for {sched.strftime('%H:%M')} — review below"})
+    results = []
+    for platform in ["x", "linkedin"]:
+        pid = db.insert_planned_post(
+            news_item_id=best.get("news_id", news_id),
+            chart_id=best.get("chart_id") or best.get("id", 0),
+            article_id=best.get("article_id", 0),
+            platform=platform, post_type="short",
+            scheduled_at=sched_str,
+            image_path=best.get("image_path", ""),
+            article_url=best.get("article_url", ""),
+            hook=best.get("hook", ""))
+        # Generate immediately
+        ok = generate_single(pid)
+        results.append((platform, pid, ok))
+    succeeded = [r for r in results if r[2]]
+    if succeeded:
+        log(f"Quick post generated for {', '.join(r[0] for r in succeeded)} from news #{news_id}")
+        return jsonify({"ok": True, "msg": f"{len(succeeded)} post(s) generated for {sched.strftime('%H:%M')} — review below"})
     else:
-        log(f"Quick post #{pid} generation failed")
+        log(f"Quick post generation failed for news #{news_id}")
         return jsonify({"ok": False, "msg": "Created but generation failed — try generating manually"})
 
 @app.route("/api/plan_clear", methods=["POST"])
