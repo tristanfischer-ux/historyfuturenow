@@ -1,4 +1,4 @@
-"""HFN Promote v3.8 — Polish: keyboard shortcuts, undo, drag reorder, CSV export."""
+"""HFN Promote v3.9 — Queue: richer cards, drag-and-drop, HFN editorial design."""
 from datetime import datetime, timedelta
 from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort
@@ -33,10 +33,12 @@ HTML = r"""<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>HFN Promote</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f8f7f6;--card:#fff;--border:#e5e2de;--text:#1a1815;--dim:#8a8479;
---accent:#c43425;--xblk:#0f1419;--li:#0a66c2;--grn:#16a34a;--red:#dc2626;--sched:#7c3aed}
+--accent:#c43425;--xblk:#0f1419;--li:#0a66c2;--grn:#16a34a;--red:#dc2626;--sched:#7c3aed;
+--bg-warm:#faf8f5;--surface:#f5f3ef;--border-light:#e8e4de;--accent-soft:#fef7f6;
+--serif:'Playfair Display',Georgia,serif;--mono:'IBM Plex Mono','Courier New',monospace}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;height:100vh;overflow:hidden}
 .topbar{background:var(--text);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar h1{font-size:1rem;font-weight:700}.topbar .r{font-size:.72rem;color:#a8a29e;display:flex;align-items:center;gap:12px}
@@ -131,20 +133,29 @@ HTML = r"""<!DOCTYPE html>
 .rq-countdown{font-size:.62rem;font-weight:700;color:var(--sched);background:#ede9fe;padding:1px 7px;border-radius:10px}
 
 /* Queue calendar grid */
-.qcal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:8px}
+.qcal{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:12px}
 .qcal-day{min-width:0}
-.qcal-dayhead{font-size:.68rem;font-weight:700;padding:6px 8px;border-radius:6px 6px 0 0;background:#f0fdf4;color:#166534;text-align:center;border:1px solid #bbf7d0;border-bottom:none}
-.qcal-dayhead.today{background:#dcfce7;border-color:#86efac}
-.qcal-slots{min-height:40px;border:1px solid #bbf7d0;border-radius:0 0 6px 6px;padding:4px}
-.qcal-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:4px;cursor:pointer;transition:all .12s;font-size:.7rem}
-.qcal-card:hover{border-color:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.qcal-dayhead{font-family:var(--mono);font-size:.62rem;font-weight:600;padding:7px 8px;border-radius:8px 8px 0 0;background:var(--bg-warm);color:var(--dim);text-align:center;text-transform:uppercase;letter-spacing:.5px;border:1px solid var(--border-light);border-bottom:none}
+.qcal-dayhead.today{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.qcal-slots{min-height:48px;border:1px solid var(--border-light);border-radius:0 0 8px 8px;padding:6px;transition:background .15s,border-color .15s}
+.qcal-slots.over{background:var(--accent-soft);border-color:var(--accent);border-style:dashed}
+.qcal-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:10px;padding:8px 9px;margin-bottom:6px;cursor:grab;transition:all .15s;font-size:.7rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.qcal-card:hover{border-color:var(--accent);box-shadow:0 3px 8px rgba(0,0,0,.08);transform:translateY(-2px)}
 .qcal-card.expanded{border-color:var(--accent)}
-.qcal-time{font-size:.6rem;font-weight:700;color:var(--dim)}
-.qcal-title{font-size:.68rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:2px 0}
+.qcal-card.dragging{opacity:.35;transform:scale(.95)}
+.qcal-meta{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.qcal-time{font-family:var(--mono);font-size:.58rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+.qcal-type{font-family:var(--mono);font-size:.5rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px;padding:1px 5px;border-radius:3px;background:var(--surface);color:var(--dim)}
+.qcal-article{font-family:var(--serif);font-size:.72rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:3px 0 1px;color:var(--text);line-height:1.3}
+.qcal-title{font-size:.66rem;font-weight:600;color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:1px 0}
+.qcal-hook{font-size:.6rem;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.3}
 .qcal-detail{display:none;margin-top:6px;font-size:.72rem;line-height:1.4;white-space:pre-wrap;border-top:1px solid var(--border);padding-top:6px}
 .qcal-card.expanded .qcal-detail{display:block}
 .qcal-actions{display:flex;gap:4px;margin-top:6px}
-.qcal-empty{font-size:.62rem;color:var(--dim);text-align:center;padding:8px 4px;font-style:italic}
+.qcal-empty{font-family:var(--mono);font-size:.58rem;color:var(--dim);text-align:center;padding:10px 4px;text-transform:uppercase;letter-spacing:.3px}
+
+/* Review page (full-width tab) */
+.review-page{max-width:800px;margin:0 auto;padding:16px 20px;height:100%;overflow-y:auto}
 
 /* Platform preview */
 .post-preview{border:1px solid var(--border);border-radius:12px;padding:12px;margin:6px 0;background:#fff}
@@ -174,9 +185,14 @@ HTML = r"""<!DOCTYPE html>
 .post-cal-dayhead:hover{background:#f5f4f2}
 .post-cal-posts{display:none;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:6px}
 .post-cal-posts.open{display:block}
-.post-cal-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;background:var(--card);border-radius:6px;margin-bottom:4px}
-.post-cal-item img{width:80px;height:60px;object-fit:contain;border-radius:4px;background:#fafaf9;border:1px solid var(--border);flex-shrink:0}
-.post-cal-caption{font-size:.78rem;line-height:1.4;flex:1;min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.post-cal-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
+.post-cal-item img{width:100px;height:75px;object-fit:contain;border-radius:6px;background:#fafaf9;border:1px solid var(--border);flex-shrink:0}
+.post-cal-body{flex:1;min-width:0}
+.post-cal-article{font-family:var(--serif);font-size:.76rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.post-cal-chart{font-size:.68rem;color:var(--accent);font-weight:600;margin-bottom:2px}
+.post-cal-news{font-size:.66rem;color:var(--dim);margin-bottom:4px}
+.post-cal-news a{color:#2563eb;text-decoration:none}.post-cal-news a:hover{text-decoration:underline}
+.post-cal-caption{font-size:.8rem;line-height:1.5;white-space:pre-wrap;word-break:break-word}
 
 .empty{text-align:center;padding:40px;color:var(--dim)}.empty .ei{font-size:2rem;margin-bottom:8px}
 
@@ -233,6 +249,7 @@ HTML = r"""<!DOCTYPE html>
 .rq-card,.post-preview{max-width:100%}
 .pp-img,.rq-img{max-width:100%}
 .qcal{grid-template-columns:repeat(2,1fr)}
+.qcal-card{cursor:pointer}
 }
 
 /* Lightbox */
@@ -242,7 +259,7 @@ HTML = r"""<!DOCTYPE html>
 .pp-img,.ai-img,.lib-chart-card img,.post-cal-item img{cursor:zoom-in}
 
 /* Dark mode */
-body.dark{--bg:#1a1815;--card:#252220;--border:#3a3632;--text:#e8e4de;--dim:#8a8479;--accent:#e05545}
+body.dark{--bg:#1a1815;--card:#252220;--border:#3a3632;--text:#e8e4de;--dim:#8a8479;--accent:#e05545;--bg-warm:#252220;--surface:#2a2825;--border-light:#3a3632;--accent-soft:#3a2020}
 body.dark .topbar{background:#0f0e0c}
 body.dark .post-preview{background:var(--card);border-color:var(--border)}
 body.dark .pp-img,body.dark .ai-img,body.dark .lib-chart-card img{background:#1a1815;border-color:var(--border)}
@@ -255,10 +272,14 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
 .tl-slot[draggable]{cursor:grab}.tl-slot.dragging{opacity:.4}
 .img-fallback{display:flex;align-items:center;justify-content:center;background:#f5f5f4;border:1px dashed var(--border);border-radius:6px;color:var(--dim);font-size:.72rem;padding:16px;min-height:60px}
 body.dark .img-fallback{background:#2a2825}
-body.dark .qcal-card{background:var(--card);border-color:var(--border)}
-body.dark .qcal-dayhead{background:#1a3a2a;color:#86efac;border-color:#2d5a3d}
-body.dark .qcal-dayhead.today{background:#1f4d35;border-color:#4ade80}
-body.dark .qcal-slots{border-color:#2d5a3d}
+body.dark .qcal-card{background:var(--card);border-color:var(--border);border-top-color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+body.dark .qcal-card:hover{box-shadow:0 3px 8px rgba(0,0,0,.3)}
+body.dark .qcal-dayhead{background:#2a2623;color:#a8a29e;border-color:var(--border)}
+body.dark .qcal-dayhead.today{background:#3a2020;color:var(--accent);border-color:var(--accent)}
+body.dark .qcal-slots{border-color:var(--border)}
+body.dark .qcal-slots.over{background:#3a2020;border-color:var(--accent)}
+body.dark .qcal-type{background:#3a3632;color:#a8a29e}
+body.dark .qcal-article{color:var(--text)}
 .toast a{color:#60a5fa;text-decoration:underline;margin-left:8px;cursor:pointer}
 </style></head><body>
 
@@ -279,6 +300,8 @@ body.dark .qcal-slots{border-color:#2d5a3d}
 
 <div class="tabs-bar">
   <div class="tab on" data-tab="planner" onclick="stab(this,'planner')">📋 Planner</div>
+  <div class="tab" data-tab="review" onclick="stab(this,'review')">📝 Review{% if n_generated > 0 %} ({{n_generated}}){% endif %}</div>
+  <div class="tab" data-tab="queue" onclick="stab(this,'queue')">📅 Queue{% if n_queued > 0 %} ({{n_queued}}){% endif %}</div>
   <div class="tab" data-tab="posted" onclick="stab(this,'posted')">✅ Posted{% if np > 0 %} ({{np}}){% endif %}</div>
   <div class="tab" data-tab="library" onclick="stab(this,'library')">📚 Library ({{na}} articles, {{nc}} charts)</div>
   <div class="tab" data-tab="settings" onclick="stab(this,'settings')">⚙️</div>
@@ -322,7 +345,7 @@ body.dark .qcal-slots{border-color:#2d5a3d}
     <div class="pl-body" id="arsenal"></div>
   </div>
 
-  <!-- Col 3: The Plan + Review/Queue -->
+  <!-- Col 3: The Plan -->
   <div class="pl-col c3">
     <div class="pl-head">
       📅 The Plan
@@ -331,7 +354,7 @@ body.dark .qcal-slots{border-color:#2d5a3d}
         <button class="btn rej sm" onclick="clearPlan()" id="clear-btn" style="display:none">Clear</button>
       </div>
     </div>
-    <div class="pl-body" id="timeline" style="flex:none;max-height:40%;overflow-y:auto;border-bottom:2px solid var(--accent)">
+    <div class="pl-body" id="timeline">
       {% for day in cal_days %}
       <div class="tl-day">
         <div class="tl-dayhead {{ 'today' if day.is_today else '' }}">
@@ -361,104 +384,114 @@ body.dark .qcal-slots{border-color:#2d5a3d}
       {% endfor %}
     </div>
 
-    <!-- Review & Queue section -->
-    <div class="rq-head">
-      <span>📬 Review & Queue</span>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span class="ph-sub">{{n_generated}} to review · {{n_queued}} queued</span>
-        {% if n_generated > 0 %}<button class="btn bsv sm" onclick="confirmAll()">✅ Confirm All</button>{% endif %}
-      </div>
-    </div>
-    <div class="pl-body rq-body" id="review-queue">
-      {% if not review_days and not queue_days %}
-      <div class="tl-empty" style="padding:20px">Generated posts will appear here for review before going live</div>
-      {% endif %}
-
-      {% for rd in review_days %}
-      <div class="rq-day">
-        <div class="rq-dayhead review">
-          <span>📝 {{rd.label}} {{rd.date}} — review</span>
-          <button class="btn bsv sm" onclick="confirmDay('{{rd.iso}}')">✅ Confirm all</button>
-        </div>
-        {% for p in rd.posts %}
-        <div class="rq-card review" id="rq-{{p.id}}">
-          <div class="rq-top">
-            <span class="plat {{p.platform}}" style="font-size:.58rem">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
-            <span class="sl-type">{{p.post_type|upper}}</span>
-            <span class="rq-time">{{p.time}}</span>
-            <span style="flex:1"></span>
-            {% if p.news_title %}<span style="font-size:.62rem;color:var(--dim)">📰 {{p.news_title[:40]}}</span>{% endif %}
-          </div>
-          <!-- Platform preview -->
-          <div class="post-preview {{p.platform}}">
-            <div class="pp-header">
-              <div class="pp-avatar">H</div>
-              <div class="pp-meta">
-                <span class="pp-name">History Future Now</span>
-                <span class="pp-handle">{{ '@histfuturenow' if p.platform=='x' else 'historyfuturenow.com' }}</span>
-              </div>
-            </div>
-            <div class="rq-caption" id="rqcap-{{p.id}}" contenteditable="false" ondblclick="startRqEdit(this,{{p.id}})" oninput="updateCharCount(this,{{p.id}})">{{p.caption if p.caption else '(no text)'}}</div>
-            {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="imgFallback(this)">{% endif %}
-            {% if p.article_url %}<a class="pp-link" href="{{p.article_url}}" target="_blank">{{p.article_url}}</a>{% endif %}
-            <div class="pp-charcount" id="rqcc-{{p.id}}">
-              {{(p.caption|length) if p.caption else 0}}/{{280 if p.platform=='x' else 3000}} chars
-              {% if p.caption and ((p.platform=='x' and p.caption|length > 280) or (p.platform=='linkedin' and p.caption|length > 3000)) %}
-              <span style="color:var(--red)">⚠ Over limit</span>
-              {% endif %}
-            </div>
-          </div>
-          {% if p.chart_title %}<div class="rq-chart-title">📊 {{p.chart_title}}</div>{% endif %}
-          <div class="rq-actions">
-            <button class="btn bsv sm" onclick="confirmPost({{p.id}})">✅ Confirm</button>
-            <button class="btn sm" onclick="startRqEdit(document.getElementById('rqcap-{{p.id}}'),{{p.id}})">✏️ Edit</button>
-            <button class="btn sm" onclick="regenerateCaption({{p.id}},this)" title="Regenerate caption">🔄</button>
-            <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 Post Now</button>
-            <button class="btn rej sm" onclick="removeReview({{p.id}})">✕ Remove</button>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% endfor %}
-
-      {% if queue_days %}
-      <div style="padding:4px 8px;font-size:.72rem;font-weight:700;color:#166534">🚀 Queued</div>
-      <div class="qcal">
-        {% for day in cal_days %}
-        <div class="qcal-day">
-          <div class="qcal-dayhead {{ 'today' if day.is_today else '' }}">{{day.label}} {{day.date}}</div>
-          <div class="qcal-slots">
-            {% set ns = namespace(found=false) %}
-            {% for qd in queue_days if qd.iso == day.iso %}
-              {% set ns.found = true %}
-              {% for p in qd.posts %}
-              <div class="qcal-card" id="rq-{{p.id}}" onclick="this.classList.toggle('expanded')">
-                <div style="display:flex;align-items:center;gap:4px">
-                  <span class="qcal-time">{{p.time}}</span>
-                  <span class="plat {{p.platform}}" style="font-size:.52rem;padding:1px 5px">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
-                  <span class="rq-countdown" data-sched="{{qd.iso}}T{{p.time}}:00" style="margin-left:auto"></span>
-                </div>
-                <div class="qcal-title">{{p.chart_title[:30] if p.chart_title else p.post_type|upper}}</div>
-                <div class="qcal-detail">
-                  <div style="margin-bottom:6px">{{p.caption[:200] if p.caption else '(no text)'}}{{'…' if p.caption and p.caption|length > 200 else ''}}</div>
-                  <div class="qcal-actions">
-                    <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="event.stopPropagation();postNow({{p.id}})">📤 Post Now</button>
-                    <button class="btn sm" onclick="event.stopPropagation();unqueuePost({{p.id}})">↩ Unqueue</button>
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-            {% endfor %}
-            {% if not ns.found %}
-            <div class="qcal-empty">—</div>
-            {% endif %}
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </div>
   </div>
+</div>
+</div>
+
+<!-- ═══ REVIEW ═══ -->
+<div class="tc" id="t-review">
+<div class="review-page" id="review-queue">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <h2 style="font-family:var(--serif);font-size:1.1rem;font-weight:700">📝 Review <span style="font-family:var(--mono);font-size:.68rem;color:var(--dim);font-weight:500;text-transform:uppercase;letter-spacing:.3px">{{n_generated}} to review</span></h2>
+    {% if n_generated > 0 %}<button class="btn bsv" onclick="confirmAll()">✅ Confirm All</button>{% endif %}
+  </div>
+  {% if not review_days %}
+  <div class="empty"><div class="ei">📝</div>No posts awaiting review<br><span style="font-size:.78rem;color:var(--dim)">Generate posts from the Planner tab</span></div>
+  {% endif %}
+  {% for rd in review_days %}
+  <div class="rq-day">
+    <div class="rq-dayhead review">
+      <span>📝 {{rd.label}} {{rd.date}} — review</span>
+      <button class="btn bsv sm" onclick="confirmDay('{{rd.iso}}')">✅ Confirm all</button>
+    </div>
+    {% for p in rd.posts %}
+    <div class="rq-card review" id="rq-{{p.id}}">
+      <div class="rq-top">
+        <span class="plat {{p.platform}}" style="font-size:.58rem">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
+        <span class="sl-type">{{p.post_type|upper}}</span>
+        <span class="rq-time">{{p.time}}</span>
+        <span style="flex:1"></span>
+        {% if p.news_title %}<span style="font-size:.62rem;color:var(--dim)">📰 {{p.news_title[:40]}}</span>{% endif %}
+      </div>
+      <div class="post-preview {{p.platform}}">
+        <div class="pp-header">
+          <div class="pp-avatar">H</div>
+          <div class="pp-meta">
+            <span class="pp-name">History Future Now</span>
+            <span class="pp-handle">{{ '@histfuturenow' if p.platform=='x' else 'historyfuturenow.com' }}</span>
+          </div>
+        </div>
+        <div class="rq-caption" id="rqcap-{{p.id}}" contenteditable="false" ondblclick="startRqEdit(this,{{p.id}})" oninput="updateCharCount(this,{{p.id}})">{{p.caption if p.caption else '(no text)'}}</div>
+        {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="imgFallback(this)">{% endif %}
+        {% if p.article_url %}<a class="pp-link" href="{{p.article_url}}" target="_blank">{{p.article_url}}</a>{% endif %}
+        <div class="pp-charcount" id="rqcc-{{p.id}}">
+          {{(p.caption|length) if p.caption else 0}}/{{280 if p.platform=='x' else 3000}} chars
+          {% if p.caption and ((p.platform=='x' and p.caption|length > 280) or (p.platform=='linkedin' and p.caption|length > 3000)) %}
+          <span style="color:var(--red)">⚠ Over limit</span>
+          {% endif %}
+        </div>
+      </div>
+      {% if p.chart_title %}<div class="rq-chart-title">📊 {{p.chart_title}}</div>{% endif %}
+      <div class="rq-actions">
+        <button class="btn bsv sm" onclick="confirmPost({{p.id}})">✅ Confirm</button>
+        <button class="btn sm" onclick="startRqEdit(document.getElementById('rqcap-{{p.id}}'),{{p.id}})">✏️ Edit</button>
+        <button class="btn sm" onclick="regenerateCaption({{p.id}},this)" title="Regenerate caption">🔄</button>
+        <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 Post Now</button>
+        <button class="btn rej sm" onclick="removeReview({{p.id}})">✕ Remove</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+</div>
+
+<!-- ═══ QUEUE ═══ -->
+<div class="tc" id="t-queue">
+<div style="padding:16px 20px;height:100%;overflow-y:auto">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <h2 style="font-family:var(--serif);font-size:1.1rem;font-weight:700">📅 Queue <span style="font-family:var(--mono);font-size:.68rem;color:var(--dim);font-weight:500;text-transform:uppercase;letter-spacing:.3px">{{n_queued}} scheduled</span></h2>
+  </div>
+  {% if not queue_days %}
+  <div class="empty"><div class="ei">📅</div>No posts queued<br><span style="font-size:.78rem;color:var(--dim)">Confirm reviewed posts to add them to the queue</span></div>
+  {% else %}
+  <div class="qcal">
+    {% for day in cal_days %}
+    <div class="qcal-day">
+      <div class="qcal-dayhead {{ 'today' if day.is_today else '' }}">{{day.label}} {{day.date}}</div>
+      <div class="qcal-slots" data-iso="{{day.iso}}" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="queueDrop(event,this)">
+        {% set ns = namespace(found=false) %}
+        {% for qd in queue_days if qd.iso == day.iso %}
+          {% set ns.found = true %}
+          {% for p in qd.posts %}
+          <div class="qcal-card" id="qc-{{p.id}}" data-post-id="{{p.id}}" draggable="true" onclick="if(!window._qcalDragged)this.classList.toggle('expanded')">
+            <div class="qcal-meta">
+              <span class="qcal-time">{{p.time}}</span>
+              <span class="plat {{p.platform}}" style="font-size:.52rem;padding:1px 5px">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
+              <span class="qcal-type">{{p.post_type|upper}}</span>
+              <span class="rq-countdown" data-sched="{{qd.iso}}T{{p.time}}:00" style="margin-left:auto"></span>
+            </div>
+            {% if p.article_title %}<div class="qcal-article" title="{{p.article_title}}">{{p.article_title}}</div>{% endif %}
+            <div class="qcal-title">{{p.chart_title[:35] if p.chart_title else '—'}}</div>
+            {% if p.news_title %}<div class="qcal-hook" title="{{p.news_title}}">📰 {{p.news_title[:50]}}{{'…' if p.news_title|length > 50 else ''}}</div>{% endif %}
+            <div class="qcal-detail">
+              <div style="margin-bottom:6px">{{p.caption[:200] if p.caption else '(no text)'}}{{'…' if p.caption and p.caption|length > 200 else ''}}</div>
+              <div class="qcal-actions">
+                <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="event.stopPropagation();postNow({{p.id}})">📤 Post Now</button>
+                <button class="btn sm" onclick="event.stopPropagation();unqueuePost({{p.id}})">↩ Unqueue</button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% endfor %}
+        {% if not ns.found %}
+        <div class="qcal-empty">no posts</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 </div>
 </div>
 
@@ -931,17 +964,25 @@ async function loadPosted(reset=true){
       const dayLabel=new Date(dt+'T12:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
       dayEl.innerHTML=`<div class="post-cal-dayhead" onclick="this.nextElementSibling.classList.toggle('open')">
         <span>${dayLabel}</span><span style="font-size:.65rem;color:var(--dim)">${posts.length} post(s)</span>
-      </div><div class="post-cal-posts"></div>`;
+      </div><div class="post-cal-posts open"></div>`;
       cal.appendChild(dayEl);
     }
     const container=dayEl.querySelector('.post-cal-posts');
     for(const p of posts){
       const time=p.posted_at?p.posted_at.substring(11,16):'';
+      const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       container.innerHTML+=`<div class="post-cal-item">
-        <span class="plat ${p.platform}" style="font-size:.58rem">${p.platform==='x'?'𝕏':'LI'}</span>
-        ${p.image_url?'<img src="'+p.image_url+'" onerror="imgFallback(this)">':''}
-        <div class="post-cal-caption">${(p.caption||'').substring(0,200)}</div>
-        <span style="font-size:.65rem;color:var(--dim);white-space:nowrap">${time}</span>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+          <span class="plat ${p.platform}" style="font-size:.58rem">${p.platform==='x'?'𝕏':'LI'}</span>
+          ${p.image_url?'<img src="'+p.image_url+'" onerror="imgFallback(this)">':''}
+          <span style="font-size:.62rem;color:var(--dim)">${time}</span>
+        </div>
+        <div class="post-cal-body">
+          ${p.article_title?'<div class="post-cal-article">'+esc(p.article_title)+'</div>':''}
+          ${p.chart_title?'<div class="post-cal-chart">'+esc(p.chart_title)+'</div>':''}
+          ${p.news_title?'<div class="post-cal-news">📰 '+esc(p.news_title)+(p.news_link?' <a href="'+esc(p.news_link)+'" target="_blank">↗</a>':'')+'</div>':''}
+          <div class="post-cal-caption">${esc(p.caption||'(no caption)')}</div>
+        </div>
       </div>`;
     }
   }
@@ -1011,7 +1052,7 @@ if(localStorage.getItem('hfn-dark')==='1'){document.body.classList.add('dark');d
 document.addEventListener('keydown',e=>{
   // Skip if editing or if Planner tab not visible
   if(e.target.isContentEditable||e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
-  if(!document.getElementById('t-planner').classList.contains('on'))return;
+  if(!document.getElementById('t-review').classList.contains('on'))return;
   const cards=document.querySelectorAll('#review-queue .rq-card');
   if(!cards.length)return;
   if(e.key==='j'){e.preventDefault();rqFocusIdx=Math.min(rqFocusIdx+1,cards.length-1);updateRqFocus(cards)}
@@ -1059,6 +1100,53 @@ dropOnDay=function(event,dayIdx,dayIso){
   }
   origDropOnDay(event,dayIdx,dayIso);
 };
+
+// ── Queue calendar drag-and-drop ──
+window._qcalDragged=false;
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.qcal-card').forEach(card=>{
+    card.addEventListener('dragstart',e=>{
+      window._qcalDragged=true;
+      card.classList.add('dragging');
+      e.dataTransfer.setData('text/plain','qc-'+card.dataset.postId);
+      e.dataTransfer.effectAllowed='move';
+    });
+    card.addEventListener('dragend',()=>{
+      card.classList.remove('dragging');
+      setTimeout(()=>{window._qcalDragged=false},50);
+    });
+  });
+});
+async function queueDrop(event,slotsEl){
+  event.preventDefault();slotsEl.classList.remove('over');
+  const raw=event.dataTransfer.getData('text/plain');
+  if(!raw||!raw.startsWith('qc-'))return;
+  const postId=parseInt(raw.replace('qc-',''));
+  const card=document.getElementById('qc-'+postId);if(!card)return;
+  const newIso=slotsEl.dataset.iso;
+  const existing=slotsEl.querySelectorAll('.qcal-card').length;
+  const hours=['09:00','13:00','17:00','20:00'];
+  const time=hours[Math.min(existing,hours.length-1)];
+  const scheduledAt=newIso+'T'+time;
+  const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:postId,scheduled_at:scheduledAt})});
+  const d=await r.json();
+  if(d.ok){
+    // Remove empty placeholder from target
+    const emp=slotsEl.querySelector('.qcal-empty');if(emp)emp.remove();
+    // Check if old parent needs empty placeholder
+    const oldSlots=card.closest('.qcal-slots');
+    slotsEl.appendChild(card);
+    if(oldSlots&&!oldSlots.querySelector('.qcal-card')){
+      const ph=document.createElement('div');ph.className='qcal-empty';ph.textContent='no posts';
+      oldSlots.appendChild(ph);
+    }
+    // Update time label
+    const timeEl=card.querySelector('.qcal-time');if(timeEl)timeEl.textContent=time;
+    // Update countdown data attribute
+    const cdEl=card.querySelector('.rq-countdown');if(cdEl)cdEl.dataset.sched=scheduledAt+':00';
+    toast('Moved to '+newIso);
+  }
+}
 
 // ── Export posted CSV (Item 10) ──
 async function exportPosted(){
