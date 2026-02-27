@@ -130,6 +130,22 @@ HTML = r"""<!DOCTYPE html>
 .rq-actions{display:flex;gap:4px}
 .rq-countdown{font-size:.62rem;font-weight:700;color:var(--sched);background:#ede9fe;padding:1px 7px;border-radius:10px}
 
+/* Queue calendar grid */
+.qcal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:8px}
+.qcal-day{min-width:0}
+.qcal-dayhead{font-size:.68rem;font-weight:700;padding:6px 8px;border-radius:6px 6px 0 0;background:#f0fdf4;color:#166534;text-align:center;border:1px solid #bbf7d0;border-bottom:none}
+.qcal-dayhead.today{background:#dcfce7;border-color:#86efac}
+.qcal-slots{min-height:40px;border:1px solid #bbf7d0;border-radius:0 0 6px 6px;padding:4px}
+.qcal-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:4px;cursor:pointer;transition:all .12s;font-size:.7rem}
+.qcal-card:hover{border-color:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.qcal-card.expanded{border-color:var(--accent)}
+.qcal-time{font-size:.6rem;font-weight:700;color:var(--dim)}
+.qcal-title{font-size:.68rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:2px 0}
+.qcal-detail{display:none;margin-top:6px;font-size:.72rem;line-height:1.4;white-space:pre-wrap;border-top:1px solid var(--border);padding-top:6px}
+.qcal-card.expanded .qcal-detail{display:block}
+.qcal-actions{display:flex;gap:4px;margin-top:6px}
+.qcal-empty{font-size:.62rem;color:var(--dim);text-align:center;padding:8px 4px;font-style:italic}
+
 /* Platform preview */
 .post-preview{border:1px solid var(--border);border-radius:12px;padding:12px;margin:6px 0;background:#fff}
 .post-preview.x{border-color:#cfd9de;border-radius:16px}
@@ -216,6 +232,7 @@ HTML = r"""<!DOCTYPE html>
 .heatmap-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
 .rq-card,.post-preview{max-width:100%}
 .pp-img,.rq-img{max-width:100%}
+.qcal{grid-template-columns:repeat(2,1fr)}
 }
 
 /* Lightbox */
@@ -238,6 +255,10 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
 .tl-slot[draggable]{cursor:grab}.tl-slot.dragging{opacity:.4}
 .img-fallback{display:flex;align-items:center;justify-content:center;background:#f5f5f4;border:1px dashed var(--border);border-radius:6px;color:var(--dim);font-size:.72rem;padding:16px;min-height:60px}
 body.dark .img-fallback{background:#2a2825}
+body.dark .qcal-card{background:var(--card);border-color:var(--border)}
+body.dark .qcal-dayhead{background:#1a3a2a;color:#86efac;border-color:#2d5a3d}
+body.dark .qcal-dayhead.today{background:#1f4d35;border-color:#4ade80}
+body.dark .qcal-slots{border-color:#2d5a3d}
 .toast a{color:#60a5fa;text-decoration:underline;margin-left:8px;cursor:pointer}
 </style></head><body>
 
@@ -400,47 +421,42 @@ body.dark .img-fallback{background:#2a2825}
       </div>
       {% endfor %}
 
-      {% for qd in queue_days %}
-      <div class="rq-day">
-        <div class="rq-dayhead queued">
-          <span>🚀 {{qd.label}} {{qd.date}} — queued</span>
-        </div>
-        {% for p in qd.posts %}
-        <div class="rq-card queued" id="rq-{{p.id}}">
-          <div class="rq-top">
-            <span class="plat {{p.platform}}" style="font-size:.58rem">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
-            <span class="sl-type">{{p.post_type|upper}}</span>
-            <span class="rq-time">{{p.time}}</span>
-            <span class="rq-countdown" data-sched="{{qd.iso}}T{{p.time}}:00"></span>
-            <span style="flex:1"></span>
-            {% if p.chart_title %}<span class="rq-chart">📊 {{p.chart_title[:35]}}</span>{% endif %}
-          </div>
-          <div class="post-preview {{p.platform}}">
-            <div class="pp-header">
-              <div class="pp-avatar">H</div>
-              <div class="pp-meta">
-                <span class="pp-name">History Future Now</span>
-                <span class="pp-handle">{{ '@histfuturenow' if p.platform=='x' else 'historyfuturenow.com' }}</span>
+      {% if queue_days %}
+      <div style="padding:4px 8px;font-size:.72rem;font-weight:700;color:#166534">🚀 Queued</div>
+      <div class="qcal">
+        {% for day in cal_days %}
+        <div class="qcal-day">
+          <div class="qcal-dayhead {{ 'today' if day.is_today else '' }}">{{day.label}} {{day.date}}</div>
+          <div class="qcal-slots">
+            {% set ns = namespace(found=false) %}
+            {% for qd in queue_days if qd.iso == day.iso %}
+              {% set ns.found = true %}
+              {% for p in qd.posts %}
+              <div class="qcal-card" id="rq-{{p.id}}" onclick="this.classList.toggle('expanded')">
+                <div style="display:flex;align-items:center;gap:4px">
+                  <span class="qcal-time">{{p.time}}</span>
+                  <span class="plat {{p.platform}}" style="font-size:.52rem;padding:1px 5px">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
+                  <span class="rq-countdown" data-sched="{{qd.iso}}T{{p.time}}:00" style="margin-left:auto"></span>
+                </div>
+                <div class="qcal-title">{{p.chart_title[:30] if p.chart_title else p.post_type|upper}}</div>
+                <div class="qcal-detail">
+                  <div style="margin-bottom:6px">{{p.caption[:200] if p.caption else '(no text)'}}{{'…' if p.caption and p.caption|length > 200 else ''}}</div>
+                  <div class="qcal-actions">
+                    <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="event.stopPropagation();postNow({{p.id}})">📤 Post Now</button>
+                    <button class="btn sm" onclick="event.stopPropagation();unqueuePost({{p.id}})">↩ Unqueue</button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="pp-text">{{p.caption if p.caption else ''}}</div>
-            {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="imgFallback(this)">{% endif %}
-            {% if p.article_url %}<a class="pp-link" href="{{p.article_url}}" target="_blank">{{p.article_url}}</a>{% endif %}
-            <div class="pp-charcount">{{(p.caption|length) if p.caption else 0}}/{{280 if p.platform=='x' else 3000}} chars
-              {% if p.caption and ((p.platform=='x' and p.caption|length > 280) or (p.platform=='linkedin' and p.caption|length > 3000)) %}
-              <span style="color:var(--red)">⚠ Over limit</span>
-              {% endif %}
-            </div>
-          </div>
-          <div class="rq-actions">
-            <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 Post Now</button>
-            <button class="btn sm" onclick="unqueuePost({{p.id}})">↩ Edit</button>
-            <button class="btn rej sm" onclick="removeReview({{p.id}})">✕ Remove</button>
+              {% endfor %}
+            {% endfor %}
+            {% if not ns.found %}
+            <div class="qcal-empty">—</div>
+            {% endif %}
           </div>
         </div>
         {% endfor %}
       </div>
-      {% endfor %}
+      {% endif %}
     </div>
   </div>
 </div>
@@ -657,12 +673,28 @@ function updateGenButton(){
   document.getElementById('clear-btn').style.display=slots>0?'':'none';
 }
 async function generatePlan(){
-  if(!confirm('Generate post text for all planned items? This uses Opus credits.'))return;
-  document.getElementById('gen-btn').disabled=true;
-  document.getElementById('gen-btn').textContent='⏳ Generating...';
-  toast('Generating... this may take a minute',60000);
-  const r=await fetch('/api/plan_generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
-  const d=await r.json();toast(d.msg||'Done',3000,true);setTimeout(()=>location.reload(),1500);
+  const slots=document.querySelectorAll('.tl-slot');
+  if(!slots.length)return;
+  if(!confirm('Generate post text for '+slots.length+' planned items? This uses Opus credits.'))return;
+  const btn=document.getElementById('gen-btn');
+  btn.disabled=true;
+  let done=0,failed=0,total=slots.length;
+  btn.textContent='⏳ 0/'+total+'...';
+  for(const slot of slots){
+    const id=parseInt(slot.id.replace('sl-',''));
+    if(!id){failed++;done++;btn.textContent='⏳ '+done+'/'+total+'...';continue;}
+    try{
+      const r=await fetch('/api/plan_generate_one',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+      const d=await r.json();
+      done++;
+      if(d.ok){slot.style.opacity='.4';slot.insertAdjacentHTML('afterbegin','<span style="color:var(--grn);font-weight:700;margin-right:4px">✓</span>');}
+      else{failed++;slot.style.borderColor='var(--red)';}
+    }catch(e){done++;failed++;slot.style.borderColor='var(--red)';}
+    btn.textContent='⏳ '+done+'/'+total+'...';
+  }
+  if(failed===0)toast('All '+total+' generated',3000,true);
+  else toast('Generated '+(total-failed)+'/'+total+' — '+failed+' failed',5000,true);
+  setTimeout(()=>location.reload(),1500);
 }
 async function generateOne(id,btn){
   btn.disabled=true;btn.textContent='⏳';
