@@ -1,16 +1,17 @@
-"""HFN Promote v3.6 — Platform previews, countdown timers, quick post."""
+"""HFN Promote v3.7 — Dashboard improvements, session health, auto-poster status."""
 from datetime import datetime, timedelta
 from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort
 import db
 from config import (FLASK_PORT, MAX_X_PER_DAY, MAX_LI_PER_DAY,
                     HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES, MONITOR_INTERVAL,
-                    MATCH_MODEL, GEN_MODEL)
+                    MATCH_MODEL, GEN_MODEL, SESSIONS_DIR)
 
 app = Flask(__name__)
 activity_log = []
 scheduler_ref = None
 scheduler_on = True
+last_post_result = {"time": None, "platform": None, "post_id": None, "ok": None, "msg": ""}
 
 def log(msg):
     activity_log.insert(0, {"t": datetime.now().strftime("%H:%M:%S"), "m": msg})
@@ -40,6 +41,7 @@ HTML = r"""<!DOCTYPE html>
 .topbar{background:var(--text);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar h1{font-size:1rem;font-weight:700}.topbar .r{font-size:.72rem;color:#a8a29e;display:flex;align-items:center;gap:12px}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block}.dot.on{background:#4ade80}.dot.off{background:#666}
+.sess-indicator{font-size:.7rem;color:#a8a29e;display:flex;align-items:center;gap:3px}
 .tabs-bar{background:var(--card);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:0}
 .tab{padding:10px 16px;font-size:.82rem;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--dim)}
 .tab:hover{color:var(--text)}.tab.on{color:var(--accent);border-color:var(--accent)}
@@ -191,6 +193,8 @@ HTML = r"""<!DOCTYPE html>
 <div class="topbar">
   <h1>📡 HFN Promote</h1>
   <div class="r" style="display:flex;align-items:center;gap:10px">
+        <span class="sess-indicator" title="X session"><span class="dot off" id="dot-x"></span> 𝕏</span>
+        <span class="sess-indicator" title="LinkedIn session"><span class="dot off" id="dot-li"></span> LI</span>
         <button class="btn sm" onclick="toggleAutoPost()" id="auto-btn"
           style="font-size:.78rem;padding:5px 14px;border-radius:6px;
           {% if sched %}background:#166534;color:#4ade80;border-color:#22863a{% else %}background:#7f1d1d;color:#fca5a5;border-color:#991b1b{% endif %}">
@@ -436,6 +440,15 @@ HTML = r"""<!DOCTYPE html>
   <div style="display:flex;gap:8px;margin-bottom:16px">
     <button class="btn sm" onclick="act('schedule')">{{ '⏹ Stop' if sched else '▶ Start' }} Auto-Post</button>
     <button class="btn sm" onclick="act('ingest')">🔄 Ingest</button>
+  </div>
+  <h3 style="font-size:.85rem;margin-bottom:8px">Auto-poster Status</h3>
+  <div id="auto-status" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;font-size:.78rem">
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div><strong>Scheduler:</strong> <span id="as-sched">—</span></div>
+      <div><strong>Queue:</strong> <span id="as-queue">—</span></div>
+      <div><strong>Next post:</strong> <span id="as-next">—</span></div>
+    </div>
+    <div style="margin-top:6px"><strong>Last result:</strong> <span id="as-last">—</span></div>
   </div>
   <h3 style="font-size:.85rem;margin-bottom:8px">Activity</h3>
   <div class="logbox" style="margin:0">
@@ -705,6 +718,35 @@ updateCountdowns();setInterval(updateCountdowns,60000);
 
 function toggleAutoPost(){fetch("/api/act",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({a:"schedule"})}).then(r=>r.json()).then(d=>{alert(d.msg||"Toggled");location.reload()})}
 updateGenButton();
+
+// ── Session health ──
+async function loadSessionStatus(){
+  try{
+    const r=await fetch('/api/session_status');const d=await r.json();
+    document.getElementById('dot-x').className='dot '+(d.x?'on':'off');
+    document.getElementById('dot-li').className='dot '+(d.linkedin?'on':'off');
+  }catch(e){}
+}
+loadSessionStatus();
+
+// ── Auto-poster status ──
+async function loadAutoStatus(){
+  try{
+    const r=await fetch('/api/autoposter_status');const d=await r.json();
+    document.getElementById('as-sched').innerHTML=d.scheduler_on?'<span style="color:var(--grn)">ON</span>':'<span style="color:var(--red)">OFF</span>';
+    document.getElementById('as-queue').textContent=d.queue_count+' post(s)';
+    if(d.next_post){
+      const s=d.next_post.scheduled_at||'';
+      document.getElementById('as-next').textContent=(d.next_post.chart_title||'Post #'+d.next_post.id)+' — '+s.replace('T',' ');
+    }else{document.getElementById('as-next').textContent='none';}
+    const lr=d.last_result;
+    if(lr&&lr.time){
+      const ok=lr.ok?'✅':'❌';
+      document.getElementById('as-last').innerHTML=ok+' '+lr.platform+' #'+lr.post_id+' at '+lr.time.substring(11,16)+(lr.msg?' — '+lr.msg:'');
+    }else{document.getElementById('as-last').textContent='no posts yet';}
+  }catch(e){}
+}
+loadAutoStatus();setInterval(loadAutoStatus,60000);
 </script></body></html>"""
 
 # ── Routes ──
@@ -837,6 +879,42 @@ def api_act():
             msg = "Auto-poster started"
     else: return jsonify({"ok":False,"msg":"Unknown"})
     log(msg); return jsonify({"ok":True,"msg":msg})
+
+@app.route("/api/session_status")
+def api_session_status():
+    """Check health of X and LinkedIn sessions."""
+    x_ok = False
+    li_ok = False
+    # X: check Chrome profile dir exists
+    chrome_profile = Path.home() / "Library/Application Support/Google/Chrome/Default"
+    x_ok = chrome_profile.exists()
+    # LinkedIn: try Voyager /api/me
+    try:
+        from poster import _li_api_session
+        session, err = _li_api_session()
+        if session:
+            r = session.get("https://www.linkedin.com/voyager/api/me", timeout=5)
+            li_ok = r.status_code == 200
+    except Exception:
+        pass
+    return jsonify({"x": x_ok, "linkedin": li_ok})
+
+@app.route("/api/autoposter_status")
+def api_autoposter_status():
+    """Return auto-poster state for the Settings panel."""
+    queued = db.get_queued_posts()
+    next_post = None
+    if queued:
+        p = queued[0]
+        next_post = {"id": p["id"], "platform": p["platform"],
+                     "scheduled_at": p.get("scheduled_at",""),
+                     "chart_title": p.get("chart_title","")}
+    return jsonify({
+        "scheduler_on": scheduler_on,
+        "queue_count": len(queued),
+        "next_post": next_post,
+        "last_result": last_post_result
+    })
 
 # Planner APIs
 @app.route("/api/arsenal/<int:news_id>")
@@ -1018,15 +1096,21 @@ def _start_auto_poster():
         x_posts = [p for p in due if p["platform"] == "x"]
         li_posts = [p for p in due if p["platform"] == "linkedin"]
 
+        def _record(platform, pid, ok, msg=""):
+            last_post_result.update({"time": datetime.now().isoformat(), "platform": platform,
+                                     "post_id": pid, "ok": ok, "msg": msg})
+
         # Post LinkedIn first (no Chrome conflict)
         for p in li_posts:
             from poster import post_to_linkedin
             text = p["caption"]
-            if p.get("article_context"): text += "\n\n" + p["article_context"]
             if p.get("article_url"): text += "\n" + p["article_url"]
             ok = post_to_linkedin(text, p.get("image_path"))
-            if ok: db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"]); log(f"Posted #{p['id']} to LinkedIn")
-            else: log(f"Failed #{p['id']} LinkedIn")
+            if ok:
+                db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
+                log(f"Posted #{p['id']} to LinkedIn"); _record("linkedin", p["id"], True)
+            else:
+                log(f"Failed #{p['id']} LinkedIn"); _record("linkedin", p["id"], False, "post failed")
 
         # For X posts: close Chrome, post, reopen Chrome
         if x_posts:
@@ -1044,11 +1128,13 @@ def _start_auto_poster():
             for p in x_posts:
                 from poster import post_to_x
                 text = p["caption"]
-                if p.get("article_context"): text += "\n\n" + p["article_context"]
                 if p.get("article_url"): text += "\n" + p["article_url"]
                 ok = post_to_x(text, p.get("image_path"))
-                if ok: db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"]); log(f"Posted #{p['id']} to X")
-                else: log(f"Failed #{p['id']} X")
+                if ok:
+                    db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
+                    log(f"Posted #{p['id']} to X"); _record("x", p["id"], True)
+                else:
+                    log(f"Failed #{p['id']} X"); _record("x", p["id"], False, "post failed")
 
             if chrome_was_running:
                 log("Reopening Chrome...")
@@ -1061,5 +1147,5 @@ def _start_auto_poster():
 
 if __name__ == "__main__":
     _start_auto_poster()
-    log("Started — auto-poster active"); print(f"\n  HFN Promote v3.6: http://localhost:{FLASK_PORT}\n")
+    log("Started — auto-poster active"); print(f"\n  HFN Promote v3.7: http://localhost:{FLASK_PORT}\n")
     app.run(host="0.0.0.0", port=FLASK_PORT, debug=False)
