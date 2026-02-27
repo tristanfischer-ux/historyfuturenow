@@ -260,6 +260,49 @@ def get_posted():
     conn.close()
     return rows
 
+def get_posted_extended(limit=200):
+    """Posted items with full context for calendar view."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT p.*, c.title as chart_title, c.description as chart_desc, c.image_path as chart_image,
+               a.title as article_title, a.slug as article_slug, a.part as article_part,
+               n.title as news_title, n.link as news_link
+        FROM posts p
+        LEFT JOIN charts c ON p.chart_id = c.id
+        LEFT JOIN articles a ON p.article_id = a.id
+        LEFT JOIN news_items n ON p.news_item_id = n.id
+        WHERE p.status='posted' ORDER BY p.posted_at DESC LIMIT ?
+    """, (limit,)).fetchall())
+    conn.close()
+    return rows
+
+def get_posted_filtered(platform=None, days=None, offset=0, limit=50):
+    """Filtered posted items with total count for pagination."""
+    conn = get_db()
+    where = ["p.status='posted'"]
+    params = []
+    if platform:
+        where.append("p.platform=?")
+        params.append(platform)
+    if days:
+        where.append("p.posted_at >= datetime('now', ?)")
+        params.append(f"-{days} days")
+    where_sql = " AND ".join(where)
+    total = conn.execute(f"SELECT COUNT(*) FROM posts p WHERE {where_sql}", params).fetchone()[0]
+    params_q = params + [limit, offset]
+    rows = _dicts(conn.execute(f"""
+        SELECT p.*, c.title as chart_title, c.description as chart_desc, c.image_path as chart_image,
+               a.title as article_title, a.slug as article_slug, a.part as article_part,
+               n.title as news_title, n.link as news_link
+        FROM posts p
+        LEFT JOIN charts c ON p.chart_id = c.id
+        LEFT JOIN articles a ON p.article_id = a.id
+        LEFT JOIN news_items n ON p.news_item_id = n.id
+        WHERE {where_sql} ORDER BY p.posted_at DESC LIMIT ? OFFSET ?
+    """, params_q).fetchall())
+    conn.close()
+    return rows, total
+
 def get_scheduled():
     conn = get_db()
     rows = _dicts(conn.execute("""

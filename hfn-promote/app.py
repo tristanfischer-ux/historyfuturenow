@@ -150,6 +150,18 @@ HTML = r"""<!DOCTYPE html>
 .plat{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.62rem;font-weight:700;text-transform:uppercase}
 .plat.x{background:var(--xblk);color:#fff}.plat.li{background:var(--li);color:#fff}
 
+/* Post calendar */
+.post-filter-bar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.post-filter-bar select{padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:.74rem;font-family:inherit;background:var(--card)}
+.post-cal-day{margin-bottom:10px}
+.post-cal-dayhead{font-size:.75rem;font-weight:700;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.post-cal-dayhead:hover{background:#f5f4f2}
+.post-cal-posts{display:none;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:6px}
+.post-cal-posts.open{display:block}
+.post-cal-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;background:var(--card);border-radius:6px;margin-bottom:4px}
+.post-cal-item img{width:80px;height:60px;object-fit:contain;border-radius:4px;background:#fafaf9;border:1px solid var(--border);flex-shrink:0}
+.post-cal-caption{font-size:.78rem;line-height:1.4;flex:1;min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+
 .empty{text-align:center;padding:40px;color:var(--dim)}.empty .ei{font-size:2rem;margin-bottom:8px}
 
 /* Library */
@@ -392,12 +404,24 @@ HTML = r"""<!DOCTYPE html>
 <!-- ═══ POSTED ═══ -->
 <div class="tc" id="t-posted">
 <div style="padding:16px 20px;overflow-y:auto;height:100%">
-{% if posted %}{% for p in posted %}
-<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:5px">
-<span class="plat {{p.platform}}">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
-<span style="flex:1;font-size:.82rem">{{p.caption[:100]}}</span>
-<span style="font-size:.7rem;color:var(--dim)">{{p.posted_at[:16] if p.posted_at else ''}}</span>
-</div>{% endfor %}{% else %}<div class="empty"><div class="ei">📊</div>Nothing posted</div>{% endif %}
+  <div class="post-filter-bar">
+    <select id="pf-platform" onchange="loadPosted()">
+      <option value="">All platforms</option>
+      <option value="x">𝕏 only</option>
+      <option value="linkedin">LinkedIn only</option>
+    </select>
+    <select id="pf-days" onchange="loadPosted()">
+      <option value="">All time</option>
+      <option value="7">Last 7 days</option>
+      <option value="30" selected>Last 30 days</option>
+      <option value="90">Last 90 days</option>
+    </select>
+    <span id="pf-count" style="font-size:.72rem;color:var(--dim)"></span>
+  </div>
+  <div id="posted-calendar"></div>
+  <div style="text-align:center;padding:12px">
+    <button class="btn sm" id="pf-more" onclick="loadPostedMore()" style="display:none">Load more</button>
+  </div>
 </div></div>
 
 <!-- ═══ SETTINGS ═══ -->
@@ -719,6 +743,56 @@ updateCountdowns();setInterval(updateCountdowns,60000);
 function toggleAutoPost(){fetch("/api/act",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({a:"schedule"})}).then(r=>r.json()).then(d=>{alert(d.msg||"Toggled");location.reload()})}
 updateGenButton();
 
+// ── Posted calendar ──
+let postedOffset=0;
+async function loadPosted(reset=true){
+  if(reset)postedOffset=0;
+  const plat=document.getElementById('pf-platform').value;
+  const days=document.getElementById('pf-days').value;
+  const params=new URLSearchParams();
+  if(plat)params.set('platform',plat);
+  if(days)params.set('days',days);
+  params.set('offset',postedOffset);params.set('limit',50);
+  const r=await fetch('/api/posted?'+params);const d=await r.json();
+  document.getElementById('pf-count').textContent=d.total+' post(s)';
+  const cal=document.getElementById('posted-calendar');
+  if(reset)cal.innerHTML='';
+  // Group by date
+  const byDay={};
+  for(const p of d.posts){
+    const dt=p.posted_at?p.posted_at.substring(0,10):'unknown';
+    if(!byDay[dt])byDay[dt]=[];byDay[dt].push(p);
+  }
+  for(const[dt,posts] of Object.entries(byDay)){
+    let dayEl=document.getElementById('pcal-'+dt);
+    if(!dayEl){
+      dayEl=document.createElement('div');dayEl.className='post-cal-day';dayEl.id='pcal-'+dt;
+      const dayLabel=new Date(dt+'T12:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+      dayEl.innerHTML=`<div class="post-cal-dayhead" onclick="this.nextElementSibling.classList.toggle('open')">
+        <span>${dayLabel}</span><span style="font-size:.65rem;color:var(--dim)">${posts.length} post(s)</span>
+      </div><div class="post-cal-posts"></div>`;
+      cal.appendChild(dayEl);
+    }
+    const container=dayEl.querySelector('.post-cal-posts');
+    for(const p of posts){
+      const time=p.posted_at?p.posted_at.substring(11,16):'';
+      container.innerHTML+=`<div class="post-cal-item">
+        <span class="plat ${p.platform}" style="font-size:.58rem">${p.platform==='x'?'𝕏':'LI'}</span>
+        ${p.image_url?'<img src="'+p.image_url+'" onerror="this.style.display=\'none\'">':''}
+        <div class="post-cal-caption">${(p.caption||'').substring(0,200)}</div>
+        <span style="font-size:.65rem;color:var(--dim);white-space:nowrap">${time}</span>
+      </div>`;
+    }
+  }
+  const more=document.getElementById('pf-more');
+  more.style.display=(postedOffset+d.posts.length<d.total)?'':'none';
+  postedOffset+=d.posts.length;
+}
+function loadPostedMore(){loadPosted(false)}
+// Load posted on tab switch
+const origStab=stab;
+stab=function(el,id){origStab(el,id);if(id==='posted'&&!document.getElementById('posted-calendar').children.length)loadPosted()};
+
 // ── Session health ──
 async function loadSessionStatus(){
   try{
@@ -915,6 +989,19 @@ def api_autoposter_status():
         "next_post": next_post,
         "last_result": last_post_result
     })
+
+@app.route("/api/posted")
+def api_posted():
+    """Filtered posted items for calendar view."""
+    platform = request.args.get("platform", "")
+    days = request.args.get("days", type=int)
+    offset = request.args.get("offset", 0, type=int)
+    limit = request.args.get("limit", 50, type=int)
+    rows, total = db.get_posted_filtered(
+        platform=platform or None, days=days, offset=offset, limit=min(limit, 100))
+    for r in rows:
+        r["image_url"] = img_url(r.get("image_path","") or r.get("chart_image",""))
+    return jsonify({"posts": rows, "total": total, "offset": offset, "limit": limit})
 
 # Planner APIs
 @app.route("/api/arsenal/<int:news_id>")
