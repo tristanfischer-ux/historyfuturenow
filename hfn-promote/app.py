@@ -24,6 +24,29 @@ def log(msg):
     activity_log.insert(0, {"t": datetime.now().strftime("%H:%M:%S"), "m": msg})
     if len(activity_log) > 100: activity_log.pop()
 
+POST_SLOTS = [6, 7, 11, 12, 16, 17, 18, 20]
+
+def next_available_slot():
+    """Find next posting slot not already taken by a scheduled/queued/generated post."""
+    now = datetime.now()
+    conn = db.get_db()
+    booked = {r[0] for r in conn.execute(
+        "SELECT scheduled_at FROM posts WHERE status IN ('planned','generated','queued','scheduled') AND scheduled_at != ''"
+    ).fetchall()}
+    conn.close()
+    # Try today's remaining slots, then tomorrow's, up to 7 days out
+    for day_offset in range(8):
+        d = now + timedelta(days=day_offset)
+        for h in POST_SLOTS:
+            candidate = d.replace(hour=h, minute=0, second=0, microsecond=0)
+            if candidate <= now:
+                continue
+            key = candidate.strftime("%Y-%m-%dT%H:%M")
+            if key not in booked:
+                return candidate
+    # Fallback: next hour
+    return now.replace(minute=0, second=0) + timedelta(hours=1)
+
 @app.route("/img/<path:fp>")
 def serve_img(fp):
     if "/articles/" in fp: fp = fp.split("/articles/")[-1]
@@ -712,9 +735,9 @@ function dropOnDay(event,dayIdx,dayIso){
   const el=document.getElementById('day-'+dayIdx);
   el.classList.remove('over');
   if(!dragData)return;
-  // Assign times: 09:00 for first, 13:00 for second, 17:00 for third, etc
+  // Assign times spread across the day
   const existing=el.querySelectorAll('.tl-slot').length;
-  const hours=['09:00','13:00','17:00','20:00'];
+  const hours=['06:00','07:00','11:00','12:00','16:00','17:00','18:00','20:00'];
   const time=hours[Math.min(existing,hours.length-1)];
   for(const plat of dragData.platforms){
     addToPlan(dragData,plat,dragData.post_type,dayIso,time,dayIdx);
@@ -921,7 +944,7 @@ async function promoteArticle(slug,chartId,btn){
   try{
     const r=await fetch('/api/promote_article',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,chart_id:chartId||null})});
     const d=await r.json();
-    if(d.ok){toast(d.msg,4000,true);setTimeout(()=>{document.querySelector('.tab[data-t="review"]')?.click()},1500);}
+    if(d.ok){toast(d.msg,4000,true);if(btn){btn.textContent='✓ Done';}setTimeout(()=>{document.querySelector('.tab[data-tab="review"]')?.click()},1500);}
     else{toast(d.msg||'Failed',4000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
   }catch(e){toast('Network error',3000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
 }
@@ -1158,7 +1181,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 async function reorderSlot(slotId,newIso,dayIdx){
   const id=parseInt(slotId.replace('sl-',''));
   const existing=document.getElementById('day-'+dayIdx).querySelectorAll('.tl-slot').length;
-  const hours=['09:00','13:00','17:00','20:00'];
+  const hours=['06:00','07:00','11:00','12:00','16:00','17:00','18:00','20:00'];
   const time=hours[Math.min(existing,hours.length-1)];
   const scheduledAt=newIso+'T'+time;
   const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,scheduled_at:scheduledAt})});
@@ -1208,7 +1231,7 @@ async function queueDrop(event,slotsEl){
   const card=document.getElementById('qc-'+postId);if(!card)return;
   const newIso=slotsEl.dataset.iso;
   const existing=slotsEl.querySelectorAll('.qcal-card').length;
-  const hours=['09:00','13:00','17:00','20:00'];
+  const hours=['06:00','07:00','11:00','12:00','16:00','17:00','18:00','20:00'];
   const time=hours[Math.min(existing,hours.length-1)];
   const scheduledAt=newIso+'T'+time;
   const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:postId,scheduled_at:scheduledAt})});
@@ -1536,13 +1559,8 @@ def api_quick_post():
         if c.get("image_path"):
             best = c
             break
-    # Schedule for next available slot today
-    from datetime import datetime, timedelta
-    now = datetime.now()
-    # Round up to next hour
-    sched = now.replace(minute=0, second=0) + timedelta(hours=1)
-    if sched.hour >= 22:
-        sched = (now + timedelta(days=1)).replace(hour=9, minute=0, second=0)
+    # Schedule for next available slot
+    sched = next_available_slot()
     sched_str = sched.strftime("%Y-%m-%dT%H:%M")
     # Create planned post for both platforms
     results = []
@@ -1595,15 +1613,24 @@ def api_promote_article():
         charts_with_images.sort(key=lambda c: c["_uses"])
         target = charts_with_images[0]
     # Generate for both platforms using gen_from_chart (handles news matching + generation)
+    sched = next_available_slot()
+    sched_str = sched.strftime("%Y-%m-%dT%H:%M")
     results = []
     for platform in ["x", "linkedin"]:
         result = gen_from_chart(target["id"], platform, "short")
         if result:
+            # gen_from_chart inserts as 'draft' — promote to 'generated' with schedule
+            pid = result["post_id"]
+            conn = db.get_db()
+            conn.execute("UPDATE posts SET status='generated', scheduled_at=? WHERE id=?",
+                         (sched_str, pid))
+            conn.commit()
+            conn.close()
             results.append(result)
     if results:
         log(f"Promoted '{article['title'][:40]}' — {len(results)} post(s) created")
         return jsonify({"ok": True, "count": len(results),
-                        "msg": f"{len(results)} post(s) created — check Review"})
+                        "msg": f"{len(results)} post(s) created for {sched.strftime('%H:%M')} — check Review"})
     return jsonify({"ok": False, "msg": "Generation failed — check API key and news feed"})
 
 @app.route("/api/plan_reorder", methods=["POST"])
