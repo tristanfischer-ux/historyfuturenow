@@ -60,13 +60,22 @@ def post_to_x(text, image_path=None):
         print(f"  [!] X daily limit reached ({MAX_X_PER_DAY})")
         return False
 
-    # Check Chrome isn't running (it locks the profile)
+    # Close Chrome if running (it locks the profile directory)
+    chrome_was_running = False
     try:
         result = subprocess.run(["pgrep", "-x", "Google Chrome"], capture_output=True)
         if result.returncode == 0:
-            print("  [!] Chrome is running. Close Chrome first, or X posting will fail.")
-            print("      (Chrome locks its profile while running)")
-            return False
+            chrome_was_running = True
+            print("  Closing Chrome temporarily for X post...")
+            subprocess.run(["osascript", "-e", 'tell application "Google Chrome" to quit'], timeout=10)
+            # Wait for Chrome to fully release the profile lock
+            for _ in range(15):
+                time.sleep(1)
+                if subprocess.run(["pgrep", "-x", "Google Chrome"], capture_output=True).returncode != 0:
+                    break
+            else:
+                print("  [!] Chrome didn't close in time")
+                return False
     except Exception:
         pass
 
@@ -142,6 +151,9 @@ def post_to_x(text, image_path=None):
             return False
         finally:
             ctx.close()
+            if chrome_was_running:
+                print("  Reopening Chrome...")
+                subprocess.Popen(["open", "-a", "Google Chrome"])
 
 
 def _li_api_session():
