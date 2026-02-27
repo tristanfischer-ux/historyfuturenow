@@ -107,7 +107,7 @@ def screenshot_charts_for_article(slug, chart_list):
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
             }});
             const page = await browser.newPage();
-            await page.setViewport({{ width: 1200, height: 800 }});
+            await page.setViewport({{ width: 1200, height: 800, deviceScaleFactor: 2  }});
 
             const url = 'http://localhost:{SERVER_PORT}/articles/{slug}.html';
             await page.goto(url, {{ waitUntil: 'networkidle0', timeout: 30000 }});
