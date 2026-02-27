@@ -228,12 +228,12 @@ HTML = r"""<!DOCTYPE html>
 body.dark{--bg:#1a1815;--card:#252220;--border:#3a3632;--text:#e8e4de;--dim:#8a8479;--accent:#e05545}
 body.dark .topbar{background:#0f0e0c}
 body.dark .post-preview{background:var(--card);border-color:var(--border)}
-body.dark .pp-img,.dark .ai-img,.dark .lib-chart-card img{background:#1a1815;border-color:var(--border)}
+body.dark .pp-img,body.dark .ai-img,body.dark .lib-chart-card img{background:#1a1815;border-color:var(--border)}
 body.dark .btn{background:var(--card);color:var(--text);border-color:var(--border)}
 body.dark .btn.primary{background:var(--accent);color:#fff}
 body.dark .toast{background:#e8e4de;color:#1a1815}
 body.dark input,body.dark select{background:var(--card);color:var(--text);border-color:var(--border)}
-body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:var(--li)}
+body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:var(--li);color:var(--text)}
 </style></head><body>
 
 <div class="topbar">
@@ -680,8 +680,9 @@ async function removeReview(id){
 }
 function startRqEdit(el,id){
   el.contentEditable='true';el.style.webkitLineClamp='unset';el.focus();
-  const acts=el.nextElementSibling;
-  if(!document.getElementById('rqsv-'+id)){
+  const card=el.closest('.rq-card');
+  const acts=card?card.querySelector('.rq-actions'):null;
+  if(acts&&!document.getElementById('rqsv-'+id)){
     const s=document.createElement('button');s.id='rqsv-'+id;s.className='btn bsv sm';
     s.textContent='💾 Save';s.onclick=()=>saveRqEdit(id);acts.prepend(s);
   }
@@ -762,7 +763,6 @@ async function toggleHeatmap(){
   detail.innerHTML='<div class="lib-placeholder"><div>Loading heatmap...</div></div>';
   try{
     const r=await fetch('/api/chart_usage');const stats=await r.json();
-    const max30=Math.max(1,...stats.map(s=>s.uses_30d||0));
     let html='<div style="padding:12px"><h3 style="font-size:.85rem;margin-bottom:8px">Chart Usage Heatmap <span style="font-size:.65rem;color:var(--dim)">(30 days)</span></h3>';
     html+='<div style="font-size:.65rem;color:var(--dim);margin-bottom:8px">🟢 unused → 🟡 light → 🟠 moderate → 🔴 heavy</div>';
     html+='<div class="heatmap-grid">';
@@ -809,7 +809,7 @@ function updateCountdowns(){
     const sched=new Date(el.dataset.sched);
     const now=new Date();
     const diff=sched-now;
-    if(diff<=0){el.textContent='⏰ Due now';el.style.color='var(--red)';el.style.background='#fef2f2';return;}
+    if(diff<=0){el.textContent='⏰ Due now';el.style.color='#dc2626';el.style.background='#fef2f2';return;}
     const h=Math.floor(diff/3600000);
     const m=Math.floor((diff%3600000)/60000);
     if(h>24){const d=Math.floor(h/24);el.textContent='in '+d+'d '+(h%24)+'h';}
@@ -832,7 +832,9 @@ async function loadPosted(reset=true){
   if(plat)params.set('platform',plat);
   if(days)params.set('days',days);
   params.set('offset',postedOffset);params.set('limit',50);
-  const r=await fetch('/api/posted?'+params);const d=await r.json();
+  let d;
+  try{const r=await fetch('/api/posted?'+params);d=await r.json();}
+  catch(e){document.getElementById('posted-calendar').innerHTML='<div class="empty"><div class="ei">⚠️</div>Failed to load posts</div>';return;}
   document.getElementById('pf-count').textContent=d.total+' post(s)';
   const cal=document.getElementById('posted-calendar');
   if(reset)cal.innerHTML='';
@@ -1102,11 +1104,12 @@ def api_posted():
     days = request.args.get("days", type=int)
     offset = request.args.get("offset", 0, type=int)
     limit = request.args.get("limit", 50, type=int)
+    actual_limit = min(limit, 100)
     rows, total = db.get_posted_filtered(
-        platform=platform or None, days=days, offset=offset, limit=min(limit, 100))
+        platform=platform or None, days=days, offset=offset, limit=actual_limit)
     for r in rows:
         r["image_url"] = img_url(r.get("image_path","") or r.get("chart_image",""))
-    return jsonify({"posts": rows, "total": total, "offset": offset, "limit": limit})
+    return jsonify({"posts": rows, "total": total, "offset": offset, "limit": actual_limit})
 
 # Planner APIs
 @app.route("/api/arsenal/<int:news_id>")
