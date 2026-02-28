@@ -189,6 +189,9 @@ HTML = r"""<!DOCTYPE html>
 .qcal-card.expanded .qcal-detail{display:block}
 .qcal-actions{display:flex;gap:4px;margin-top:6px}
 .qcal-empty{font-family:var(--mono);font-size:.58rem;color:var(--dim);text-align:center;padding:10px 4px;text-transform:uppercase;letter-spacing:.3px}
+.qcal-slot-empty{padding:3px 8px;font-size:.62rem;color:var(--dim);border-radius:4px;margin-bottom:2px;display:flex;align-items:center;opacity:.5;transition:all .15s}
+.qcal-slot-empty:hover,.qcal-slot-empty.over{background:var(--accent-soft);opacity:1;border:1px dashed var(--accent)}
+.qcal-slot-empty .qse-time{font-weight:600;font-size:.6rem;font-family:var(--mono);min-width:36px}
 
 /* Review page (full-width tab) */
 .review-page{max-width:800px;margin:0 auto;padding:16px 20px;height:100%;overflow-y:auto}
@@ -523,24 +526,20 @@ body.dark .qcal-article{color:var(--text)}
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
     <h2 style="font-family:var(--serif);font-size:1.1rem;font-weight:700">📅 Queue <span style="font-family:var(--mono);font-size:.68rem;color:var(--dim);font-weight:500;text-transform:uppercase;letter-spacing:.3px">{{n_queued}} scheduled</span></h2>
   </div>
-  {% if not queue_days %}
-  <div class="empty"><div class="ei">📅</div>No posts queued<br><span style="font-size:.78rem;color:var(--dim)">Confirm reviewed posts to add them to the queue</span></div>
-  {% else %}
   <div class="qcal">
     {% for day in cal_days %}
     <div class="qcal-day">
       <div class="qcal-dayhead {{ 'today' if day.is_today else '' }}">{{day.label}} {{day.date}}</div>
       <div class="qcal-slots" data-iso="{{day.iso}}" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="queueDrop(event,this)">
-        {% set ns = namespace(found=false) %}
-        {% for qd in queue_days if qd.iso == day.iso %}
-          {% set ns.found = true %}
-          {% for p in qd.posts %}
+        {% for sl in day.queue_slots %}
+          {% if sl.post %}
+          {% set p = sl.post %}
           <div class="qcal-card" id="qc-{{p.id}}" data-post-id="{{p.id}}" draggable="true" onclick="if(!window._qcalDragged)this.classList.toggle('expanded')">
             <div class="qcal-meta">
               <span class="qcal-time">{{p.time}}</span>
               <span class="plat {{p.platform}}" style="font-size:.52rem;padding:1px 5px">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
               <span class="qcal-type">{{p.post_type|upper}}</span>
-              <span class="rq-countdown" data-sched="{{qd.iso}}T{{p.time}}:00" style="margin-left:auto"></span>
+              <span class="rq-countdown" data-sched="{{day.iso}}T{{p.time}}:00" style="margin-left:auto"></span>
             </div>
             {% if p.article_title %}<div class="qcal-article" title="{{p.article_title}}">{{p.article_title}}</div>{% endif %}
             <div class="qcal-title">{{p.chart_title[:35] if p.chart_title else '—'}}</div>
@@ -553,16 +552,19 @@ body.dark .qcal-article{color:var(--text)}
               </div>
             </div>
           </div>
-          {% endfor %}
+          {% else %}
+          <div class="qcal-slot-empty" data-hour="{{sl.hour}}" data-iso="{{day.iso}}"
+               ondragover="event.preventDefault();event.stopPropagation();this.classList.add('over')"
+               ondragleave="this.classList.remove('over')"
+               ondrop="event.stopPropagation();queueDropSlot(event,this,'{{day.iso}}','{{sl.hour}}')">
+            <span class="qse-time">{{sl.hour}}</span>
+          </div>
+          {% endif %}
         {% endfor %}
-        {% if not ns.found %}
-        <div class="qcal-empty">no posts</div>
-        {% endif %}
       </div>
     </div>
     {% endfor %}
   </div>
-  {% endif %}
 </div>
 </div>
 
@@ -1290,6 +1292,38 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   });
 });
+async function queueDropSlot(event,slotEl,iso,hour){
+  event.preventDefault();event.stopPropagation();slotEl.classList.remove('over');
+  const raw=event.dataTransfer.getData('text/plain');
+  if(!raw||!raw.startsWith('qc-'))return;
+  const postId=parseInt(raw.replace('qc-',''));
+  const card=document.getElementById('qc-'+postId);if(!card)return;
+  const scheduledAt=iso+'T'+hour;
+  const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:postId,scheduled_at:scheduledAt})});
+  const d=await r.json();
+  if(d.ok){
+    const oldSlots=card.closest('.qcal-slots');
+    // Replace empty slot with the card
+    slotEl.parentNode.insertBefore(card,slotEl);
+    slotEl.remove();
+    // Restore empty slot in old position if needed
+    if(oldSlots){
+      const oldIso=oldSlots.dataset.iso;
+      const oldTime=card.querySelector('.qcal-time').textContent;
+      // Check if we need to add back an empty slot
+      const hasCards=oldSlots.querySelector('.qcal-card');
+      if(!hasCards){
+        // Add back empty slots — page will reload cleanly, just add a placeholder
+        const ph=document.createElement('div');ph.className='qcal-slot-empty';
+        ph.innerHTML='<span class="qse-time">'+oldTime+'</span>';
+        oldSlots.appendChild(ph);
+      }
+    }
+    const timeEl=card.querySelector('.qcal-time');if(timeEl)timeEl.textContent=hour;
+    const cdEl=card.querySelector('.rq-countdown');if(cdEl)cdEl.dataset.sched=scheduledAt+':00';
+    toast('Moved to '+iso+' '+hour);
+  }
+}
 async function queueDrop(event,slotsEl){
   event.preventDefault();slotsEl.classList.remove('over');
   const raw=event.dataTransfer.getData('text/plain');
@@ -1297,27 +1331,47 @@ async function queueDrop(event,slotsEl){
   const postId=parseInt(raw.replace('qc-',''));
   const card=document.getElementById('qc-'+postId);if(!card)return;
   const newIso=slotsEl.dataset.iso;
-  const existing=slotsEl.querySelectorAll('.qcal-card').length;
-  const hours=['00:00','03:00','06:00','07:00','09:00','11:00','12:00','14:00','16:00','17:00','18:00','20:00','22:00'];
-  const time=hours[Math.min(existing,hours.length-1)];
-  const scheduledAt=newIso+'T'+time;
-  const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:postId,scheduled_at:scheduledAt})});
-  const d=await r.json();
-  if(d.ok){
-    // Remove empty placeholder from target
-    const emp=slotsEl.querySelector('.qcal-empty');if(emp)emp.remove();
-    // Check if old parent needs empty placeholder
-    const oldSlots=card.closest('.qcal-slots');
-    slotsEl.appendChild(card);
-    if(oldSlots&&!oldSlots.querySelector('.qcal-card')){
-      const ph=document.createElement('div');ph.className='qcal-empty';ph.textContent='no posts';
-      oldSlots.appendChild(ph);
+  // Find first empty slot in this day
+  const emptySlot=slotsEl.querySelector('.qcal-slot-empty');
+  if(emptySlot){
+    // Drop onto the first empty slot
+    const hour=emptySlot.dataset.hour;
+    const scheduledAt=newIso+'T'+hour;
+    const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:postId,scheduled_at:scheduledAt})});
+    const d=await r.json();
+    if(d.ok){
+      const oldSlots=card.closest('.qcal-slots');
+      emptySlot.parentNode.insertBefore(card,emptySlot);
+      emptySlot.remove();
+      if(oldSlots&&!oldSlots.querySelector('.qcal-card')){
+        const ph=document.createElement('div');ph.className='qcal-slot-empty';
+        ph.innerHTML='<span class="qse-time">00:00</span>';
+        oldSlots.appendChild(ph);
+      }
+      const timeEl=card.querySelector('.qcal-time');if(timeEl)timeEl.textContent=hour;
+      const cdEl=card.querySelector('.rq-countdown');if(cdEl)cdEl.dataset.sched=scheduledAt+':00';
+      toast('Moved to '+newIso+' '+hour);
     }
-    // Update time label
-    const timeEl=card.querySelector('.qcal-time');if(timeEl)timeEl.textContent=time;
-    // Update countdown data attribute
-    const cdEl=card.querySelector('.rq-countdown');if(cdEl)cdEl.dataset.sched=scheduledAt+':00';
-    toast('Moved to '+newIso);
+  } else {
+    // All slots full — use last slot time
+    const hours=['00:00','03:00','06:00','07:00','09:00','11:00','12:00','14:00','16:00','17:00','18:00','20:00','22:00'];
+    const existing=slotsEl.querySelectorAll('.qcal-card').length;
+    const time=hours[Math.min(existing,hours.length-1)];
+    const scheduledAt=newIso+'T'+time;
+    const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:postId,scheduled_at:scheduledAt})});
+    const d=await r.json();
+    if(d.ok){
+      const oldSlots=card.closest('.qcal-slots');
+      slotsEl.appendChild(card);
+      if(oldSlots&&!oldSlots.querySelector('.qcal-card')){
+        const ph=document.createElement('div');ph.className='qcal-slot-empty';
+        ph.innerHTML='<span class="qse-time">00:00</span>';
+        oldSlots.appendChild(ph);
+      }
+      const timeEl=card.querySelector('.qcal-time');if(timeEl)timeEl.textContent=time;
+      const cdEl=card.querySelector('.rq-countdown');if(cdEl)cdEl.dataset.sched=scheduledAt+':00';
+      toast('Moved to '+newIso+' '+time);
+    }
   }
 }
 
@@ -1444,6 +1498,22 @@ def dashboard():
 
     review_days = build_day_groups(generated)
     queue_days = build_day_groups(queued)
+
+    # Build queue_slots on each cal_day (same {hour, post} pattern as planner slots)
+    for cd in cal_days:
+        qd_posts = {}
+        for qd in queue_days:
+            if qd["iso"] == cd["iso"]:
+                for p in qd["posts"]:
+                    qd_posts.setdefault(p["time"], []).append(p)
+        qslots = []
+        for hour in slot_hours:
+            if hour in qd_posts:
+                for p in qd_posts[hour]:
+                    qslots.append({"hour": hour, "post": p})
+            else:
+                qslots.append({"hour": hour, "post": None})
+        cd["queue_slots"] = qslots
 
     # Library data
     articles_with_charts = db.get_articles_with_chart_counts()
