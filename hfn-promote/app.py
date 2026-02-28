@@ -716,7 +716,7 @@ async function selectNews(newsId){
           <div class="ai-hook">${m.hook||'Drag to add to plan →'}</div>
           <div class="ai-opts">
             <span class="opt-pill x-sel" data-v="x" onclick="togglePill(this)">𝕏</span>
-            <span class="opt-pill li-sel" data-v="li" onclick="togglePill(this)">LinkedIn</span>
+            <span class="opt-pill${(['Jobs & Economy','Natural Resources'].includes(m.article_part))?' li-sel':''}" data-v="li" onclick="togglePill(this)" ${!['Jobs & Economy','Natural Resources'].includes(m.article_part)?'title="Political articles are not posted on LinkedIn"':''}>${['Jobs & Economy','Natural Resources'].includes(m.article_part)?'LinkedIn':'<s>LinkedIn</s>'}</span>
             <span class="opt-pill sel" data-v="short" onclick="togglePill(this)">Short</span>
             <span class="opt-pill" data-v="long" onclick="togglePill(this)">Long</span>
           </div>
@@ -1672,6 +1672,12 @@ def api_plan_add():
         conn.close()
         if count >= MAX_POSTS_PER_DAY:
             return jsonify({"ok": False, "msg": f"Daily limit reached ({MAX_POSTS_PER_DAY} posts)"})
+    # Block LinkedIn for political articles
+    if d.get("platform") == "linkedin" and d.get("article_id"):
+        from generator import is_linkedin_safe
+        article = db.get_article(d["article_id"])
+        if article and not is_linkedin_safe(article):
+            return jsonify({"ok": False, "msg": "Political articles are not posted on LinkedIn"})
     pid = db.insert_planned_post(
         news_item_id=d.get("news_id"), chart_id=d["chart_id"],
         article_id=d.get("article_id"), platform=d["platform"],
@@ -1722,9 +1728,12 @@ def api_quick_post():
     # Schedule for next available slot
     sched = next_available_slot()
     sched_str = sched.strftime("%Y-%m-%dT%H:%M")
-    # Create planned post for both platforms
+    # Create planned post — skip LinkedIn for political articles
+    from generator import is_linkedin_safe
+    article = db.get_article(best.get("article_id", 0)) if best.get("article_id") else None
+    platforms = ["x", "linkedin"] if (article and is_linkedin_safe(article)) else ["x"]
     results = []
-    for platform in ["x", "linkedin"]:
+    for platform in platforms:
         pid = db.insert_planned_post(
             news_item_id=best.get("news_id", news_id),
             chart_id=best.get("chart_id") or best.get("id", 0),
@@ -1775,11 +1784,13 @@ def api_promote_article():
             c["_uses"] = len(db.get_posts_for_chart(c["id"]))
         charts_with_images.sort(key=lambda c: c["_uses"])
         target = charts_with_images[0]
-    # Generate for both platforms using gen_from_chart (handles news matching + generation)
+    # Generate for platforms — skip LinkedIn for political articles
+    from generator import is_linkedin_safe
     sched = next_available_slot()
     sched_str = sched.strftime("%Y-%m-%dT%H:%M")
+    platforms = ["x", "linkedin"] if is_linkedin_safe(article) else ["x"]
     results = []
-    for platform in ["x", "linkedin"]:
+    for platform in platforms:
         result = gen_from_chart(target["id"], platform, post_type)
         if result:
             # gen_from_chart inserts as 'draft' — promote to 'generated' with schedule

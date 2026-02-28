@@ -3,6 +3,13 @@ import json, re, anthropic
 import db
 from config import ANTHROPIC_API_KEY, GEN_MODEL, MIN_RELEVANCE, HFN_BASE_URL
 
+# Only these article parts are allowed on LinkedIn (avoids political content)
+LINKEDIN_SAFE_PARTS = {"Jobs & Economy", "Natural Resources"}
+
+def is_linkedin_safe(article):
+    """Check if an article's topic is suitable for LinkedIn."""
+    return (article.get("part", "") or "") in LINKEDIN_SAFE_PARTS
+
 VOICE = """You are writing social media posts for History Future Now (historyfuturenow.com).
 
 ABOUT THE SITE:
@@ -168,7 +175,8 @@ def generate_from_matches():
 
         print(f"\n  {'★' if high_relevance else '·'} [{score:.1f}] {news['title'][:55]}...")
 
-        for platform in ["x", "linkedin"]:
+        platforms = ["x", "linkedin"] if is_linkedin_safe(article) else ["x"]
+        for platform in platforms:
             # Decide: short or long (not both by default)
             post_type = "long" if high_relevance else "short"
             key = (chart["id"], platform, post_type)
