@@ -5290,7 +5290,7 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
             'title': 'Muslim Population Share in UK Cities, 1961–2021',
             'desc': 'From near zero to nearly a third of the population in sixty years. The religion question was first asked in the 2001 census; earlier figures are scholarly estimates based on ethnicity and migration data.',
             'source': 'UK Census 2001, 2011, 2021 (religion question); pre-2001 estimates from Peach (1990), Anwar (1979), migration records',
-            'position': 'after_heading:Part 5: What Comes Next',
+            'position': 'after_heading:Part 6: What Comes Next',
             'js': """
 _regChart('usefulChart3',()=>{const ctx=document.getElementById('usefulChart3');
 new Chart(ctx,{type:'line',data:{datasets:[
@@ -5322,6 +5322,25 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% agreeing',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'usefulChart5', 'figure_num': 5,
+            'title': 'The Replacement: Labour Lost Its Workers and Found New Voters',
+            'desc': 'As deindustrialisation destroyed Labour\'s working-class base, the Muslim population grew to fill the electoral gap. The two lines crossed around 2001 — and the party\'s incentive structure shifted permanently.',
+            'source': 'Ipsos MORI election aggregates 1974–2019 (C2DE class); UK Census 2001, 2011, 2021; pre-2001 Muslim population estimates from Peach (1990), Anwar (1979)',
+            'position': 'after_heading:Part 5: The Electoral Bargain',
+            'tall': True,
+            'js': """
+_regChart('usefulChart5',()=>{const ctx=document.getElementById('usefulChart5');
+new Chart(ctx,{type:'line',data:{datasets:[
+{...dxy('Labour C2DE vote share',[1974,1979,1983,1987,1992,1997,2001,2005,2010,2019],[53,45,37,42,45,55,52,44,35,33],C.accent),yAxisID:'y'},
+{...dxy('UK Muslim population (millions)',[1971,1981,1991,2001,2011,2021],[0.17,0.55,0.95,1.59,2.71,3.87],C.teal),yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.yAxisID==='y'?i.dataset.label+': '+i.raw+'%':i.dataset.label+': '+i.raw+'M'}}},
+scales:{x:linX(1970,2025),
+y:{position:'left',min:0,max:60,grid:{color:C.grid},ticks:{color:C.accent,callback:v=>v+'%'},title:{display:true,text:'Labour C2DE vote share (%)',color:C.accent}},
+y1:{position:'right',min:0,max:4.5,grid:{drawOnChartArea:false},ticks:{color:C.teal,callback:v=>v+'M'},title:{display:true,text:'UK Muslim population (millions)',color:C.teal}}}}});
 });"""
         },
     ]

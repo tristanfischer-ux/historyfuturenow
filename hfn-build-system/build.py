@@ -27,7 +27,6 @@ REVIEW_SLUGS = {
     'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
-    'the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way',
 }
 
 # Articles that were under review and have been released to the public site.
@@ -40,6 +39,7 @@ RELEASED_FROM_REVIEW = {
     'the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions',
     'why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split',
     'the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world',
+    'the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way',
 }
 
 def truncate_excerpt(text, max_len):
