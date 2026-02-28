@@ -5252,7 +5252,7 @@ title:{display:true,text:'Gender ideology gap (pp)',color:C.dim}}}}});
             'title': 'The Red-Green Alliance: A History of Betrayal',
             'desc': 'Estimated leftist deaths following purges after tactical alliances with Islamist or religious-nationalist forces',
             'source': 'Boroumand Center; Cribb (2002); scholarly estimates for Indonesia 1965-66; Sudan historical records',
-            'position': 'after_heading:Part 2: Iran',
+            'position': 'after_heading:The Historical Record',
             'js': """
 _regChart('usefulChart1',()=>{const ctx=document.getElementById('usefulChart1');
 new Chart(ctx,{type:'bar',data:{
@@ -5270,7 +5270,7 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
             'title': 'The Values Chasm: What British Muslims Want Changed',
             'desc': 'British Muslims were asked what social changes they want to see in the UK over the next 20 years. The results reveal a civilisational gap with the general population.',
             'source': 'JL Partners for the Henry Jackson Society, 2024 (1,000 UK Muslims); ICM for Channel 4, 2016',
-            'position': 'after_heading:Part 1: The Oldest Alliance',
+            'position': 'after_heading:The Betrayal in Real Time',
             'tall': True,
             'js': """
 _regChart('usefulChart2',()=>{const ctx=document.getElementById('usefulChart2');
@@ -5290,7 +5290,7 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
             'title': 'Muslim Population Share in UK Cities, 1961–2021',
             'desc': 'From near zero to nearly a third of the population in sixty years. The religion question was first asked in the 2001 census; earlier figures are scholarly estimates based on ethnicity and migration data.',
             'source': 'UK Census 2001, 2011, 2021 (religion question); pre-2001 estimates from Peach (1990), Anwar (1979), migration records',
-            'position': 'after_heading:Part 6: What Comes Next',
+            'position': 'after_heading:What Comes Next',
             'js': """
 _regChart('usefulChart3',()=>{const ctx=document.getElementById('usefulChart3');
 new Chart(ctx,{type:'line',data:{datasets:[
@@ -5308,7 +5308,7 @@ scales:{x:linX(1960,2025),y:{min:0,max:40,grid:{color:C.grid},ticks:{color:C.dim
             'title': 'The Alignment Illusion',
             'desc': 'On every social issue, Conservative and Labour voters cluster together — both far from British Muslim opinion. The left-right gap is a family argument. The real divide is civilisational.',
             'source': 'ICM for Channel 4, 2016; JL Partners/HJS, 2024; YouGov, 2015. *General population figure shown where party data unavailable — at 1-5%, the left-right variation is below the margin of error.',
-            'position': 'after_heading:Part 4: The Pattern Repeats',
+            'position': 'after_heading:The Betrayal in Real Time',
             'js': """
 _regChart('usefulChart4',()=>{const ctx=document.getElementById('usefulChart4');
 new Chart(ctx,{type:'bar',data:{
@@ -5329,7 +5329,7 @@ y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:
             'title': 'The Replacement: Labour Lost Its Workers and Found New Voters',
             'desc': 'As deindustrialisation destroyed Labour\'s working-class base, the Muslim population grew to fill the electoral gap. The two lines crossed around 2001 — and the party\'s incentive structure shifted permanently.',
             'source': 'Ipsos MORI election aggregates 1974–2019 (C2DE class); UK Census 2001, 2011, 2021; pre-2001 Muslim population estimates from Peach (1990), Anwar (1979)',
-            'position': 'after_heading:Part 5: The Electoral Bargain',
+            'position': 'after_heading:The Electoral Bargain',
             'tall': True,
             'js': """
 _regChart('usefulChart5',()=>{const ctx=document.getElementById('usefulChart5');
