@@ -5304,20 +5304,23 @@ scales:{x:linX(2010,2025),y:{min:0,max:40,grid:{color:C.grid},ticks:{color:C.dim
         },
         {
             'id': 'usefulChart4', 'figure_num': 4,
-            'title': 'Further Right Than the Right',
-            'desc': 'British Muslims say homosexuality "should be illegal" (52%). Even on the softer question — "is it morally wrong?" — only 21% of Conservative voters agree. The supposedly hard right are dramatically more liberal.',
-            'source': 'ICM for Channel 4, 2016 (British Muslims); YouGov, Feb 2015 (voter breakdown)',
+            'title': 'The Alignment Illusion',
+            'desc': 'On every social issue, Conservative and Labour voters cluster together — both far from British Muslim opinion. The left-right gap is a family argument. The real divide is civilisational.',
+            'source': 'ICM for Channel 4, 2016; JL Partners/HJS, 2024; YouGov, 2015. *General population figure shown where party data unavailable — at 1-5%, the left-right variation is below the margin of error.',
             'position': 'after_heading:Part 4: The Pattern Repeats',
             'js': """
 _regChart('usefulChart4',()=>{const ctx=document.getElementById('usefulChart4');
 new Chart(ctx,{type:'bar',data:{
-labels:[['British Muslims','(should be illegal)'],['Conservative','voters'],['UK average',''],['Labour','voters']],
-datasets:[{label:'% opposing homosexuality',data:[52,21,17,14],
-backgroundColor:[C.accent,C.blue,C.slate,C.teal],borderRadius:4,borderSkipped:false}]},
+labels:['British Muslims','Conservative voters','Labour voters'],
+datasets:[
+{label:'Homosexuality wrong / illegal',data:[52,21,14],backgroundColor:C.accent,borderRadius:4,borderSkipped:false},
+{label:'Wives should always obey',data:[39,5,5],backgroundColor:C.amber,borderRadius:4,borderSkipped:false},
+{label:'Support Sharia law',data:[32,1,1],backgroundColor:C.purple,borderRadius:4,borderSkipped:false}
+]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'%'}}},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
-y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% opposing homosexuality',color:C.dim}}}}});
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% agreeing',color:C.dim}}}}});
 });"""
         },
     ]
