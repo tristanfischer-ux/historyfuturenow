@@ -5256,29 +5256,33 @@ title:{display:true,text:'Gender ideology gap (pp)',color:C.dim}}}}});
             'js': """
 _regChart('usefulChart1',()=>{const ctx=document.getElementById('usefulChart1');
 new Chart(ctx,{type:'bar',data:{
-labels:['Indonesia (1965-66)','Iran (1981-88)','Sudan (1965-71)'],
+labels:['Indonesia\\n(1965-66)','Iran\\n(1981-88)','Sudan\\n(1965-71)'],
 datasets:[{label:'Estimated leftist deaths',data:[500000,15000,5000],
 backgroundColor:[C.accent,C.purple,C.amber],borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw>=1000?(i.raw/1000)+'k estimated':i.raw+' estimated'}}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000)+'k':v},title:{display:true,text:'Estimated deaths',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw>=1000?Math.round(i.raw/1000)+'k estimated':i.raw+' estimated'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?Math.round(v/1000)+'k':v},title:{display:true,text:'Estimated deaths',color:C.dim}},
+y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
 });"""
         },
         {
             'id': 'usefulChart2', 'figure_num': 2,
-            'title': 'The Values Gap: Homosexuality Should Be Illegal',
-            'desc': 'British Muslims and the general UK population hold diametrically opposed views on LGBTQ+ rights',
-            'source': 'ICM for Channel 4, 2016 — "What British Muslims Really Think"',
+            'title': 'The Values Chasm',
+            'desc': 'British Muslims hold dramatically more conservative views than the UK general population across every social metric polled',
+            'source': 'ICM for Channel 4, 2016 — "What British Muslims Really Think"; general population control sample',
             'position': 'after_heading:Part 1: The Oldest Alliance',
+            'tall': True,
             'js': """
 _regChart('usefulChart2',()=>{const ctx=document.getElementById('usefulChart2');
 new Chart(ctx,{type:'bar',data:{
-labels:['UK general population','British Muslims'],
-datasets:[{label:'% saying homosexuality should be illegal',data:[5,52],
-backgroundColor:[C.teal,C.accent],borderRadius:4,borderSkipped:false}]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'%'}}},
-scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% agreeing homosexuality should be illegal',color:C.dim}}}}});
+labels:[['Homosexuality should','be illegal'],['Gay people should','not be teachers'],['Support introduction','of Sharia law'],['Wives should always','obey husbands'],['Sympathise with violence','against Prophet mockers']],
+datasets:[
+{label:'British Muslims',data:[52,47,43,39,18],backgroundColor:C.accent,borderRadius:4,borderSkipped:false},
+{label:'UK general population',data:[5,14,4,5,1],backgroundColor:C.teal,borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{...chartPad,left:16}},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% agreeing',color:C.dim}},
+y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 });"""
         },
         {
@@ -5296,6 +5300,24 @@ dxy('Leicester',[2011,2021],[26,33],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'%'}}},
 scales:{x:linX(2010,2025),y:{min:0,max:40,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Muslim population share (%)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'usefulChart4', 'figure_num': 4,
+            'title': 'Further Right Than the Right',
+            'desc': 'British Muslims say homosexuality "should be illegal" (52%). Even on the softer question — "is it morally wrong?" — only 21% of Conservative voters agree. The supposedly hard right are dramatically more liberal.',
+            'source': 'ICM for Channel 4, 2016 (British Muslims); YouGov, Feb 2015 (voter breakdown)',
+            'position': 'after_heading:Part 4: The Pattern Repeats',
+            'js': """
+_regChart('usefulChart4',()=>{const ctx=document.getElementById('usefulChart4');
+new Chart(ctx,{type:'bar',data:{
+labels:[['British Muslims','(should be illegal)'],['Conservative','voters'],['UK average',''],['Labour','voters']],
+datasets:[{label:'% opposing homosexuality',data:[52,21,17,14],
+backgroundColor:[C.accent,C.blue,C.slate,C.teal],borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% opposing homosexuality',color:C.dim}}}}});
 });"""
         },
     ]
