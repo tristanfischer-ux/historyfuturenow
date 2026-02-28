@@ -5287,19 +5287,20 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
         },
         {
             'id': 'usefulChart3', 'figure_num': 3,
-            'title': 'Muslim Population Share in UK Cities',
-            'desc': 'Rapid growth in cities with large Muslim populations',
-            'source': 'UK Census 2011, 2021; ONS population estimates',
+            'title': 'Muslim Population Share in UK Cities, 1961–2021',
+            'desc': 'From near zero to nearly a third of the population in sixty years. The religion question was first asked in the 2001 census; earlier figures are scholarly estimates based on ethnicity and migration data.',
+            'source': 'UK Census 2001, 2011, 2021 (religion question); pre-2001 estimates from Peach (1990), Anwar (1979), migration records',
             'position': 'after_heading:Part 5: What Comes Next',
             'js': """
 _regChart('usefulChart3',()=>{const ctx=document.getElementById('usefulChart3');
 new Chart(ctx,{type:'line',data:{datasets:[
-dxy('Birmingham',[2011,2021],[21.8,29.9],C.accent),
-dxy('Bradford',[2011,2021],[24.7,30.5],C.purple),
-dxy('Leicester',[2011,2021],[26,33],C.blue)
+dxy('Birmingham',[1961,1971,1981,1991,2001,2011,2021],[0.5,2,5,8,14.3,21.8,29.9],C.accent),
+dxy('Bradford',[1961,1971,1981,1991,2001,2011,2021],[0.5,3,6,10,16.1,24.7,30.5],C.purple),
+dxy('Leicester',[1961,1971,1981,1991,2001,2011,2021],[0.2,1,3,6,11,26,33],C.blue)
 ]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
-plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'%'}}},
-scales:{x:linX(2010,2025),y:{min:0,max:40,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Muslim population share (%)',color:C.dim}}}}});
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}},
+annotation:{annotations:{censusLine:{type:'line',xMin:2001,xMax:2001,borderColor:C.dim+'80',borderWidth:1,borderDash:[4,4],label:{..._al,display:true,content:'Census religion data →',position:'start',color:C.dim,font:{size:9}}}}}},
+scales:{x:linX(1960,2025),y:{min:0,max:40,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Muslim population share (%)',color:C.dim}}}}});
 });"""
         },
         {
