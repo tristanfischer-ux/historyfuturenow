@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort
 import db
-from config import (FLASK_PORT, MAX_X_PER_DAY, MAX_LI_PER_DAY,
+from config import (FLASK_PORT, MAX_X_PER_DAY, MAX_LI_PER_DAY, MAX_POSTS_PER_DAY,
                     HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES, MONITOR_INTERVAL,
                     MATCH_MODEL, GEN_MODEL, SESSIONS_DIR)
 
@@ -24,7 +24,7 @@ def log(msg):
     activity_log.insert(0, {"t": datetime.now().strftime("%H:%M:%S"), "m": msg})
     if len(activity_log) > 100: activity_log.pop()
 
-POST_SLOTS = [6, 7, 11, 12, 16, 17, 18, 20]
+POST_SLOTS = [0, 3, 6, 7, 9, 11, 12, 14, 16, 17, 18, 20, 22]
 
 def next_available_slot():
     """Find next posting slot not already taken by a scheduled/queued/generated post."""
@@ -137,6 +137,9 @@ HTML = r"""<!DOCTYPE html>
 .tl-slot.queued{opacity:.55;border-left-style:solid!important;pointer-events:none}
 .tl-slot.queued .sl-badge{font-size:.52rem;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;background:#dcfce7;color:#166534}
 .tl-slot.generated .sl-badge{font-size:.52rem;padding:1px 5px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;background:#fef9c3;color:#854d0e}
+.tl-slot-empty{padding:3px 8px;font-size:.62rem;color:var(--dim);border-radius:4px;margin-bottom:2px;display:flex;align-items:center;opacity:.5;transition:all .15s}
+.tl-slot-empty:hover,.tl-slot-empty.over{background:#f0f7ff;opacity:1;border:1px dashed var(--li)}
+.tl-slot-empty .sle-time{font-weight:600;font-size:.6rem;font-family:var(--mono);min-width:36px}
 .tl-empty{font-size:.68rem;color:var(--dim);padding:8px;text-align:center;font-style:italic}
 .tl-time-sel{display:flex;gap:4px;margin-top:4px}
 .tl-time-sel select{font-size:.7rem;padding:2px 4px}
@@ -317,6 +320,7 @@ body.dark .rq-caption[contenteditable="true"]{background:#2a2825;border-color:va
 .tl-slot[draggable]{cursor:grab}.tl-slot.dragging{opacity:.4}
 .img-fallback{display:flex;align-items:center;justify-content:center;background:#f5f5f4;border:1px dashed var(--border);border-radius:6px;color:var(--dim);font-size:.72rem;padding:16px;min-height:60px}
 body.dark .img-fallback{background:#2a2825}
+body.dark .tl-slot-empty:hover,body.dark .tl-slot-empty.over{background:#2a2825;border-color:var(--li)}
 body.dark .qcal-card{background:var(--card);border-color:var(--border);border-top-color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.2)}
 body.dark .qcal-card:hover{box-shadow:0 3px 8px rgba(0,0,0,.3)}
 body.dark .qcal-dayhead{background:#2a2623;color:#a8a29e;border-color:var(--border)}
@@ -404,15 +408,17 @@ body.dark .qcal-article{color:var(--text)}
       <div class="tl-day">
         <div class="tl-dayhead {{ 'today' if day.is_today else '' }}">
           <span>{{ 'Today' if day.is_today else day.label }} {{day.date}}</span>
-          <span style="font-size:.65rem;color:var(--dim)" id="day-count-{{day.idx}}">{% if day.posts|length > 0 %}{{day.posts|length}} post{{ 's' if day.posts|length != 1 else '' }}{% endif %}</span>
+          <span style="font-size:.65rem;color:var(--dim)" id="day-count-{{day.idx}}">{% if day.posts|length > 0 %}{{day.posts|length}}/{{max_per_day}}{% endif %}</span>
         </div>
         <div class="tl-slots" id="day-{{day.idx}}"
              ondragover="event.preventDefault();this.classList.add('over')"
              ondragleave="this.classList.remove('over')"
              ondrop="dropOnDay(event,{{day.idx}},'{{day.iso}}')">
-          {% for sp in day.posts %}
+          {% for sl in day.slots %}
+          {% if sl.post %}
+          {% set sp = sl.post %}
           {% if sp.status == 'planned' %}
-          <div class="tl-slot {{sp.platform}}" id="sl-{{sp.id}}">
+          <div class="tl-slot {{sp.platform}}" id="sl-{{sp.id}}" data-hour="{{sl.hour}}">
             <span class="sl-time">{{sp.time}}</span>
             <span class="plat {{sp.platform}}" style="font-size:.58rem">{{ '𝕏' if sp.platform=='x' else 'LI' }}</span>
             <div class="sl-body">
@@ -424,7 +430,7 @@ body.dark .qcal-article{color:var(--text)}
             <span class="sl-rm" onclick="removePlan({{sp.id}})">✕</span>
           </div>
           {% else %}
-          <div class="tl-slot {{sp.platform}} {{sp.status}}" title="{{sp.status|title}} — managed in {{('Review' if sp.status=='generated' else 'Queue')}} tab">
+          <div class="tl-slot {{sp.platform}} {{sp.status}}" data-hour="{{sl.hour}}" title="{{sp.status|title}} — managed in {{('Review' if sp.status=='generated' else 'Queue')}} tab">
             <span class="sl-time">{{sp.time}}</span>
             <span class="plat {{sp.platform}}" style="font-size:.58rem">{{ '𝕏' if sp.platform=='x' else 'LI' }}</span>
             <div class="sl-body">
@@ -435,9 +441,15 @@ body.dark .qcal-article{color:var(--text)}
             <span class="sl-badge">{{ '✅ queued' if sp.status=='queued' else '📝 review' }}</span>
           </div>
           {% endif %}
+          {% else %}
+          <div class="tl-slot-empty" data-hour="{{sl.hour}}"
+               ondragover="event.preventDefault();event.stopPropagation();this.classList.add('over')"
+               ondragleave="this.classList.remove('over')"
+               ondrop="event.stopPropagation();dropOnSlot(event,{{day.idx}},'{{day.iso}}','{{sl.hour}}')">
+            <span class="sle-time">{{sl.hour}}</span>
+          </div>
+          {% endif %}
           {% endfor %}
-          {% set plan_only = day.posts|selectattr('status','equalto','planned')|list %}
-          {% if not day.posts %}<div class="tl-empty" id="empty-{{day.idx}}">{% if day.is_today %}← Click a story, pick a chart, drag here{% else %}Drop here{% endif %}</div>{% endif %}
         </div>
       </div>
       {% endfor %}
@@ -730,20 +742,36 @@ function startDrag(event,match){
   event.dataTransfer.effectAllowed='copy';
   event.dataTransfer.setData('text/plain','');
 }
+const MAX_PER_DAY={{max_per_day}};
 function dropOnDay(event,dayIdx,dayIso){
   event.preventDefault();
   const el=document.getElementById('day-'+dayIdx);
   el.classList.remove('over');
   if(!dragData)return;
-  // Assign times spread across the day
-  const existing=el.querySelectorAll('.tl-slot').length;
-  const hours=['06:00','07:00','11:00','12:00','16:00','17:00','18:00','20:00'];
-  const time=hours[Math.min(existing,hours.length-1)];
+  const filled=el.querySelectorAll('.tl-slot').length;
+  if(filled+dragData.platforms.length>MAX_PER_DAY){toast('Daily limit reached ('+MAX_PER_DAY+' posts)');dragData=null;return;}
+  // Find first empty slot
+  const emptySlot=el.querySelector('.tl-slot-empty');
+  const time=emptySlot?emptySlot.dataset.hour:'22:00';
   for(const plat of dragData.platforms){
     addToPlan(dragData,plat,dragData.post_type,dayIso,time,dayIdx);
   }
   dragData=null;
 updateGenButton();
+}
+function dropOnSlot(event,dayIdx,dayIso,hour){
+  event.preventDefault();
+  const el=document.getElementById('day-'+dayIdx);
+  const slotEl=event.currentTarget;
+  slotEl.classList.remove('over');
+  if(!dragData)return;
+  const filled=el.querySelectorAll('.tl-slot').length;
+  if(filled+dragData.platforms.length>MAX_PER_DAY){toast('Daily limit reached ('+MAX_PER_DAY+' posts)');dragData=null;return;}
+  for(const plat of dragData.platforms){
+    addToPlan(dragData,plat,dragData.post_type,dayIso,hour,dayIdx);
+  }
+  dragData=null;
+  updateGenButton();
 }
 async function addToPlan(match,platform,postType,dayIso,time,dayIdx){
   const schedAt=dayIso+'T'+time;
@@ -754,8 +782,9 @@ async function addToPlan(match,platform,postType,dayIso,time,dayIdx){
   const d=await r.json();
   if(d.ok){
     const el=document.getElementById('day-'+dayIdx);
-    const emp=document.getElementById('empty-'+dayIdx);if(emp)emp.remove();
-    el.innerHTML+=`<div class="tl-slot ${platform}" id="sl-${d.id}">
+    // Replace the empty slot placeholder for this time
+    const emptySlot=el.querySelector(`.tl-slot-empty[data-hour="${time}"]`);
+    const newHtml=`<div class="tl-slot ${platform}" id="sl-${d.id}" data-hour="${time}">
       <span class="sl-time">${time}</span>
       <span class="plat ${platform}" style="font-size:.58rem">${platform==='x'?'𝕏':'LI'}</span>
       <div class="sl-body">
@@ -765,12 +794,36 @@ async function addToPlan(match,platform,postType,dayIso,time,dayIdx){
       <span class="sl-type">${postType.toUpperCase()}</span>
       <button class="btn sm sl-gen" onclick="generateOne(${d.id},this)" title="Generate this post">✍️</button>
       <span class="sl-rm" onclick="removePlan(${d.id})">✕</span></div>`;
+    if(emptySlot){emptySlot.insertAdjacentHTML('afterend',newHtml);emptySlot.remove();}
+    else{el.insertAdjacentHTML('beforeend',newHtml);}
     toast('Added to plan');
+    // Update count
+    const cnt=el.querySelectorAll('.tl-slot').length;
+    const cntEl=document.getElementById('day-count-'+dayIdx);
+    if(cntEl)cntEl.textContent=cnt+'/'+MAX_PER_DAY;
+  } else {
+    toast(d.msg||'Failed to add');
   }
 }
 async function removePlan(id){
   await fetch('/api/plan_remove',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
-  const el=document.getElementById('sl-'+id);if(el)el.remove();
+  const el=document.getElementById('sl-'+id);
+  if(el){
+    const hour=el.dataset.hour;
+    const parent=el.closest('.tl-slots');
+    // Insert empty slot placeholder back
+    const ph=document.createElement('div');ph.className='tl-slot-empty';ph.dataset.hour=hour;
+    ph.setAttribute('ondragover',"event.preventDefault();event.stopPropagation();this.classList.add('over')");
+    ph.setAttribute('ondragleave',"this.classList.remove('over')");
+    const dayIdx=parent.id.replace('day-','');
+    const dayIso=parent.closest('.tl-day').querySelector('.tl-dayhead span').nextElementSibling||'';
+    ph.innerHTML=`<span class="sle-time">${hour}</span>`;
+    el.replaceWith(ph);
+    // Update count
+    const cnt=parent.querySelectorAll('.tl-slot').length;
+    const cntEl=document.getElementById('day-count-'+dayIdx);
+    if(cntEl)cntEl.textContent=cnt>0?cnt+'/'+MAX_PER_DAY:'';
+  }
 updateGenButton();toast('Removed');
 }
 function updateGenButton(){
@@ -909,7 +962,7 @@ async function selectArticle(slug){
       ${d.article.url?'<a class="lib-url" href="'+d.article.url+'" target="_blank">'+d.article.url+'</a>':''}
       <div style="font-size:.7rem;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:10px">
         <span>${d.charts.length} chart(s) · ${d.charts.filter(c=>c.image_path).length} with images · 📤 ${postCount} post(s)${issueNum?' · Issue '+issueNum:''}</span>
-        ${d.charts.some(c=>c.image_path)?'<button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button>':''}
+        ${d.charts.some(c=>c.image_path)?'<select id="lib-post-type" style="padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:.68rem;font-family:inherit"><option value="short">Short</option><option value="long">Long</option></select><button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button>':''}
       </div>
     </div>`;
     if(d.charts.length){
@@ -940,9 +993,10 @@ async function selectArticle(slug){
 
 async function promoteArticle(slug,chartId,btn){
   if(btn){btn.disabled=true;btn.textContent='⏳ Generating...';}
-  toast('Generating posts from article...',30000);
+  const postType=(document.getElementById('lib-post-type')||{}).value||'short';
+  toast('Generating '+postType+' posts from article...',30000);
   try{
-    const r=await fetch('/api/promote_article',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,chart_id:chartId||null})});
+    const r=await fetch('/api/promote_article',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug,chart_id:chartId||null,post_type:postType})});
     const d=await r.json();
     if(d.ok){toast(d.msg,4000,true);if(btn){btn.textContent='✓ Done';}setTimeout(()=>{document.querySelector('.tab[data-tab="review"]')?.click()},1500);}
     else{toast(d.msg||'Failed',4000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
@@ -1178,20 +1232,23 @@ document.addEventListener('DOMContentLoaded',()=>{
     sl.addEventListener('dragend',()=>sl.classList.remove('dragging'));
   });
 });
-async function reorderSlot(slotId,newIso,dayIdx){
+async function reorderSlot(slotId,newIso,dayIdx,targetHour){
   const id=parseInt(slotId.replace('sl-',''));
-  const existing=document.getElementById('day-'+dayIdx).querySelectorAll('.tl-slot').length;
-  const hours=['06:00','07:00','11:00','12:00','16:00','17:00','18:00','20:00'];
-  const time=hours[Math.min(existing,hours.length-1)];
+  const target=document.getElementById('day-'+dayIdx);
+  // Use targeted hour if provided, otherwise find first empty slot
+  let time=targetHour;
+  if(!time){const emptySlot=target.querySelector('.tl-slot-empty');time=emptySlot?emptySlot.dataset.hour:'22:00';}
   const scheduledAt=newIso+'T'+time;
   const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,scheduled_at:scheduledAt})});
   const d=await r.json();
   if(d.ok){
     const slot=document.getElementById(slotId);if(slot){
       slot.querySelector('.sl-time').textContent=time;
-      const target=document.getElementById('day-'+dayIdx);
-      const emp=document.getElementById('empty-'+dayIdx);if(emp)emp.remove();
-      target.appendChild(slot);
+      slot.dataset.hour=time;
+      // Replace empty slot placeholder at target time
+      const emptySlot=target.querySelector(`.tl-slot-empty[data-hour="${time}"]`);
+      if(emptySlot){emptySlot.replaceWith(slot);}
+      else{target.appendChild(slot);}
     }
     toast('Moved');
   }
@@ -1202,9 +1259,19 @@ dropOnDay=function(event,dayIdx,dayIso){
   const slotId=event.dataTransfer.getData('text/plain');
   if(slotId&&slotId.startsWith('sl-')){
     event.preventDefault();document.getElementById('day-'+dayIdx).classList.remove('over');
-    reorderSlot(slotId,dayIso,dayIdx);return;
+    reorderSlot(slotId,dayIso,dayIdx,null);return;
   }
   origDropOnDay(event,dayIdx,dayIso);
+};
+// Patch dropOnSlot to handle reorder drops too
+const origDropOnSlot=dropOnSlot;
+dropOnSlot=function(event,dayIdx,dayIso,hour){
+  const slotId=event.dataTransfer.getData('text/plain');
+  if(slotId&&slotId.startsWith('sl-')){
+    event.preventDefault();event.currentTarget.classList.remove('over');
+    reorderSlot(slotId,dayIso,dayIdx,hour);return;
+  }
+  origDropOnSlot(event,dayIdx,dayIso,hour);
 };
 
 // ── Queue calendar drag-and-drop ──
@@ -1231,7 +1298,7 @@ async function queueDrop(event,slotsEl){
   const card=document.getElementById('qc-'+postId);if(!card)return;
   const newIso=slotsEl.dataset.iso;
   const existing=slotsEl.querySelectorAll('.qcal-card').length;
-  const hours=['06:00','07:00','11:00','12:00','16:00','17:00','18:00','20:00'];
+  const hours=['00:00','03:00','06:00','07:00','09:00','11:00','12:00','14:00','16:00','17:00','18:00','20:00','22:00'];
   const time=hours[Math.min(existing,hours.length-1)];
   const scheduledAt=newIso+'T'+time;
   const r=await fetch('/api/plan_reorder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:postId,scheduled_at:scheduledAt})});
@@ -1296,6 +1363,7 @@ def dashboard():
         all_plan_posts.append({**s, "_status": "generated"})
     for s in queued:
         all_plan_posts.append({**s, "_status": "queued"})
+    slot_hours = [f"{h:02d}:00" for h in POST_SLOTS]
     for i in range(7):
         d = today + timedelta(days=i)
         day_posts = []
@@ -1317,8 +1385,19 @@ def dashboard():
                             "status": s["_status"]})
                 except: pass
         day_posts.sort(key=lambda x: x["time"])
+        # Build slot list: each POST_SLOTS hour -> either filled or empty
+        posts_by_time = {}
+        for p in day_posts:
+            posts_by_time.setdefault(p["time"], []).append(p)
+        slots = []
+        for hour in slot_hours:
+            if hour in posts_by_time:
+                for p in posts_by_time[hour]:
+                    slots.append({"hour": hour, "post": p})
+            else:
+                slots.append({"hour": hour, "post": None})
         cal_days.append({"date": d.strftime("%d %b"), "label": day_names[d.weekday()],
-                         "is_today": d == today, "posts": day_posts,
+                         "is_today": d == today, "posts": day_posts, "slots": slots,
                          "idx": i, "iso": d.isoformat()})
 
     # Build review days (generated posts grouped by date)
@@ -1404,7 +1483,7 @@ def dashboard():
         xt=db.posts_today("x"), lt=db.posts_today("linkedin"),
         mx=MAX_X_PER_DAY, ml=MAX_LI_PER_DAY,
         news=news,
-        posted=posted[:30], cal_days=cal_days,
+        posted=posted[:30], cal_days=cal_days, max_per_day=MAX_POSTS_PER_DAY,
         review_days=review_days, queue_days=queue_days,
         n_generated=len(generated), n_queued=len(queued),
         articles_with_charts=articles_with_charts,
@@ -1512,10 +1591,21 @@ def api_arsenal(news_id):
 @app.route("/api/plan_add", methods=["POST"])
 def api_plan_add():
     d = request.json
+    sched_at = d.get("scheduled_at", "")
+    # Enforce daily limit
+    if sched_at:
+        day_iso = sched_at[:10]
+        conn = db.get_db()
+        count = conn.execute(
+            "SELECT COUNT(*) FROM posts WHERE scheduled_at LIKE ? AND status IN ('planned','generated','queued','scheduled')",
+            (day_iso + "%",)).fetchone()[0]
+        conn.close()
+        if count >= MAX_POSTS_PER_DAY:
+            return jsonify({"ok": False, "msg": f"Daily limit reached ({MAX_POSTS_PER_DAY} posts)"})
     pid = db.insert_planned_post(
         news_item_id=d.get("news_id"), chart_id=d["chart_id"],
         article_id=d.get("article_id"), platform=d["platform"],
-        post_type=d.get("post_type","short"), scheduled_at=d["scheduled_at"],
+        post_type=d.get("post_type","short"), scheduled_at=sched_at,
         image_path=d.get("image_path",""), article_url=d.get("article_url",""),
         hook=d.get("hook",""))
     return jsonify({"ok":True,"id":pid})
@@ -1592,6 +1682,9 @@ def api_promote_article():
     d = request.json
     slug = d.get("slug")
     chart_id = d.get("chart_id")
+    post_type = d.get("post_type", "short")
+    if post_type not in ("short", "long"):
+        post_type = "short"
     if not slug:
         return jsonify({"ok": False, "msg": "No article slug"})
     article = db.get_article_by_slug(slug)
@@ -1617,7 +1710,7 @@ def api_promote_article():
     sched_str = sched.strftime("%Y-%m-%dT%H:%M")
     results = []
     for platform in ["x", "linkedin"]:
-        result = gen_from_chart(target["id"], platform, "short")
+        result = gen_from_chart(target["id"], platform, post_type)
         if result:
             # gen_from_chart inserts as 'draft' — promote to 'generated' with schedule
             pid = result["post_id"]

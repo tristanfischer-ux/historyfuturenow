@@ -28,8 +28,9 @@ SESSIONS_DIR = BASE_DIR / "sessions"
 SESSIONS_DIR.mkdir(exist_ok=True)
 
 # Limits
-MAX_X_PER_DAY = int(os.getenv("MAX_X_PER_DAY", "4"))
-MAX_LI_PER_DAY = int(os.getenv("MAX_LI_PER_DAY", "2"))
+MAX_X_PER_DAY = int(os.getenv("MAX_X_PER_DAY", "6"))
+MAX_LI_PER_DAY = int(os.getenv("MAX_LI_PER_DAY", "6"))
+MAX_POSTS_PER_DAY = int(os.getenv("MAX_POSTS_PER_DAY", "12"))
 MONITOR_INTERVAL = int(os.getenv("MONITOR_INTERVAL", "30"))
 MIN_RELEVANCE = float(os.getenv("MIN_RELEVANCE", "0.5"))
 
