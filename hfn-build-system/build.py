@@ -27,6 +27,7 @@ REVIEW_SLUGS = {
     'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
+    'the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way',
 }
 
 # Articles that were under review and have been released to the public site.
@@ -147,6 +148,7 @@ ARTICLE_DATES = {
     "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing": "2026-02-16",
     "a-nation-transformed-britains-demographic-revolution-1948-2050": "2026-02-18",
     "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible": "2026-02-20",
+    "the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way": "2026-02-28",
 }
 
 def load_original_slugs():

@@ -356,6 +356,7 @@ BOOKS = [
     {"title": "Surprise, Kill, Vanish", "author": "Annie Jacobsen", "year": 2024, "source": "audible", "themes": ["geopolitics"]},
     {"title": "Ghost Fleet", "author": "P. W. Singer & August Cole", "year": 2015, "source": "kindle", "themes": ["geopolitics", "fiction"]},
     {"title": "Islam, Authoritarianism, and Underdevelopment", "author": "Ahmet T. Kuru", "year": 2023, "source": "audible", "themes": ["geopolitics", "religion"]},
+    {"title": "All the Shah's Men", "author": "Stephen Kinzer", "year": 2008, "source": "kindle", "themes": ["geopolitics", "modern"]},
 
     # ═══════════════════════════════════════════════════════════════
     # ECONOMICS & BUSINESS
@@ -408,6 +409,7 @@ BOOKS = [
     # ═══════════════════════════════════════════════════════════════
     # POLITICS & CULTURE
     # ═══════════════════════════════════════════════════════════════
+    {"title": "The Practice and Theory of Bolshevism", "author": "Bertrand Russell", "year": 1920, "source": "kindle", "themes": ["politics", "philosophy"]},
     {"title": "The True Believer", "author": "Eric Hoffer", "year": 2023, "source": "audible", "themes": ["politics"]},
     {"title": "Cynical Theories", "author": "Helen Pluckrose & James Lindsay", "year": 2022, "source": "audible", "themes": ["politics"]},
     {"title": "We Have Never Been Woke", "author": "Musa al-Gharbi", "year": 2025, "source": "audible", "themes": ["politics"]},
@@ -458,6 +460,7 @@ BOOKS = [
     # ═══════════════════════════════════════════════════════════════
     # RELIGION
     # ═══════════════════════════════════════════════════════════════
+    {"title": "Milestones", "author": "Sayyid Qutb", "year": 1964, "source": "kindle", "themes": ["religion", "politics"]},
     {"title": "Dominion", "author": "Tom Holland", "year": 2022, "source": "audible", "themes": ["religion"]},
     {"title": "In the Shadow of the Sword", "author": "Tom Holland", "year": 2012, "source": "audible", "themes": ["religion"]},
     {"title": "Christendom", "author": "Peter Heather", "year": 2023, "source": "audible", "themes": ["religion"]},

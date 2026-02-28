@@ -1,29 +1,75 @@
-"""HFN Promote — Ingester. Reads from corpus_context.json and chart_defs.py."""
-import json, re, sys
+"""HFN Promote — Ingester. Reads from corpus_context.json, chart_defs.py, and essay files."""
+import json, re, sys, yaml
 from pathlib import Path
 import db
 from config import HFN_BASE_URL, HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES
 
+
+def _parse_essay_frontmatter(filepath):
+    """Extract YAML frontmatter from an essay markdown file."""
+    text = filepath.read_text(encoding="utf-8")
+    m = re.match(r'^---\s*\n(.*?)\n---\s*\n', text, re.DOTALL)
+    if not m:
+        return None
+    try:
+        return yaml.safe_load(m.group(1))
+    except Exception:
+        return None
+
+
 def ingest_articles():
+    # Phase 1: corpus_context.json (full text + keywords)
     path = HFN_SOURCE_DIR / "corpus_context.json"
-    if not path.exists():
-        print(f"  ERROR: corpus_context.json not found at {path}")
-        return 0
-    data = json.loads(path.read_text(encoding="utf-8"))
+    ingested_slugs = set()
     count = 0
-    for art in data.get("articles", []):
-        slug = art["slug"]
-        keywords = set()
-        for ref in art.get("cross_references", []):
-            for theme in ref.get("shared_themes", []):
-                keywords.add(theme.lower())
-        db.upsert_article(
-            slug=slug, title=art.get("title", slug), part=art.get("part", ""),
-            excerpt=art.get("excerpt", ""), keywords=sorted(keywords),
-            opening=art.get("opening", ""), full_text=art.get("full_text", ""),
-            word_count=art.get("word_count", 0),
-            url=f"{HFN_BASE_URL}/articles/{slug}")
-        count += 1
+    if path.exists():
+        data = json.loads(path.read_text(encoding="utf-8"))
+        for art in data.get("articles", []):
+            slug = art["slug"]
+            keywords = set()
+            for ref in art.get("cross_references", []):
+                for theme in ref.get("shared_themes", []):
+                    keywords.add(theme.lower())
+            db.upsert_article(
+                slug=slug, title=art.get("title", slug), part=art.get("part", ""),
+                excerpt=art.get("excerpt", ""), keywords=sorted(keywords),
+                opening=art.get("opening", ""), full_text=art.get("full_text", ""),
+                word_count=art.get("word_count", 0),
+                url=f"{HFN_BASE_URL}/articles/{slug}")
+            ingested_slugs.add(slug)
+            count += 1
+    else:
+        print(f"  WARN: corpus_context.json not found at {path}")
+
+    # Phase 2: scan essays/ for any articles not in corpus_context.json
+    essays_dir = HFN_SOURCE_DIR / "essays"
+    extras = 0
+    if essays_dir.is_dir():
+        for md in sorted(essays_dir.glob("*.md")):
+            slug = md.stem
+            if slug in ingested_slugs:
+                continue
+            fm = _parse_essay_frontmatter(md)
+            if not fm:
+                continue
+            # Read body for opening paragraph and word count
+            text = md.read_text(encoding="utf-8")
+            body = re.sub(r'^---.*?---\s*\n', '', text, count=1, flags=re.DOTALL)
+            paragraphs = [p.strip() for p in body.split('\n\n') if p.strip() and not p.strip().startswith('#')]
+            opening = paragraphs[0] if paragraphs else ""
+            word_count = len(body.split())
+            db.upsert_article(
+                slug=slug, title=fm.get("title", slug), part=fm.get("part", ""),
+                excerpt=fm.get("excerpt", ""), keywords=[],
+                opening=opening, full_text=body[:10000],
+                word_count=word_count,
+                url=fm.get("url", f"{HFN_BASE_URL}/articles/{slug}"))
+            ingested_slugs.add(slug)
+            extras += 1
+            count += 1
+        if extras:
+            print(f"  + {extras} articles from essays/ (not yet in corpus_context.json)")
+
     return count
 
 def ingest_charts():

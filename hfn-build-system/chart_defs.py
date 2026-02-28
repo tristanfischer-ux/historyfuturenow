@@ -5245,6 +5245,61 @@ title:{display:true,text:'Gender ideology gap (pp)',color:C.dim}}}}});
         },
     ]
 
+    # ─── THE USEFUL IDIOTS ───
+    charts['the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way'] = [
+        {
+            'id': 'usefulChart1', 'figure_num': 1,
+            'title': 'The Red-Green Alliance: A History of Betrayal',
+            'desc': 'Estimated leftist deaths following purges after tactical alliances with Islamist or religious-nationalist forces',
+            'source': 'Boroumand Center; Cribb (2002); scholarly estimates for Indonesia 1965-66; Sudan historical records',
+            'position': 'after_heading:Part 2: Iran',
+            'js': """
+_regChart('usefulChart1',()=>{const ctx=document.getElementById('usefulChart1');
+new Chart(ctx,{type:'bar',data:{
+labels:['Indonesia (1965-66)','Iran (1981-88)','Sudan (1965-71)'],
+datasets:[{label:'Estimated leftist deaths',data:[500000,15000,5000],
+backgroundColor:[C.accent,C.purple,C.amber],borderRadius:4,borderSkipped:false}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw>=1000?(i.raw/1000)+'k estimated':i.raw+' estimated'}}}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v>=1000?(v/1000)+'k':v},title:{display:true,text:'Estimated deaths',color:C.dim}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
+});"""
+        },
+        {
+            'id': 'usefulChart2', 'figure_num': 2,
+            'title': 'The Values Gap: Homosexuality Should Be Illegal',
+            'desc': 'British Muslims and the general UK population hold diametrically opposed views on LGBTQ+ rights',
+            'source': 'ICM for Channel 4, 2016 — "What British Muslims Really Think"',
+            'position': 'after_heading:Part 1: The Oldest Alliance',
+            'js': """
+_regChart('usefulChart2',()=>{const ctx=document.getElementById('usefulChart2');
+new Chart(ctx,{type:'bar',data:{
+labels:['UK general population','British Muslims'],
+datasets:[{label:'% saying homosexuality should be illegal',data:[5,52],
+backgroundColor:[C.teal,C.accent],borderRadius:4,borderSkipped:false}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'%'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% agreeing homosexuality should be illegal',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'usefulChart3', 'figure_num': 3,
+            'title': 'Muslim Population Share in UK Cities',
+            'desc': 'Rapid growth in cities with large Muslim populations',
+            'source': 'UK Census 2011, 2021; ONS population estimates',
+            'position': 'after_heading:Part 5: What Comes Next',
+            'js': """
+_regChart('usefulChart3',()=>{const ctx=document.getElementById('usefulChart3');
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Birmingham',[2011,2021],[21.8,29.9],C.accent),
+dxy('Bradford',[2011,2021],[24.7,30.5],C.purple),
+dxy('Leicester',[2011,2021],[26,33],C.blue)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'%'}}},
+scales:{x:linX(2010,2025),y:{min:0,max:40,grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},title:{display:true,text:'Muslim population share (%)',color:C.dim}}}}});
+});"""
+        },
+    ]
+
     # Flatten any accidentally nested lists
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):

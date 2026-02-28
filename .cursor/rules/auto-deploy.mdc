@@ -13,12 +13,13 @@ New articles must be **built locally as drafts** for the user to review before d
 
 After completing a new article (text, charts, hero image):
 
-1. **Build the site** so the article is viewable locally with all charts and images:
+1. **Add the article to `REVIEW_SLUGS`** in `hfn-build-system/build.py` so it appears on the Editorial Review page at `historyfuturenow.com/review`.
+2. **Build the site** so the article is viewable locally with all charts and images:
    ```bash
    cd hfn-build-system && python3 build.py
    ```
-2. **Do NOT deploy.** The article is a draft until the user has read it and approved.
-3. **Tell the user** the article is ready to review and where to find the built HTML (e.g. `hfn-site-output/articles/{slug}.html`).
+3. **Do NOT deploy.** The article is a draft until the user has read it and approved.
+4. **Tell the user** the article is ready to review at `historyfuturenow.com/review` (or the built HTML path `hfn-site-output/articles/{slug}.html`).
 
 Only after the user explicitly approves (e.g. "deploy", "ship it", "looks good"):
 

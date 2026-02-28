@@ -33,11 +33,12 @@
 2. **Fact-check** — extract verifiable claims, verify each, correct errors, flag unverifiable (NOT optional)
 3. **Define charts** — add to `chart_defs.py`, min 1, target 2-5
 4. **Generate hero image** — create `hfn-site-output/images/articles/{slug}/hero.png` in HFN style
-5. **Build site** — run `build.py`, verify HTML
-6. **Generate discussion script** — `generate_discussions.py` (needs GEMINI_API_KEY)
-7. **Generate audio narration** — `generate_audio.py` (needs API key)
-8. **Generate discussion audio** — `generate_discussions.py audio` (needs API key)
-9. **Deploy** — `./scripts/deploy.sh`, verify live
+5. **Add to REVIEW_SLUGS** — in `hfn-build-system/build.py`, so the article appears on `historyfuturenow.com/review`
+6. **Build site** — run `build.py`, verify HTML
+7. **Generate discussion script** — `generate_discussions.py` (needs GEMINI_API_KEY)
+8. **Generate audio narration** — `generate_audio.py` (needs API key)
+9. **Generate discussion audio** — `generate_discussions.py audio` (needs API key)
+10. **Deploy** — `./scripts/deploy.sh`, verify live (only after user approves)
 
 ### Essay Model Requirement
 Essay writing MUST use Opus 4.6. Never delegate prose to faster/cheaper models. Covers: drafting, rewriting, debate scripts, share summaries. Does NOT cover: chart defs, build system, file searches, image prompts, deploying.
