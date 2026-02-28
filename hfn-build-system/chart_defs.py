@@ -5267,21 +5267,21 @@ y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});
         },
         {
             'id': 'usefulChart2', 'figure_num': 2,
-            'title': 'The Values Chasm',
-            'desc': 'British Muslims hold dramatically more conservative views than the UK general population across every social metric polled',
-            'source': 'ICM for Channel 4, 2016 — "What British Muslims Really Think"; general population control sample',
+            'title': 'The Values Chasm: What British Muslims Want Changed',
+            'desc': 'British Muslims were asked what social changes they want to see in the UK over the next 20 years. The results reveal a civilisational gap with the general population.',
+            'source': 'JL Partners for the Henry Jackson Society, 2024 (1,000 UK Muslims); ICM for Channel 4, 2016',
             'position': 'after_heading:Part 1: The Oldest Alliance',
             'tall': True,
             'js': """
 _regChart('usefulChart2',()=>{const ctx=document.getElementById('usefulChart2');
 new Chart(ctx,{type:'bar',data:{
-labels:[['Homosexuality should','be illegal'],['Gay people should','not be teachers'],['Support introduction','of Sharia law'],['Wives should always','obey husbands'],['Sympathise with violence','against Prophet mockers']],
+labels:[['Compulsory halal in','all schools & hospitals'],['Ban images of','the Prophet'],['Implement','Sharia law'],['Islam as UK','national religion'],['Outlaw','homosexuality']],
 datasets:[
-{label:'British Muslims',data:[52,47,43,39,18],backgroundColor:C.accent,borderRadius:4,borderSkipped:false},
-{label:'UK general population',data:[5,14,4,5,1],backgroundColor:C.teal,borderRadius:4,borderSkipped:false}]},
+{label:'British Muslims (2024)',data:[57,52,32,32,27],backgroundColor:C.accent,borderRadius:4,borderSkipped:false},
+{label:'UK general population',data:[1,2,1,1,5],backgroundColor:C.teal,borderRadius:4,borderSkipped:false}]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{...chartPad,left:16}},
 plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'%'}}},
-scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:60,title:{display:true,text:'% agreeing',color:C.dim}},
+scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:65,title:{display:true,text:'% supporting this change',color:C.dim}},
 y:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}}}}});
 });"""
         },
