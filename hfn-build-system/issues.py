@@ -193,6 +193,7 @@ ISSUES = [
             "the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration",
             "why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split",
             "the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world",
+            "the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way",
         ],
     },
 ]
