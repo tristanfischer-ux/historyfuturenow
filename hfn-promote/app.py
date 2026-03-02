@@ -851,6 +851,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
   <div class="st-wrap" id="st-list">
     <div class="st-header">
       <h2>Article Studio</h2>
+      <span style="font-size:.68rem;color:var(--dim);font-family:var(--mono);background:var(--surface);padding:3px 8px;border-radius:4px;border:1px solid var(--border)">claude-opus-4-6</span>
       <button class="btn primary" onclick="studioNewDraft()">✚ New Article</button>
     </div>
     {% if studio_drafts %}
