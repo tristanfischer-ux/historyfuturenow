@@ -9,7 +9,7 @@ load_dotenv(BASE_DIR / ".env")
 # Anthropic
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 MATCH_MODEL = os.getenv("MATCH_MODEL", "claude-sonnet-4-20250514")
-GEN_MODEL = os.getenv("GEN_MODEL", "claude-opus-4-20250514")
+GEN_MODEL = os.getenv("GEN_MODEL", "claude-opus-4-6-20250610")
 
 # HFN source paths
 HFN_SOURCE_DIR = Path(os.path.expanduser(os.getenv(
