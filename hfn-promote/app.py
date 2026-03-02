@@ -390,7 +390,7 @@ body.dark .qcal-article{color:var(--text)}
 .st-pills{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .st-pill{font-size:.62rem;font-weight:700;padding:3px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.3px}
 .st-pill.draft{background:#f5f5f4;color:#666}.st-pill.factcheck{background:#fef3c7;color:#92400e}
-.st-pill.images{background:#fef3c7;color:#92400e}.st-pill.review{background:#ede9fe;color:#5b21b6}
+.st-pill.charts{background:#dbeafe;color:#1e40af}.st-pill.images{background:#fef3c7;color:#92400e}.st-pill.review{background:#ede9fe;color:#5b21b6}
 .st-pill.deployed{background:#dcfce7;color:#166534}
 .st-table{width:100%;border-collapse:collapse}
 .st-table th{text-align:left;font-size:.68rem;color:var(--dim);font-weight:600;padding:8px 10px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.3px}
@@ -400,7 +400,7 @@ body.dark .qcal-article{color:var(--text)}
 .st-table .st-del{color:var(--red);cursor:pointer;opacity:.4;font-size:.8rem}.st-del:hover{opacity:1}
 .st-badge{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
 .st-badge.draft{background:#f5f5f4;color:#666}.st-badge.factcheck{background:#fef3c7;color:#92400e}
-.st-badge.images{background:#fef3c7;color:#92400e}.st-badge.review{background:#ede9fe;color:#5b21b6}
+.st-badge.charts{background:#dbeafe;color:#1e40af}.st-badge.images{background:#fef3c7;color:#92400e}.st-badge.review{background:#ede9fe;color:#5b21b6}
 .st-badge.deployed{background:#dcfce7;color:#166534}
 .st-assets{display:flex;gap:4px;font-size:.75rem}
 .st-assets .dim{opacity:.25}.st-assets .on{opacity:1}
@@ -867,7 +867,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
     </div>
     {% if studio_drafts %}
     <div class="st-pills">
-      {% set stages = {'draft':0,'factcheck':0,'images':0,'review':0,'deployed':0} %}
+      {% set stages = {'draft':0,'factcheck':0,'charts':0,'images':0,'review':0,'deployed':0} %}
       {% for d in studio_drafts %}{% if stages.update({d.stage: stages[d.stage]+1}) %}{% endif %}{% endfor %}
       {% for s,c in stages.items() %}{% if c > 0 %}
       <span class="st-pill {{s}}">{{s}} {{c}}</span>
@@ -897,7 +897,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <div class="st-icon">✍️</div>
       <div style="font-size:.9rem;font-weight:600;margin-bottom:6px">No articles yet</div>
       <div style="font-size:.78rem;color:var(--dim);max-width:360px;line-height:1.5">
-        Click "New Article" to start writing. Articles go through a pipeline: Draft → Fact-Check → Image → Build → Deploy.
+        Click "New Article" to start writing. Pipeline: Draft → Fact-Check → Charts → Image → Build → Deploy.
       </div>
     </div>
     {% endif %}
@@ -916,11 +916,13 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <div class="st-step-line" id="st-line-0"></div>
       <div class="st-step"><div class="st-step-dot" id="st-dot-1">2</div><div class="st-step-label">Fact-Check</div></div>
       <div class="st-step-line" id="st-line-1"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-2">3</div><div class="st-step-label">Image</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-2">3</div><div class="st-step-label">Charts</div></div>
       <div class="st-step-line" id="st-line-2"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-3">4</div><div class="st-step-label">Build</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-3">4</div><div class="st-step-label">Image</div></div>
       <div class="st-step-line" id="st-line-3"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Deploy</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Build</div></div>
+      <div class="st-step-line" id="st-line-4"></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-5">6</div><div class="st-step-label">Deploy</div></div>
     </div>
     <div class="st-next-bar" id="st-next-bar" style="display:none">
       <span class="st-next-text" id="st-next-text"></span>
@@ -1753,8 +1755,8 @@ let studioCurrentId=null;
 let studioSaveTimer=null;
 let studioPollTimer=null;
 let studioChatStreaming=false;
-const stageOrder=['draft','factcheck','images','review','deployed'];
-const stageLabels=['Draft','Fact-Check','Image','Build','Deploy'];
+const stageOrder=['draft','factcheck','charts','images','review','deployed'];
+const stageLabels=['Draft','Fact-Check','Charts','Image','Build','Deploy'];
 
 async function studioNewDraft(){
   const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'Untitled'})});
@@ -2031,7 +2033,7 @@ function studioUpdateWc(){
 
 function studioUpdateStepper(stage){
   const idx=stageOrder.indexOf(stage);
-  for(let i=0;i<5;i++){
+  for(let i=0;i<6;i++){
     const dot=document.getElementById('st-dot-'+i);
     const line=document.getElementById('st-line-'+i);
     dot.classList.remove('active','done');
@@ -2054,7 +2056,11 @@ function studioUpdateNextBar(stage){
       break;
     case 'factcheck':
       text.textContent='Review the report and edit the draft if needed. Continue when done.';
-      btns.innerHTML='<button class="btn secondary" onclick="studioFactCheck()" style="margin-right:6px">Re-check</button><button class="btn primary" onclick="studioAdvanceStage(\'images\')">Continue \u2192</button>';
+      btns.innerHTML='<button class="btn secondary" onclick="studioFactCheck()" style="margin-right:6px">Re-check</button><button class="btn primary" onclick="studioAdvanceStage(\'charts\')">Continue \u2192</button>';
+      break;
+    case 'charts':
+      text.textContent='Define 2\u20135 charts in the chat, then continue to hero image.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioDefineCharts()" style="margin-right:6px">Define Charts</button><button class="btn primary" onclick="studioAdvanceStage(\'images\')">Continue \u2192</button>';
       break;
     case 'images':
       text.textContent='Generate a hero image for the article.';
@@ -2077,6 +2083,13 @@ async function studioAdvanceStage(newStage){
   if(!studioCurrentId)return;
   await fetch('/api/studio/drafts/'+studioCurrentId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage:newStage})});
   studioUpdateStepper(newStage);
+}
+
+async function studioDefineCharts(){
+  if(!studioCurrentId||studioChatStreaming)return;
+  const input=document.getElementById('st-chat-input');
+  input.value='Define 2-5 charts for this article. Output complete chart_defs.py entries with Chart.js code.';
+  studioSendChat();
 }
 
 async function studioFactCheck(){
