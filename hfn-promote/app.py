@@ -2763,7 +2763,7 @@ def api_studio_chat(did):
         full_response = []
         try:
             with client.messages.stream(
-                model="claude-opus-4-6-20250610",  # Hardcoded: essay writing must use Opus 4.6
+                model="claude-opus-4-6",  # Hardcoded: essay writing must use Opus 4.6
                 max_tokens=4096,
                 system=system,
                 messages=messages,
