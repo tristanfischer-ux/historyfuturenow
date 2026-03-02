@@ -389,8 +389,8 @@ body.dark .qcal-article{color:var(--text)}
 .st-header h2{font-size:1rem;font-weight:700}
 .st-pills{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .st-pill{font-size:.62rem;font-weight:700;padding:3px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.3px}
-.st-pill.draft{background:#f5f5f4;color:#666}.st-pill.images{background:#fef3c7;color:#92400e}
-.st-pill.audio{background:#dbeafe;color:#1e40af}.st-pill.review{background:#ede9fe;color:#5b21b6}
+.st-pill.draft{background:#f5f5f4;color:#666}.st-pill.factcheck{background:#fef3c7;color:#92400e}
+.st-pill.images{background:#fef3c7;color:#92400e}.st-pill.review{background:#ede9fe;color:#5b21b6}
 .st-pill.deployed{background:#dcfce7;color:#166534}
 .st-table{width:100%;border-collapse:collapse}
 .st-table th{text-align:left;font-size:.68rem;color:var(--dim);font-weight:600;padding:8px 10px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.3px}
@@ -399,8 +399,8 @@ body.dark .qcal-article{color:var(--text)}
 .st-table .st-title-link{color:var(--text);font-weight:600;cursor:pointer;text-decoration:none}.st-title-link:hover{color:var(--accent)}
 .st-table .st-del{color:var(--red);cursor:pointer;opacity:.4;font-size:.8rem}.st-del:hover{opacity:1}
 .st-badge{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
-.st-badge.draft{background:#f5f5f4;color:#666}.st-badge.images{background:#fef3c7;color:#92400e}
-.st-badge.audio{background:#dbeafe;color:#1e40af}.st-badge.review{background:#ede9fe;color:#5b21b6}
+.st-badge.draft{background:#f5f5f4;color:#666}.st-badge.factcheck{background:#fef3c7;color:#92400e}
+.st-badge.images{background:#fef3c7;color:#92400e}.st-badge.review{background:#ede9fe;color:#5b21b6}
 .st-badge.deployed{background:#dcfce7;color:#166534}
 .st-assets{display:flex;gap:4px;font-size:.75rem}
 .st-assets .dim{opacity:.25}.st-assets .on{opacity:1}
@@ -416,14 +416,23 @@ body.dark .qcal-article{color:var(--text)}
 .st-ed-save{font-size:.62rem;color:var(--grn);font-weight:600}
 
 /* Pipeline stepper */
-.st-stepper{display:flex;align-items:center;gap:0;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
-.st-step{display:flex;align-items:center;gap:0}
+.st-stepper{display:flex;align-items:flex-start;gap:0;padding:12px 16px 28px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.st-step{display:flex;flex-direction:column;align-items:center;gap:0;position:relative}
 .st-step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:var(--dim);background:var(--card);transition:all .2s}
 .st-step-dot.active{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .st-step-dot.done{border-color:var(--grn);color:#fff;background:var(--grn)}
-.st-step-line{width:24px;height:2px;background:var(--border)}
+.st-step-line{width:24px;height:2px;background:var(--border);margin-top:13px}
 .st-step-line.done{background:var(--grn)}
 .st-step-label{font-size:.55rem;color:var(--dim);text-align:center;margin-top:2px;position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap}
+
+/* Next-step action bar */
+.st-next-bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#fffbeb;border-bottom:1px solid #fde68a;flex-shrink:0}
+.st-next-text{flex:1;font-size:.78rem;color:#92400e;font-weight:500}
+.st-next-bar .btn{flex-shrink:0}
+.st-next-bar .btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.st-next-bar .btn.secondary:hover{background:#f0efed}
+body.dark .st-next-bar{background:#3a3020;border-color:#5a4a20}
+body.dark .st-next-text{color:#fbbf24}
 
 /* Editor layout */
 .st-ed-body{display:flex;flex:1;overflow:hidden}
@@ -448,6 +457,8 @@ body.dark .qcal-article{color:var(--text)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .st-draft-indicator{background:#dcfce7;color:#166534;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;text-align:center;animation:fadeInUp .3s ease}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes editorFlash{0%{box-shadow:inset 0 0 0 2px transparent}30%{box-shadow:inset 0 0 0 2px #4ade80}100%{box-shadow:inset 0 0 0 2px transparent}}
+.st-md-area.flash{animation:editorFlash 1.2s ease}
 .st-chat-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);background:var(--card);align-items:flex-end}
 .st-chat-input-row textarea{flex:1;resize:none;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.82rem;font-family:inherit;line-height:1.4;max-height:120px;overflow-y:auto;background:var(--card);color:var(--text)}
 .st-chat-input-row textarea:focus{outline:none;border-color:var(--accent)}
@@ -856,7 +867,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
     </div>
     {% if studio_drafts %}
     <div class="st-pills">
-      {% set stages = {'draft':0,'images':0,'audio':0,'review':0,'deployed':0} %}
+      {% set stages = {'draft':0,'factcheck':0,'images':0,'review':0,'deployed':0} %}
       {% for d in studio_drafts %}{% if stages.update({d.stage: stages[d.stage]+1}) %}{% endif %}{% endfor %}
       {% for s,c in stages.items() %}{% if c > 0 %}
       <span class="st-pill {{s}}">{{s}} {{c}}</span>
@@ -886,7 +897,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <div class="st-icon">✍️</div>
       <div style="font-size:.9rem;font-weight:600;margin-bottom:6px">No articles yet</div>
       <div style="font-size:.78rem;color:var(--dim);max-width:360px;line-height:1.5">
-        Click "New Article" to start writing. Articles go through a pipeline: Draft → Image → Audio → Preview → Deploy.
+        Click "New Article" to start writing. Articles go through a pipeline: Draft → Fact-Check → Image → Build → Deploy.
       </div>
     </div>
     {% endif %}
@@ -901,15 +912,19 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <span class="st-ed-save" id="st-ed-save"></span>
     </div>
     <div class="st-stepper">
-      <div class="st-step"><div class="st-step-dot" id="st-dot-0">1</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-0">1</div><div class="st-step-label">Draft</div></div>
       <div class="st-step-line" id="st-line-0"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-1">2</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-1">2</div><div class="st-step-label">Fact-Check</div></div>
       <div class="st-step-line" id="st-line-1"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-2">3</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-2">3</div><div class="st-step-label">Image</div></div>
       <div class="st-step-line" id="st-line-2"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-3">4</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-3">4</div><div class="st-step-label">Build</div></div>
       <div class="st-step-line" id="st-line-3"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Deploy</div></div>
+    </div>
+    <div class="st-next-bar" id="st-next-bar" style="display:none">
+      <span class="st-next-text" id="st-next-text"></span>
+      <span id="st-next-btns"></span>
     </div>
     <div class="st-ed-body">
       <!-- Left panel: chat -->
@@ -1738,8 +1753,8 @@ let studioCurrentId=null;
 let studioSaveTimer=null;
 let studioPollTimer=null;
 let studioChatStreaming=false;
-const stageOrder=['draft','images','audio','review','deployed'];
-const stageLabels=['Draft','Image','Audio','Preview','Deploy'];
+const stageOrder=['draft','factcheck','images','review','deployed'];
+const stageLabels=['Draft','Fact-Check','Image','Build','Deploy'];
 
 async function studioNewDraft(){
   const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'Untitled'})});
@@ -1940,13 +1955,22 @@ function studioCheckForDraft(text){
   studioUpdateWc();
   studioAutoSave();
 
+  // Flash the editor area
+  const mdArea=document.getElementById('st-md-textarea').parentElement;
+  mdArea.classList.remove('flash');
+  void mdArea.offsetWidth; // force reflow
+  mdArea.classList.add('flash');
+
   // Show indicator
   const msgs=document.getElementById('st-chat-messages');
   const ind=document.createElement('div');
   ind.className='st-draft-indicator';
-  ind.textContent='Draft loaded into editor →';
+  ind.textContent='Draft loaded into editor — edit freely, then fact-check when ready.';
   msgs.appendChild(ind);
   msgs.scrollTop=msgs.scrollHeight;
+
+  // Show next-step bar
+  studioUpdateNextBar('draft');
 }
 
 function studioToggleDetails(){
@@ -2015,6 +2039,115 @@ function studioUpdateStepper(stage){
     if(i<idx){dot.classList.add('done');if(line)line.classList.add('done')}
     else if(i===idx){dot.classList.add('active')}
   }
+  studioUpdateNextBar(stage);
+}
+
+function studioUpdateNextBar(stage){
+  const bar=document.getElementById('st-next-bar');
+  const text=document.getElementById('st-next-text');
+  const btns=document.getElementById('st-next-btns');
+  bar.style.display='flex';
+  switch(stage){
+    case 'draft':
+      text.textContent='Edit in the editor if needed, then fact-check.';
+      btns.innerHTML='<button class="btn primary" onclick="studioFactCheck()">Fact-Check</button>';
+      break;
+    case 'factcheck':
+      text.textContent='Review the report, then generate the hero image.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioFactCheck()" style="margin-right:6px">Re-check</button><button class="btn primary" onclick="studioAction(\'generate_image\')">Generate Image</button>';
+      break;
+    case 'images':
+      text.textContent='Hero image ready. Build a preview.';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'build\')">Build &amp; Preview</button>';
+      break;
+    case 'review':
+      text.textContent='Preview built. Deploy when ready.';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'deploy\')">Deploy</button>';
+      break;
+    case 'deployed':
+      text.textContent='Article deployed.';
+      btns.innerHTML='';
+      break;
+    default:
+      bar.style.display='none';
+  }
+}
+
+async function studioFactCheck(){
+  if(!studioCurrentId||studioChatStreaming)return;
+  // Save draft first
+  await studioSave();
+  // Show user message
+  studioAppendMessage('user','[Fact-check requested]');
+  // Create streaming assistant bubble
+  const bubble=studioAppendMessage('assistant','',true);
+  const contentEl=bubble.querySelector('.st-msg-content');
+  studioChatStreaming=true;
+  document.getElementById('st-chat-send').disabled=true;
+  let fullText='';
+  try{
+    const res=await fetch('/api/studio/drafts/'+studioCurrentId+'/fact-check',{
+      method:'POST',headers:{'Content-Type':'application/json'}
+    });
+    const reader=res.body.getReader();
+    const decoder=new TextDecoder();
+    let buffer='';
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      buffer+=decoder.decode(value,{stream:true});
+      const lines=buffer.split('\n');
+      buffer=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data: '))continue;
+        try{
+          const data=JSON.parse(line.slice(6));
+          if(data.delta){
+            fullText+=data.delta;
+            const cursor=contentEl.querySelector('.st-cursor');
+            if(typeof marked!=='undefined'){
+              contentEl.innerHTML=marked.parse(fullText);
+            }else{
+              contentEl.textContent=fullText;
+            }
+            if(cursor||bubble.classList.contains('streaming')){
+              const c=document.createElement('span');
+              c.className='st-cursor';
+              contentEl.appendChild(c);
+            }
+            document.getElementById('st-chat-messages').scrollTop=document.getElementById('st-chat-messages').scrollHeight;
+          }
+          if(data.done){
+            bubble.classList.remove('streaming');
+            const cur=contentEl.querySelector('.st-cursor');
+            if(cur)cur.remove();
+            if(typeof marked!=='undefined'){
+              contentEl.innerHTML=marked.parse(fullText);
+            }
+            // Update stepper to factcheck
+            studioUpdateStepper('factcheck');
+            // Show indicator
+            const msgs=document.getElementById('st-chat-messages');
+            const ind=document.createElement('div');
+            ind.className='st-draft-indicator';
+            ind.textContent='Fact-check complete — review above, then generate image.';
+            msgs.appendChild(ind);
+            msgs.scrollTop=msgs.scrollHeight;
+          }
+          if(data.error){
+            contentEl.innerHTML='<em style="color:var(--red)">Error: '+data.error+'</em>';
+            bubble.classList.remove('streaming');
+          }
+        }catch(e){}
+      }
+    }
+  }catch(e){
+    contentEl.innerHTML='<em style="color:var(--red)">Connection error</em>';
+    bubble.classList.remove('streaming');
+  }
+  studioChatStreaming=false;
+  document.getElementById('st-chat-send').disabled=false;
+  document.getElementById('st-chat-input').focus();
 }
 
 async function studioAction(action){
@@ -2798,6 +2931,83 @@ def api_studio_chat(did):
             if "---\ntitle:" in full_text or full_text.strip().startswith("# "):
                 # Extract the markdown portion (after frontmatter or from start)
                 db.update_draft(did, markdown=full_text)
+
+        yield "data: {\"done\": true}\n\n"
+
+    return Response(generate(), mimetype="text/event-stream",
+                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+FACTCHECK_SYSTEM_PROMPT = """You are an editorial fact-checker for History Future Now (historyfuturenow.com).
+
+YOUR TASK:
+Systematically fact-check the article draft below. For every verifiable claim:
+
+1. **Extract** the specific claim (quote or paraphrase)
+2. **Assess** it as one of: CONFIRMED | LIKELY CORRECT | UNCERTAIN | INCORRECT
+3. **Cite** the authoritative source to check against (UN DESA, World Bank, OECD, IEA, Pew, Eurobarometer, IISS, WTO, UNESCO, or other credible primary source)
+4. **Suggest corrections** for any INCORRECT or UNCERTAIN claims
+
+OUTPUT FORMAT (structured markdown):
+## Fact-Check Report
+
+**Summary:** X claims checked — Y confirmed, Z likely correct, W uncertain, V incorrect
+
+### Claim-by-Claim Analysis
+
+1. **Claim:** "quoted or paraphrased claim"
+   - **Assessment:** CONFIRMED
+   - **Source:** [Source name, date/edition]
+   - **Notes:** Any relevant context
+
+2. **Claim:** "quoted or paraphrased claim"
+   - **Assessment:** INCORRECT
+   - **Source:** [Source name] says [correct figure/fact]
+   - **Suggested correction:** [How to fix it]
+
+...
+
+### Recommendations
+- List any claims that need the author's attention
+- Note if any claims are unverifiable and should be flagged or removed
+"""
+
+@app.route("/api/studio/drafts/<int:did>/fact-check", methods=["POST"])
+def api_studio_fact_check(did):
+    import anthropic
+    from config import ANTHROPIC_API_KEY
+
+    draft = db.get_draft(did)
+    if not draft:
+        return jsonify({"error": "Draft not found"}), 404
+
+    markdown = (draft.get("markdown") or "").strip()
+    if not markdown:
+        return jsonify({"error": "No draft content to fact-check"}), 400
+
+    # Record fact-check request as a user message
+    db.add_studio_message(did, "user", "[Fact-check requested]")
+
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+
+    def generate():
+        full_response = []
+        try:
+            with client.messages.stream(
+                model="claude-opus-4-6",
+                max_tokens=4096,
+                system=FACTCHECK_SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": f"Fact-check this article draft:\n\n{markdown}"}],
+            ) as stream:
+                for text in stream.text_stream:
+                    full_response.append(text)
+                    yield f"data: {json.dumps({'delta': text})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+        full_text = "".join(full_response)
+        if full_text:
+            db.add_studio_message(did, "assistant", full_text)
+            db.update_draft(did, stage="factcheck")
 
         yield "data: {\"done\": true}\n\n"
 

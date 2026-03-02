@@ -136,6 +136,8 @@ def init_db():
             conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
         except sqlite3.OperationalError:
             conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT ''")
+    # Migrate legacy 'audio' stage to 'images' (audio decoupled from pipeline)
+    conn.execute("UPDATE article_drafts SET stage='images' WHERE stage='audio'")
     conn.commit()
     conn.close()
 

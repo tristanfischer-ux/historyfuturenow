@@ -131,7 +131,7 @@ def _run_generate_audio(task_id, draft_id):
     # Check if audio file was created
     audio_path = HFN_AUDIO_DIR / f"{draft['slug']}.mp3"
     if audio_path.exists():
-        db.update_draft(draft_id, has_audio=1, stage="audio")
+        db.update_draft(draft_id, has_audio=1)
         db.update_studio_task(task_id, progress="Audio generated")
     else:
         db.update_studio_task(task_id, progress="Script ran but MP3 not found")
