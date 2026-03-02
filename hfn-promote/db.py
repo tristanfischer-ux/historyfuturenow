@@ -377,7 +377,9 @@ def log_post(platform, post_id):
 
 def posts_today(platform):
     conn = get_db()
-    n = conn.execute("SELECT COUNT(*) FROM post_log WHERE platform=? AND date(posted_at)=?",
+    n = conn.execute("""SELECT COUNT(*) FROM post_log pl
+                        JOIN posts p ON pl.post_id = p.id
+                        WHERE pl.platform=? AND date(p.scheduled_at)=?""",
                      (platform, date.today().isoformat())).fetchone()[0]
     conn.close()
     return n

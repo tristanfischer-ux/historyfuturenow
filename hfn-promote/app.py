@@ -1,6 +1,6 @@
 """HFN Promote v3.11 — Library: Promote Article to generate posts."""
 import sys
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort
 import db
@@ -1904,15 +1904,25 @@ def _start_auto_poster():
         import subprocess
         due = db.get_due_posts()
         if not due: return
+        today_iso = date.today().isoformat()
         x_posts = [p for p in due if p["platform"] == "x"]
         li_posts = [p for p in due if p["platform"] == "linkedin"]
+
+        # Sort: today's scheduled posts first, then overdue (catch-up)
+        def _today_first(p):
+            return 0 if p.get("scheduled_at", "")[:10] == today_iso else 1
+        x_posts.sort(key=_today_first)
+        li_posts.sort(key=_today_first)
 
         def _record(platform, pid, ok, msg=""):
             last_post_result.update({"time": datetime.now().isoformat(), "platform": platform,
                                      "post_id": pid, "ok": ok, "msg": msg})
 
         # Post LinkedIn first (no Chrome conflict)
+        li_remaining = MAX_LI_PER_DAY - db.posts_today("linkedin")
         for p in li_posts:
+            if li_remaining <= 0:
+                log(f"Skipping #{p['id']} LinkedIn — daily limit reached"); break
             try:
                 from poster import post_to_linkedin
                 text = p["caption"]
@@ -1921,13 +1931,17 @@ def _start_auto_poster():
                 if ok:
                     db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
                     log(f"Posted #{p['id']} to LinkedIn"); _record("linkedin", p["id"], True)
+                    li_remaining -= 1
                 else:
                     log(f"Failed #{p['id']} LinkedIn"); _record("linkedin", p["id"], False, "post failed")
             except Exception as ex:
                 log(f"Error #{p['id']} LinkedIn: {ex}"); _record("linkedin", p["id"], False, str(ex))
 
         # Post to X (post_to_x handles Chrome close/reopen internally)
+        x_remaining = MAX_X_PER_DAY - db.posts_today("x")
         for p in x_posts:
+            if x_remaining <= 0:
+                log(f"Skipping #{p['id']} X — daily limit reached"); break
             try:
                 from poster import post_to_x
                 text = p["caption"]
@@ -1936,6 +1950,7 @@ def _start_auto_poster():
                 if ok:
                     db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
                     log(f"Posted #{p['id']} to X"); _record("x", p["id"], True)
+                    x_remaining -= 1
                 else:
                     log(f"Failed #{p['id']} X"); _record("x", p["id"], False, "post failed")
             except Exception as ex:
