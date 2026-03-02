@@ -105,6 +105,13 @@ CREATE TABLE IF NOT EXISTS studio_tasks (
     created_at TEXT DEFAULT (datetime('now')),
     completed_at TEXT
 );
+CREATE TABLE IF NOT EXISTS studio_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    draft_id INTEGER NOT NULL,
+    role TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+);
 """
 
 def _dict(row):
@@ -778,6 +785,7 @@ def delete_draft(did):
     conn = get_db()
     conn.execute("DELETE FROM article_drafts WHERE id=?", (did,))
     conn.execute("DELETE FROM studio_tasks WHERE draft_id=?", (did,))
+    conn.execute("DELETE FROM studio_messages WHERE draft_id=?", (did,))
     conn.commit()
     conn.close()
 
@@ -809,6 +817,31 @@ def update_studio_task(tid, **fields):
     vals.append(tid)
     conn = get_db()
     conn.execute(f"UPDATE studio_tasks SET {', '.join(sets)} WHERE id=?", vals)
+    conn.commit()
+    conn.close()
+
+# ── Studio Messages ──
+
+def add_studio_message(draft_id, role, content):
+    conn = get_db()
+    conn.execute("INSERT INTO studio_messages (draft_id, role, content) VALUES (?, ?, ?)",
+                 (draft_id, role, content))
+    conn.commit()
+    mid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+    return mid
+
+def get_studio_messages(draft_id):
+    conn = get_db()
+    rows = _dicts(conn.execute(
+        "SELECT * FROM studio_messages WHERE draft_id=? ORDER BY id ASC",
+        (draft_id,)).fetchall())
+    conn.close()
+    return rows
+
+def clear_studio_messages(draft_id):
+    conn = get_db()
+    conn.execute("DELETE FROM studio_messages WHERE draft_id=?", (draft_id,))
     conn.commit()
     conn.close()
 

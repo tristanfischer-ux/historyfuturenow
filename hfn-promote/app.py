@@ -1,8 +1,8 @@
 """HFN Promote v3.11 — Library: Promote Article to generate posts."""
-import sys
+import sys, json
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from flask import Flask, render_template_string, request, jsonify, send_file, abort
+from flask import Flask, render_template_string, request, jsonify, send_file, abort, Response
 import db
 from config import (FLASK_PORT, MAX_X_PER_DAY, MAX_LI_PER_DAY, MAX_POSTS_PER_DAY,
                     HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES, HFN_SITE_OUTPUT,
@@ -14,6 +14,53 @@ _build_sys = str(Path(__file__).resolve().parent.parent / "hfn-build-system")
 if _build_sys not in sys.path:
     sys.path.insert(0, _build_sys)
 from issues import ISSUES, build_slug_to_issue_map
+
+# ── Style guide + article catalog loaders for Studio chat ──
+
+_style_guide_cache = None
+
+def load_style_guides():
+    """Load all editorial rules and style guides from disk (cached after first call)."""
+    global _style_guide_cache
+    if _style_guide_cache:
+        return _style_guide_cache
+
+    rules_dir = Path(HFN_SOURCE_DIR).parent / ".cursor" / "rules"
+    editorial = Path(HFN_SOURCE_DIR).parent / "CLAUDE.md"
+
+    parts = []
+    if editorial.exists():
+        parts.append(f"# EDITORIAL RULES\n\n{editorial.read_text()}")
+
+    if rules_dir.is_dir():
+        for f in sorted(rules_dir.glob("*.mdc")):
+            name = f.stem.replace("-", " ").title()
+            content = f.read_text()
+            # Strip .mdc frontmatter (---\n...\n---)
+            if content.startswith("---"):
+                end = content.find("---", 3)
+                if end != -1:
+                    content = content[end + 3:].strip()
+            parts.append(f"## {name}\n\n{content}")
+
+    _style_guide_cache = "\n\n---\n\n".join(parts)
+    return _style_guide_cache
+
+
+def build_article_catalog():
+    """Build a compact article catalog from the DB for cross-referencing."""
+    articles = db.get_all_articles()
+    lines = ["# Existing HFN Articles (for cross-referencing)\n"]
+    lines.append("IMPORTANT: When writing or discussing articles, actively reference relevant "
+                 "existing articles using markdown links: [Title](/articles/slug). Every new "
+                 "article should cross-reference at least 2 existing articles. Suggest thematic "
+                 "connections the author may not have considered.\n")
+    for a in articles:
+        part = a.get("part", "")
+        excerpt = (a.get("excerpt", "") or "")[:120]
+        lines.append(f"- **{a['title']}** ({part}) `/articles/{a['slug']}` — {excerpt}")
+    return "\n".join(lines)
+
 
 app = Flask(__name__)
 activity_log = []
@@ -380,8 +427,39 @@ body.dark .qcal-article{color:var(--text)}
 
 /* Editor layout */
 .st-ed-body{display:flex;flex:1;overflow:hidden}
-.st-ed-left{width:35%;min-width:280px;border-right:1px solid var(--border);overflow-y:auto;padding:12px}
+.st-ed-left{width:45%;min-width:320px;border-right:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
 .st-ed-right{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* Chat pane */
+.st-chat{display:flex;flex-direction:column;height:100%}
+.st-chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.st-chat-messages:empty::before{content:'Start a conversation about your article idea...';color:var(--dim);font-size:.82rem;text-align:center;margin-top:40%;font-style:italic}
+.st-msg{max-width:88%;padding:10px 14px;border-radius:12px;font-size:.82rem;line-height:1.55;word-wrap:break-word}
+.st-msg.user{align-self:flex-end;background:var(--accent-soft);border:1px solid #f0d4d0;border-bottom-right-radius:4px}
+.st-msg.assistant{align-self:flex-start;background:var(--card);border:1px solid var(--border);border-bottom-left-radius:4px}
+.st-msg .st-msg-content p{margin-bottom:6px}.st-msg .st-msg-content p:last-child{margin-bottom:0}
+.st-msg .st-msg-content h1,.st-msg .st-msg-content h2,.st-msg .st-msg-content h3{font-size:.88rem;font-weight:700;margin:8px 0 4px}
+.st-msg .st-msg-content code{background:#f5f5f4;padding:1px 4px;border-radius:3px;font-family:var(--mono);font-size:.78em}
+.st-msg .st-msg-content pre{background:#f5f5f4;padding:8px;border-radius:4px;overflow-x:auto;margin:6px 0;font-size:.76rem}
+.st-msg .st-msg-content blockquote{border-left:3px solid var(--accent);padding-left:10px;color:#555;margin:6px 0}
+.st-msg .st-msg-content ul,.st-msg .st-msg-content ol{margin:4px 0;padding-left:20px}
+.st-msg .st-msg-content li{margin-bottom:2px}
+.st-msg.streaming .st-cursor{display:inline-block;width:2px;height:14px;background:var(--accent);animation:blink .8s infinite;vertical-align:text-bottom;margin-left:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.st-draft-indicator{background:#dcfce7;color:#166534;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;text-align:center;animation:fadeInUp .3s ease}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.st-chat-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);background:var(--card);align-items:flex-end}
+.st-chat-input-row textarea{flex:1;resize:none;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.82rem;font-family:inherit;line-height:1.4;max-height:120px;overflow-y:auto;background:var(--card);color:var(--text)}
+.st-chat-input-row textarea:focus{outline:none;border-color:var(--accent)}
+.st-chat-input-row button{padding:8px 14px;border-radius:8px;font-size:.9rem;min-width:40px;flex-shrink:0}
+
+/* Details panel (collapsible) */
+.st-details-panel{display:none;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg-warm);overflow-y:auto;max-height:320px}
+.st-details-panel.open{display:block}
+.st-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.st-details-grid .st-field:nth-child(3),.st-details-grid .st-field:nth-child(4),.st-details-grid .st-field:nth-child(5){grid-column:span 2}
+.st-details-actions{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.st-details-actions .st-action-btn{padding:5px 10px;font-size:.68rem;flex:none}
 
 /* Metadata card */
 .st-meta-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
@@ -443,7 +521,14 @@ body.dark .st-action-btn{background:var(--card);color:var(--text);border-color:v
 body.dark .st-action-btn:hover{background:#3a2020;border-color:var(--accent)}
 body.dark .st-meta-card{background:var(--card);border-color:var(--border)}
 body.dark .st-task-status{background:#2a2825;border-color:var(--border)}
-@media(max-width:900px){.st-ed-body{flex-direction:column}.st-ed-left{width:100%;min-width:0;border-right:none;border-bottom:1px solid var(--border);max-height:300px}.st-ed-right{min-height:300px}}
+body.dark .st-msg.user{background:#3a2020;border-color:#5a3030}
+body.dark .st-msg.assistant{background:var(--card);border-color:var(--border)}
+body.dark .st-msg .st-msg-content code,body.dark .st-msg .st-msg-content pre{background:#2a2825}
+body.dark .st-chat-input-row{background:var(--card);border-color:var(--border)}
+body.dark .st-chat-input-row textarea{background:var(--card);color:var(--text);border-color:var(--border)}
+body.dark .st-details-panel{background:#2a2825}
+body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
+@media(max-width:900px){.st-ed-body{flex-direction:column}.st-ed-left{width:100%;min-width:0;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}.st-ed-right{min-height:300px}.st-details-grid{grid-template-columns:1fr}}
 </style></head><body>
 
 <div class="topbar">
@@ -826,59 +911,15 @@ body.dark .st-task-status{background:#2a2825;border-color:var(--border)}
       <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div></div>
     </div>
     <div class="st-ed-body">
-      <!-- Left panel: metadata + actions -->
+      <!-- Left panel: chat -->
       <div class="st-ed-left">
-        <div class="st-meta-card">
-          <h3>Metadata</h3>
-          <div class="st-field">
-            <label>Title</label>
-            <input type="text" id="st-f-title" onchange="studioAutoSave()" oninput="studioAutoSave()">
-          </div>
-          <div class="st-field">
-            <label>Section</label>
-            <select id="st-f-section" onchange="studioAutoSave()">
-              <option value="">— None —</option>
-              <option value="Geopolitics">Geopolitics</option>
-              <option value="Economics">Economics</option>
-              <option value="Technology">Technology</option>
-              <option value="Society">Society</option>
-              <option value="Environment">Environment</option>
-              <option value="History">History</option>
-            </select>
-          </div>
-          <div class="st-field">
-            <label>Excerpt</label>
-            <textarea id="st-f-excerpt" rows="3" onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
-          </div>
-          <div class="st-field">
-            <label>Share Summary</label>
-            <textarea id="st-f-share" rows="2" maxlength="140" onchange="studioAutoSave()" oninput="studioShareCount()"></textarea>
-            <div class="st-char-count" id="st-share-count">0/140</div>
-          </div>
-          <div class="st-field">
-            <label>Image Prompt</label>
-            <textarea id="st-f-imgprompt" rows="3" placeholder="Describe the hero image style..." onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
+        <div class="st-chat">
+          <div class="st-chat-messages" id="st-chat-messages"></div>
+          <div class="st-chat-input-row">
+            <textarea id="st-chat-input" rows="1" placeholder="Discuss your article idea..." oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();studioSendChat()}"></textarea>
+            <button id="st-chat-send" class="btn primary" onclick="studioSendChat()">→</button>
           </div>
         </div>
-
-        <div class="st-meta-card">
-          <h3>Pipeline</h3>
-          <div class="st-actions">
-            <button class="st-action-btn" onclick="studioAction('save_to_disk')"><span class="st-act-icon">💾</span> Save to Disk</button>
-            <button class="st-action-btn" onclick="studioAction('generate_image')"><span class="st-act-icon">🖼</span> Generate Image</button>
-            <button class="st-action-btn" onclick="studioAction('generate_audio')"><span class="st-act-icon">🔊</span> Generate Audio</button>
-            <button class="st-action-btn" onclick="studioAction('build')"><span class="st-act-icon">🔨</span> Build & Preview</button>
-            <button class="st-action-btn" onclick="studioAction('deploy')"><span class="st-act-icon">🚀</span> Deploy</button>
-          </div>
-        </div>
-
-        <div class="st-task-status" id="st-task-status">
-          <div class="st-task-label" id="st-task-label">Running...</div>
-          <div class="st-task-progress" id="st-task-progress"></div>
-        </div>
-
-        <img class="st-hero-img" id="st-hero-img" src="" onerror="this.classList.remove('visible')">
-        <audio class="st-audio" id="st-audio" controls src=""></audio>
       </div>
 
       <!-- Right panel: markdown editor -->
@@ -889,8 +930,58 @@ body.dark .st-task-status{background:#2a2825;border-color:var(--border)}
           <button class="st-md-btn" onclick="studioInsert('\n## ','\n')" title="Heading">H2</button>
           <button class="st-md-btn" onclick="studioInsert('[','](url)')" title="Link">🔗</button>
           <button class="st-md-btn" id="st-preview-btn" onclick="studioTogglePreview()" title="Toggle preview">Preview</button>
+          <button class="st-md-btn" id="st-details-btn" onclick="studioToggleDetails()" title="Metadata & Pipeline">Details</button>
           <span class="st-md-wc" id="st-md-wc">0 words</span>
         </div>
+
+        <!-- Collapsible metadata & pipeline panel -->
+        <div class="st-details-panel" id="st-details-panel">
+          <div class="st-details-grid">
+            <div class="st-field">
+              <label>Title</label>
+              <input type="text" id="st-f-title" onchange="studioAutoSave()" oninput="studioAutoSave()">
+            </div>
+            <div class="st-field">
+              <label>Section</label>
+              <select id="st-f-section" onchange="studioAutoSave()">
+                <option value="">— None —</option>
+                <option value="Geopolitics">Geopolitics</option>
+                <option value="Economics">Economics</option>
+                <option value="Technology">Technology</option>
+                <option value="Society">Society</option>
+                <option value="Environment">Environment</option>
+                <option value="History">History</option>
+              </select>
+            </div>
+            <div class="st-field">
+              <label>Excerpt</label>
+              <textarea id="st-f-excerpt" rows="2" onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
+            </div>
+            <div class="st-field">
+              <label>Share Summary</label>
+              <textarea id="st-f-share" rows="1" maxlength="140" onchange="studioAutoSave()" oninput="studioShareCount()"></textarea>
+              <div class="st-char-count" id="st-share-count">0/140</div>
+            </div>
+            <div class="st-field">
+              <label>Image Prompt</label>
+              <textarea id="st-f-imgprompt" rows="2" placeholder="Describe the hero image style..." onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
+            </div>
+          </div>
+          <div class="st-details-actions">
+            <button class="st-action-btn" onclick="studioAction('save_to_disk')"><span class="st-act-icon">💾</span> Save to Disk</button>
+            <button class="st-action-btn" onclick="studioAction('generate_image')"><span class="st-act-icon">🖼</span> Generate Image</button>
+            <button class="st-action-btn" onclick="studioAction('generate_audio')"><span class="st-act-icon">🔊</span> Generate Audio</button>
+            <button class="st-action-btn" onclick="studioAction('build')"><span class="st-act-icon">🔨</span> Build & Preview</button>
+            <button class="st-action-btn" onclick="studioAction('deploy')"><span class="st-act-icon">🚀</span> Deploy</button>
+          </div>
+          <div class="st-task-status" id="st-task-status">
+            <div class="st-task-label" id="st-task-label">Running...</div>
+            <div class="st-task-progress" id="st-task-progress"></div>
+          </div>
+          <img class="st-hero-img" id="st-hero-img" src="" onerror="this.classList.remove('visible')">
+          <audio class="st-audio" id="st-audio" controls src=""></audio>
+        </div>
+
         <div class="st-md-area">
           <textarea id="st-md-textarea" placeholder="Start writing your article..." oninput="studioAutoSave();studioUpdateWc()"></textarea>
           <div class="st-md-preview" id="st-md-preview"></div>
@@ -1645,13 +1736,12 @@ async function exportPosted(){
 let studioCurrentId=null;
 let studioSaveTimer=null;
 let studioPollTimer=null;
+let studioChatStreaming=false;
 const stageOrder=['draft','images','audio','review','deployed'];
 const stageLabels=['Draft','Image','Audio','Preview','Deploy'];
 
 async function studioNewDraft(){
-  const title=prompt('Article title:');
-  if(!title||!title.trim())return;
-  const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.trim()})});
+  const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'Untitled'})});
   const d=await r.json();
   if(d.ok){studioSelectDraft(d.id)}else{toast(d.msg||'Failed')}
 }
@@ -1686,13 +1776,192 @@ async function studioSelectDraft(id){
   // Reset task status
   document.getElementById('st-task-status').classList.remove('visible','error');
   document.getElementById('st-ed-save').textContent='';
+  // Close details panel
+  document.getElementById('st-details-panel').classList.remove('open');
+  document.getElementById('st-details-btn').classList.remove('active');
+  // Load chat messages
+  await studioLoadMessages(id);
+  // Focus chat input
+  setTimeout(()=>document.getElementById('st-chat-input').focus(),100);
+}
+
+async function studioLoadMessages(id){
+  const el=document.getElementById('st-chat-messages');
+  el.innerHTML='';
+  try{
+    const r=await fetch('/api/studio/drafts/'+id+'/messages');
+    const msgs=await r.json();
+    for(const m of msgs){
+      studioAppendMessage(m.role, m.content);
+    }
+    el.scrollTop=el.scrollHeight;
+  }catch(e){console.error('Failed to load messages',e)}
+}
+
+function studioAppendMessage(role, content, isStreaming){
+  const el=document.getElementById('st-chat-messages');
+  const div=document.createElement('div');
+  div.className='st-msg '+role;
+  const inner=document.createElement('div');
+  inner.className='st-msg-content';
+  if(role==='assistant'){
+    inner.innerHTML=(typeof marked!=='undefined'?marked.parse(content):content.replace(/\n/g,'<br>'));
+  }else{
+    inner.textContent=content;
+  }
+  if(isStreaming){
+    div.classList.add('streaming');
+    const cursor=document.createElement('span');
+    cursor.className='st-cursor';
+    inner.appendChild(cursor);
+  }
+  div.appendChild(inner);
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+  return div;
+}
+
+async function studioSendChat(){
+  if(!studioCurrentId||studioChatStreaming)return;
+  const input=document.getElementById('st-chat-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  input.style.height='auto';
+
+  // Show user message
+  studioAppendMessage('user',text);
+
+  // Create streaming assistant bubble
+  const bubble=studioAppendMessage('assistant','',true);
+  const contentEl=bubble.querySelector('.st-msg-content');
+  studioChatStreaming=true;
+  document.getElementById('st-chat-send').disabled=true;
+
+  let fullText='';
+  try{
+    const res=await fetch('/api/studio/drafts/'+studioCurrentId+'/chat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:text})
+    });
+    const reader=res.body.getReader();
+    const decoder=new TextDecoder();
+    let buffer='';
+
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      buffer+=decoder.decode(value,{stream:true});
+      const lines=buffer.split('\n');
+      buffer=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data: '))continue;
+        try{
+          const data=JSON.parse(line.slice(6));
+          if(data.delta){
+            fullText+=data.delta;
+            // Remove cursor, update content, re-add cursor
+            const cursor=contentEl.querySelector('.st-cursor');
+            if(typeof marked!=='undefined'){
+              contentEl.innerHTML=marked.parse(fullText);
+            }else{
+              contentEl.textContent=fullText;
+            }
+            if(cursor||bubble.classList.contains('streaming')){
+              const c=document.createElement('span');
+              c.className='st-cursor';
+              contentEl.appendChild(c);
+            }
+            document.getElementById('st-chat-messages').scrollTop=document.getElementById('st-chat-messages').scrollHeight;
+          }
+          if(data.done){
+            bubble.classList.remove('streaming');
+            const cur=contentEl.querySelector('.st-cursor');
+            if(cur)cur.remove();
+            // Final render
+            if(typeof marked!=='undefined'){
+              contentEl.innerHTML=marked.parse(fullText);
+            }
+            // Check for draft in response
+            studioCheckForDraft(fullText);
+          }
+          if(data.error){
+            contentEl.innerHTML='<em style="color:var(--red)">Error: '+data.error+'</em>';
+            bubble.classList.remove('streaming');
+          }
+        }catch(e){}
+      }
+    }
+  }catch(e){
+    contentEl.innerHTML='<em style="color:var(--red)">Connection error</em>';
+    bubble.classList.remove('streaming');
+  }
+  studioChatStreaming=false;
+  document.getElementById('st-chat-send').disabled=false;
+  input.focus();
+}
+
+function studioCheckForDraft(text){
+  // Detect if the response contains an article draft
+  const hasFrontmatter=text.includes('---\ntitle:');
+  const startsWithHeading=text.trim().startsWith('# ');
+  if(!hasFrontmatter&&!startsWithHeading)return;
+
+  let markdown=text;
+  // If there's frontmatter, also try to extract metadata
+  if(hasFrontmatter){
+    const fmMatch=text.match(/---\n([\s\S]*?)\n---/);
+    if(fmMatch){
+      const fm=fmMatch[1];
+      const titleMatch=fm.match(/title:\s*"?([^"\n]+)"?/);
+      const sectionMatch=fm.match(/section:\s*"?([^"\n]+)"?/);
+      const excerptMatch=fm.match(/excerpt:\s*"?([^"\n]+)"?/);
+      const shareMatch=fm.match(/share_summary:\s*"?([^"\n]+)"?/);
+      if(titleMatch){
+        document.getElementById('st-f-title').value=titleMatch[1].trim();
+        document.getElementById('st-ed-title').textContent=titleMatch[1].trim();
+      }
+      if(sectionMatch){
+        const sec=sectionMatch[1].trim();
+        const sel=document.getElementById('st-f-section');
+        for(const opt of sel.options){if(opt.value===sec){sel.value=sec;break}}
+      }
+      if(excerptMatch)document.getElementById('st-f-excerpt').value=excerptMatch[1].trim();
+      if(shareMatch){
+        document.getElementById('st-f-share').value=shareMatch[1].trim();
+        studioShareCount();
+      }
+    }
+  }
+
+  // Put the full text into the editor
+  document.getElementById('st-md-textarea').value=markdown;
+  studioUpdateWc();
+  studioAutoSave();
+
+  // Show indicator
+  const msgs=document.getElementById('st-chat-messages');
+  const ind=document.createElement('div');
+  ind.className='st-draft-indicator';
+  ind.textContent='Draft loaded into editor →';
+  msgs.appendChild(ind);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function studioToggleDetails(){
+  const panel=document.getElementById('st-details-panel');
+  const btn=document.getElementById('st-details-btn');
+  panel.classList.toggle('open');
+  btn.classList.toggle('active');
 }
 
 function studioBack(){
   studioCurrentId=null;
+  studioChatStreaming=false;
   if(studioPollTimer){clearInterval(studioPollTimer);studioPollTimer=null}
   document.getElementById('st-editor').style.display='none';
   document.getElementById('st-list').style.display='block';
+  document.getElementById('st-chat-messages').innerHTML='';
   location.reload();
 }
 
@@ -1751,6 +2020,9 @@ async function studioAction(action){
   if(!studioCurrentId)return;
   // Save first
   await studioSave();
+  // Ensure details panel is open to see progress
+  document.getElementById('st-details-panel').classList.add('open');
+  document.getElementById('st-details-btn').classList.add('active');
   const statusEl=document.getElementById('st-task-status');
   const labelEl=document.getElementById('st-task-label');
   const progressEl=document.getElementById('st-task-progress');
@@ -2432,6 +2704,88 @@ def api_studio_audio(did):
     if audio.exists():
         return send_file(str(audio), mimetype="audio/mpeg")
     abort(404)
+
+STUDIO_BASE_PROMPT = """You are an editorial collaborator for History Future Now (historyfuturenow.com).
+
+YOUR ROLE:
+- Help the author develop article ideas through discussion
+- Ask probing questions to sharpen the thesis
+- Suggest historical parallels, data points, and structural approaches
+- Challenge weak arguments constructively
+- Actively cross-reference existing HFN articles — suggest internal links and thematic connections
+- When the author says "write the draft", "go ahead", or similar, produce a FULL article draft
+
+WHEN PRODUCING A DRAFT:
+- Output complete markdown with YAML frontmatter at the top:
+  ---
+  title: "Article Title"
+  section: "Geopolitics|Economics|Technology|Society|Environment|History"
+  excerpt: "2-3 sentence summary"
+  share_summary: "Under 140 chars, pithy thesis"
+  ---
+- Include cross-references to at least 2 relevant existing HFN articles as [Title](/articles/slug) links
+
+Follow ALL the editorial rules and style guides below exactly.
+"""
+
+@app.route("/api/studio/drafts/<int:did>/messages")
+def api_studio_messages(did):
+    msgs = db.get_studio_messages(did)
+    return jsonify(msgs)
+
+@app.route("/api/studio/drafts/<int:did>/chat", methods=["POST"])
+def api_studio_chat(did):
+    import anthropic
+    from config import ANTHROPIC_API_KEY, GEN_MODEL
+
+    draft = db.get_draft(did)
+    if not draft:
+        return jsonify({"error": "Draft not found"}), 404
+
+    user_msg = request.json.get("message", "").strip()
+    if not user_msg:
+        return jsonify({"error": "Empty message"}), 400
+
+    db.add_studio_message(did, "user", user_msg)
+
+    history = db.get_studio_messages(did)
+    messages = [{"role": m["role"], "content": m["content"]} for m in history]
+
+    # Build full system prompt: base + article catalog + style guides + draft context
+    # Article catalog comes before style guides so the model attends to it more reliably
+    system = STUDIO_BASE_PROMPT + "\n\n" + build_article_catalog() + "\n\n" + load_style_guides()
+    if draft.get("markdown", "").strip():
+        system += f"\n\nThe current draft in the editor is:\n\n{draft['markdown'][:2000]}"
+
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+
+    def generate():
+        full_response = []
+        try:
+            with client.messages.stream(
+                model=GEN_MODEL,
+                max_tokens=4096,
+                system=system,
+                messages=messages,
+            ) as stream:
+                for text in stream.text_stream:
+                    full_response.append(text)
+                    yield f"data: {json.dumps({'delta': text})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+        full_text = "".join(full_response)
+        if full_text:
+            db.add_studio_message(did, "assistant", full_text)
+            # Auto-update draft markdown if response contains a draft
+            if "---\ntitle:" in full_text or full_text.strip().startswith("# "):
+                # Extract the markdown portion (after frontmatter or from start)
+                db.update_draft(did, markdown=full_text)
+
+        yield "data: {\"done\": true}\n\n"
+
+    return Response(generate(), mimetype="text/event-stream",
+                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 @app.route("/preview-assets/<path:fp>")
 def serve_preview(fp):
