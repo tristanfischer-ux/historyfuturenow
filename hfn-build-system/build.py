@@ -28,6 +28,9 @@ REVIEW_SLUGS = {
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
 }
+_review_file = Path(__file__).parent / "review_slugs.json"
+if _review_file.exists():
+    REVIEW_SLUGS.update(json.loads(_review_file.read_text()))
 
 # Articles that were under review and have been released to the public site.
 RELEASED_FROM_REVIEW = {
