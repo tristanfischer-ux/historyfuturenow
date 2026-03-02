@@ -421,6 +421,7 @@ body.dark .qcal-article{color:var(--text)}
 .st-step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:var(--dim);background:var(--card);transition:all .2s}
 .st-step-dot.active{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 .st-step-dot.done{border-color:var(--grn);color:#fff;background:var(--grn)}
+.st-step-dot.done:hover,.st-step-dot.active:hover{transform:scale(1.15);box-shadow:0 0 0 3px rgba(0,0,0,.1)}
 .st-step-line{width:24px;height:2px;background:var(--border);margin-top:13px}
 .st-step-line.done{background:var(--grn)}
 .st-step-label{font-size:.55rem;color:var(--dim);text-align:center;margin-top:2px;position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap}
@@ -2040,6 +2041,14 @@ function studioUpdateStepper(stage){
     if(line)line.classList.remove('done');
     if(i<idx){dot.classList.add('done');if(line)line.classList.add('done')}
     else if(i===idx){dot.classList.add('active')}
+    // Make completed and active dots clickable
+    if(i<=idx){
+      dot.style.cursor='pointer';
+      dot.onclick=(function(s){return function(){studioAdvanceStage(s)}})(stageOrder[i]);
+    }else{
+      dot.style.cursor='default';
+      dot.onclick=null;
+    }
   }
   studioUpdateNextBar(stage);
 }
