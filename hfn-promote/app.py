@@ -865,7 +865,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <thead><tr><th>Title</th><th>Section</th><th>Stage</th><th>Assets</th><th>Words</th><th>Updated</th><th></th></tr></thead>
       <tbody>
       {% for d in studio_drafts %}
-      <tr>
+      <tr id="st-row-{{d.id}}">
         <td><a class="st-title-link" onclick="studioSelectDraft({{d.id}})">{{d.title}}</a></td>
         <td style="font-size:.72rem;color:var(--dim)">{{d.section or '—'}}</td>
         <td><span class="st-badge {{d.stage}}">{{d.stage}}</span></td>
@@ -2093,7 +2093,23 @@ function studioInsert(before,after){
 async function studioDeleteDraft(id,title){
   if(!confirm('Delete "'+title+'"? This cannot be undone.'))return;
   await fetch('/api/studio/drafts/'+id+'/delete',{method:'POST'});
-  location.reload();
+  // Remove row from DOM instead of reloading page
+  const row=document.getElementById('st-row-'+id);
+  if(row)row.remove();
+  // Update the Studio tab count
+  const tab=document.querySelector('.tab[onclick*="studio"]');
+  if(tab){
+    const remaining=document.querySelectorAll('tr[id^="st-row-"]').length;
+    tab.innerHTML='✏️ Studio ('+remaining+')';
+  }
+  // Update stage pills
+  const pills=document.querySelector('.st-pills');
+  if(pills){
+    const rows=document.querySelectorAll('tr[id^="st-row-"]');
+    const counts={};
+    rows.forEach(r=>{const badge=r.querySelector('.st-badge');if(badge){const s=badge.textContent.trim().toLowerCase();counts[s]=(counts[s]||0)+1}});
+    pills.innerHTML=Object.entries(counts).map(([s,c])=>'<span class="st-pill '+s+'">'+s+' '+c+'</span>').join('');
+  }
 }
 </script></body></html>"""
 
