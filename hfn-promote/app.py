@@ -2966,27 +2966,38 @@ def api_studio_chat(did):
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-    def generate():
-        full_response = []
-        try:
-            with client.messages.stream(
-                model="claude-opus-4-6",  # Hardcoded: essay writing must use Opus 4.6
-                max_tokens=4096,
-                system=system,
-                messages=messages,
-            ) as stream:
-                for text in stream.text_stream:
-                    full_response.append(text)
-                    yield f"data: {json.dumps({'delta': text})}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+    # Opus for prose, Sonnet fallback for overloaded errors
+    MODELS = ["claude-opus-4-6", "claude-sonnet-4-6"]
 
-        full_text = "".join(full_response)
+    def generate():
+        full_text = ""
+        used_model = None
+        for i, model in enumerate(MODELS):
+            try:
+                result = client.messages.create(
+                    model=model, max_tokens=4096, system=system, messages=messages,
+                )
+                full_text = result.content[0].text
+                used_model = model
+                break
+            except Exception as e:
+                err_str = str(e)
+                is_overloaded = "overloaded" in err_str.lower() or "529" in err_str
+                if is_overloaded and i < len(MODELS) - 1:
+                    continue  # Try next model
+                yield f"data: {json.dumps({'error': err_str})}\n\n"
+                yield "data: {\"done\": true}\n\n"
+                return
+
+        if used_model and used_model != MODELS[0]:
+            yield f"data: {json.dumps({'delta': '[Using Sonnet — Opus temporarily busy]\\n\\n'})}\n\n"
+
         if full_text:
+            # Yield in chunks for progressive rendering
+            for i in range(0, len(full_text), 40):
+                yield f"data: {json.dumps({'delta': full_text[i:i+40]})}\n\n"
             db.add_studio_message(did, "assistant", full_text)
-            # Auto-update draft markdown if response contains a draft
             if "---\ntitle:" in full_text or full_text.strip().startswith("# "):
-                # Extract the markdown portion (after frontmatter or from start)
                 db.update_draft(did, markdown=full_text)
 
         yield "data: {\"done\": true}\n\n"
@@ -3045,24 +3056,36 @@ def api_studio_fact_check(did):
     db.add_studio_message(did, "user", "[Fact-check requested]")
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    fc_models = ["claude-opus-4-6", "claude-sonnet-4-6"]
+    fc_messages = [{"role": "user", "content": f"Fact-check this article draft:\n\n{markdown}"}]
 
     def generate():
-        full_response = []
-        try:
-            with client.messages.stream(
-                model="claude-opus-4-6",
-                max_tokens=4096,
-                system=FACTCHECK_SYSTEM_PROMPT,
-                messages=[{"role": "user", "content": f"Fact-check this article draft:\n\n{markdown}"}],
-            ) as stream:
-                for text in stream.text_stream:
-                    full_response.append(text)
-                    yield f"data: {json.dumps({'delta': text})}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+        full_text = ""
+        used_model = None
+        for i, model in enumerate(fc_models):
+            try:
+                result = client.messages.create(
+                    model=model, max_tokens=4096,
+                    system=FACTCHECK_SYSTEM_PROMPT, messages=fc_messages,
+                )
+                full_text = result.content[0].text
+                used_model = model
+                break
+            except Exception as e:
+                err_str = str(e)
+                is_overloaded = "overloaded" in err_str.lower() or "529" in err_str
+                if is_overloaded and i < len(fc_models) - 1:
+                    continue
+                yield f"data: {json.dumps({'error': err_str})}\n\n"
+                yield "data: {\"done\": true}\n\n"
+                return
 
-        full_text = "".join(full_response)
+        if used_model and used_model != fc_models[0]:
+            yield f"data: {json.dumps({'delta': '[Using Sonnet — Opus temporarily busy]\\n\\n'})}\n\n"
+
         if full_text:
+            for i in range(0, len(full_text), 40):
+                yield f"data: {json.dumps({'delta': full_text[i:i+40]})}\n\n"
             db.add_studio_message(did, "assistant", full_text)
             db.update_draft(did, stage="factcheck")
 
