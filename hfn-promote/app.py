@@ -2053,12 +2053,12 @@ function studioUpdateNextBar(stage){
       btns.innerHTML='<button class="btn primary" onclick="studioFactCheck()">Fact-Check</button>';
       break;
     case 'factcheck':
-      text.textContent='Review the report, then generate the hero image.';
-      btns.innerHTML='<button class="btn secondary" onclick="studioFactCheck()" style="margin-right:6px">Re-check</button><button class="btn primary" onclick="studioAction(\'generate_image\')">Generate Image</button>';
+      text.textContent='Review the report and edit the draft if needed. Continue when done.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioFactCheck()" style="margin-right:6px">Re-check</button><button class="btn primary" onclick="studioAdvanceStage(\'images\')">Continue \u2192</button>';
       break;
     case 'images':
-      text.textContent='Hero image ready. Build a preview.';
-      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'build\')">Build &amp; Preview</button>';
+      text.textContent='Generate a hero image for the article.';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')">Generate Image</button>';
       break;
     case 'review':
       text.textContent='Preview built. Deploy when ready.';
@@ -2071,6 +2071,12 @@ function studioUpdateNextBar(stage){
     default:
       bar.style.display='none';
   }
+}
+
+async function studioAdvanceStage(newStage){
+  if(!studioCurrentId)return;
+  await fetch('/api/studio/drafts/'+studioCurrentId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage:newStage})});
+  studioUpdateStepper(newStage);
 }
 
 async function studioFactCheck(){
@@ -2777,7 +2783,7 @@ def api_studio_get_draft(did):
 def api_studio_update_draft(did):
     d = request.json
     fields = {}
-    for k in ("title", "section", "excerpt", "share_summary", "markdown", "image_prompt"):
+    for k in ("title", "section", "excerpt", "share_summary", "markdown", "image_prompt", "stage"):
         if k in d:
             fields[k] = d[k]
     db.update_draft(did, **fields)
