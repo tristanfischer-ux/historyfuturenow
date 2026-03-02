@@ -5,7 +5,8 @@ from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort
 import db
 from config import (FLASK_PORT, MAX_X_PER_DAY, MAX_LI_PER_DAY, MAX_POSTS_PER_DAY,
-                    HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES, MONITOR_INTERVAL,
+                    HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES, HFN_SITE_OUTPUT,
+                    HFN_CONTENT_DIR, HFN_AUDIO_DIR, MONITOR_INTERVAL,
                     MATCH_MODEL, GEN_MODEL, SESSIONS_DIR)
 
 # Import issues from build system
@@ -64,6 +65,7 @@ HTML = r"""<!DOCTYPE html>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>HFN Promote</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 :root{--bg:#f8f7f6;--card:#fff;--border:#e5e2de;--text:#1a1815;--dim:#8a8479;
 --accent:#c43425;--xblk:#0f1419;--li:#0a66c2;--grn:#16a34a;--red:#dc2626;--sched:#7c3aed;
@@ -333,6 +335,115 @@ body.dark .qcal-slots.over{background:#3a2020;border-color:var(--accent)}
 body.dark .qcal-type{background:#3a3632;color:#a8a29e}
 body.dark .qcal-article{color:var(--text)}
 .toast a{color:#60a5fa;text-decoration:underline;margin-left:8px;cursor:pointer}
+
+/* ═══ ARTICLE STUDIO ═══ */
+.st-wrap{height:100%;overflow-y:auto;padding:16px 20px}
+.st-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.st-header h2{font-size:1rem;font-weight:700}
+.st-pills{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.st-pill{font-size:.62rem;font-weight:700;padding:3px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.3px}
+.st-pill.draft{background:#f5f5f4;color:#666}.st-pill.images{background:#fef3c7;color:#92400e}
+.st-pill.audio{background:#dbeafe;color:#1e40af}.st-pill.review{background:#ede9fe;color:#5b21b6}
+.st-pill.deployed{background:#dcfce7;color:#166534}
+.st-table{width:100%;border-collapse:collapse}
+.st-table th{text-align:left;font-size:.68rem;color:var(--dim);font-weight:600;padding:8px 10px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.3px}
+.st-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:.78rem;vertical-align:middle}
+.st-table tr:hover{background:#fafaf9}
+.st-table .st-title-link{color:var(--text);font-weight:600;cursor:pointer;text-decoration:none}.st-title-link:hover{color:var(--accent)}
+.st-table .st-del{color:var(--red);cursor:pointer;opacity:.4;font-size:.8rem}.st-del:hover{opacity:1}
+.st-badge{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.st-badge.draft{background:#f5f5f4;color:#666}.st-badge.images{background:#fef3c7;color:#92400e}
+.st-badge.audio{background:#dbeafe;color:#1e40af}.st-badge.review{background:#ede9fe;color:#5b21b6}
+.st-badge.deployed{background:#dcfce7;color:#166534}
+.st-assets{display:flex;gap:4px;font-size:.75rem}
+.st-assets .dim{opacity:.25}.st-assets .on{opacity:1}
+.st-empty{text-align:center;padding:60px 20px;color:var(--dim)}
+.st-empty .st-icon{font-size:2.5rem;margin-bottom:10px}
+
+/* Studio Editor */
+.st-editor{height:100%;display:flex;flex-direction:column}
+.st-ed-top{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.st-back{cursor:pointer;font-size:1.1rem;color:var(--dim);padding:4px}.st-back:hover{color:var(--accent)}
+.st-ed-title{font-size:.9rem;font-weight:700;flex:1}
+.st-ed-slug{font-size:.65rem;color:var(--dim);font-family:var(--mono)}
+.st-ed-save{font-size:.62rem;color:var(--grn);font-weight:600}
+
+/* Pipeline stepper */
+.st-stepper{display:flex;align-items:center;gap:0;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.st-step{display:flex;align-items:center;gap:0}
+.st-step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:var(--dim);background:var(--card);transition:all .2s}
+.st-step-dot.active{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.st-step-dot.done{border-color:var(--grn);color:#fff;background:var(--grn)}
+.st-step-line{width:24px;height:2px;background:var(--border)}
+.st-step-line.done{background:var(--grn)}
+.st-step-label{font-size:.55rem;color:var(--dim);text-align:center;margin-top:2px;position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap}
+
+/* Editor layout */
+.st-ed-body{display:flex;flex:1;overflow:hidden}
+.st-ed-left{width:35%;min-width:280px;border-right:1px solid var(--border);overflow-y:auto;padding:12px}
+.st-ed-right{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* Metadata card */
+.st-meta-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
+.st-meta-card h3{font-size:.75rem;font-weight:700;margin-bottom:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+.st-field{margin-bottom:10px}
+.st-field label{display:block;font-size:.68rem;font-weight:600;color:var(--dim);margin-bottom:3px}
+.st-field input,.st-field select,.st-field textarea{width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;font-family:inherit;background:var(--card);color:var(--text)}
+.st-field input:focus,.st-field select:focus,.st-field textarea:focus{outline:none;border-color:var(--accent)}
+.st-field textarea{resize:vertical;min-height:60px}
+.st-char-count{font-size:.58rem;color:var(--dim);text-align:right;margin-top:2px}
+.st-char-count.over{color:var(--red)}
+
+/* Pipeline buttons */
+.st-actions{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.st-action-btn{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:.74rem;font-weight:600;font-family:inherit;transition:all .12s;color:var(--text)}
+.st-action-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.st-action-btn:disabled{opacity:.4;cursor:not-allowed}
+.st-action-btn .st-act-icon{font-size:.9rem}
+
+/* Task status */
+.st-task-status{background:#fafaf9;border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:12px;font-size:.72rem;display:none}
+.st-task-status.visible{display:block}
+.st-task-status .st-task-label{font-weight:600;margin-bottom:2px}
+.st-task-status .st-task-progress{color:var(--dim)}
+.st-task-status.error{border-color:#fecaca;background:#fef2f2}
+.st-task-status.error .st-task-label{color:var(--red)}
+
+/* Hero image + audio preview */
+.st-hero-img{width:100%;border-radius:6px;border:1px solid var(--border);margin-bottom:8px;display:none}
+.st-hero-img.visible{display:block}
+.st-audio{width:100%;margin-bottom:8px;display:none}
+.st-audio.visible{display:block}
+
+/* Markdown editor */
+.st-md-toolbar{display:flex;align-items:center;gap:4px;padding:6px 10px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.st-md-btn{padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-size:.72rem;font-weight:700;font-family:var(--mono);color:var(--dim)}
+.st-md-btn:hover{border-color:var(--accent);color:var(--accent)}
+.st-md-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.st-md-wc{margin-left:auto;font-size:.62rem;color:var(--dim);font-family:var(--mono)}
+.st-md-area{flex:1;overflow:hidden;position:relative}
+.st-md-area textarea{width:100%;height:100%;border:none;padding:12px 16px;font-size:.82rem;line-height:1.7;font-family:var(--mono);resize:none;background:var(--card);color:var(--text)}
+.st-md-area textarea:focus{outline:none}
+.st-md-preview{width:100%;height:100%;overflow-y:auto;padding:16px 20px;font-size:.85rem;line-height:1.7;display:none}
+.st-md-preview.on{display:block}
+.st-md-preview h1{font-size:1.4rem;font-weight:700;margin:16px 0 8px}
+.st-md-preview h2{font-size:1.1rem;font-weight:700;margin:14px 0 6px;color:var(--accent)}
+.st-md-preview h3{font-size:.95rem;font-weight:700;margin:12px 0 4px}
+.st-md-preview p{margin-bottom:10px}.st-md-preview blockquote{border-left:3px solid var(--accent);padding-left:12px;color:#555;margin:10px 0}
+.st-md-preview code{background:#f5f5f4;padding:1px 4px;border-radius:3px;font-family:var(--mono);font-size:.8em}
+.st-md-preview pre{background:#f5f5f4;padding:12px;border-radius:6px;overflow-x:auto;margin:10px 0}
+.st-md-preview a{color:#2563eb}
+
+body.dark .st-table tr:hover{background:#2a2825}
+body.dark .st-field input,body.dark .st-field select,body.dark .st-field textarea{background:var(--card);color:var(--text);border-color:var(--border)}
+body.dark .st-md-area textarea{background:var(--card);color:var(--text)}
+body.dark .st-md-preview{color:var(--text)}
+body.dark .st-md-preview code,body.dark .st-md-preview pre{background:#2a2825}
+body.dark .st-action-btn{background:var(--card);color:var(--text);border-color:var(--border)}
+body.dark .st-action-btn:hover{background:#3a2020;border-color:var(--accent)}
+body.dark .st-meta-card{background:var(--card);border-color:var(--border)}
+body.dark .st-task-status{background:#2a2825;border-color:var(--border)}
+@media(max-width:900px){.st-ed-body{flex-direction:column}.st-ed-left{width:100%;min-width:0;border-right:none;border-bottom:1px solid var(--border);max-height:300px}.st-ed-right{min-height:300px}}
 </style></head><body>
 
 <div class="topbar">
@@ -356,6 +467,7 @@ body.dark .qcal-article{color:var(--text)}
   <div class="tab" data-tab="queue" onclick="stab(this,'queue')">📅 Queue{% if n_queued > 0 %} ({{n_queued}}){% endif %}</div>
   <div class="tab" data-tab="posted" onclick="stab(this,'posted')">✅ Posted{% if np > 0 %} ({{np}}){% endif %}</div>
   <div class="tab" data-tab="library" onclick="stab(this,'library')">📚 Library ({{na}} articles, {{nc}} charts)</div>
+  <div class="tab" data-tab="studio" onclick="stab(this,'studio')">✍️ Studio{% if n_drafts > 0 %} ({{n_drafts}}){% endif %}</div>
   <div class="tab" data-tab="settings" onclick="stab(this,'settings')">⚙️</div>
   <div class="tab-actions">
     <button class="btn sm" onclick="act('ingest')">📚 Ingest</button>
@@ -646,6 +758,146 @@ body.dark .qcal-article{color:var(--text)}
     </div>
   </div>
 </div>
+</div>
+
+<!-- ═══ ARTICLE STUDIO ═══ -->
+<div class="tc" id="t-studio">
+  <!-- List view (default) -->
+  <div class="st-wrap" id="st-list">
+    <div class="st-header">
+      <h2>Article Studio</h2>
+      <button class="btn primary" onclick="studioNewDraft()">✚ New Article</button>
+    </div>
+    {% if studio_drafts %}
+    <div class="st-pills">
+      {% set stages = {'draft':0,'images':0,'audio':0,'review':0,'deployed':0} %}
+      {% for d in studio_drafts %}{% if stages.update({d.stage: stages[d.stage]+1}) %}{% endif %}{% endfor %}
+      {% for s,c in stages.items() %}{% if c > 0 %}
+      <span class="st-pill {{s}}">{{s}} {{c}}</span>
+      {% endif %}{% endfor %}
+    </div>
+    <table class="st-table">
+      <thead><tr><th>Title</th><th>Section</th><th>Stage</th><th>Assets</th><th>Words</th><th>Updated</th><th></th></tr></thead>
+      <tbody>
+      {% for d in studio_drafts %}
+      <tr>
+        <td><a class="st-title-link" onclick="studioSelectDraft({{d.id}})">{{d.title}}</a></td>
+        <td style="font-size:.72rem;color:var(--dim)">{{d.section or '—'}}</td>
+        <td><span class="st-badge {{d.stage}}">{{d.stage}}</span></td>
+        <td class="st-assets">
+          <span class="{{'on' if d.has_hero_image else 'dim'}}" title="Hero image">🖼</span>
+          <span class="{{'on' if d.has_audio else 'dim'}}" title="Audio">🔊</span>
+        </td>
+        <td style="font-size:.72rem;font-family:var(--mono)">{{d.word_count|default(0)}}</td>
+        <td style="font-size:.65rem;color:var(--dim)">{{d.updated_at[:16] if d.updated_at else ''}}</td>
+        <td><span class="st-del" onclick="studioDeleteDraft({{d.id}},'{{d.title|e}}')" title="Delete">×</span></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="st-empty">
+      <div class="st-icon">✍️</div>
+      <div style="font-size:.9rem;font-weight:600;margin-bottom:6px">No articles yet</div>
+      <div style="font-size:.78rem;color:var(--dim);max-width:360px;line-height:1.5">
+        Click "New Article" to start writing. Articles go through a pipeline: Draft → Image → Audio → Preview → Deploy.
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Editor view (shown when draft selected) -->
+  <div class="st-editor" id="st-editor" style="display:none">
+    <div class="st-ed-top">
+      <span class="st-back" onclick="studioBack()">←</span>
+      <span class="st-ed-title" id="st-ed-title"></span>
+      <span class="st-ed-slug" id="st-ed-slug"></span>
+      <span class="st-ed-save" id="st-ed-save"></span>
+    </div>
+    <div class="st-stepper">
+      <div class="st-step"><div class="st-step-dot" id="st-dot-0">1</div></div>
+      <div class="st-step-line" id="st-line-0"></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-1">2</div></div>
+      <div class="st-step-line" id="st-line-1"></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-2">3</div></div>
+      <div class="st-step-line" id="st-line-2"></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-3">4</div></div>
+      <div class="st-step-line" id="st-line-3"></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div></div>
+    </div>
+    <div class="st-ed-body">
+      <!-- Left panel: metadata + actions -->
+      <div class="st-ed-left">
+        <div class="st-meta-card">
+          <h3>Metadata</h3>
+          <div class="st-field">
+            <label>Title</label>
+            <input type="text" id="st-f-title" onchange="studioAutoSave()" oninput="studioAutoSave()">
+          </div>
+          <div class="st-field">
+            <label>Section</label>
+            <select id="st-f-section" onchange="studioAutoSave()">
+              <option value="">— None —</option>
+              <option value="Geopolitics">Geopolitics</option>
+              <option value="Economics">Economics</option>
+              <option value="Technology">Technology</option>
+              <option value="Society">Society</option>
+              <option value="Environment">Environment</option>
+              <option value="History">History</option>
+            </select>
+          </div>
+          <div class="st-field">
+            <label>Excerpt</label>
+            <textarea id="st-f-excerpt" rows="3" onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
+          </div>
+          <div class="st-field">
+            <label>Share Summary</label>
+            <textarea id="st-f-share" rows="2" maxlength="140" onchange="studioAutoSave()" oninput="studioShareCount()"></textarea>
+            <div class="st-char-count" id="st-share-count">0/140</div>
+          </div>
+          <div class="st-field">
+            <label>Image Prompt</label>
+            <textarea id="st-f-imgprompt" rows="3" placeholder="Describe the hero image style..." onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
+          </div>
+        </div>
+
+        <div class="st-meta-card">
+          <h3>Pipeline</h3>
+          <div class="st-actions">
+            <button class="st-action-btn" onclick="studioAction('save_to_disk')"><span class="st-act-icon">💾</span> Save to Disk</button>
+            <button class="st-action-btn" onclick="studioAction('generate_image')"><span class="st-act-icon">🖼</span> Generate Image</button>
+            <button class="st-action-btn" onclick="studioAction('generate_audio')"><span class="st-act-icon">🔊</span> Generate Audio</button>
+            <button class="st-action-btn" onclick="studioAction('build')"><span class="st-act-icon">🔨</span> Build & Preview</button>
+            <button class="st-action-btn" onclick="studioAction('deploy')"><span class="st-act-icon">🚀</span> Deploy</button>
+          </div>
+        </div>
+
+        <div class="st-task-status" id="st-task-status">
+          <div class="st-task-label" id="st-task-label">Running...</div>
+          <div class="st-task-progress" id="st-task-progress"></div>
+        </div>
+
+        <img class="st-hero-img" id="st-hero-img" src="" onerror="this.classList.remove('visible')">
+        <audio class="st-audio" id="st-audio" controls src=""></audio>
+      </div>
+
+      <!-- Right panel: markdown editor -->
+      <div class="st-ed-right">
+        <div class="st-md-toolbar">
+          <button class="st-md-btn" onclick="studioInsert('**','**')" title="Bold">B</button>
+          <button class="st-md-btn" onclick="studioInsert('*','*')" title="Italic"><em>I</em></button>
+          <button class="st-md-btn" onclick="studioInsert('\n## ','\n')" title="Heading">H2</button>
+          <button class="st-md-btn" onclick="studioInsert('[','](url)')" title="Link">🔗</button>
+          <button class="st-md-btn" id="st-preview-btn" onclick="studioTogglePreview()" title="Toggle preview">Preview</button>
+          <span class="st-md-wc" id="st-md-wc">0 words</span>
+        </div>
+        <div class="st-md-area">
+          <textarea id="st-md-textarea" placeholder="Start writing your article..." oninput="studioAutoSave();studioUpdateWc()"></textarea>
+          <div class="st-md-preview" id="st-md-preview"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ SETTINGS (actual) ═══ -->
@@ -1388,6 +1640,189 @@ async function exportPosted(){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hfn-posted-'+new Date().toISOString().substring(0,10)+'.csv';
   a.click();URL.revokeObjectURL(a.href);toast('Downloaded');
 }
+
+// ═══ ARTICLE STUDIO ═══
+let studioCurrentId=null;
+let studioSaveTimer=null;
+let studioPollTimer=null;
+const stageOrder=['draft','images','audio','review','deployed'];
+const stageLabels=['Draft','Image','Audio','Preview','Deploy'];
+
+async function studioNewDraft(){
+  const title=prompt('Article title:');
+  if(!title||!title.trim())return;
+  const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.trim()})});
+  const d=await r.json();
+  if(d.ok){studioSelectDraft(d.id)}else{toast(d.msg||'Failed')}
+}
+
+async function studioSelectDraft(id){
+  const r=await fetch('/api/studio/drafts/'+id);
+  const d=await r.json();
+  if(!d||d.error){toast('Draft not found');return}
+  studioCurrentId=id;
+  document.getElementById('st-list').style.display='none';
+  document.getElementById('st-editor').style.display='flex';
+  // Populate fields
+  document.getElementById('st-ed-title').textContent=d.title;
+  document.getElementById('st-ed-slug').textContent=d.slug;
+  document.getElementById('st-f-title').value=d.title||'';
+  document.getElementById('st-f-section').value=d.section||'';
+  document.getElementById('st-f-excerpt').value=d.excerpt||'';
+  document.getElementById('st-f-share').value=d.share_summary||'';
+  document.getElementById('st-f-imgprompt').value=d.image_prompt||'';
+  document.getElementById('st-md-textarea').value=d.markdown||'';
+  studioShareCount();
+  studioUpdateWc();
+  studioUpdateStepper(d.stage);
+  // Hero image
+  const heroImg=document.getElementById('st-hero-img');
+  heroImg.src='/api/studio/drafts/'+id+'/hero-image';
+  heroImg.classList.toggle('visible',!!d.has_hero_image);
+  // Audio
+  const audioEl=document.getElementById('st-audio');
+  audioEl.src='/api/studio/drafts/'+id+'/audio';
+  audioEl.classList.toggle('visible',!!d.has_audio);
+  // Reset task status
+  document.getElementById('st-task-status').classList.remove('visible','error');
+  document.getElementById('st-ed-save').textContent='';
+}
+
+function studioBack(){
+  studioCurrentId=null;
+  if(studioPollTimer){clearInterval(studioPollTimer);studioPollTimer=null}
+  document.getElementById('st-editor').style.display='none';
+  document.getElementById('st-list').style.display='block';
+  location.reload();
+}
+
+function studioAutoSave(){
+  if(studioSaveTimer)clearTimeout(studioSaveTimer);
+  studioSaveTimer=setTimeout(studioSave,500);
+}
+
+async function studioSave(){
+  if(!studioCurrentId)return;
+  const data={
+    title:document.getElementById('st-f-title').value,
+    section:document.getElementById('st-f-section').value,
+    excerpt:document.getElementById('st-f-excerpt').value,
+    share_summary:document.getElementById('st-f-share').value,
+    image_prompt:document.getElementById('st-f-imgprompt').value,
+    markdown:document.getElementById('st-md-textarea').value
+  };
+  const saveEl=document.getElementById('st-ed-save');
+  saveEl.textContent='Saving...';
+  try{
+    const r=await fetch('/api/studio/drafts/'+studioCurrentId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    const d=await r.json();
+    saveEl.textContent=d.ok?'Saved ✓':'Save failed';
+    document.getElementById('st-ed-title').textContent=data.title;
+    setTimeout(()=>{if(saveEl.textContent==='Saved ✓')saveEl.textContent=''},2000);
+  }catch(e){saveEl.textContent='Error'}
+}
+
+function studioShareCount(){
+  const v=document.getElementById('st-f-share').value;
+  const el=document.getElementById('st-share-count');
+  el.textContent=v.length+'/140';
+  el.classList.toggle('over',v.length>140);
+}
+
+function studioUpdateWc(){
+  const md=document.getElementById('st-md-textarea').value.trim();
+  const wc=md?md.split(/\s+/).length:0;
+  document.getElementById('st-md-wc').textContent=wc.toLocaleString()+' words';
+}
+
+function studioUpdateStepper(stage){
+  const idx=stageOrder.indexOf(stage);
+  for(let i=0;i<5;i++){
+    const dot=document.getElementById('st-dot-'+i);
+    const line=document.getElementById('st-line-'+i);
+    dot.classList.remove('active','done');
+    if(line)line.classList.remove('done');
+    if(i<idx){dot.classList.add('done');if(line)line.classList.add('done')}
+    else if(i===idx){dot.classList.add('active')}
+  }
+}
+
+async function studioAction(action){
+  if(!studioCurrentId)return;
+  // Save first
+  await studioSave();
+  const statusEl=document.getElementById('st-task-status');
+  const labelEl=document.getElementById('st-task-label');
+  const progressEl=document.getElementById('st-task-progress');
+  statusEl.classList.add('visible');statusEl.classList.remove('error');
+  labelEl.textContent='Starting '+action.replace(/_/g,' ')+'...';
+  progressEl.textContent='';
+  try{
+    const r=await fetch('/api/studio/drafts/'+studioCurrentId+'/'+action.replace(/_/g,'-'),{method:'POST'});
+    const d=await r.json();
+    if(d.ok&&d.task_id){
+      studioPollTask(d.task_id);
+    }else{
+      labelEl.textContent='Error';progressEl.textContent=d.msg||'Unknown error';
+      statusEl.classList.add('error');
+    }
+  }catch(e){labelEl.textContent='Error';progressEl.textContent=e.message;statusEl.classList.add('error')}
+}
+
+function studioPollTask(taskId){
+  if(studioPollTimer)clearInterval(studioPollTimer);
+  const statusEl=document.getElementById('st-task-status');
+  const labelEl=document.getElementById('st-task-label');
+  const progressEl=document.getElementById('st-task-progress');
+  studioPollTimer=setInterval(async()=>{
+    try{
+      const r=await fetch('/api/studio/tasks/'+taskId);
+      const d=await r.json();
+      if(!d){clearInterval(studioPollTimer);return}
+      progressEl.textContent=d.progress||'';
+      if(d.status==='done'){
+        clearInterval(studioPollTimer);studioPollTimer=null;
+        labelEl.textContent='Complete';progressEl.textContent=d.progress||'Done';
+        statusEl.classList.remove('error');
+        // Refresh draft data
+        if(studioCurrentId)studioSelectDraft(studioCurrentId);
+      }else if(d.status==='error'){
+        clearInterval(studioPollTimer);studioPollTimer=null;
+        labelEl.textContent='Error';progressEl.textContent=d.error||'Task failed';
+        statusEl.classList.add('error');
+      }else{
+        labelEl.textContent='Running...';
+      }
+    }catch(e){clearInterval(studioPollTimer)}
+  },2000);
+}
+
+function studioTogglePreview(){
+  const ta=document.getElementById('st-md-textarea');
+  const pv=document.getElementById('st-md-preview');
+  const btn=document.getElementById('st-preview-btn');
+  if(pv.classList.contains('on')){
+    pv.classList.remove('on');ta.style.display='block';btn.classList.remove('active');
+  }else{
+    pv.innerHTML=typeof marked!=='undefined'?marked.parse(ta.value):ta.value.replace(/\n/g,'<br>');
+    pv.classList.add('on');ta.style.display='none';btn.classList.add('active');
+  }
+}
+
+function studioInsert(before,after){
+  const ta=document.getElementById('st-md-textarea');
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const sel=ta.value.substring(s,e);
+  ta.value=ta.value.substring(0,s)+before+sel+after+ta.value.substring(e);
+  ta.focus();ta.selectionStart=s+before.length;ta.selectionEnd=s+before.length+sel.length;
+  studioAutoSave();
+}
+
+async function studioDeleteDraft(id,title){
+  if(!confirm('Delete "'+title+'"? This cannot be undone.'))return;
+  await fetch('/api/studio/drafts/'+id+'/delete',{method:'POST'});
+  location.reload();
+}
 </script></body></html>"""
 
 # ── Routes ──
@@ -1544,6 +1979,8 @@ def dashboard():
         if inum:
             issues_with_articles[inum] = issues_with_articles.get(inum, 0) + 1
 
+    studio_drafts = db.get_all_drafts()
+
     return render_template_string(HTML,
         sched=scheduler_on,
         match_model=MATCH_MODEL.split("-")[1] if "-" in MATCH_MODEL else MATCH_MODEL[:15],
@@ -1559,6 +1996,7 @@ def dashboard():
         articles_with_charts=articles_with_charts,
         total_charts=total_charts, total_images=total_images,
         issues=ISSUES, issues_with_articles=issues_with_articles,
+        studio_drafts=studio_drafts, n_drafts=len(studio_drafts),
         alog=activity_log[:30], img_url=img_url)
 
 @app.route("/api/act", methods=["POST"])
@@ -1890,6 +2328,117 @@ def api_post_now():
         return jsonify({"ok":True,"msg":"Posted!"})
     db.update_post_status(post["id"], prev_status)
     return jsonify({"ok":False,"msg":"Failed — check session"})
+
+
+# ── Article Studio APIs ──
+
+@app.route("/api/studio/drafts")
+def api_studio_drafts():
+    return jsonify(db.get_all_drafts())
+
+@app.route("/api/studio/drafts", methods=["POST"])
+def api_studio_create_draft():
+    title = request.json.get("title", "").strip()
+    if not title:
+        return jsonify({"ok": False, "msg": "Title is required"})
+    did = db.create_draft(title)
+    return jsonify({"ok": True, "id": did})
+
+@app.route("/api/studio/drafts/<int:did>")
+def api_studio_get_draft(did):
+    draft = db.get_draft(did)
+    if not draft:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify(draft)
+
+@app.route("/api/studio/drafts/<int:did>", methods=["POST"])
+def api_studio_update_draft(did):
+    d = request.json
+    fields = {}
+    for k in ("title", "section", "excerpt", "share_summary", "markdown", "image_prompt"):
+        if k in d:
+            fields[k] = d[k]
+    db.update_draft(did, **fields)
+    return jsonify({"ok": True})
+
+@app.route("/api/studio/drafts/<int:did>/delete", methods=["POST"])
+def api_studio_delete_draft(did):
+    db.delete_draft(did)
+    return jsonify({"ok": True})
+
+@app.route("/api/studio/drafts/<int:did>/save-to-disk", methods=["POST"])
+def api_studio_save_to_disk(did):
+    import studio_runner
+    tid = db.create_studio_task("save_to_disk", did)
+    studio_runner.start_task(tid, "save_to_disk", did)
+    return jsonify({"ok": True, "task_id": tid})
+
+@app.route("/api/studio/drafts/<int:did>/generate-image", methods=["POST"])
+def api_studio_generate_image(did):
+    import studio_runner
+    tid = db.create_studio_task("generate_image", did)
+    studio_runner.start_task(tid, "generate_image", did)
+    return jsonify({"ok": True, "task_id": tid})
+
+@app.route("/api/studio/drafts/<int:did>/generate-audio", methods=["POST"])
+def api_studio_generate_audio(did):
+    import studio_runner
+    tid = db.create_studio_task("generate_audio", did)
+    studio_runner.start_task(tid, "generate_audio", did)
+    return jsonify({"ok": True, "task_id": tid})
+
+@app.route("/api/studio/drafts/<int:did>/build", methods=["POST"])
+def api_studio_build(did):
+    import studio_runner
+    tid = db.create_studio_task("build", did)
+    studio_runner.start_task(tid, "build", did)
+    return jsonify({"ok": True, "task_id": tid})
+
+@app.route("/api/studio/drafts/<int:did>/deploy", methods=["POST"])
+def api_studio_deploy(did):
+    import studio_runner
+    tid = db.create_studio_task("deploy", did)
+    studio_runner.start_task(tid, "deploy", did)
+    return jsonify({"ok": True, "task_id": tid})
+
+@app.route("/api/studio/tasks/<int:tid>")
+def api_studio_task(tid):
+    task = db.get_studio_task(tid)
+    if not task:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify(task)
+
+@app.route("/api/studio/drafts/<int:did>/hero-image")
+def api_studio_hero(did):
+    draft = db.get_draft(did)
+    if not draft:
+        abort(404)
+    img_dir = HFN_ARTICLE_IMAGES / draft["slug"]
+    hero = img_dir / "hero.png"
+    if hero.exists():
+        return send_file(str(hero), mimetype="image/png")
+    # Try .jpg
+    hero_jpg = img_dir / "hero.jpg"
+    if hero_jpg.exists():
+        return send_file(str(hero_jpg), mimetype="image/jpeg")
+    abort(404)
+
+@app.route("/api/studio/drafts/<int:did>/audio")
+def api_studio_audio(did):
+    draft = db.get_draft(did)
+    if not draft:
+        abort(404)
+    audio = HFN_AUDIO_DIR / f"{draft['slug']}.mp3"
+    if audio.exists():
+        return send_file(str(audio), mimetype="audio/mpeg")
+    abort(404)
+
+@app.route("/preview-assets/<path:fp>")
+def serve_preview(fp):
+    full = HFN_SITE_OUTPUT / fp
+    if full.exists():
+        return send_file(str(full))
+    abort(404)
 
 
 # ── Auto-start scheduler on boot ──

@@ -1,5 +1,5 @@
-"""HFN Promote — Database v3.2. With feedback learning and scheduling."""
-import sqlite3, json
+"""HFN Promote — Database v3.3. With feedback learning, scheduling, and Article Studio."""
+import sqlite3, json, re
 from datetime import date, datetime
 from config import DB_PATH
 
@@ -79,6 +79,31 @@ CREATE TABLE IF NOT EXISTS feedback (
     platform TEXT DEFAULT '',
     post_type TEXT DEFAULT '',
     created_at TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS article_drafts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug TEXT UNIQUE NOT NULL,
+    title TEXT NOT NULL,
+    section TEXT DEFAULT '',
+    excerpt TEXT DEFAULT '',
+    share_summary TEXT DEFAULT '',
+    markdown TEXT DEFAULT '',
+    stage TEXT DEFAULT 'draft',
+    has_hero_image INTEGER DEFAULT 0,
+    has_audio INTEGER DEFAULT 0,
+    image_prompt TEXT DEFAULT '',
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS studio_tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_type TEXT NOT NULL,
+    draft_id INTEGER NOT NULL,
+    status TEXT DEFAULT 'pending',
+    progress TEXT DEFAULT '',
+    error TEXT DEFAULT '',
+    created_at TEXT DEFAULT (datetime('now')),
+    completed_at TEXT
 );
 """
 
@@ -683,6 +708,107 @@ def delete_planned():
     """Clear all planned posts (reset the plan)."""
     conn = get_db()
     conn.execute("DELETE FROM posts WHERE status='planned'")
+    conn.commit()
+    conn.close()
+
+# ── Article Studio ──
+
+def slugify(title):
+    s = title.lower().strip()
+    s = re.sub(r'[^a-z0-9\s-]', '', s)
+    s = re.sub(r'[\s-]+', '-', s).strip('-')
+    return s[:80]
+
+def create_draft(title):
+    slug = slugify(title)
+    conn = get_db()
+    # Ensure unique slug
+    base = slug
+    n = 1
+    while conn.execute("SELECT 1 FROM article_drafts WHERE slug=?", (slug,)).fetchone():
+        slug = f"{base}-{n}"
+        n += 1
+    conn.execute("INSERT INTO article_drafts (slug, title) VALUES (?, ?)", (slug, title))
+    conn.commit()
+    rid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+    return rid
+
+def get_draft(did):
+    conn = get_db()
+    row = _dict(conn.execute("SELECT * FROM article_drafts WHERE id=?", (did,)).fetchone())
+    conn.close()
+    return row
+
+def get_all_drafts():
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT id, slug, title, section, excerpt, share_summary, stage,
+               has_hero_image, has_audio, image_prompt,
+               created_at, updated_at,
+               CASE WHEN markdown = '' THEN 0
+                    ELSE LENGTH(TRIM(markdown)) - LENGTH(REPLACE(TRIM(markdown), ' ', '')) + 1
+               END as word_count
+        FROM article_drafts ORDER BY updated_at DESC
+    """).fetchall())
+    conn.close()
+    return rows
+
+def update_draft(did, **fields):
+    if not fields:
+        return
+    allowed = {"title", "slug", "section", "excerpt", "share_summary",
+               "markdown", "stage", "has_hero_image", "has_audio", "image_prompt"}
+    sets = []
+    vals = []
+    for k, v in fields.items():
+        if k in allowed:
+            sets.append(f"{k}=?")
+            vals.append(v)
+    if not sets:
+        return
+    sets.append("updated_at=datetime('now')")
+    vals.append(did)
+    conn = get_db()
+    conn.execute(f"UPDATE article_drafts SET {', '.join(sets)} WHERE id=?", vals)
+    conn.commit()
+    conn.close()
+
+def delete_draft(did):
+    conn = get_db()
+    conn.execute("DELETE FROM article_drafts WHERE id=?", (did,))
+    conn.execute("DELETE FROM studio_tasks WHERE draft_id=?", (did,))
+    conn.commit()
+    conn.close()
+
+def create_studio_task(task_type, draft_id):
+    conn = get_db()
+    conn.execute("INSERT INTO studio_tasks (task_type, draft_id) VALUES (?, ?)",
+                 (task_type, draft_id))
+    conn.commit()
+    tid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+    return tid
+
+def get_studio_task(tid):
+    conn = get_db()
+    row = _dict(conn.execute("SELECT * FROM studio_tasks WHERE id=?", (tid,)).fetchone())
+    conn.close()
+    return row
+
+def update_studio_task(tid, **fields):
+    allowed = {"status", "progress", "error", "completed_at"}
+    sets = []
+    vals = []
+    for k, v in fields.items():
+        if k in allowed:
+            sets.append(f"{k}=?")
+            vals.append(v)
+    if not sets:
+        return
+    vals.append(tid)
+    conn = get_db()
+    conn.execute(f"UPDATE studio_tasks SET {', '.join(sets)} WHERE id=?", vals)
     conn.commit()
     conn.close()
 

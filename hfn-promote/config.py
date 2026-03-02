@@ -18,6 +18,8 @@ HFN_SOURCE_DIR = Path(os.path.expanduser(os.getenv(
 )))
 HFN_SITE_OUTPUT = HFN_SOURCE_DIR.parent / "hfn-site-output"
 HFN_ARTICLE_IMAGES = HFN_SITE_OUTPUT / "images" / "articles"
+HFN_CONTENT_DIR = HFN_SOURCE_DIR / "essays"
+HFN_AUDIO_DIR = HFN_SITE_OUTPUT / "audio"
 HFN_BASE_URL = "https://www.historyfuturenow.com"
 
 # Database
