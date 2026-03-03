@@ -75,6 +75,8 @@ def _run_save_to_disk(task_id, draft_id):
 
 def _write_chart_defs(task_id, slug, chart_defs):
     """Append chart definitions for a slug into chart_defs.py (idempotent)."""
+    import re
+
     chart_file = BUILD_SYSTEM / "chart_defs.py"
     if not chart_file.exists():
         db.update_studio_task(task_id, progress="chart_defs.py not found — skipping")
@@ -88,8 +90,25 @@ def _write_chart_defs(task_id, slug, chart_defs):
         db.update_studio_task(task_id, progress=f"Charts for {slug} already in chart_defs.py — skipped")
         return
 
+    # Strip comment header lines (# === ...) from AI output
+    lines = chart_defs.split('\n')
+    cleaned = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith('#') and not cleaned:
+            continue  # skip leading comment lines
+        cleaned.append(line)
+    chart_code = '\n'.join(cleaned).strip()
+
+    # If the AI didn't wrap in charts['slug'] = [...], add the wrapper
+    if not re.search(r"charts\[", chart_code):
+        # Ensure the bare dicts are wrapped in a list
+        if not chart_code.startswith('['):
+            chart_code = f"[\n    {chart_code}\n    ]"
+        chart_code = f"charts['{slug}'] = {chart_code}"
+
     # Build the block to insert
-    block = f"\n    # ─── STUDIO: {slug} ───\n    {chart_defs}\n"
+    block = f"\n    # ─── STUDIO: {slug} ───\n    {chart_code}\n"
 
     # Insert before "return charts" line
     insert_point = existing.rfind("    return charts")

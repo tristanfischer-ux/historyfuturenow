@@ -1978,10 +1978,22 @@ function studioCheckForDraft(text){
 }
 
 function studioCheckForCharts(text){
-  // Detect chart definitions (python code blocks with 'id': and 'js': patterns)
-  const codeMatch=text.match(/```python\s*\n([\s\S]*?)```/);
-  if(!codeMatch)return;
-  const block=codeMatch[1];
+  // Detect chart definitions — look for 'id' + 'js' keys regardless of code fence format
+  const hasId=text.includes("'id':")||text.includes('"id":');
+  const hasJs=text.includes("'js':")||text.includes('"js":');
+  if(!hasId||!hasJs)return;
+
+  // Extract: try fenced code block first (closed or unclosed), then fall back to full text
+  let block;
+  const fenced=text.match(/```\w*\s*\n([\s\S]*?)```/);
+  if(fenced){
+    block=fenced[1];
+  }else{
+    // Unclosed fence: take everything after ```python\n
+    const unclosed=text.match(/```\w*\s*\n([\s\S]*)/);
+    block=unclosed?unclosed[1]:text;
+  }
+  // Final check the extracted block actually has chart keys
   if(!(block.includes("'id':")||block.includes('"id":'))||!(block.includes("'js':")||block.includes('"js":')))return;
 
   // Save chart defs to draft via existing update endpoint
@@ -2123,7 +2135,7 @@ async function studioAdvanceStage(newStage){
 async function studioDefineCharts(){
   if(!studioCurrentId||studioChatStreaming)return;
   const input=document.getElementById('st-chat-input');
-  input.value='Define 2-5 charts for this article. Output complete chart_defs.py entries with Chart.js code.';
+  input.value='Define 2-5 charts for this article. Wrap in charts[\\\'slug\\\'] = [...], use single quotes, _regChart wrapper, C.accent/C.blue colors, close the ```python fence. Follow the EXAMPLE FORMAT exactly.';
   studioSendChat();
 }
 
@@ -2952,11 +2964,32 @@ WHEN PRODUCING A DRAFT:
 - Include cross-references to at least 2 relevant existing HFN articles as [Title](/articles/slug) links
 
 WHEN PRODUCING CHART DEFINITIONS:
-- Output complete Python dict entries ready for chart_defs.py
-- Include id, figure_num, title, desc, source, position, and complete Chart.js code in the js field
-- Use the shared COLORS theme and gridOpts() helper
+- Wrap ALL charts in: charts['<slug>'] = [ ... ]
+- Use SINGLE quotes for Python keys/strings, triple-double-quotes for js field (no r prefix)
+- js field must use _regChart('chartId',()=>{ ... }) wrapper — NOT raw (()=>{ try { ... })()
+- Color references: use C.accent, C.blue, C.green, C.teal, C.amber, C.purple (NOT COLORS.x)
+- Shared helpers: ds(), dxy(), linX(), gridOpts, legend, tooltipStyle, chartPad, yearTick
 - Year ticks must use `callback: v => String(v)` (never let Chart.js add commas to years)
 - Target 2-5 charts per article covering historic-present-future arcs
+- Wrap output in a ```python code fence and CLOSE it with ```
+- EXAMPLE FORMAT (follow this exactly):
+```
+charts['article-slug'] = [
+    {
+        'id': 'slugChart1', 'figure_num': 1,
+        'title': 'Chart Title',
+        'desc': 'What this chart shows.',
+        'source': 'Data source citation',
+        'position': 'after_para_6',
+        'js': \"""_regChart('slugChart1',()=>{const ctx=document.getElementById('slugChart1');
+new Chart(ctx,{type:'line',data:{labels:['2000','2010','2020'],
+datasets:[{...ds('Series',data,C.accent)}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:tooltipStyle},scales:gridOpts}});
+});\"""
+    },
+]
+```
 
 Follow ALL the editorial rules and style guides below exactly.
 """
@@ -3027,14 +3060,19 @@ def api_studio_chat(did):
                 db.update_draft(did, markdown=full_text)
 
             # Detect chart definitions in response
-            import re as _re
-            _chart_blocks = _re.findall(r"```python\s*\n([\s\S]*?)```", full_text)
-            for _block in _chart_blocks:
-                _has_id = "'id':" in _block or '"id":' in _block
-                _has_js = "'js':" in _block or '"js":' in _block
-                if _has_id and _has_js:
+            _has_id = "'id':" in full_text or '"id":' in full_text
+            _has_js = "'js':" in full_text or '"js":' in full_text
+            if _has_id and _has_js:
+                import re as _re
+                # Try fenced block first (closed or unclosed), else use full text
+                _m = _re.search(r"```\w*\s*\n([\s\S]*?)```", full_text)
+                if not _m:
+                    _m = _re.search(r"```\w*\s*\n([\s\S]*)", full_text)
+                _block = _m.group(1) if _m else full_text
+                _bid = "'id':" in _block or '"id":' in _block
+                _bjs = "'js':" in _block or '"js":' in _block
+                if _bid and _bjs:
                     db.update_draft(did, chart_defs=_block)
-                    break
 
         yield "data: {\"done\": true}\n\n"
 
