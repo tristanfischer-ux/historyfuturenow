@@ -1,8 +1,10 @@
 """Article Studio — Background task runner using threading + subprocess."""
-import threading, subprocess, json
+import sys, threading, subprocess, json, re as _re
 from datetime import datetime
 from pathlib import Path
 import db
+
+_PYTHON = sys.executable  # Always use the running interpreter, not bare "python"
 from config import HFN_SOURCE_DIR, HFN_SITE_OUTPUT, HFN_CONTENT_DIR, HFN_AUDIO_DIR, HFN_ARTICLE_IMAGES
 
 BUILD_SYSTEM = HFN_SOURCE_DIR
@@ -38,15 +40,103 @@ def _wrap(runner, task_id, draft_id):
                               completed_at=datetime.now().isoformat())
 
 
+def _update_library(new_books):
+    """Append genuinely new books to library_data.py. Returns count added."""
+    lib_path = HFN_SOURCE_DIR / "library_data.py"
+    if not lib_path.exists() or not new_books:
+        return 0
+
+    text = lib_path.read_text(encoding="utf-8")
+
+    # Build set of existing titles (case-insensitive)
+    existing = set()
+    for m in _re.finditer(r'"title":\s*"([^"]+)"', text):
+        existing.add(m.group(1).lower())
+
+    year = datetime.now().year
+    entries = []
+    for b in new_books:
+        title = (b.get("title") or "").strip()
+        if not title or title.lower() in existing:
+            continue
+        author = (b.get("author") or "Unknown").strip()
+        themes = b.get("themes", ["world"])
+        # Validate theme keys
+        valid_themes = {"ancient", "medieval", "modern", "world", "geopolitics",
+                        "economics", "politics", "religion", "science", "biology",
+                        "philosophy", "fiction"}
+        themes = [t for t in themes if t in valid_themes] or ["world"]
+        entry = f'    {{"title": "{title}", "author": "{author}", "year": {year}, "source": "kindle", "themes": {json.dumps(themes)}}},'
+        entries.append(entry)
+        existing.add(title.lower())
+
+    if not entries:
+        return 0
+
+    # Insert before the closing ] of the BOOKS list
+    close_idx = text.rfind("\n]\n")
+    if close_idx == -1:
+        close_idx = text.rfind("\n]")
+    if close_idx == -1:
+        return 0
+
+    insert_block = "\n" + "\n".join(entries) + "\n"
+    updated = text[:close_idx] + insert_block + text[close_idx:]
+    lib_path.write_text(updated, encoding="utf-8")
+    return len(entries)
+
+
 def _run_save_to_disk(task_id, draft_id):
     """Write draft markdown to essays/ with YAML frontmatter."""
+
     draft = db.get_draft(draft_id)
     if not draft:
         raise ValueError("Draft not found")
 
     db.update_studio_task(task_id, progress="Writing file...")
 
-    # Build frontmatter
+    # Extract sources from the markdown's embedded YAML frontmatter (if any)
+    raw_md = draft.get("markdown") or ""
+    sources_lines = []
+    body_md = raw_md
+
+    new_books = []
+
+    fm_match = _re.match(r'^\s*---\n([\s\S]*?)\n---\s*\n?', raw_md)
+    if fm_match:
+        fm_block = fm_match.group(1)
+        body_md = raw_md[fm_match.end():]
+        # Extract sources list
+        src_match = _re.search(r'sources:\s*\n((?:\s+-\s+.*\n?)*)', fm_block)
+        if src_match:
+            for line in src_match.group(1).split('\n'):
+                m = _re.match(r'^\s+-\s+["\']?([^"\'\n]+?)["\']?\s*$', line)
+                if m:
+                    sources_lines.append(f'  - "{m.group(1).strip()}"')
+
+        # Extract new_books list (YAML block of dicts with title/author/themes)
+        nb_match = _re.search(r'new_books:\s*\n((?:\s+[-\w].*\n?)*)', fm_block)
+        if nb_match:
+            current = {}
+            for line in nb_match.group(1).split('\n'):
+                line = line.strip()
+                if not line:
+                    continue
+                if line.startswith('- title:'):
+                    if current.get("title"):
+                        new_books.append(current)
+                    current = {"title": line.split(':', 1)[1].strip().strip('"').strip("'")}
+                elif line.startswith('author:'):
+                    current["author"] = line.split(':', 1)[1].strip().strip('"').strip("'")
+                elif line.startswith('themes:'):
+                    # Parse inline YAML list: ["economics", "politics"]
+                    themes_str = line.split(':', 1)[1].strip()
+                    themes_match = _re.findall(r'"([^"]+)"|\'([^\']+)\'', themes_str)
+                    current["themes"] = [t[0] or t[1] for t in themes_match]
+            if current.get("title"):
+                new_books.append(current)
+
+    # Build frontmatter from DB fields + extracted sources (new_books stripped)
     fm_lines = ["---"]
     fm_lines.append(f"title: \"{draft['title']}\"")
     if draft.get("section"):
@@ -55,10 +145,13 @@ def _run_save_to_disk(task_id, draft_id):
         fm_lines.append(f"excerpt: \"{draft['excerpt']}\"")
     if draft.get("share_summary"):
         fm_lines.append(f"share_summary: \"{draft['share_summary']}\"")
+    if sources_lines:
+        fm_lines.append("sources:")
+        fm_lines.extend(sources_lines)
     fm_lines.append("---")
     fm_lines.append("")
 
-    content = "\n".join(fm_lines) + (draft.get("markdown") or "")
+    content = "\n".join(fm_lines) + body_md
 
     out_path = HFN_CONTENT_DIR / f"{draft['slug']}.md"
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -69,7 +162,19 @@ def _run_save_to_disk(task_id, draft_id):
     if chart_defs:
         _write_chart_defs(task_id, draft["slug"], chart_defs)
 
-    db.update_studio_task(task_id, progress=f"Saved to {out_path.name}")
+    # Update library with new books from the AI
+    if new_books:
+        added = _update_library(new_books)
+        if added > 0:
+            # Clear caches so next article sees updated library
+            import app as _app
+            _app._library_books_cache = None
+            _app._library_catalog_cache = None
+            db.update_studio_task(task_id, progress=f"Saved to {out_path.name} — added {added} new book{'s' if added != 1 else ''} to library")
+        else:
+            db.update_studio_task(task_id, progress=f"Saved to {out_path.name}")
+    else:
+        db.update_studio_task(task_id, progress=f"Saved to {out_path.name}")
     db.update_draft(draft_id, stage="draft")
 
 
@@ -125,48 +230,130 @@ def _write_chart_defs(task_id, slug, chart_defs):
 
 
 def _run_generate_image(task_id, draft_id):
-    """Run the hero image generation script."""
+    """Generate hero image using Gemini API directly."""
+    import os
+
     draft = db.get_draft(draft_id)
     if not draft:
         raise ValueError("Draft not found")
 
     db.update_studio_task(task_id, progress="Generating hero image...")
 
-    script = BUILD_SYSTEM / "generate_chart_images.py"
-    if not script.exists():
-        # Fallback — try generate_icons or a generic image gen
-        raise FileNotFoundError(f"Image generation script not found: {script}")
+    # Build the image prompt
+    user_prompt = (draft.get("image_prompt") or "").strip()
+    title = draft.get("title", "Untitled")
+    if not user_prompt:
+        # Auto-generate a prompt from the article title
+        user_prompt = (
+            f"Editorial illustration for an article titled '{title}'. "
+            "Style: flat geometric editorial illustration, mid-century modern poster aesthetic. "
+            "Warm muted editorial palette (terracotta, navy, sand, teal, grey, ochre). "
+            "No text, no writing, no photorealism, no detailed faces. "
+            "Landscape orientation, wide format, 16:9 aspect ratio."
+        )
+        db.update_studio_task(task_id, progress="Auto-generated image prompt from title...")
 
-    # Ensure output dir exists
+    # Ensure we have the HFN style prefix
+    if "flat geometric" not in user_prompt.lower() and "editorial illustration" not in user_prompt.lower():
+        user_prompt = (
+            "Flat geometric editorial illustration in a mid-century modern poster style. "
+            "Warm muted editorial palette (terracotta, navy, sand, teal, grey, ochre). "
+            "No text, no writing, no photorealism, no detailed faces. "
+            "Landscape orientation, wide format, 16:9 aspect ratio. "
+        ) + user_prompt
+
+    # Always ensure landscape orientation is requested
+    if "landscape" not in user_prompt.lower() and "16:9" not in user_prompt:
+        user_prompt += " Landscape orientation, wide format, 16:9 aspect ratio."
+
+    # Check API key — try env first, then fall back to .zshrc extraction
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        # Try loading from shell config as fallback
+        zshrc = Path.home() / ".zshrc"
+        if zshrc.exists():
+            import re as _re
+            for line in zshrc.read_text().splitlines():
+                m = _re.match(r'export\s+GEMINI_API_KEY=["\']?([^"\']+)', line)
+                if m:
+                    api_key = m.group(1)
+                    break
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY not found in environment or ~/.zshrc")
+
+    db.update_studio_task(task_id, progress="Calling Gemini image generation...")
+
+    # Run image generation via subprocess with system python3 (has google-generativeai)
     img_dir = HFN_ARTICLE_IMAGES / draft["slug"]
     img_dir.mkdir(parents=True, exist_ok=True)
+    hero = img_dir / "hero.png"
 
-    # Run image generation — this is a placeholder call
-    # The actual command depends on the HFN build system's image generation pipeline
+    # Use json to safely pass prompt/api_key/output path
+    import json as _json
+    args_json = _json.dumps({"prompt": user_prompt, "api_key": api_key, "output": str(hero)})
+
+    gen_script = """
+import sys, json, warnings, pathlib, io
+warnings.filterwarnings("ignore", category=FutureWarning)
+args = json.loads(sys.argv[1])
+import google.generativeai as genai
+genai.configure(api_key=args["api_key"])
+model = genai.GenerativeModel("gemini-2.5-flash-image")
+response = model.generate_content(
+    "Generate an image: " + args["prompt"],
+    generation_config={"response_modalities": ["IMAGE"]},
+)
+for part in (response.candidates[0].content.parts if response.candidates else []):
+    if hasattr(part, "inline_data") and part.inline_data:
+        raw_bytes = part.inline_data.data
+        # Resize to 1200x675 (HFN hero image standard)
+        try:
+            from PIL import Image
+            img = Image.open(io.BytesIO(raw_bytes))
+            img = img.resize((1200, 675), Image.LANCZOS)
+            img.save(args["output"], "PNG", optimize=True)
+        except ImportError:
+            # No Pillow — save raw and warn
+            pathlib.Path(args["output"]).write_bytes(raw_bytes)
+            print("OK_NO_RESIZE")
+            sys.exit(0)
+        print("OK")
+        sys.exit(0)
+print("NO_IMAGE")
+sys.exit(1)
+"""
+
     proc = subprocess.run(
-        ["python", str(script), "--slug", draft["slug"]],
-        cwd=str(BUILD_SYSTEM),
-        capture_output=True, text=True, timeout=300
+        ["/opt/homebrew/bin/python3", "-c", gen_script, args_json],
+        capture_output=True, text=True, timeout=120
     )
 
     if proc.returncode != 0:
-        err = proc.stderr[:300] if proc.stderr else "Unknown error"
-        raise RuntimeError(f"Image generation failed: {err}")
+        err = (proc.stderr.strip() or proc.stdout.strip() or "Unknown error")[:1000]
+        raise RuntimeError(f"Gemini image generation failed: {err}")
 
-    # Check if hero image was created
-    hero = img_dir / "hero.png"
-    if hero.exists():
-        db.update_draft(draft_id, has_hero_image=1, stage="images")
-        db.update_studio_task(task_id, progress="Hero image generated")
-    else:
-        db.update_studio_task(task_id, progress="Script ran but hero.png not found")
+    if not hero.exists():
+        raise RuntimeError(f"Image generation succeeded but {hero} not found")
+
+    db.update_draft(draft_id, has_hero_image=1, stage="images")
+    db.update_studio_task(task_id, progress="Hero image generated")
 
 
 def _run_generate_audio(task_id, draft_id):
     """Run audio narration generation."""
+    import os
+
     draft = db.get_draft(draft_id)
     if not draft:
         raise ValueError("Draft not found")
+
+    # Audio script reads from essays/{slug}.md — ensure Save to Disk ran first
+    essay_path = HFN_CONTENT_DIR / f"{draft['slug']}.md"
+    if not essay_path.exists():
+        raise RuntimeError(
+            f"Essay file not found: {essay_path.name}. "
+            "Run 'Save to Disk' first so the audio generator can read the markdown."
+        )
 
     db.update_studio_task(task_id, progress="Generating audio narration...")
 
@@ -174,14 +361,34 @@ def _run_generate_audio(task_id, draft_id):
     if not script.exists():
         raise FileNotFoundError(f"Audio script not found: {script}")
 
+    # Get GEMINI_API_KEY for the subprocess environment
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        zshrc = Path.home() / ".zshrc"
+        if zshrc.exists():
+            import re as _re
+            for line in zshrc.read_text().splitlines():
+                m = _re.match(r'export\s+GEMINI_API_KEY=["\']?([^"\']+)', line)
+                if m:
+                    api_key = m.group(1)
+                    break
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY not found in environment or ~/.zshrc")
+
+    # Build env with the API key
+    env = os.environ.copy()
+    env["GEMINI_API_KEY"] = api_key
+
+    # Use system python3 (has required packages: yaml, requests, etc.)
     proc = subprocess.run(
-        ["python", str(script), "--slug", draft["slug"]],
+        ["/opt/homebrew/bin/python3", str(script), "--article", draft["slug"]],
         cwd=str(BUILD_SYSTEM),
+        env=env,
         capture_output=True, text=True, timeout=600
     )
 
     if proc.returncode != 0:
-        err = proc.stderr[:300] if proc.stderr else "Unknown error"
+        err = (proc.stderr[:500] if proc.stderr else proc.stdout[:500]) or "Unknown error"
         raise RuntimeError(f"Audio generation failed: {err}")
 
     # Check if audio file was created
@@ -215,7 +422,7 @@ def _run_build(task_id, draft_id):
     db.update_studio_task(task_id, progress="Building site...")
 
     proc = subprocess.run(
-        ["python", str(BUILD_SYSTEM / "build.py")],
+        ["/opt/homebrew/bin/python3", str(BUILD_SYSTEM / "build.py")],
         cwd=str(BUILD_SYSTEM),
         capture_output=True, text=True, timeout=300
     )
@@ -225,7 +432,7 @@ def _run_build(task_id, draft_id):
         raise RuntimeError(f"Build failed: {err}")
 
     db.update_draft(draft_id, stage="review")
-    db.update_studio_task(task_id, progress="Build complete — preview ready")
+    db.update_studio_task(task_id, progress="Build complete — ready for deploy")
 
 
 def _run_deploy(task_id, draft_id):

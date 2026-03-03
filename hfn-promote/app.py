@@ -61,6 +61,44 @@ def build_article_catalog():
         lines.append(f"- **{a['title']}** ({part}) `/articles/{a['slug']}` — {excerpt}")
     return "\n".join(lines)
 
+_library_catalog_cache = None
+
+def build_library_catalog():
+    """Build a compact library catalog grouped by theme for the AI to select sources."""
+    global _library_catalog_cache
+    if _library_catalog_cache:
+        return _library_catalog_cache
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "library_data",
+            str(HFN_SOURCE_DIR / "library_data.py")
+        )
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+
+        by_theme = {}
+        theme_names = {t: v.get("name", t) for t, v in mod.THEMES.items()} if hasattr(mod, "THEMES") else {}
+        for b in mod.BOOKS:
+            t = b.get("themes", ["other"])[0]
+            by_theme.setdefault(t, []).append(f"{b['title']} ({b.get('author', '?')})")
+
+        lines = ["# HFN Library — Available Books for Sources\n"]
+        lines.append("When writing a draft, include a `sources:` list in the YAML frontmatter with "
+                     "at least 3 books from this library that are RELEVANT to the article's topic. "
+                     "Use the EXACT title as shown below. Only cite books that genuinely inform the "
+                     "article — do not pad with unrelated titles.\n")
+        for theme in sorted(by_theme.keys()):
+            name = theme_names.get(theme, theme.title())
+            lines.append(f"\n## {name}")
+            for book in by_theme[theme]:
+                lines.append(f"- {book}")
+
+        _library_catalog_cache = "\n".join(lines)
+    except Exception:
+        _library_catalog_cache = ""
+    return _library_catalog_cache
+
 
 app = Flask(__name__)
 activity_log = []
@@ -505,24 +543,44 @@ body.dark .st-next-text{color:#fbbf24}
 .st-audio{width:100%;margin-bottom:8px;display:none}
 .st-audio.visible{display:block}
 
+/* Chart summary */
+.st-charts-summary{margin-bottom:10px;padding:8px 10px;background:#fafaf9;border:1px solid var(--border);border-radius:6px;display:none;font-size:.72rem}
+.st-charts-summary.visible{display:block}
+.st-charts-summary h4{margin:0 0 6px;font-size:.72rem;font-weight:700;color:var(--text)}
+.st-charts-summary ol{margin:0;padding-left:18px}
+.st-charts-summary li{margin-bottom:4px;line-height:1.4}
+.st-charts-summary li strong{color:var(--text)}
+.st-charts-summary li span{color:var(--dim)}
+body.dark .st-charts-summary{background:#2a2825}
+
+/* Hero preview (below next-bar) */
+.st-hero-preview{width:100%;max-height:200px;object-fit:cover;border-radius:8px;border:1px solid var(--border);display:none;flex-shrink:0}
+.st-hero-preview.visible{display:block}
+
 /* Markdown editor */
 .st-md-toolbar{display:flex;align-items:center;gap:4px;padding:6px 10px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
 .st-md-btn{padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--card);cursor:pointer;font-size:.72rem;font-weight:700;font-family:var(--mono);color:var(--dim)}
 .st-md-btn:hover{border-color:var(--accent);color:var(--accent)}
 .st-md-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .st-md-wc{margin-left:auto;font-size:.62rem;color:var(--dim);font-family:var(--mono)}
-.st-md-area{flex:1;overflow:hidden;position:relative}
-.st-md-area textarea{width:100%;height:100%;border:none;padding:12px 16px;font-size:.82rem;line-height:1.7;font-family:var(--mono);resize:none;background:var(--card);color:var(--text)}
+/* Editor area — supports edit/split/preview modes */
+.st-md-area{flex:1;overflow:hidden;position:relative;display:flex}
+.st-md-area textarea{width:100%;height:100%;border:none;padding:12px 16px;font-size:.82rem;line-height:1.7;font-family:var(--mono);resize:none;background:var(--card);color:var(--text);flex:1}
 .st-md-area textarea:focus{outline:none}
-.st-md-preview{width:100%;height:100%;overflow-y:auto;padding:16px 20px;font-size:.85rem;line-height:1.7;display:none}
-.st-md-preview.on{display:block}
-.st-md-preview h1{font-size:1.4rem;font-weight:700;margin:16px 0 8px}
-.st-md-preview h2{font-size:1.1rem;font-weight:700;margin:14px 0 6px;color:var(--accent)}
-.st-md-preview h3{font-size:.95rem;font-weight:700;margin:12px 0 4px}
-.st-md-preview p{margin-bottom:10px}.st-md-preview blockquote{border-left:3px solid var(--accent);padding-left:12px;color:#555;margin:10px 0}
-.st-md-preview code{background:#f5f5f4;padding:1px 4px;border-radius:3px;font-family:var(--mono);font-size:.8em}
-.st-md-preview pre{background:#f5f5f4;padding:12px;border-radius:6px;overflow-x:auto;margin:10px 0}
-.st-md-preview a{color:#2563eb}
+.st-md-area iframe{border:none;flex:1;background:#fff}
+/* Mode: edit (default) — textarea visible, iframe hidden */
+.st-md-area[data-mode="edit"] textarea{display:block;width:100%}
+.st-md-area[data-mode="edit"] iframe{display:none}
+/* Mode: split — 50/50 side by side */
+.st-md-area[data-mode="split"] textarea{display:block;width:50%;border-right:1px solid var(--border)}
+.st-md-area[data-mode="split"] iframe{display:block;width:50%}
+/* Mode: preview — full-width iframe, textarea hidden */
+.st-md-area[data-mode="preview"] textarea{display:none}
+.st-md-area[data-mode="preview"] iframe{display:block;width:100%}
+/* Mode buttons separator */
+.st-md-toolbar .st-mode-sep{width:1px;height:16px;background:var(--border);margin:0 4px}
+/* Old preview div — no longer used */
+.st-md-preview{display:none}
 
 body.dark .st-table tr:hover{background:#2a2825}
 body.dark .st-field input,body.dark .st-field select,body.dark .st-field textarea{background:var(--card);color:var(--text);border-color:var(--border)}
@@ -929,6 +987,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <span class="st-next-text" id="st-next-text"></span>
       <span id="st-next-btns"></span>
     </div>
+    <img class="st-hero-preview" id="st-hero-preview" src="" onerror="this.classList.remove('visible')">
     <div class="st-ed-body">
       <!-- Left panel: chat -->
       <div class="st-ed-left">
@@ -948,7 +1007,11 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
           <button class="st-md-btn" onclick="studioInsert('*','*')" title="Italic"><em>I</em></button>
           <button class="st-md-btn" onclick="studioInsert('\n## ','\n')" title="Heading">H2</button>
           <button class="st-md-btn" onclick="studioInsert('[','](url)')" title="Link">🔗</button>
-          <button class="st-md-btn" id="st-preview-btn" onclick="studioTogglePreview()" title="Toggle preview">Preview</button>
+          <span class="st-mode-sep"></span>
+          <button class="st-md-btn active" id="st-mode-edit" onclick="studioSetMode('edit')" title="Editor only">Edit</button>
+          <button class="st-md-btn" id="st-mode-split" onclick="studioSetMode('split')" title="Editor + Preview">Split</button>
+          <button class="st-md-btn" id="st-mode-preview" onclick="studioSetMode('preview')" title="Preview only">Preview</button>
+          <span class="st-mode-sep"></span>
           <button class="st-md-btn" id="st-details-btn" onclick="studioToggleDetails()" title="Metadata & Pipeline">Details</button>
           <span class="st-md-wc" id="st-md-wc">0 words</span>
         </div>
@@ -958,11 +1021,11 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
           <div class="st-details-grid">
             <div class="st-field">
               <label>Title</label>
-              <input type="text" id="st-f-title" onchange="studioAutoSave()" oninput="studioAutoSave()">
+              <input type="text" id="st-f-title" onchange="studioAutoSave()" oninput="studioAutoSave();studioSchedulePreviewUpdate()">
             </div>
             <div class="st-field">
               <label>Section</label>
-              <select id="st-f-section" onchange="studioAutoSave()">
+              <select id="st-f-section" onchange="studioAutoSave();studioSchedulePreviewUpdate()">
                 <option value="">— None —</option>
                 <option value="Geopolitics">Geopolitics</option>
                 <option value="Economics">Economics</option>
@@ -974,7 +1037,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
             </div>
             <div class="st-field">
               <label>Excerpt</label>
-              <textarea id="st-f-excerpt" rows="2" onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
+              <textarea id="st-f-excerpt" rows="2" onchange="studioAutoSave()" oninput="studioAutoSave();studioSchedulePreviewUpdate()"></textarea>
             </div>
             <div class="st-field">
               <label>Share Summary</label>
@@ -986,11 +1049,12 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
               <textarea id="st-f-imgprompt" rows="2" placeholder="Describe the hero image style..." onchange="studioAutoSave()" oninput="studioAutoSave()"></textarea>
             </div>
           </div>
+          <div class="st-charts-summary" id="st-charts-summary"></div>
           <div class="st-details-actions">
             <button class="st-action-btn" onclick="studioAction('save_to_disk')"><span class="st-act-icon">💾</span> Save to Disk</button>
             <button class="st-action-btn" onclick="studioAction('generate_image')"><span class="st-act-icon">🖼</span> Generate Image</button>
             <button class="st-action-btn" onclick="studioAction('generate_audio')"><span class="st-act-icon">🔊</span> Generate Audio</button>
-            <button class="st-action-btn" onclick="studioAction('build')"><span class="st-act-icon">🔨</span> Build & Preview</button>
+            <button class="st-action-btn" onclick="studioAction('build')"><span class="st-act-icon">🔨</span> Build for Deploy</button>
             <button class="st-action-btn" onclick="studioAction('deploy')"><span class="st-act-icon">🚀</span> Deploy</button>
           </div>
           <div class="st-task-status" id="st-task-status">
@@ -1001,9 +1065,9 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
           <audio class="st-audio" id="st-audio" controls src=""></audio>
         </div>
 
-        <div class="st-md-area">
-          <textarea id="st-md-textarea" placeholder="Start writing your article..." oninput="studioAutoSave();studioUpdateWc()"></textarea>
-          <div class="st-md-preview" id="st-md-preview"></div>
+        <div class="st-md-area" data-mode="edit" id="st-md-area">
+          <textarea id="st-md-textarea" placeholder="Start writing your article..." oninput="studioAutoSave();studioUpdateWc();studioSchedulePreviewUpdate()"></textarea>
+          <iframe id="st-preview-iframe" sandbox="allow-scripts allow-same-origin"></iframe>
         </div>
       </div>
     </div>
@@ -1756,6 +1820,7 @@ let studioCurrentId=null;
 let studioSaveTimer=null;
 let studioPollTimer=null;
 let studioChatStreaming=false;
+let studioCurrentAction=null;
 const stageOrder=['draft','factcheck','charts','images','review','deployed'];
 const stageLabels=['Draft','Fact-Check','Charts','Image','Build','Deploy'];
 
@@ -1784,10 +1849,18 @@ async function studioSelectDraft(id){
   studioShareCount();
   studioUpdateWc();
   studioUpdateStepper(d.stage);
-  // Hero image
+  // Chart summary + parse for preview
+  studioRenderChartSummary(d.chart_defs||'');
+  if(d.chart_defs)studioParseCharts(d.chart_defs);
+  else{_parsedCharts=null;}
+  // Hero image (details panel)
   const heroImg=document.getElementById('st-hero-img');
   heroImg.src='/api/studio/drafts/'+id+'/hero-image';
   heroImg.classList.toggle('visible',!!d.has_hero_image);
+  // Hero preview (below next-bar)
+  const heroPreview=document.getElementById('st-hero-preview');
+  if(d.has_hero_image){heroPreview.src='/api/studio/drafts/'+id+'/hero-image';heroPreview.classList.add('visible')}
+  else{heroPreview.classList.remove('visible');heroPreview.src=''}
   // Audio
   const audioEl=document.getElementById('st-audio');
   audioEl.src='/api/studio/drafts/'+id+'/audio';
@@ -1800,8 +1873,9 @@ async function studioSelectDraft(id){
   document.getElementById('st-details-btn').classList.remove('active');
   // Load chat messages
   await studioLoadMessages(id);
-  // Focus chat input
+  // Focus chat input + schedule preview update
   setTimeout(()=>document.getElementById('st-chat-input').focus(),100);
+  studioSchedulePreviewUpdate();
 }
 
 async function studioLoadMessages(id){
@@ -1840,8 +1914,9 @@ function studioAppendMessage(role, content, isStreaming){
   return div;
 }
 
-async function studioSendChat(){
+async function studioSendChat(opts){
   if(!studioCurrentId||studioChatStreaming)return;
+  opts=opts||{};
   const input=document.getElementById('st-chat-input');
   const text=input.value.trim();
   if(!text)return;
@@ -1859,9 +1934,11 @@ async function studioSendChat(){
 
   let fullText='';
   try{
+    const body={message:text};
+    if(opts.model)body.model=opts.model;
     const res=await fetch('/api/studio/drafts/'+studioCurrentId+'/chat',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:text})
+      body:JSON.stringify(body)
     });
     const reader=res.body.getReader();
     const decoder=new TextDecoder();
@@ -2002,6 +2079,12 @@ function studioCheckForCharts(text){
     body:JSON.stringify({chart_defs:block})
   });
 
+  // Render chart summary in details panel
+  studioRenderChartSummary(block);
+
+  // Parse charts for live preview
+  studioParseCharts(block);
+
   // Show indicator in chat
   const msgs=document.getElementById('st-chat-messages');
   const ind=document.createElement('div');
@@ -2070,6 +2153,39 @@ function studioUpdateWc(){
   document.getElementById('st-md-wc').textContent=wc.toLocaleString()+' words';
 }
 
+function studioRenderChartSummary(defs){
+  const el=document.getElementById('st-charts-summary');
+  if(!defs||!defs.trim()){el.classList.remove('visible');el.innerHTML='';return}
+
+  // Use parsed chart data if available
+  if(_parsedCharts&&_parsedCharts.length>0){
+    let html='<h4>Charts ('+_parsedCharts.length+')</h4><ol>';
+    for(const c of _parsedCharts){
+      html+='<li><strong>Fig '+c.figure_num+': '+_escHtml(c.title)+'</strong> <span>'+_escHtml(c.position)+'</span></li>';
+    }
+    html+='</ol>';
+    el.innerHTML=html;
+    el.classList.add('visible');
+    return;
+  }
+
+  // Fallback: regex extraction from raw defs
+  const titles=[];
+  const re=/'title'\s*:\s*'([^']+)'/g;
+  let m;
+  while((m=re.exec(defs))!==null)titles.push(m[1]);
+  if(!titles.length){
+    const re2=/"title"\s*:\s*"([^"]+)"/g;
+    while((m=re2.exec(defs))!==null)titles.push(m[1]);
+  }
+  if(!titles.length){el.classList.remove('visible');el.innerHTML='';return}
+  let html='<h4>Charts ('+titles.length+')</h4><ol>';
+  for(const t of titles)html+='<li><strong>'+t+'</strong></li>';
+  html+='</ol>';
+  el.innerHTML=html;
+  el.classList.add('visible');
+}
+
 function studioUpdateStepper(stage){
   const idx=stageOrder.indexOf(stage);
   for(let i=0;i<6;i++){
@@ -2099,7 +2215,7 @@ function studioUpdateNextBar(stage){
   switch(stage){
     case 'draft':
       text.textContent='Edit in the editor if needed, then fact-check.';
-      btns.innerHTML='<button class="btn primary" onclick="studioFactCheck()">Fact-Check</button>';
+      btns.innerHTML='<button class="btn primary" onclick="studioFactCheck()" style="margin-right:6px">Fact-Check</button><button class="btn secondary" onclick="studioAdvanceStage(\'factcheck\')">Continue \u2192</button>';
       break;
     case 'factcheck':
       text.textContent='Review the report, then apply corrections or continue to Charts.';
@@ -2111,11 +2227,11 @@ function studioUpdateNextBar(stage){
       break;
     case 'images':
       text.textContent='Generate a hero image for the article.';
-      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')">Generate Image</button>';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')" style="margin-right:6px">Generate Image</button><button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Review in Preview</button><button class="btn secondary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
       break;
     case 'review':
-      text.textContent='Preview built. Deploy when ready.';
-      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'deploy\')">Deploy</button>';
+      text.textContent='Review your article in the live preview. When satisfied, build for deployment.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Preview</button><button class="btn primary" onclick="studioAction(\'build\')" style="margin-right:6px">Build for Deploy</button><button class="btn primary" onclick="studioAction(\'deploy\')">Deploy</button>';
       break;
     case 'deployed':
       text.textContent='Article deployed.';
@@ -2136,7 +2252,7 @@ async function studioApplyCorrections(){
   if(!studioCurrentId||studioChatStreaming)return;
   const input=document.getElementById('st-chat-input');
   input.value='Apply all corrections from the fact-check report above to the article. For every INCORRECT claim, replace with the correct fact and source. For every UNCERTAIN claim, soften the language or add a caveat. Keep all CONFIRMED claims as-is. Output the FULL corrected article including complete frontmatter (title, subtitle, summary, share_summary, sources, etc.). Use British English throughout. Do not add commentary — just output the corrected article.';
-  studioSendChat();
+  studioSendChat({model:'sonnet'});
 }
 
 async function studioDefineCharts(){
@@ -2225,6 +2341,7 @@ async function studioFactCheck(){
 
 async function studioAction(action){
   if(!studioCurrentId)return;
+  studioCurrentAction=action;
   // Save first
   await studioSave();
   // Ensure details panel is open to see progress
@@ -2236,6 +2353,13 @@ async function studioAction(action){
   statusEl.classList.add('visible');statusEl.classList.remove('error');
   labelEl.textContent='Starting '+action.replace(/_/g,' ')+'...';
   progressEl.textContent='';
+  // Show feedback in next-bar for image generation
+  if(action==='generate_image'){
+    const bar=document.getElementById('st-next-bar');
+    bar.style.display='flex';
+    document.getElementById('st-next-text').textContent='Generating hero image\u2026';
+    document.getElementById('st-next-btns').innerHTML='<button class="btn primary" disabled>Generating\u2026</button>';
+  }
   try{
     const r=await fetch('/api/studio/drafts/'+studioCurrentId+'/'+action.replace(/_/g,'-'),{method:'POST'});
     const d=await r.json();
@@ -2244,8 +2368,12 @@ async function studioAction(action){
     }else{
       labelEl.textContent='Error';progressEl.textContent=d.msg||'Unknown error';
       statusEl.classList.add('error');
+      if(action==='generate_image')studioUpdateNextBar('images');
     }
-  }catch(e){labelEl.textContent='Error';progressEl.textContent=e.message;statusEl.classList.add('error')}
+  }catch(e){
+    labelEl.textContent='Error';progressEl.textContent=e.message;statusEl.classList.add('error');
+    if(action==='generate_image')studioUpdateNextBar('images');
+  }
 }
 
 function studioPollTask(taskId){
@@ -2263,12 +2391,30 @@ function studioPollTask(taskId){
         clearInterval(studioPollTimer);studioPollTimer=null;
         labelEl.textContent='Complete';progressEl.textContent=d.progress||'Done';
         statusEl.classList.remove('error');
-        // Refresh draft data
-        if(studioCurrentId)studioSelectDraft(studioCurrentId);
+        // Image task: show hero preview + advance stage instead of full reset
+        if(studioCurrentAction==='generate_image'&&studioCurrentId){
+          const heroPreview=document.getElementById('st-hero-preview');
+          heroPreview.src='/api/studio/drafts/'+studioCurrentId+'/hero-image?t='+Date.now();
+          heroPreview.classList.add('visible');
+          const heroImg=document.getElementById('st-hero-img');
+          heroImg.src=heroPreview.src;
+          heroImg.classList.add('visible');
+          document.getElementById('st-next-text').textContent='Hero image generated.';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
+          studioUpdateStepper('images');
+          studioCurrentAction=null;
+          studioSchedulePreviewUpdate();
+        }else{
+          // Other tasks: refresh draft data as before
+          if(studioCurrentId)studioSelectDraft(studioCurrentId);
+          studioCurrentAction=null;
+        }
       }else if(d.status==='error'){
         clearInterval(studioPollTimer);studioPollTimer=null;
         labelEl.textContent='Error';progressEl.textContent=d.error||'Task failed';
         statusEl.classList.add('error');
+        if(studioCurrentAction==='generate_image')studioUpdateNextBar('images');
+        studioCurrentAction=null;
       }else{
         labelEl.textContent='Running...';
       }
@@ -2276,16 +2422,340 @@ function studioPollTask(taskId){
   },2000);
 }
 
-function studioTogglePreview(){
-  const ta=document.getElementById('st-md-textarea');
-  const pv=document.getElementById('st-md-preview');
-  const btn=document.getElementById('st-preview-btn');
-  if(pv.classList.contains('on')){
-    pv.classList.remove('on');ta.style.display='block';btn.classList.remove('active');
-  }else{
-    pv.innerHTML=typeof marked!=='undefined'?marked.parse(ta.value):ta.value.replace(/\n/g,'<br>');
-    pv.classList.add('on');ta.style.display='none';btn.classList.add('active');
+// ── Live Preview Engine ──
+
+let _previewTimer=null;
+let _previewMode='edit';
+let _chartBootstrapJs=null;
+let _parsedCharts=null;
+let _chartParseInFlight=false;
+
+function studioSetMode(mode){
+  _previewMode=mode;
+  const area=document.getElementById('st-md-area');
+  area.setAttribute('data-mode',mode);
+  // Update toolbar active state
+  ['edit','split','preview'].forEach(m=>{
+    const btn=document.getElementById('st-mode-'+m);
+    if(btn)btn.classList.toggle('active',m===mode);
+  });
+  if(mode!=='edit')studioUpdatePreview();
+}
+
+function studioSchedulePreviewUpdate(){
+  if(_previewMode==='edit')return;
+  if(_previewTimer)clearTimeout(_previewTimer);
+  _previewTimer=setTimeout(studioUpdatePreview,400);
+}
+
+var _libraryBooks=null;
+async function _loadLibraryBooks(){
+  if(_libraryBooks)return _libraryBooks;
+  try{
+    const r=await fetch('/api/studio/library-books');
+    const d=await r.json();
+    _libraryBooks=d.books||[];
+  }catch(e){_libraryBooks=[];}
+  return _libraryBooks;
+}
+
+async function studioUpdatePreview(){
+  if(_previewMode==='edit')return;
+  const iframe=document.getElementById('st-preview-iframe');
+  if(!iframe)return;
+
+  // Gather metadata
+  const title=document.getElementById('st-f-title')?.value||'Untitled';
+  const section=document.getElementById('st-f-section')?.value||'';
+  const excerpt=document.getElementById('st-f-excerpt')?.value||'';
+  let md=document.getElementById('st-md-textarea')?.value||'';
+
+  // Extract sources from YAML frontmatter BEFORE stripping it
+  let articleSources=[];
+  const fmMatch=md.match(/^\s*---\n([\s\S]*?)\n---/);
+  if(fmMatch){
+    const fmBlock=fmMatch[1];
+    const srcMatch=fmBlock.match(/sources:\s*\n((?:\s+-\s+.*\n?)*)/);
+    if(srcMatch){
+      const lines=srcMatch[1].split('\n');
+      for(const line of lines){
+        const m=line.match(/^\s+-\s+["']?([^"'\n]+?)["']?\s*$/);
+        if(m)articleSources.push(m[1].trim());
+      }
+    }
   }
+
+  // Strip frontmatter and AI metadata blobs from preview.
+  // Pattern 1: Standard YAML frontmatter at start: ---\n...\n---
+  md=md.replace(/^\s*---\n[\s\S]*?\n---\s*\n?/,'');
+  // Pattern 2: AI preamble like [Using Sonnet...]\n\n--- followed by YAML then ---
+  // The \n\n may be literal backslash-n or actual newlines
+  md=md.replace(/^\s*\[Using [^\]]*\][\\n\s]*---\n[\s\S]*?\n---\s*\n?/,'');
+  // Pattern 3: If above didn't match (no closing ---), strip from [Using...] up to first # heading
+  if(/^\s*\[Using /.test(md)){
+    md=md.replace(/^[\s\S]*?(?=\n#\s)/,'');
+  }
+
+  // Strip leading H1 if it duplicates the metadata title (preview already renders title from metadata)
+  if(title){
+    const titleNorm=title.trim().toLowerCase();
+    md=md.replace(/^\s*#\s+(.+)\n*/,function(match,h1){
+      return h1.trim().toLowerCase()===titleNorm?'':match;
+    });
+  }
+
+  // Render markdown
+  let bodyHtml=typeof marked!=='undefined'?marked.parse(md):md.replace(/\n/g,'<br>');
+
+  // Inject charts at correct positions
+  if(_parsedCharts&&_parsedCharts.length>0){
+    bodyHtml=studioInjectCharts(bodyHtml,_parsedCharts);
+  }
+
+  // Hero image — always try to load, onerror hides it
+  const heroUrl=studioCurrentId?'/api/studio/drafts/'+studioCurrentId+'/hero-image':'';
+
+  // Audio — always try to load, onerror hides it
+  const audioUrl=studioCurrentId?'/api/studio/drafts/'+studioCurrentId+'/audio':'';
+
+  // Load chart bootstrap JS if needed
+  if(!_chartBootstrapJs&&_parsedCharts&&_parsedCharts.length>0){
+    try{
+      const r=await fetch('/api/studio/chart-bootstrap-js');
+      _chartBootstrapJs=await r.text();
+    }catch(e){_chartBootstrapJs='';}
+  }
+
+  // Build Further Reading section
+  let furtherReadingHtml='';
+  if(articleSources.length>0){
+    const books=await _loadLibraryBooks();
+    const bookMap={};
+    for(const b of books)bookMap[b.title.toLowerCase()]=b;
+    let items='';
+    for(const src of articleSources){
+      const book=bookMap[src.toLowerCase()];
+      if(book){
+        const q=encodeURIComponent(book.title+' '+book.author);
+        const url=book.url||('https://www.amazon.co.uk/s?k='+q);
+        const label=book.url?'Buy':'Buy on Amazon';
+        items+=`<div class="fr-item"><span class="fr-title">${_escHtml(book.title)}</span><span class="fr-author">${_escHtml(book.author)}</span><a class="fr-amazon" href="${url}" target="_blank" rel="noopener">${label}</a></div>`;
+      }else{
+        items+=`<div class="fr-item fr-missing"><span class="fr-title">${_escHtml(src)}</span></div>`;
+      }
+    }
+    furtherReadingHtml=`<section class="further-reading"><h2 class="fr-heading">Further Reading</h2><p class="fr-desc">Books cited or drawn upon in this article.</p><div class="fr-list">${items}</div></section>`;
+  }
+
+  // Build chart JS block
+  let chartScripts='';
+  if(_parsedCharts&&_parsedCharts.length>0&&_chartBootstrapJs){
+    const allJs=_parsedCharts.map(c=>c.js||'').filter(Boolean).join('\n');
+    chartScripts=`
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"><\/script>
+<script>
+(function(){
+// Force light-theme: override _gc so COLORS bootstrap always uses light fallbacks
+var _LIGHT_VARS={'--text':'#1a1815','--bg':'#ffffff','--border-light':'#f2eeea','--text-dim':'#8a8479'};
+function _gc(v,fb){return _LIGHT_VARS[v]||fb;}
+function _refreshC(){}
+${_chartBootstrapJs}
+// Re-enforce light values after bootstrap runs (overwrite any _gc reads)
+C.text='#1a1815';C.grid='#f2eeea';C.dim='#8a8479';C.bg='#ffffff';
+// Fix annotation contrast: force white text on ALL annotation labels that have backgrounds
+Chart.register({id:'previewAnnotationContrast',beforeDraw:function(chart){
+  var ann=chart.options&&chart.options.plugins&&chart.options.plugins.annotation&&chart.options.plugins.annotation.annotations;
+  if(!ann)return;
+  for(var k in ann){
+    var a=ann[k];if(!a)continue;
+    // Force label text to white if there's any background
+    if(a.label){
+      var bg=a.label.backgroundColor||a.backgroundColor||'';
+      if(bg&&bg!=='transparent'&&bg!=='rgba(0,0,0,0)'){
+        a.label.color='#ffffff';
+      }
+      // Also force any colored label text to white for readability
+      var lc=a.label.color||'';
+      if(lc&&lc!=='#ffffff'&&lc!=='#fff'&&lc!=='white'&&lc!=='#1a1815'){
+        a.label.color='#ffffff';
+      }
+    }
+    // Force line annotation label colours too
+    if(a.type==='line'&&a.label){
+      a.label.color='#ffffff';
+    }
+  }
+}});
+// Also override tooltipStyle to ensure white text on dark tooltip bg
+tooltipStyle.titleColor='#ffffff';tooltipStyle.bodyColor='#ffffff';
+${allJs}
+})();
+<\/script>`;
+  }
+
+  const html=`<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+:root,html,html[data-theme="light"]{--text:#1a1815!important;--bg:#ffffff!important;--border-light:#f2eeea!important;--text-dim:#8a8479!important;--accent:#c43425!important}
+*{margin:0;padding:0;box-sizing:border-box;color-scheme:light}
+body{font-family:'Inter',sans-serif;color:#1a1815;background:#ffffff;padding:24px 32px;line-height:1.7;max-width:720px;margin:0 auto}
+.section-kicker{text-transform:uppercase;font-size:.72rem;font-weight:600;color:var(--accent);letter-spacing:.08em;margin-bottom:8px}
+h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1.2;margin-bottom:12px}
+.excerpt{font-size:1.05rem;color:#555;line-height:1.6;margin-bottom:20px;font-style:italic}
+.hero-img{width:100%;border-radius:8px;margin-bottom:20px}
+audio{width:100%;margin-bottom:20px}
+h2{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;margin:28px 0 12px;color:var(--text)}
+h3{font-size:1.05rem;font-weight:600;margin:20px 0 8px}
+p{margin-bottom:14px;font-size:.95rem}
+blockquote{border-left:3px solid var(--accent);padding-left:16px;color:#555;margin:16px 0;font-style:italic}
+code{background:#f5f5f4;padding:2px 5px;border-radius:3px;font-size:.85em}
+pre{background:#f5f5f4;padding:14px;border-radius:6px;overflow-x:auto;margin:14px 0}
+a{color:#2563eb}
+ul,ol{margin-bottom:14px;padding-left:24px}
+li{margin-bottom:4px;font-size:.95rem}
+hr{border:none;border-top:1px solid var(--border-light);margin:24px 0}
+.chart-figure{margin:24px 0;padding:16px;background:#fafaf9;border:1px solid #f0ece8;border-radius:8px}
+.chart-figure-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600;margin-bottom:4px}
+.chart-figure h4{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:4px}
+.chart-desc{font-size:.82rem;color:#666;margin-bottom:10px}
+.chart-area{position:relative;width:100%;aspect-ratio:16/10}
+.chart-area.tall{aspect-ratio:16/14}
+.chart-area canvas{width:100%!important;height:100%!important}
+.chart-source{font-size:.7rem;color:#999;margin-top:8px}
+.further-reading{max-width:680px;margin:2.5rem auto 0;padding:2rem 0 0;border-top:1px solid #f2eeea}
+.fr-heading{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;margin:0 0 .35rem}
+.fr-desc{font-size:.85rem;color:#8a8479;margin:0 0 1.25rem}
+.fr-list{display:flex;flex-direction:column}
+.fr-item{display:flex;align-items:baseline;gap:.5rem;padding:.4rem 0;border-bottom:1px solid #f2eeea}
+.fr-item:last-child{border-bottom:none}
+.fr-title{font-family:'Playfair Display',serif;font-size:.88rem;font-weight:500;font-style:italic;flex:1;line-height:1.4}
+.fr-author{font-size:.78rem;color:#8a8479;white-space:nowrap;flex-shrink:0}
+.fr-amazon{font-size:.72rem;font-weight:600;color:#b8751a;text-decoration:none;white-space:nowrap;padding:.15rem .45rem;border:1px solid #b8751a;border-radius:3px;flex-shrink:0}
+.fr-amazon:hover{background:#b8751a;color:#fff}
+.fr-missing .fr-title{color:#8a8479}
+</style>
+</head>
+<body>
+${section?'<div class="section-kicker">'+_escHtml(section)+'</div>':''}
+<h1>${_escHtml(title)}</h1>
+${excerpt?'<p class="excerpt">'+_escHtml(excerpt)+'</p>':''}
+${heroUrl?'<img class="hero-img" src="'+heroUrl+'" onerror="this.style.display=\'none\'">':''}
+${audioUrl?'<audio controls src="'+audioUrl+'" onerror="this.style.display=\'none\'"></audio>':''}
+${bodyHtml}
+${furtherReadingHtml}
+${chartScripts}
+</body>
+</html>`;
+
+  // Write to iframe
+  const doc=iframe.contentDocument||iframe.contentWindow.document;
+  doc.open();
+  doc.write(html);
+  doc.close();
+}
+
+function _escHtml(s){
+  const d=document.createElement('div');d.textContent=s;return d.innerHTML;
+}
+
+function studioInjectCharts(html,charts){
+  if(!charts||!charts.length)return html;
+
+  // Group by position
+  const positioned={};
+  const endCharts=[];
+  for(const ch of charts){
+    const pos=ch.position||'before_end';
+    if(pos==='before_end'){endCharts.push(ch);continue;}
+    if(!positioned[pos])positioned[pos]=[];
+    positioned[pos].push(ch);
+  }
+
+  // Find </p> positions (simple — not inside chart-figures since we're building fresh)
+  const paraEnds=[];
+  let idx=0;
+  while(true){
+    idx=html.indexOf('</p>',idx);
+    if(idx===-1)break;
+    paraEnds.push(idx+4);
+    idx+=4;
+  }
+
+  // Build insertions (position, chartHtml) — insert in reverse order
+  const insertions=[];
+  for(const[pos,chs] of Object.entries(positioned)){
+    const chartBlock=chs.map(c=>_makeChartHtml(c)).join('\n');
+    if(pos.startsWith('after_para_')){
+      const n=parseInt(pos.split('_').pop())||3;
+      if(n<=paraEnds.length){
+        insertions.push([paraEnds[n-1],chartBlock]);
+      }else{
+        endCharts.push(...chs);
+      }
+    }else if(pos.startsWith('after_heading:')){
+      const hText=pos.split(':')[1].trim().toLowerCase();
+      const hRe=/<h[23][^>]*>([\s\S]*?)<\/h[23]>/gi;
+      let hm;
+      let found=false;
+      while((hm=hRe.exec(html))!==null){
+        const clean=hm[1].replace(/<[^>]+>/g,'').trim().toLowerCase();
+        if(clean.includes(hText)){
+          insertions.push([hm.index+hm[0].length,chartBlock]);
+          found=true;
+          break;
+        }
+      }
+      if(!found&&paraEnds.length>=3){
+        insertions.push([paraEnds[2],chartBlock]);
+      }else if(!found){
+        endCharts.push(...chs);
+      }
+    }
+  }
+
+  // Sort insertions reverse by position to avoid drift
+  insertions.sort((a,b)=>b[0]-a[0]);
+  for(const[pos,block] of insertions){
+    html=html.slice(0,pos)+'\n'+block+html.slice(pos);
+  }
+
+  // Append end charts
+  if(endCharts.length){
+    html+='\n'+endCharts.map(c=>_makeChartHtml(c)).join('\n');
+  }
+  return html;
+}
+
+function _makeChartHtml(ch){
+  return `<div class="chart-figure">
+  <div class="chart-figure-label">Figure ${ch.figure_num||'?'}</div>
+  <h4>${_escHtml(ch.title||'')}</h4>
+  <p class="chart-desc">${_escHtml(ch.desc||'')}</p>
+  <div class="chart-area"><canvas id="${ch.id}"></canvas></div>
+  <p class="chart-source">Source: ${_escHtml(ch.source||'')}</p>
+</div>`;
+}
+
+async function studioParseCharts(raw){
+  if(!raw||_chartParseInFlight)return;
+  _chartParseInFlight=true;
+  try{
+    const r=await fetch('/api/studio/drafts/'+studioCurrentId+'/parse-charts',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chart_defs:raw})
+    });
+    const d=await r.json();
+    _parsedCharts=d.charts||[];
+    // Clear bootstrap cache so it reloads with chart content
+    if(_parsedCharts.length>0&&!_chartBootstrapJs)_chartBootstrapJs=null;
+    studioSchedulePreviewUpdate();
+  }catch(e){console.error('Parse charts error:',e)}
+  finally{_chartParseInFlight=false}
 }
 
 function studioInsert(before,after){
@@ -2928,6 +3398,82 @@ def api_studio_audio(did):
         return send_file(str(audio), mimetype="audio/mpeg")
     abort(404)
 
+# ── Chart bootstrap JS (serves COLORS constant from chart_defs.py) ──
+
+_chart_bootstrap_cache = None
+_library_books_cache = None
+
+@app.route("/api/studio/library-books")
+def api_studio_library_books():
+    """Serve the HFN library books list as JSON for Further Reading."""
+    global _library_books_cache
+    if _library_books_cache is None:
+        try:
+            import importlib, sys as _sys
+            spec = importlib.util.spec_from_file_location(
+                "library_data",
+                str(HFN_SOURCE_DIR / "library_data.py")
+            )
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            _library_books_cache = [
+                {"title": b["title"], "author": b.get("author", ""),
+                 "url": b.get("url", "")}
+                for b in mod.BOOKS
+            ]
+        except Exception as e:
+            return jsonify({"books": [], "error": str(e)[:200]})
+    return jsonify({"books": _library_books_cache})
+
+@app.route("/api/studio/chart-bootstrap-js")
+def api_studio_chart_bootstrap():
+    global _chart_bootstrap_cache
+    if _chart_bootstrap_cache is None:
+        from chart_defs import COLORS as _COLORS_JS
+        _chart_bootstrap_cache = _COLORS_JS
+    return Response(_chart_bootstrap_cache, mimetype="application/javascript")
+
+# ── Parse chart definitions ──
+
+@app.route("/api/studio/drafts/<int:did>/parse-charts", methods=["POST"])
+def api_studio_parse_charts(did):
+    import re as _re
+    data = request.get_json(silent=True) or {}
+    raw = data.get("chart_defs", "")
+    if not raw:
+        draft = db.get_draft(did)
+        if draft:
+            raw = draft.get("chart_defs", "")
+    if not raw:
+        return jsonify({"charts": []})
+
+    charts = []
+    # Per-field extraction — fault-tolerant regex parsing of Python dict chart defs
+    ids = _re.findall(r"['\"]id['\"]\s*:\s*['\"]([^'\"]+)['\"]", raw)
+    fig_nums = _re.findall(r"['\"]figure_num['\"]\s*:\s*(\d+)", raw)
+    titles = _re.findall(r"['\"]title['\"]\s*:\s*['\"]([^'\"]+)['\"]", raw)
+    descs = _re.findall(r"['\"]desc['\"]\s*:\s*['\"]([^'\"]+)['\"]", raw)
+    sources = _re.findall(r"['\"]source['\"]\s*:\s*['\"]([^'\"]+)['\"]", raw)
+    positions = _re.findall(r"['\"]position['\"]\s*:\s*['\"]([^'\"]+)['\"]", raw)
+    # Extract JS blocks — triple-quoted strings first, then single-quoted
+    js_blocks = _re.findall(r'["\']js["\']\s*:\s*"""([\s\S]*?)"""', raw)
+    if not js_blocks:
+        js_blocks = _re.findall(r"['\"]js['\"]\s*:\s*'((?:[^'\\]|\\.)*)'", raw)
+
+    n = min(len(ids), len(titles)) if ids and titles else 0
+    for i in range(n):
+        charts.append({
+            "id": ids[i],
+            "figure_num": int(fig_nums[i]) if i < len(fig_nums) else i + 1,
+            "title": titles[i],
+            "desc": descs[i] if i < len(descs) else "",
+            "source": sources[i] if i < len(sources) else "",
+            "position": positions[i] if i < len(positions) else "before_end",
+            "js": js_blocks[i] if i < len(js_blocks) else ""
+        })
+
+    return jsonify({"charts": charts})
+
 STUDIO_BASE_PROMPT = """You are an editorial collaborator for History Future Now (historyfuturenow.com).
 
 IMPORTANT — YOUR ENVIRONMENT:
@@ -2967,7 +3513,24 @@ WHEN PRODUCING A DRAFT:
   section: "Geopolitics|Economics|Technology|Society|Environment|History"
   excerpt: "2-3 sentence summary"
   share_summary: "Under 140 chars, pithy thesis"
+  sources:
+    - "Book Title From Library"
+    - "Another Relevant Book"
+    - "A New Book Not In Library"
+  new_books:
+    - title: "A New Book Not In Library"
+      author: "Author Name"
+      themes: ["economics", "politics"]
   ---
+- The sources field MUST list at least 3 books. Include books from the HFN Library AND any
+  additional real, published books you recommend. These populate the Further Reading section.
+  Use exact titles as they appear in the library for existing books.
+- The new_books field lists books in your sources that are NOT already in the HFN Library.
+  For each new book provide: title (exact match to sources entry), author, and themes.
+  Use theme keys from: ancient, medieval, modern, world, geopolitics, economics, politics,
+  religion, science, biology, philosophy, fiction.
+  Recommend 2-3 genuinely relevant, real published books per article. Do NOT invent titles.
+  If all your sources are already in the library, omit the new_books field entirely.
 - Include cross-references to at least 2 relevant existing HFN articles as [Title](/articles/slug) links
 
 WHEN PRODUCING CHART DEFINITIONS:
@@ -3019,21 +3582,27 @@ def api_studio_chat(did):
     if not user_msg:
         return jsonify({"error": "Empty message"}), 400
 
+    model_pref = request.json.get("model", "")  # "sonnet" for edits, default Opus
+
     db.add_studio_message(did, "user", user_msg)
 
     history = db.get_studio_messages(did)
     messages = [{"role": m["role"], "content": m["content"]} for m in history]
 
-    # Build full system prompt: base + article catalog + style guides + draft context
+    # Build full system prompt: base + article catalog + library catalog + style guides + draft context
     # Article catalog comes before style guides so the model attends to it more reliably
-    system = STUDIO_BASE_PROMPT + "\n\n" + build_article_catalog() + "\n\n" + load_style_guides()
+    system = (STUDIO_BASE_PROMPT + "\n\n" + build_article_catalog()
+              + "\n\n" + build_library_catalog() + "\n\n" + load_style_guides())
     if draft.get("markdown", "").strip():
         system += f"\n\nThe current draft in the editor is:\n\n{draft['markdown'][:6000]}"
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-    # Opus for prose, Sonnet fallback for overloaded errors
-    MODELS = ["claude-opus-4-6", "claude-sonnet-4-6"]
+    # Sonnet for edits/corrections, Opus for original prose (with Sonnet fallback)
+    if model_pref == "sonnet":
+        MODELS = ["claude-sonnet-4-6"]
+    else:
+        MODELS = ["claude-opus-4-6", "claude-sonnet-4-6"]
 
     def generate():
         full_text = ""
