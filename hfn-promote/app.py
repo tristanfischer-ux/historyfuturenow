@@ -2102,8 +2102,8 @@ function studioUpdateNextBar(stage){
       btns.innerHTML='<button class="btn primary" onclick="studioFactCheck()">Fact-Check</button>';
       break;
     case 'factcheck':
-      text.textContent='Review the report and edit the draft if needed. Continue when done.';
-      btns.innerHTML='<button class="btn secondary" onclick="studioFactCheck()" style="margin-right:6px">Re-check</button><button class="btn primary" onclick="studioAdvanceStage(\'charts\')">Continue \u2192</button>';
+      text.textContent='Review the report, then apply corrections or continue to Charts.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioFactCheck()" style="margin-right:6px">Re-check</button><button class="btn secondary" onclick="studioApplyCorrections()" style="margin-right:6px">Apply Corrections</button><button class="btn primary" onclick="studioAdvanceStage(\'charts\')">Continue \u2192</button>';
       break;
     case 'charts':
       text.textContent='Define 2\u20135 charts in the chat, then continue to hero image.';
@@ -2130,6 +2130,13 @@ async function studioAdvanceStage(newStage){
   if(!studioCurrentId)return;
   await fetch('/api/studio/drafts/'+studioCurrentId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage:newStage})});
   studioUpdateStepper(newStage);
+}
+
+async function studioApplyCorrections(){
+  if(!studioCurrentId||studioChatStreaming)return;
+  const input=document.getElementById('st-chat-input');
+  input.value='Apply all corrections from the fact-check report above to the article. For every INCORRECT claim, replace with the correct fact and source. For every UNCERTAIN claim, soften the language or add a caveat. Keep all CONFIRMED claims as-is. Output the FULL corrected article including complete frontmatter (title, subtitle, summary, share_summary, sources, etc.). Use British English throughout. Do not add commentary — just output the corrected article.';
+  studioSendChat();
 }
 
 async function studioDefineCharts(){
@@ -3021,7 +3028,7 @@ def api_studio_chat(did):
     # Article catalog comes before style guides so the model attends to it more reliably
     system = STUDIO_BASE_PROMPT + "\n\n" + build_article_catalog() + "\n\n" + load_style_guides()
     if draft.get("markdown", "").strip():
-        system += f"\n\nThe current draft in the editor is:\n\n{draft['markdown'][:2000]}"
+        system += f"\n\nThe current draft in the editor is:\n\n{draft['markdown'][:6000]}"
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
@@ -3034,7 +3041,7 @@ def api_studio_chat(did):
         for i, model in enumerate(MODELS):
             try:
                 result = client.messages.create(
-                    model=model, max_tokens=4096, system=system, messages=messages,
+                    model=model, max_tokens=8192, system=system, messages=messages,
                 )
                 full_text = result.content[0].text
                 used_model = model
