@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS article_drafts (
     has_hero_image INTEGER DEFAULT 0,
     has_audio INTEGER DEFAULT 0,
     image_prompt TEXT DEFAULT '',
+    chart_defs TEXT DEFAULT '',
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
 );
@@ -132,6 +133,12 @@ def init_db():
     conn.executescript(SCHEMA)
     # Migrations for older dbs
     for col, tbl in [("scheduled_at", "posts"), ("edit_reason", "posts")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT ''")
+    # Add chart_defs column for existing DBs
+    for col, tbl in [("chart_defs", "article_drafts")]:
         try:
             conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
         except sqlite3.OperationalError:
@@ -767,7 +774,8 @@ def update_draft(did, **fields):
     if not fields:
         return
     allowed = {"title", "slug", "section", "excerpt", "share_summary",
-               "markdown", "stage", "has_hero_image", "has_audio", "image_prompt"}
+               "markdown", "stage", "has_hero_image", "has_audio", "image_prompt",
+               "chart_defs"}
     sets = []
     vals = []
     for k, v in fields.items():

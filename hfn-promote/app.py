@@ -1903,6 +1903,7 @@ async function studioSendChat(){
             }
             // Check for draft in response
             studioCheckForDraft(fullText);
+            studioCheckForCharts(fullText);
           }
           if(data.error){
             contentEl.innerHTML='<em style="color:var(--red)">Error: '+data.error+'</em>';
@@ -1974,6 +1975,31 @@ function studioCheckForDraft(text){
 
   // Show next-step bar
   studioUpdateNextBar('draft');
+}
+
+function studioCheckForCharts(text){
+  // Detect chart definitions (python code blocks with 'id': and 'js': patterns)
+  const codeMatch=text.match(/```python\s*\n([\s\S]*?)```/);
+  if(!codeMatch)return;
+  const block=codeMatch[1];
+  if(!(block.includes("'id':")||block.includes('"id":'))||!(block.includes("'js':")||block.includes('"js":')))return;
+
+  // Save chart defs to draft via existing update endpoint
+  fetch('/api/studio/drafts/'+studioCurrentId,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chart_defs:block})
+  });
+
+  // Show indicator in chat
+  const msgs=document.getElementById('st-chat-messages');
+  const ind=document.createElement('div');
+  ind.className='st-draft-indicator';
+  ind.textContent='Chart definitions captured — they will be saved when you click Save to Disk.';
+  msgs.appendChild(ind);
+  msgs.scrollTop=msgs.scrollHeight;
+
+  // Advance stage hint
+  studioUpdateNextBar('charts');
 }
 
 function studioToggleDetails(){
@@ -2805,7 +2831,7 @@ def api_studio_get_draft(did):
 def api_studio_update_draft(did):
     d = request.json
     fields = {}
-    for k in ("title", "section", "excerpt", "share_summary", "markdown", "image_prompt", "stage"):
+    for k in ("title", "section", "excerpt", "share_summary", "markdown", "image_prompt", "stage", "chart_defs"):
         if k in d:
             fields[k] = d[k]
     db.update_draft(did, **fields)
@@ -2999,6 +3025,16 @@ def api_studio_chat(did):
             db.add_studio_message(did, "assistant", full_text)
             if "---\ntitle:" in full_text or full_text.strip().startswith("# "):
                 db.update_draft(did, markdown=full_text)
+
+            # Detect chart definitions in response
+            import re as _re
+            _chart_blocks = _re.findall(r"```python\s*\n([\s\S]*?)```", full_text)
+            for _block in _chart_blocks:
+                _has_id = "'id':" in _block or '"id":' in _block
+                _has_js = "'js':" in _block or '"js":' in _block
+                if _has_id and _has_js:
+                    db.update_draft(did, chart_defs=_block)
+                    break
 
         yield "data: {\"done\": true}\n\n"
 

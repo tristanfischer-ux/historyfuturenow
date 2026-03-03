@@ -64,8 +64,42 @@ def _run_save_to_disk(task_id, draft_id):
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(content, encoding="utf-8")
 
+    # Write chart definitions to chart_defs.py if present
+    chart_defs = (draft.get("chart_defs") or "").strip()
+    if chart_defs:
+        _write_chart_defs(task_id, draft["slug"], chart_defs)
+
     db.update_studio_task(task_id, progress=f"Saved to {out_path.name}")
     db.update_draft(draft_id, stage="draft")
+
+
+def _write_chart_defs(task_id, slug, chart_defs):
+    """Append chart definitions for a slug into chart_defs.py (idempotent)."""
+    chart_file = BUILD_SYSTEM / "chart_defs.py"
+    if not chart_file.exists():
+        db.update_studio_task(task_id, progress="chart_defs.py not found — skipping")
+        return
+
+    existing = chart_file.read_text(encoding="utf-8")
+
+    # Skip if charts for this slug already exist
+    marker = f"charts['{slug}']"
+    if marker in existing:
+        db.update_studio_task(task_id, progress=f"Charts for {slug} already in chart_defs.py — skipped")
+        return
+
+    # Build the block to insert
+    block = f"\n    # ─── STUDIO: {slug} ───\n    {chart_defs}\n"
+
+    # Insert before "return charts" line
+    insert_point = existing.rfind("    return charts")
+    if insert_point == -1:
+        db.update_studio_task(task_id, progress="Could not find 'return charts' in chart_defs.py — skipping")
+        return
+
+    updated = existing[:insert_point] + block + "\n" + existing[insert_point:]
+    chart_file.write_text(updated, encoding="utf-8")
+    db.update_studio_task(task_id, progress=f"Chart defs appended to chart_defs.py")
 
 
 def _run_generate_image(task_id, draft_id):
