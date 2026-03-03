@@ -5349,6 +5349,101 @@ y1:{position:'right',min:0,max:4.5,grid:{drawOnChartArea:false},ticks:{color:C.t
     for k in charts:
         if charts[k] and isinstance(charts[k][0], list):
             charts[k] = charts[k][0]
+
+    # ─── STUDIO: untitled-1 ───
+    charts['untitled-1'] = [
+    {
+        'id': 'nibPrice', 'figure_num': 1,
+        'title': 'The Pen Nib Price Collapse, 1822–1860',
+        'desc': 'Steel pen nibs fell from around one shilling (12 old pence) each when hand-made in the early 1820s to under half a penny by 1860 — a 96% collapse driven by Birmingham\'s clustered manufacturing trades.',
+        'source': 'Henry Bore, The Story of the Invention of Steel Pens (1890); W. K. V. Gale, The Birmingham Pen Trade (1970)',
+        'position': 'after_para_4',
+        'js': """_regChart('nibPrice',()=>{const ctx=document.getElementById('nibPrice');
+new Chart(ctx,{type:'line',
+data:{datasets:[{label:'Price per nib (old pence)',
+data:[{x:1822,y:12},{x:1828,y:9},{x:1830,y:6},{x:1833,y:3},{x:1838,y:1.5},
+{x:1842,y:1.0},{x:1848,y:0.5},{x:1855,y:0.4},{x:1860,y:0.25}],
+borderColor:C.accent,backgroundColor:C.accent+'18',fill:true,tension:0.35,
+pointRadius:5,pointBackgroundColor:C.accent,pointHoverRadius:7}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>String(items[0].parsed.x),
+label:c=>{const v=c.parsed.y;return v>=1?v.toFixed(0)+'d per nib':v.toFixed(2)+'d (under a halfpenny)';}}},
+annotation:{annotations:{
+gillott:{type:'line',xMin:1830,xMax:1830,borderColor:C.blue,borderWidth:2,borderDash:[6,4],
+label:{content:'Gillott adopts press methods',display:true,position:'start',color:C.blue,font:{size:10}}},
+shilling:{type:'line',yMin:12,yMax:12,borderColor:C.blue+'44',borderWidth:1,borderDash:[3,3],
+label:{content:"1 shilling — a quarter to half a craftsman's daily wage",display:true,position:'end',color:C.blue,font:{size:9}}}}}},
+scales:{x:{type:'linear',min:1820,max:1862,
+title:{display:true,text:'Year',color:C.blue,font:{size:10}},
+ticks:{color:C.blue,font:{size:9},callback:v=>String(v),stepSize:5},...gridOpts},
+y:{type:'logarithmic',
+title:{display:true,text:'Price per nib (old pence, log scale)',color:C.blue,font:{size:10}},
+ticks:{color:C.blue,font:{size:9},callback:v=>{
+const m=[0.25,0.5,1,2,4,8,12];return m.some(k=>Math.abs(k-v)<0.01)?v+'d':'';}},
+min:0.15,max:16,...gridOpts}}}});});"""
+    },
+    {
+        'id': 'ukMfgGdp', 'figure_num': 2,
+        'title': 'UK Manufacturing as Share of GDP, 1950–2023',
+        'desc': 'British manufacturing fell from roughly 34% of GDP in 1950 to under 10% by 2010, where it has remained. The dense local supply chains that enabled same-day iteration were stretched across oceans.',
+        'source': 'World Bank WDI (NV.IND.MANF.ZS); ONS National Accounts historical series; ONS GDP output approach, 2024 release',
+        'position': 'after_para_22',
+        'js': """_regChart('ukMfgGdp',()=>{const ctx=document.getElementById('ukMfgGdp');
+new Chart(ctx,{type:'line',
+data:{datasets:[{label:'Manufacturing % of UK GDP',
+data:[{x:1950,y:34},{x:1955,y:34},{x:1960,y:33},{x:1965,y:31},{x:1970,y:28},
+{x:1975,y:26},{x:1980,y:24},{x:1985,y:21},{x:1990,y:19},{x:1995,y:17},
+{x:2000,y:15},{x:2005,y:12},{x:2010,y:10},{x:2015,y:10},{x:2020,y:9},{x:2023,y:9}],
+borderColor:C.blue,backgroundColor:C.blue+'15',fill:true,tension:0.3,
+pointRadius:3,pointBackgroundColor:C.blue}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{
+title:items=>String(items[0].parsed.x),label:c=>c.parsed.y+'% of GDP'}},
+annotation:{annotations:{
+thatcher:{type:'line',xMin:1979,xMax:1979,borderColor:C.accent+'bb',borderWidth:1.5,borderDash:[5,4],
+label:{content:'1979',display:true,position:'start',color:C.accent,font:{size:9}}},
+wto:{type:'line',xMin:2001,xMax:2001,borderColor:C.accent+'bb',borderWidth:1.5,borderDash:[5,4],
+label:{content:'China joins WTO',display:true,position:'end',color:C.accent,font:{size:9}}}}}},
+scales:{x:{type:'linear',min:1948,max:2025,
+title:{display:true,text:'Year',color:C.blue,font:{size:10}},
+ticks:{color:C.blue,font:{size:9},callback:v=>String(v),stepSize:10},...gridOpts},
+y:{title:{display:true,text:'% of GDP',color:C.blue,font:{size:10}},
+ticks:{color:C.blue,font:{size:9},callback:v=>v+'%'},min:0,max:40,...gridOpts}}}});});"""
+    },
+    {
+        'id': 'iterGap', 'figure_num': 3,
+        'title': 'The Iteration Gap: Co-located vs. Offshore Cycle Times',
+        'desc': 'A product team in a dense industrial cluster completes a design–prototype–feedback loop in 1–5 days. The same team sourcing offshore waits 30–60 days per cycle. Over twelve months the cluster team runs 50–100 iterations; the offshore team manages six to twelve.',
+        'source': "Andrew 'Bunnie' Huang, The Hardware Hacker (2017); Suzanne Berger, Making in America (MIT Press, 2013); PCH International lead-time data (2018)",
+        'position': 'after_para_28',
+        'js': """_regChart('iterGap',()=>{const ctx=document.getElementById('iterGap');
+const lbl=['Shenzhen\\nHuaqiangbei\\n(2015)','Birmingham\\nc.1860','Toyota City\\nc.1980',
+'UK firm →\\nChina','US firm →\\nSE Asia'];
+const mn=[1,1,3,30,30];const mx=[3,3,7,56,60];
+const ex=mx.map((m,i)=>m-mn[i]);
+const cS=lbl.map((_,i)=>i<3?C.accent+'cc':C.blue+'cc');
+const cF=lbl.map((_,i)=>i<3?C.accent+'44':C.blue+'44');
+new Chart(ctx,{type:'bar',
+data:{labels:lbl,datasets:[
+{label:'Min days',data:mn,backgroundColor:cS,borderRadius:3,stack:'s'},
+{label:'Range to max',data:ex,backgroundColor:cF,borderRadius:3,stack:'s'}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{labels:{color:C.blue,font:{size:9},generateLabels:()=>[
+{text:'Minimum days per cycle',fillStyle:C.accent+'cc',strokeStyle:'transparent',lineWidth:0},
+{text:'Additional range (max)',fillStyle:C.accent+'44',strokeStyle:'transparent',lineWidth:0}]}},
+tooltip:{...tooltipStyle,callbacks:{
+title:items=>lbl[items[0].dataIndex].replace(/\\n/g,' '),label:()=>'',
+afterBody:items=>{const i=items[0].dataIndex;return 'Cycle: '+mn[i]+'\u2013'+mx[i]+' days';}}},
+annotation:{annotations:{
+week:{type:'line',yMin:7,yMax:7,borderColor:C.green,borderWidth:1.5,borderDash:[6,4],
+label:{content:'One-week threshold',display:true,position:'end',color:C.green,font:{size:9}}}}}},
+scales:{x:{stacked:true,ticks:{color:C.blue,font:{size:8},maxRotation:0},...gridOpts},
+y:{stacked:true,title:{display:true,text:'Days per design\u2013prototype\u2013feedback cycle',
+color:C.blue,font:{size:10}},ticks:{color:C.blue,font:{size:9}},min:0,...gridOpts}}}});});"""
+    },
+]
+
     return charts
 
 
