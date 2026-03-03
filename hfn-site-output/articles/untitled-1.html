@@ -273,12 +273,12 @@ sources:<br />
   <section class="read-next-section" aria-label="Read next">
     <h2 class="read-next-heading">Read next</h2>
     <div class="read-next-grid">
-      <a href="/articles/is-democracy-the-opium-of-the-masses" class="read-next-card" style="--section-color:#7c3aed">
-        <div class="read-next-img-wrap"><img src="/images/articles/is-democracy-the-opium-of-the-masses/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
+      <a href="/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future" class="read-next-card" style="--section-color:#7c3aed">
+        <div class="read-next-img-wrap"><img src="/images/articles/prisons-we-never-used-to-have-them-will-they-exist-in-the-future/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
         <div class="read-next-body">
           <span class="read-next-label">More in Society</span>
           <span class="read-next-kicker" style="color:#7c3aed">Society</span>
-          <h3 class="read-next-title">Is Democracy The Opium Of The Masses?</h3>
+          <h3 class="read-next-title">Prisons: We Never Used To Have Them. Will They Exist In The Future?</h3>
           <span class="read-next-meta">3 min read <span class="read-next-audio">Audio</span></span>
         </div>
       </a>
@@ -473,9 +473,9 @@ title:items=>String(items[0].parsed.x),
 label:c=>{const v=c.parsed.y;return v>=1?v.toFixed(0)+'d per nib':v.toFixed(2)+'d (under a halfpenny)';}}},
 annotation:{annotations:{
 gillott:{type:'line',xMin:1830,xMax:1830,borderColor:C.blue,borderWidth:2,borderDash:[6,4],
-label:{content:'Gillott adopts press methods',display:true,position:'start',color:C.blue,font:{size:10}}},
+label:{..._al,content:'Gillott adopts press methods',display:true,position:'start',color:C.blue,font:{size:10}}},
 shilling:{type:'line',yMin:12,yMax:12,borderColor:C.blue+'44',borderWidth:1,borderDash:[3,3],
-label:{content:"1 shilling — a quarter to half a craftsman's daily wage",display:true,position:'end',color:C.blue,font:{size:9}}}}}},
+label:{..._al,content:"1 shilling — a quarter to half a craftsman's daily wage",display:true,position:'end',color:C.blue,font:{size:9}}}}}},
 scales:{x:{type:'linear',min:1820,max:1862,
 title:{display:true,text:'Year',color:C.blue,font:{size:10}},
 ticks:{color:C.blue,font:{size:9},callback:v=>String(v),stepSize:5},...gridOpts},
@@ -497,9 +497,9 @@ plugins:{legend,tooltip:{...tooltipStyle,callbacks:{
 title:items=>String(items[0].parsed.x),label:c=>c.parsed.y+'% of GDP'}},
 annotation:{annotations:{
 thatcher:{type:'line',xMin:1979,xMax:1979,borderColor:C.accent+'bb',borderWidth:1.5,borderDash:[5,4],
-label:{content:'1979',display:true,position:'start',color:C.accent,font:{size:9}}},
+label:{..._al,content:'1979',display:true,position:'start',color:C.accent,font:{size:9}}},
 wto:{type:'line',xMin:2001,xMax:2001,borderColor:C.accent+'bb',borderWidth:1.5,borderDash:[5,4],
-label:{content:'China joins WTO',display:true,position:'end',color:C.accent,font:{size:9}}}}}},
+label:{..._al,content:'China joins WTO',display:true,position:'end',color:C.accent,font:{size:9}}}}}},
 scales:{x:{type:'linear',min:1948,max:2025,
 title:{display:true,text:'Year',color:C.blue,font:{size:10}},
 ticks:{color:C.blue,font:{size:9},callback:v=>String(v),stepSize:10},...gridOpts},
@@ -525,7 +525,7 @@ title:items=>lbl[items[0].dataIndex].replace(/\n/g,' '),label:()=>'',
 afterBody:items=>{const i=items[0].dataIndex;return 'Cycle: '+mn[i]+'–'+mx[i]+' days';}}},
 annotation:{annotations:{
 week:{type:'line',yMin:7,yMax:7,borderColor:C.green,borderWidth:1.5,borderDash:[6,4],
-label:{content:'One-week threshold',display:true,position:'end',color:C.green,font:{size:9}}}}}},
+label:{..._al,content:'One-week threshold',display:true,position:'end',color:C.green,font:{size:9}}}}}},
 scales:{x:{stacked:true,ticks:{color:C.blue,font:{size:8},maxRotation:0},...gridOpts},
 y:{stacked:true,title:{display:true,text:'Days per design–prototype–feedback cycle',
 color:C.blue,font:{size:10}},ticks:{color:C.blue,font:{size:9}},min:0,...gridOpts}}}});});

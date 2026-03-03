@@ -2607,7 +2607,7 @@ body{font-family:'Inter',sans-serif;color:#1a1815;background:#ffffff;padding:24p
 .section-kicker{text-transform:uppercase;font-size:.72rem;font-weight:600;color:var(--accent);letter-spacing:.08em;margin-bottom:8px}
 h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1.2;margin-bottom:12px}
 .excerpt{font-size:1.05rem;color:#555;line-height:1.6;margin-bottom:20px;font-style:italic}
-.hero-img{width:100%;border-radius:8px;margin-bottom:20px}
+.hero-img{width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin-bottom:20px}
 audio{width:100%;margin-bottom:20px}
 h2{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;margin:28px 0 12px;color:var(--text)}
 h3{font-size:1.05rem;font-weight:600;margin:20px 0 8px}
@@ -3539,6 +3539,7 @@ WHEN PRODUCING CHART DEFINITIONS:
 - js field must use _regChart('chartId',()=>{ ... }) wrapper — NOT raw (()=>{ try { ... })()
 - Color references: use C.accent, C.blue, C.green, C.teal, C.amber, C.purple (NOT COLORS.x)
 - Shared helpers: ds(), dxy(), linX(), gridOpts, legend, tooltipStyle, chartPad, yearTick
+- Annotation labels must always spread ..._al first: label:{..._al, content:'text', display:true, color:C.dim, ...}
 - Year ticks must use `callback: v => String(v)` (never let Chart.js add commas to years)
 - Target 2-5 charts per article covering historic-present-future arcs
 - Wrap output in a ```python code fence and CLOSE it with ```
