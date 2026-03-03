@@ -100,6 +100,9 @@ def _write_chart_defs(task_id, slug, chart_defs):
         cleaned.append(line)
     chart_code = '\n'.join(cleaned).strip()
 
+    # Replace whatever slug the AI used with the draft's actual slug
+    chart_code = re.sub(r"charts\['[^']+'\]", f"charts['{slug}']", chart_code)
+
     # If the AI didn't wrap in charts['slug'] = [...], add the wrapper
     if not re.search(r"charts\[", chart_code):
         # Ensure the bare dicts are wrapped in a list
