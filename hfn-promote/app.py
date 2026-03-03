@@ -2563,27 +2563,16 @@ function _refreshC(){}
 ${_chartBootstrapJs}
 // Re-enforce light values after bootstrap runs (overwrite any _gc reads)
 C.text='#1a1815';C.grid='#f2eeea';C.dim='#8a8479';C.bg='#ffffff';
-// Fix annotation contrast: force white text on ALL annotation labels that have backgrounds
+// Fix annotation contrast: ensure annotation labels are always readable
 Chart.register({id:'previewAnnotationContrast',beforeDraw:function(chart){
   var ann=chart.options&&chart.options.plugins&&chart.options.plugins.annotation&&chart.options.plugins.annotation.annotations;
   if(!ann)return;
   for(var k in ann){
-    var a=ann[k];if(!a)continue;
-    // Force label text to white if there's any background
-    if(a.label){
-      var bg=a.label.backgroundColor||a.backgroundColor||'';
-      if(bg&&bg!=='transparent'&&bg!=='rgba(0,0,0,0)'){
-        a.label.color='#ffffff';
-      }
-      // Also force any colored label text to white for readability
-      var lc=a.label.color||'';
-      if(lc&&lc!=='#ffffff'&&lc!=='#fff'&&lc!=='white'&&lc!=='#1a1815'){
-        a.label.color='#ffffff';
-      }
-    }
-    // Force line annotation label colours too
-    if(a.type==='line'&&a.label){
-      a.label.color='#ffffff';
+    var a=ann[k];if(!a||!a.label)continue;
+    // If label has no explicit backgroundColor, force transparent + dark text
+    if(!a.label.backgroundColor){
+      a.label.backgroundColor='transparent';
+      a.label.color=a.label.color||'#1a1815';
     }
   }
 }});

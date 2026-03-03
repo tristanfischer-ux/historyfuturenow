@@ -633,6 +633,13 @@ BOOKS = [
     {"title": "Niccolo Rising", "author": "Dorothy Dunnett", "year": 2024, "source": "kindle", "themes": ["fiction"]},
     {"title": "Crime and Punishment", "author": "Fyodor Dostoyevsky", "year": 2013, "source": "kindle", "themes": ["fiction"]},
     {"title": "Ready Player One", "author": "Ernest Cline", "year": 2018, "source": "kindle", "themes": ["fiction"]},
+    {"title": "The Story of the Invention of Steel Pens", "author": "Henry Bore", "year": 1890, "source": "physical", "themes": ["modern"]},
+    {"title": "The Lunar Men", "author": "Jenny Uglow", "year": 2002, "source": "physical", "themes": ["modern", "science"]},
+    {"title": "Against the Odds", "author": "James Dyson", "year": 1997, "source": "physical", "themes": ["modern", "economics"]},
+    {"title": "Making in America", "author": "Suzanne Berger", "year": 2013, "source": "kindle", "themes": ["economics", "modern"]},
+    {"title": "The Hardware Hacker", "author": "Andrew 'Bunnie' Huang", "year": 2017, "source": "kindle", "themes": ["science", "economics"]},
+    {"title": "Victorian Things", "author": "Asa Briggs", "year": 1988, "source": "physical", "themes": ["modern"]},
+    {"title": "History of Birmingham", "author": "Chris Upton", "year": 1993, "source": "physical", "themes": ["modern"]},
 ]
 
 
