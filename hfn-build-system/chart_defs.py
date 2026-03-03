@@ -5350,8 +5350,8 @@ y1:{position:'right',min:0,max:4.5,grid:{drawOnChartArea:false},ticks:{color:C.t
         if charts[k] and isinstance(charts[k][0], list):
             charts[k] = charts[k][0]
 
-    # ─── STUDIO: untitled-1 ───
-    charts['untitled-1'] = [
+    # ─── STUDIO: the-walking-distance-supply-chain ───
+    charts['the-walking-distance-supply-chain'] = [
     {
         'id': 'nibPrice', 'figure_num': 1,
         'title': 'The Pen Nib Price Collapse, 1822–1860',
