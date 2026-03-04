@@ -429,7 +429,7 @@ body.dark .qcal-article{color:var(--text)}
 .st-pill{font-size:.62rem;font-weight:700;padding:3px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.3px}
 .st-pill.draft{background:#f5f5f4;color:#666}.st-pill.factcheck{background:#fef3c7;color:#92400e}
 .st-pill.charts{background:#dbeafe;color:#1e40af}.st-pill.images{background:#fef3c7;color:#92400e}.st-pill.review{background:#ede9fe;color:#5b21b6}
-.st-pill.deployed{background:#dcfce7;color:#166534}
+.st-pill.deployed{background:#dcfce7;color:#166534}.st-pill.in_review{background:#e0e7ff;color:#3730a3}.st-pill.published{background:#dcfce7;color:#166534}
 .st-table{width:100%;border-collapse:collapse}
 .st-table th{text-align:left;font-size:.68rem;color:var(--dim);font-weight:600;padding:8px 10px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.3px}
 .st-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:.78rem;vertical-align:middle}
@@ -439,7 +439,7 @@ body.dark .qcal-article{color:var(--text)}
 .st-badge{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
 .st-badge.draft{background:#f5f5f4;color:#666}.st-badge.factcheck{background:#fef3c7;color:#92400e}
 .st-badge.charts{background:#dbeafe;color:#1e40af}.st-badge.images{background:#fef3c7;color:#92400e}.st-badge.review{background:#ede9fe;color:#5b21b6}
-.st-badge.deployed{background:#dcfce7;color:#166534}
+.st-badge.deployed{background:#dcfce7;color:#166534}.st-badge.in_review{background:#e0e7ff;color:#3730a3}.st-badge.published{background:#dcfce7;color:#166534}
 .st-assets{display:flex;gap:4px;font-size:.75rem}
 .st-assets .dim{opacity:.25}.st-assets .on{opacity:1}
 .st-empty{text-align:center;padding:60px 20px;color:var(--dim)}
@@ -926,7 +926,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
     </div>
     {% if studio_drafts %}
     <div class="st-pills">
-      {% set stages = {'draft':0,'factcheck':0,'charts':0,'images':0,'review':0,'deployed':0} %}
+      {% set stages = {'draft':0,'factcheck':0,'charts':0,'images':0,'review':0,'in_review':0,'published':0,'deployed':0} %}
       {% for d in studio_drafts %}{% if stages.update({d.stage: stages[d.stage]+1}) %}{% endif %}{% endfor %}
       {% for s,c in stages.items() %}{% if c > 0 %}
       <span class="st-pill {{s}}">{{s}} {{c}}</span>
@@ -981,7 +981,9 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <div class="st-step-line" id="st-line-3"></div>
       <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Build</div></div>
       <div class="st-step-line" id="st-line-4"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-5">6</div><div class="st-step-label">Deploy</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-5">6</div><div class="st-step-label">Review</div></div>
+      <div class="st-step-line" id="st-line-5"></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-6">7</div><div class="st-step-label">Website</div></div>
     </div>
     <div class="st-next-bar" id="st-next-bar" style="display:none">
       <span class="st-next-text" id="st-next-text"></span>
@@ -1054,8 +1056,9 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
             <button class="st-action-btn" onclick="studioAction('save_to_disk')"><span class="st-act-icon">💾</span> Save to Disk</button>
             <button class="st-action-btn" onclick="studioAction('generate_image')"><span class="st-act-icon">🖼</span> Generate Image</button>
             <button class="st-action-btn" onclick="studioAction('generate_audio')"><span class="st-act-icon">🔊</span> Generate Audio</button>
-            <button class="st-action-btn" onclick="studioAction('build')"><span class="st-act-icon">🔨</span> Build for Deploy</button>
-            <button class="st-action-btn" onclick="studioAction('deploy')"><span class="st-act-icon">🚀</span> Deploy</button>
+            <button class="st-action-btn" onclick="studioAction('build')"><span class="st-act-icon">🔨</span> Build</button>
+            <button class="st-action-btn" onclick="studioAction('deploy')"><span class="st-act-icon">📋</span> Deploy to Review</button>
+            <button class="st-action-btn" onclick="studioAction('publish')"><span class="st-act-icon">🚀</span> Deploy to Website</button>
           </div>
           <div class="st-task-status" id="st-task-status">
             <div class="st-task-label" id="st-task-label">Running...</div>
@@ -1821,8 +1824,8 @@ let studioSaveTimer=null;
 let studioPollTimer=null;
 let studioChatStreaming=false;
 let studioCurrentAction=null;
-const stageOrder=['draft','factcheck','charts','images','review','deployed'];
-const stageLabels=['Draft','Fact-Check','Charts','Image','Build','Deploy'];
+const stageOrder=['draft','factcheck','charts','images','review','in_review','published'];
+const stageLabels=['Draft','Fact-Check','Charts','Image','Build','Review','Website'];
 
 async function studioNewDraft(){
   const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'Untitled'})});
@@ -2188,7 +2191,7 @@ function studioRenderChartSummary(defs){
 
 function studioUpdateStepper(stage){
   const idx=stageOrder.indexOf(stage);
-  for(let i=0;i<6;i++){
+  for(let i=0;i<stageOrder.length;i++){
     const dot=document.getElementById('st-dot-'+i);
     const line=document.getElementById('st-line-'+i);
     dot.classList.remove('active','done');
@@ -2230,8 +2233,16 @@ function studioUpdateNextBar(stage){
       btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')" style="margin-right:6px">Generate Image</button><button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Review in Preview</button><button class="btn secondary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
       break;
     case 'review':
-      text.textContent='Review your article in the live preview. When satisfied, build for deployment.';
-      btns.innerHTML='<button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Preview</button><button class="btn primary" onclick="studioAction(\'build\')" style="margin-right:6px">Build for Deploy</button><button class="btn primary" onclick="studioAction(\'deploy\')">Deploy</button>';
+      text.textContent='Review your article. When ready, deploy to the review page.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Preview</button><button class="btn primary" onclick="studioAction(\'build\')" style="margin-right:6px">Build</button><button class="btn primary" onclick="studioAction(\'deploy\')">Deploy to Review</button>';
+      break;
+    case 'in_review':
+      text.textContent='Article is live on /review. Edit freely, then deploy to website when approved.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Preview</button><button class="btn secondary" onclick="studioAction(\'build\')" style="margin-right:6px">Rebuild Preview</button><button class="btn primary" onclick="studioAction(\'publish\')">Deploy to Website</button>';
+      break;
+    case 'published':
+      text.textContent='Article published. Edit and redeploy anytime.';
+      btns.innerHTML='<button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Preview</button><button class="btn primary" onclick="studioAction(\'publish\')">Deploy to Website</button>';
       break;
     case 'deployed':
       text.textContent='Article deployed.';
@@ -3353,6 +3364,13 @@ def api_studio_deploy(did):
     import studio_runner
     tid = db.create_studio_task("deploy", did)
     studio_runner.start_task(tid, "deploy", did)
+    return jsonify({"ok": True, "task_id": tid})
+
+@app.route("/api/studio/drafts/<int:did>/publish", methods=["POST"])
+def api_studio_publish(did):
+    import studio_runner
+    tid = db.create_studio_task("publish", did)
+    studio_runner.start_task(tid, "publish", did)
     return jsonify({"ok": True, "task_id": tid})
 
 @app.route("/api/studio/tasks/<int:tid>")

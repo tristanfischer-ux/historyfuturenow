@@ -44,6 +44,12 @@ RELEASED_FROM_REVIEW = {
     'the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world',
     'the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way',
 }
+_released_file = Path(__file__).parent / "released_slugs.json"
+if _released_file.exists():
+    try:
+        RELEASED_FROM_REVIEW.update(json.loads(_released_file.read_text()))
+    except (json.JSONDecodeError, TypeError):
+        pass
 
 def truncate_excerpt(text, max_len):
     """Truncate text to max_len characters, adding ellipsis if truncated."""
@@ -1935,6 +1941,18 @@ def build_homepage(essays, new_essays=None):
 </body>
 </html>"""
 
+def _load_deploy_log():
+    """Load deploy_log.json for tracking push counts."""
+    log_file = Path(__file__).parent / "deploy_log.json"
+    if log_file.exists():
+        try:
+            return json.loads(log_file.read_text())
+        except (json.JSONDecodeError, TypeError):
+            pass
+    return {}
+
+_DEPLOY_LOG = _load_deploy_log()
+
 def _review_card(e, badge_html=""):
     """Render a single review card."""
     pi = PARTS[e['part']]
@@ -1942,6 +1960,20 @@ def _review_card(e, badge_html=""):
     img_html = f'<img src="{hero_img}" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0" loading="lazy">' if hero_img else ''
     has_audio = e.get('has_audio') or e.get('has_discussion')
     audio_tag = '<span style="color:#059669;font-size:0.85rem">&#9654; Audio</span>' if has_audio else ''
+    # Deploy tracking
+    deploy_info = _DEPLOY_LOG.get(e['slug'])
+    if deploy_info and deploy_info.get('count', 0) > 0:
+        from datetime import datetime
+        count = deploy_info['count']
+        last_raw = deploy_info.get('last', '')
+        try:
+            last_dt = datetime.fromisoformat(last_raw)
+            last_str = last_dt.strftime('%-d %b %Y %H:%M')
+        except (ValueError, TypeError):
+            last_str = last_raw[:16] if last_raw else 'unknown'
+        deploy_tag = f'<div style="font-size:0.75rem;color:#6366f1;margin-top:0.25rem">Pushed {count} time{"s" if count != 1 else ""} &middot; Last: {last_str}</div>'
+    else:
+        deploy_tag = '<div style="font-size:0.75rem;color:#9ca3af;margin-top:0.25rem">Not yet pushed</div>'
     return f'''    <a href="/articles/{html_mod.escape(e['slug'])}" style="display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;transition:box-shadow 0.2s">
       {img_html}
       <div style="padding:1rem">
@@ -1950,6 +1982,7 @@ def _review_card(e, badge_html=""):
         <h3 style="margin:0 0 0.5rem;font-size:1.1rem;line-height:1.3">{html_mod.escape(e['title'])}</h3>
         <p style="margin:0 0 0.5rem;font-size:0.9rem;color:#6b7280;line-height:1.4">{truncate_excerpt(e['excerpt'], 160)}</p>
         <div style="font-size:0.8rem;color:#9ca3af">{e['reading_time']} min read {audio_tag}</div>
+        {deploy_tag}
       </div>
     </a>\n'''
 

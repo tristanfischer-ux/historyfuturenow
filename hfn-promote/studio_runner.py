@@ -19,6 +19,7 @@ def start_task(task_id, task_type, draft_id):
         "generate_audio": _run_generate_audio,
         "build": _run_build,
         "deploy": _run_deploy,
+        "publish": _run_publish,
     }
     runner = runners.get(task_type)
     if not runner:
@@ -436,19 +437,19 @@ def _run_build(task_id, draft_id):
 
 
 def _run_deploy(task_id, draft_id):
-    """Deploy the site to production via deploy.sh."""
+    """Deploy the site to review (not public) via deploy.sh."""
     draft = db.get_draft(draft_id)
     if not draft:
         raise ValueError("Draft not found")
 
-    db.update_studio_task(task_id, progress="Deploying to production...")
+    db.update_studio_task(task_id, progress="Deploying to review...")
 
     deploy_script = SCRIPTS_DIR / "deploy.sh"
     if not deploy_script.exists():
         raise FileNotFoundError(f"Deploy script not found: {deploy_script}")
 
     proc = subprocess.run(
-        ["bash", str(deploy_script), f"feat: publish {draft['title'][:50]}"],
+        ["bash", str(deploy_script), f"feat: deploy {draft['title'][:50]} to review"],
         cwd=str(BUILD_SYSTEM.parent),
         capture_output=True, text=True, timeout=300
     )
@@ -457,5 +458,66 @@ def _run_deploy(task_id, draft_id):
         err = proc.stderr[:300] if proc.stderr else "Unknown error"
         raise RuntimeError(f"Deploy failed: {err}")
 
-    db.update_draft(draft_id, stage="deployed")
-    db.update_studio_task(task_id, progress="Deployed to production")
+    db.update_draft(draft_id, stage="in_review")
+    db.update_studio_task(task_id, progress="Deployed to review — awaiting approval")
+
+
+def _run_publish(task_id, draft_id):
+    """Publish article to the public website."""
+    draft = db.get_draft(draft_id)
+    if not draft:
+        raise ValueError("Draft not found")
+
+    slug = draft["slug"]
+    db.update_studio_task(task_id, progress="Moving article to public site...")
+
+    # Remove from review_slugs.json
+    review_file = BUILD_SYSTEM / "review_slugs.json"
+    if review_file.exists():
+        try:
+            slugs = set(json.loads(review_file.read_text()))
+            slugs.discard(slug)
+            review_file.write_text(json.dumps(sorted(slugs), indent=2))
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    # Add to released_slugs.json
+    released_file = BUILD_SYSTEM / "released_slugs.json"
+    released = set()
+    if released_file.exists():
+        try:
+            released = set(json.loads(released_file.read_text()))
+        except (json.JSONDecodeError, TypeError):
+            pass
+    released.add(slug)
+    released_file.write_text(json.dumps(sorted(released), indent=2))
+
+    # Rebuild site
+    db.update_studio_task(task_id, progress="Rebuilding site...")
+    proc = subprocess.run(
+        ["/opt/homebrew/bin/python3", str(BUILD_SYSTEM / "build.py")],
+        cwd=str(BUILD_SYSTEM),
+        capture_output=True, text=True, timeout=300
+    )
+    if proc.returncode != 0:
+        err = proc.stderr[:300] if proc.stderr else "Unknown error"
+        raise RuntimeError(f"Build failed: {err}")
+
+    # Deploy to Vercel
+    db.update_studio_task(task_id, progress="Deploying to website...")
+    deploy_script = SCRIPTS_DIR / "deploy.sh"
+    if not deploy_script.exists():
+        raise FileNotFoundError(f"Deploy script not found: {deploy_script}")
+
+    proc = subprocess.run(
+        ["bash", str(deploy_script), "--skip-build",
+         f"feat: publish {draft['title'][:50]}"],
+        cwd=str(BUILD_SYSTEM.parent),
+        capture_output=True, text=True, timeout=300
+    )
+    if proc.returncode != 0:
+        err = proc.stderr[:300] if proc.stderr else "Unknown error"
+        raise RuntimeError(f"Deploy failed: {err}")
+
+    db.update_draft(draft_id, stage="published")
+    db.update_studio_task(task_id, progress="Published to website")

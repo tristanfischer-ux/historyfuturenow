@@ -5,13 +5,10 @@ date: "2026-03-03"
 excerpt: "In 1830, Joseph Gillott walked three streets to a medal stamper, two streets to a steel roller, and one street to a press maker. Within months, he had reduced the cost of a pen nib by 95%. That walking-distance supply chain was the engine of the Industrial Revolution. Today, a British engineer emails Shenzhen and waits a month."
 share_summary: "Victorian Birmingham iterated same-day. Modern Britain waits 30 days for parts. We offshored factories and accidentally offshored thinking."
 sources:
-  - "The Story of the Invention of Steel Pens"
   - "The Lunar Men"
   - "Against the Odds"
   - "Making in America"
   - "The Hardware Hacker"
-  - "Victorian Things"
-  - "History of Birmingham"
 ---
 
 # The Fifteen-Minute Advantage: How Birmingham's Walking-Distance Supply Chain Built the Modern World

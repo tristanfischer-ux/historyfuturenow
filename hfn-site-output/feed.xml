@@ -5,13 +5,22 @@
     <link>https://www.historyfuturenow.com</link>
     <description>Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.</description>
     <language>en-gb</language>
-    <lastBuildDate>Sat, 28 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.historyfuturenow.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://www.historyfuturenow.com/favicon.svg</url>
       <title>History Future Now</title>
       <link>https://www.historyfuturenow.com</link>
     </image>
+    <item>
+      <title>The Fifteen-Minute Advantage: How Birmingham&#x27;s Walking-Distance Supply Chain Built the Modern World</title>
+      <link>https://www.historyfuturenow.com/articles/the-walking-distance-supply-chain</link>
+      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-walking-distance-supply-chain</guid>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate>
+      <description>In 1830, Joseph Gillott walked three streets to a medal stamper, two streets to a steel roller, and one street to a press maker. Within months, he had reduced the cost of a pen nib by 95%. That walking-distance supply chain was the engine of the Industrial Revolution. Today, a British engineer emails Shenzhen and waits a month.</description>
+      <category>Jobs &amp; Economy</category>
+      <enclosure url="https://www.historyfuturenow.com/images/articles/the-walking-distance-supply-chain/hero.png" type="image/png" />
+    </item>
     <item>
       <title>The Useful Idiots: Why Every Alliance Between the Left and Islamism Ends the Same Way</title>
       <link>https://www.historyfuturenow.com/articles/the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way</link>
@@ -182,15 +191,6 @@
       <description>For five thousand years, every successful civilisation tightly controlled who could enter, settle, and become a citizen. Then, in the space of a single generation, the West decided this was bigotry. The historical record suggests the experiment will not end well.</description>
       <category>Society</category>
       <enclosure url="https://www.historyfuturenow.com/images/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped/hero.png" type="image/png" />
-    </item>
-    <item>
-      <title>The New Literacy: How AI Is Killing The Scribes And What Happens Next</title>
-      <link>https://www.historyfuturenow.com/articles/the-new-literacy</link>
-      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-new-literacy</guid>
-      <pubDate>Mon, 16 Feb 2026 00:00:00 +0000</pubDate>
-      <description>For five thousand years, if you could not write, you hired a scribe. If you could not code, you hired a developer. AI has just made everyone literate in the digital scribal arts — coding, design, filmmaking, marketing — in months, not decades. The middlemen are disappearing and a flourishing has begun. But history shows what comes after the flourishing: dependency and atrophy. The question is how long the golden age lasts.</description>
-      <category>Jobs &amp; Economy</category>
-      <enclosure url="https://www.historyfuturenow.com/images/articles/the-new-literacy/hero.png" type="image/png" />
     </item>
   </channel>
 </rss>

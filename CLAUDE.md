@@ -81,7 +81,7 @@ Every data point must be verifiable against a named published source.
 - Test: Does it belong next to "The Robot Bargain" and "The Silence of the Scribes"?
 
 ### Library References
-- At least 3 books from HFN Library referenced per article
+- 3–4 books from HFN Library referenced per article (no more — avoid niche/obscure titles)
 - Every cited book must appear in `library_data.py` BOOKS list AND article's `sources` frontmatter
 - At least 2 other HFN articles cross-referenced with relative links
 - Check `hfn-site-output/search-index.json` for article catalogue

@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 80
+Total articles: 81
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -14,7 +14,7 @@ Total articles: 80
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (14 articles)
+### Jobs & Economy (15 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
@@ -443,6 +443,13 @@ Total articles: 80
 - Published: 2026-02-28
 - Reading time: 12 min
 - In February 2026, the Green Party overturned a century of Labour dominance in Manchester's Gorton and Denton by-election by courting a Muslim voting bloc. The Greens are unequivocally pro-trans. Their
+
+### The Fifteen-Minute Advantage: How Birmingham's Walking-Distance Supply Chain Built the Modern World [3 charts]
+- URL: https://www.historyfuturenow.com/articles/the-walking-distance-supply-chain
+- Section: Jobs & Economy
+- Published: 2026-03-03
+- Reading time: 12 min
+- In 1830, Joseph Gillott walked three streets to a medal stamper, two streets to a steel roller, and one street to a press maker. Within months, he had reduced the cost of a pen nib by 95%. That walkin
 
 ### The War in Ukraine: Escalation, Miscalculation, and the Path to Peace
 - URL: https://www.historyfuturenow.com/articles/the-war-in-ukraine-escalation-miscalculation-and-the-path-to-peace

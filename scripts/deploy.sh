@@ -89,6 +89,31 @@ cd "$OUTPUT_DIR"
 vercel --prod --yes 2>&1 | tail -5
 echo "  ✓ Vercel deploy complete"
 
+# ─── Step 3b: Update deploy log ─────────────────────────────────────────────
+echo ""
+echo "▸ Updating deploy log..."
+python3 -c "
+import json, os, glob
+from datetime import datetime, timezone
+log_path = '$BUILD_DIR/deploy_log.json'
+log = {}
+if os.path.exists(log_path):
+    with open(log_path) as f:
+        log = json.load(f)
+articles_dir = '$OUTPUT_DIR/articles'
+if os.path.isdir(articles_dir):
+    for slug in os.listdir(articles_dir):
+        if os.path.isdir(os.path.join(articles_dir, slug)):
+            entry = log.get(slug, {'count': 0, 'last': ''})
+            entry['count'] = entry['count'] + 1
+            entry['last'] = datetime.now(timezone.utc).isoformat()
+            log[slug] = entry
+with open(log_path, 'w') as f:
+    json.dump(log, f, indent=2, sort_keys=True)
+print(f'  Updated {len(log)} article entries')
+"
+echo "  ✓ Deploy log updated"
+
 # ─── Step 4: Verify ─────────────────────────────────────────────────────────
 echo ""
 echo "▸ Verifying site..."
