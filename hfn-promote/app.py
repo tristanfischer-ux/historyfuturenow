@@ -1,5 +1,5 @@
 """HFN Promote v3.11 — Library: Promote Article to generate posts."""
-import sys, json
+import sys, json, re
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from flask import Flask, render_template_string, request, jsonify, send_file, abort, Response
@@ -7,7 +7,25 @@ import db
 from config import (FLASK_PORT, MAX_X_PER_DAY, MAX_LI_PER_DAY, MAX_POSTS_PER_DAY,
                     HFN_SOURCE_DIR, HFN_ARTICLE_IMAGES, HFN_SITE_OUTPUT,
                     HFN_CONTENT_DIR, HFN_AUDIO_DIR, MONITOR_INTERVAL,
-                    MATCH_MODEL, GEN_MODEL, SESSIONS_DIR)
+                    MATCH_MODEL, GEN_MODEL, SESSIONS_DIR, GA4_PROPERTY_ID)
+from analytics import fetch_article_analytics, get_analytics_for_slug
+
+_URL_RE = re.compile(r'https?://\S+')
+
+def _strip_urls(text):
+    """Remove any URLs from caption text (the correct article_url is appended separately)."""
+    cleaned = _URL_RE.sub('', text)
+    cleaned = re.sub(r'  +', ' ', cleaned)  # collapse double spaces
+    cleaned = re.sub(r' *\n', '\n', cleaned)  # trim trailing spaces on lines
+    cleaned = re.sub(r'\n{3,}', '\n\n', cleaned)  # collapse triple+ newlines
+    return cleaned.strip()
+
+def _build_post_text(caption, article_url):
+    """Build final post text: strip any LLM-hallucinated URLs, append the correct article URL."""
+    clean = _strip_urls(caption)
+    if article_url:
+        clean += "\n" + article_url
+    return clean
 
 # Import issues from build system
 _build_sys = str(Path(__file__).resolve().parent.parent / "hfn-build-system")
@@ -62,6 +80,41 @@ def build_article_catalog():
     return "\n".join(lines)
 
 _library_catalog_cache = None
+
+def build_series_context(draft_id):
+    """Build strategic series context for a draft that's part of a series. Returns empty string for standalone."""
+    series, sa, all_articles = db.get_series_for_draft(draft_id)
+    if not series or not sa:
+        return ""
+    total = len(all_articles)
+    position = sa["position"] + 1  # 1-indexed for display
+    lines = [
+        "# STRATEGIC SERIES CONTEXT",
+        f"\n## Series: \"{series['title']}\"",
+        f"\n## Overarching Thesis\n{series.get('thesis') or '(Not yet defined)'}",
+        f"\n## Strategic Goal (CONFIDENTIAL — never reveal in article text)\n{series.get('strategic_goal') or '(Not yet defined)'}",
+        f"\n## Audience\n{series.get('audience') or '(Not yet defined)'}",
+        f"\n## Narrative Arc\n{series.get('narrative_arc') or '(Not yet defined)'}",
+        f"\n## This Article's Role\nPosition: {position} of {total}",
+        f"Working Title: \"{sa['working_title']}\"",
+        f"Role: {sa.get('role') or '(Not defined)'}",
+        f"Key arguments: {sa.get('key_arguments') or '(Not defined)'}",
+        f"Connections: {sa.get('connects_to') or '(Not defined)'}",
+        "\n## Full Series Plan",
+    ]
+    for a in all_articles:
+        pos = a["position"] + 1
+        status = a.get("status", "planned")
+        title = a["working_title"]
+        role = a.get("role", "")
+        if a["id"] == sa["id"]:
+            lines.append(f"{pos}. **\"{title}\"** ({status}) ← YOU ARE HERE — {role}")
+        else:
+            lines.append(f"{pos}. \"{title}\" ({status}) — {role}")
+    if sa.get("brief"):
+        lines.append(f"\n## Brief\n{sa['brief']}")
+    return "\n".join(lines)
+
 
 def build_library_catalog():
     """Build a compact library catalog grouped by theme for the AI to select sources."""
@@ -361,6 +414,16 @@ HTML = r"""<!DOCTYPE html>
 .lib-promote-btn:hover{background:#a82d20}.lib-promote-btn:disabled{opacity:.5;cursor:wait}
 .lib-chart-promote{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:5px;border:1px solid var(--border);background:var(--card);color:var(--accent);cursor:pointer;font-size:.62rem;font-weight:600;font-family:inherit;transition:all .12s}
 .lib-chart-promote:hover{border-color:var(--accent);background:var(--accent-soft)}.lib-chart-promote:disabled{opacity:.5;cursor:wait}
+/* Analytics pills + bar */
+.lib-views-pill{font-size:.58rem;padding:1px 5px;border-radius:3px;background:#dbeafe;color:#1d4ed8;font-weight:600}
+.lib-analytics-bar{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 14px;margin-top:8px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.lib-stat{font-size:.72rem;font-weight:600;color:#1e40af}
+.lib-stat-dim{font-size:.62rem;color:#6b7280;margin-left:2px}
+.lib-sort-select{font-size:.6rem;padding:2px 4px;border:1px solid var(--border);border-radius:4px;font-family:inherit}
+body.dark .lib-views-pill{background:#1e3a5f;color:#93c5fd}
+body.dark .lib-analytics-bar{background:#1e293b;border-color:#334155}
+body.dark .lib-stat{color:#93c5fd}
+body.dark .lib-stat-dim{color:#9ca3af}
 /* Heatmap */
 .heatmap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:12px}
 .hm-card{border-radius:8px;overflow:hidden;border:1px solid var(--border);text-align:center;font-size:.62rem}
@@ -502,6 +565,15 @@ body.dark .st-next-text{color:#fbbf24}
 .st-chat-input-row textarea{flex:1;resize:none;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:.82rem;font-family:inherit;line-height:1.4;max-height:120px;overflow-y:auto;background:var(--card);color:var(--text)}
 .st-chat-input-row textarea:focus{outline:none;border-color:var(--accent)}
 .st-chat-input-row button{padding:8px 14px;border-radius:8px;font-size:.9rem;min-width:40px;flex-shrink:0}
+.doc-drop-overlay{display:none;position:absolute;inset:0;background:rgba(34,197,94,.08);border:2px dashed #22c55e;border-radius:12px;z-index:50;align-items:center;justify-content:center;font-size:.85rem;color:#16a34a;font-weight:600;pointer-events:none}
+.doc-drop-active .doc-drop-overlay{display:flex}
+.doc-pills{display:flex;flex-wrap:wrap;gap:6px;padding:6px 12px;min-height:0;transition:min-height .15s}
+.doc-pills:empty{padding:0}
+.doc-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:16px;background:#f0f0f0;font-size:.72rem;color:#333;border:1px solid #e0e0e0;max-width:200px}
+.doc-pill .doc-pill-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-pill .doc-pill-x{cursor:pointer;color:#999;font-weight:700;font-size:.8rem;margin-left:2px;line-height:1}
+.doc-pill .doc-pill-x:hover{color:#e11d48}
+.doc-pill-icon{font-size:.7rem;flex-shrink:0}
 
 /* Details panel (collapsible) */
 .st-details-panel{display:none;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg-warm);overflow-y:auto;max-height:320px}
@@ -599,6 +671,68 @@ body.dark .st-chat-input-row textarea{background:var(--card);color:var(--text);b
 body.dark .st-details-panel{background:#2a2825}
 body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
 @media(max-width:900px){.st-ed-body{flex-direction:column}.st-ed-left{width:100%;min-width:0;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}.st-ed-right{min-height:300px}.st-details-grid{grid-template-columns:1fr}}
+
+/* ═══ STRATEGIC SERIES ═══ */
+.st-view-toggle{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-right:auto;margin-left:12px}
+.st-view-btn{padding:6px 14px;font-size:.72rem;font-weight:600;cursor:pointer;background:var(--card);color:var(--dim);border:none;border-right:1px solid var(--border);font-family:inherit}
+.st-view-btn:last-child{border-right:none}
+.st-view-btn.active{background:var(--accent);color:#fff}
+.st-view-btn:hover:not(.active){background:var(--surface)}
+
+/* Series list */
+.sr-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:12px}
+.sr-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all .12s}
+.sr-card:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.sr-card-title{font-size:.88rem;font-weight:700;margin-bottom:6px}
+.sr-card-thesis{font-size:.72rem;color:var(--dim);line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sr-card-meta{display:flex;align-items:center;gap:8px}
+.sr-card-progress{flex:1;height:4px;background:var(--surface);border-radius:2px;overflow:hidden}
+.sr-card-progress-bar{height:100%;background:var(--grn);border-radius:2px;transition:width .3s}
+.sr-card-count{font-size:.62rem;color:var(--dim);font-family:var(--mono)}
+.sr-badge{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px}
+.sr-badge.planning{background:#fef3c7;color:#92400e}
+.sr-badge.active{background:#dbeafe;color:#1e40af}
+.sr-badge.complete{background:#dcfce7;color:#166534}
+.sr-badge.paused{background:#f5f5f4;color:#666}
+
+/* Series detail view */
+.sr-detail{height:100%;display:flex;flex-direction:column}
+.sr-detail-top{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.sr-detail-title{font-size:.9rem;font-weight:700;flex:1}
+.sr-detail-body{display:flex;flex:1;overflow:hidden}
+.sr-detail-left{width:45%;min-width:320px;border-right:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
+.sr-detail-right{flex:1;display:flex;flex-direction:column;overflow-y:auto;padding:16px}
+
+/* Strategy board fields */
+.sr-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sr-fields .st-field:nth-child(n+3){grid-column:span 2}
+.sr-fields textarea{min-height:70px;resize:vertical}
+
+/* Article cards on board */
+.sr-articles-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sr-articles-header h3{font-size:.82rem;font-weight:700}
+.sr-article-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;transition:all .12s;cursor:grab}
+.sr-article-card:hover{border-color:var(--accent)}
+.sr-article-card.dragging{opacity:.4}
+.sr-article-card-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.sr-article-pos{font-size:.68rem;font-weight:700;color:var(--dim);font-family:var(--mono);min-width:20px}
+.sr-article-title{font-size:.82rem;font-weight:600;flex:1}
+.sr-article-role{font-size:.58rem;font-weight:700;padding:2px 8px;border-radius:10px;background:#ede9fe;color:#5b21b6}
+.sr-article-brief{font-size:.72rem;color:var(--dim);line-height:1.4;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sr-article-actions{display:flex;gap:4px}
+.sr-article-status{font-size:.55rem;font-weight:700;padding:2px 6px;border-radius:8px;text-transform:uppercase;letter-spacing:.3px;margin-left:auto}
+.sr-article-status.planned{background:#f5f5f4;color:#666}
+.sr-article-status.writing{background:#fef3c7;color:#92400e}
+.sr-article-status.drafted{background:#dbeafe;color:#1e40af}
+.sr-article-status.published{background:#dcfce7;color:#166534}
+
+/* Series banner in article editor */
+.st-series-banner{display:flex;align-items:center;gap:10px;padding:8px 16px;background:#eff6ff;border-bottom:1px solid #bfdbfe;flex-shrink:0;font-size:.76rem;color:#1e40af}
+.st-series-banner strong{font-weight:700}
+body.dark .st-series-banner{background:#1e2a3a;border-color:#2a3a5a;color:#93c5fd}
+body.dark .sr-card{background:var(--card);border-color:var(--border)}
+body.dark .sr-article-card{background:var(--card);border-color:var(--border)}
+body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);color:var(--text);border-color:var(--border)}
 </style></head><body>
 
 <div class="topbar">
@@ -886,17 +1020,23 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
         <option value="least">Least used</option>
         <option value="alpha">Alphabetical</option>
       </select>
+      <select id="lib-sort" class="lib-sort-select" onchange="sortLibrary()">
+        <option value="alpha">A-Z</option>
+        <option value="views30">Most viewed (30d)</option>
+        <option value="views7">Trending (7d)</option>
+      </select>
       <button class="btn sm" onclick="toggleHeatmap()" id="heatmap-btn" style="font-size:.6rem">🔥 Heatmap</button>
     </div>
     <div class="lib-list" id="lib-list">
       {% for a in articles_with_charts %}
-      <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}" data-issue="{{a.issue_num}}" data-genre="{{(a.part or '')|lower}}">
+      <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}" data-issue="{{a.issue_num}}" data-genre="{{(a.part or '')|lower}}" data-views7d="{{a.views_7d or 0}}" data-views30d="{{a.views_30d or 0}}">
         <div class="lib-item-title">{{a.title}}</div>
         <div class="lib-item-meta">
           {% if a.part %}<span class="lib-part">{{a.part}}</span>{% endif %}
           <span>📊 {{a.image_count or 0}} charts</span>
           {% if a.chart_count and not a.image_count %}<span style="color:var(--dim)">(text only)</span>{% endif %}
           <span class="lib-post-count {{ 'has-posts' if a.post_count > 0 else 'no-posts' }}">📤 {{a.post_count}}</span>
+          {% if a.views_7d %}<span class="lib-views-pill">👁 {{a.views_7d}}</span>{% endif %}
         </div>
       </div>
       {% endfor %}
@@ -921,8 +1061,13 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
   <div class="st-wrap" id="st-list">
     <div class="st-header">
       <h2>Article Studio</h2>
+      <div class="st-view-toggle">
+        <button class="st-view-btn active" onclick="studioToggleView('articles',this)">Articles ({{n_drafts}})</button>
+        <button class="st-view-btn" onclick="studioToggleView('series',this)">Series ({{n_series}})</button>
+      </div>
       <span style="font-size:.68rem;color:var(--dim);font-family:var(--mono);background:var(--surface);padding:3px 8px;border-radius:4px;border:1px solid var(--border)">claude-opus-4-6</span>
-      <button class="btn primary" onclick="studioNewDraft()">✚ New Article</button>
+      <button class="btn primary" id="st-btn-new-article" onclick="studioNewDraft()">✚ New Article</button>
+      <button class="btn primary" id="st-btn-new-series" onclick="seriesNew()" style="display:none">✚ New Series</button>
     </div>
     {% if studio_drafts %}
     <div class="st-pills">
@@ -952,7 +1097,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       </tbody>
     </table>
     {% else %}
-    <div class="st-empty">
+    <div class="st-empty" id="st-articles-empty">
       <div class="st-icon">✍️</div>
       <div style="font-size:.9rem;font-weight:600;margin-bottom:6px">No articles yet</div>
       <div style="font-size:.78rem;color:var(--dim);max-width:360px;line-height:1.5">
@@ -960,6 +1105,78 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       </div>
     </div>
     {% endif %}
+
+    <!-- Series list (hidden by default, shown when toggle is on "Series") -->
+    <div id="st-series-list" style="display:none">
+      <div class="sr-list" id="sr-list-grid">
+        {% for s in studio_series %}
+        <div class="sr-card" onclick="seriesSelect({{s.id}})">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span class="sr-card-title" style="flex:1">{{s.title}}</span>
+            <span class="sr-badge {{s.status}}">{{s.status}}</span>
+          </div>
+          <div class="sr-card-thesis">{{(s.thesis or 'No thesis defined yet')[:120]}}</div>
+          <div class="sr-card-meta">
+            <div class="sr-card-progress"><div class="sr-card-progress-bar" style="width:{{((s.written_count or 0)/(s.article_count or 1)*100)|int}}%"></div></div>
+            <span class="sr-card-count">{{s.written_count or 0}}/{{s.article_count or 0}} written</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if not studio_series %}
+      <div class="st-empty">
+        <div class="st-icon">📐</div>
+        <div style="font-size:.9rem;font-weight:600;margin-bottom:6px">No series yet</div>
+        <div style="font-size:.78rem;color:var(--dim);max-width:360px;line-height:1.5">
+          Click "New Series" to plan a strategic sequence of articles that build an argument across multiple essays.
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Series detail view (two-panel) -->
+  <div class="sr-detail" id="sr-detail" style="display:none">
+    <div class="sr-detail-top">
+      <span class="st-back" onclick="seriesBack()">←</span>
+      <span class="sr-detail-title" id="sr-detail-title"></span>
+      <span class="sr-badge" id="sr-detail-status"></span>
+      <select id="sr-status-select" onchange="seriesUpdateStatus(this.value)" style="font-size:.68rem;padding:3px 8px;border-radius:6px;border:1px solid var(--border)">
+        <option value="planning">Planning</option>
+        <option value="active">Active</option>
+        <option value="complete">Complete</option>
+        <option value="paused">Paused</option>
+      </select>
+      <button class="btn sm" style="color:var(--red)" onclick="seriesDelete()">Delete</button>
+    </div>
+    <div class="sr-detail-body">
+      <!-- Left: Strategy chat -->
+      <div class="sr-detail-left">
+        <div class="st-chat" id="sr-chat-zone" style="position:relative">
+          <div class="doc-drop-overlay">Drop files here</div>
+          <div class="st-chat-messages" id="sr-chat-messages"></div>
+          <div class="doc-pills" id="sr-doc-pills"></div>
+          <div class="st-chat-input-row">
+            <textarea id="sr-chat-input" rows="1" placeholder="Discuss your series strategy..." oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();seriesSendChat()}"></textarea>
+            <button id="sr-chat-send" class="btn primary" onclick="seriesSendChat()">→</button>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Strategy board -->
+      <div class="sr-detail-right">
+        <div class="sr-fields">
+          <div class="st-field"><label>Thesis</label><textarea id="sr-f-thesis" rows="2" onchange="seriesAutoSave()"></textarea></div>
+          <div class="st-field"><label>Strategic Goal</label><textarea id="sr-f-goal" rows="2" onchange="seriesAutoSave()"></textarea></div>
+          <div class="st-field"><label>Audience</label><textarea id="sr-f-audience" rows="2" onchange="seriesAutoSave()"></textarea></div>
+          <div class="st-field"><label>Narrative Arc</label><textarea id="sr-f-arc" rows="2" onchange="seriesAutoSave()"></textarea></div>
+        </div>
+        <div class="sr-articles-header">
+          <h3>Article Plan</h3>
+          <button class="btn sm" onclick="seriesAddArticle()">+ Add Article</button>
+        </div>
+        <div id="sr-articles-board"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Editor view (shown when draft selected) -->
@@ -985,6 +1202,7 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
       <div class="st-step-line" id="st-line-5"></div>
       <div class="st-step"><div class="st-step-dot" id="st-dot-6">7</div><div class="st-step-label">Website</div></div>
     </div>
+    <div class="st-series-banner" id="st-series-banner" style="display:none"></div>
     <div class="st-next-bar" id="st-next-bar" style="display:none">
       <span class="st-next-text" id="st-next-text"></span>
       <span id="st-next-btns"></span>
@@ -993,8 +1211,10 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
     <div class="st-ed-body">
       <!-- Left panel: chat -->
       <div class="st-ed-left">
-        <div class="st-chat">
+        <div class="st-chat" id="st-chat-zone" style="position:relative">
+          <div class="doc-drop-overlay">Drop files here</div>
           <div class="st-chat-messages" id="st-chat-messages"></div>
+          <div class="doc-pills" id="st-doc-pills"></div>
           <div class="st-chat-input-row">
             <textarea id="st-chat-input" rows="1" placeholder="Discuss your article idea..." oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();studioSendChat()}"></textarea>
             <button id="st-chat-send" class="btn primary" onclick="studioSendChat()">→</button>
@@ -1355,6 +1575,17 @@ async function saveRqEdit(id){
 }
 
 // ── Library ──
+function sortLibrary(){
+  const mode=document.getElementById('lib-sort').value;
+  const list=document.getElementById('lib-list');
+  const items=[...list.querySelectorAll('.lib-item')];
+  items.sort((a,b)=>{
+    if(mode==='views30') return (parseInt(b.dataset.views30d)||0)-(parseInt(a.dataset.views30d)||0);
+    if(mode==='views7') return (parseInt(b.dataset.views7d)||0)-(parseInt(a.dataset.views7d)||0);
+    return a.querySelector('.lib-item-title').textContent.localeCompare(b.querySelector('.lib-item-title').textContent);
+  });
+  items.forEach(el=>list.appendChild(el));
+}
 function filterLibrary(){
   const q=(document.getElementById('lib-search').value||'').toLowerCase();
   const issue=document.getElementById('lib-filter-issue').value;
@@ -1396,6 +1627,14 @@ async function selectArticle(slug){
         ${d.charts.some(c=>c.image_path)?'<select id="lib-post-type" style="padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:.68rem;font-family:inherit"><option value="short">Short</option><option value="long">Long</option></select><button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button>':''}
       </div>
     </div>`;
+    if(d.analytics&&(d.analytics.views_7d||d.analytics.views_30d)){
+      html+=`<div class="lib-analytics-bar">
+        <span class="lib-stat">${d.analytics.views_7d}<span class="lib-stat-dim"> views (7d)</span></span>
+        <span class="lib-stat">${d.analytics.users_7d}<span class="lib-stat-dim"> readers (7d)</span></span>
+        <span class="lib-stat">${d.analytics.views_30d}<span class="lib-stat-dim"> views (30d)</span></span>
+        <span class="lib-stat">${d.analytics.users_30d}<span class="lib-stat-dim"> readers (30d)</span></span>
+      </div>`;
+    }
     if(d.charts.length){
       html+='<div class="lib-charts-grid">';
       for(const c of d.charts){
@@ -2788,6 +3027,419 @@ async function studioDeleteDraft(id,title){
     pills.innerHTML=Object.entries(counts).map(([s,c])=>'<span class="st-pill '+s+'">'+s+' '+c+'</span>').join('');
   }
 }
+
+// ═══ STRATEGIC SERIES ═══
+
+let seriesCurrentId=null;
+let seriesChatStreaming=false;
+let seriesSaveTimer=null;
+
+function studioToggleView(view,btn){
+  document.querySelectorAll('.st-view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const articlesView=document.querySelector('.st-pills')?.parentElement===document.getElementById('st-list')?null:null;
+  const table=document.querySelector('.st-table');
+  const pills=document.querySelector('.st-pills');
+  const emptyArticles=document.getElementById('st-articles-empty');
+  const seriesList=document.getElementById('st-series-list');
+  const btnNew=document.getElementById('st-btn-new-article');
+  const btnNewSeries=document.getElementById('st-btn-new-series');
+  if(view==='articles'){
+    if(table)table.style.display='';
+    if(pills)pills.style.display='';
+    if(emptyArticles)emptyArticles.style.display='';
+    seriesList.style.display='none';
+    btnNew.style.display='';
+    btnNewSeries.style.display='none';
+  }else{
+    if(table)table.style.display='none';
+    if(pills)pills.style.display='none';
+    if(emptyArticles)emptyArticles.style.display='none';
+    seriesList.style.display='block';
+    btnNew.style.display='none';
+    btnNewSeries.style.display='';
+  }
+}
+
+async function seriesNew(){
+  const title=prompt('Series title:');
+  if(!title)return;
+  const r=await fetch('/api/studio/series',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title})});
+  const d=await r.json();
+  if(d.ok){seriesSelect(d.id)}else{toast(d.msg||'Failed')}
+}
+
+async function seriesSelect(id){
+  const r=await fetch('/api/studio/series/'+id);
+  const d=await r.json();
+  if(!d||d.error){toast('Series not found');return}
+  seriesCurrentId=id;
+  document.getElementById('st-list').style.display='none';
+  document.getElementById('sr-detail').style.display='flex';
+  document.getElementById('sr-detail-title').textContent=d.title;
+  document.getElementById('sr-detail-status').textContent=d.status;
+  document.getElementById('sr-detail-status').className='sr-badge '+d.status;
+  document.getElementById('sr-status-select').value=d.status;
+  document.getElementById('sr-f-thesis').value=d.thesis||'';
+  document.getElementById('sr-f-goal').value=d.strategic_goal||'';
+  document.getElementById('sr-f-audience').value=d.audience||'';
+  document.getElementById('sr-f-arc').value=d.narrative_arc||'';
+  seriesRenderArticles(d.articles||[]);
+  await seriesLoadMessages(id);
+  loadDocPills('/api/studio/series/'+id+'/documents','sr-doc-pills');
+  setTimeout(()=>document.getElementById('sr-chat-input').focus(),100);
+}
+
+function seriesBack(){
+  seriesCurrentId=null;
+  seriesChatStreaming=false;
+  document.getElementById('sr-detail').style.display='none';
+  document.getElementById('st-list').style.display='block';
+  document.getElementById('sr-chat-messages').innerHTML='';
+  location.reload();
+}
+
+function seriesAutoSave(){
+  if(seriesSaveTimer)clearTimeout(seriesSaveTimer);
+  seriesSaveTimer=setTimeout(seriesSave,600);
+}
+
+async function seriesSave(){
+  if(!seriesCurrentId)return;
+  const data={
+    thesis:document.getElementById('sr-f-thesis').value,
+    strategic_goal:document.getElementById('sr-f-goal').value,
+    audience:document.getElementById('sr-f-audience').value,
+    narrative_arc:document.getElementById('sr-f-arc').value
+  };
+  await fetch('/api/studio/series/'+seriesCurrentId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+}
+
+async function seriesUpdateStatus(status){
+  if(!seriesCurrentId)return;
+  await fetch('/api/studio/series/'+seriesCurrentId,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+  document.getElementById('sr-detail-status').textContent=status;
+  document.getElementById('sr-detail-status').className='sr-badge '+status;
+}
+
+async function seriesDelete(){
+  if(!confirm('Delete this series? Articles already written will be preserved.'))return;
+  await fetch('/api/studio/series/'+seriesCurrentId+'/delete',{method:'POST'});
+  seriesBack();
+}
+
+function seriesRenderArticles(articles){
+  const board=document.getElementById('sr-articles-board');
+  if(!articles.length){
+    board.innerHTML='<div style="text-align:center;padding:20px;color:var(--dim);font-size:.78rem">No articles planned yet. Chat with the AI to plan your article sequence.</div>';
+    return;
+  }
+  board.innerHTML=articles.map((a,i)=>`
+    <div class="sr-article-card" draggable="true" data-said="${a.id}" data-pos="${a.position}"
+         ondragstart="seriesDragStart(event,${a.id},${a.position})" ondragover="event.preventDefault();this.style.borderTopColor='var(--accent)'"
+         ondragleave="this.style.borderTopColor=''" ondrop="seriesDrop(event,${a.position});this.style.borderTopColor=''">
+      <div class="sr-article-card-top">
+        <span class="sr-article-pos">${a.position+1}.</span>
+        <span class="sr-article-title">${_escHtml(a.working_title)}</span>
+        ${a.role?'<span class="sr-article-role">'+_escHtml(a.role.substring(0,30))+'</span>':''}
+        <span class="sr-article-status ${a.status}">${a.status}</span>
+      </div>
+      ${a.brief?'<div class="sr-article-brief">'+_escHtml(a.brief)+'</div>':''}
+      <div class="sr-article-actions">
+        <button class="btn sm" onclick="seriesEditArticle(${a.id})">Edit Brief</button>
+        ${a.status==='planned'?'<button class="btn sm primary" onclick="seriesStartArticle('+a.id+')">Write This Article</button>':''}
+        ${a.draft_id?'<button class="btn sm" onclick="studioSelectDraft('+a.draft_id+')">Open Draft</button>':''}
+        <button class="btn sm" style="color:var(--red);margin-left:auto" onclick="seriesRemoveArticle(${a.id})">×</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+let _seriesDragId=null,_seriesDragPos=null;
+function seriesDragStart(e,said,pos){_seriesDragId=said;_seriesDragPos=pos;e.dataTransfer.effectAllowed='move'}
+async function seriesDrop(e,targetPos){
+  e.preventDefault();
+  if(_seriesDragId===null||_seriesDragPos===targetPos)return;
+  await fetch('/api/studio/series/'+seriesCurrentId+'/articles/'+_seriesDragId+'/reorder',{
+    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({position:targetPos})
+  });
+  _seriesDragId=null;_seriesDragPos=null;
+  // Refresh
+  const r=await fetch('/api/studio/series/'+seriesCurrentId);
+  const d=await r.json();
+  seriesRenderArticles(d.articles||[]);
+}
+
+async function seriesAddArticle(){
+  const title=prompt('Working title:');
+  if(!title)return;
+  await fetch('/api/studio/series/'+seriesCurrentId+'/articles',{
+    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({working_title:title})
+  });
+  const r=await fetch('/api/studio/series/'+seriesCurrentId);
+  const d=await r.json();
+  seriesRenderArticles(d.articles||[]);
+}
+
+async function seriesEditArticle(said){
+  const r=await fetch('/api/studio/series/'+seriesCurrentId);
+  const d=await r.json();
+  const a=(d.articles||[]).find(x=>x.id===said);
+  if(!a)return;
+  const title=prompt('Working title:',a.working_title);
+  if(title===null)return;
+  const role=prompt('Role (what this article does in the arc):',a.role||'');
+  if(role===null)return;
+  const brief=prompt('Brief (writing guidance):',a.brief||'');
+  if(brief===null)return;
+  const keyArgs=prompt('Key arguments (semicolon-separated):',a.key_arguments||'');
+  if(keyArgs===null)return;
+  const connects=prompt('Connects to (links to previous/next):',a.connects_to||'');
+  if(connects===null)return;
+  await fetch('/api/studio/series/'+seriesCurrentId+'/articles/'+said,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({working_title:title,role,brief,key_arguments:keyArgs,connects_to:connects})
+  });
+  const r2=await fetch('/api/studio/series/'+seriesCurrentId);
+  const d2=await r2.json();
+  seriesRenderArticles(d2.articles||[]);
+}
+
+async function seriesRemoveArticle(said){
+  if(!confirm('Remove this article from the series?'))return;
+  await fetch('/api/studio/series/'+seriesCurrentId+'/articles/'+said+'/delete',{method:'POST'});
+  const r=await fetch('/api/studio/series/'+seriesCurrentId);
+  const d=await r.json();
+  seriesRenderArticles(d.articles||[]);
+}
+
+async function seriesStartArticle(said){
+  const r=await fetch('/api/studio/series/'+seriesCurrentId+'/articles/'+said+'/start',{method:'POST'});
+  const d=await r.json();
+  if(d.ok&&d.draft_id){
+    // Switch to article editor
+    document.getElementById('sr-detail').style.display='none';
+    studioSelectDraft(d.draft_id);
+  }else{
+    toast(d.msg||'Failed to start article');
+  }
+}
+
+async function seriesLoadMessages(id){
+  const el=document.getElementById('sr-chat-messages');
+  el.innerHTML='';
+  try{
+    const r=await fetch('/api/studio/series/'+id+'/messages');
+    const msgs=await r.json();
+    for(const m of msgs){
+      seriesAppendMessage(m.role,m.content);
+    }
+    el.scrollTop=el.scrollHeight;
+  }catch(e){console.error('Failed to load series messages',e)}
+}
+
+function seriesAppendMessage(role,content,isStreaming){
+  const el=document.getElementById('sr-chat-messages');
+  const div=document.createElement('div');
+  div.className='st-msg '+role;
+  const inner=document.createElement('div');
+  inner.className='st-msg-content';
+  if(role==='assistant'){
+    inner.innerHTML=(typeof marked!=='undefined'?marked.parse(content):content.replace(/\n/g,'<br>'));
+  }else{
+    inner.textContent=content;
+  }
+  if(isStreaming){
+    div.classList.add('streaming');
+    const cursor=document.createElement('span');
+    cursor.className='st-cursor';
+    inner.appendChild(cursor);
+  }
+  div.appendChild(inner);
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+  return div;
+}
+
+async function seriesSendChat(){
+  if(!seriesCurrentId||seriesChatStreaming)return;
+  const input=document.getElementById('sr-chat-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  input.style.height='auto';
+  seriesAppendMessage('user',text);
+  const bubble=seriesAppendMessage('assistant','',true);
+  const contentEl=bubble.querySelector('.st-msg-content');
+  seriesChatStreaming=true;
+  document.getElementById('sr-chat-send').disabled=true;
+  let fullText='';
+  try{
+    const res=await fetch('/api/studio/series/'+seriesCurrentId+'/chat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:text})
+    });
+    const reader=res.body.getReader();
+    const decoder=new TextDecoder();
+    let buffer='';
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      buffer+=decoder.decode(value,{stream:true});
+      const lines=buffer.split('\n');
+      buffer=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data: '))continue;
+        try{
+          const data=JSON.parse(line.slice(6));
+          if(data.delta){
+            fullText+=data.delta;
+            if(typeof marked!=='undefined'){
+              contentEl.innerHTML=marked.parse(fullText);
+            }else{
+              contentEl.textContent=fullText;
+            }
+            document.getElementById('sr-chat-messages').scrollTop=document.getElementById('sr-chat-messages').scrollHeight;
+          }
+          if(data.strategy_updated){
+            // Refresh strategy fields
+            const r=await fetch('/api/studio/series/'+seriesCurrentId);
+            const d=await r.json();
+            document.getElementById('sr-f-thesis').value=d.thesis||'';
+            document.getElementById('sr-f-goal').value=d.strategic_goal||'';
+            document.getElementById('sr-f-audience').value=d.audience||'';
+            document.getElementById('sr-f-arc').value=d.narrative_arc||'';
+            const ind=document.createElement('div');
+            ind.className='st-draft-indicator';
+            ind.textContent='Strategy fields updated on the board →';
+            document.getElementById('sr-chat-messages').appendChild(ind);
+          }
+          if(data.articles_added){
+            // Refresh article board
+            const r=await fetch('/api/studio/series/'+seriesCurrentId);
+            const d=await r.json();
+            seriesRenderArticles(d.articles||[]);
+            const ind=document.createElement('div');
+            ind.className='st-draft-indicator';
+            ind.textContent=data.articles_added+' articles added to the board →';
+            document.getElementById('sr-chat-messages').appendChild(ind);
+          }
+          if(data.done){
+            bubble.classList.remove('streaming');
+            const cur=contentEl.querySelector('.st-cursor');
+            if(cur)cur.remove();
+            if(typeof marked!=='undefined'){
+              contentEl.innerHTML=marked.parse(fullText);
+            }
+          }
+          if(data.error){
+            contentEl.innerHTML='<em style="color:var(--red)">Error: '+data.error+'</em>';
+            bubble.classList.remove('streaming');
+          }
+        }catch(e){}
+      }
+    }
+  }catch(e){
+    contentEl.innerHTML='<em style="color:var(--red)">Connection error</em>';
+    bubble.classList.remove('streaming');
+  }
+  seriesChatStreaming=false;
+  document.getElementById('sr-chat-send').disabled=false;
+  document.getElementById('sr-chat-input').focus();
+}
+
+// ── Document Drag-Drop & Pills ──
+
+const DOC_ICONS={'pdf':'PDF','docx':'W','pptx':'P','xlsx':'X','csv':'CSV','txt':'TXT','md':'MD','png':'IMG','jpg':'IMG','jpeg':'IMG','gif':'IMG','webp':'IMG'};
+
+function _docIcon(fn){
+  const ext=(fn.split('.').pop()||'').toLowerCase();
+  return DOC_ICONS[ext]||'DOC';
+}
+
+function initDocDrop(zoneId, uploadFn){
+  const zone=document.getElementById(zoneId);
+  if(!zone)return;
+  let dragCounter=0;
+  zone.addEventListener('dragenter',e=>{e.preventDefault();dragCounter++;zone.classList.add('doc-drop-active')});
+  zone.addEventListener('dragleave',e=>{e.preventDefault();dragCounter--;if(dragCounter<=0){dragCounter=0;zone.classList.remove('doc-drop-active')}});
+  zone.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='copy'});
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();dragCounter=0;zone.classList.remove('doc-drop-active');
+    const files=e.dataTransfer.files;
+    for(let i=0;i<files.length;i++){uploadFn(files[i])}
+  });
+}
+
+async function uploadDocFile(file, urlBase, pillsId){
+  const maxSize=10*1024*1024;
+  const allowed=new Set(['pdf','docx','pptx','xlsx','csv','txt','md','png','jpg','jpeg','gif','webp']);
+  const ext=(file.name.split('.').pop()||'').toLowerCase();
+  if(!allowed.has(ext)){toast('Unsupported file type: .'+ext);return}
+  if(file.size>maxSize){toast('File too large (max 10MB)');return}
+  const fd=new FormData();
+  fd.append('file',file);
+  try{
+    const r=await fetch(urlBase,{method:'POST',body:fd});
+    const d=await r.json();
+    if(!d.ok){toast(d.msg||'Upload failed');return}
+    _addDocPill(pillsId, d.id, file.name, d.is_image);
+  }catch(e){toast('Upload error: '+e.message)}
+}
+
+function _addDocPill(pillsId, docId, filename, isImage){
+  const container=document.getElementById(pillsId);
+  if(!container)return;
+  const pill=document.createElement('span');
+  pill.className='doc-pill';
+  pill.dataset.docId=docId;
+  pill.innerHTML='<span class="doc-pill-icon">'+(isImage?'IMG':_docIcon(filename))+'</span><span class="doc-pill-name" title="'+_escHtml(filename)+'">'+_escHtml(filename)+'</span><span class="doc-pill-x" onclick="deleteDoc('+docId+',\''+pillsId+'\')">&times;</span>';
+  container.appendChild(pill);
+}
+
+async function loadDocPills(listUrl, pillsId){
+  const container=document.getElementById(pillsId);
+  if(!container)return;
+  container.innerHTML='';
+  try{
+    const r=await fetch(listUrl);
+    const docs=await r.json();
+    for(const d of docs){_addDocPill(pillsId, d.id, d.filename, d.is_image)}
+  }catch(e){console.error('Failed to load doc pills',e)}
+}
+
+async function deleteDoc(docId, pillsId){
+  try{
+    await fetch('/api/studio/documents/'+docId+'/delete',{method:'POST'});
+    const container=document.getElementById(pillsId);
+    if(container){
+      const pill=container.querySelector('[data-doc-id="'+docId+'"]');
+      if(pill)pill.remove();
+    }
+  }catch(e){toast('Delete failed: '+e.message)}
+}
+
+// Init drop zones on page load
+initDocDrop('st-chat-zone', f=>{ if(studioCurrentId) uploadDocFile(f,'/api/studio/drafts/'+studioCurrentId+'/documents/upload','st-doc-pills'); else toast('Select a draft first') });
+initDocDrop('sr-chat-zone', f=>{ if(seriesCurrentId) uploadDocFile(f,'/api/studio/series/'+seriesCurrentId+'/documents/upload','sr-doc-pills'); else toast('Select a series first') });
+
+// Series banner in article editor — inject when selecting a draft that's part of a series
+const _origStudioSelectDraft=studioSelectDraft;
+studioSelectDraft=async function(id){
+  await _origStudioSelectDraft(id);
+  loadDocPills('/api/studio/drafts/'+id+'/documents','st-doc-pills');
+  const banner=document.getElementById('st-series-banner');
+  try{
+    const r=await fetch('/api/studio/drafts/'+id+'/series-context');
+    const d=await r.json();
+    if(d.in_series){
+      banner.style.display='flex';
+      banner.innerHTML='Part of: <strong>"'+_escHtml(d.series_title)+'"</strong> ('+d.position+' of '+d.total+') · '+_escHtml(d.working_title);
+    }else{
+      banner.style.display='none';
+    }
+  }catch(e){banner.style.display='none'}
+};
 </script></body></html>"""
 
 # ── Routes ──
@@ -2944,7 +3596,20 @@ def dashboard():
         if inum:
             issues_with_articles[inum] = issues_with_articles.get(inum, 0) + 1
 
+    # Enrich with GA4 analytics
+    ga4_data = fetch_article_analytics()
+    for a in articles_with_charts:
+        stats = get_analytics_for_slug(a.get("slug", ""), ga4_data)
+        if stats:
+            a["views_7d"] = stats["views_7d"]
+            a["users_7d"] = stats["users_7d"]
+            a["views_30d"] = stats["views_30d"]
+            a["users_30d"] = stats["users_30d"]
+        else:
+            a["views_7d"] = a["users_7d"] = a["views_30d"] = a["users_30d"] = 0
+
     studio_drafts = db.get_all_drafts()
+    studio_series = db.get_all_series()
 
     return render_template_string(HTML,
         sched=scheduler_on,
@@ -2962,6 +3627,7 @@ def dashboard():
         total_charts=total_charts, total_images=total_images,
         issues=ISSUES, issues_with_articles=issues_with_articles,
         studio_drafts=studio_drafts, n_drafts=len(studio_drafts),
+        studio_series=studio_series, n_series=len(studio_series),
         alog=activity_log[:30], img_url=img_url)
 
 @app.route("/api/act", methods=["POST"])
@@ -3256,7 +3922,10 @@ def api_library(slug):
     for c in charts:
         c["image_url"] = img_url(c.get("image_path", ""))
         c["times_used"] = len(db.get_posts_for_chart(c["id"])) if c.get("id") else 0
-    return jsonify({"article": article, "charts": charts})
+    # Include GA4 analytics if available
+    ga4_data = fetch_article_analytics()
+    analytics = get_analytics_for_slug(slug, ga4_data)
+    return jsonify({"article": article, "charts": charts, "analytics": analytics})
 
 # Curate APIs
 @app.route("/api/edit", methods=["POST"])
@@ -3285,8 +3954,7 @@ def api_post_now():
     prev_status = post["status"]
     db.update_post_status(post["id"],"approved")
     from poster import post_to_x, post_to_linkedin
-    text = post["caption"]
-    if post.get("article_url"): text += "\n" + post["article_url"]
+    text = _build_post_text(post["caption"], post.get("article_url"))
     ok = (post_to_x if post["platform"]=="x" else post_to_linkedin)(text, post.get("image_path"))
     if ok:
         db.update_post_status(post["id"],"posted"); db.log_post(post["platform"],post["id"])
@@ -3572,6 +4240,152 @@ plugins:{legend,tooltip:tooltipStyle},scales:gridOpts}});
 Follow ALL the editorial rules and style guides below exactly.
 """
 
+# ── Document Upload & Extraction ──
+
+ALLOWED_DOC_TYPES = {
+    'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'text/csv', 'text/plain', 'text/markdown',
+    'image/png', 'image/jpeg', 'image/gif', 'image/webp',
+}
+ALLOWED_EXTENSIONS = {
+    '.pdf', '.docx', '.pptx', '.xlsx', '.csv', '.txt', '.md',
+    '.png', '.jpg', '.jpeg', '.gif', '.webp',
+}
+IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp'}
+MAX_DOC_SIZE = 10 * 1024 * 1024  # 10MB
+MAX_DOCS_PER_ENTITY = 10
+
+def extract_document_text(file_bytes, filename):
+    """Extract text from a document. Returns (text, is_image, base64_data)."""
+    import base64
+    ext = Path(filename).suffix.lower()
+
+    if ext in IMAGE_EXTENSIONS:
+        b64 = base64.b64encode(file_bytes).decode('utf-8')
+        return "", 1, b64
+
+    if ext == '.pdf':
+        try:
+            from PyPDF2 import PdfReader
+            import io
+            reader = PdfReader(io.BytesIO(file_bytes))
+            text = "\n\n".join(page.extract_text() or "" for page in reader.pages)
+            return text[:200_000], 0, ""
+        except Exception as e:
+            return f"[PDF extraction failed: {e}]", 0, ""
+
+    if ext == '.docx':
+        try:
+            from docx import Document
+            import io
+            doc = Document(io.BytesIO(file_bytes))
+            text = "\n\n".join(p.text for p in doc.paragraphs if p.text.strip())
+            return text[:200_000], 0, ""
+        except Exception as e:
+            return f"[DOCX extraction failed: {e}]", 0, ""
+
+    if ext == '.pptx':
+        try:
+            from pptx import Presentation
+            import io
+            prs = Presentation(io.BytesIO(file_bytes))
+            parts = []
+            for slide in prs.slides:
+                for shape in slide.shapes:
+                    if hasattr(shape, "text_frame"):
+                        parts.append(shape.text_frame.text)
+            text = "\n\n".join(parts)
+            return text[:200_000], 0, ""
+        except Exception as e:
+            return f"[PPTX extraction failed: {e}]", 0, ""
+
+    if ext == '.xlsx':
+        try:
+            from openpyxl import load_workbook
+            import io
+            wb = load_workbook(io.BytesIO(file_bytes), read_only=True, data_only=True)
+            parts = []
+            for ws in wb.worksheets:
+                parts.append(f"## Sheet: {ws.title}")
+                for row in ws.iter_rows(max_row=500, values_only=True):
+                    parts.append(" | ".join(str(c) if c is not None else "" for c in row))
+            text = "\n".join(parts)
+            return text[:200_000], 0, ""
+        except Exception as e:
+            return f"[XLSX extraction failed: {e}]", 0, ""
+
+    if ext in ('.csv', '.txt', '.md'):
+        try:
+            text = file_bytes.decode('utf-8', errors='replace')
+            return text[:200_000], 0, ""
+        except Exception as e:
+            return f"[Text extraction failed: {e}]", 0, ""
+
+    return "[Unsupported file type]", 0, ""
+
+@app.route("/api/studio/drafts/<int:did>/documents/upload", methods=["POST"])
+def api_studio_draft_doc_upload(did):
+    draft = db.get_draft(did)
+    if not draft:
+        return jsonify({"ok": False, "msg": "Draft not found"}), 404
+    if db.count_chat_documents(draft_id=did) >= MAX_DOCS_PER_ENTITY:
+        return jsonify({"ok": False, "msg": f"Maximum {MAX_DOCS_PER_ENTITY} documents reached"}), 400
+    if 'file' not in request.files:
+        return jsonify({"ok": False, "msg": "No file provided"}), 400
+    f = request.files['file']
+    ext = Path(f.filename).suffix.lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        return jsonify({"ok": False, "msg": f"Unsupported file type: {ext}"}), 400
+    file_bytes = f.read()
+    if len(file_bytes) > MAX_DOC_SIZE:
+        return jsonify({"ok": False, "msg": "File too large (max 10MB)"}), 400
+    text, is_image, b64 = extract_document_text(file_bytes, f.filename)
+    mime = f.content_type or ""
+    doc_id = db.insert_chat_document(
+        draft_id=did, filename=f.filename, mime_type=mime,
+        file_size=len(file_bytes), extracted_text=text,
+        is_image=is_image, image_base64=b64)
+    return jsonify({"ok": True, "id": doc_id, "filename": f.filename, "is_image": is_image})
+
+@app.route("/api/studio/drafts/<int:did>/documents")
+def api_studio_draft_doc_list(did):
+    return jsonify(db.list_chat_documents(draft_id=did))
+
+@app.route("/api/studio/series/<int:sid>/documents/upload", methods=["POST"])
+def api_studio_series_doc_upload(sid):
+    series = db.get_series(sid)
+    if not series:
+        return jsonify({"ok": False, "msg": "Series not found"}), 404
+    if db.count_chat_documents(series_id=sid) >= MAX_DOCS_PER_ENTITY:
+        return jsonify({"ok": False, "msg": f"Maximum {MAX_DOCS_PER_ENTITY} documents reached"}), 400
+    if 'file' not in request.files:
+        return jsonify({"ok": False, "msg": "No file provided"}), 400
+    f = request.files['file']
+    ext = Path(f.filename).suffix.lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        return jsonify({"ok": False, "msg": f"Unsupported file type: {ext}"}), 400
+    file_bytes = f.read()
+    if len(file_bytes) > MAX_DOC_SIZE:
+        return jsonify({"ok": False, "msg": "File too large (max 10MB)"}), 400
+    text, is_image, b64 = extract_document_text(file_bytes, f.filename)
+    mime = f.content_type or ""
+    doc_id = db.insert_chat_document(
+        series_id=sid, filename=f.filename, mime_type=mime,
+        file_size=len(file_bytes), extracted_text=text,
+        is_image=is_image, image_base64=b64)
+    return jsonify({"ok": True, "id": doc_id, "filename": f.filename, "is_image": is_image})
+
+@app.route("/api/studio/series/<int:sid>/documents")
+def api_studio_series_doc_list(sid):
+    return jsonify(db.list_chat_documents(series_id=sid))
+
+@app.route("/api/studio/documents/<int:doc_id>/delete", methods=["POST"])
+def api_studio_doc_delete(doc_id):
+    db.delete_chat_document(doc_id)
+    return jsonify({"ok": True})
+
 @app.route("/api/studio/drafts/<int:did>/messages")
 def api_studio_messages(did):
     msgs = db.get_studio_messages(did)
@@ -3597,12 +4411,32 @@ def api_studio_chat(did):
     history = db.get_studio_messages(did)
     messages = [{"role": m["role"], "content": m["content"]} for m in history]
 
-    # Build full system prompt: base + article catalog + library catalog + style guides + draft context
+    # Build full system prompt: base + series context + article catalog + library catalog + style guides + draft context
     # Article catalog comes before style guides so the model attends to it more reliably
-    system = (STUDIO_BASE_PROMPT + "\n\n" + build_article_catalog()
+    series_ctx = build_series_context(did)
+    system = (STUDIO_BASE_PROMPT
+              + ("\n\n" + series_ctx if series_ctx else "")
+              + "\n\n" + build_article_catalog()
               + "\n\n" + build_library_catalog() + "\n\n" + load_style_guides())
     if draft.get("markdown", "").strip():
         system += f"\n\nThe current draft in the editor is:\n\n{draft['markdown'][:6000]}"
+
+    # Inject uploaded reference documents
+    ref_docs = db.get_chat_documents_for_prompt(draft_id=did)
+    text_docs = [d for d in ref_docs if not d.get("is_image")]
+    image_docs = [d for d in ref_docs if d.get("is_image") and d.get("image_base64")]
+    if text_docs:
+        system += "\n\n# UPLOADED REFERENCE DOCUMENTS\n"
+        for doc in text_docs:
+            system += f"\n### {doc['filename']}\n\n{(doc.get('extracted_text') or '')[:30000]}\n\n---\n"
+    if image_docs and messages:
+        last_msg = messages[-1]
+        if last_msg["role"] == "user":
+            content_parts = [{"type": "text", "text": last_msg["content"]}]
+            for img in image_docs:
+                mime = img.get("mime_type") or "image/png"
+                content_parts.append({"type": "image", "source": {"type": "base64", "media_type": mime, "data": img["image_base64"]}})
+            messages[-1] = {"role": "user", "content": content_parts}
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
@@ -3752,6 +4586,287 @@ def api_studio_fact_check(did):
     return Response(generate(), mimetype="text/event-stream",
                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
+# ── Strategic Series APIs ──
+
+SERIES_STRATEGY_PROMPT = """You are the content strategist for History Future Now (historyfuturenow.com). You help plan strategic article series — sequences of essays that build an argument across multiple pieces.
+
+YOUR ROLE:
+- Help the author crystallise their thesis, strategic goal, target audience, and narrative arc
+- Ask probing questions about the persuasion architecture — what should readers believe after reading the full series?
+- Think about what each article needs to ACCOMPLISH, not just what it covers
+- Propose article sequences with titles, roles, key arguments, and connections between pieces
+- Think like a magazine editor planning a special issue or a publisher planning a book's chapter structure
+
+STRATEGIC THINKING:
+- Every series has a covert strategic goal (what readers should conclude or do). Help define it clearly.
+- Each article should serve a specific function: establish credibility, present evidence, address counter-arguments, build emotional connection, or deliver the call to action
+- Articles should connect — earlier pieces set up later ones, later pieces reference earlier ones
+- The strongest argument structures: problem→evidence→solution, myth→reality→implication, or chronological revelation
+
+WHEN ASKED TO "WRITE UP THE STRATEGY" or similar:
+Output the strategy fields in this exact format so the system can parse them:
+
+[STRATEGY]
+THESIS: <the overarching argument in 1-2 sentences>
+STRATEGIC_GOAL: <what readers should conclude or do — this stays confidential>
+AUDIENCE: <target reader and their starting assumptions>
+NARRATIVE_ARC: <how the argument builds across articles, 2-3 sentences>
+[/STRATEGY]
+
+WHEN ASKED TO "PLAN THE ARTICLES" or similar:
+Output the article plan in this exact format:
+
+[ARTICLES]
+1. TITLE: <working title>
+ROLE: <what this article does in the arc — 1 sentence>
+BRIEF: <detailed writing guidance — 2-3 sentences>
+KEY_ARGUMENTS: <bullet points this article must make, separated by semicolons>
+CONNECTS_TO: <how it links to previous/next articles>
+
+2. TITLE: <working title>
+ROLE: ...
+BRIEF: ...
+KEY_ARGUMENTS: ...
+CONNECTS_TO: ...
+[/ARTICLES]
+
+Use British English throughout. Be incisive and strategic, not generic."""
+
+
+@app.route("/api/studio/series")
+def api_studio_series_list():
+    return jsonify(db.get_all_series())
+
+@app.route("/api/studio/series", methods=["POST"])
+def api_studio_series_create():
+    title = request.json.get("title", "").strip()
+    if not title:
+        return jsonify({"ok": False, "msg": "Title is required"})
+    sid = db.create_series(title)
+    return jsonify({"ok": True, "id": sid})
+
+@app.route("/api/studio/series/<int:sid>")
+def api_studio_series_get(sid):
+    series = db.get_series(sid)
+    if not series:
+        return jsonify({"error": "Not found"}), 404
+    series["articles"] = db.get_series_articles(sid)
+    return jsonify(series)
+
+@app.route("/api/studio/series/<int:sid>", methods=["POST"])
+def api_studio_series_update(sid):
+    d = request.json
+    fields = {}
+    for k in ("title", "slug", "status", "thesis", "strategic_goal", "audience", "narrative_arc"):
+        if k in d:
+            fields[k] = d[k]
+    db.update_series(sid, **fields)
+    return jsonify({"ok": True})
+
+@app.route("/api/studio/series/<int:sid>/delete", methods=["POST"])
+def api_studio_series_delete(sid):
+    db.delete_series(sid)
+    return jsonify({"ok": True})
+
+@app.route("/api/studio/series/<int:sid>/articles", methods=["POST"])
+def api_studio_series_add_article(sid):
+    d = request.json
+    said = db.add_series_article(
+        sid, d.get("working_title", "Untitled"),
+        position=d.get("position"),
+        role=d.get("role", ""), brief=d.get("brief", ""),
+        key_arguments=d.get("key_arguments", ""),
+        connects_to=d.get("connects_to", ""))
+    return jsonify({"ok": True, "id": said})
+
+@app.route("/api/studio/series/<int:sid>/articles/<int:said>", methods=["POST"])
+def api_studio_series_update_article(sid, said):
+    d = request.json
+    fields = {}
+    for k in ("working_title", "role", "brief", "key_arguments", "connects_to", "status"):
+        if k in d:
+            fields[k] = d[k]
+    db.update_series_article(said, **fields)
+    return jsonify({"ok": True})
+
+@app.route("/api/studio/series/<int:sid>/articles/<int:said>/delete", methods=["POST"])
+def api_studio_series_delete_article(sid, said):
+    db.delete_series_article(said)
+    return jsonify({"ok": True})
+
+@app.route("/api/studio/series/<int:sid>/articles/<int:said>/reorder", methods=["POST"])
+def api_studio_series_reorder_article(sid, said):
+    new_pos = request.json.get("position", 0)
+    db.reorder_series_article(said, new_pos)
+    return jsonify({"ok": True})
+
+@app.route("/api/studio/series/<int:sid>/articles/<int:said>/start", methods=["POST"])
+def api_studio_series_start_article(sid, said):
+    did = db.start_series_article(said)
+    if did is None:
+        return jsonify({"ok": False, "msg": "Article not found"})
+    return jsonify({"ok": True, "draft_id": did})
+
+@app.route("/api/studio/drafts/<int:did>/series-context")
+def api_studio_draft_series_context(did):
+    """Lightweight endpoint to get series context for a draft."""
+    series, sa, all_articles = db.get_series_for_draft(did)
+    if not series or not sa:
+        return jsonify({"in_series": False})
+    return jsonify({
+        "in_series": True,
+        "series_id": series["id"],
+        "series_title": series["title"],
+        "position": sa["position"] + 1,
+        "total": len(all_articles),
+        "working_title": sa["working_title"]
+    })
+
+@app.route("/api/studio/series/<int:sid>/messages")
+def api_studio_series_messages(sid):
+    msgs = db.get_series_messages(sid)
+    return jsonify(msgs)
+
+@app.route("/api/studio/series/<int:sid>/chat", methods=["POST"])
+def api_studio_series_chat(sid):
+    import anthropic
+    from config import ANTHROPIC_API_KEY
+
+    series = db.get_series(sid)
+    if not series:
+        return jsonify({"error": "Series not found"}), 404
+
+    user_msg = request.json.get("message", "").strip()
+    if not user_msg:
+        return jsonify({"error": "Empty message"}), 400
+
+    db.add_series_message(sid, "user", user_msg)
+
+    history = db.get_series_messages(sid)
+    messages = [{"role": m["role"], "content": m["content"]} for m in history]
+
+    # Build system prompt with current series state
+    series_state = f"\n\n# Current Series State\nTitle: {series['title']}\nStatus: {series['status']}"
+    if series.get("thesis"):
+        series_state += f"\nThesis: {series['thesis']}"
+    if series.get("strategic_goal"):
+        series_state += f"\nStrategic Goal: {series['strategic_goal']}"
+    if series.get("audience"):
+        series_state += f"\nAudience: {series['audience']}"
+    if series.get("narrative_arc"):
+        series_state += f"\nNarrative Arc: {series['narrative_arc']}"
+
+    articles = db.get_series_articles(sid)
+    if articles:
+        series_state += "\n\n## Planned Articles:"
+        for a in articles:
+            series_state += f"\n{a['position']+1}. \"{a['working_title']}\" ({a['status']}) — {a.get('role','')}"
+
+    system = SERIES_STRATEGY_PROMPT + series_state + "\n\n" + load_style_guides()
+
+    # Inject uploaded reference documents
+    ref_docs = db.get_chat_documents_for_prompt(series_id=sid)
+    text_docs = [d for d in ref_docs if not d.get("is_image")]
+    image_docs = [d for d in ref_docs if d.get("is_image") and d.get("image_base64")]
+    if text_docs:
+        system += "\n\n# UPLOADED REFERENCE DOCUMENTS\n"
+        for doc in text_docs:
+            system += f"\n### {doc['filename']}\n\n{(doc.get('extracted_text') or '')[:30000]}\n\n---\n"
+    if image_docs and messages:
+        last_msg = messages[-1]
+        if last_msg["role"] == "user":
+            content_parts = [{"type": "text", "text": last_msg["content"]}]
+            for img in image_docs:
+                mime = img.get("mime_type") or "image/png"
+                content_parts.append({"type": "image", "source": {"type": "base64", "media_type": mime, "data": img["image_base64"]}})
+            messages[-1] = {"role": "user", "content": content_parts}
+
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    MODELS = ["claude-opus-4-6", "claude-sonnet-4-6"]
+
+    def generate():
+        full_text = ""
+        used_model = None
+        for i, model in enumerate(MODELS):
+            try:
+                result = client.messages.create(
+                    model=model, max_tokens=4096, system=system, messages=messages,
+                )
+                full_text = result.content[0].text
+                used_model = model
+                break
+            except Exception as e:
+                err_str = str(e)
+                is_overloaded = "overloaded" in err_str.lower() or "529" in err_str
+                if is_overloaded and i < len(MODELS) - 1:
+                    continue
+                yield f"data: {json.dumps({'error': err_str})}\n\n"
+                yield "data: {\"done\": true}\n\n"
+                return
+
+        if used_model and used_model != MODELS[0]:
+            yield f"data: {json.dumps({'delta': '[Using Sonnet — Opus temporarily busy]\\n\\n'})}\n\n"
+
+        if full_text:
+            for i in range(0, len(full_text), 40):
+                yield f"data: {json.dumps({'delta': full_text[i:i+40]})}\n\n"
+            db.add_series_message(sid, "assistant", full_text)
+
+            # Parse strategy fields if present
+            import re as _sre
+            strat_match = _sre.search(r'\[STRATEGY\](.*?)\[/STRATEGY\]', full_text, _sre.DOTALL)
+            if strat_match:
+                block = strat_match.group(1)
+                fields = {}
+                for key, db_key in [("THESIS", "thesis"), ("STRATEGIC_GOAL", "strategic_goal"),
+                                     ("AUDIENCE", "audience"), ("NARRATIVE_ARC", "narrative_arc")]:
+                    m = _sre.search(rf'{key}:\s*(.+?)(?=\n[A-Z_]+:|$)', block, _sre.DOTALL)
+                    if m:
+                        fields[db_key] = m.group(1).strip()
+                if fields:
+                    fields["status"] = "active"
+                    db.update_series(sid, **fields)
+                    yield f"data: {json.dumps({'strategy_updated': True})}\n\n"
+
+            # Parse article plan if present
+            art_match = _sre.search(r'\[ARTICLES\](.*?)\[/ARTICLES\]', full_text, _sre.DOTALL)
+            if art_match:
+                block = art_match.group(1)
+                # Split on numbered entries: "1. TITLE:", "2. TITLE:", etc.
+                entries = _sre.split(r'\n\d+\.\s+TITLE:', block)
+                articles_added = []
+                for idx, entry in enumerate(entries):
+                    if not entry.strip():
+                        continue
+                    title_m = _sre.match(r'\s*(.+?)(?:\n|$)', entry)
+                    if not title_m:
+                        continue
+                    title = title_m.group(1).strip()
+                    role = ""
+                    brief = ""
+                    key_args = ""
+                    connects = ""
+                    rm = _sre.search(r'ROLE:\s*(.+?)(?=\n[A-Z_]+:|$)', entry, _sre.DOTALL)
+                    if rm: role = rm.group(1).strip()
+                    bm = _sre.search(r'BRIEF:\s*(.+?)(?=\n[A-Z_]+:|$)', entry, _sre.DOTALL)
+                    if bm: brief = bm.group(1).strip()
+                    km = _sre.search(r'KEY_ARGUMENTS:\s*(.+?)(?=\n[A-Z_]+:|$)', entry, _sre.DOTALL)
+                    if km: key_args = km.group(1).strip()
+                    cm = _sre.search(r'CONNECTS_TO:\s*(.+?)(?=\n[A-Z_]+:|$)', entry, _sre.DOTALL)
+                    if cm: connects = cm.group(1).strip()
+                    said = db.add_series_article(sid, title, position=idx,
+                                                  role=role, brief=brief,
+                                                  key_arguments=key_args, connects_to=connects)
+                    articles_added.append(said)
+                if articles_added:
+                    yield f"data: {json.dumps({'articles_added': len(articles_added)})}\n\n"
+
+        yield "data: {\"done\": true}\n\n"
+
+    return Response(generate(), mimetype="text/event-stream",
+                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
 @app.route("/preview-assets/<path:fp>")
 def serve_preview(fp):
     full = HFN_SITE_OUTPUT / fp
@@ -3793,8 +4908,7 @@ def _start_auto_poster():
                 log(f"Skipping #{p['id']} LinkedIn — daily limit reached"); break
             try:
                 from poster import post_to_linkedin
-                text = p["caption"]
-                if p.get("article_url"): text += "\n" + p["article_url"]
+                text = _build_post_text(p["caption"], p.get("article_url"))
                 ok = post_to_linkedin(text, p.get("image_path"))
                 if ok:
                     db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
@@ -3805,24 +4919,28 @@ def _start_auto_poster():
             except Exception as ex:
                 log(f"Error #{p['id']} LinkedIn: {ex}"); _record("linkedin", p["id"], False, str(ex))
 
-        # Post to X (post_to_x handles Chrome close/reopen internally)
+        # Post to X — batch all posts in one Chrome session (one close/reopen cycle)
         x_remaining = MAX_X_PER_DAY - db.posts_today("x")
+        x_batch = []
         for p in x_posts:
             if x_remaining <= 0:
                 log(f"Skipping #{p['id']} X — daily limit reached"); break
+            x_batch.append((p, _build_post_text(p["caption"], p.get("article_url"))))
+            x_remaining -= 1
+        if x_batch:
             try:
-                from poster import post_to_x
-                text = p["caption"]
-                if p.get("article_url"): text += "\n" + p["article_url"]
-                ok = post_to_x(text, p.get("image_path"))
-                if ok:
-                    db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
-                    log(f"Posted #{p['id']} to X"); _record("x", p["id"], True)
-                    x_remaining -= 1
-                else:
-                    log(f"Failed #{p['id']} X"); _record("x", p["id"], False, "post failed")
+                from poster import post_x_batch
+                results = post_x_batch(x_batch)
+                for p, ok in results:
+                    if ok:
+                        db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
+                        log(f"Posted #{p['id']} to X"); _record("x", p["id"], True)
+                    else:
+                        log(f"Failed #{p['id']} X"); _record("x", p["id"], False, "post failed")
             except Exception as ex:
-                log(f"Error #{p['id']} X: {ex}"); _record("x", p["id"], False, str(ex))
+                log(f"Error posting X batch: {ex}")
+                for p, _ in x_batch:
+                    _record("x", p["id"], False, str(ex))
     bg = BackgroundScheduler()
     bg.add_job(post_due, trigger=IntervalTrigger(minutes=5), id="ap")
     bg.start()

@@ -1,4 +1,4 @@
-"""HFN Promote — Database v3.3. With feedback learning, scheduling, and Article Studio."""
+"""HFN Promote — Database v3.4. With feedback learning, scheduling, Article Studio, and Strategic Series."""
 import sqlite3, json, re
 from datetime import date, datetime
 from config import DB_PATH
@@ -111,7 +111,48 @@ CREATE TABLE IF NOT EXISTS studio_messages (
     draft_id INTEGER NOT NULL,
     role TEXT NOT NULL,
     content TEXT NOT NULL,
+    series_id INTEGER DEFAULT NULL,
     created_at TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS series (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    slug TEXT UNIQUE,
+    status TEXT DEFAULT 'planning',
+    thesis TEXT DEFAULT '',
+    strategic_goal TEXT DEFAULT '',
+    audience TEXT DEFAULT '',
+    narrative_arc TEXT DEFAULT '',
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS chat_documents (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    draft_id INTEGER,
+    series_id INTEGER,
+    filename TEXT NOT NULL,
+    mime_type TEXT DEFAULT '',
+    file_size INTEGER DEFAULT 0,
+    extracted_text TEXT DEFAULT '',
+    is_image INTEGER DEFAULT 0,
+    image_base64 TEXT DEFAULT '',
+    created_at TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS series_articles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    series_id INTEGER NOT NULL,
+    draft_id INTEGER DEFAULT NULL,
+    position INTEGER DEFAULT 0,
+    working_title TEXT NOT NULL,
+    role TEXT DEFAULT '',
+    brief TEXT DEFAULT '',
+    key_arguments TEXT DEFAULT '',
+    connects_to TEXT DEFAULT '',
+    status TEXT DEFAULT 'planned',
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (series_id) REFERENCES series(id),
+    FOREIGN KEY (draft_id) REFERENCES article_drafts(id)
 );
 """
 
@@ -143,6 +184,13 @@ def init_db():
             conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
         except sqlite3.OperationalError:
             conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT ''")
+    # Add series_article_id to article_drafts
+    for col, tbl, default in [("series_article_id", "article_drafts", "NULL"),
+                               ("series_id", "studio_messages", "NULL")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} INTEGER DEFAULT {default}")
     # Migrate legacy 'audio' stage to 'images' (audio decoupled from pipeline)
     conn.execute("UPDATE article_drafts SET stage='images' WHERE stage='audio'")
     conn.commit()
@@ -775,7 +823,7 @@ def update_draft(did, **fields):
         return
     allowed = {"title", "slug", "section", "excerpt", "share_summary",
                "markdown", "stage", "has_hero_image", "has_audio", "image_prompt",
-               "chart_defs"}
+               "chart_defs", "series_article_id"}
     sets = []
     vals = []
     for k, v in fields.items():
@@ -796,6 +844,7 @@ def delete_draft(did):
     conn.execute("DELETE FROM article_drafts WHERE id=?", (did,))
     conn.execute("DELETE FROM studio_tasks WHERE draft_id=?", (did,))
     conn.execute("DELETE FROM studio_messages WHERE draft_id=?", (did,))
+    conn.execute("DELETE FROM chat_documents WHERE draft_id=?", (did,))
     conn.commit()
     conn.close()
 
@@ -852,6 +901,287 @@ def get_studio_messages(draft_id):
 def clear_studio_messages(draft_id):
     conn = get_db()
     conn.execute("DELETE FROM studio_messages WHERE draft_id=?", (draft_id,))
+    conn.commit()
+    conn.close()
+
+# ── Strategic Series ──
+
+def create_series(title):
+    slug = slugify(title)
+    conn = get_db()
+    base = slug
+    n = 1
+    while conn.execute("SELECT 1 FROM series WHERE slug=?", (slug,)).fetchone():
+        slug = f"{base}-{n}"
+        n += 1
+    conn.execute("INSERT INTO series (title, slug) VALUES (?, ?)", (title, slug))
+    conn.commit()
+    rid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+    return rid
+
+def get_series(sid):
+    conn = get_db()
+    row = _dict(conn.execute("SELECT * FROM series WHERE id=?", (sid,)).fetchone())
+    conn.close()
+    return row
+
+def get_all_series():
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT s.*,
+               COUNT(sa.id) as article_count,
+               SUM(CASE WHEN sa.status IN ('drafted','published') THEN 1 ELSE 0 END) as written_count
+        FROM series s
+        LEFT JOIN series_articles sa ON sa.series_id = s.id
+        GROUP BY s.id
+        ORDER BY s.updated_at DESC
+    """).fetchall())
+    conn.close()
+    return rows
+
+def update_series(sid, **fields):
+    if not fields:
+        return
+    allowed = {"title", "slug", "status", "thesis", "strategic_goal",
+               "audience", "narrative_arc"}
+    sets = []
+    vals = []
+    for k, v in fields.items():
+        if k in allowed:
+            sets.append(f"{k}=?")
+            vals.append(v)
+    if not sets:
+        return
+    sets.append("updated_at=datetime('now')")
+    vals.append(sid)
+    conn = get_db()
+    conn.execute(f"UPDATE series SET {', '.join(sets)} WHERE id=?", vals)
+    conn.commit()
+    conn.close()
+
+def delete_series(sid):
+    conn = get_db()
+    # Unlink any drafts that were connected to this series
+    conn.execute("""UPDATE article_drafts SET series_article_id=NULL
+                    WHERE series_article_id IN (SELECT id FROM series_articles WHERE series_id=?)""", (sid,))
+    conn.execute("DELETE FROM series_articles WHERE series_id=?", (sid,))
+    conn.execute("DELETE FROM studio_messages WHERE series_id=?", (sid,))
+    conn.execute("DELETE FROM chat_documents WHERE series_id=?", (sid,))
+    conn.execute("DELETE FROM series WHERE id=?", (sid,))
+    conn.commit()
+    conn.close()
+
+def get_series_articles(sid):
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT sa.*, ad.title as draft_title, ad.stage as draft_stage
+        FROM series_articles sa
+        LEFT JOIN article_drafts ad ON sa.draft_id = ad.id
+        ORDER BY sa.position ASC
+    """).fetchall())
+    conn.close()
+    # Filter to only this series (the WHERE was missing)
+    return [r for r in rows if r["series_id"] == sid]
+
+def add_series_article(sid, working_title, position=None, role="", brief="",
+                       key_arguments="", connects_to=""):
+    conn = get_db()
+    if position is None:
+        row = conn.execute("SELECT COALESCE(MAX(position),-1)+1 FROM series_articles WHERE series_id=?",
+                          (sid,)).fetchone()
+        position = row[0]
+    conn.execute("""INSERT INTO series_articles (series_id, position, working_title, role, brief,
+                    key_arguments, connects_to) VALUES (?,?,?,?,?,?,?)""",
+                (sid, position, working_title, role, brief, key_arguments, connects_to))
+    conn.commit()
+    rid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+    # Update series timestamp
+    update_series(sid)
+    return rid
+
+def update_series_article(said, **fields):
+    if not fields:
+        return
+    allowed = {"working_title", "role", "brief", "key_arguments", "connects_to",
+               "status", "position", "draft_id"}
+    sets = []
+    vals = []
+    for k, v in fields.items():
+        if k in allowed:
+            sets.append(f"{k}=?")
+            vals.append(v)
+    if not sets:
+        return
+    sets.append("updated_at=datetime('now')")
+    vals.append(said)
+    conn = get_db()
+    conn.execute(f"UPDATE series_articles SET {', '.join(sets)} WHERE id=?", vals)
+    conn.commit()
+    conn.close()
+
+def delete_series_article(said):
+    conn = get_db()
+    # Unlink any draft
+    conn.execute("UPDATE article_drafts SET series_article_id=NULL WHERE series_article_id=?", (said,))
+    conn.execute("DELETE FROM series_articles WHERE id=?", (said,))
+    conn.commit()
+    conn.close()
+
+def reorder_series_article(said, new_position):
+    conn = get_db()
+    row = conn.execute("SELECT series_id, position FROM series_articles WHERE id=?", (said,)).fetchone()
+    if not row:
+        conn.close()
+        return
+    sid = row[0]
+    old_pos = row[1]
+    if new_position == old_pos:
+        conn.close()
+        return
+    # Shift other articles
+    if new_position < old_pos:
+        conn.execute("""UPDATE series_articles SET position=position+1
+                        WHERE series_id=? AND position>=? AND position<?""",
+                    (sid, new_position, old_pos))
+    else:
+        conn.execute("""UPDATE series_articles SET position=position-1
+                        WHERE series_id=? AND position>? AND position<=?""",
+                    (sid, old_pos, new_position))
+    conn.execute("UPDATE series_articles SET position=? WHERE id=?", (new_position, said))
+    conn.commit()
+    conn.close()
+
+def start_series_article(said):
+    """Create a draft for a series article and link them bidirectionally."""
+    conn = get_db()
+    sa = _dict(conn.execute("SELECT * FROM series_articles WHERE id=?", (said,)).fetchone())
+    if not sa:
+        conn.close()
+        return None
+    if sa.get("draft_id"):
+        conn.close()
+        return sa["draft_id"]  # Already started
+    # Create draft
+    title = sa["working_title"]
+    slug = slugify(title)
+    base = slug
+    n = 1
+    while conn.execute("SELECT 1 FROM article_drafts WHERE slug=?", (slug,)).fetchone():
+        slug = f"{base}-{n}"
+        n += 1
+    conn.execute("INSERT INTO article_drafts (slug, title, series_article_id) VALUES (?, ?, ?)",
+                (slug, title, said))
+    conn.commit()
+    did = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    # Link back
+    conn.execute("UPDATE series_articles SET draft_id=?, status='writing', updated_at=datetime('now') WHERE id=?",
+                (did, said))
+    conn.commit()
+    conn.close()
+    return did
+
+def get_series_messages(sid):
+    conn = get_db()
+    rows = _dicts(conn.execute(
+        "SELECT * FROM studio_messages WHERE series_id=? ORDER BY id ASC",
+        (sid,)).fetchall())
+    conn.close()
+    return rows
+
+def add_series_message(sid, role, content):
+    conn = get_db()
+    conn.execute("INSERT INTO studio_messages (draft_id, role, content, series_id) VALUES (0, ?, ?, ?)",
+                (role, content, sid))
+    conn.commit()
+    mid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+    return mid
+
+def get_series_for_draft(draft_id):
+    """Get series context for a draft that's part of a series."""
+    conn = get_db()
+    draft = _dict(conn.execute("SELECT series_article_id FROM article_drafts WHERE id=?",
+                               (draft_id,)).fetchone())
+    if not draft or not draft.get("series_article_id"):
+        conn.close()
+        return None, None, None
+    said = draft["series_article_id"]
+    sa = _dict(conn.execute("SELECT * FROM series_articles WHERE id=?", (said,)).fetchone())
+    if not sa:
+        conn.close()
+        return None, None, None
+    series = _dict(conn.execute("SELECT * FROM series WHERE id=?", (sa["series_id"],)).fetchone())
+    all_articles = _dicts(conn.execute(
+        """SELECT sa.*, ad.title as draft_title, ad.stage as draft_stage
+           FROM series_articles sa
+           LEFT JOIN article_drafts ad ON sa.draft_id = ad.id
+           WHERE sa.series_id=? ORDER BY sa.position ASC""",
+        (sa["series_id"],)).fetchall())
+    conn.close()
+    return series, sa, all_articles
+
+# ── Chat Documents ──
+
+def insert_chat_document(draft_id=None, series_id=None, filename="", mime_type="",
+                         file_size=0, extracted_text="", is_image=0, image_base64=""):
+    conn = get_db()
+    conn.execute("""INSERT INTO chat_documents
+        (draft_id, series_id, filename, mime_type, file_size, extracted_text, is_image, image_base64)
+        VALUES (?,?,?,?,?,?,?,?)""",
+        (draft_id, series_id, filename, mime_type, file_size, extracted_text, is_image, image_base64))
+    conn.commit()
+    rid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.close()
+    return rid
+
+def list_chat_documents(draft_id=None, series_id=None):
+    """List documents (without text/base64 for lightweight listing)."""
+    conn = get_db()
+    if draft_id:
+        rows = _dicts(conn.execute(
+            "SELECT id, draft_id, series_id, filename, mime_type, file_size, is_image, created_at FROM chat_documents WHERE draft_id=? ORDER BY created_at ASC",
+            (draft_id,)).fetchall())
+    elif series_id:
+        rows = _dicts(conn.execute(
+            "SELECT id, draft_id, series_id, filename, mime_type, file_size, is_image, created_at FROM chat_documents WHERE series_id=? ORDER BY created_at ASC",
+            (series_id,)).fetchall())
+    else:
+        rows = []
+    conn.close()
+    return rows
+
+def get_chat_documents_for_prompt(draft_id=None, series_id=None):
+    """Get full documents (with text + base64) for prompt injection."""
+    conn = get_db()
+    if draft_id:
+        rows = _dicts(conn.execute(
+            "SELECT * FROM chat_documents WHERE draft_id=? ORDER BY created_at ASC",
+            (draft_id,)).fetchall())
+    elif series_id:
+        rows = _dicts(conn.execute(
+            "SELECT * FROM chat_documents WHERE series_id=? ORDER BY created_at ASC",
+            (series_id,)).fetchall())
+    else:
+        rows = []
+    conn.close()
+    return rows
+
+def count_chat_documents(draft_id=None, series_id=None):
+    conn = get_db()
+    if draft_id:
+        n = conn.execute("SELECT COUNT(*) FROM chat_documents WHERE draft_id=?", (draft_id,)).fetchone()[0]
+    elif series_id:
+        n = conn.execute("SELECT COUNT(*) FROM chat_documents WHERE series_id=?", (series_id,)).fetchone()[0]
+    else:
+        n = 0
+    conn.close()
+    return n
+
+def delete_chat_document(doc_id):
+    conn = get_db()
+    conn.execute("DELETE FROM chat_documents WHERE id=?", (doc_id,))
     conn.commit()
     conn.close()
 
