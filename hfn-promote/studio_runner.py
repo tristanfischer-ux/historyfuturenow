@@ -439,7 +439,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 args = json.loads(sys.argv[1])
 import google.generativeai as genai
 genai.configure(api_key=args["api_key"])
-model = genai.GenerativeModel("gemini-2.5-flash-image")
+model = genai.GenerativeModel("gemini-3-pro-image-preview")
 response = model.generate_content(
     args["prompt"],
     generation_config={"response_modalities": ["IMAGE"]},
