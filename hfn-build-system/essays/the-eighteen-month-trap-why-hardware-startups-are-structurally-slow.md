@@ -2,22 +2,13 @@
 title: "The Eighteen-Month Trap: Why Hardware Startups Are Structurally Slow"
 excerpt: "A software founder builds one thing. A hardware founder builds two — the product and the entire infrastructure to make it. That structural double burden, not bad management, is why hardware startups take 12-18 months before they can sell a single unit, and why their designs are often obsolete before the equipment arrives."
 share_summary: "Hardware founders build two things at once — product and factory. That's why they're structurally slow."
----
-```markdown
----
-title: "The Eighteen-Month Trap: Why Hardware Startups Are Structurally Slow"
-section: "Jobs & Economy"
-excerpt: "A software founder builds one thing. A hardware founder builds two — the product and the entire infrastructure to make it. That structural double burden, not bad management, is why hardware startups take 12-18 months before they can sell a single unit, and why their designs are often obsolete before the equipment arrives."
-share_summary: "Hardware founders build two things at once — product and factory. That's why they're structurally slow."
 sources:
   - "The Lean Startup"
-  - "The Innovator's Dilemma"
   - "How Big Things Get Done"
   - "Making in America"
   - "The Hardware Hacker"
   - "Zero to One"
 ---
-
 There is a particular expression that appears on the face of a hardware startup founder about nine months into their journey. It is not despair, exactly. It is the look of someone who has just realised that the rules of the game they are playing are different from the rules they were told about — and that nobody mentioned this before they started.
 
 The expression appears when the founder, who has raised a seed round, assembled a small team, designed a promising product, and begun to feel the first stirrings of commercial momentum, discovers that they cannot actually *make* anything. Not because the design is wrong. Not because the team is incompetent. But because the physical infrastructure required to manufacture their product does not yet exist, and building it will take another year, cost more than the product development itself, and force a cascade of decisions that have nothing to do with engineering and everything to do with property law, planning permission, equipment procurement, and the agonising fragility of global supply chains.
@@ -117,4 +108,3 @@ Hardware has not had its AWS moment. The infrastructure problem remains stubborn
 That is not a law of nature. It is a gap. And gaps, in the history of industry, tend eventually to be filled.
 
 The hardware founder staring at their empty factory floor, waiting for equipment that is six months delayed, is not looking at a personal failure. They are looking at the shape of the next platform waiting to be built.
-```

@@ -315,6 +315,23 @@ def _run_generate_image(task_id, draft_id):
     # Build the image prompt: style prefix + subject (user-provided or auto-generated)
     subject = (draft.get("image_prompt") or "").strip()
     title = draft.get("title", "Untitled")
+
+    # Sanitize: strip frontmatter/markdown that may have leaked into the image_prompt field
+    if subject.startswith("```") or subject.startswith("---\n") or subject.startswith("---\ntitle"):
+        subject = ""  # Contaminated with article frontmatter — discard
+    # Strip redundant style directives the AI may have included (we prepend our own)
+    for noise in [
+        "Flat geometric editorial illustration,",
+        "flat geometric editorial illustration,",
+        "mid-century modern poster aesthetic,",
+        "warm muted palette.",
+        "Bold silhouettes, clean lines, no text, no faces, no photorealism.",
+        "Landscape 16:9 composition with clear visual hierarchy and negative space.",
+        "No text, no lettering, no words, no logos in the image.",
+    ]:
+        subject = subject.replace(noise, "")
+    subject = " ".join(subject.split())  # collapse whitespace
+
     if not subject:
         subject = f"A conceptual metaphor for an article titled '{title}'."
         db.update_studio_task(task_id, progress="Auto-generated image subject from title...")
@@ -355,7 +372,7 @@ import google.generativeai as genai
 genai.configure(api_key=args["api_key"])
 model = genai.GenerativeModel("gemini-2.5-flash-image")
 response = model.generate_content(
-    "Generate an image: " + args["prompt"],
+    args["prompt"],
     generation_config={"response_modalities": ["IMAGE"]},
 )
 for part in (response.candidates[0].content.parts if response.candidates else []):

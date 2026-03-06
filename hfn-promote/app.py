@@ -1270,6 +1270,7 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
           <button class="st-md-btn active" id="st-mode-edit" onclick="studioSetMode('edit')" title="Editor only">Edit</button>
           <button class="st-md-btn" id="st-mode-split" onclick="studioSetMode('split')" title="Editor + Preview">Split</button>
           <button class="st-md-btn" id="st-mode-preview" onclick="studioSetMode('preview')" title="Preview only">Preview</button>
+          <button class="st-md-btn" onclick="studioUpdatePreview();_mediaCacheBust=Date.now()" title="Refresh preview">&#x21bb;</button>
           <span class="st-mode-sep"></span>
           <button class="st-md-btn" id="st-details-btn" onclick="studioToggleDetails()" title="Metadata & Pipeline">Details</button>
           <span class="st-md-wc" id="st-md-wc">0 words</span>
@@ -2853,10 +2854,13 @@ async function studioUpdatePreview(){
   }
 
   // Strip frontmatter and AI metadata blobs from preview.
+  // Pattern 0: Fenced code block wrapping frontmatter: ```markdown\n---\n...\n---\n```
+  md=md.replace(/^\s*```\w*\n---\n[\s\S]*?\n---\s*\n?```\s*\n?/,'');
+  // Pattern 0b: Fenced block without closing ```: ```markdown\n---\n...\n---\n (rest is article)
+  md=md.replace(/^\s*```\w*\n---\n[\s\S]*?\n---\s*\n?/,'');
   // Pattern 1: Standard YAML frontmatter at start: ---\n...\n---
   md=md.replace(/^\s*---\n[\s\S]*?\n---\s*\n?/,'');
   // Pattern 2: AI preamble like [Using Sonnet...]\n\n--- followed by YAML then ---
-  // The \n\n may be literal backslash-n or actual newlines
   md=md.replace(/^\s*\[Using [^\]]*\][\\n\s]*---\n[\s\S]*?\n---\s*\n?/,'');
   // Pattern 3: If above didn't match (no closing ---), strip from [Using...] up to first # heading
   if(/^\s*\[Using /.test(md)){
@@ -2959,7 +2963,7 @@ ${allJs}
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
 :root,html,html[data-theme="light"]{--text:#1a1815!important;--bg:#ffffff!important;--border-light:#f2eeea!important;--text-dim:#8a8479!important;--accent:#c43425!important}
 *{margin:0;padding:0;box-sizing:border-box;color-scheme:light}
-body{font-family:'Inter',sans-serif;color:#1a1815;background:#ffffff;padding:24px 32px;line-height:1.7;max-width:720px;margin:0 auto}
+body{font-family:'Inter',sans-serif;color:#1a1815;background:#ffffff;padding:24px 20px;line-height:1.7;max-width:100%;margin:0 auto;word-wrap:break-word;overflow-wrap:break-word}
 .section-kicker{text-transform:uppercase;font-size:.72rem;font-weight:600;color:var(--accent);letter-spacing:.08em;margin-bottom:8px}
 h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1.2;margin-bottom:12px}
 .excerpt{font-size:1.05rem;color:#555;line-height:1.6;margin-bottom:20px;font-style:italic}
@@ -4182,6 +4186,10 @@ def api_studio_update_draft(did):
     for k in ("title", "section", "excerpt", "share_summary", "markdown", "image_prompt", "stage", "chart_defs"):
         if k in d:
             fields[k] = d[k]
+    # Guard: never save frontmatter/markdown into the image_prompt field
+    ip = fields.get("image_prompt", "")
+    if ip and ("---\ntitle:" in ip or ip.lstrip().startswith("```")):
+        del fields["image_prompt"]
     db.update_draft(did, **fields)
     return jsonify({"ok": True})
 
@@ -4729,7 +4737,12 @@ def api_studio_chat(did):
                 yield f"data: {json.dumps({'delta': full_text[i:i+40]})}\n\n"
             db.add_studio_message(did, "assistant", full_text)
             if "---\ntitle:" in full_text or full_text.strip().startswith("# "):
-                db.update_draft(did, markdown=full_text)
+                # Strip ```markdown wrapper if present (LLMs often wrap output in fenced blocks)
+                clean = full_text
+                if clean.lstrip().startswith("```"):
+                    clean = re.sub(r'^\s*```\w*\n', '', clean, count=1)
+                    clean = re.sub(r'\n```\s*$', '', clean, count=1)
+                db.update_draft(did, markdown=clean)
 
             # Detect chart definitions in response
             _has_id = "'id':" in full_text or '"id":' in full_text
