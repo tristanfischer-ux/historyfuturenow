@@ -7,4 +7,5 @@ venv/
 __pycache__/
 *.pyc
 sessions/
+ga4-service-account.json
 composer_debug*.png

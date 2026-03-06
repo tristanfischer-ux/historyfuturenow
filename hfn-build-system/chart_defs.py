@@ -5444,6 +5444,124 @@ color:C.blue,font:{size:10}},ticks:{color:C.blue,font:{size:9}},min:0,...gridOpt
     },
 ]
 
+
+    # ─── STUDIO: the-fifteen-minute-factory-why-proximity-still-wins ───
+    charts['the-fifteen-minute-factory-why-proximity-still-wins'] = [
+    {
+        'id': 'clusterProximity',
+        'figure_num': 1,
+        'title': 'The Shrinking Radius: How Innovation Clusters Compressed Distance',
+        'desc': 'Approximate typical distance from a manufacturer to their nearest key supplier in each historical cluster.',
+        'source': 'Author estimates from Hibbert (1993), Uglow (2002), Saxenian (1994), Berger (2013), Huang (2017)',
+        'position': 'after_para_15',
+        'js': """_regChart('clusterProximity',()=>{const ctx=document.getElementById('clusterProximity');
+const clusters=['Florence\\n1400s','Birmingham\\n1830s','Detroit\\n1920s','Silicon\\nValley 1980s','Shenzhen\\ntoday','Distributed\\nWestern'];
+const km=[0.3,0.4,8,25,5,10000];
+const bg=[C.amber,C.accent,C.blue,C.teal,C.green,C.purple];
+new Chart(ctx,{type:'bar',data:{labels:clusters,
+datasets:[{label:'Distance to key supplier (km)',data:km,backgroundColor:bg,
+borderRadius:4,barPercentage:0.7,categoryPercentage:0.8}]},
+options:{responsive:true,maintainAspectRatio:false,
+layout:{padding:{top:5,right:10,bottom:5,left:10}},
+plugins:{legend:{display:false},tooltip:{...tooltipStyle,callbacks:{
+label:function(c){const v=c.raw;return v>=1000?v.toLocaleString()+' km':v+' km';}}}},
+scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:10},maxRotation:0}},
+y:{type:'logarithmic',
+title:{display:true,text:'Distance (km, log scale)',color:'#8a8479',font:{size:11}},
+grid:{color:'rgba(138,132,121,0.12)'},
+ticks:{color:'#8a8479',font:{size:11},
+callback:function(v){if([0.1,1,10,100,1000,10000].includes(v))return v>=1000?v.toLocaleString():v;return'';}},
+min:0.1,max:15000}}}});
+});"""
+    },
+    {
+        'id': 'iterationsPerYear',
+        'figure_num': 2,
+        'title': 'Prototype Iterations Possible Per Year by Location',
+        'desc': 'How many full prototype cycles a hardware team can complete in one year. Shenzhen teams complete over 80; distributed Western teams manage fewer than five.',
+        'source': 'Author calculation: 250 working days per year divided by typical cycle time per location',
+        'position': 'after_para_21',
+        'js': """_regChart('iterationsPerYear',()=>{const ctx=document.getElementById('iterationsPerYear');
+const locations=['Shenzhen\\n(~3 day cycle)','Co-located US\\n(~14 day cycle)','Distributed Western\\n(~57 day cycle)'];
+const iterations=[83,18,4];
+const bg=[C.accent,C.teal,C.blue];
+new Chart(ctx,{type:'bar',data:{labels:locations,
+datasets:[{label:'Iterations per year',data:iterations,backgroundColor:bg,
+borderRadius:4,barPercentage:0.7,categoryPercentage:0.8}]},
+options:{responsive:true,maintainAspectRatio:false,
+layout:{padding:{top:5,right:10,bottom:5,left:10}},
+plugins:{legend:{display:false},tooltip:tooltipStyle},
+scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:11},maxRotation:0}},
+y:{title:{display:true,text:'Full prototype cycles per year',color:'#8a8479',font:{size:11}},
+grid:{color:'rgba(138,132,121,0.12)'},
+ticks:{color:'#8a8479',font:{size:11}},
+beginAtZero:true}}}});
+});"""
+    },
+    {
+        'id': 'prototypeLeadTime',
+        'figure_num': 3,
+        'title': 'Days From Design Change to Testable Prototype',
+        'desc': 'Elapsed time for each stage of a typical consumer electronics prototype cycle, comparing Shenzhen with a distributed Western supply chain.',
+        'source': 'Estimates based on Berger, Making in America (2013); Huang, The Hardware Hacker (2017)',
+        'position': 'after_para_23',
+        'js': """_regChart('prototypeLeadTime',()=>{const ctx=document.getElementById('prototypeLeadTime');
+const stages=['Source\\ncomponents','PCB\\nfabrication','PCB\\nassembly','Enclosure\\nprototype','Final test'];
+const shenzhen=[0.5,1,0.5,1,0.5];
+const western=[14,10,7,21,5];
+new Chart(ctx,{type:'bar',data:{labels:stages,
+datasets:[
+{label:'Shenzhen (days)',data:shenzhen,backgroundColor:C.accent,
+borderRadius:3,barPercentage:0.5,categoryPercentage:0.8},
+{label:'Distributed Western (days)',data:western,backgroundColor:C.blue,
+borderRadius:3,barPercentage:0.5,categoryPercentage:0.8}
+]},options:{responsive:true,maintainAspectRatio:false,
+layout:{padding:{top:5,right:10,bottom:5,left:10}},
+plugins:{legend:{...legend,labels:{...legend.labels,boxWidth:12,padding:14}},
+tooltip:tooltipStyle},
+scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:10},maxRotation:0}},
+y:{title:{display:true,text:'Days',color:'#8a8479',font:{size:11}},
+grid:{color:'rgba(138,132,121,0.12)'},
+ticks:{color:'#8a8479',font:{size:11}}}}}});
+});"""
+    },
+    {
+        'id': 'mfgEmploymentDecline',
+        'figure_num': 4,
+        'title': 'The Hollowing Out: US Manufacturing Jobs, 1980–2023',
+        'desc': 'US manufacturing employment fell by nearly a third between 1998 and 2010, dismantling the supplier ecosystems that hardware companies depended on.',
+        'source': 'US Bureau of Labor Statistics, Current Employment Statistics (CES), Manufacturing Sector',
+        'position': 'after_para_28',
+        'js': """_regChart('mfgEmploymentDecline',()=>{const ctx=document.getElementById('mfgEmploymentDecline');
+const years=[1980,1985,1990,1995,1998,2000,2001,2002,2004,2006,2008,2009,2010,2012,2015,2018,2020,2023];
+const emp=[18.7,17.8,17.7,17.2,17.6,17.3,16.4,15.3,14.3,14.2,13.4,11.8,11.5,12.0,12.3,12.8,12.2,12.9];
+new Chart(ctx,{type:'line',data:{labels:years.map(String),
+datasets:[{label:'Manufacturing employment (millions)',data:emp,
+borderColor:C.accent,backgroundColor:'rgba(196,112,75,0.08)',
+fill:true,tension:0.3,pointRadius:3,pointBackgroundColor:C.accent,
+pointHoverRadius:6,borderWidth:2.5,pointBorderColor:'#fff',pointBorderWidth:1}]},
+options:{responsive:true,maintainAspectRatio:false,
+layout:{padding:{top:5,right:10,bottom:5,left:10}},
+plugins:{legend:{display:false},tooltip:tooltipStyle,
+annotation:{annotations:{
+wto:{type:'line',xMin:'2001',xMax:'2001',
+borderColor:C.amber,borderWidth:2,borderDash:[5,4],
+label:{..._al,content:'China joins WTO',display:true,color:C.amber,
+font:{size:10,weight:'bold'},position:'start'}},
+drop:{type:'label',xValue:'2004',yValue:13.2,
+content:['5.5m jobs lost, 1998\u20132010'],
+font:{size:11,weight:'bold'},color:C.accent}
+}}},
+scales:{x:{grid:{color:'rgba(138,132,121,0.06)'},
+ticks:{color:'#8a8479',font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:10}},
+y:{min:10,max:20,
+title:{display:true,text:'Millions employed',color:'#8a8479',font:{size:11}},
+grid:{color:'rgba(138,132,121,0.12)'},
+ticks:{color:'#8a8479',font:{size:11}}}}}});
+});"""
+    }
+]
+
     return charts
 
 

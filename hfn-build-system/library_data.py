@@ -640,6 +640,10 @@ BOOKS = [
     {"title": "The Hardware Hacker", "author": "Andrew 'Bunnie' Huang", "year": 2017, "source": "kindle", "themes": ["science", "economics"]},
     {"title": "Victorian Things", "author": "Asa Briggs", "year": 1988, "source": "physical", "themes": ["modern"]},
     {"title": "History of Birmingham", "author": "Chris Upton", "year": 1993, "source": "physical", "themes": ["modern"]},
+    {"title": "The Triumph of the City", "author": "Edward Glaeser", "year": 2026, "source": "kindle", "themes": ["economics", "modern"]},
+    {"title": "How Buildings Learn", "author": "Stewart Brand", "year": 2026, "source": "kindle", "themes": ["science", "economics"]},
+    {"title": "Where Good Ideas Come From", "author": "Steven Johnson", "year": 2026, "source": "kindle", "themes": ["science", "economics"]},
+
 ]
 
 

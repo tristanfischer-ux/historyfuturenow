@@ -33,9 +33,10 @@ HOOK STRATEGY — make people want to click:
 FORBIDDEN:
 - Never say "Here's why", "Let's talk about", "It turns out", "In this article", "Dive into"
 - Never use "HFN" — always "History Future Now"
-- No hashtags on X. 2-3 hashtags on LinkedIn only (at the very end after the URL).
+- No hashtags on X. 2-3 hashtags on LinkedIn only (at the very end).
 - Never start with "Did you know" or "Have you ever wondered"
 - Never be generic. Every post must contain at least one specific number or historical reference.
+- NEVER include URLs in the caption. The article URL is appended automatically after generation.
 
 When providing the CONTEXT field, write it as: "From [article title] on History Future Now"
 """
@@ -85,8 +86,8 @@ Return JSON: {{"caption": "...", "context": "..."}}"""
 - HOOK: Open with the most counterintuitive or surprising data point from the chart. Make it impossible to scroll past.
 - BRIDGE: Connect this to today's news headline in one sentence.
 - DEPTH: Draw 2-3 historical parallels or insights from the article. Use specific numbers, dates, and comparisons — e.g. "Rome's grain dole fed 200,000 citizens. Our welfare state covers 67 million."
-- CLOSE: End with a thought that makes the reader want the full picture, then the article URL: {url}
-{"- No hashtags" if platform == "x" else "- End with 2-3 relevant hashtags after the URL"}
+- CLOSE: End with a thought that makes the reader want the full picture. Do NOT include the URL — it is appended automatically.
+{"- No hashtags" if platform == "x" else "- End with 2-3 relevant hashtags"}
 
 ARTICLE CONTENT:
 {article_text}

@@ -178,6 +178,10 @@ def _run_save_to_disk(task_id, draft_id):
         db.update_studio_task(task_id, progress=f"Saved to {out_path.name}")
     db.update_draft(draft_id, stage="draft")
 
+    # Update series article status if this draft is part of a series
+    if draft.get("series_article_id"):
+        db.update_series_article(draft["series_article_id"], status="drafted")
+
 
 def _write_chart_defs(task_id, slug, chart_defs):
     """Append chart definitions for a slug into chart_defs.py (idempotent)."""
@@ -307,11 +311,25 @@ response = model.generate_content(
 for part in (response.candidates[0].content.parts if response.candidates else []):
     if hasattr(part, "inline_data") and part.inline_data:
         raw_bytes = part.inline_data.data
-        # Resize to 1200x675 (HFN hero image standard)
+        # Crop-to-fit 1200x675 (HFN hero image standard) — never stretch
         try:
             from PIL import Image
             img = Image.open(io.BytesIO(raw_bytes))
-            img = img.resize((1200, 675), Image.LANCZOS)
+            target_w, target_h = 1200, 675
+            target_ratio = target_w / target_h
+            src_ratio = img.width / img.height
+            if src_ratio > target_ratio:
+                # Source is wider — fit height, crop width
+                new_h = target_h
+                new_w = int(img.width * target_h / img.height)
+            else:
+                # Source is taller — fit width, crop height
+                new_w = target_w
+                new_h = int(img.height * target_w / img.width)
+            img = img.resize((new_w, new_h), Image.LANCZOS)
+            left = (new_w - target_w) // 2
+            top = (new_h - target_h) // 2
+            img = img.crop((left, top, left + target_w, top + target_h))
             img.save(args["output"], "PNG", optimize=True)
         except ImportError:
             # No Pillow — save raw and warn
@@ -348,13 +366,11 @@ def _run_generate_audio(task_id, draft_id):
     if not draft:
         raise ValueError("Draft not found")
 
-    # Audio script reads from essays/{slug}.md — ensure Save to Disk ran first
+    # Audio script reads from essays/{slug}.md — save to disk first if needed
     essay_path = HFN_CONTENT_DIR / f"{draft['slug']}.md"
     if not essay_path.exists():
-        raise RuntimeError(
-            f"Essay file not found: {essay_path.name}. "
-            "Run 'Save to Disk' first so the audio generator can read the markdown."
-        )
+        db.update_studio_task(task_id, progress="Saving to disk first...")
+        _run_save_to_disk(task_id, draft_id)
 
     db.update_studio_task(task_id, progress="Generating audio narration...")
 
@@ -437,11 +453,20 @@ def _run_build(task_id, draft_id):
 
 
 def _run_deploy(task_id, draft_id):
-    """Deploy the site to review (not public) via deploy.sh."""
+    """Save to disk, build, then deploy to review via deploy.sh."""
     draft = db.get_draft(draft_id)
     if not draft:
         raise ValueError("Draft not found")
 
+    # Step 1: Save to disk (ensures essays/{slug}.md exists)
+    db.update_studio_task(task_id, progress="Saving to disk...")
+    _run_save_to_disk(task_id, draft_id)
+
+    # Step 2: Build (adds to review_slugs, runs build.py)
+    db.update_studio_task(task_id, progress="Building site...")
+    _run_build(task_id, draft_id)
+
+    # Step 3: Deploy
     db.update_studio_task(task_id, progress="Deploying to review...")
 
     deploy_script = SCRIPTS_DIR / "deploy.sh"
@@ -449,9 +474,10 @@ def _run_deploy(task_id, draft_id):
         raise FileNotFoundError(f"Deploy script not found: {deploy_script}")
 
     proc = subprocess.run(
-        ["bash", str(deploy_script), f"feat: deploy {draft['title'][:50]} to review"],
+        ["bash", str(deploy_script), "--skip-build",
+         f"feat: deploy {draft['title'][:50]} to review"],
         cwd=str(BUILD_SYSTEM.parent),
-        capture_output=True, text=True, timeout=300
+        capture_output=True, text=True, timeout=600
     )
 
     if proc.returncode != 0:

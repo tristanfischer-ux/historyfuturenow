@@ -626,8 +626,7 @@ body.dark .st-next-text{color:#fbbf24}
 body.dark .st-charts-summary{background:#2a2825}
 
 /* Hero preview (below next-bar) */
-.st-hero-preview{width:100%;max-height:200px;object-fit:cover;border-radius:8px;border:1px solid var(--border);display:none;flex-shrink:0}
-.st-hero-preview.visible{display:block}
+.st-hero-preview{display:none}
 
 /* Markdown editor */
 .st-md-toolbar{display:flex;align-items:center;gap:4px;padding:6px 10px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
@@ -726,10 +725,42 @@ body.dark .st-draft-indicator{background:#1a3a2a;color:#4ade80}
 .sr-article-status.drafted{background:#dbeafe;color:#1e40af}
 .sr-article-status.published{background:#dcfce7;color:#166534}
 
-/* Series banner in article editor */
-.st-series-banner{display:flex;align-items:center;gap:10px;padding:8px 16px;background:#eff6ff;border-bottom:1px solid #bfdbfe;flex-shrink:0;font-size:.76rem;color:#1e40af}
-.st-series-banner strong{font-weight:700}
+/* Series context panel in article editor */
+.st-series-banner{flex-shrink:0;font-size:.76rem;color:#1e40af;border-bottom:1px solid #bfdbfe;background:#eff6ff}
+.st-series-header{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;user-select:none}
+.st-series-header:hover{background:#dbeafe}
+.st-series-header strong{font-weight:700}
+.st-series-chevron{margin-left:auto;transition:transform .2s;font-size:.65rem}
+.st-series-banner.expanded .st-series-chevron{transform:rotate(180deg)}
+.st-series-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.st-series-banner.expanded .st-series-body{max-height:400px;overflow-y:auto}
+.st-series-body-inner{padding:12px 16px;display:flex;flex-direction:column;gap:14px;border-top:1px solid #bfdbfe}
+.st-series-section{display:flex;flex-direction:column;gap:4px}
+.st-series-section-title{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#3b82f6;margin-bottom:2px}
+.st-series-field{display:flex;gap:6px;line-height:1.45}
+.st-series-field-label{font-weight:600;white-space:nowrap;min-width:80px;color:#1e3a5f}
+.st-series-field-value{color:#334155}
+.st-series-articles{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px}
+.st-series-articles li{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0}
+.st-series-articles li.current{background:#dbeafe;border-color:#93c5fd;font-weight:600}
+.st-series-articles .sa-pos{font-weight:700;color:#3b82f6;min-width:18px;text-align:center}
+.st-series-articles .sa-role{font-size:.58rem;font-weight:700;padding:1px 6px;border-radius:8px;background:#ede9fe;color:#5b21b6}
+.st-series-articles .sa-status{font-size:.55rem;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:auto;text-transform:uppercase;letter-spacing:.3px}
+.sa-status.planned{background:#f5f5f4;color:#666}
+.sa-status.writing{background:#fef3c7;color:#92400e}
+.sa-status.drafted{background:#dbeafe;color:#1e40af}
+.sa-status.published{background:#dcfce7;color:#166534}
+.st-series-strategic{border:1px dashed #fca5a5;border-radius:6px;padding:8px 10px;background:#fef2f2;color:#991b1b;font-size:.72rem;line-height:1.45}
+.st-series-strategic-label{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#dc2626;margin-bottom:4px}
 body.dark .st-series-banner{background:#1e2a3a;border-color:#2a3a5a;color:#93c5fd}
+body.dark .st-series-header:hover{background:#253349}
+body.dark .st-series-body-inner{border-color:#2a3a5a}
+body.dark .st-series-section-title{color:#60a5fa}
+body.dark .st-series-field-label{color:#93c5fd}
+body.dark .st-series-field-value{color:#cbd5e1}
+body.dark .st-series-articles li{background:#1a2332;border-color:#2a3a5a}
+body.dark .st-series-articles li.current{background:#1e3a5a;border-color:#3b82f6}
+body.dark .st-series-strategic{background:#2a1a1a;border-color:#7f1d1d;color:#fca5a5}
 body.dark .sr-card{background:var(--card);border-color:var(--border)}
 body.dark .sr-article-card{background:var(--card);border-color:var(--border)}
 body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);color:var(--text);border-color:var(--border)}
@@ -1071,7 +1102,7 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
     </div>
     {% if studio_drafts %}
     <div class="st-pills">
-      {% set stages = {'draft':0,'factcheck':0,'charts':0,'images':0,'review':0,'in_review':0,'published':0,'deployed':0} %}
+      {% set stages = {'draft':0,'factcheck':0,'charts':0,'images':0,'audio':0,'review':0,'in_review':0,'published':0,'deployed':0} %}
       {% for d in studio_drafts %}{% if stages.update({d.stage: stages[d.stage]+1}) %}{% endif %}{% endfor %}
       {% for s,c in stages.items() %}{% if c > 0 %}
       <span class="st-pill {{s}}">{{s}} {{c}}</span>
@@ -1196,18 +1227,19 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
       <div class="st-step-line" id="st-line-2"></div>
       <div class="st-step"><div class="st-step-dot" id="st-dot-3">4</div><div class="st-step-label">Image</div></div>
       <div class="st-step-line" id="st-line-3"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Build</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Audio</div></div>
       <div class="st-step-line" id="st-line-4"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-5">6</div><div class="st-step-label">Review</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-5">6</div><div class="st-step-label">Build</div></div>
       <div class="st-step-line" id="st-line-5"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-6">7</div><div class="st-step-label">Website</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-6">7</div><div class="st-step-label">Review</div></div>
+      <div class="st-step-line" id="st-line-6"></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-7">8</div><div class="st-step-label">Website</div></div>
     </div>
     <div class="st-series-banner" id="st-series-banner" style="display:none"></div>
     <div class="st-next-bar" id="st-next-bar" style="display:none">
       <span class="st-next-text" id="st-next-text"></span>
       <span id="st-next-btns"></span>
     </div>
-    <img class="st-hero-preview" id="st-hero-preview" src="" onerror="this.classList.remove('visible')">
     <div class="st-ed-body">
       <!-- Left panel: chat -->
       <div class="st-ed-left">
@@ -2063,8 +2095,9 @@ let studioSaveTimer=null;
 let studioPollTimer=null;
 let studioChatStreaming=false;
 let studioCurrentAction=null;
-const stageOrder=['draft','factcheck','charts','images','review','in_review','published'];
-const stageLabels=['Draft','Fact-Check','Charts','Image','Build','Review','Website'];
+let _mediaCacheBust=Date.now();
+const stageOrder=['draft','factcheck','charts','images','audio','review','in_review','published'];
+const stageLabels=['Draft','Fact-Check','Charts','Image','Audio','Build','Review','Website'];
 
 async function studioNewDraft(){
   const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'Untitled'})});
@@ -2096,16 +2129,13 @@ async function studioSelectDraft(id){
   if(d.chart_defs)studioParseCharts(d.chart_defs);
   else{_parsedCharts=null;}
   // Hero image (details panel)
+  _mediaCacheBust=Date.now();
   const heroImg=document.getElementById('st-hero-img');
-  heroImg.src='/api/studio/drafts/'+id+'/hero-image';
+  heroImg.src='/api/studio/drafts/'+id+'/hero-image?t='+_mediaCacheBust;
   heroImg.classList.toggle('visible',!!d.has_hero_image);
-  // Hero preview (below next-bar)
-  const heroPreview=document.getElementById('st-hero-preview');
-  if(d.has_hero_image){heroPreview.src='/api/studio/drafts/'+id+'/hero-image';heroPreview.classList.add('visible')}
-  else{heroPreview.classList.remove('visible');heroPreview.src=''}
   // Audio
   const audioEl=document.getElementById('st-audio');
-  audioEl.src='/api/studio/drafts/'+id+'/audio';
+  audioEl.src='/api/studio/drafts/'+id+'/audio?t='+_mediaCacheBust;
   audioEl.classList.toggle('visible',!!d.has_audio);
   // Reset task status
   document.getElementById('st-task-status').classList.remove('visible','error');
@@ -2223,6 +2253,10 @@ async function studioSendChat(opts){
             // Check for draft in response
             studioCheckForDraft(fullText);
             studioCheckForCharts(fullText);
+          }
+          if(data.image_task_id){
+            studioCurrentAction='generate_image';
+            studioPollTask(data.image_task_id);
           }
           if(data.error){
             contentEl.innerHTML='<em style="color:var(--red)">Error: '+data.error+'</em>';
@@ -2469,7 +2503,11 @@ function studioUpdateNextBar(stage){
       break;
     case 'images':
       text.textContent='Generate a hero image for the article.';
-      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')" style="margin-right:6px">Generate Image</button><button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Review in Preview</button><button class="btn secondary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')" style="margin-right:6px">Generate Image</button><button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Review in Preview</button><button class="btn secondary" onclick="studioAdvanceStage(\'audio\')">Continue \u2192</button>';
+      break;
+    case 'audio':
+      text.textContent='Generate audio narration for the article.';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_audio\')" style="margin-right:6px">Generate Audio</button><button class="btn secondary" onclick="studioAdvanceStage(\'review\')">Skip \u2192</button>';
       break;
     case 'review':
       text.textContent='Review your article. When ready, deploy to the review page.';
@@ -2603,13 +2641,12 @@ async function studioAction(action){
   statusEl.classList.add('visible');statusEl.classList.remove('error');
   labelEl.textContent='Starting '+action.replace(/_/g,' ')+'...';
   progressEl.textContent='';
-  // Show feedback in next-bar for image generation
-  if(action==='generate_image'){
-    const bar=document.getElementById('st-next-bar');
-    bar.style.display='flex';
-    document.getElementById('st-next-text').textContent='Generating hero image\u2026';
-    document.getElementById('st-next-btns').innerHTML='<button class="btn primary" disabled>Generating\u2026</button>';
-  }
+  // Show feedback in next-bar for all actions
+  const bar=document.getElementById('st-next-bar');
+  bar.style.display='flex';
+  const actionLabel={'generate_image':'Generating hero image','generate_audio':'Generating audio narration','build':'Building site','deploy':'Deploying to review','publish':'Publishing to website','save_to_disk':'Saving to disk'}[action]||action;
+  document.getElementById('st-next-text').textContent=actionLabel+'\u2026';
+  document.getElementById('st-next-btns').innerHTML='<button class="btn primary" disabled>'+actionLabel+'\u2026</button>';
   try{
     const r=await fetch('/api/studio/drafts/'+studioCurrentId+'/'+action.replace(/_/g,'-'),{method:'POST'});
     const d=await r.json();
@@ -2643,17 +2680,38 @@ function studioPollTask(taskId){
         statusEl.classList.remove('error');
         // Image task: show hero preview + advance stage instead of full reset
         if(studioCurrentAction==='generate_image'&&studioCurrentId){
-          const heroPreview=document.getElementById('st-hero-preview');
-          heroPreview.src='/api/studio/drafts/'+studioCurrentId+'/hero-image?t='+Date.now();
-          heroPreview.classList.add('visible');
+          _mediaCacheBust=Date.now();
           const heroImg=document.getElementById('st-hero-img');
-          heroImg.src=heroPreview.src;
+          heroImg.src='/api/studio/drafts/'+studioCurrentId+'/hero-image?t='+_mediaCacheBust;
           heroImg.classList.add('visible');
           document.getElementById('st-next-text').textContent='Hero image generated.';
-          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAdvanceStage(\'audio\')">Continue \u2192</button>';
           studioUpdateStepper('images');
           studioCurrentAction=null;
           studioSchedulePreviewUpdate();
+        }else if(studioCurrentAction==='generate_audio'&&studioCurrentId){
+          _mediaCacheBust=Date.now();
+          document.getElementById('st-next-text').textContent='Audio narration generated.';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
+          studioUpdateStepper('audio');
+          studioCurrentAction=null;
+          // Refresh to show audio player
+          if(studioCurrentId)studioSelectDraft(studioCurrentId);
+        }else if(studioCurrentAction==='deploy'&&studioCurrentId){
+          document.getElementById('st-next-text').textContent='Deployed to review \u2014 awaiting approval.';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="window.open(\'https://www.historyfuturenow.com/review/\',\'_blank\')">View Review Page</button>';
+          studioCurrentAction=null;
+          if(studioCurrentId)studioSelectDraft(studioCurrentId);
+        }else if(studioCurrentAction==='build'&&studioCurrentId){
+          document.getElementById('st-next-text').textContent='Build complete. Ready to deploy.';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAction(\'deploy\')">Deploy to Review</button>';
+          studioCurrentAction=null;
+          if(studioCurrentId)studioSelectDraft(studioCurrentId);
+        }else if(studioCurrentAction==='publish'&&studioCurrentId){
+          document.getElementById('st-next-text').textContent='Published to website.';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="window.open(\'https://www.historyfuturenow.com/\',\'_blank\')">View Website</button>';
+          studioCurrentAction=null;
+          if(studioCurrentId)studioSelectDraft(studioCurrentId);
         }else{
           // Other tasks: refresh draft data as before
           if(studioCurrentId)studioSelectDraft(studioCurrentId);
@@ -2663,10 +2721,14 @@ function studioPollTask(taskId){
         clearInterval(studioPollTimer);studioPollTimer=null;
         labelEl.textContent='Error';progressEl.textContent=d.error||'Task failed';
         statusEl.classList.add('error');
-        if(studioCurrentAction==='generate_image')studioUpdateNextBar('images');
+        // Show error in next-bar too
+        document.getElementById('st-next-text').textContent='Error: '+(d.error||'Task failed');
+        document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="studioUpdateNextBar(stageOrder[stageOrder.indexOf(document.querySelector(\'.st-dot.done:last-of-type,.st-dot.active\')?.dataset?.stage||\'draft\')])">Dismiss</button>';
         studioCurrentAction=null;
       }else{
         labelEl.textContent='Running...';
+        // Update next-bar with live progress
+        if(d.progress)document.getElementById('st-next-text').textContent=d.progress;
       }
     }catch(e){clearInterval(studioPollTimer)}
   },2000);
@@ -2762,11 +2824,11 @@ async function studioUpdatePreview(){
     bodyHtml=studioInjectCharts(bodyHtml,_parsedCharts);
   }
 
-  // Hero image — always try to load, onerror hides it
-  const heroUrl=studioCurrentId?'/api/studio/drafts/'+studioCurrentId+'/hero-image':'';
+  // Hero image — always try to load with cache-bust, onerror hides it
+  const heroUrl=studioCurrentId?'/api/studio/drafts/'+studioCurrentId+'/hero-image?t='+_mediaCacheBust:'';
 
-  // Audio — always try to load, onerror hides it
-  const audioUrl=studioCurrentId?'/api/studio/drafts/'+studioCurrentId+'/audio':'';
+  // Audio — always try to load with cache-bust, onerror hides it
+  const audioUrl=studioCurrentId?'/api/studio/drafts/'+studioCurrentId+'/audio?t='+_mediaCacheBust:'';
 
   // Load chart bootstrap JS if needed
   if(!_chartBootstrapJs&&_parsedCharts&&_parsedCharts.length>0){
@@ -3423,7 +3485,73 @@ async function deleteDoc(docId, pillsId){
 initDocDrop('st-chat-zone', f=>{ if(studioCurrentId) uploadDocFile(f,'/api/studio/drafts/'+studioCurrentId+'/documents/upload','st-doc-pills'); else toast('Select a draft first') });
 initDocDrop('sr-chat-zone', f=>{ if(seriesCurrentId) uploadDocFile(f,'/api/studio/series/'+seriesCurrentId+'/documents/upload','sr-doc-pills'); else toast('Select a series first') });
 
-// Series banner in article editor — inject when selecting a draft that's part of a series
+// Image paste in Studio chat
+document.getElementById('st-chat-input').addEventListener('paste',function(e){
+  if(!studioCurrentId)return;
+  const items=e.clipboardData&&e.clipboardData.items;
+  if(!items)return;
+  for(let i=0;i<items.length;i++){
+    if(items[i].type.indexOf('image/')===0){
+      e.preventDefault();
+      const file=items[i].getAsFile();
+      if(file)uploadDocFile(file,'/api/studio/drafts/'+studioCurrentId+'/documents/upload','st-doc-pills');
+    }
+  }
+});
+
+// Series context panel — expandable panel when draft is part of a series
+let _seriesPanelOpen=false;
+function toggleSeriesPanel(){
+  const el=document.getElementById('st-series-banner');
+  if(!el)return;
+  _seriesPanelOpen=!_seriesPanelOpen;
+  el.classList.toggle('expanded',_seriesPanelOpen);
+}
+function _buildSeriesPanel(d){
+  let h='<div class="st-series-header" onclick="toggleSeriesPanel()">';
+  h+='Part of: <strong>\u201c'+_escHtml(d.series_title)+'\u201d</strong> ('+d.position+' of '+d.total+') \u00b7 '+_escHtml(d.working_title);
+  h+='<span class="st-series-chevron">\u25bc</span></div>';
+  h+='<div class="st-series-body"><div class="st-series-body-inner">';
+  // — This Article —
+  const af=[];
+  if(d.role)af.push({l:'Role',v:d.role});
+  if(d.brief)af.push({l:'Brief',v:d.brief});
+  if(d.key_arguments)af.push({l:'Key arguments',v:d.key_arguments});
+  if(d.connects_to)af.push({l:'Connects to',v:d.connects_to});
+  if(af.length){
+    h+='<div class="st-series-section"><div class="st-series-section-title">This Article</div>';
+    af.forEach(f=>{h+='<div class="st-series-field"><span class="st-series-field-label">'+_escHtml(f.l)+'</span><span class="st-series-field-value">'+_escHtml(f.v)+'</span></div>';});
+    h+='</div>';
+  }
+  // — Series Overview —
+  const sf=[];
+  if(d.thesis)sf.push({l:'Thesis',v:d.thesis});
+  if(d.audience)sf.push({l:'Audience',v:d.audience});
+  if(d.narrative_arc)sf.push({l:'Narrative arc',v:d.narrative_arc});
+  if(sf.length){
+    h+='<div class="st-series-section"><div class="st-series-section-title">Series Overview</div>';
+    sf.forEach(f=>{h+='<div class="st-series-field"><span class="st-series-field-label">'+_escHtml(f.l)+'</span><span class="st-series-field-value">'+_escHtml(f.v)+'</span></div>';});
+    h+='</div>';
+  }
+  // — Article Plan —
+  if(d.articles&&d.articles.length){
+    h+='<div class="st-series-section"><div class="st-series-section-title">Article Plan</div><ul class="st-series-articles">';
+    d.articles.forEach(a=>{
+      const cls=a.is_current?' current':'';
+      const st=a.draft_stage||a.status||'planned';
+      h+='<li class="'+cls+'"><span class="sa-pos">'+a.position+'</span><span>'+_escHtml(a.working_title)+'</span>';
+      if(a.role)h+='<span class="sa-role">'+_escHtml(a.role)+'</span>';
+      h+='<span class="sa-status '+_escHtml(st)+'">'+_escHtml(st)+'</span></li>';
+    });
+    h+='</ul></div>';
+  }
+  // — Strategic Goal (confidential) —
+  if(d.strategic_goal){
+    h+='<div class="st-series-section"><div class="st-series-strategic"><div class="st-series-strategic-label">Strategic Goal (confidential)</div>'+_escHtml(d.strategic_goal)+'</div></div>';
+  }
+  h+='</div></div>';
+  return h;
+}
 const _origStudioSelectDraft=studioSelectDraft;
 studioSelectDraft=async function(id){
   await _origStudioSelectDraft(id);
@@ -3433,10 +3561,12 @@ studioSelectDraft=async function(id){
     const r=await fetch('/api/studio/drafts/'+id+'/series-context');
     const d=await r.json();
     if(d.in_series){
-      banner.style.display='flex';
-      banner.innerHTML='Part of: <strong>"'+_escHtml(d.series_title)+'"</strong> ('+d.position+' of '+d.total+') · '+_escHtml(d.working_title);
+      banner.style.display='block';
+      banner.innerHTML=_buildSeriesPanel(d);
+      banner.classList.toggle('expanded',_seriesPanelOpen);
     }else{
       banner.style.display='none';
+      banner.classList.remove('expanded');
     }
   }catch(e){banner.style.display='none'}
 };
@@ -4440,6 +4570,24 @@ def api_studio_chat(did):
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
+    # Tool: let Claude trigger hero image generation
+    chat_tools = [
+        {
+            "name": "generate_hero_image",
+            "description": "Generate or regenerate the hero image for this article. Use this whenever the user asks to create, redo, fix, or change the hero image.",
+            "input_schema": {
+                "type": "object",
+                "properties": {
+                    "prompt": {
+                        "type": "string",
+                        "description": "Detailed image generation prompt. Must include style directives: flat geometric editorial illustration, mid-century modern poster aesthetic, warm muted palette, no text/faces/photorealism, landscape 16:9."
+                    }
+                },
+                "required": ["prompt"]
+            }
+        }
+    ]
+
     # Sonnet for edits/corrections, Opus for original prose (with Sonnet fallback)
     if model_pref == "sonnet":
         MODELS = ["claude-sonnet-4-6"]
@@ -4453,8 +4601,17 @@ def api_studio_chat(did):
             try:
                 result = client.messages.create(
                     model=model, max_tokens=8192, system=system, messages=messages,
+                    tools=chat_tools,
                 )
-                full_text = result.content[0].text
+                # Collect text blocks and detect tool_use blocks
+                text_parts = []
+                tool_call = None
+                for block in result.content:
+                    if block.type == "text":
+                        text_parts.append(block.text)
+                    elif block.type == "tool_use" and block.name == "generate_hero_image":
+                        tool_call = block
+                full_text = "".join(text_parts)
                 used_model = model
                 break
             except Exception as e:
@@ -4468,6 +4625,16 @@ def api_studio_chat(did):
 
         if used_model and used_model != MODELS[0]:
             yield f"data: {json.dumps({'delta': '[Using Sonnet — Opus temporarily busy]\\n\\n'})}\n\n"
+
+        # Handle tool call: trigger hero image generation
+        if tool_call:
+            import studio_runner
+            prompt = tool_call.input.get("prompt", "")
+            if prompt:
+                db.update_draft(did, image_prompt=prompt)
+                tid = db.create_studio_task("generate_image", did)
+                studio_runner.start_task(tid, "generate_image", did)
+                yield f"data: {json.dumps({'image_task_id': tid})}\n\n"
 
         if full_text:
             # Yield in chunks for progressive rendering
@@ -4719,7 +4886,23 @@ def api_studio_draft_series_context(did):
         "series_title": series["title"],
         "position": sa["position"] + 1,
         "total": len(all_articles),
-        "working_title": sa["working_title"]
+        "working_title": sa["working_title"],
+        "role": sa.get("role", ""),
+        "brief": sa.get("brief", ""),
+        "key_arguments": sa.get("key_arguments", ""),
+        "connects_to": sa.get("connects_to", ""),
+        "thesis": series.get("thesis", ""),
+        "strategic_goal": series.get("strategic_goal", ""),
+        "audience": series.get("audience", ""),
+        "narrative_arc": series.get("narrative_arc", ""),
+        "articles": [{
+            "position": a["position"] + 1,
+            "working_title": a["working_title"],
+            "role": a.get("role", ""),
+            "status": a.get("status", "planned"),
+            "draft_stage": a.get("draft_stage", ""),
+            "is_current": a["id"] == sa["id"]
+        } for a in all_articles]
     })
 
 @app.route("/api/studio/series/<int:sid>/messages")

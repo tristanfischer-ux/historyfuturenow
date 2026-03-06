@@ -69,4 +69,6 @@ RSS_FEEDS = [
     {"name": "Bloomberg",        "url": "https://feeds.bloomberg.com/markets/news.rss"},
 ]
 
+GA4_PROPERTY_ID = os.getenv("GA4_PROPERTY_ID", "")
+
 FLASK_PORT = int(os.getenv("FLASK_PORT", "5050"))
