@@ -505,8 +505,10 @@ def _run_deploy(task_id, draft_id):
     )
 
     if proc.returncode != 0:
-        err = (proc.stderr[:300] if proc.stderr else proc.stdout[:300]) or "Unknown error"
-        raise RuntimeError(f"Deploy failed: {err}")
+        # stdout has script progress; stderr has git noise — prefer stdout tail
+        lines = [l for l in (proc.stdout or "").strip().splitlines() if l.strip()]
+        tail = "\n".join(lines[-5:]) if lines else (proc.stderr or "Unknown error")[:300]
+        raise RuntimeError(f"Deploy failed (exit {proc.returncode}):\n{tail}")
 
     db.update_draft(draft_id, stage="in_review")
     db.update_studio_task(task_id, progress="Deployed to review — awaiting approval")
@@ -566,8 +568,9 @@ def _run_publish(task_id, draft_id):
         capture_output=True, text=True, timeout=300
     )
     if proc.returncode != 0:
-        err = proc.stderr[:300] if proc.stderr else "Unknown error"
-        raise RuntimeError(f"Deploy failed: {err}")
+        lines = [l for l in (proc.stdout or "").strip().splitlines() if l.strip()]
+        tail = "\n".join(lines[-5:]) if lines else (proc.stderr or "Unknown error")[:300]
+        raise RuntimeError(f"Deploy failed (exit {proc.returncode}):\n{tail}")
 
     db.update_draft(draft_id, stage="published")
     db.update_studio_task(task_id, progress="Published to website")
