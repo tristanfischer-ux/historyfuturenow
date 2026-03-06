@@ -147,7 +147,7 @@ def _run_save_to_disk(task_id, draft_id):
     fm_lines = ["---"]
     fm_lines.append(f"title: \"{draft['title']}\"")
     if draft.get("section"):
-        fm_lines.append(f"section: \"{draft['section']}\"")
+        fm_lines.append(f"part: \"{draft['section']}\"")
     if draft.get("excerpt"):
         fm_lines.append(f"excerpt: \"{draft['excerpt']}\"")
     if draft.get("share_summary"):
@@ -384,7 +384,7 @@ def _run_generate_audio(task_id, draft_id):
         db.update_studio_task(task_id, progress="Saving to disk first...")
         _run_save_to_disk(task_id, draft_id)
 
-    db.update_studio_task(task_id, progress="Generating audio narration...")
+    db.update_studio_task(task_id, progress="Starting audio generation...")
 
     script = BUILD_SYSTEM / "generate_audio.py"
     if not script.exists():
@@ -407,24 +407,54 @@ def _run_generate_audio(task_id, draft_id):
     # Build env with the API key + proper PATH (launchd has minimal PATH)
     env = _SUBPROCESS_ENV.copy()
     env["GEMINI_API_KEY"] = api_key
+    env["PYTHONUNBUFFERED"] = "1"
 
-    # Use system python3 (has required packages: yaml, requests, etc.)
-    proc = subprocess.run(
-        ["/opt/homebrew/bin/python3", str(script), "--article", draft["slug"]],
-        cwd=str(BUILD_SYSTEM),
-        env=env,
-        capture_output=True, text=True, timeout=600
+    # Stream output to update progress in real-time
+    proc = subprocess.Popen(
+        ["/opt/homebrew/bin/python3", "-u", str(script), "--article", draft["slug"]],
+        cwd=str(BUILD_SYSTEM), env=env,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
     )
 
+    output_lines = []
+    try:
+        for line in proc.stdout:
+            line = line.rstrip()
+            output_lines.append(line)
+            # Parse generate_audio.py output for progress updates
+            stripped = line.strip()
+            if "words," in stripped and "chars" in stripped:
+                # e.g. "3,200 words, 18,500 chars, ~20.0 min estimated"
+                db.update_studio_task(task_id, progress=f"Audio: {stripped}")
+            elif "sections" in stripped and "TTS chunk" in stripped:
+                # e.g. "12 sections -> 4 TTS chunk(s)"
+                db.update_studio_task(task_id, progress=f"Audio: {stripped}")
+            elif stripped.startswith("[") and "/" in stripped and "chars" in stripped:
+                # e.g. "[1/4] 3 sections, 4,200 chars (M+F)"
+                db.update_studio_task(task_id, progress=f"Audio: generating chunk {stripped}")
+            elif "Rate limited" in stripped or "waiting" in stripped:
+                db.update_studio_task(task_id, progress=f"Audio: {stripped}")
+            elif "Saved:" in stripped:
+                db.update_studio_task(task_id, progress=f"Audio: {stripped}")
+            elif stripped.startswith("[skip]"):
+                db.update_studio_task(task_id, progress=f"Audio: already exists")
+
+        proc.wait(timeout=600)
+    except Exception as e:
+        proc.kill()
+        raise RuntimeError(f"Audio generation failed: {e}")
+
     if proc.returncode != 0:
-        err = (proc.stderr[:500] if proc.stderr else proc.stdout[:500]) or "Unknown error"
-        raise RuntimeError(f"Audio generation failed: {err}")
+        stderr = proc.stderr.read() if proc.stderr else ""
+        stdout_tail = "\n".join(output_lines[-5:]) if output_lines else ""
+        err = stdout_tail or stderr[:500] or "Unknown error"
+        raise RuntimeError(f"Audio generation failed (exit {proc.returncode}):\n{err}")
 
     # Check if audio file was created
     audio_path = HFN_AUDIO_DIR / f"{draft['slug']}.mp3"
     if audio_path.exists():
         db.update_draft(draft_id, has_audio=1)
-        db.update_studio_task(task_id, progress="Audio generated")
+        db.update_studio_task(task_id, progress="Audio narration generated")
     else:
         db.update_studio_task(task_id, progress="Script ran but MP3 not found")
 
@@ -505,7 +535,8 @@ def _run_deploy(task_id, draft_id):
     )
 
     if proc.returncode != 0:
-        # stdout has script progress; stderr has git noise — prefer stdout tail
+        _diag = BUILD_SYSTEM.parent / "hfn-promote" / "deploy_diag.log"
+        _diag.write_text(f"EXIT: {proc.returncode}\n\n--- STDOUT ---\n{proc.stdout}\n\n--- STDERR ---\n{proc.stderr}\n")
         lines = [l for l in (proc.stdout or "").strip().splitlines() if l.strip()]
         tail = "\n".join(lines[-5:]) if lines else (proc.stderr or "Unknown error")[:300]
         raise RuntimeError(f"Deploy failed (exit {proc.returncode}):\n{tail}")
@@ -564,10 +595,13 @@ def _run_publish(task_id, draft_id):
     proc = subprocess.run(
         ["bash", str(deploy_script), "--skip-build",
          f"feat: publish {draft['title'][:50]}"],
-        cwd=str(BUILD_SYSTEM.parent),
+        cwd=str(BUILD_SYSTEM.parent), env=_SUBPROCESS_ENV,
         capture_output=True, text=True, timeout=300
     )
     if proc.returncode != 0:
+        # Dump full output for diagnostics
+        _diag = BUILD_SYSTEM.parent / "hfn-promote" / "deploy_diag.log"
+        _diag.write_text(f"EXIT: {proc.returncode}\n\n--- STDOUT ---\n{proc.stdout}\n\n--- STDERR ---\n{proc.stderr}\n")
         lines = [l for l in (proc.stdout or "").strip().splitlines() if l.strip()]
         tail = "\n".join(lines[-5:]) if lines else (proc.stderr or "Unknown error")[:300]
         raise RuntimeError(f"Deploy failed (exit {proc.returncode}):\n{tail}")

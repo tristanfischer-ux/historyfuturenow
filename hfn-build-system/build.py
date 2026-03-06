@@ -71,6 +71,8 @@ PART_ALIASES = {
     "Jobs & Economy": "Jobs & Economy",
     "Jobs &amp; Economy": "Jobs & Economy",
     "Jobs and the Economy": "Jobs & Economy",
+    "Economy": "Jobs & Economy",
+    "Economics": "Jobs & Economy",
     "Society": "Society",
 }
 
@@ -237,7 +239,7 @@ def parse_essay(filepath):
     slug = slug.replace('strong', '').replace('nbsp', '').strip('-')
     slug = re.sub(r'-+', '-', slug)
 
-    raw_part = meta.get('part', 'Society')
+    raw_part = meta.get('part') or meta.get('section') or 'Society'
     part = PART_ALIASES.get(raw_part, raw_part)
     if part not in PARTS: part = "Society"
 

@@ -14,11 +14,11 @@ Total articles: 81
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (14 articles)
+### Jobs & Economy (15 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (37 articles)
+### Society (36 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -271,7 +271,7 @@ Total articles: 81
 
 ### The Fifteen-Minute Factory: Why Proximity Still Wins [4 charts]
 - URL: https://www.historyfuturenow.com/articles/the-fifteen-minute-factory-why-proximity-still-wins
-- Section: Society
+- Section: Jobs & Economy
 - Reading time: 13 min
 - Innovation has always clustered where the distance between thinking and making approaches zero. From Florence's silk workshops to Shenzhen's electronics bazaars, the pattern is invariant: compress the
 
