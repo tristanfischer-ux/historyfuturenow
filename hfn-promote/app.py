@@ -2148,6 +2148,8 @@ async function studioSelectDraft(id){
   // Focus chat input + schedule preview update
   setTimeout(()=>document.getElementById('st-chat-input').focus(),100);
   studioSchedulePreviewUpdate();
+  // Resume any running task (survives browser crash)
+  studioResumeTask(id);
 }
 
 async function studioLoadMessages(id){
@@ -2722,7 +2724,7 @@ function studioPollTask(taskId){
         statusEl.classList.add('error');
         // Show error in next-bar too
         document.getElementById('st-next-text').textContent='Error: '+(d.error||'Task failed');
-        document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="studioUpdateNextBar(stageOrder[stageOrder.indexOf(document.querySelector(\'.st-dot.done:last-of-type,.st-dot.active\')?.dataset?.stage||\'draft\')])">Dismiss</button>';
+        document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="document.getElementById(\'st-next-bar\').style.display=\'none\'">Dismiss</button>';
         studioCurrentAction=null;
       }else{
         labelEl.textContent='Running...';
@@ -2731,6 +2733,43 @@ function studioPollTask(taskId){
       }
     }catch(e){clearInterval(studioPollTimer)}
   },2000);
+}
+
+async function studioResumeTask(draftId){
+  // Check for any running/recently completed task (survives browser crash/reload)
+  try{
+    const r=await fetch('/api/studio/drafts/'+draftId+'/latest-task');
+    const t=await r.json();
+    if(t.none)return;
+    if(t.status==='running'){
+      // Task still running — resume polling
+      studioCurrentAction=t.task_type;
+      const bar=document.getElementById('st-next-bar');
+      bar.style.display='flex';
+      document.getElementById('st-next-text').textContent=(t.progress||'Task running...');
+      document.getElementById('st-next-btns').innerHTML='<button class="btn primary" disabled>Running\u2026</button>';
+      const statusEl=document.getElementById('st-task-status');
+      statusEl.classList.add('visible');statusEl.classList.remove('error');
+      document.getElementById('st-task-label').textContent='Running...';
+      document.getElementById('st-task-progress').textContent=t.progress||'';
+      studioPollTask(t.id);
+    }else if(t.status==='done'&&t.completed_at){
+      // Task completed recently (within last 5 min) — show result
+      const completed=new Date(t.completed_at);
+      const ago=(Date.now()-completed.getTime())/1000;
+      if(ago<300){
+        const bar=document.getElementById('st-next-bar');
+        bar.style.display='flex';
+        document.getElementById('st-next-text').textContent='\u2705 '+(t.progress||t.task_type+' complete');
+        document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="document.getElementById(\'st-next-bar\').style.display=\'none\'">Dismiss</button>';
+      }
+    }else if(t.status==='error'){
+      const bar=document.getElementById('st-next-bar');
+      bar.style.display='flex';
+      document.getElementById('st-next-text').textContent='Error: '+(t.error||'Task failed');
+      document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="document.getElementById(\'st-next-bar\').style.display=\'none\'">Dismiss</button>';
+    }
+  }catch(e){/* ignore */}
 }
 
 // ── Live Preview Engine ──
@@ -4176,6 +4215,19 @@ def api_studio_task(tid):
     if not task:
         return jsonify({"error": "Not found"}), 404
     return jsonify(task)
+
+@app.route("/api/studio/drafts/<int:did>/latest-task")
+def api_studio_latest_task(did):
+    """Get the most recent task for a draft (for resuming after browser crash)."""
+    conn = db.get_db()
+    row = db._dict(conn.execute(
+        "SELECT * FROM studio_tasks WHERE draft_id=? ORDER BY id DESC LIMIT 1",
+        (did,)
+    ).fetchone())
+    conn.close()
+    if not row:
+        return jsonify({"none": True})
+    return jsonify(row)
 
 @app.route("/api/studio/drafts/<int:did>/hero-image")
 def api_studio_hero(did):
