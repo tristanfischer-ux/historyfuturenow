@@ -195,6 +195,7 @@ ISSUES = [
             "the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world",
             "the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way",
             "the-fifteen-minute-factory-why-proximity-still-wins",
+            "the-eighteen-month-trap-why-hardware-startups-are-structurally-slow",
         ],
     },
 ]

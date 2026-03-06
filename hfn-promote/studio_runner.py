@@ -93,6 +93,50 @@ def _update_library(new_books):
     return len(entries)
 
 
+# Valid sections from build.py PARTS + PART_ALIASES
+_SECTION_ALIASES = {
+    "Natural Resources": "Natural Resources",
+    "Global Balance of Power": "Global Balance of Power",
+    "Balance of Power": "Global Balance of Power",
+    "Jobs & Economy": "Jobs & Economy",
+    "Jobs &amp; Economy": "Jobs & Economy",
+    "Jobs and the Economy": "Jobs & Economy",
+    "Economy": "Jobs & Economy",
+    "Economics": "Jobs & Economy",
+    "Society": "Society",
+}
+
+
+def _ensure_in_current_issue(slug):
+    """Add slug to the current (latest) issue in issues.py if not already assigned."""
+    issues_path = BUILD_SYSTEM / "issues.py"
+    if not issues_path.exists():
+        return
+
+    # Check if slug already appears in issues.py
+    text = issues_path.read_text(encoding="utf-8")
+    if slug in text:
+        return
+
+    # Find the last "]," before the final "]" of the ISSUES list — that's where
+    # the last issue's articles list ends. Insert the slug there.
+    # Pattern: find last occurrence of articles list closing "],"
+    import re as _issue_re
+    # Find all article list closings: "        ]," or "        ],\n    },"
+    # We want the LAST articles list in the file (the current issue)
+    matches = list(_issue_re.finditer(r'^(\s+)\],\s*$', text, _issue_re.MULTILINE))
+    if not matches:
+        return
+
+    last_close = matches[-1]
+    indent = last_close.group(1)
+    # Insert the slug before the closing bracket
+    new_line = f'{indent}    "{slug}",\n'
+    insert_pos = last_close.start()
+    updated = text[:insert_pos] + new_line + text[insert_pos:]
+    issues_path.write_text(updated, encoding="utf-8")
+
+
 def _run_save_to_disk(task_id, draft_id):
     """Write draft markdown to essays/ with YAML frontmatter."""
 
@@ -147,7 +191,10 @@ def _run_save_to_disk(task_id, draft_id):
     fm_lines = ["---"]
     fm_lines.append(f"title: \"{draft['title']}\"")
     if draft.get("section"):
-        fm_lines.append(f"part: \"{draft['section']}\"")
+        # Normalise to a valid build.py section name
+        raw_section = draft["section"]
+        normalised = _SECTION_ALIASES.get(raw_section, raw_section)
+        fm_lines.append(f"part: \"{normalised}\"")
     if draft.get("excerpt"):
         fm_lines.append(f"excerpt: \"{draft['excerpt']}\"")
     if draft.get("share_summary"):
@@ -250,38 +297,29 @@ def _run_generate_image(task_id, draft_id):
 
     db.update_studio_task(task_id, progress="Generating hero image...")
 
-    # Build the image prompt
-    user_prompt = (draft.get("image_prompt") or "").strip()
+    # The HFN house style prefix — grounds every image in a specific design tradition.
+    # Matches the original generate_image_prompts.py STYLE_PREFIX that produced the best images.
+    HFN_STYLE_PREFIX = (
+        "Editorial illustration for a serious analytical magazine about history and geopolitics. "
+        "Conceptual and metaphorical, not literal or photorealistic. "
+        "Bold flat shapes with clean geometric composition. "
+        "Palette: muted earth tones (warm cream, deep crimson #c43425, navy blue, ochre, olive) "
+        "with one or two vivid accent colours. "
+        "No text, no lettering, no words, no logos in the image. "
+        "Inspired by Noma Bar, Christoph Niemann, and the conceptual illustration tradition "
+        "of The Economist magazine covers. "
+        "Sophisticated, intellectual, slightly provocative. "
+        "Suitable for a publication about historical forces shaping the future. "
+    )
+
+    # Build the image prompt: style prefix + subject (user-provided or auto-generated)
+    subject = (draft.get("image_prompt") or "").strip()
     title = draft.get("title", "Untitled")
-    if not user_prompt:
-        # Auto-generate a prompt from the article title
-        user_prompt = (
-            f"Editorial illustration for an article titled '{title}'. "
-            "Style: flat geometric editorial illustration, mid-century modern poster aesthetic. "
-            "The illustration must fill the ENTIRE frame edge-to-edge with NO empty space, NO margins, NO borders, NO background padding. "
-            "Warm muted editorial palette (terracotta, navy, sand, teal, grey, ochre). "
-            "No text, no writing, no photorealism, no detailed faces, no people. "
-            "Landscape orientation, wide panoramic format, 16:9 aspect ratio."
-        )
-        db.update_studio_task(task_id, progress="Auto-generated image prompt from title...")
+    if not subject:
+        subject = f"A conceptual metaphor for an article titled '{title}'."
+        db.update_studio_task(task_id, progress="Auto-generated image subject from title...")
 
-    # Ensure we have the HFN style prefix
-    if "flat geometric" not in user_prompt.lower() and "editorial illustration" not in user_prompt.lower():
-        user_prompt = (
-            "Flat geometric editorial illustration in a mid-century modern poster style. "
-            "The illustration must fill the ENTIRE frame edge-to-edge with NO empty space, NO margins, NO borders. "
-            "Warm muted editorial palette (terracotta, navy, sand, teal, grey, ochre). "
-            "No text, no writing, no photorealism, no detailed faces, no people. "
-            "Landscape orientation, wide panoramic format, 16:9 aspect ratio. "
-        ) + user_prompt
-
-    # Always add edge-to-edge instruction
-    if "edge-to-edge" not in user_prompt.lower() and "fill the entire" not in user_prompt.lower():
-        user_prompt += " The illustration must fill the ENTIRE frame edge-to-edge. No empty space, no margins, no background padding."
-
-    # Always ensure landscape orientation is requested
-    if "landscape" not in user_prompt.lower() and "16:9" not in user_prompt:
-        user_prompt += " Landscape orientation, wide format, 16:9 aspect ratio."
+    user_prompt = HFN_STYLE_PREFIX + subject + " Wide panoramic composition. Image dimensions: 1200x675 pixels."
 
     # Check API key — try env first, then fall back to .zshrc extraction
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -477,6 +515,9 @@ def _run_build(task_id, draft_id):
             pass
     slugs.add(draft["slug"])
     review_file.write_text(json.dumps(sorted(slugs), indent=2))
+
+    # Auto-assign to current issue if not already in one
+    _ensure_in_current_issue(draft["slug"])
 
     db.update_studio_task(task_id, progress="Building site...")
 

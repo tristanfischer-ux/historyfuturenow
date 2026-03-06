@@ -5467,6 +5467,136 @@ ticks:{color:'#8a8479',font:{size:11}}}}}});
     }
 ]
 
+
+    # ─── STUDIO: the-eighteen-month-trap-why-hardware-startups-are-structurally-slow ───
+    charts['the-eighteen-month-trap-why-hardware-startups-are-structurally-slow'] = [
+    {
+        'id': 'trapTimeline', 'figure_num': 1,
+        'title': 'Two Startups, One Clock: Months to Key Milestones',
+        'desc': 'A software startup can reach first revenue in weeks. A hardware startup building its own production facility typically takes 12-18 months — spending most of that time on infrastructure, not product.',
+        'source': 'Hardware timeline based on industry benchmarks (HAX, Bolt, Lemnos); software timeline based on typical SaaS launch cycles',
+        'position': 'after_para_6',
+        'js': """_regChart('trapTimeline',()=>{const ctx=document.getElementById('trapTimeline');
+const milestones=['Infrastructure Ready','Product Design Frozen','First Unit Produced','First Revenue'];
+const hw=[10,8,15,18];
+const sw=[0.1,3,3,4];
+new Chart(ctx,{type:'bar',data:{labels:milestones,
+datasets:[
+{label:'Hardware Startup',data:hw,backgroundColor:C.accent+'CC',borderColor:C.accent,borderWidth:1,borderRadius:3},
+{label:'Software Startup',data:sw,backgroundColor:C.blue+'CC',borderColor:C.blue,borderWidth:1,borderRadius:3}
+]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'rect'}},
+tooltip:{...tooltipStyle,callbacks:{label:function(c){return c.dataset.label+': '+c.raw+' months';}}},
+annotation:{annotations:{trap:{type:'line',xMin:18,xMax:18,borderColor:C.amber,borderWidth:2,borderDash:[6,4],
+label:{..._al,content:'18-month trap',display:true,color:C.amber,backgroundColor:'transparent',font:{size:10,weight:'bold'},position:'end'}}}}},
+scales:{x:{title:{display:true,text:'Months from Founding',color:C.dim,font:{size:11}},min:0,max:22,
+ticks:{color:C.dim,font:{size:10}},grid:{color:C.grid}},
+y:{ticks:{color:C.dim,font:{size:10}},grid:{display:false}}}}});
+});"""
+    },
+    {
+        'id': 'trapCapitalSplit', 'figure_num': 2,
+        'title': 'Where the Money Goes: Hardware vs Software Startup Capital Allocation',
+        'desc': 'A typical hardware startup spends the majority of its seed capital on infrastructure — facilities, equipment, and regulatory compliance — leaving a fraction for the product itself. A software startup invests almost entirely in product development.',
+        'source': 'Based on aggregate data from hardware accelerators (HAX, Bolt) and SaaS benchmarks (SaaS Capital, OpenView Partners)',
+        'position': 'after_para_17',
+        'js': """_regChart('trapCapitalSplit',()=>{const ctx=document.getElementById('trapCapitalSplit');
+const cats=['Product Engineering','Facility Lease & Fitout','Equipment & Tooling','Regulatory & Certification','Sales & Marketing','Working Capital & Other'];
+const hw=[15,25,30,10,10,10];
+const sw=[55,0,0,2,28,15];
+new Chart(ctx,{type:'bar',data:{labels:cats,
+datasets:[
+{label:'Hardware Startup (% of seed)',data:hw,backgroundColor:C.accent+'CC',borderColor:C.accent,borderWidth:1,borderRadius:3},
+{label:'Software Startup (% of seed)',data:sw,backgroundColor:C.blue+'CC',borderColor:C.blue,borderWidth:1,borderRadius:3}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'rect'}},
+tooltip:{...tooltipStyle,callbacks:{label:function(c){return c.dataset.label.split('(')[0].trim()+': '+c.raw+'%';}}}},
+scales:{x:{ticks:{color:C.dim,font:{size:9},maxRotation:45,minRotation:25},grid:{display:false}},
+y:{title:{display:true,text:'% of Seed Capital',color:C.dim,font:{size:11}},ticks:{color:C.dim,font:{size:10},callback:function(v){return v+'%';}},grid:{color:C.grid},min:0,max:60}}}});
+});"""
+    },
+    {
+        'id': 'trapLeadTimes', 'figure_num': 3,
+        'title': 'Equipment Lead Times Have Stretched: Months from Order to Delivery',
+        'desc': 'Lead times for key manufacturing equipment have lengthened significantly, particularly since 2020. Hardware startups must commit capital to equipment orders months or years before production begins.',
+        'source': 'Gardner Intelligence (machine tool surveys), Plastics Machinery & Manufacturing, industry procurement benchmarks',
+        'position': 'after_para_10',
+        'js': """_regChart('trapLeadTimes',()=>{const ctx=document.getElementById('trapLeadTimes');
+const equip=['CNC Machining Centre','Injection Moulding Press','Pick-and-Place SMT Line','Industrial Robot Cell','Custom Test Rig','Clean-Room HVAC System'];
+const pre=[3,4,3,2,4,3];
+const post=[7,9,8,5,7,6];
+new Chart(ctx,{type:'bar',data:{labels:equip,
+datasets:[
+{label:'Pre-2020 (typical)',data:pre,backgroundColor:C.teal+'AA',borderColor:C.teal,borderWidth:1,borderRadius:3},
+{label:'2021-2024 (post-disruption)',data:post,backgroundColor:C.accent+'CC',borderColor:C.accent,borderWidth:1,borderRadius:3}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'rect'}},
+tooltip:{...tooltipStyle,callbacks:{label:function(c){return c.dataset.label+': '+c.raw+' months';}}}},
+scales:{x:{ticks:{color:C.dim,font:{size:9}},grid:{display:false}},
+y:{title:{display:true,text:'Months from Order to Delivery',color:C.dim,font:{size:11}},ticks:{color:C.dim,font:{size:10}},grid:{color:C.grid},min:0,max:12}}}});
+});"""
+    },
+    {
+        'id': 'trapCashFlow', 'figure_num': 4,
+        'title': 'The Cash Abyss: Cumulative Cash Flow for a Typical Hardware vs Software Startup',
+        'desc': 'Hardware startups burn cash for 12-18 months before any revenue, with the deepest negative cash flow driven by infrastructure and equipment spending. Software startups reach cash-flow positive far earlier.',
+        'source': 'Illustrative model based on aggregate hardware and SaaS startup financial profiles (Bolt, HAX, SaaS Capital)',
+        'position': 'after_para_20',
+        'js': """_regChart('trapCashFlow',()=>{const ctx=document.getElementById('trapCashFlow');
+const months=Array.from({length:25},(_,i)=>i);
+const hw=[-50,-120,-250,-420,-600,-780,-950,-1100,-1250,-1380,-1480,-1560,-1620,-1670,-1700,-1720,-1700,-1650,-1560,-1430,-1270,-1080,-860,-610,-330];
+const sw=[-30,-80,-150,-230,-310,-380,-430,-460,-470,-460,-430,-380,-310,-220,-110,10,140,280,430,590,760,940,1130,1330,1540];
+new Chart(ctx,{type:'line',data:{labels:months,
+datasets:[
+{...ds('Hardware Startup',hw,C.accent),data:hw,fill:{target:'origin',above:C.green+'11',below:C.accent+'22'},tension:0.3,pointRadius:0},
+{...ds('Software Startup',sw,C.blue),data:sw,fill:{target:'origin',above:C.blue+'18',below:C.blue+'11'},tension:0.3,pointRadius:0}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'line'}},
+tooltip:{...tooltipStyle,callbacks:{label:function(c){return c.dataset.label+': \u00a3'+c.raw+'k';}}},
+annotation:{annotations:{
+zeroLine:{type:'line',yMin:0,yMax:0,borderColor:C.dim+'66',borderWidth:1,borderDash:[4,4]},
+hwRevenue:{type:'line',xMin:15,xMax:15,borderColor:C.accent,borderWidth:1.5,borderDash:[5,3],
+label:{..._al,content:'HW first revenue',display:true,color:C.accent,backgroundColor:'transparent',position:'start',font:{size:10}}},
+swRevenue:{type:'line',xMin:4,xMax:4,borderColor:C.blue,borderWidth:1.5,borderDash:[5,3],
+label:{..._al,content:'SW first revenue',display:true,color:C.blue,backgroundColor:'transparent',position:'end',font:{size:10}}}
+}}},
+scales:{x:{title:{display:true,text:'Months from Founding',color:C.dim,font:{size:11}},
+ticks:{color:C.dim,font:{size:10}},grid:{color:C.grid}},
+y:{title:{display:true,text:'Cumulative Cash Flow (\u00a3k)',color:C.dim,font:{size:11}},
+ticks:{color:C.dim,font:{size:10},callback:function(v){return '\u00a3'+v+'k';}},grid:{color:C.grid}}}}});
+});"""
+    },
+    {
+        'id': 'trapVacancy', 'figure_num': 5,
+        'title': 'Finding a Factory: US Industrial Vacancy Rates, 2015-2025',
+        'desc': 'Industrial vacancy rates in the United States fell to historic lows around 2022, making it exceptionally difficult for hardware startups to find suitable manufacturing space. Rates have since risen but remain below pre-pandemic norms in many markets.',
+        'source': 'CBRE Industrial & Logistics Market Reports, 2015-2025',
+        'position': 'after_para_8',
+        'js': """_regChart('trapVacancy',()=>{const ctx=document.getElementById('trapVacancy');
+const years=['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const rates=[7.2,6.6,5.8,5.2,5.0,5.3,4.0,3.1,4.5,5.8,6.6];
+new Chart(ctx,{type:'line',data:{labels:years,
+datasets:[{...ds('US Industrial Vacancy Rate (%)',rates,C.accent),data:rates,fill:{target:'origin',above:C.accent+'18'},tension:0.35,pointRadius:4,pointBackgroundColor:C.accent,pointBorderColor:C.bg}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{display:false},
+tooltip:{...tooltipStyle,callbacks:{label:function(c){return c.raw+'% vacancy';}}},
+annotation:{annotations:{
+trough:{type:'point',xValue:'2022',yValue:3.1,radius:7,backgroundColor:'transparent',borderColor:C.amber,borderWidth:2},
+troughLabel:{type:'label',xValue:'2022',yValue:1.8,content:['3.1% \u2014 historic low'],color:C.amber,backgroundColor:'transparent',font:{size:10,weight:'bold'}},
+pandemic:{type:'box',xMin:'2020',xMax:'2021',backgroundColor:C.dim+'0D',borderWidth:0,
+label:{..._al,content:'COVID',display:true,color:C.dim,backgroundColor:'transparent',font:{size:9},position:{x:'center',y:'start'}}}
+}}},
+scales:{x:{ticks:{color:C.dim,font:{size:10}},grid:{color:C.grid}},
+y:{title:{display:true,text:'Vacancy Rate (%)',color:C.dim,font:{size:11}},
+ticks:{color:C.dim,font:{size:10},callback:function(v){return v+'%';}},grid:{color:C.grid},min:0,max:10}}}});
+});"""
+    }
+]
+
     return charts
 
 

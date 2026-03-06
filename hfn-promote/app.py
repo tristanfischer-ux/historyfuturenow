@@ -557,6 +557,11 @@ body.dark .st-next-text{color:#fbbf24}
 .st-msg .st-msg-content li{margin-bottom:2px}
 .st-msg.streaming .st-cursor{display:inline-block;width:2px;height:14px;background:var(--accent);animation:blink .8s infinite;vertical-align:text-bottom;margin-left:2px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.st-thinking{display:inline-flex;gap:4px;padding:8px 4px;align-items:center}
+.st-thinking-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:.3;animation:thinkPulse 1.4s ease-in-out infinite}
+.st-thinking-dot:nth-child(2){animation-delay:.2s}
+.st-thinking-dot:nth-child(3){animation-delay:.4s}
+@keyframes thinkPulse{0%,80%,100%{opacity:.3;transform:scale(1)}40%{opacity:1;transform:scale(1.2)}}
 .st-draft-indicator{background:#dcfce7;color:#166534;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:6px;text-align:center;animation:fadeInUp .3s ease}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @keyframes editorFlash{0%{box-shadow:inset 0 0 0 2px transparent}30%{box-shadow:inset 0 0 0 2px #4ade80}100%{box-shadow:inset 0 0 0 2px transparent}}
@@ -2200,9 +2205,10 @@ async function studioSendChat(opts){
   // Show user message
   studioAppendMessage('user',text);
 
-  // Create streaming assistant bubble
+  // Create streaming assistant bubble with thinking indicator
   const bubble=studioAppendMessage('assistant','',true);
   const contentEl=bubble.querySelector('.st-msg-content');
+  contentEl.innerHTML='<span class="st-thinking"><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span></span>';
   studioChatStreaming=true;
   document.getElementById('st-chat-send').disabled=true;
 
@@ -2228,6 +2234,11 @@ async function studioSendChat(opts){
         if(!line.startsWith('data: '))continue;
         try{
           const data=JSON.parse(line.slice(6));
+          if(data.thinking){
+            contentEl.innerHTML='<span class="st-thinking"><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span></span>';
+            document.getElementById('st-chat-messages').scrollTop=document.getElementById('st-chat-messages').scrollHeight;
+            continue;
+          }
           if(data.delta){
             fullText+=data.delta;
             // Remove cursor, update content, re-add cursor
@@ -2558,9 +2569,10 @@ async function studioFactCheck(){
   await studioSave();
   // Show user message
   studioAppendMessage('user','[Fact-check requested]');
-  // Create streaming assistant bubble
+  // Create streaming assistant bubble with thinking indicator
   const bubble=studioAppendMessage('assistant','',true);
   const contentEl=bubble.querySelector('.st-msg-content');
+  contentEl.innerHTML='<span class="st-thinking"><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span></span>';
   studioChatStreaming=true;
   document.getElementById('st-chat-send').disabled=true;
   let fullText='';
@@ -2581,6 +2593,11 @@ async function studioFactCheck(){
         if(!line.startsWith('data: '))continue;
         try{
           const data=JSON.parse(line.slice(6));
+          if(data.thinking){
+            contentEl.innerHTML='<span class="st-thinking"><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span></span>';
+            document.getElementById('st-chat-messages').scrollTop=document.getElementById('st-chat-messages').scrollHeight;
+            continue;
+          }
           if(data.delta){
             fullText+=data.delta;
             const cursor=contentEl.querySelector('.st-cursor');
@@ -3371,6 +3388,7 @@ async function seriesSendChat(){
   seriesAppendMessage('user',text);
   const bubble=seriesAppendMessage('assistant','',true);
   const contentEl=bubble.querySelector('.st-msg-content');
+  contentEl.innerHTML='<span class="st-thinking"><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span></span>';
   seriesChatStreaming=true;
   document.getElementById('sr-chat-send').disabled=true;
   let fullText='';
@@ -3392,6 +3410,11 @@ async function seriesSendChat(){
         if(!line.startsWith('data: '))continue;
         try{
           const data=JSON.parse(line.slice(6));
+          if(data.thinking){
+            contentEl.innerHTML='<span class="st-thinking"><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span><span class="st-thinking-dot"></span></span>';
+            el.scrollTop=el.scrollHeight;
+            continue;
+          }
           if(data.delta){
             fullText+=data.delta;
             if(typeof marked!=='undefined'){
@@ -4366,7 +4389,7 @@ WHEN PRODUCING A DRAFT:
 - Output complete markdown with YAML frontmatter at the top:
   ---
   title: "Article Title"
-  section: "Geopolitics|Economics|Technology|Society|Environment|History"
+  section: "Natural Resources|Global Balance of Power|Jobs & Economy|Society"
   excerpt: "2-3 sentence summary"
   share_summary: "Under 140 chars, pithy thesis"
   sources:
@@ -4417,6 +4440,14 @@ plugins:{legend,tooltip:tooltipStyle},scales:gridOpts}});
     },
 ]
 ```
+
+WORKFLOW SEQUENCE — FOLLOW THIS ORDER STRICTLY:
+The pipeline has 8 steps: Draft → Fact-Check → Charts → Image → Audio → Build → Review → Website.
+- Do NOT generate hero images while drafting. The image comes AFTER charts are defined (step 4).
+- Do NOT call the generate_hero_image tool unless the user is on the Image step or explicitly asks for an image.
+- Do NOT skip steps or do things in parallel. Each step produces inputs for the next.
+- When the user says "write the article", focus ONLY on producing the draft text. Do not also generate images.
+- When asked about next steps, refer to the current pipeline step and what button to click next.
 
 Follow ALL the editorial rules and style guides below exactly.
 """
@@ -4625,19 +4656,23 @@ def api_studio_chat(did):
     chat_tools = [
         {
             "name": "generate_hero_image",
-            "description": "Generate or regenerate the hero image for this article. Use this whenever the user asks to create, redo, fix, or change the hero image.",
+            "description": "Generate or regenerate the hero image for this article. Use this whenever the user asks to create, redo, fix, or change the hero image. The system automatically prepends the HFN house style prefix (Noma Bar, Christoph Niemann, Economist tradition). You only need to provide the SUBJECT — a conceptual metaphor for the article's theme.",
             "input_schema": {
                 "type": "object",
                 "properties": {
                     "prompt": {
                         "type": "string",
-                        "description": "Detailed image generation prompt. Must include style directives: flat geometric editorial illustration, mid-century modern poster aesthetic, warm muted palette, no text/faces/photorealism, landscape 16:9."
+                        "description": "The SUBJECT of the illustration — a conceptual, metaphorical description (NOT literal). Think Noma Bar / Christoph Niemann: abstract visual metaphors, not narrative scenes. Example: 'A human eye reflected in a surveillance camera lens, with frost crystals spreading across the surface. Binary code fading into ice.' Do NOT include style directives (they are added automatically)."
                     }
                 },
                 "required": ["prompt"]
             }
         }
     ]
+
+    # Only offer image tool when user EXPLICITLY asks for an image
+    user_asks_image = any(w in user_msg.lower() for w in ["image", "hero", "illustration", "picture", "generate image"])
+    tools_for_call = chat_tools if user_asks_image else []
 
     # Sonnet for edits/corrections, Opus for original prose (with Sonnet fallback)
     if model_pref == "sonnet":
@@ -4646,13 +4681,14 @@ def api_studio_chat(did):
         MODELS = ["claude-opus-4-6", "claude-sonnet-4-6"]
 
     def generate():
+        yield f"data: {json.dumps({'thinking': True})}\n\n"
         full_text = ""
         used_model = None
         for i, model in enumerate(MODELS):
             try:
                 result = client.messages.create(
                     model=model, max_tokens=8192, system=system, messages=messages,
-                    tools=chat_tools,
+                    tools=tools_for_call or anthropic.NOT_GIVEN,
                 )
                 # Collect text blocks and detect tool_use blocks
                 text_parts = []
@@ -4770,6 +4806,7 @@ def api_studio_fact_check(did):
     fc_messages = [{"role": "user", "content": f"Fact-check this article draft:\n\n{markdown}"}]
 
     def generate():
+        yield f"data: {json.dumps({'thinking': True})}\n\n"
         full_text = ""
         used_model = None
         for i, model in enumerate(fc_models):
@@ -5019,6 +5056,7 @@ def api_studio_series_chat(sid):
     MODELS = ["claude-opus-4-6", "claude-sonnet-4-6"]
 
     def generate():
+        yield f"data: {json.dumps({'thinking': True})}\n\n"
         full_text = ""
         used_model = None
         for i, model in enumerate(MODELS):
