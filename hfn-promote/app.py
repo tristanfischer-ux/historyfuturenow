@@ -1227,11 +1227,11 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
       <div class="st-step-line" id="st-line-2"></div>
       <div class="st-step"><div class="st-step-dot" id="st-dot-3">4</div><div class="st-step-label">Image</div></div>
       <div class="st-step-line" id="st-line-3"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Audio</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-4">5</div><div class="st-step-label">Build</div></div>
       <div class="st-step-line" id="st-line-4"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-5">6</div><div class="st-step-label">Build</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-5">6</div><div class="st-step-label">Review</div></div>
       <div class="st-step-line" id="st-line-5"></div>
-      <div class="st-step"><div class="st-step-dot" id="st-dot-6">7</div><div class="st-step-label">Review</div></div>
+      <div class="st-step"><div class="st-step-dot" id="st-dot-6">7</div><div class="st-step-label">Audio</div></div>
       <div class="st-step-line" id="st-line-6"></div>
       <div class="st-step"><div class="st-step-dot" id="st-dot-7">8</div><div class="st-step-label">Website</div></div>
     </div>
@@ -2096,8 +2096,8 @@ let studioPollTimer=null;
 let studioChatStreaming=false;
 let studioCurrentAction=null;
 let _mediaCacheBust=Date.now();
-const stageOrder=['draft','factcheck','charts','images','audio','review','in_review','published'];
-const stageLabels=['Draft','Fact-Check','Charts','Image','Audio','Build','Review','Website'];
+const stageOrder=['draft','factcheck','charts','images','review','in_review','audio','published'];
+const stageLabels=['Draft','Fact-Check','Charts','Image','Build','Review','Audio','Website'];
 
 async function studioNewDraft(){
   const r=await fetch('/api/studio/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'Untitled'})});
@@ -2503,19 +2503,19 @@ function studioUpdateNextBar(stage){
       break;
     case 'images':
       text.textContent='Generate a hero image for the article.';
-      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')" style="margin-right:6px">Generate Image</button><button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Review in Preview</button><button class="btn secondary" onclick="studioAdvanceStage(\'audio\')">Continue \u2192</button>';
-      break;
-    case 'audio':
-      text.textContent='Generate audio narration for the article.';
-      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_audio\')" style="margin-right:6px">Generate Audio</button><button class="btn secondary" onclick="studioAdvanceStage(\'review\')">Skip \u2192</button>';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_image\')" style="margin-right:6px">Generate Image</button><button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Review in Preview</button><button class="btn secondary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
       break;
     case 'review':
       text.textContent='Review your article. When ready, deploy to the review page.';
       btns.innerHTML='<button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Preview</button><button class="btn primary" onclick="studioAction(\'build\')" style="margin-right:6px">Build</button><button class="btn primary" onclick="studioAction(\'deploy\')">Deploy to Review</button>';
       break;
     case 'in_review':
-      text.textContent='Article is live on /review. Edit freely, then deploy to website when approved.';
-      btns.innerHTML='<button class="btn secondary" onclick="studioSetMode(\'preview\')" style="margin-right:6px">Preview</button><button class="btn secondary" onclick="studioAction(\'build\')" style="margin-right:6px">Rebuild Preview</button><button class="btn primary" onclick="studioAction(\'publish\')">Deploy to Website</button>';
+      text.textContent='Article is live on /review. Read it there, then generate audio when approved.';
+      btns.innerHTML='<button class="btn secondary" onclick="window.open(\'https://www.historyfuturenow.com/review/\',\'_blank\')" style="margin-right:6px">View on Review Site</button><button class="btn primary" onclick="studioAdvanceStage(\'audio\')">Approve \u2192 Audio</button>';
+      break;
+    case 'audio':
+      text.textContent='Generate audio narration, then publish to the main site.';
+      btns.innerHTML='<button class="btn primary" onclick="studioAction(\'generate_audio\')" style="margin-right:6px">Generate Audio</button><button class="btn secondary" onclick="studioAdvanceStage(\'published\')" style="margin-right:6px">Skip Audio</button><button class="btn primary" onclick="studioAction(\'publish\')" style="margin-right:6px">Publish to Website</button>';
       break;
     case 'published':
       text.textContent='Article published. Edit and redeploy anytime.';
@@ -2685,21 +2685,20 @@ function studioPollTask(taskId){
           heroImg.src='/api/studio/drafts/'+studioCurrentId+'/hero-image?t='+_mediaCacheBust;
           heroImg.classList.add('visible');
           document.getElementById('st-next-text').textContent='Hero image generated.';
-          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAdvanceStage(\'audio\')">Continue \u2192</button>';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
           studioUpdateStepper('images');
           studioCurrentAction=null;
           studioSchedulePreviewUpdate();
         }else if(studioCurrentAction==='generate_audio'&&studioCurrentId){
           _mediaCacheBust=Date.now();
-          document.getElementById('st-next-text').textContent='Audio narration generated.';
-          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAdvanceStage(\'review\')">Continue \u2192</button>';
+          document.getElementById('st-next-text').textContent='Audio narration generated. Ready to publish.';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn primary" onclick="studioAction(\'publish\')">Publish to Website</button>';
           studioUpdateStepper('audio');
           studioCurrentAction=null;
-          // Refresh to show audio player
           if(studioCurrentId)studioSelectDraft(studioCurrentId);
         }else if(studioCurrentAction==='deploy'&&studioCurrentId){
-          document.getElementById('st-next-text').textContent='Deployed to review \u2014 awaiting approval.';
-          document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="window.open(\'https://www.historyfuturenow.com/review/\',\'_blank\')">View Review Page</button>';
+          document.getElementById('st-next-text').textContent='Deployed to review. Read it on the review site, then approve for audio.';
+          document.getElementById('st-next-btns').innerHTML='<button class="btn secondary" onclick="window.open(\'https://www.historyfuturenow.com/review/\',\'_blank\')" style="margin-right:6px">View Review Page</button><button class="btn primary" onclick="studioAdvanceStage(\'audio\')">Approve \u2192 Audio</button>';
           studioCurrentAction=null;
           if(studioCurrentId)studioSelectDraft(studioCurrentId);
         }else if(studioCurrentAction==='build'&&studioCurrentId){

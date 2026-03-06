@@ -10,6 +10,12 @@ from config import HFN_SOURCE_DIR, HFN_SITE_OUTPUT, HFN_CONTENT_DIR, HFN_AUDIO_D
 BUILD_SYSTEM = HFN_SOURCE_DIR
 SCRIPTS_DIR = HFN_SOURCE_DIR.parent / "scripts"
 
+# Ensure subprocess PATH includes Homebrew (launchd has minimal PATH)
+import os as _os
+_SUBPROCESS_ENV = _os.environ.copy()
+_homebrew_paths = "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
+_SUBPROCESS_ENV["PATH"] = _homebrew_paths + ":" + _SUBPROCESS_ENV.get("PATH", "/usr/bin:/bin")
+
 
 def start_task(task_id, task_type, draft_id):
     """Spawn a background thread to run the given task."""
@@ -252,9 +258,10 @@ def _run_generate_image(task_id, draft_id):
         user_prompt = (
             f"Editorial illustration for an article titled '{title}'. "
             "Style: flat geometric editorial illustration, mid-century modern poster aesthetic. "
+            "The illustration must fill the ENTIRE frame edge-to-edge with NO empty space, NO margins, NO borders, NO background padding. "
             "Warm muted editorial palette (terracotta, navy, sand, teal, grey, ochre). "
-            "No text, no writing, no photorealism, no detailed faces. "
-            "Landscape orientation, wide format, 16:9 aspect ratio."
+            "No text, no writing, no photorealism, no detailed faces, no people. "
+            "Landscape orientation, wide panoramic format, 16:9 aspect ratio."
         )
         db.update_studio_task(task_id, progress="Auto-generated image prompt from title...")
 
@@ -262,10 +269,15 @@ def _run_generate_image(task_id, draft_id):
     if "flat geometric" not in user_prompt.lower() and "editorial illustration" not in user_prompt.lower():
         user_prompt = (
             "Flat geometric editorial illustration in a mid-century modern poster style. "
+            "The illustration must fill the ENTIRE frame edge-to-edge with NO empty space, NO margins, NO borders. "
             "Warm muted editorial palette (terracotta, navy, sand, teal, grey, ochre). "
-            "No text, no writing, no photorealism, no detailed faces. "
-            "Landscape orientation, wide format, 16:9 aspect ratio. "
+            "No text, no writing, no photorealism, no detailed faces, no people. "
+            "Landscape orientation, wide panoramic format, 16:9 aspect ratio. "
         ) + user_prompt
+
+    # Always add edge-to-edge instruction
+    if "edge-to-edge" not in user_prompt.lower() and "fill the entire" not in user_prompt.lower():
+        user_prompt += " The illustration must fill the ENTIRE frame edge-to-edge. No empty space, no margins, no background padding."
 
     # Always ensure landscape orientation is requested
     if "landscape" not in user_prompt.lower() and "16:9" not in user_prompt:
@@ -392,8 +404,8 @@ def _run_generate_audio(task_id, draft_id):
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY not found in environment or ~/.zshrc")
 
-    # Build env with the API key
-    env = os.environ.copy()
+    # Build env with the API key + proper PATH (launchd has minimal PATH)
+    env = _SUBPROCESS_ENV.copy()
     env["GEMINI_API_KEY"] = api_key
 
     # Use system python3 (has required packages: yaml, requests, etc.)
@@ -466,7 +478,19 @@ def _run_deploy(task_id, draft_id):
     db.update_studio_task(task_id, progress="Building site...")
     _run_build(task_id, draft_id)
 
-    # Step 3: Deploy
+    # Step 3: Git pull to avoid rejection (remote may have new commits)
+    db.update_studio_task(task_id, progress="Syncing with remote...")
+    root_dir = str(BUILD_SYSTEM.parent)
+    pull = subprocess.run(
+        ["git", "pull", "--rebase", "--autostash"],
+        cwd=root_dir, env=_SUBPROCESS_ENV,
+        capture_output=True, text=True, timeout=120
+    )
+    if pull.returncode != 0:
+        err = pull.stderr[:300] if pull.stderr else "pull failed"
+        raise RuntimeError(f"Git pull failed: {err}")
+
+    # Step 4: Deploy (skip-build since we already built)
     db.update_studio_task(task_id, progress="Deploying to review...")
 
     deploy_script = SCRIPTS_DIR / "deploy.sh"
@@ -476,12 +500,12 @@ def _run_deploy(task_id, draft_id):
     proc = subprocess.run(
         ["bash", str(deploy_script), "--skip-build",
          f"feat: deploy {draft['title'][:50]} to review"],
-        cwd=str(BUILD_SYSTEM.parent),
+        cwd=root_dir, env=_SUBPROCESS_ENV,
         capture_output=True, text=True, timeout=600
     )
 
     if proc.returncode != 0:
-        err = proc.stderr[:300] if proc.stderr else "Unknown error"
+        err = (proc.stderr[:300] if proc.stderr else proc.stdout[:300]) or "Unknown error"
         raise RuntimeError(f"Deploy failed: {err}")
 
     db.update_draft(draft_id, stage="in_review")
