@@ -287,6 +287,68 @@ def _write_chart_defs(task_id, slug, chart_defs):
     db.update_studio_task(task_id, progress=f"Chart defs appended to chart_defs.py")
 
 
+def _craft_image_subject(title, excerpt=""):
+    """Use Claude to craft a specific visual metaphor for the hero image, like the hand-crafted originals."""
+    import os
+    try:
+        import anthropic
+    except ImportError:
+        return None
+
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        zshrc = Path.home() / ".zshrc"
+        if zshrc.exists():
+            for line in zshrc.read_text().splitlines():
+                m = _re.match(r'export\s+ANTHROPIC_API_KEY=["\']?([^"\']+)', line)
+                if m:
+                    api_key = m.group(1)
+                    break
+    if not api_key:
+        return None
+
+    client = anthropic.Anthropic(api_key=api_key)
+
+    prompt = f"""You are writing a visual subject for an editorial illustration in the style of Noma Bar and Christoph Niemann.
+
+THE SINGLE MOST IMPORTANT RULE: Simplicity. ONE central object or visual metaphor. Maximum 2-3 elements total. The best illustrations have ONE bold idea, not five competing ones.
+
+Be LITERAL about the title's metaphor. "The Locked Gate" = a locked gate. "Scissors Opened" = scissors. "The Eighteen-Month Trap" = a trap.
+
+RULES:
+- ONE dominant visual element, not a collage of many things
+- No text, numbers, labels, or any readable content in the scene
+- No detailed faces (silhouettes OK)
+- Describe in 1-2 sentences only
+- Think: what single image would a reader instantly connect to this title?
+
+EXAMPLES:
+
+Title: "The Locked Gate: How the West Priced Its Children Out of Existence"
+Subject: A massive padlocked iron gate with rows of houses visible behind the bars. A young couple's silhouettes stand outside, unable to enter.
+
+Title: "Why the Scissors Opened: Nine Hypotheses for the Gender Ideology Split"
+Subject: A pair of scissors opening wide, one blade pink, one blade blue, with human silhouettes standing on each blade facing away from each other.
+
+Title: "The Ladder and the Lie: Why Every Great Economy Was Built on Tariffs"
+Subject: A tall ladder behind a shield wall. A figure at the top kicks the ladder away while figures below try to climb.
+
+Title: "A Frozen Society: The Long-Term Implications of NSA's Secrets"
+Subject: A human eye reflected in a surveillance camera lens, with frost crystals spreading across the surface.
+
+Title: "{title}"
+{f'Excerpt: "{excerpt}"' if excerpt else ''}
+
+Reply with ONLY the subject description. 1-2 sentences. ONE central image."""
+
+    result = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=200,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return result.content[0].text.strip()
+
+
 def _run_generate_image(task_id, draft_id):
     """Generate hero image using Gemini API directly."""
     import os
@@ -298,28 +360,30 @@ def _run_generate_image(task_id, draft_id):
     db.update_studio_task(task_id, progress="Generating hero image...")
 
     # The HFN house style prefix — grounds every image in a specific design tradition.
-    # Matches the original generate_image_prompts.py STYLE_PREFIX that produced the best images.
     HFN_STYLE_PREFIX = (
         "Editorial illustration for a serious analytical magazine about history and geopolitics. "
         "Conceptual and metaphorical, not literal or photorealistic. "
         "Bold flat shapes with clean geometric composition. "
         "Palette: muted earth tones (warm cream, deep crimson #c43425, navy blue, ochre, olive) "
         "with one or two vivid accent colours. "
-        "No text, no lettering, no words, no logos in the image. "
+        "ABSOLUTELY NO text, NO lettering, NO words, NO numbers, NO digits, NO labels, NO logos, NO titles, NO captions, "
+        "NO signs, NO calendars with numbers, NO writing of any kind anywhere in the image. "
+        "The image must contain ZERO written or printed characters. This is the most important rule. "
         "Inspired by Noma Bar, Christoph Niemann, and the conceptual illustration tradition "
         "of The Economist magazine covers. "
         "Sophisticated, intellectual, slightly provocative. "
         "Suitable for a publication about historical forces shaping the future. "
     )
 
-    # Build the image prompt: style prefix + subject (user-provided or auto-generated)
+    # Build the image prompt: style prefix + subject
     subject = (draft.get("image_prompt") or "").strip()
     title = draft.get("title", "Untitled")
+    excerpt = draft.get("excerpt", "")
 
     # Sanitize: strip frontmatter/markdown that may have leaked into the image_prompt field
     if subject.startswith("```") or subject.startswith("---\n") or subject.startswith("---\ntitle"):
-        subject = ""  # Contaminated with article frontmatter — discard
-    # Strip redundant style directives the AI may have included (we prepend our own)
+        subject = ""
+    # Strip redundant style directives the AI may have included
     for noise in [
         "Flat geometric editorial illustration,",
         "flat geometric editorial illustration,",
@@ -330,13 +394,18 @@ def _run_generate_image(task_id, draft_id):
         "No text, no lettering, no words, no logos in the image.",
     ]:
         subject = subject.replace(noise, "")
-    subject = " ".join(subject.split())  # collapse whitespace
+    subject = " ".join(subject.split())
 
+    # If no specific subject, use Claude to craft a proper visual metaphor
     if not subject:
-        subject = f"A conceptual metaphor for an article titled '{title}'."
-        db.update_studio_task(task_id, progress="Auto-generated image subject from title...")
+        db.update_studio_task(task_id, progress="Crafting visual metaphor with Claude...")
+        subject = _craft_image_subject(title, excerpt)
+        if subject:
+            db.update_draft(draft_id, image_prompt=subject)  # Save for reference
+        else:
+            subject = f"A visual metaphor for '{title}'."
 
-    user_prompt = HFN_STYLE_PREFIX + subject + " Wide panoramic composition. Image dimensions: 1200x675 pixels."
+    user_prompt = HFN_STYLE_PREFIX + subject + " Wide panoramic composition filling the entire canvas edge to edge. Image dimensions: 1200x675 pixels."
 
     # Check API key — try env first, then fall back to .zshrc extraction
     api_key = os.environ.get("GEMINI_API_KEY")

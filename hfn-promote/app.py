@@ -2807,6 +2807,9 @@ function studioSetMode(mode){
     const btn=document.getElementById('st-mode-'+m);
     if(btn)btn.classList.toggle('active',m===mode);
   });
+  // Hide details-panel hero when preview shows its own hero image
+  const detailsHero=document.getElementById('st-hero-img');
+  if(detailsHero)detailsHero.style.display=(mode==='edit'&&detailsHero.classList.contains('visible'))?'block':'none';
   if(mode!=='edit')studioUpdatePreview();
 }
 
