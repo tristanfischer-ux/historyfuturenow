@@ -5482,8 +5482,8 @@ const hw=[10,8,15,18];
 const sw=[0.1,3,3,4];
 new Chart(ctx,{type:'bar',data:{labels:milestones,
 datasets:[
-{label:'Hardware Startup',data:hw,backgroundColor:C.accent+'CC',borderColor:C.accent,borderWidth:1,borderRadius:3},
-{label:'Software Startup',data:sw,backgroundColor:C.blue+'CC',borderColor:C.blue,borderWidth:1,borderRadius:3}
+{label:'Hardware Startup',data:hw,backgroundColor:C.accent+'CC',borderWidth:0,borderRadius:3},
+{label:'Software Startup',data:sw,backgroundColor:C.blue+'CC',borderWidth:0,borderRadius:3}
 ]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'rect'}},
@@ -5507,8 +5507,8 @@ const hw=[15,25,30,10,10,10];
 const sw=[55,0,0,2,28,15];
 new Chart(ctx,{type:'bar',data:{labels:cats,
 datasets:[
-{label:'Hardware Startup (% of seed)',data:hw,backgroundColor:C.accent+'CC',borderColor:C.accent,borderWidth:1,borderRadius:3},
-{label:'Software Startup (% of seed)',data:sw,backgroundColor:C.blue+'CC',borderColor:C.blue,borderWidth:1,borderRadius:3}
+{label:'Hardware Startup (% of seed)',data:hw,backgroundColor:C.accent+'CC',borderWidth:0,borderRadius:3},
+{label:'Software Startup (% of seed)',data:sw,backgroundColor:C.blue+'CC',borderWidth:0,borderRadius:3}
 ]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'rect'}},
@@ -5529,8 +5529,8 @@ const pre=[3,4,3,2,4,3];
 const post=[7,9,8,5,7,6];
 new Chart(ctx,{type:'bar',data:{labels:equip,
 datasets:[
-{label:'Pre-2020 (typical)',data:pre,backgroundColor:C.teal+'AA',borderColor:C.teal,borderWidth:1,borderRadius:3},
-{label:'2021-2024 (post-disruption)',data:post,backgroundColor:C.accent+'CC',borderColor:C.accent,borderWidth:1,borderRadius:3}
+{label:'Pre-2020 (typical)',data:pre,backgroundColor:C.teal+'AA',borderWidth:0,borderRadius:3},
+{label:'2021-2024 (post-disruption)',data:post,backgroundColor:C.accent+'CC',borderWidth:0,borderRadius:3}
 ]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'rect'}},
@@ -5593,6 +5593,108 @@ label:{..._al,content:'COVID',display:true,color:C.dim,backgroundColor:'transpar
 scales:{x:{ticks:{color:C.dim,font:{size:10}},grid:{color:C.grid}},
 y:{title:{display:true,text:'Vacancy Rate (%)',color:C.dim,font:{size:11}},
 ticks:{color:C.dim,font:{size:10},callback:function(v){return v+'%';}},grid:{color:C.grid},min:0,max:10}}}});
+});"""
+    }
+]
+
+
+    # ─── STUDIO: the-arsenal-and-the-container-how-shared-infrastructure-always-wins ───
+    charts['the-arsenal-and-the-container-how-shared-infrastructure-always-wins'] = [
+    {
+        'id': 'arsenalGalleyOutput',
+        'figure_num': 1,
+        'title': 'Venetian Arsenale: Galley Production Capacity vs Mediterranean Rivals, c. 1570',
+        'desc': 'Estimated wartime galley mobilisation capacity of major Mediterranean naval powers in the years before Lepanto (1571). Venice\'s Arsenale system enabled a city-state of 170,000 to outproduce empires.',
+        'source': 'Frederic C. Lane, Venetian Ships and Shipbuilders of the Renaissance (1934); Niccolò Capponi, Victory of the West (2006)',
+        'position': 'after_para_7',
+        'js': """_regChart('arsenalGalleyOutput',()=>{const ctx=document.getElementById('arsenalGalleyOutput');
+new Chart(ctx,{type:'bar',data:{labels:['Venice\\n(pop. ~170k)','Ottoman Empire\\n(pop. ~25m)','Spain\\n(pop. ~8m)','Genoa\\n(pop. ~70k)','France\\n(pop. ~16m)'],
+datasets:[{...ds('Galleys mobilised for Lepanto campaign or equivalent',[109,230,49,27,0],C.accent),
+backgroundColor:[C.accent,C.blue,C.amber,C.teal,C.purple],borderWidth:0}]},
+options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',layout:{padding:chartPad},
+plugins:{legend:{display:false},tooltip:tooltipStyle,
+annotation:{annotations:{
+perCapita:{type:'label',..._al,content:'Venice produced ~1 galley per 1,500 citizens',
+xValue:60,yValue:0.3,color:C.dim,font:{size:10,style:'italic'}}
+}}},
+scales:{x:{...gridOpts.x,title:{display:true,text:'War galleys mobilised (c. 1570–71)',color:C.dim,font:{size:10}}},
+y:{...gridOpts.y,ticks:{...gridOpts.y.ticks,font:{size:9}}}}}});
+});"""
+    },
+    {
+        'id': 'springfieldOutput',
+        'figure_num': 2,
+        'title': 'Springfield Armory Annual Musket Production, 1800–1865',
+        'desc': 'As the American system of manufactures matured — standardised gauges, dedicated machine tools, interchangeable parts — output scaled dramatically without proportional increases in workforce skill.',
+        'source': 'Merritt Roe Smith, Harpers Ferry Armory and the New Technology (1977); Derwent Whittlesey, Springfield Armory (1920)',
+        'position': 'after_para_16',
+        'js': """_regChart('springfieldOutput',()=>{const ctx=document.getElementById('springfieldOutput');
+const years=[1800,1810,1815,1820,1825,1830,1835,1840,1845,1850,1855,1860,1861,1862,1863,1864,1865];
+const output=[4,8,10,13,15,16,14,15,20,22,24,12,50,200,250,276,100];
+new Chart(ctx,{type:'line',data:{datasets:[{...dxy('Annual musket/rifle production (thousands)',years,output,C.accent),
+fill:true,backgroundColor:C.accent+'22',pointRadius:3}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{
+hallRifle:{type:'line',xMin:1824,xMax:1824,borderColor:C.teal,borderWidth:1,borderDash:[4,4],
+label:{..._al,content:'Hall achieves interchangeable parts (1824)',display:true,color:C.teal,position:'start',rotation:-90,font:{size:9}}},
+model1842:{type:'line',xMin:1842,xMax:1842,borderColor:C.blue,borderWidth:1,borderDash:[4,4],
+label:{..._al,content:'Model 1842: first fully interchangeable musket',display:true,color:C.blue,position:'start',rotation:-90,font:{size:9}}},
+civilWar:{type:'box',xMin:1861,xMax:1865,backgroundColor:C.amber+'15',borderWidth:0,
+label:{..._al,content:'Civil War surge',display:true,color:C.amber,font:{size:9}}}
+}}},
+scales:{x:{...linX(),title:{display:true,text:'Year',color:C.dim,font:{size:10}}},
+y:{...gridOpts.y,title:{display:true,text:'Thousands of muskets/rifles per year',color:C.dim,font:{size:10}}}}}});
+});"""
+    },
+    {
+        'id': 'containerCostCollapse',
+        'figure_num': 3,
+        'title': 'The Container Revolution: Cargo Handling Cost Per Ton, 1956–1985',
+        'desc': 'Containerisation did not make ships faster. It eliminated the friction between modes of transport, collapsing the cost of moving goods by more than 90%.',
+        'source': 'Marc Levinson, The Box (2006; rev. 2016); US Bureau of Labor Statistics',
+        'position': 'after_para_24',
+        'js': """_regChart('containerCostCollapse',()=>{const ctx=document.getElementById('containerCostCollapse');
+new Chart(ctx,{type:'bar',data:{labels:['1956\\nBreak-bulk era','1970\\nEarly containers','1980\\nFull containerisation','1985\\nMature system'],
+datasets:[{...ds('Cargo handling cost ($ per ton, approximate)',
+[5.86,1.50,0.50,0.16],C.accent),
+backgroundColor:[C.amber,C.teal,C.blue,C.accent],borderWidth:0}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{display:false},tooltip:tooltipStyle,
+annotation:{annotations:{
+pctDrop:{type:'label',..._al,content:'>97% cost reduction in under 30 years',
+xValue:2,yValue:4.5,color:C.dim,font:{size:11,weight:'bold'}},
+idealx:{type:'line',xMin:-0.3,xMax:-0.3,borderColor:C.amber,borderWidth:1,borderDash:[3,3],
+label:{..._al,content:'Ideal X sails (April 1956)',display:true,color:C.amber,font:{size:9}}}
+}}},
+scales:{x:{...gridOpts.x},
+y:{...gridOpts.y,title:{display:true,text:'US dollars per ton (cargo handling)',color:C.dim,font:{size:10}}}}}});
+});"""
+    },
+    {
+        'id': 'globalContainerTraffic',
+        'figure_num': 4,
+        'title': 'Global Container Port Throughput, 1970–2023',
+        'desc': 'Once the platform existed, adoption followed an exponential curve. Global container traffic grew from virtually zero to nearly 900 million TEUs in five decades — the signature growth pattern of a platform that democratises access.',
+        'source': 'UNCTAD Review of Maritime Transport (various years); World Bank',
+        'position': 'after_para_28',
+        'js': """_regChart('globalContainerTraffic',()=>{const ctx=document.getElementById('globalContainerTraffic');
+const years=[1970,1975,1980,1985,1990,1995,2000,2005,2008,2010,2015,2019,2020,2021,2022,2023];
+const teus=[8,22,39,62,88,145,236,392,530,545,684,811,775,849,869,879];
+new Chart(ctx,{type:'line',data:{datasets:[{...dxy('Million TEUs handled at ports worldwide',years,teus,C.accent),
+fill:true,backgroundColor:C.accent+'18',pointRadius:3,tension:0.3}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{
+iso:{type:'line',xMin:1968,xMax:1968,borderColor:C.teal,borderWidth:1,borderDash:[4,4],
+label:{..._al,content:'ISO standards agreed (1968)',display:true,color:C.teal,position:'start',rotation:-90,font:{size:9}}},
+china:{type:'line',xMin:2001,xMax:2001,borderColor:C.blue,borderWidth:1,borderDash:[4,4],
+label:{..._al,content:'China joins WTO (2001)',display:true,color:C.blue,position:'start',rotation:-90,font:{size:9}}},
+covid:{type:'point',xValue:2020,yValue:775,backgroundColor:C.amber,radius:6,borderWidth:0,
+label:{..._al,content:'COVID-19 dip',display:true,color:C.amber,font:{size:9},yAdjust:-18}}
+}}},
+scales:{x:{...linX(),title:{display:true,text:'Year',color:C.dim,font:{size:10}}},
+y:{...gridOpts.y,title:{display:true,text:'Million TEUs (twenty-foot equivalent units)',color:C.dim,font:{size:10}}}}}});
 });"""
     }
 ]

@@ -137,10 +137,9 @@ def build_library_catalog():
             by_theme.setdefault(t, []).append(f"{b['title']} ({b.get('author', '?')})")
 
         lines = ["# HFN Library — Available Books for Sources\n"]
-        lines.append("When writing a draft, include a `sources:` list in the YAML frontmatter with "
-                     "at least 3 books from this library that are RELEVANT to the article's topic. "
-                     "Use the EXACT title as shown below. Only cite books that genuinely inform the "
-                     "article — do not pad with unrelated titles.\n")
+        lines.append("Every article must reference 3-4 books from this library PLUS 1-2 new books not listed here. "
+                     "Use EXACT titles from below for existing books. New books go in the `new_books:` frontmatter field "
+                     "with title, author, and themes — they get added to the library automatically.\n")
         for theme in sorted(by_theme.keys()):
             name = theme_names.get(theme, theme.title())
             lines.append(f"\n## {name}")
@@ -1287,12 +1286,10 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
               <label>Section</label>
               <select id="st-f-section" onchange="studioAutoSave();studioSchedulePreviewUpdate()">
                 <option value="">— None —</option>
-                <option value="Geopolitics">Geopolitics</option>
-                <option value="Economics">Economics</option>
-                <option value="Technology">Technology</option>
+                <option value="Natural Resources">Natural Resources</option>
+                <option value="Global Balance of Power">Global Balance of Power</option>
+                <option value="Jobs & Economy">Jobs &amp; Economy</option>
                 <option value="Society">Society</option>
-                <option value="Environment">Environment</option>
-                <option value="History">History</option>
               </select>
             </div>
             <div class="st-field">
@@ -2982,7 +2979,7 @@ a{color:#2563eb}
 ul,ol{margin-bottom:14px;padding-left:24px}
 li{margin-bottom:4px;font-size:.95rem}
 hr{border:none;border-top:1px solid var(--border-light);margin:24px 0}
-.chart-figure{margin:24px 0;padding:16px;background:#fafaf9;border:1px solid #f0ece8;border-radius:8px}
+.chart-figure{margin:1.25rem -1rem;padding:1rem 1rem 0.75rem;background:#fafaf9;border:1px solid #f0ece8;border-radius:12px}
 .chart-figure-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600;margin-bottom:4px}
 .chart-figure h4{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:4px}
 .chart-desc{font-size:.82rem;color:#666;margin-bottom:10px}
@@ -4412,14 +4409,17 @@ WHEN PRODUCING A DRAFT:
       author: "Author Name"
       themes: ["economics", "politics"]
   ---
-- The sources field MUST list at least 3 books. Include books from the HFN Library AND any
-  additional real, published books you recommend. These populate the Further Reading section.
-  Use exact titles as they appear in the library for existing books.
-- The new_books field lists books in your sources that are NOT already in the HFN Library.
-  For each new book provide: title (exact match to sources entry), author, and themes.
+- SOURCES & LIBRARY (two-way street — this is important):
+  The HFN Library catalogue is provided below. Every article must reference books in BOTH directions:
+  1. EXISTING library books: Pick 3-4 books already in the HFN Library that genuinely inform this article.
+     Use the EXACT title as shown in the library catalogue.
+  2. NEW book recommendations: Add 1-2 books NOT already in the library — real, published, well-known
+     books that a reader of this article should read next. These get added to the library automatically.
+  The sources field in frontmatter lists ALL books (existing + new). The new_books field lists ONLY
+  the new ones with title, author, and themes so the pipeline can add them to the library.
   Use theme keys from: ancient, medieval, modern, world, geopolitics, economics, politics,
   religion, science, biology, philosophy, fiction.
-  Recommend 2-3 genuinely relevant, real published books per article. Do NOT invent titles.
+  Do NOT invent book titles. Every book must be a real, published work.
   If all your sources are already in the library, omit the new_books field entirely.
 - Include cross-references to at least 2 relevant existing HFN articles as [Title](/articles/slug) links
 

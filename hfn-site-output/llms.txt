@@ -14,11 +14,11 @@ Total articles: 82
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (15 articles)
+### Jobs & Economy (16 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (37 articles)
+### Society (36 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -257,7 +257,7 @@ Total articles: 82
 
 ### The Eighteen-Month Trap: Why Hardware Startups Are Structurally Slow [5 charts]
 - URL: https://www.historyfuturenow.com/articles/the-eighteen-month-trap-why-hardware-startups-are-structurally-slow
-- Section: Society
+- Section: Jobs & Economy
 - Reading time: 13 min
 - A software founder builds one thing. A hardware founder builds two — the product and the entire infrastructure to make it. That structural double burden, not bad management, is why hardware startups t
 

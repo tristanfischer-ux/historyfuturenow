@@ -195,6 +195,8 @@ def _run_save_to_disk(task_id, draft_id):
         raw_section = draft["section"]
         normalised = _SECTION_ALIASES.get(raw_section, raw_section)
         fm_lines.append(f"part: \"{normalised}\"")
+    # Always include pub_date so article appears in Home/New section
+    fm_lines.append(f"pub_date: \"{datetime.now().strftime('%Y-%m-%d')}\"")
     if draft.get("excerpt"):
         fm_lines.append(f"excerpt: \"{draft['excerpt']}\"")
     if draft.get("share_summary"):
