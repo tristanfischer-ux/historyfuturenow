@@ -5,25 +5,6 @@ pub_date: "2026-03-07"
 excerpt: "Every era produces the same pattern: fragmented, bespoke, expensive production transformed by shared infrastructure that democratises access to speed and scale. Venice's Arsenale, the Springfield Armory, and Malcolm McLean's shipping container all prove the same point — the breakthrough is never a better product, it is a better platform. Hardware manufacturing today is at the pre-platform stage."
 share_summary: "The breakthrough is never a better product. It is a better platform. Hardware hasn't learned this yet."
 ---
-```markdown
----
-title: "The Arsenal and the Container: How Shared Infrastructure Always Wins"
-section: "Jobs & Economy"
-excerpt: "Every era produces the same pattern: fragmented, bespoke, expensive production transformed by shared infrastructure that democratises access to speed and scale. Venice's Arsenale, the Springfield Armory, and Malcolm McLean's shipping container all prove the same point — the breakthrough is never a better product, it is a better platform. Hardware manufacturing today is at the pre-platform stage."
-share_summary: "The breakthrough is never a better product. It is a better platform. Hardware hasn't learned this yet."
-sources:
-  - "Behemoth: A History of the Factory"
-  - "How the World Really Works"
-  - "The Great Sea"
-  - "Making in America"
-  - "The Box: How the Shipping Container Made the World Smaller and the World Economy Bigger"
-  - "The Innovator's Dilemma"
-new_books:
-  - title: "The Box: How the Shipping Container Made the World Smaller and the World Economy Bigger"
-    author: "Marc Levinson"
-    themes: ["economics", "modern"]
----
-
 In 1574, King Henry III of France visited the Arsenale di Venezia. He arrived expecting to see a shipyard. What he saw was closer to a magic trick. Over the course of a single banquet — roughly the time it took for the wine to flow and the courses to be served — the Venetians fitted out and launched a war galley assembled from pre-made components held in inventory, armed it, and floated it. Henry was reportedly astonished. He had just watched a small city-state demonstrate a manufacturing capability that his entire kingdom could not match.
 
 The galley was not a better ship. Venetian galleys were functional, well-made, but not dramatically superior to those built in Genoa or Constantinople. What was superior — overwhelmingly, decisively superior — was the *system* that produced it. The Arsenale was not a shipyard in any sense Henry would have recognised. It was a platform.

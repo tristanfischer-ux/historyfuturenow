@@ -153,10 +153,18 @@ def _run_save_to_disk(task_id, draft_id):
 
     new_books = []
 
+    # Also handle LLM wrapping entire output in ```markdown fences
+    raw_md = _re.sub(r'^\s*```\w*\n', '', raw_md)
+    raw_md = _re.sub(r'\n```\s*$', '', raw_md)
+
     fm_match = _re.match(r'^\s*---\n([\s\S]*?)\n---\s*\n?', raw_md)
     if fm_match:
         fm_block = fm_match.group(1)
         body_md = raw_md[fm_match.end():]
+        # Strip any duplicate frontmatter left in body (LLM sometimes emits two)
+        body_md = _re.sub(r'^\s*```\w*\n---\n[\s\S]*?\n---\s*\n?```\s*\n?', '', body_md)
+        body_md = _re.sub(r'^\s*```\w*\n---\n[\s\S]*?\n---\s*\n?', '', body_md)
+        body_md = _re.sub(r'^\s*---\n[\s\S]*?\n---\s*\n?', '', body_md)
         # Extract sources list
         src_match = _re.search(r'sources:\s*\n((?:\s+-\s+.*\n?)*)', fm_block)
         if src_match:
