@@ -282,13 +282,13 @@
   <section class="read-next-section" aria-label="Read next">
     <h2 class="read-next-heading">Read next</h2>
     <div class="read-next-grid">
-      <a href="/articles/the-eighteen-month-trap-why-hardware-startups-are-structurally-slow" class="read-next-card" style="--section-color:#b8751a">
-        <div class="read-next-img-wrap"><img src="/images/articles/the-eighteen-month-trap-why-hardware-startups-are-structurally-slow/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
+      <a href="/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin" class="read-next-card" style="--section-color:#b8751a">
+        <div class="read-next-img-wrap"><img src="/images/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
         <div class="read-next-body">
           <span class="read-next-label">More in Jobs &amp; Economy</span>
           <span class="read-next-kicker" style="color:#b8751a">Jobs & Economy</span>
-          <h3 class="read-next-title">The Eighteen-Month Trap: Why Hardware Startups Are Structurally Slow</h3>
-          <span class="read-next-meta">13 min read <span class="read-next-audio">Audio</span></span>
+          <h3 class="read-next-title">The Debasement: Why Every Great Power That Borrowed Its Way to Greatness Borrowed Its Way to Ruin</h3>
+          <span class="read-next-meta">11 min read <span class="read-next-audio">Audio</span></span>
         </div>
       </a>
       <a href="/articles/the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way" class="read-next-card" style="--section-color:#7c3aed">
@@ -490,10 +490,12 @@ fill:true,backgroundColor:C.accent+'22',pointRadius:3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{
-hallRifle:{type:'line',xMin:1824,xMax:1824,borderColor:C.teal,borderWidth:1,borderDash:[4,4],
-label:{..._al,content:'Hall achieves interchangeable parts (1824)',display:true,color:C.teal,position:'start',rotation:-90,font:{size:9}}},
-model1842:{type:'line',xMin:1842,xMax:1842,borderColor:C.blue,borderWidth:1,borderDash:[4,4],
-label:{..._al,content:'Model 1842: first fully interchangeable musket',display:true,color:C.blue,position:'start',rotation:-90,font:{size:9}}},
+hallRifle:{type:'line',xMin:1824,xMax:1824,borderColor:C.teal,borderWidth:1,borderDash:[4,4]},
+hallLabel:{type:'label',..._al,content:'Hall: interchangeable parts (1824)',
+xValue:1824,yValue:260,color:C.teal,font:{size:9}},
+model1842:{type:'line',xMin:1842,xMax:1842,borderColor:C.blue,borderWidth:1,borderDash:[4,4]},
+modelLabel:{type:'label',..._al,content:'Model 1842: first interchangeable musket',
+xValue:1842,yValue:240,color:C.blue,font:{size:9}},
 civilWar:{type:'box',xMin:1861,xMax:1865,backgroundColor:C.amber+'15',borderWidth:0,
 label:{..._al,content:'Civil War surge',display:true,color:C.amber,font:{size:9}}}
 }}},
@@ -524,10 +526,12 @@ fill:true,backgroundColor:C.accent+'18',pointRadius:3,tension:0.3}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{
-iso:{type:'line',xMin:1968,xMax:1968,borderColor:C.teal,borderWidth:1,borderDash:[4,4],
-label:{..._al,content:'ISO standards agreed (1968)',display:true,color:C.teal,position:'start',rotation:-90,font:{size:9}}},
-china:{type:'line',xMin:2001,xMax:2001,borderColor:C.blue,borderWidth:1,borderDash:[4,4],
-label:{..._al,content:'China joins WTO (2001)',display:true,color:C.blue,position:'start',rotation:-90,font:{size:9}}},
+iso:{type:'line',xMin:1968,xMax:1968,borderColor:C.teal,borderWidth:1,borderDash:[4,4]},
+isoLabel:{type:'label',..._al,content:'ISO standards (1968)',
+xValue:1968,yValue:820,color:C.teal,font:{size:9}},
+china:{type:'line',xMin:2001,xMax:2001,borderColor:C.blue,borderWidth:1,borderDash:[4,4]},
+chinaLabel:{type:'label',..._al,content:'China joins WTO (2001)',
+xValue:2001,yValue:780,color:C.blue,font:{size:9}},
 covid:{type:'point',xValue:2020,yValue:775,backgroundColor:C.amber,radius:6,borderWidth:0,
 label:{..._al,content:'COVID-19 dip',display:true,color:C.amber,font:{size:9},yAdjust:-18}}
 }}},
