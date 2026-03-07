@@ -2983,9 +2983,10 @@ hr{border:none;border-top:1px solid var(--border-light);margin:24px 0}
 .chart-figure-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600;margin-bottom:4px}
 .chart-figure h4{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:4px}
 .chart-desc{font-size:.82rem;color:#666;margin-bottom:10px}
-.chart-area{position:relative;width:100%;aspect-ratio:16/10}
-.chart-area.tall{aspect-ratio:16/14}
+.chart-area{position:relative;width:100%;aspect-ratio:1.8/1;min-height:200px}
+.chart-area.tall{aspect-ratio:4/3;min-height:240px}
 .chart-area canvas{width:100%!important;height:100%!important}
+@media(max-width:640px){.chart-area{aspect-ratio:unset;height:260px}.chart-area.tall{aspect-ratio:unset;height:320px}}
 .chart-source{font-size:.7rem;color:#999;margin-top:8px}
 .further-reading{max-width:680px;margin:2.5rem auto 0;padding:2rem 0 0;border-top:1px solid #f2eeea}
 .fr-heading{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;margin:0 0 .35rem}
