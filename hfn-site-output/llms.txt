@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 82
+Total articles: 83
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -14,7 +14,7 @@ Total articles: 82
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (16 articles)
+### Jobs & Economy (17 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
@@ -226,6 +226,12 @@ Total articles: 82
 - Published: 2024-06-01
 - Reading time: 14 min
 - In the quest for immortality, humanity has long dreamed of extending the boundaries of life beyond the confines of our current existence. The tantalizing prospect of living to 150 years or more has ca
+
+### The Arsenal and the Container: How Shared Infrastructure Always Wins [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-arsenal-and-the-container-how-shared-infrastructure-always-wins
+- Section: Jobs & Economy
+- Reading time: 14 min
+- Every era produces the same pattern: fragmented, bespoke, expensive production transformed by shared infrastructure that democratises access to speed and scale. Venice's Arsenale, the Springfield Armo
 
 ### The Atom Returns: Why the World's Most Feared Energy Source Is Its Best Hope [3 charts]
 - URL: https://www.historyfuturenow.com/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope
