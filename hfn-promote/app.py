@@ -4132,7 +4132,19 @@ def api_auto_space():
             conn.commit()
             conn.close()
             occupied.append((best, post["platform"]))
-            available_slots = [(s,dt,pl) for s,dt,pl in available_slots if not (dt == best and pl == post["platform"])]
+            # Remove used slot AND any same-platform slots within 90 min of it
+            def _gap_ok(dt, pl):
+                if dt == best and pl == post["platform"]:
+                    return False
+                if pl == post["platform"]:
+                    try:
+                        t1 = datetime.fromisoformat(dt.replace("T"," "))
+                        t2 = datetime.fromisoformat(best.replace("T"," "))
+                        if abs((t1-t2).total_seconds()) < 5400:
+                            return False
+                    except: pass
+                return True
+            available_slots = [(s,dt,pl) for s,dt,pl in available_slots if _gap_ok(dt, pl)]
             assigned += 1
     return jsonify({"ok": True, "count": assigned, "msg": f"Assigned {assigned} post(s) to time slots"})
 
@@ -5513,6 +5525,14 @@ def _start_auto_poster():
                 median_clicks = sorted([(a["clicks_30d"] or 0) for a in all_perf])[len(all_perf)//2] if all_perf else 0
                 for opp in opps[:1]:  # Max 1 auto re-promotion per sync
                     if (opp.get("historical_clicks") or 0) > median_clicks:
+                        # Check for existing pending posts to avoid infinite draft creation
+                        conn_chk = db.get_db()
+                        pending = conn_chk.execute(
+                            "SELECT id FROM posts WHERE article_id=? AND status NOT IN ('posted','rejected') LIMIT 1",
+                            (opp["article_id"],)).fetchone()
+                        conn_chk.close()
+                        if pending:
+                            continue
                         from generator import gen_from_chart
                         charts = db.get_charts_for_article(opp["slug"])
                         usable = [c for c in charts if c.get("image_path")]

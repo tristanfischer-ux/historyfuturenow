@@ -1485,7 +1485,7 @@ def compute_article_priority(article_id):
     perf = get_article_performance(article_id)
     clicks_30d = perf["clicks_30d"] if perf else 0
     total_posts = perf["total_posts"] if perf else 0
-    conversion = clicks_30d / max(total_posts, 1)
+    conversion = min(clicks_30d / max(total_posts, 1) / 50, 1.0)  # normalise to 0-1
     lc = get_article_lifecycle(article_id)
     days = lc["days_old"]
     freshness = max(0.2, 1.0 - (days / 90) * 0.8)
