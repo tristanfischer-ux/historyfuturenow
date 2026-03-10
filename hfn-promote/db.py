@@ -162,8 +162,21 @@ CREATE TABLE IF NOT EXISTS post_performance (
     clicks_30d INTEGER DEFAULT 0,
     users_7d INTEGER DEFAULT 0,
     users_30d INTEGER DEFAULT 0,
+    bounce_rate REAL DEFAULT NULL,
+    avg_session_duration REAL DEFAULT NULL,
     last_fetched TEXT DEFAULT '',
     FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+CREATE TABLE IF NOT EXISTS strategy_wins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    article_id INTEGER NOT NULL,
+    platform TEXT NOT NULL,
+    winning_strategy TEXT NOT NULL,
+    losing_strategy TEXT NOT NULL,
+    win_clicks INTEGER DEFAULT 0,
+    lose_clicks INTEGER DEFAULT 0,
+    decided_at TEXT DEFAULT (datetime('now')),
+    UNIQUE(article_id, platform, winning_strategy, losing_strategy)
 );
 """
 
@@ -211,6 +224,27 @@ def init_db():
             conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
         except sqlite3.OperationalError:
             conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} INTEGER DEFAULT {default}")
+    # Hook strategy + A/B testing columns
+    for col, tbl, default in [("hook_strategy", "posts", "''"),
+                               ("variant_group", "posts", "''")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT {default}")
+    # Article lifecycle columns
+    for col, tbl, default in [("published_at", "articles", "''"),
+                               ("last_promoted_at", "articles", "''")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT {default}")
+    # Engagement depth columns on post_performance
+    for col, tbl in [("bounce_rate", "post_performance"),
+                      ("avg_session_duration", "post_performance")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} REAL DEFAULT NULL")
     # Error tracking columns
     for col, tbl, default in [("last_error", "posts", "''"),
                                ("error_category", "posts", "''"),
@@ -225,6 +259,8 @@ def init_db():
                 conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT {default}")
     # Migrate legacy 'audio' stage to 'images' (audio decoupled from pipeline)
     conn.execute("UPDATE article_drafts SET stage='images' WHERE stage='audio'")
+    # Backfill published_at from indexed_at for existing articles (one-time)
+    conn.execute("UPDATE articles SET published_at=indexed_at WHERE published_at IS NULL OR published_at=''")
     conn.commit()
     conn.close()
 
@@ -234,8 +270,8 @@ def upsert_article(slug, title, part="", excerpt="", keywords=None,
                    opening="", full_text="", word_count=0, url=""):
     conn = get_db()
     conn.execute("""
-        INSERT INTO articles (slug,title,part,excerpt,keywords,opening,full_text,word_count,url)
-        VALUES (?,?,?,?,?,?,?,?,?)
+        INSERT INTO articles (slug,title,part,excerpt,keywords,opening,full_text,word_count,url,published_at)
+        VALUES (?,?,?,?,?,?,?,?,?,datetime('now'))
         ON CONFLICT(slug) DO UPDATE SET
             title=excluded.title, part=excluded.part, excerpt=excluded.excerpt,
             keywords=excluded.keywords, opening=excluded.opening,
@@ -337,12 +373,13 @@ def get_matched_news(min_score=0.5, limit=30):
 
 def insert_post(news_item_id=None, chart_id=None, article_id=None,
                 platform="x", caption="", article_context="",
-                article_url="", image_path="", post_type="short"):
+                article_url="", image_path="", post_type="short",
+                hook_strategy="", variant_group=""):
     conn = get_db()
     conn.execute("""
-        INSERT INTO posts (news_item_id,chart_id,article_id,platform,caption,article_context,article_url,image_path,post_type)
-        VALUES (?,?,?,?,?,?,?,?,?)
-    """, (news_item_id, chart_id, article_id, platform, caption, article_context, article_url, image_path, post_type))
+        INSERT INTO posts (news_item_id,chart_id,article_id,platform,caption,article_context,article_url,image_path,post_type,hook_strategy,variant_group)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)
+    """, (news_item_id, chart_id, article_id, platform, caption, article_context, article_url, image_path, post_type, hook_strategy, variant_group))
     conn.commit()
     pid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
     conn.close()
@@ -1276,16 +1313,20 @@ def get_retry_candidates(platform):
 
 # ── Post performance ──
 
-def upsert_post_performance(post_id, clicks_7d=0, clicks_30d=0, users_7d=0, users_30d=0):
+def upsert_post_performance(post_id, clicks_7d=0, clicks_30d=0, users_7d=0, users_30d=0,
+                            bounce_rate=None, avg_session_duration=None):
     conn = get_db()
     conn.execute("""
-        INSERT INTO post_performance (post_id, clicks_7d, clicks_30d, users_7d, users_30d, last_fetched)
-        VALUES (?, ?, ?, ?, ?, datetime('now'))
+        INSERT INTO post_performance (post_id, clicks_7d, clicks_30d, users_7d, users_30d,
+                                      bounce_rate, avg_session_duration, last_fetched)
+        VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
         ON CONFLICT(post_id) DO UPDATE SET
             clicks_7d=excluded.clicks_7d, clicks_30d=excluded.clicks_30d,
             users_7d=excluded.users_7d, users_30d=excluded.users_30d,
+            bounce_rate=COALESCE(excluded.bounce_rate, post_performance.bounce_rate),
+            avg_session_duration=COALESCE(excluded.avg_session_duration, post_performance.avg_session_duration),
             last_fetched=datetime('now')
-    """, (post_id, clicks_7d, clicks_30d, users_7d, users_30d))
+    """, (post_id, clicks_7d, clicks_30d, users_7d, users_30d, bounce_rate, avg_session_duration))
     conn.commit()
     conn.close()
 
@@ -1330,6 +1371,235 @@ def get_engagement_by_hour(platform=None, days=30):
         GROUP BY hour, p.platform
         ORDER BY hour
     """, params).fetchall())
+    conn.close()
+    return rows
+
+# ── Per-article performance (Feature 1) ──
+
+def get_article_performance(article_id):
+    """Aggregate clicks/users across all posts for one article."""
+    conn = get_db()
+    row = _dict(conn.execute("""
+        SELECT a.id, a.slug, a.title,
+            COUNT(DISTINCT p.id) as total_posts,
+            SUM(COALESCE(pp.clicks_7d, 0)) as clicks_7d,
+            SUM(COALESCE(pp.clicks_30d, 0)) as clicks_30d,
+            SUM(COALESCE(pp.users_7d, 0)) as users_7d,
+            SUM(COALESCE(pp.users_30d, 0)) as users_30d,
+            CASE WHEN COUNT(DISTINCT p.id) > 0
+                 THEN ROUND(CAST(SUM(COALESCE(pp.clicks_30d,0)) AS REAL) / COUNT(DISTINCT p.id), 1)
+                 ELSE 0 END as clicks_per_post
+        FROM articles a
+        LEFT JOIN posts p ON p.article_id = a.id AND p.status = 'posted'
+        LEFT JOIN post_performance pp ON pp.post_id = p.id
+        WHERE a.id = ?
+        GROUP BY a.id
+    """, (article_id,)).fetchone())
+    conn.close()
+    return row
+
+def get_all_article_performance():
+    """Ranked list of all articles by total clicks."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT a.id, a.slug, a.title, a.part,
+            COUNT(DISTINCT p.id) as total_posts,
+            SUM(COALESCE(pp.clicks_7d, 0)) as clicks_7d,
+            SUM(COALESCE(pp.clicks_30d, 0)) as clicks_30d,
+            SUM(COALESCE(pp.users_7d, 0)) as users_7d,
+            SUM(COALESCE(pp.users_30d, 0)) as users_30d,
+            CASE WHEN COUNT(DISTINCT p.id) > 0
+                 THEN ROUND(CAST(SUM(COALESCE(pp.clicks_30d,0)) AS REAL) / COUNT(DISTINCT p.id), 1)
+                 ELSE 0 END as clicks_per_post
+        FROM articles a
+        LEFT JOIN posts p ON p.article_id = a.id AND p.status = 'posted'
+        LEFT JOIN post_performance pp ON pp.post_id = p.id
+        GROUP BY a.id
+        ORDER BY clicks_30d DESC
+    """).fetchall())
+    conn.close()
+    return rows
+
+# ── Article lifecycle (Feature 2) ──
+
+def get_article_lifecycle(article_id):
+    """Return lifecycle stage: launch/active/evergreen based on published_at."""
+    conn = get_db()
+    row = conn.execute("""
+        SELECT a.published_at, a.indexed_at,
+            (SELECT COUNT(*) FROM posts WHERE article_id=a.id AND status='posted') as promo_count,
+            (SELECT MAX(posted_at) FROM posts WHERE article_id=a.id AND status='posted') as last_promoted
+        FROM articles a WHERE a.id=?
+    """, (article_id,)).fetchone()
+    conn.close()
+    if not row:
+        return {"stage": "unknown", "days_old": 0, "promo_count": 0, "last_promoted": None}
+    pub = row[0] or row[1]  # fall back to indexed_at
+    days = 999
+    if pub:
+        try:
+            pub_dt = datetime.fromisoformat(pub.replace("Z", "+00:00").split("+")[0])
+            days = (datetime.now() - pub_dt).days
+        except Exception:
+            pass
+    if days < 7:
+        stage = "launch"
+    elif days < 60:
+        stage = "active"
+    else:
+        stage = "evergreen"
+    return {"stage": stage, "days_old": days, "promo_count": row[2] or 0,
+            "last_promoted": row[3]}
+
+# ── Per-article feedback (Feature 3) ──
+
+def get_article_feedback(article_id):
+    """Get performance data for posts about a specific article."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT p.id, p.platform, p.post_type, p.hook_strategy, p.caption,
+               pp.clicks_7d, pp.clicks_30d, pp.bounce_rate, pp.avg_session_duration
+        FROM posts p
+        LEFT JOIN post_performance pp ON pp.post_id = p.id
+        WHERE p.article_id = ? AND p.status = 'posted'
+        ORDER BY pp.clicks_30d DESC
+    """, (article_id,)).fetchall())
+    conn.close()
+    return rows
+
+# ── Engagement quality (Feature 4) ──
+
+def get_post_quality_score(post_id):
+    """Compute engagement quality: clicks * (1 - bounce_rate) * min(avg_duration/120, 1)."""
+    perf = get_post_performance(post_id)
+    if not perf or not perf.get("clicks_30d"):
+        return 0
+    bounce = perf.get("bounce_rate") or 0.5  # default 50% if unknown
+    duration = perf.get("avg_session_duration") or 60  # default 60s
+    return round(perf["clicks_30d"] * (1 - bounce) * min(duration / 120, 1), 1)
+
+# ── Priority scoring (Feature 5) ──
+
+def compute_article_priority(article_id):
+    """Combined priority score for promotion scheduling."""
+    conn = get_db()
+    perf = get_article_performance(article_id)
+    clicks_30d = perf["clicks_30d"] if perf else 0
+    total_posts = perf["total_posts"] if perf else 0
+    conversion = clicks_30d / max(total_posts, 1)
+    lc = get_article_lifecycle(article_id)
+    days = lc["days_old"]
+    freshness = max(0.2, 1.0 - (days / 90) * 0.8)
+    article = get_article(article_id)
+    saturation = 0
+    if article:
+        charts = get_charts_for_article(article["slug"])
+        chart_count = len([c for c in charts if c.get("image_path")])
+        saturation = min(total_posts / max(chart_count, 1), 3) / 3
+    best_match = conn.execute("""
+        SELECT MAX(relevance_score) FROM news_items
+        WHERE matched_article_id=? AND created_at >= datetime('now', '-7 days')
+    """, (article_id,)).fetchone()
+    conn.close()
+    news_strength = (best_match[0] or 0) if best_match else 0
+    priority = (
+        conversion * 0.3 +
+        freshness * 0.2 +
+        (1 - saturation) * 0.2 +
+        news_strength * 0.3
+    )
+    return {
+        "article_id": article_id,
+        "priority": round(priority, 3),
+        "conversion": round(conversion, 1),
+        "freshness": round(freshness, 2),
+        "saturation": round(saturation, 2),
+        "news_strength": round(news_strength, 2),
+        "lifecycle": lc["stage"]
+    }
+
+def get_all_article_priorities():
+    """Compute priorities for all articles, return ranked."""
+    articles = get_all_articles()
+    priorities = []
+    for a in articles:
+        p = compute_article_priority(a["id"])
+        p["slug"] = a["slug"]
+        p["title"] = a["title"]
+        p["part"] = a.get("part", "")
+        priorities.append(p)
+    priorities.sort(key=lambda x: x["priority"], reverse=True)
+    return priorities
+
+# ── A/B testing (Feature 6) ──
+
+def get_undecided_ab_tests(min_days=7):
+    """Find variant_group pairs where both posted 7+ days ago, no winner declared."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT p.variant_group, p.article_id, p.platform,
+               GROUP_CONCAT(p.id) as post_ids,
+               GROUP_CONCAT(p.hook_strategy) as strategies,
+               GROUP_CONCAT(COALESCE(pp.clicks_7d, 0)) as clicks
+        FROM posts p
+        LEFT JOIN post_performance pp ON pp.post_id = p.id
+        WHERE p.variant_group != '' AND p.status = 'posted'
+        AND p.posted_at <= datetime('now', ?)
+        GROUP BY p.variant_group
+        HAVING COUNT(*) = 2
+    """, (f"-{min_days} days",)).fetchall())
+    conn.close()
+    decided = set()
+    conn2 = get_db()
+    for r in conn2.execute("SELECT article_id, platform FROM strategy_wins").fetchall():
+        decided.add((r[0], r[1]))
+    conn2.close()
+    return [r for r in rows if (r["article_id"], r["platform"]) not in decided]
+
+def record_strategy_win(article_id, platform, winning_strategy, losing_strategy, win_clicks, lose_clicks):
+    conn = get_db()
+    conn.execute("""
+        INSERT OR REPLACE INTO strategy_wins
+        (article_id, platform, winning_strategy, losing_strategy, win_clicks, lose_clicks)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (article_id, platform, winning_strategy, losing_strategy, win_clicks, lose_clicks))
+    conn.commit()
+    conn.close()
+
+def get_winning_strategies(article_id):
+    conn = get_db()
+    rows = _dicts(conn.execute(
+        "SELECT * FROM strategy_wins WHERE article_id=? ORDER BY decided_at DESC",
+        (article_id,)).fetchall())
+    conn.close()
+    return rows
+
+# ── Re-promotion triggers (Feature 7) ──
+
+def get_repromotion_opportunities():
+    """Find articles with no posts in 30+ days that have strong current news matches."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT DISTINCT a.id as article_id, a.slug, a.title, a.part,
+            n.id as news_id, n.title as news_title, n.relevance_score, n.hook,
+            (SELECT MAX(p.posted_at) FROM posts p
+             WHERE p.article_id = a.id AND p.status='posted') as last_posted,
+            (SELECT SUM(COALESCE(pp.clicks_30d, 0))
+             FROM posts p2 JOIN post_performance pp ON pp.post_id = p2.id
+             WHERE p2.article_id = a.id) as historical_clicks
+        FROM news_items n
+        JOIN articles a ON n.matched_article_id = a.id
+        WHERE n.relevance_score >= 0.8
+        AND n.created_at >= datetime('now', '-7 days')
+        AND (
+            (SELECT MAX(p3.posted_at) FROM posts p3
+             WHERE p3.article_id = a.id AND p3.status='posted')
+            <= datetime('now', '-30 days')
+            OR (SELECT COUNT(*) FROM posts p4
+                WHERE p4.article_id = a.id AND p4.status='posted') = 0
+        )
+        ORDER BY n.relevance_score DESC
+    """).fetchall())
     conn.close()
     return rows
 

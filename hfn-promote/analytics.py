@@ -94,7 +94,8 @@ def get_analytics_for_slug(slug, data):
 
 def fetch_post_performance():
     """Fetch GA4 UTM campaign data for post performance tracking.
-    Looks for campaigns named 'post_<id>' and maps back to post IDs."""
+    Looks for campaigns named 'post_<id>' and maps back to post IDs.
+    Fetches clicks, users, bounce rate, and avg session duration."""
     import db
 
     pid = GA4_PROPERTY_ID
@@ -131,14 +132,12 @@ def fetch_post_performance():
             resp = client.run_report(req)
             for row in resp.rows:
                 campaign = row.dimension_values[0].value
-                # Extract post_id from "post_123"
                 try:
                     post_id = int(campaign.split("_", 1)[1])
                 except (ValueError, IndexError):
                     continue
                 clicks = int(row.metric_values[0].value)
                 users = int(row.metric_values[1].value)
-                # Upsert — we call twice (7d then 30d), so use kwargs
                 existing = db.get_post_performance(post_id)
                 if existing:
                     kwargs = dict(existing)
@@ -146,11 +145,52 @@ def fetch_post_performance():
                     kwargs.pop("post_id", None)
                     kwargs.pop("last_fetched", None)
                 else:
-                    kwargs = {"clicks_7d": 0, "clicks_30d": 0, "users_7d": 0, "users_30d": 0}
+                    kwargs = {"clicks_7d": 0, "clicks_30d": 0, "users_7d": 0, "users_30d": 0,
+                              "bounce_rate": None, "avg_session_duration": None}
                 kwargs[click_col] = clicks
                 kwargs[user_col] = users
                 db.upsert_post_performance(post_id, **kwargs)
                 updated += 1
+
+        # Fetch engagement depth: bounce rate + avg session duration (30d only)
+        try:
+            depth_req = RunReportRequest(
+                property=f"properties/{pid}",
+                date_ranges=[DateRange(start_date="30daysAgo", end_date="today")],
+                dimensions=[Dimension(name="sessionCampaignName")],
+                metrics=[Metric(name="bounceRate"), Metric(name="averageSessionDuration")],
+                dimension_filter=FilterExpression(
+                    filter=Filter(
+                        field_name="sessionCampaignName",
+                        string_filter=Filter.StringFilter(
+                            match_type=Filter.StringFilter.MatchType.BEGINS_WITH,
+                            value="post_",
+                        ),
+                    )
+                ),
+                limit=500,
+            )
+            depth_resp = client.run_report(depth_req)
+            for row in depth_resp.rows:
+                campaign = row.dimension_values[0].value
+                try:
+                    post_id = int(campaign.split("_", 1)[1])
+                except (ValueError, IndexError):
+                    continue
+                bounce_rate = float(row.metric_values[0].value)
+                avg_duration = float(row.metric_values[1].value)
+                existing = db.get_post_performance(post_id)
+                if existing:
+                    kwargs = dict(existing)
+                    kwargs.pop("id", None)
+                    kwargs.pop("post_id", None)
+                    kwargs.pop("last_fetched", None)
+                    kwargs["bounce_rate"] = bounce_rate
+                    kwargs["avg_session_duration"] = avg_duration
+                    db.upsert_post_performance(post_id, **kwargs)
+        except Exception as ex:
+            print(f"  [!] Engagement depth fetch error: {ex}")
+
         return updated
     except Exception as ex:
         print(f"  [!] Post performance fetch error: {ex}")

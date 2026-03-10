@@ -419,13 +419,18 @@ HTML = r"""<!DOCTYPE html>
 .lib-chart-promote:hover{border-color:var(--accent);background:var(--accent-soft)}.lib-chart-promote:disabled{opacity:.5;cursor:wait}
 /* Analytics pills + bar */
 .lib-views-pill{font-size:.58rem;padding:1px 5px;border-radius:3px;background:#dbeafe;color:#1d4ed8;font-weight:600}
+.lib-lifecycle{font-size:.52rem;padding:1px 4px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.lib-lc-launch{background:#fef3c7;color:#92400e}.lib-lc-active{background:#d1fae5;color:#065f46}.lib-lc-evergreen{background:#e0e7ff;color:#3730a3}
 .perf-pill{font-size:.58rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;font-weight:600;margin-top:4px;display:inline-block}
+.perf-pill.quality{background:#ede9fe;color:#5b21b6;margin-left:4px}
 .lib-analytics-bar{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 14px;margin-top:8px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .lib-stat{font-size:.72rem;font-weight:600;color:#1e40af}
 .lib-stat-dim{font-size:.62rem;color:#6b7280;margin-left:2px}
 .lib-sort-select{font-size:.6rem;padding:2px 4px;border:1px solid var(--border);border-radius:4px;font-family:inherit}
 body.dark .lib-views-pill{background:#1e3a5f;color:#93c5fd}
+body.dark .lib-lc-launch{background:#451a03;color:#fbbf24}body.dark .lib-lc-active{background:#064e3b;color:#6ee7b7}body.dark .lib-lc-evergreen{background:#1e1b4b;color:#a5b4fc}
 body.dark .perf-pill{background:#14532d;color:#86efac}
+body.dark .perf-pill.quality{background:#2e1065;color:#c4b5fd}
 body.dark .lib-analytics-bar{background:#1e293b;border-color:#334155}
 body.dark .lib-stat{color:#93c5fd}
 body.dark .lib-stat-dim{color:#9ca3af}
@@ -1065,19 +1070,24 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
         <option value="alpha">A-Z</option>
         <option value="views30">Most viewed (30d)</option>
         <option value="views7">Trending (7d)</option>
+        <option value="clicks30">Most clicks (30d)</option>
+        <option value="clicksper">Best conversion</option>
+        <option value="priority">Priority</option>
       </select>
       <button class="btn sm" onclick="toggleHeatmap()" id="heatmap-btn" style="font-size:.6rem">🔥 Heatmap</button>
     </div>
     <div class="lib-list" id="lib-list">
       {% for a in articles_with_charts %}
-      <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}" data-issue="{{a.issue_num}}" data-genre="{{(a.part or '')|lower}}" data-views7d="{{a.views_7d or 0}}" data-views30d="{{a.views_30d or 0}}">
+      <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}" data-issue="{{a.issue_num}}" data-genre="{{(a.part or '')|lower}}" data-views7d="{{a.views_7d or 0}}" data-views30d="{{a.views_30d or 0}}" data-clicks30d="{{a.total_clicks_30d or 0}}" data-clicksper="{{a.clicks_per_post or 0}}" data-lifecycle="{{a.lifecycle_stage or 'unknown'}}">
         <div class="lib-item-title">{{a.title}}</div>
         <div class="lib-item-meta">
           {% if a.part %}<span class="lib-part">{{a.part}}</span>{% endif %}
+          {% if a.lifecycle_stage and a.lifecycle_stage != 'unknown' %}<span class="lib-lifecycle lib-lc-{{a.lifecycle_stage}}">{{a.lifecycle_stage}}</span>{% endif %}
           <span>📊 {{a.image_count or 0}} charts</span>
           {% if a.chart_count and not a.image_count %}<span style="color:var(--dim)">(text only)</span>{% endif %}
           <span class="lib-post-count {{ 'has-posts' if a.post_count > 0 else 'no-posts' }}">📤 {{a.post_count}}</span>
           {% if a.views_7d %}<span class="lib-views-pill">👁 {{a.views_7d}}</span>{% endif %}
+          {% if a.total_clicks_30d %}<span class="perf-pill">🔗 {{a.total_clicks_30d}}</span>{% endif %}
         </div>
       </div>
       {% endfor %}
@@ -1625,9 +1635,20 @@ function sortLibrary(){
   const mode=document.getElementById('lib-sort').value;
   const list=document.getElementById('lib-list');
   const items=[...list.querySelectorAll('.lib-item')];
+  if(mode==='priority'){
+    // Fetch priority data and sort
+    fetch('/api/article_priorities').then(r=>r.json()).then(priorities=>{
+      const pMap={};priorities.forEach(p=>{pMap[p.slug]=p.priority});
+      items.sort((a,b)=>(pMap[b.dataset.slug]||0)-(pMap[a.dataset.slug]||0));
+      items.forEach(el=>list.appendChild(el));
+    });
+    return;
+  }
   items.sort((a,b)=>{
     if(mode==='views30') return (parseInt(b.dataset.views30d)||0)-(parseInt(a.dataset.views30d)||0);
     if(mode==='views7') return (parseInt(b.dataset.views7d)||0)-(parseInt(a.dataset.views7d)||0);
+    if(mode==='clicks30') return (parseInt(b.dataset.clicks30d)||0)-(parseInt(a.dataset.clicks30d)||0);
+    if(mode==='clicksper') return (parseFloat(b.dataset.clicksper)||0)-(parseFloat(a.dataset.clicksper)||0);
     return a.querySelector('.lib-item-title').textContent.localeCompare(b.querySelector('.lib-item-title').textContent);
   });
   items.forEach(el=>list.appendChild(el));
@@ -1679,6 +1700,14 @@ async function selectArticle(slug){
         <span class="lib-stat">${d.analytics.users_7d}<span class="lib-stat-dim"> readers (7d)</span></span>
         <span class="lib-stat">${d.analytics.views_30d}<span class="lib-stat-dim"> views (30d)</span></span>
         <span class="lib-stat">${d.analytics.users_30d}<span class="lib-stat-dim"> readers (30d)</span></span>
+      </div>`;
+    }
+    if(d.performance&&d.performance.total_posts>0){
+      html+=`<div class="lib-analytics-bar" style="margin-top:6px;background:#f0fdf4;border-color:#bbf7d0">
+        <span class="lib-stat" style="color:#166534">${d.performance.clicks_30d}<span class="lib-stat-dim"> post clicks (30d)</span></span>
+        <span class="lib-stat" style="color:#166534">${d.performance.clicks_per_post}<span class="lib-stat-dim"> clicks/post</span></span>
+        <span class="lib-stat" style="color:#166534">${d.performance.total_posts}<span class="lib-stat-dim"> posts</span></span>
+        ${d.lifecycle?'<span class="lib-lifecycle lib-lc-'+d.lifecycle.stage+'">'+d.lifecycle.stage+' ('+d.lifecycle.days_old+'d old)</span>':''}
       </div>`;
     }
     if(d.charts.length){
@@ -1858,7 +1887,7 @@ async function loadPosted(reset=true){
           ${p.chart_title?'<div class="post-cal-chart">'+esc(p.chart_title)+'</div>':''}
           ${p.news_title?'<div class="post-cal-news">📰 '+esc(p.news_title)+(p.news_link?' <a href="'+esc(p.news_link)+'" target="_blank">↗</a>':'')+'</div>':''}
           <div class="post-cal-caption">${esc(p.caption||'(no caption)')}</div>
-          ${p.clicks_30d?'<span class="perf-pill">'+p.clicks_30d+' clicks</span>':''}
+          ${p.clicks_30d?'<span class="perf-pill">'+p.clicks_30d+' clicks</span>':''}${p.quality_score?'<span class="perf-pill quality">'+p.quality_score.toFixed(1)+' quality</span>':''}
         </div>
       </div>`;
     }
@@ -3822,6 +3851,24 @@ def dashboard():
         else:
             a["views_7d"] = a["users_7d"] = a["views_30d"] = a["users_30d"] = 0
 
+    # Enrich with post performance aggregation (Feature 1) and lifecycle (Feature 2)
+    article_perf = {r["slug"]: r for r in db.get_all_article_performance()}
+    for a in articles_with_charts:
+        perf = article_perf.get(a.get("slug", ""))
+        if perf:
+            a["total_clicks_30d"] = perf["clicks_30d"]
+            a["clicks_per_post"] = perf["clicks_per_post"]
+            a["total_posts_posted"] = perf["total_posts"]
+        else:
+            a["total_clicks_30d"] = a["clicks_per_post"] = a["total_posts_posted"] = 0
+        # Lifecycle stage
+        aid = perf["id"] if perf else None
+        if aid:
+            lc = db.get_article_lifecycle(aid)
+            a["lifecycle_stage"] = lc["stage"]
+        else:
+            a["lifecycle_stage"] = "unknown"
+
     studio_drafts = db.get_all_drafts()
     studio_series = db.get_all_series()
 
@@ -3929,6 +3976,9 @@ def api_posted():
         if perf:
             r["clicks_7d"] = perf["clicks_7d"]
             r["clicks_30d"] = perf["clicks_30d"]
+            r["bounce_rate"] = perf.get("bounce_rate")
+            r["avg_session_duration"] = perf.get("avg_session_duration")
+            r["quality_score"] = db.get_post_quality_score(r["id"])
     return jsonify({"posts": rows, "total": total, "offset": offset, "limit": actual_limit})
 
 # Planner APIs
@@ -4005,6 +4055,21 @@ def api_schedule_heatmap():
     for d in data:
         d["intensity"] = round((d["avg_clicks"] or 0) / max_clicks, 2)
     return jsonify(data)
+
+@app.route("/api/article_priorities")
+def api_article_priorities():
+    """Ranked articles by promotion priority score."""
+    return jsonify(db.get_all_article_priorities())
+
+@app.route("/api/repromotion_opportunities")
+def api_repromotion_opportunities():
+    """Articles dormant 30+ days with strong current news matches."""
+    opps = db.get_repromotion_opportunities()
+    all_perf = db.get_all_article_performance()
+    median_clicks = sorted([a["clicks_30d"] for a in all_perf])[len(all_perf)//2] if all_perf else 0
+    for o in opps:
+        o["above_median"] = (o.get("historical_clicks") or 0) > median_clicks
+    return jsonify({"opportunities": opps, "median_clicks": median_clicks})
 
 @app.route("/api/auto_space", methods=["POST"])
 def api_auto_space():
@@ -4236,7 +4301,12 @@ def api_library(slug):
     # Include GA4 analytics if available
     ga4_data = fetch_article_analytics()
     analytics = get_analytics_for_slug(slug, ga4_data)
-    return jsonify({"article": article, "charts": charts, "analytics": analytics})
+    # Post performance aggregation (Feature 1)
+    performance = db.get_article_performance(article["id"])
+    # Lifecycle (Feature 2)
+    lifecycle = db.get_article_lifecycle(article["id"])
+    return jsonify({"article": article, "charts": charts, "analytics": analytics,
+                     "performance": performance, "lifecycle": lifecycle})
 
 # Curate APIs
 @app.route("/api/edit", methods=["POST"])
@@ -5410,6 +5480,39 @@ def _start_auto_poster():
             from analytics import fetch_post_performance
             n = fetch_post_performance()
             if n: log(f"Synced performance for {n} posts")
+            # Evaluate A/B tests (Feature 6)
+            try:
+                tests = db.get_undecided_ab_tests(min_days=7)
+                for test in tests:
+                    post_ids = str(test["post_ids"]).split(",")
+                    strategies = str(test["strategies"]).split(",")
+                    clicks = [int(c) for c in str(test["clicks"]).split(",")]
+                    if len(post_ids) == 2 and len(strategies) == 2 and clicks[0] != clicks[1]:
+                        winner_idx = 0 if clicks[0] > clicks[1] else 1
+                        loser_idx = 1 - winner_idx
+                        db.record_strategy_win(
+                            test["article_id"], test["platform"],
+                            strategies[winner_idx], strategies[loser_idx],
+                            clicks[winner_idx], clicks[loser_idx])
+                        log(f"A/B winner: {strategies[winner_idx]} beat {strategies[loser_idx]} ({clicks[winner_idx]} vs {clicks[loser_idx]} clicks)")
+            except Exception as ex:
+                log(f"A/B evaluation error: {ex}")
+            # Re-promotion triggers (Feature 7)
+            try:
+                opps = db.get_repromotion_opportunities()
+                all_perf = db.get_all_article_performance()
+                median_clicks = sorted([a["clicks_30d"] for a in all_perf])[len(all_perf)//2] if all_perf else 0
+                for opp in opps[:1]:  # Max 1 auto re-promotion per sync
+                    if (opp.get("historical_clicks") or 0) > median_clicks:
+                        from generator import gen_from_chart
+                        charts = db.get_charts_for_article(opp["slug"])
+                        usable = [c for c in charts if c.get("image_path")]
+                        if usable:
+                            result = gen_from_chart(usable[0]["id"], "x", "short")
+                            if result:
+                                log(f"Auto re-promoted '{opp['title'][:40]}' (dormant + strong match)")
+            except Exception as ex:
+                log(f"Re-promotion error: {ex}")
         except Exception as ex:
             log(f"Performance sync error: {ex}")
     bg.add_job(post_due, trigger=IntervalTrigger(minutes=5), id="ap")

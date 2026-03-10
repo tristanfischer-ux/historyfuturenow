@@ -1,5 +1,5 @@
-"""HFN Promote — Generator v3.2. Deduped, feedback-aware generation."""
-import json, re, anthropic
+"""HFN Promote — Generator v3.3. Deduped, feedback-aware generation with per-article learning and A/B testing."""
+import json, re, random, uuid, anthropic
 import db
 from config import ANTHROPIC_API_KEY, GEN_MODEL, MIN_RELEVANCE, HFN_BASE_URL
 
@@ -91,31 +91,85 @@ def build_feedback_prompt():
             lines.append(f"  - {r['reason']}")
     return "\n".join(lines) if lines else ""
 
-def gen_post(news, chart, article, platform, post_type="short"):
+def build_article_feedback_prompt(article_id):
+    """Build per-article performance insights for the generation prompt."""
+    if not article_id:
+        return ""
+    feedback = db.get_article_feedback(article_id)
+    if not feedback:
+        return ""
+    lines = ["\nARTICLE-SPECIFIC INSIGHTS (from past posts about THIS article):"]
+    # Group by hook_strategy and compute average clicks
+    strategy_perf = {}
+    for f in feedback:
+        hs = f.get("hook_strategy") or "unknown"
+        if hs not in strategy_perf:
+            strategy_perf[hs] = {"clicks": [], "count": 0}
+        strategy_perf[hs]["clicks"].append(f.get("clicks_30d") or 0)
+        strategy_perf[hs]["count"] += 1
+    if len(strategy_perf) > 1:
+        lines.append("  Hook strategy performance:")
+        for hs, data in sorted(strategy_perf.items(),
+                                key=lambda x: sum(x[1]["clicks"]) / max(len(x[1]["clicks"]), 1),
+                                reverse=True):
+            avg = sum(data["clicks"]) / max(len(data["clicks"]), 1)
+            lines.append(f"    {hs}: {avg:.0f} avg clicks ({data['count']} posts)")
+    # Platform comparison
+    plat_perf = {}
+    for f in feedback:
+        plat = f.get("platform", "unknown")
+        if plat not in plat_perf:
+            plat_perf[plat] = []
+        plat_perf[plat].append(f.get("clicks_30d") or 0)
+    if len(plat_perf) > 1:
+        lines.append("  Platform performance:")
+        for plat, clicks in plat_perf.items():
+            lines.append(f"    {plat}: {sum(clicks)/len(clicks):.0f} avg clicks")
+    # Top performing post example
+    top = [f for f in feedback if f.get("clicks_30d", 0) > 0]
+    if top:
+        best = top[0]
+        lines.append(f"  Best post: {best.get('hook_strategy','?')} on {best['platform']} — {best['clicks_30d']} clicks")
+        lines.append(f"    Caption start: \"{(best.get('caption','')[:80])}...\"")
+    # A/B test results
+    wins = db.get_winning_strategies(article_id)
+    if wins:
+        lines.append("  A/B test results:")
+        for w in wins[:3]:
+            lines.append(f"    {w['winning_strategy']} beat {w['losing_strategy']} on {w['platform']} ({w['win_clicks']} vs {w['lose_clicks']} clicks)")
+    return "\n".join(lines) if len(lines) > 1 else ""
+
+def gen_post(news, chart, article, platform, post_type="short", force_strategy=None):
     """Generate a single post. Unified function for short and long."""
     client = get_client()
     if not client: return None
     url = article["url"] if article else f"{HFN_BASE_URL}/charts"
     feedback = build_feedback_prompt()
+    article_feedback = build_article_feedback_prompt(article.get("id") if article else None)
+
+    strategy_instruction = ""
+    if force_strategy:
+        strategy_instruction = f"\nYou MUST use the {force_strategy} hook strategy. Do not use any other."
 
     if post_type == "short":
         content_instruction = f"""Write a SHORT post (the chart image will be shown alongside):
 1. CAPTION ({"max 220 chars" if platform == "x" else "max 600 chars"}):
-   - Pick ONE hook strategy (Question / Historical Parallel / Contrast / Provocative Claim / Number). Vary across posts — do not always lead with a number.
+   - Pick ONE hook strategy (Question / Historical Parallel / Contrast / Provocative Claim / Number). Vary across posts — do not always lead with a number.{strategy_instruction}
    - The chart is attached as an image. Do not describe what it shows — provoke curiosity about it.
    - Connect to the news story in one sharp sentence. The reader should think "I need to see that article."
    {"- No hashtags." if platform == "x" else "- End with 2-3 hashtags."}
    {"" if platform == "x" else "- Use 2-3 short paragraphs with line breaks."}
 2. CONTEXT ({"max 80 chars" if platform == "x" else "max 120 chars"}):
    Write as: "From [article title] on History Future Now"
-Return JSON: {{"caption": "...", "context": "..."}}"""
+3. HOOK_STRATEGY: Which strategy you used (QUESTION, HISTORICAL_PARALLEL, CONTRAST, PROVOCATIVE_CLAIM, or NUMBER)
+Return JSON: {{"caption": "...", "context": "...", "hook_strategy": "..."}}"""
         max_tok = 400
     else:
         article_text = article.get("full_text", article.get("opening", ""))[:4000]
         max_chars = "1800" if platform == "x" else "2500"
         platform_note = "Structure as numbered points for threadability." if platform == "x" else "Open with scroll-stopping first line. Use paragraph breaks. End with a question."
         content_instruction = f"""Write a {"thread-style post" if platform == "x" else "LinkedIn article"} (max {max_chars} chars):
-- HOOK: Pick ONE hook strategy (Question / Historical Parallel / Contrast / Provocative Claim / Number). The chart is attached as an image — do not describe what it shows. Make it impossible to scroll past.
+- HOOK: Pick ONE hook strategy (Question / Historical Parallel / Contrast / Provocative Claim / Number). The chart is attached as an image — do not describe what it shows. Make it impossible to scroll past.{strategy_instruction}
 - BRIDGE: Connect this to today's news headline in one sentence.
 - DEPTH: Draw 2-3 historical parallels or insights from the article. Use specific numbers, dates, and comparisons — e.g. "Rome's grain dole fed 200,000 citizens. Our welfare state covers 67 million."
 - CLOSE: End with a thought that makes the reader want the full picture. Do NOT include the URL — it is appended automatically.
@@ -126,7 +180,8 @@ ARTICLE CONTENT:
 {article_text}
 
 Also provide a short CONTEXT line (max 100 chars): "From [article title] on History Future Now"
-Return JSON: {{"caption": "...", "context": "..."}}"""
+Also identify your HOOK_STRATEGY (QUESTION, HISTORICAL_PARALLEL, CONTRAST, PROVOCATIVE_CLAIM, or NUMBER).
+Return JSON: {{"caption": "...", "context": "...", "hook_strategy": "..."}}"""
         max_tok = 1500
 
     platform_hook = PLATFORM_HOOKS.get(platform, "")
@@ -135,6 +190,7 @@ Return JSON: {{"caption": "...", "context": "..."}}"""
 {platform_hook}
 
 {feedback}
+{article_feedback}
 
 NEWS: {news['title']}
 {news.get('summary', '')[:200]}
@@ -210,7 +266,20 @@ def generate_from_matches():
             print(f"  ⏭ [{score:.1f}] Skipping (chart used recently): {chart['title'][:50]}")
             continue
 
-        print(f"\n  {'★' if high_relevance else '·'} [{score:.1f}] {news['title'][:55]}...")
+        # Lifecycle-aware threshold (Feature 2)
+        lifecycle = db.get_article_lifecycle(article["id"])
+        stage = lifecycle["stage"]
+        if stage == "launch":
+            threshold = 0.5
+        elif stage == "active":
+            threshold = 0.6
+        else:  # evergreen
+            threshold = 0.7
+        if score < threshold:
+            print(f"  ⏭ [{score:.1f}] Below {stage} threshold ({threshold}): {chart['title'][:50]}")
+            continue
+
+        print(f"\n  {'★' if high_relevance else '·'} [{score:.1f}] [{stage}] {news['title'][:55]}...")
 
         platforms = ["x", "linkedin"] if is_linkedin_safe(article) else ["x"]
         for platform in platforms:
@@ -223,17 +292,46 @@ def generate_from_matches():
             if ("news", news["id"], platform) in existing_keys:
                 continue
 
+            # A/B testing: 30% chance on high-relevance matches (Feature 6)
+            if high_relevance and random.random() < 0.3:
+                variant_group = f"ab_{uuid.uuid4().hex[:8]}"
+                strategies = random.sample(["QUESTION", "CONTRAST", "PROVOCATIVE_CLAIM",
+                                            "HISTORICAL_PARALLEL", "NUMBER"], 2)
+                ab_ok = True
+                for strategy in strategies:
+                    result = gen_post(news, chart, article, platform, post_type,
+                                      force_strategy=strategy)
+                    if result:
+                        caption = result.get("essay", result.get("caption", ""))
+                        context = result.get("context", "")
+                        hook_strategy = result.get("hook_strategy", strategy)
+                        db.insert_post(
+                            news_item_id=news["id"], chart_id=chart["id"],
+                            article_id=article["id"], platform=platform,
+                            caption=caption, article_context=context,
+                            article_url=article["url"],
+                            image_path=chart["image_path"],
+                            post_type=post_type, hook_strategy=hook_strategy,
+                            variant_group=variant_group)
+                        generated += 1
+                        print(f"    ✓ {platform} {post_type} A/B [{strategy}]")
+                    else:
+                        ab_ok = False
+                if ab_ok:
+                    continue  # Skip normal generation
+
             result = gen_post(news, chart, article, platform, post_type)
             if result:
                 caption = result.get("essay", result.get("caption", ""))
                 context = result.get("context", "")
+                hook_strategy = result.get("hook_strategy", "")
                 db.insert_post(
                     news_item_id=news["id"], chart_id=chart["id"],
                     article_id=article["id"], platform=platform,
                     caption=caption, article_context=context,
                     article_url=article["url"],
                     image_path=chart["image_path"],
-                    post_type=post_type)
+                    post_type=post_type, hook_strategy=hook_strategy)
                 generated += 1
                 print(f"    ✓ {platform} {post_type}")
 
@@ -290,12 +388,13 @@ JSON only, no markdown."""
 
     caption = result.get("essay", result.get("caption", ""))
     context = result.get("context", "")
+    hook_strategy = result.get("hook_strategy", "")
     pid = db.insert_post(
         news_item_id=news.get("id"), chart_id=chart["id"],
         article_id=article["id"], platform=platform,
         caption=caption, article_context=context,
         article_url=article["url"], image_path=chart["image_path"],
-        post_type=post_type)
+        post_type=post_type, hook_strategy=hook_strategy)
     return {"post_id": pid, "caption": caption, "news_title": news.get("title", "")}
 
 
