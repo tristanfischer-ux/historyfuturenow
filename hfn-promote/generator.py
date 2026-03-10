@@ -297,7 +297,7 @@ def generate_from_matches():
                 variant_group = f"ab_{uuid.uuid4().hex[:8]}"
                 strategies = random.sample(["QUESTION", "CONTRAST", "PROVOCATIVE_CLAIM",
                                             "HISTORICAL_PARALLEL", "NUMBER"], 2)
-                ab_ok = True
+                ab_pids = []
                 for strategy in strategies:
                     result = gen_post(news, chart, article, platform, post_type,
                                       force_strategy=strategy)
@@ -305,7 +305,7 @@ def generate_from_matches():
                         caption = result.get("essay", result.get("caption", ""))
                         context = result.get("context", "")
                         hook_strategy = result.get("hook_strategy", strategy)
-                        db.insert_post(
+                        pid = db.insert_post(
                             news_item_id=news["id"], chart_id=chart["id"],
                             article_id=article["id"], platform=platform,
                             caption=caption, article_context=context,
@@ -313,12 +313,19 @@ def generate_from_matches():
                             image_path=chart["image_path"],
                             post_type=post_type, hook_strategy=hook_strategy,
                             variant_group=variant_group)
+                        ab_pids.append(pid)
                         generated += 1
                         print(f"    ✓ {platform} {post_type} A/B [{strategy}]")
-                    else:
-                        ab_ok = False
-                if ab_ok:
-                    continue  # Skip normal generation
+                if len(ab_pids) == 2:
+                    continue  # Both variants succeeded — skip normal generation
+                elif len(ab_pids) == 1:
+                    # One variant failed — clear variant_group on the orphan so it's a normal post
+                    conn = db.get_db()
+                    conn.execute("UPDATE posts SET variant_group='' WHERE id=?", (ab_pids[0],))
+                    conn.commit()
+                    conn.close()
+                    print(f"    ⚠ A/B partial — converted to normal post")
+                    continue  # Already have one post, don't generate another
 
             result = gen_post(news, chart, article, platform, post_type)
             if result:
@@ -500,11 +507,12 @@ def _generate_one_post(p, charts):
     if result:
         caption = result.get("essay", result.get("caption", ""))
         context = result.get("context", "")
+        hook_strategy = result.get("hook_strategy", "")
         conn = db.get_db()
         conn.execute("""UPDATE posts SET caption=?, article_context=?, article_url=?,
-                       image_path=?, status='generated' WHERE id=?""",
+                       image_path=?, hook_strategy=?, status='generated' WHERE id=?""",
                      (caption, context, article.get("url",""),
-                      chart.get("image_path",""), p["id"]))
+                      chart.get("image_path",""), hook_strategy, p["id"]))
         conn.commit()
         conn.close()
         print(f"    ✓ Done")

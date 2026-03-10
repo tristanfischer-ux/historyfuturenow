@@ -1482,7 +1482,6 @@ def get_post_quality_score(post_id):
 
 def compute_article_priority(article_id):
     """Combined priority score for promotion scheduling."""
-    conn = get_db()
     perf = get_article_performance(article_id)
     clicks_30d = perf["clicks_30d"] if perf else 0
     total_posts = perf["total_posts"] if perf else 0
@@ -1496,12 +1495,15 @@ def compute_article_priority(article_id):
         charts = get_charts_for_article(article["slug"])
         chart_count = len([c for c in charts if c.get("image_path")])
         saturation = min(total_posts / max(chart_count, 1), 3) / 3
-    best_match = conn.execute("""
-        SELECT MAX(relevance_score) FROM news_items
-        WHERE matched_article_id=? AND created_at >= datetime('now', '-7 days')
-    """, (article_id,)).fetchone()
-    conn.close()
-    news_strength = (best_match[0] or 0) if best_match else 0
+    conn = get_db()
+    try:
+        best_match = conn.execute("""
+            SELECT MAX(relevance_score) FROM news_items
+            WHERE matched_article_id=? AND created_at >= datetime('now', '-7 days')
+        """, (article_id,)).fetchone()
+        news_strength = (best_match[0] or 0) if best_match else 0
+    finally:
+        conn.close()
     priority = (
         conversion * 0.3 +
         freshness * 0.2 +
@@ -1542,7 +1544,7 @@ def get_undecided_ab_tests(min_days=7, max_days=30):
         SELECT p.variant_group, p.article_id, p.platform,
                GROUP_CONCAT(p.id ORDER BY p.id) as post_ids,
                GROUP_CONCAT(p.hook_strategy ORDER BY p.id) as strategies,
-               GROUP_CONCAT(COALESCE(pp.clicks_7d, 0) ORDER BY p.id) as clicks,
+               GROUP_CONCAT(COALESCE(pp.clicks_30d, 0) ORDER BY p.id) as clicks,
                MIN(p.posted_at) as earliest_post
         FROM posts p
         LEFT JOIN post_performance pp ON pp.post_id = p.id
