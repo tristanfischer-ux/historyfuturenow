@@ -14,6 +14,12 @@ import requests
 import db
 from config import SESSIONS_DIR, MAX_X_PER_DAY, MAX_LI_PER_DAY
 
+def _classify_error(ex):
+    s = str(ex).lower()
+    if "timeout" in s or "connection" in s: return "network"
+    if "login" in s or "auth" in s: return "session_expired"
+    return "unknown"
+
 LI_SESSION = SESSIONS_DIR / "linkedin_session.json"
 CHROME_PROFILE = Path.home() / "Library/Application Support/Google/Chrome"
 
@@ -90,14 +96,14 @@ def _post_to_x_single(page, text, image_path):
                 if el.is_visible(timeout=1000):
                     el.click(force=True)
                     time.sleep(1)
-            except:
-                pass
+            except Exception:
+                pass  # overlay dismiss is best-effort
 
         if "login" in page.url.lower():
             print("  [!] Not logged in to X — log in via Chrome and retry")
             try: page.screenshot(path=str(SESSIONS_DIR / "x_debug.png"))
-            except: pass
-            return False
+            except Exception: pass
+            return False, "session_expired"
 
         editor = page.get_by_test_id("primaryColumn").get_by_test_id("tweetTextarea_0")
         editor.wait_for(timeout=10000)
@@ -114,7 +120,7 @@ def _post_to_x_single(page, text, image_path):
                 const btn = document.querySelector('[data-testid="tweetButtonInline"]');
                 return btn && !btn.disabled;
             }""", timeout=10000)
-        except:
+        except Exception:
             editor.click(force=True)
             time.sleep(0.5)
             page.evaluate(f"""() => {{
@@ -132,19 +138,19 @@ def _post_to_x_single(page, text, image_path):
 
         page.locator('[data-testid="tweetButtonInline"]').click()
         time.sleep(3)
-        return True
+        return True, ""
     except Exception as ex:
         try: page.screenshot(path=str(SESSIONS_DIR / "x_debug.png"))
         except: pass
         print(f"  [!] X error: {ex}")
-        return False
+        return False, _classify_error(ex)
 
 
 def post_to_x(text, image_path=None):
     """Post a single tweet. Closes Chrome, posts, reopens. For single manual posts."""
     if db.posts_today("x") >= MAX_X_PER_DAY:
         print(f"  [!] X daily limit reached ({MAX_X_PER_DAY})")
-        return False
+        return False, "daily_limit"
 
     chrome_was_running = _close_chrome()
     try:
@@ -156,9 +162,12 @@ def post_to_x(text, image_path=None):
                 args=["--disable-blink-features=AutomationControlled"],
             )
             page = ctx.new_page()
-            ok = _post_to_x_single(page, text, image_path)
+            ok, err = _post_to_x_single(page, text, image_path)
             ctx.close()
-            return ok
+            return ok, err
+    except Exception as ex:
+        print(f"  [!] X error: {ex}")
+        return False, _classify_error(ex)
     finally:
         if chrome_was_running:
             _reopen_chrome()
@@ -167,7 +176,7 @@ def post_to_x(text, image_path=None):
 def post_x_batch(posts_with_text):
     """Post multiple tweets in one Chrome session. One close/reopen cycle.
     posts_with_text: list of (post_dict, text_str) tuples.
-    Returns list of (post_dict, success_bool)."""
+    Returns list of (post_dict, success_bool, error_str) triples."""
     if not posts_with_text:
         return []
 
@@ -183,22 +192,22 @@ def post_x_batch(posts_with_text):
             )
             page = ctx.new_page()
             for post, text in posts_with_text:
-                ok = _post_to_x_single(page, text, post.get("image_path"))
-                results.append((post, ok))
+                ok, err = _post_to_x_single(page, text, post.get("image_path"))
+                results.append((post, ok, err))
                 if ok:
                     time.sleep(2)  # Brief pause between posts
                 else:
                     # If login failed, skip remaining
                     if "login" in (page.url or "").lower():
                         for remaining_post, _ in posts_with_text[len(results):]:
-                            results.append((remaining_post, False))
+                            results.append((remaining_post, False, "session_expired"))
                         break
             ctx.close()
     except Exception as ex:
         print(f"  [!] X batch error: {ex}")
         # Mark remaining as failed
         for post, text in posts_with_text[len(results):]:
-            results.append((post, False))
+            results.append((post, False, "batch_error"))
     finally:
         if chrome_was_running:
             _reopen_chrome()
@@ -323,7 +332,7 @@ def _li_post_playwright(text, image_path):
     cookies = _load_cookies(LI_SESSION)
     if not cookies:
         print("  [!] No LinkedIn cookies for Playwright fallback")
-        return False
+        return False, "no_cookies"
 
     print("  Trying Playwright fallback for LinkedIn post...")
     with sync_playwright() as p:
@@ -339,7 +348,7 @@ def _li_post_playwright(text, image_path):
                 print("  [!] LinkedIn session expired for Playwright. Run: python3 poster.py linkedin")
                 try: page.screenshot(path=str(SESSIONS_DIR / "li_debug.png"))
                 except: pass
-                return False
+                return False, "session_expired"
 
             trigger = page.locator(
                 'button.share-box-feed-entry__trigger, '
@@ -368,8 +377,8 @@ def _li_post_playwright(text, image_path):
                     media_btn.wait_for(timeout=5000)
                     media_btn.click()
                     time.sleep(1)
-                except:
-                    pass
+                except Exception:
+                    pass  # media button may not exist on all LinkedIn forms
 
                 file_input = page.locator('input[type="file"][accept*="image"]').first
                 file_input.wait_for(timeout=5000)
@@ -384,8 +393,8 @@ def _li_post_playwright(text, image_path):
                             done.click()
                             time.sleep(1)
                             break
-                    except:
-                        pass
+                    except Exception:
+                        pass  # try next selector
 
             editor = page.locator(
                 '.ql-editor[contenteditable="true"], '
@@ -411,14 +420,14 @@ def _li_post_playwright(text, image_path):
             except: pass
 
             print("  ✓ Posted via Playwright fallback")
-            return True
+            return True, ""
 
         except Exception as ex:
             try: page.screenshot(path=str(SESSIONS_DIR / "li_debug.png"))
             except: pass
             print(f"  [!] LinkedIn Playwright error: {ex}")
             print(f"      Debug screenshot saved to {SESSIONS_DIR / 'li_debug.png'}")
-            return False
+            return False, _classify_error(ex)
         finally:
             ctx.close()
             browser.close()
@@ -428,18 +437,18 @@ def post_to_linkedin(text, image_path=None):
     """Post to LinkedIn. Tries Voyager REST API first, falls back to Playwright."""
     if db.posts_today("linkedin") >= MAX_LI_PER_DAY:
         print(f"  [!] LinkedIn daily limit reached ({MAX_LI_PER_DAY})")
-        return False
+        return False, "daily_limit"
 
     session, err = _li_api_session()
     if not session:
         print(f"  [!] {err}")
-        return False
+        return False, "session_expired"
 
     media_urn = None
     if image_path:
         if not Path(image_path).exists():
             print(f"  [!] Image file not found: {image_path}")
-            return False
+            return False, "image_not_found"
         media_urn, img_err = _li_upload_image(session, image_path)
         if img_err:
             print(f"  [!] API image upload failed: {img_err}")
@@ -464,19 +473,24 @@ def post_to_linkedin(text, image_path=None):
         resp = session.post(share_url, json=payload)
         if resp.status_code in (401, 403):
             print("  [!] LinkedIn session expired. Run: python3 poster.py linkedin")
-            return False
+            return False, "session_expired"
         if resp.status_code in (200, 201):
-            return True
+            return True, ""
+        if resp.status_code == 429:
+            print(f"  [!] LinkedIn rate limited (HTTP 429)")
+            if image_path:
+                return _li_post_playwright(text, image_path)
+            return False, "rate_limit"
         print(f"  [!] LinkedIn share failed (HTTP {resp.status_code}): {resp.text[:300]}")
         if image_path:
             print(f"  Falling back to Playwright...")
             return _li_post_playwright(text, image_path)
-        return False
+        return False, "post_failed"
     except Exception as ex:
         print(f"  [!] LinkedIn error: {ex}")
         if image_path:
             return _li_post_playwright(text, image_path)
-        return False
+        return False, _classify_error(ex)
 
 
 if __name__ == "__main__":

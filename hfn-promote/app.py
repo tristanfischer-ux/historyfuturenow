@@ -20,11 +20,15 @@ def _strip_urls(text):
     cleaned = re.sub(r'\n{3,}', '\n\n', cleaned)  # collapse triple+ newlines
     return cleaned.strip()
 
-def _build_post_text(caption, article_url):
-    """Build final post text: strip any LLM-hallucinated URLs, append the correct article URL."""
+def _build_post_text(caption, article_url, post_id=None, platform=None):
+    """Build final post text: strip any LLM-hallucinated URLs, append the correct article URL with UTM tracking."""
     clean = _strip_urls(caption)
     if article_url:
-        clean += "\n" + article_url
+        url = article_url
+        if post_id:
+            sep = '&' if '?' in url else '?'
+            url += f"{sep}utm_source={platform or 'social'}&utm_medium=social&utm_campaign=post_{post_id}"
+        clean += "\n" + url
     return clean
 
 # Import issues from build system
@@ -415,11 +419,13 @@ HTML = r"""<!DOCTYPE html>
 .lib-chart-promote:hover{border-color:var(--accent);background:var(--accent-soft)}.lib-chart-promote:disabled{opacity:.5;cursor:wait}
 /* Analytics pills + bar */
 .lib-views-pill{font-size:.58rem;padding:1px 5px;border-radius:3px;background:#dbeafe;color:#1d4ed8;font-weight:600}
+.perf-pill{font-size:.58rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;font-weight:600;margin-top:4px;display:inline-block}
 .lib-analytics-bar{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 14px;margin-top:8px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .lib-stat{font-size:.72rem;font-weight:600;color:#1e40af}
 .lib-stat-dim{font-size:.62rem;color:#6b7280;margin-left:2px}
 .lib-sort-select{font-size:.6rem;padding:2px 4px;border:1px solid var(--border);border-radius:4px;font-family:inherit}
 body.dark .lib-views-pill{background:#1e3a5f;color:#93c5fd}
+body.dark .perf-pill{background:#14532d;color:#86efac}
 body.dark .lib-analytics-bar{background:#1e293b;border-color:#334155}
 body.dark .lib-stat{color:#93c5fd}
 body.dark .lib-stat-dim{color:#9ca3af}
@@ -1347,6 +1353,7 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
       <div><strong>Next post:</strong> <span id="as-next">—</span></div>
     </div>
     <div style="margin-top:6px"><strong>Last result:</strong> <span id="as-last">—</span></div>
+    <div id="as-errors" style="margin-top:8px"></div>
   </div>
   <h3 style="font-size:.85rem;margin-bottom:8px">Activity</h3>
   <div class="logbox" style="margin:0">
@@ -1398,6 +1405,10 @@ async function selectNews(newsId){
           ${!m.text_only?'<div class="ai-chart">📊 '+(m.chart_title||m.title||'')+'</div>':''}
           ${m.description?'<div style="font-size:.7rem;color:var(--dim);margin-bottom:4px;line-height:1.35">'+m.description.substring(0,200)+'</div>':''}
           <div class="ai-hook">${m.hook||'Drag to add to plan →'}</div>
+          <div class="ai-score" style="display:flex;align-items:center;gap:4px;margin-top:3px">
+            <span style="width:7px;height:7px;border-radius:50%;background:${m.relevance_score>=0.7?'#4caf50':m.relevance_score>=0.5?'#d4a017':'#e53935'}"></span>
+            <span style="font-size:.62rem;color:var(--dim)">${Math.round((m.relevance_score||0)*100)}% match</span>
+          </div>
           <div class="ai-opts">
             <span class="opt-pill x-sel" data-v="x" onclick="togglePill(this)">𝕏</span>
             <span class="opt-pill${(['Jobs & Economy','Natural Resources'].includes(m.article_part))?' li-sel':''}" data-v="li" onclick="togglePill(this)" ${!['Jobs & Economy','Natural Resources'].includes(m.article_part)?'title="Political articles are not posted on LinkedIn"':''}>${['Jobs & Economy','Natural Resources'].includes(m.article_part)?'LinkedIn':'<s>LinkedIn</s>'}</span>
@@ -1847,6 +1858,7 @@ async function loadPosted(reset=true){
           ${p.chart_title?'<div class="post-cal-chart">'+esc(p.chart_title)+'</div>':''}
           ${p.news_title?'<div class="post-cal-news">📰 '+esc(p.news_title)+(p.news_link?' <a href="'+esc(p.news_link)+'" target="_blank">↗</a>':'')+'</div>':''}
           <div class="post-cal-caption">${esc(p.caption||'(no caption)')}</div>
+          ${p.clicks_30d?'<span class="perf-pill">'+p.clicks_30d+' clicks</span>':''}
         </div>
       </div>`;
     }
@@ -1891,6 +1903,12 @@ async function loadAutoStatus(){
       const ok=lr.ok?'✅':'❌';
       document.getElementById('as-last').innerHTML=ok+' '+lr.platform+' #'+lr.post_id+' at '+lr.time.substring(11,16)+(lr.msg?' — '+lr.msg:'');
     }else{document.getElementById('as-last').textContent='no posts yet';}
+    const errEl=document.getElementById('as-errors');
+    if(d.errors&&d.errors.length){
+      const colors={session_expired:'#e53935',network:'#ff9800',rate_limit:'#d4a017',unknown:'#9e9e9e',post_failed:'#e53935',daily_limit:'#757575'};
+      errEl.innerHTML='<strong style="font-size:.72rem">Recent errors (24h):</strong><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+
+        d.errors.map(e=>`<span style="font-size:.65rem;padding:2px 6px;border-radius:4px;background:${colors[e.error_category]||'#9e9e9e'}22;color:${colors[e.error_category]||'#9e9e9e'};border:1px solid ${colors[e.error_category]||'#9e9e9e'}44">${e.error_category} (${e.platform}): ${e.count}</span>`).join('')+'</div>';
+    }else{errEl.innerHTML='';}
   }catch(e){}
 }
 loadAutoStatus();setInterval(loadAutoStatus,60000);
@@ -3883,7 +3901,8 @@ def api_autoposter_status():
         "scheduler_on": scheduler_on,
         "queue_count": len(queued),
         "next_post": next_post,
-        "last_result": last_post_result
+        "last_result": last_post_result,
+        "errors": db.get_error_summary()
     })
 
 @app.route("/api/chart_usage")
@@ -3906,6 +3925,10 @@ def api_posted():
         platform=platform or None, days=days, offset=offset, limit=actual_limit)
     for r in rows:
         r["image_url"] = img_url(r.get("image_path","") or r.get("chart_image",""))
+        perf = db.get_post_performance(r["id"])
+        if perf:
+            r["clicks_7d"] = perf["clicks_7d"]
+            r["clicks_30d"] = perf["clicks_30d"]
     return jsonify({"posts": rows, "total": total, "offset": offset, "limit": actual_limit})
 
 # Planner APIs
@@ -3937,6 +3960,17 @@ def api_plan_add():
         conn.close()
         if count >= MAX_POSTS_PER_DAY:
             return jsonify({"ok": False, "msg": f"Daily limit reached ({MAX_POSTS_PER_DAY} posts)"})
+    # 90-minute gap enforcement
+    if sched_at and d.get("platform"):
+        conn = db.get_db()
+        nearby = conn.execute("""
+            SELECT id FROM posts WHERE platform=?
+            AND status IN ('planned','generated','queued','scheduled')
+            AND ABS(strftime('%s',replace(scheduled_at,'T',' ')) - strftime('%s',replace(?,'T',' '))) < 5400
+        """, (d["platform"], sched_at)).fetchall()
+        conn.close()
+        if nearby:
+            return jsonify({"ok": False, "msg": "Too close to another post (90-min gap required)"})
     # Block LinkedIn for political articles
     if d.get("platform") == "linkedin" and d.get("article_id"):
         from generator import is_linkedin_safe
@@ -3953,8 +3987,89 @@ def api_plan_add():
 
 @app.route("/api/plan_remove", methods=["POST"])
 def api_plan_remove():
+    post = db.get_post(request.json["id"])
+    if post and post["status"] == "planned":
+        db.add_feedback(post_id=post["id"], action="match_reject",
+            reason=f"Removed from plan: chart#{post.get('chart_id','')} + news#{post.get('news_item_id','')}",
+            platform=post["platform"], post_type=post.get("post_type",""))
     db.delete_post(request.json["id"])
     return jsonify({"ok":True})
+
+@app.route("/api/schedule_heatmap")
+def api_schedule_heatmap():
+    """Engagement intensity (0-1) per hour per platform for planner heatmap."""
+    data = db.get_engagement_by_hour()
+    if not data:
+        return jsonify([])
+    max_clicks = max((d["avg_clicks"] or 0) for d in data) or 1
+    for d in data:
+        d["intensity"] = round((d["avg_clicks"] or 0) / max_clicks, 2)
+    return jsonify(data)
+
+@app.route("/api/auto_space", methods=["POST"])
+def api_auto_space():
+    """Auto-assign planned posts to best available time slots for a given day."""
+    d = request.json or {}
+    day_iso = d.get("day", date.today().isoformat())
+    platform = d.get("platform")
+    # Get engagement data
+    heat = db.get_engagement_by_hour()
+    hour_scores = {}
+    for h in heat:
+        key = (h["hour"], h.get("platform",""))
+        hour_scores[key] = h.get("avg_clicks", 0)
+    # Get existing scheduled posts for this day
+    conn = db.get_db()
+    existing = conn.execute(
+        "SELECT scheduled_at, platform FROM posts WHERE scheduled_at LIKE ? AND status IN ('planned','generated','queued','scheduled','posted')",
+        (day_iso + "%",)).fetchall()
+    occupied = [(r[0], r[1]) for r in existing]
+    # Get unscheduled planned posts
+    where = "status='planned' AND (scheduled_at IS NULL OR scheduled_at='')"
+    params = []
+    if platform:
+        where += " AND platform=?"
+        params.append(platform)
+    unscheduled = db._dicts(conn.execute(f"SELECT * FROM posts WHERE {where} ORDER BY created_at", params).fetchall())
+    conn.close()
+    if not unscheduled:
+        return jsonify({"ok": True, "count": 0, "msg": "No unscheduled posts"})
+    # Rank POST_SLOTS by engagement
+    available_slots = []
+    default_slots = ['09:00','11:00','14:00','16:30','19:00']
+    for slot_time in sorted(getattr(sys.modules.get('config'), 'POST_SLOTS', default_slots)):
+        hour = int(slot_time.split(":")[0])
+        for plat in (["x", "linkedin"] if not platform else [platform]):
+            score = hour_scores.get((hour, plat), 0)
+            slot_dt = f"{day_iso}T{slot_time}"
+            # Check not occupied and 90-min gap
+            too_close = False
+            for occ_dt, occ_plat in occupied:
+                if occ_plat == plat:
+                    try:
+                        t1 = datetime.fromisoformat(slot_dt.replace("T"," "))
+                        t2 = datetime.fromisoformat(occ_dt.replace("T"," "))
+                        if abs((t1-t2).total_seconds()) < 5400:
+                            too_close = True; break
+                    except: pass
+            if not too_close:
+                available_slots.append((score, slot_dt, plat))
+    available_slots.sort(key=lambda x: -x[0])
+    assigned = 0
+    for post in unscheduled:
+        best = None
+        for score, slot_dt, plat in available_slots:
+            if plat == post["platform"]:
+                best = slot_dt; break
+        if best:
+            conn = db.get_db()
+            conn.execute("UPDATE posts SET scheduled_at=? WHERE id=?", (best, post["id"]))
+            conn.commit()
+            conn.close()
+            occupied.append((best, post["platform"]))
+            available_slots = [(s,dt,pl) for s,dt,pl in available_slots if dt != best]
+            assigned += 1
+    return jsonify({"ok": True, "count": assigned, "msg": f"Assigned {assigned} post(s) to time slots"})
 
 @app.route("/api/plan_generate", methods=["POST"])
 def api_plan_generate():
@@ -4150,13 +4265,15 @@ def api_post_now():
     prev_status = post["status"]
     db.update_post_status(post["id"],"approved")
     from poster import post_to_x, post_to_linkedin
-    text = _build_post_text(post["caption"], post.get("article_url"))
-    ok = (post_to_x if post["platform"]=="x" else post_to_linkedin)(text, post.get("image_path"))
+    text = _build_post_text(post["caption"], post.get("article_url"), post_id=post["id"], platform=post["platform"])
+    ok, err = (post_to_x if post["platform"]=="x" else post_to_linkedin)(text, post.get("image_path"))
     if ok:
+        db.clear_post_error(post["id"])
         db.update_post_status(post["id"],"posted"); db.log_post(post["platform"],post["id"])
         return jsonify({"ok":True,"msg":"Posted!"})
+    db.record_post_error(post["id"], err, err)
     db.update_post_status(post["id"], prev_status)
-    return jsonify({"ok":False,"msg":"Failed — check session"})
+    return jsonify({"ok":False,"msg":f"Failed: {err}"})
 
 
 # ── Article Studio APIs ──
@@ -5174,8 +5291,37 @@ def _start_auto_poster():
     from apscheduler.triggers.interval import IntervalTrigger
     def post_due():
         import subprocess
+        # Auto-promote planned/generated posts that are due
+        # Cap generation at 3 per cycle to avoid blocking the posting flow
+        MAX_AUTO_GEN = 3
+        gen_count = 0
+        try:
+            unready = db.get_due_unready_posts()
+            for p in unready:
+                pid = p["id"]
+                try:
+                    if p["status"] == "planned":
+                        if gen_count >= MAX_AUTO_GEN:
+                            log(f"Auto-generate cap reached — deferring #{pid} to next cycle")
+                            continue
+                        from generator import generate_single
+                        ok = generate_single(pid)
+                        gen_count += 1
+                        if ok:
+                            log(f"Auto-generated #{pid}")
+                            db.confirm_post(pid)
+                            log(f"Auto-confirmed #{pid} to queued")
+                        else:
+                            log(f"Auto-generate failed #{pid} — will retry next cycle")
+                    elif p["status"] == "generated":
+                        db.confirm_post(pid)
+                        log(f"Auto-confirmed #{pid} to queued")
+                except Exception as ex:
+                    log(f"Auto-promote error #{pid}: {ex}")
+        except Exception as ex:
+            log(f"Auto-promote sweep error: {ex}")
+
         due = db.get_due_posts()
-        if not due: return
         today_iso = date.today().isoformat()
         x_posts = [p for p in due if p["platform"] == "x"]
         li_posts = [p for p in due if p["platform"] == "linkedin"]
@@ -5197,14 +5343,18 @@ def _start_auto_poster():
                 log(f"Skipping #{p['id']} LinkedIn — daily limit reached"); break
             try:
                 from poster import post_to_linkedin
-                text = _build_post_text(p["caption"], p.get("article_url"))
-                ok = post_to_linkedin(text, p.get("image_path"))
+                text = _build_post_text(p["caption"], p.get("article_url") or p.get("article_url_joined"), post_id=p["id"], platform="linkedin")
+                ok, err = post_to_linkedin(text, p.get("image_path"))
                 if ok:
+                    db.clear_post_error(p["id"])
                     db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
                     log(f"Posted #{p['id']} to LinkedIn"); _record("linkedin", p["id"], True)
                     li_remaining -= 1
                 else:
-                    log(f"Failed #{p['id']} LinkedIn"); _record("linkedin", p["id"], False, "post failed")
+                    db.record_post_error(p["id"], err, err)
+                    if err == "session_expired":
+                        log(f"LinkedIn session expired — skipping remaining"); break
+                    log(f"Error #{p['id']} LinkedIn: {err}"); _record("linkedin", p["id"], False, err)
             except Exception as ex:
                 log(f"Error #{p['id']} LinkedIn: {ex}"); _record("linkedin", p["id"], False, str(ex))
 
@@ -5214,24 +5364,54 @@ def _start_auto_poster():
         for p in x_posts:
             if x_remaining <= 0:
                 log(f"Skipping #{p['id']} X — daily limit reached"); break
-            x_batch.append((p, _build_post_text(p["caption"], p.get("article_url"))))
+            x_batch.append((p, _build_post_text(p["caption"], p.get("article_url") or p.get("article_url_joined"), post_id=p["id"], platform="x")))
             x_remaining -= 1
         if x_batch:
             try:
                 from poster import post_x_batch
                 results = post_x_batch(x_batch)
-                for p, ok in results:
+                for p, ok, err in results:
                     if ok:
+                        db.clear_post_error(p["id"])
                         db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
                         log(f"Posted #{p['id']} to X"); _record("x", p["id"], True)
                     else:
-                        log(f"Failed #{p['id']} X"); _record("x", p["id"], False, "post failed")
+                        db.record_post_error(p["id"], err, err)
+                        log(f"Error #{p['id']} X: {err}"); _record("x", p["id"], False, err)
             except Exception as ex:
                 log(f"Error posting X batch: {ex}")
                 for p, _ in x_batch:
+                    db.record_post_error(p["id"], "batch_error", str(ex))
                     _record("x", p["id"], False, str(ex))
+
+        # Retry failed posts (rate_limit, network errors)
+        for plat in ("linkedin", "x"):
+            retries = db.get_retry_candidates(plat)
+            for rp in retries[:2]:
+                try:
+                    from poster import post_to_linkedin, post_to_x
+                    text = _build_post_text(rp["caption"], rp.get("article_url") or rp.get("article_url_joined"), post_id=rp["id"], platform=plat)
+                    ok, err = (post_to_x if plat == "x" else post_to_linkedin)(text, rp.get("image_path"))
+                    if ok:
+                        db.clear_post_error(rp["id"])
+                        db.update_post_status(rp["id"], "posted"); db.log_post(plat, rp["id"])
+                        log(f"Retry success #{rp['id']} {plat}")
+                    else:
+                        db.record_post_error(rp["id"], err, err)
+                        log(f"Retry failed #{rp['id']} {plat}: {err}")
+                except Exception as ex:
+                    log(f"Retry error #{rp['id']} {plat}: {ex}")
+
     bg = BackgroundScheduler()
+    def sync_post_performance():
+        try:
+            from analytics import fetch_post_performance
+            n = fetch_post_performance()
+            if n: log(f"Synced performance for {n} posts")
+        except Exception as ex:
+            log(f"Performance sync error: {ex}")
     bg.add_job(post_due, trigger=IntervalTrigger(minutes=5), id="ap")
+    bg.add_job(sync_post_performance, trigger=IntervalTrigger(hours=6), id="perf_sync")
     bg.start()
     scheduler_ref = bg
     log("Auto-poster started (checks every 5 min)")

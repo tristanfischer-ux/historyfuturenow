@@ -1,5 +1,6 @@
 """HFN Promote — Database v3.4. With feedback learning, scheduling, Article Studio, and Strategic Series."""
 import sqlite3, json, re
+from contextlib import contextmanager
 from datetime import date, datetime
 from config import DB_PATH
 
@@ -154,6 +155,16 @@ CREATE TABLE IF NOT EXISTS series_articles (
     FOREIGN KEY (series_id) REFERENCES series(id),
     FOREIGN KEY (draft_id) REFERENCES article_drafts(id)
 );
+CREATE TABLE IF NOT EXISTS post_performance (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER NOT NULL UNIQUE,
+    clicks_7d INTEGER DEFAULT 0,
+    clicks_30d INTEGER DEFAULT 0,
+    users_7d INTEGER DEFAULT 0,
+    users_30d INTEGER DEFAULT 0,
+    last_fetched TEXT DEFAULT '',
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+);
 """
 
 def _dict(row):
@@ -168,6 +179,15 @@ def get_db():
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     return conn
+
+@contextmanager
+def get_db_ctx():
+    """Context manager for DB connections — guarantees close on exception."""
+    conn = get_db()
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 def init_db():
     conn = get_db()
@@ -191,6 +211,18 @@ def init_db():
             conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
         except sqlite3.OperationalError:
             conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} INTEGER DEFAULT {default}")
+    # Error tracking columns
+    for col, tbl, default in [("last_error", "posts", "''"),
+                               ("error_category", "posts", "''"),
+                               ("retry_count", "posts", "0"),
+                               ("last_attempt_at", "posts", "''")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            if default in ("0",):
+                conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} INTEGER DEFAULT {default}")
+            else:
+                conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT {default}")
     # Migrate legacy 'audio' stage to 'images' (audio decoupled from pipeline)
     conn.execute("UPDATE article_drafts SET stage='images' WHERE stage='audio'")
     conn.commit()
@@ -276,7 +308,8 @@ def insert_news(feed_name, title, link, summary="", published=""):
         row = conn.execute("SELECT id FROM news_items WHERE link=?", (link,)).fetchone()
         conn.close()
         return row[0] if row else None
-    except:
+    except Exception as e:
+        print(f"  [!] insert_news error for '{title[:60]}': {e}")
         conn.close()
         return None
 
@@ -448,11 +481,25 @@ def delete_post(post_id):
 def get_due_posts():
     conn = get_db()
     rows = _dicts(conn.execute("""
-        SELECT p.*, c.title as chart_title, a.title as article_title
+        SELECT p.*, c.title as chart_title, a.title as article_title, a.url as article_url_joined
         FROM posts p
         LEFT JOIN charts c ON p.chart_id = c.id
         LEFT JOIN articles a ON p.article_id = a.id
         WHERE p.status IN ('queued','scheduled') AND replace(p.scheduled_at,'T',' ') <= datetime('now')
+        ORDER BY p.scheduled_at ASC
+    """).fetchall())
+    conn.close()
+    return rows
+
+def get_due_unready_posts():
+    """Fetch posts with status planned/generated whose scheduled_at <= now."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT p.*, c.title as chart_title, a.title as article_title, a.url as article_url_joined
+        FROM posts p
+        LEFT JOIN charts c ON p.chart_id = c.id
+        LEFT JOIN articles a ON p.article_id = a.id
+        WHERE p.status IN ('planned','generated') AND replace(p.scheduled_at,'T',' ') <= datetime('now')
         ORDER BY p.scheduled_at ASC
     """).fetchall())
     conn.close()
@@ -978,11 +1025,11 @@ def get_series_articles(sid):
         SELECT sa.*, ad.title as draft_title, ad.stage as draft_stage
         FROM series_articles sa
         LEFT JOIN article_drafts ad ON sa.draft_id = ad.id
+        WHERE sa.series_id = ?
         ORDER BY sa.position ASC
-    """).fetchall())
+    """, (sid,)).fetchall())
     conn.close()
-    # Filter to only this series (the WHERE was missing)
-    return [r for r in rows if r["series_id"] == sid]
+    return rows
 
 def add_series_article(sid, working_title, position=None, role="", brief="",
                        key_arguments="", connects_to=""):
@@ -1184,5 +1231,106 @@ def delete_chat_document(doc_id):
     conn.execute("DELETE FROM chat_documents WHERE id=?", (doc_id,))
     conn.commit()
     conn.close()
+
+# ── Error tracking ──
+
+def record_post_error(post_id, category, message):
+    conn = get_db()
+    conn.execute("""UPDATE posts SET last_error=?, error_category=?,
+                    retry_count=retry_count+1, last_attempt_at=datetime('now')
+                    WHERE id=?""", (message, category, post_id))
+    conn.commit()
+    conn.close()
+
+def clear_post_error(post_id):
+    conn = get_db()
+    conn.execute("""UPDATE posts SET last_error='', error_category='',
+                    retry_count=0, last_attempt_at='' WHERE id=?""", (post_id,))
+    conn.commit()
+    conn.close()
+
+def get_error_summary():
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT error_category, platform, COUNT(*) as count
+        FROM posts WHERE error_category != '' AND last_attempt_at >= datetime('now', '-1 day')
+        GROUP BY error_category, platform
+    """).fetchall())
+    conn.close()
+    return rows
+
+def get_retry_candidates(platform):
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT p.*, c.title as chart_title, a.title as article_title, a.url as article_url_joined
+        FROM posts p
+        LEFT JOIN charts c ON p.chart_id = c.id
+        LEFT JOIN articles a ON p.article_id = a.id
+        WHERE p.platform=? AND p.retry_count < 3
+        AND p.error_category IN ('rate_limit','network')
+        AND p.last_attempt_at < datetime('now', '-15 minutes')
+        AND p.status NOT IN ('posted','rejected')
+    """, (platform,)).fetchall())
+    conn.close()
+    return rows
+
+# ── Post performance ──
+
+def upsert_post_performance(post_id, clicks_7d=0, clicks_30d=0, users_7d=0, users_30d=0):
+    conn = get_db()
+    conn.execute("""
+        INSERT INTO post_performance (post_id, clicks_7d, clicks_30d, users_7d, users_30d, last_fetched)
+        VALUES (?, ?, ?, ?, ?, datetime('now'))
+        ON CONFLICT(post_id) DO UPDATE SET
+            clicks_7d=excluded.clicks_7d, clicks_30d=excluded.clicks_30d,
+            users_7d=excluded.users_7d, users_30d=excluded.users_30d,
+            last_fetched=datetime('now')
+    """, (post_id, clicks_7d, clicks_30d, users_7d, users_30d))
+    conn.commit()
+    conn.close()
+
+def get_top_performing_posts(limit=10):
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT p.*, pp.clicks_7d, pp.clicks_30d, pp.users_7d, pp.users_30d,
+               c.title as chart_title, a.title as article_title
+        FROM post_performance pp
+        JOIN posts p ON pp.post_id = p.id
+        LEFT JOIN charts c ON p.chart_id = c.id
+        LEFT JOIN articles a ON p.article_id = a.id
+        ORDER BY pp.clicks_30d DESC LIMIT ?
+    """, (limit,)).fetchall())
+    conn.close()
+    return rows
+
+def get_post_performance(post_id):
+    conn = get_db()
+    row = _dict(conn.execute(
+        "SELECT * FROM post_performance WHERE post_id=?", (post_id,)).fetchone())
+    conn.close()
+    return row
+
+def get_engagement_by_hour(platform=None, days=30):
+    """Avg clicks by hour-of-day from posted + post_performance data."""
+    conn = get_db()
+    where = ["p.status='posted'", "p.posted_at IS NOT NULL",
+             "p.posted_at >= datetime('now', ?)"]
+    params = [f"-{days} days"]
+    if platform:
+        where.append("p.platform=?")
+        params.append(platform)
+    rows = _dicts(conn.execute(f"""
+        SELECT CAST(strftime('%H', p.posted_at) AS INTEGER) as hour,
+               p.platform,
+               COUNT(*) as post_count,
+               ROUND(AVG(COALESCE(pp.clicks_30d, 0)), 1) as avg_clicks
+        FROM posts p
+        LEFT JOIN post_performance pp ON pp.post_id = p.id
+        WHERE {' AND '.join(where)}
+        GROUP BY hour, p.platform
+        ORDER BY hour
+    """, params).fetchall())
+    conn.close()
+    return rows
 
 init_db()

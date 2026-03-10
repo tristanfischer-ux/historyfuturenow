@@ -23,12 +23,16 @@ WRITING STYLE — match the History Future Now voice:
 - Slightly provocative, never partisan. Challenges assumptions from both left and right.
 - Direct, clear sentences. No corporate jargon. No "In today's world" or "It's important to note."
 
-HOOK STRATEGY — make people want to click:
-- Lead with the most surprising or counterintuitive data point from the chart.
+HOOK STRATEGY — pick ONE of these five approaches (vary across posts, do NOT default to NUMBER every time):
+1. QUESTION: A sharp, specific question the article answers. Not rhetorical waffle — something that makes the reader realise they don't know the answer.
+2. HISTORICAL PARALLEL: A vivid past event that mirrors today. "Rome's legions were paid in salt. Your salary still carries the word."
+3. CONTRAST: Two facts that clash. "Britain built 6,000 miles of railway in 20 years. HS2 can't finish 130 miles in 30."
+4. PROVOCATIVE CLAIM: A counterintuitive assertion the article backs up. Makes the reader think "that can't be right" — then click.
+5. NUMBER: A jaw-dropping statistic — but ONLY when the number is genuinely striking. Not every chart has one.
+
+The chart image IS the visual hook. Do NOT repeat what the chart shows — provoke curiosity that makes the reader study the chart.
 - Create a "knowledge gap" — hint at an insight the reader can only get by reading the article.
-- Use patterns like: "[Surprising fact]. [Why it matters]. [What history tells us]."
 - End with the article URL — never bury the link.
-- The chart image IS the visual hook. The text should make people look at it twice.
 
 FORBIDDEN:
 - Never say "Here's why", "Let's talk about", "It turns out", "In this article", "Dive into"
@@ -40,6 +44,18 @@ FORBIDDEN:
 
 When providing the CONTEXT field, write it as: "From [article title] on History Future Now"
 """
+
+PLATFORM_HOOKS = {
+    "x": """PLATFORM: X (Twitter)
+- Prefer CONTRAST and PROVOCATIVE CLAIM hooks — they drive retweets
+- Keep it punchy: 1-2 sentences, no paragraph breaks
+- If long-form: structure as numbered points, ~200 chars each""",
+    "linkedin": """PLATFORM: LinkedIn
+- Prefer QUESTION and NUMBER hooks — they drive comments
+- Use 2-3 short paragraphs with line breaks between them
+- LinkedIn truncates after ~210 chars — first line MUST hook on its own
+- End with a specific question to prompt engagement"""
+}
 
 def get_client():
     if not ANTHROPIC_API_KEY: return None
@@ -59,6 +75,20 @@ def build_feedback_prompt():
         for e in fb["edits"][:5]:
             lines.append(f"  - Original: {e['original_caption'][:80]}...")
             lines.append(f"    Changed to: {e['edited_caption'][:80]}...")
+    top = db.get_top_performing_posts(5)
+    if top:
+        lines.append("\nTOP-PERFORMING POSTS (these drove the most clicks):")
+        for t in top:
+            lines.append(f"  - {t['platform']} {t.get('post_type','short')}: \"{t['caption'][:80]}...\" — {t['clicks_30d']} clicks")
+    conn = db.get_db()
+    match_rejects = db._dicts(conn.execute(
+        "SELECT reason, platform FROM feedback WHERE action='match_reject' ORDER BY created_at DESC LIMIT 5"
+    ).fetchall())
+    conn.close()
+    if match_rejects:
+        lines.append("\nREJECTED MATCHES (user removed these pairings from plan):")
+        for r in match_rejects:
+            lines.append(f"  - {r['reason']}")
     return "\n".join(lines) if lines else ""
 
 def gen_post(news, chart, article, platform, post_type="short"):
@@ -70,11 +100,12 @@ def gen_post(news, chart, article, platform, post_type="short"):
 
     if post_type == "short":
         content_instruction = f"""Write a SHORT post (the chart image will be shown alongside):
-1. CAPTION ({"max 220 chars" if platform == "x" else "max 350 chars"}):
-   - Open with the single most striking number or contrast from the chart. This is your hook.
-   - Then connect it to the news story in one sharp sentence.
-   - The reader should think "I need to see that article" after reading.
+1. CAPTION ({"max 220 chars" if platform == "x" else "max 600 chars"}):
+   - Pick ONE hook strategy (Question / Historical Parallel / Contrast / Provocative Claim / Number). Vary across posts — do not always lead with a number.
+   - The chart is attached as an image. Do not describe what it shows — provoke curiosity about it.
+   - Connect to the news story in one sharp sentence. The reader should think "I need to see that article."
    {"- No hashtags." if platform == "x" else "- End with 2-3 hashtags."}
+   {"" if platform == "x" else "- Use 2-3 short paragraphs with line breaks."}
 2. CONTEXT ({"max 80 chars" if platform == "x" else "max 120 chars"}):
    Write as: "From [article title] on History Future Now"
 Return JSON: {{"caption": "...", "context": "..."}}"""
@@ -82,11 +113,13 @@ Return JSON: {{"caption": "...", "context": "..."}}"""
     else:
         article_text = article.get("full_text", article.get("opening", ""))[:4000]
         max_chars = "1800" if platform == "x" else "2500"
+        platform_note = "Structure as numbered points for threadability." if platform == "x" else "Open with scroll-stopping first line. Use paragraph breaks. End with a question."
         content_instruction = f"""Write a {"thread-style post" if platform == "x" else "LinkedIn article"} (max {max_chars} chars):
-- HOOK: Open with the most counterintuitive or surprising data point from the chart. Make it impossible to scroll past.
+- HOOK: Pick ONE hook strategy (Question / Historical Parallel / Contrast / Provocative Claim / Number). The chart is attached as an image — do not describe what it shows. Make it impossible to scroll past.
 - BRIDGE: Connect this to today's news headline in one sentence.
 - DEPTH: Draw 2-3 historical parallels or insights from the article. Use specific numbers, dates, and comparisons — e.g. "Rome's grain dole fed 200,000 citizens. Our welfare state covers 67 million."
 - CLOSE: End with a thought that makes the reader want the full picture. Do NOT include the URL — it is appended automatically.
+- {platform_note}
 {"- No hashtags" if platform == "x" else "- End with 2-3 relevant hashtags"}
 
 ARTICLE CONTENT:
@@ -96,7 +129,10 @@ Also provide a short CONTEXT line (max 100 chars): "From [article title] on Hist
 Return JSON: {{"caption": "...", "context": "..."}}"""
         max_tok = 1500
 
+    platform_hook = PLATFORM_HOOKS.get(platform, "")
     prompt = f"""{VOICE}
+
+{platform_hook}
 
 {feedback}
 
