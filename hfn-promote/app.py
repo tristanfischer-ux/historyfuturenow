@@ -931,6 +931,8 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
         <span class="plat {{p.platform}}" style="font-size:.58rem">{{ '𝕏' if p.platform=='x' else 'LI' }}</span>
         <span class="sl-type">{{p.post_type|upper}}</span>
         <span class="rq-time">{{p.time}}</span>
+        {% if p.confidence_score is defined and p.confidence_score >= 0.7 %}<span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#dcfce7;color:#166534;font-weight:600">Auto-queue</span>
+        {% elif p.confidence_score is defined and p.confidence_score < 0.5 %}<span style="font-size:.55rem;padding:1px 5px;border-radius:3px;background:#fef2f2;color:#991b1b;font-weight:600">Needs review</span>{% endif %}
         <span style="flex:1"></span>
         {% if p.news_title %}<span style="font-size:.62rem;color:var(--dim)">📰 {{p.news_title[:40]}}</span>{% endif %}
       </div>
@@ -1364,6 +1366,12 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
     </div>
     <div style="margin-top:6px"><strong>Last result:</strong> <span id="as-last">—</span></div>
     <div id="as-errors" style="margin-top:8px"></div>
+    <div id="as-automation" style="margin-top:8px"></div>
+    <div id="as-waste" style="margin-top:8px"></div>
+  </div>
+  <h3 style="font-size:.85rem;margin-bottom:8px">Insights</h3>
+  <div id="insights-panel" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;font-size:.78rem">
+    <div id="insights-list" style="color:var(--dim)">Loading...</div>
   </div>
   <h3 style="font-size:.85rem;margin-bottom:8px">Activity</h3>
   <div class="logbox" style="margin:0">
@@ -1938,9 +1946,36 @@ async function loadAutoStatus(){
       errEl.innerHTML='<strong style="font-size:.72rem">Recent errors (24h):</strong><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+
         d.errors.map(e=>`<span style="font-size:.65rem;padding:2px 6px;border-radius:4px;background:${colors[e.error_category]||'#9e9e9e'}22;color:${colors[e.error_category]||'#9e9e9e'};border:1px solid ${colors[e.error_category]||'#9e9e9e'}44">${e.error_category} (${e.platform}): ${e.count}</span>`).join('')+'</div>';
     }else{errEl.innerHTML='';}
+    // Automation status
+    const autoEl=document.getElementById('as-automation');
+    if(d.automation){
+      autoEl.innerHTML=`<div style="font-size:.65rem;color:var(--dim)">Monitor every ${d.automation.monitor_interval}min · Auto-generate: ${d.automation.auto_generate?'ON':'OFF'} · Auto-confirm threshold: ${d.automation.auto_confirm_threshold}</div>`;
+    }
+    // Waste rate
+    const wasteEl=document.getElementById('as-waste');
+    if(d.waste_rate&&d.waste_rate.total>0){
+      const wr=d.waste_rate;
+      const pct=Math.round(wr.waste_rate*100);
+      const color=pct>30?'#e53935':pct>15?'#d4a017':'#4caf50';
+      wasteEl.innerHTML=`<div style="font-size:.7rem"><strong>Waste rate (30d):</strong> <span style="color:${color};font-weight:700">${pct}%</span> <span style="color:var(--dim)">(${wr.wasted} wasted / ${wr.total} total, ${wr.posted} posted)</span></div>`;
+    }else{wasteEl.innerHTML='';}
   }catch(e){}
 }
 loadAutoStatus();setInterval(loadAutoStatus,60000);
+
+// Load insights
+async function loadInsights(){
+  try{
+    const r=await fetch('/api/insights');const d=await r.json();
+    const el=document.getElementById('insights-list');
+    if(d.insights&&d.insights.length){
+      el.innerHTML=d.insights.map(i=>`<div style="padding:4px 0;border-bottom:1px solid var(--border);color:var(--fg)">${i}</div>`).join('');
+    }else{
+      el.innerHTML='<span style="color:var(--dim)">No insights yet — need more posted data with GA4 tracking</span>';
+    }
+  }catch(e){}
+}
+loadInsights();
 
 // ── Lightbox ──
 function openLightbox(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open')}
@@ -3944,12 +3979,19 @@ def api_autoposter_status():
         next_post = {"id": p["id"], "platform": p["platform"],
                      "scheduled_at": p.get("scheduled_at",""),
                      "chart_title": p.get("chart_title","")}
+    waste = db.get_waste_rate(30)
     return jsonify({
         "scheduler_on": scheduler_on,
         "queue_count": len(queued),
         "next_post": next_post,
         "last_result": last_post_result,
-        "errors": db.get_error_summary()
+        "errors": db.get_error_summary(),
+        "waste_rate": waste,
+        "automation": {
+            "monitor_interval": getattr(__import__('config'), 'AUTO_MONITOR_INTERVAL', 30),
+            "auto_generate": getattr(__import__('config'), 'AUTO_GENERATE_ENABLED', True),
+            "auto_confirm_threshold": getattr(__import__('config'), 'AUTO_CONFIRM_THRESHOLD', 0.7),
+        }
     })
 
 @app.route("/api/chart_usage")
@@ -4047,8 +4089,9 @@ def api_plan_remove():
 
 @app.route("/api/schedule_heatmap")
 def api_schedule_heatmap():
-    """Engagement intensity (0-1) per hour per platform for planner heatmap."""
-    data = db.get_engagement_by_hour()
+    """Engagement intensity (0-1) per hour per platform, timezone-aware with priors."""
+    from config import USER_TIMEZONE
+    data = db.get_engagement_by_hour_with_priors(timezone=USER_TIMEZONE)
     if not data:
         return jsonify([])
     max_clicks = max((d["avg_clicks"] or 0) for d in data) or 1
@@ -4061,15 +4104,29 @@ def api_article_priorities():
     """Ranked articles by promotion priority score."""
     return jsonify(db.get_all_article_priorities())
 
+@app.route("/api/waste_rate")
+def api_waste_rate():
+    """Waste rate: % of generated posts that never got posted."""
+    return jsonify(db.get_waste_rate(30))
+
+@app.route("/api/performance_trend")
+def api_performance_trend():
+    """Weekly avg quality score per platform for trend chart."""
+    platform = request.args.get("platform")
+    return jsonify(db.get_weekly_performance_trend(12, platform or None))
+
+@app.route("/api/insights")
+def api_insights():
+    """System-learned insights from post performance data."""
+    return jsonify({"insights": db.get_system_insights()})
+
 @app.route("/api/repromotion_opportunities")
 def api_repromotion_opportunities():
     """Articles dormant 30+ days with strong current news matches."""
     opps = db.get_repromotion_opportunities()
-    all_perf = db.get_all_article_performance()
-    median_clicks = sorted([(a["clicks_30d"] or 0) for a in all_perf])[len(all_perf)//2] if all_perf else 0
     for o in opps:
-        o["above_median"] = (o.get("historical_clicks") or 0) > median_clicks
-    return jsonify({"opportunities": opps, "median_clicks": median_clicks})
+        o["above_median"] = (o.get("historical_quality") or 0) > 0
+    return jsonify({"opportunities": opps})
 
 @app.route("/api/auto_space", methods=["POST"])
 def api_auto_space():
@@ -4077,8 +4134,9 @@ def api_auto_space():
     d = request.json or {}
     day_iso = d.get("day", date.today().isoformat())
     platform = d.get("platform")
-    # Get engagement data
-    heat = db.get_engagement_by_hour()
+    # Get engagement data (timezone-aware with priors)
+    from config import USER_TIMEZONE
+    heat = db.get_engagement_by_hour_with_priors(timezone=USER_TIMEZONE)
     hour_scores = {}
     for h in heat:
         key = (h["hour"], h.get("platform",""))
@@ -5373,6 +5431,16 @@ def _start_auto_poster():
     from apscheduler.triggers.interval import IntervalTrigger
     def post_due():
         import subprocess
+        # Auto-confirm high-confidence posts (Improvement 2: opt-out review)
+        from config import AUTO_CONFIRM_LEAD_HOURS, AUTO_CONFIRM_THRESHOLD
+        try:
+            auto_posts = db.get_auto_confirmable_posts(AUTO_CONFIRM_THRESHOLD, AUTO_CONFIRM_LEAD_HOURS)
+            for p in auto_posts:
+                db.confirm_post(p["id"])
+                log(f"Auto-confirmed #{p['id']} (confidence {p.get('confidence_score', 0):.2f})")
+        except Exception as ex:
+            log(f"Auto-confirm error: {ex}")
+
         # Auto-promote planned/generated posts that are due
         # Cap generation at 3 per cycle to avoid blocking the posting flow
         MAX_AUTO_GEN = 3
@@ -5486,6 +5554,14 @@ def _start_auto_poster():
                 except Exception as ex:
                     log(f"Retry error #{rp['id']} {plat}: {ex}")
 
+        # Archive stale posts (Improvement 7)
+        try:
+            archived = db.archive_stale_posts(48)
+            if archived:
+                log(f"Archived {archived} stale post(s) (news > 48h old)")
+        except Exception as ex:
+            log(f"Archive sweep error: {ex}")
+
     bg = BackgroundScheduler()
     def sync_post_performance():
         try:
@@ -5501,16 +5577,17 @@ def _start_auto_poster():
                     clicks = [int(c) for c in str(test["clicks"]).split(",")]
                     if len(post_ids) != 2 or len(strategies) != 2:
                         continue
-                    if clicks[0] != clicks[1]:
-                        winner_idx = 0 if clicks[0] > clicks[1] else 1
+                    # Compare by quality score, not raw clicks
+                    qs = [db.get_post_quality_score(int(pid)) for pid in post_ids]
+                    if qs[0] != qs[1]:
+                        winner_idx = 0 if qs[0] > qs[1] else 1
                         loser_idx = 1 - winner_idx
                         db.record_strategy_win(
                             test["article_id"], test["platform"],
                             strategies[winner_idx], strategies[loser_idx],
                             clicks[winner_idx], clicks[loser_idx])
-                        log(f"A/B winner: {strategies[winner_idx]} beat {strategies[loser_idx]} ({clicks[winner_idx]} vs {clicks[loser_idx]} clicks)")
+                        log(f"A/B winner: {strategies[winner_idx]} beat {strategies[loser_idx]} (quality {qs[winner_idx]} vs {qs[loser_idx]})")
                     elif test.get("expired"):
-                        # Tied after 30 days — pick first alphabetically as arbitrary winner
                         s = sorted(enumerate(strategies), key=lambda x: x[1])
                         db.record_strategy_win(
                             test["article_id"], test["platform"],
@@ -5521,10 +5598,16 @@ def _start_auto_poster():
             # Re-promotion triggers (Feature 7)
             try:
                 opps = db.get_repromotion_opportunities()
-                all_perf = db.get_all_article_performance()
-                median_clicks = sorted([(a["clicks_30d"] or 0) for a in all_perf])[len(all_perf)//2] if all_perf else 0
+                # Use quality scores for re-promotion threshold
+                all_articles = db.get_all_articles()
+                quality_scores = []
+                for art in all_articles:
+                    perf = db.get_article_performance(art["id"])
+                    if perf and perf.get("total_posts", 0) > 0:
+                        quality_scores.append(db.get_post_quality_score(art["id"]) or 0)
+                median_quality = sorted(quality_scores)[len(quality_scores)//2] if quality_scores else 0
                 for opp in opps[:1]:  # Max 1 auto re-promotion per sync
-                    if (opp.get("historical_clicks") or 0) > median_clicks:
+                    if (opp.get("historical_quality") or 0) > median_quality:
                         # Check for existing pending posts to avoid infinite draft creation
                         conn_chk = db.get_db()
                         pending = conn_chk.execute(
@@ -5544,11 +5627,36 @@ def _start_auto_poster():
                 log(f"Re-promotion error: {ex}")
         except Exception as ex:
             log(f"Performance sync error: {ex}")
+    # Automated monitor + generate (Improvement 1)
+    from config import AUTO_MONITOR_INTERVAL, AUTO_INGEST_HOUR, AUTO_GENERATE_ENABLED
+    def monitor_and_generate():
+        try:
+            from monitor import run_monitor
+            matched = run_monitor()
+            log(f"Auto-monitor: {matched} matches")
+            if matched and matched > 0 and AUTO_GENERATE_ENABLED:
+                from generator import generate_from_matches
+                generated = generate_from_matches()
+                log(f"Auto-generated {generated} posts from monitor sweep")
+        except Exception as ex:
+            log(f"Auto-monitor error: {ex}")
+
+    def daily_ingest():
+        try:
+            from ingester import ingest_all
+            na, nc = ingest_all()
+            log(f"Daily ingest: {na} articles, {nc} charts")
+        except Exception as ex:
+            log(f"Daily ingest error: {ex}")
+
+    from apscheduler.triggers.cron import CronTrigger
     bg.add_job(post_due, trigger=IntervalTrigger(minutes=5), id="ap")
     bg.add_job(sync_post_performance, trigger=IntervalTrigger(hours=6), id="perf_sync")
+    bg.add_job(monitor_and_generate, trigger=IntervalTrigger(minutes=AUTO_MONITOR_INTERVAL), id="auto_monitor")
+    bg.add_job(daily_ingest, trigger=CronTrigger(hour=AUTO_INGEST_HOUR), id="daily_ingest")
     bg.start()
     scheduler_ref = bg
-    log("Auto-poster started (checks every 5 min)")
+    log(f"Auto-poster started (post every 5 min, monitor every {AUTO_MONITOR_INTERVAL} min, ingest daily at {AUTO_INGEST_HOUR}:00)")
 
 if __name__ == "__main__":
     _start_auto_poster()

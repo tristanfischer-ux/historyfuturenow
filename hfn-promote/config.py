@@ -71,4 +71,20 @@ RSS_FEEDS = [
 
 GA4_PROPERTY_ID = os.getenv("GA4_PROPERTY_ID", "")
 
+# Automation
+AUTO_MONITOR_INTERVAL = int(os.getenv("AUTO_MONITOR_INTERVAL", "30"))  # minutes
+AUTO_INGEST_HOUR = int(os.getenv("AUTO_INGEST_HOUR", "6"))  # daily at 6am
+AUTO_GENERATE_THRESHOLD = float(os.getenv("AUTO_GENERATE_THRESHOLD", "0.7"))
+AUTO_GENERATE_ENABLED = os.getenv("AUTO_GENERATE_ENABLED", "true").lower() == "true"
+AUTO_CONFIRM_LEAD_HOURS = float(os.getenv("AUTO_CONFIRM_LEAD_HOURS", "2"))
+AUTO_CONFIRM_THRESHOLD = float(os.getenv("AUTO_CONFIRM_THRESHOLD", "0.7"))
+PRE_FILTER_ENABLED = os.getenv("PRE_FILTER_ENABLED", "true").lower() == "true"
+
+# Timezone + engagement priors
+USER_TIMEZONE = os.getenv("USER_TIMEZONE", "Europe/London")
+PLATFORM_PRIORS = {
+    "x": {8: 0.9, 9: 1.0, 12: 0.95, 13: 0.85, 17: 0.7, 18: 0.75, 19: 0.8},
+    "linkedin": {7: 0.85, 8: 1.0, 9: 0.9, 12: 0.7, 17: 0.95, 18: 0.9},
+}
+
 FLASK_PORT = int(os.getenv("FLASK_PORT", "5050"))

@@ -1,7 +1,33 @@
 """HFN Promote — News Monitor. Fetches RSS, matches news to charts."""
 import json, re, feedparser, anthropic
 import db
-from config import RSS_FEEDS, ANTHROPIC_API_KEY, MATCH_MODEL, MIN_RELEVANCE
+from config import RSS_FEEDS, ANTHROPIC_API_KEY, MATCH_MODEL, MIN_RELEVANCE, PRE_FILTER_ENABLED
+
+# Keywords indicating irrelevant news — sports, celebrity, local crime, lifestyle
+NOISE_KEYWORDS = {
+    "premier league", "champions league", "nba", "nfl", "rugby", "cricket",
+    "tennis", "formula 1", "f1 ", "fifa", "olympics", "world cup",
+    "kardashian", "celebrity", "reality tv", "love island", "big brother",
+    "murder suspect", "stabbing", "arrested for", "sentenced to",
+    "horoscope", "lottery", "weather forecast", "traffic update",
+    "recipe", "diet tips", "weight loss", "soap opera",
+}
+
+def pre_filter(items):
+    """Remove news items that are clearly irrelevant to HFN topics."""
+    if not PRE_FILTER_ENABLED:
+        return items
+    filtered = []
+    removed = 0
+    for item in items:
+        text = (item.get("title", "") + " " + item.get("summary", "")).lower()
+        if any(kw in text for kw in NOISE_KEYWORDS):
+            removed += 1
+        else:
+            filtered.append(item)
+    if removed:
+        print(f"  Pre-filter: removed {removed} irrelevant items ({len(filtered)} remaining)")
+    return filtered
 
 def fetch_feeds():
     items = []
@@ -107,6 +133,18 @@ def run_monitor():
     unprocessed = db.get_unprocessed_news(50)
     if not unprocessed:
         print("  No new items to match")
+        return 0
+
+    # Pre-filter irrelevant items before expensive AI matching
+    filtered = pre_filter(unprocessed)
+    # Mark filtered-out items as processed with score 0
+    filtered_ids = {item["id"] for item in filtered}
+    for item in unprocessed:
+        if item["id"] not in filtered_ids:
+            db.mark_processed(item["id"], score=0, hook="pre-filtered")
+    unprocessed = filtered
+    if not unprocessed:
+        print("  All items pre-filtered — nothing to match")
         return 0
 
     print(f"  Matching {len(unprocessed)} items to charts (using {MATCH_MODEL})...")

@@ -257,6 +257,12 @@ def init_db():
                 conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} INTEGER DEFAULT {default}")
             else:
                 conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT {default}")
+    # Confidence score for auto-confirm
+    for col, tbl, default in [("confidence_score", "posts", "0.0")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} REAL DEFAULT {default}")
     # Migrate legacy 'audio' stage to 'images' (audio decoupled from pipeline)
     conn.execute("UPDATE article_drafts SET stage='images' WHERE stage='audio'")
     # Backfill published_at from indexed_at for existing articles (one-time)
@@ -374,12 +380,12 @@ def get_matched_news(min_score=0.5, limit=30):
 def insert_post(news_item_id=None, chart_id=None, article_id=None,
                 platform="x", caption="", article_context="",
                 article_url="", image_path="", post_type="short",
-                hook_strategy="", variant_group=""):
+                hook_strategy="", variant_group="", confidence_score=0.0):
     conn = get_db()
     conn.execute("""
-        INSERT INTO posts (news_item_id,chart_id,article_id,platform,caption,article_context,article_url,image_path,post_type,hook_strategy,variant_group)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?)
-    """, (news_item_id, chart_id, article_id, platform, caption, article_context, article_url, image_path, post_type, hook_strategy, variant_group))
+        INSERT INTO posts (news_item_id,chart_id,article_id,platform,caption,article_context,article_url,image_path,post_type,hook_strategy,variant_group,confidence_score)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+    """, (news_item_id, chart_id, article_id, platform, caption, article_context, article_url, image_path, post_type, hook_strategy, variant_group, confidence_score))
     conn.commit()
     pid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
     conn.close()
@@ -1334,12 +1340,15 @@ def get_top_performing_posts(limit=10):
     conn = get_db()
     rows = _dicts(conn.execute("""
         SELECT p.*, pp.clicks_7d, pp.clicks_30d, pp.users_7d, pp.users_30d,
+               pp.bounce_rate, pp.avg_session_duration,
+               ROUND(pp.clicks_30d * (1.0 - COALESCE(pp.bounce_rate, 0.5))
+                     * MIN(COALESCE(pp.avg_session_duration, 60) / 120.0, 1.0), 1) as quality_score,
                c.title as chart_title, a.title as article_title
         FROM post_performance pp
         JOIN posts p ON pp.post_id = p.id
         LEFT JOIN charts c ON p.chart_id = c.id
         LEFT JOIN articles a ON p.article_id = a.id
-        ORDER BY pp.clicks_30d DESC LIMIT ?
+        ORDER BY quality_score DESC LIMIT ?
     """, (limit,)).fetchall())
     conn.close()
     return rows
@@ -1481,11 +1490,25 @@ def get_post_quality_score(post_id):
 # ── Priority scoring (Feature 5) ──
 
 def compute_article_priority(article_id):
-    """Combined priority score for promotion scheduling."""
+    """Combined priority score for promotion scheduling. Uses quality scores, not raw clicks."""
     perf = get_article_performance(article_id)
-    clicks_30d = perf["clicks_30d"] if perf else 0
     total_posts = perf["total_posts"] if perf else 0
-    conversion = min(clicks_30d / max(total_posts, 1) / 50, 1.0)  # normalise to 0-1
+    # Sum quality scores across all posted posts for this article
+    conn = get_db()
+    try:
+        qrow = conn.execute("""
+            SELECT COALESCE(SUM(
+                pp.clicks_30d * (1.0 - COALESCE(pp.bounce_rate, 0.5))
+                * MIN(COALESCE(pp.avg_session_duration, 60) / 120.0, 1.0)
+            ), 0) as total_quality
+            FROM posts p
+            JOIN post_performance pp ON pp.post_id = p.id
+            WHERE p.article_id = ? AND p.status = 'posted'
+        """, (article_id,)).fetchone()
+        total_quality = qrow[0] if qrow else 0
+    finally:
+        conn.close()
+    conversion = min(total_quality / max(total_posts, 1) / 30, 1.0)  # normalise to 0-1
     lc = get_article_lifecycle(article_id)
     days = lc["days_old"]
     freshness = max(0.2, 1.0 - (days / 90) * 0.8)
@@ -1608,9 +1631,11 @@ def get_repromotion_opportunities():
             n.id as news_id, n.title as news_title, n.relevance_score, n.hook,
             (SELECT MAX(p.posted_at) FROM posts p
              WHERE p.article_id = a.id AND p.status='posted') as last_posted,
-            (SELECT SUM(COALESCE(pp.clicks_30d, 0))
-             FROM posts p2 JOIN post_performance pp ON pp.post_id = p2.id
-             WHERE p2.article_id = a.id) as historical_clicks
+            (SELECT COALESCE(SUM(
+                pp.clicks_30d * (1.0 - COALESCE(pp.bounce_rate, 0.5))
+                * MIN(COALESCE(pp.avg_session_duration, 60) / 120.0, 1.0)
+             ), 0) FROM posts p2 JOIN post_performance pp ON pp.post_id = p2.id
+             WHERE p2.article_id = a.id) as historical_quality
         FROM news_items n
         JOIN articles a ON n.matched_article_id = a.id
         WHERE n.relevance_score >= 0.8
@@ -1626,5 +1651,229 @@ def get_repromotion_opportunities():
     """).fetchall())
     conn.close()
     return rows
+
+# ── Auto-confirm (Improvement 2) ──
+
+def get_auto_confirmable_posts(threshold, lead_hours):
+    """Posts with status 'generated', confidence >= threshold, scheduled within lead_hours."""
+    conn = get_db()
+    rows = _dicts(conn.execute("""
+        SELECT * FROM posts
+        WHERE status = 'generated'
+          AND confidence_score >= ?
+          AND scheduled_at IS NOT NULL AND scheduled_at != ''
+          AND datetime(replace(scheduled_at,'T',' '), ?) <= datetime('now')
+    """, (threshold, f"-{int(lead_hours)} hours")).fetchall())
+    conn.close()
+    return rows
+
+# ── Stale post archive + waste rate (Improvement 7) ──
+
+def archive_stale_posts(max_age_hours=48):
+    """Archive generated/planned posts linked to news older than max_age_hours. Returns count."""
+    conn = get_db()
+    cur = conn.execute("""
+        UPDATE posts SET status='archived'
+        WHERE status IN ('draft', 'generated', 'planned')
+          AND news_item_id IS NOT NULL
+          AND news_item_id IN (
+            SELECT id FROM news_items
+            WHERE created_at <= datetime('now', ?)
+          )
+    """, (f"-{max_age_hours} hours",))
+    count = cur.rowcount
+    conn.commit()
+    conn.close()
+    return count
+
+def get_waste_rate(days=30):
+    """Waste rate: % of generated posts that never got posted."""
+    conn = get_db()
+    row = conn.execute("""
+        SELECT COUNT(*) as total,
+            SUM(CASE WHEN status IN ('archived','rejected') THEN 1 ELSE 0 END) as wasted,
+            SUM(CASE WHEN status = 'posted' THEN 1 ELSE 0 END) as posted
+        FROM posts WHERE created_at >= datetime('now', ?)
+    """, (f"-{days} days",)).fetchone()
+    conn.close()
+    total = row[0] or 0
+    wasted = row[1] or 0
+    posted = row[2] or 0
+    return {"total": total, "wasted": wasted, "posted": posted,
+            "waste_rate": round(wasted / max(total, 1), 2)}
+
+# ── Timezone-aware engagement with priors (Improvement 5) ──
+
+def get_engagement_by_hour_with_priors(platform=None, timezone="UTC", days=30):
+    """Engagement by hour blended with platform priors when data is sparse."""
+    from config import PLATFORM_PRIORS
+    try:
+        from zoneinfo import ZoneInfo
+        tz = ZoneInfo(timezone)
+        utc_offset_hours = datetime.now(tz).utcoffset().total_seconds() / 3600
+    except Exception:
+        utc_offset_hours = 0
+
+    raw = get_engagement_by_hour(platform, days)
+    # Count posts per platform to determine data sparsity
+    plat_counts = {}
+    for r in raw:
+        p = r.get("platform", "")
+        plat_counts[p] = plat_counts.get(p, 0) + r.get("post_count", 0)
+
+    # Build hourly map from real data (adjusted to local tz)
+    hourly = {}
+    for r in raw:
+        local_hour = (r["hour"] + int(utc_offset_hours)) % 24
+        key = (local_hour, r.get("platform", ""))
+        hourly[key] = r.get("avg_clicks", 0)
+
+    max_real = max(hourly.values()) if hourly else 0
+    result = []
+    platforms = [platform] if platform else ["x", "linkedin"]
+    for plat in platforms:
+        count = plat_counts.get(plat, 0)
+        alpha = min(count / 20, 1.0)
+        priors = PLATFORM_PRIORS.get(plat, {})
+        max_prior = max(priors.values()) if priors else 1.0
+        for hour in range(24):
+            real = hourly.get((hour, plat), 0)
+            prior = priors.get(hour, 0) / max(max_prior, 1.0) if priors else 0
+            # When real data is all zeros, priors scale to 1.0; otherwise blend with real scale
+            blended = alpha * real + (1 - alpha) * prior * (max_real or 1.0)
+            result.append({"hour": hour, "platform": plat,
+                           "avg_clicks": round(blended, 1),
+                           "post_count": count, "alpha": round(alpha, 2)})
+    return result
+
+# ── Weekly performance trend (Improvement 3) ──
+
+def get_weekly_performance_trend(weeks=12, platform=None):
+    """Avg quality score per week per platform."""
+    conn = get_db()
+    where = ["p.status='posted'", "p.posted_at IS NOT NULL",
+             f"p.posted_at >= datetime('now', '-{weeks * 7} days')"]
+    params = []
+    if platform:
+        where.append("p.platform=?")
+        params.append(platform)
+    rows = _dicts(conn.execute(f"""
+        SELECT strftime('%Y-W%W', p.posted_at) as week,
+               p.platform,
+               COUNT(*) as posts,
+               ROUND(AVG(
+                   pp.clicks_30d * (1.0 - COALESCE(pp.bounce_rate, 0.5))
+                   * MIN(COALESCE(pp.avg_session_duration, 60) / 120.0, 1.0)
+               ), 1) as avg_quality,
+               ROUND(AVG(COALESCE(pp.clicks_30d, 0)), 1) as avg_clicks
+        FROM posts p
+        LEFT JOIN post_performance pp ON pp.post_id = p.id
+        WHERE {' AND '.join(where)}
+        GROUP BY week, p.platform
+        ORDER BY week
+    """, params).fetchall())
+    conn.close()
+    return rows
+
+def get_system_insights():
+    """Compute deterministic statistical insights from post performance data."""
+    conn = get_db()
+    insights = []
+
+    # 1. Hook strategy comparison by platform
+    strat_rows = _dicts(conn.execute("""
+        SELECT p.hook_strategy, p.platform, COUNT(*) as n,
+            ROUND(AVG(
+                pp.clicks_30d * (1.0 - COALESCE(pp.bounce_rate, 0.5))
+                * MIN(COALESCE(pp.avg_session_duration, 60) / 120.0, 1.0)
+            ), 1) as avg_quality
+        FROM posts p
+        JOIN post_performance pp ON pp.post_id = p.id
+        WHERE p.status='posted' AND p.hook_strategy != ''
+        GROUP BY p.hook_strategy, p.platform
+        HAVING COUNT(*) >= 2
+        ORDER BY avg_quality DESC
+    """).fetchall())
+    by_plat = {}
+    for r in strat_rows:
+        by_plat.setdefault(r["platform"], []).append(r)
+    for plat, strats in by_plat.items():
+        if len(strats) >= 2:
+            best, worst = strats[0], strats[-1]
+            if worst["avg_quality"] and worst["avg_quality"] > 0:
+                ratio = round(best["avg_quality"] / worst["avg_quality"], 1)
+                insights.append(f"{best['hook_strategy']} hooks on {plat} outperform "
+                                f"{worst['hook_strategy']} by {ratio}x "
+                                f"(avg quality {best['avg_quality']} vs {worst['avg_quality']})")
+
+    # 2. Article section (part) comparison
+    part_rows = _dicts(conn.execute("""
+        SELECT a.part, COUNT(*) as n,
+            ROUND(AVG(
+                pp.clicks_30d * (1.0 - COALESCE(pp.bounce_rate, 0.5))
+                * MIN(COALESCE(pp.avg_session_duration, 60) / 120.0, 1.0)
+            ), 1) as avg_quality
+        FROM posts p
+        JOIN post_performance pp ON pp.post_id = p.id
+        JOIN articles a ON p.article_id = a.id
+        WHERE p.status='posted' AND a.part != ''
+        GROUP BY a.part
+        HAVING COUNT(*) >= 3
+        ORDER BY avg_quality DESC
+    """).fetchall())
+    if len(part_rows) >= 2:
+        best, worst = part_rows[0], part_rows[-1]
+        if worst["avg_quality"] and worst["avg_quality"] > 0:
+            pct = round((best["avg_quality"] - worst["avg_quality"]) / worst["avg_quality"] * 100)
+            insights.append(f"{best['part']} articles convert {pct}% better than "
+                            f"{worst['part']} articles")
+
+    # 3. Time-of-day patterns
+    hour_rows = _dicts(conn.execute("""
+        SELECT CAST(strftime('%H', p.posted_at) AS INTEGER) as hour,
+            p.platform,
+            ROUND(AVG(
+                pp.clicks_30d * (1.0 - COALESCE(pp.bounce_rate, 0.5))
+                * MIN(COALESCE(pp.avg_session_duration, 60) / 120.0, 1.0)
+            ), 1) as avg_quality,
+            COUNT(*) as n
+        FROM posts p
+        JOIN post_performance pp ON pp.post_id = p.id
+        WHERE p.status='posted' AND p.posted_at IS NOT NULL
+        GROUP BY hour, p.platform
+        HAVING COUNT(*) >= 2
+        ORDER BY avg_quality DESC
+    """).fetchall())
+    by_plat = {}
+    for r in hour_rows:
+        by_plat.setdefault(r["platform"], []).append(r)
+    for plat, hours in by_plat.items():
+        if len(hours) >= 2:
+            best, worst = hours[0], hours[-1]
+            if worst["avg_quality"] and worst["avg_quality"] > 0:
+                ratio = round(best["avg_quality"] / worst["avg_quality"], 1)
+                insights.append(f"{plat} posts at {best['hour']}:00 get {ratio}x the engagement "
+                                f"of {worst['hour']}:00 posts")
+
+    # 4. A/B test wins summary
+    wins = _dicts(conn.execute("""
+        SELECT winning_strategy, COUNT(*) as wins
+        FROM strategy_wins
+        GROUP BY winning_strategy
+        ORDER BY wins DESC LIMIT 3
+    """).fetchall())
+    if wins:
+        top = wins[0]
+        insights.append(f"{top['winning_strategy']} has won {top['wins']} A/B test(s) — "
+                        f"most of any strategy")
+
+    # 5. Waste rate
+    waste = get_waste_rate(30)
+    if waste["total"] > 0:
+        insights.append(f"Waste rate: {int(waste['waste_rate']*100)}% of generated posts never posted "
+                        f"({waste['wasted']}/{waste['total']} in last 30 days)")
+
+    conn.close()
+    return insights
 
 init_db()

@@ -61,6 +61,36 @@ def get_client():
     if not ANTHROPIC_API_KEY: return None
     return anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
+def _compute_confidence(news, article, chart, hook_strategy=""):
+    """Compute confidence score (0-1) for auto-confirm decisions.
+    Based on: relevance (0.5), prior article performance (0.2), strategy track record (0.3)."""
+    score = 0.0
+    # Relevance component (0-0.5)
+    score += min(news.get("relevance_score", 0), 1.0) * 0.5
+    # Article has prior performance data (0-0.2)
+    if article and article.get("id"):
+        perf = db.get_article_performance(article["id"])
+        if perf and perf.get("total_posts", 0) > 0:
+            score += 0.1
+            if perf.get("clicks_30d", 0) > 0:
+                score += 0.1
+    # Hook strategy has won A/B tests (0-0.3)
+    if hook_strategy and article and article.get("id"):
+        wins = db.get_winning_strategies(article["id"])
+        for w in wins:
+            if w["winning_strategy"] == hook_strategy:
+                score += 0.3
+                break
+        else:
+            # No win data but strategy exists — moderate confidence
+            if wins:
+                score += 0.1
+            else:
+                score += 0.15  # no A/B data at all — neutral
+    else:
+        score += 0.15
+    return round(min(score, 1.0), 2)
+
 def build_feedback_prompt():
     """Build a prompt section from past feedback."""
     fb = db.get_feedback_summary()
@@ -77,9 +107,10 @@ def build_feedback_prompt():
             lines.append(f"    Changed to: {e['edited_caption'][:80]}...")
     top = db.get_top_performing_posts(5)
     if top:
-        lines.append("\nTOP-PERFORMING POSTS (these drove the most clicks):")
+        lines.append("\nTOP-PERFORMING POSTS (ranked by engagement quality, not raw clicks):")
         for t in top:
-            lines.append(f"  - {t['platform']} {t.get('post_type','short')}: \"{t['caption'][:80]}...\" — {t['clicks_30d']} clicks")
+            qs = t.get('quality_score', 0) or 0
+            lines.append(f"  - {t['platform']} {t.get('post_type','short')}: \"{t['caption'][:80]}...\" — quality {qs} ({t['clicks_30d']} clicks)")
     conn = db.get_db()
     match_rejects = db._dicts(conn.execute(
         "SELECT reason, platform FROM feedback WHERE action='match_reject' ORDER BY created_at DESC LIMIT 5"
@@ -99,32 +130,40 @@ def build_article_feedback_prompt(article_id):
     if not feedback:
         return ""
     lines = ["\nARTICLE-SPECIFIC INSIGHTS (from past posts about THIS article):"]
-    # Group by hook_strategy and compute average clicks
+    # Compute quality score per post
+    def _qs(f):
+        clicks = f.get("clicks_30d") or 0
+        if not clicks: return 0
+        bounce = f.get("bounce_rate") if f.get("bounce_rate") is not None else 0.5
+        dur = f.get("avg_session_duration") if f.get("avg_session_duration") is not None else 60
+        return round(clicks * (1 - bounce) * min(dur / 120, 1), 1)
+
+    # Group by hook_strategy and compute average quality
     strategy_perf = {}
     for f in feedback:
         hs = f.get("hook_strategy") or "unknown"
         if hs not in strategy_perf:
-            strategy_perf[hs] = {"clicks": [], "count": 0}
-        strategy_perf[hs]["clicks"].append(f.get("clicks_30d") or 0)
+            strategy_perf[hs] = {"scores": [], "count": 0}
+        strategy_perf[hs]["scores"].append(_qs(f))
         strategy_perf[hs]["count"] += 1
     if len(strategy_perf) > 1:
-        lines.append("  Hook strategy performance:")
+        lines.append("  Hook strategy performance (quality score = clicks adjusted for engagement depth):")
         for hs, data in sorted(strategy_perf.items(),
-                                key=lambda x: sum(x[1]["clicks"]) / max(len(x[1]["clicks"]), 1),
+                                key=lambda x: sum(x[1]["scores"]) / max(len(x[1]["scores"]), 1),
                                 reverse=True):
-            avg = sum(data["clicks"]) / max(len(data["clicks"]), 1)
-            lines.append(f"    {hs}: {avg:.0f} avg clicks ({data['count']} posts)")
+            avg = sum(data["scores"]) / max(len(data["scores"]), 1)
+            lines.append(f"    {hs}: {avg:.1f} avg quality ({data['count']} posts)")
     # Platform comparison
     plat_perf = {}
     for f in feedback:
         plat = f.get("platform", "unknown")
         if plat not in plat_perf:
             plat_perf[plat] = []
-        plat_perf[plat].append(f.get("clicks_30d") or 0)
+        plat_perf[plat].append(_qs(f))
     if len(plat_perf) > 1:
         lines.append("  Platform performance:")
-        for plat, clicks in plat_perf.items():
-            lines.append(f"    {plat}: {sum(clicks)/len(clicks):.0f} avg clicks")
+        for plat, scores in plat_perf.items():
+            lines.append(f"    {plat}: {sum(scores)/len(scores):.1f} avg quality")
     # Top performing post example
     top = [f for f in feedback if f.get("clicks_30d", 0) > 0]
     if top:
@@ -305,6 +344,7 @@ def generate_from_matches():
                         caption = result.get("essay", result.get("caption", ""))
                         context = result.get("context", "")
                         hook_strategy = result.get("hook_strategy", strategy)
+                        conf = _compute_confidence(news, article, chart, hook_strategy)
                         pid = db.insert_post(
                             news_item_id=news["id"], chart_id=chart["id"],
                             article_id=article["id"], platform=platform,
@@ -312,10 +352,10 @@ def generate_from_matches():
                             article_url=article["url"],
                             image_path=chart["image_path"],
                             post_type=post_type, hook_strategy=hook_strategy,
-                            variant_group=variant_group)
+                            variant_group=variant_group, confidence_score=conf)
                         ab_pids.append(pid)
                         generated += 1
-                        print(f"    ✓ {platform} {post_type} A/B [{strategy}]")
+                        print(f"    ✓ {platform} {post_type} A/B [{strategy}] (conf={conf:.2f})")
                 if len(ab_pids) == 2:
                     continue  # Both variants succeeded — skip normal generation
                 elif len(ab_pids) == 1:
@@ -332,15 +372,17 @@ def generate_from_matches():
                 caption = result.get("essay", result.get("caption", ""))
                 context = result.get("context", "")
                 hook_strategy = result.get("hook_strategy", "")
+                conf = _compute_confidence(news, article, chart, hook_strategy)
                 db.insert_post(
                     news_item_id=news["id"], chart_id=chart["id"],
                     article_id=article["id"], platform=platform,
                     caption=caption, article_context=context,
                     article_url=article["url"],
                     image_path=chart["image_path"],
-                    post_type=post_type, hook_strategy=hook_strategy)
+                    post_type=post_type, hook_strategy=hook_strategy,
+                    confidence_score=conf)
                 generated += 1
-                print(f"    ✓ {platform} {post_type}")
+                print(f"    ✓ {platform} {post_type} (conf={conf:.2f})")
 
     print(f"\n  ✓ {generated} posts generated")
     return generated
