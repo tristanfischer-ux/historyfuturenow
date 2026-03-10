@@ -1533,14 +1533,17 @@ def get_all_article_priorities():
 
 # ── A/B testing (Feature 6) ──
 
-def get_undecided_ab_tests(min_days=7):
-    """Find variant_group pairs where both posted 7+ days ago, no winner declared."""
+def get_undecided_ab_tests(min_days=7, max_days=30):
+    """Find variant_group pairs where both posted 7+ days ago, no winner declared.
+    Tests older than max_days are resolved as ties."""
     conn = get_db()
+    # Use ORDER BY p.id inside GROUP_CONCAT to guarantee consistent ordering
     rows = _dicts(conn.execute("""
         SELECT p.variant_group, p.article_id, p.platform,
-               GROUP_CONCAT(p.id) as post_ids,
-               GROUP_CONCAT(p.hook_strategy) as strategies,
-               GROUP_CONCAT(COALESCE(pp.clicks_7d, 0)) as clicks
+               GROUP_CONCAT(p.id ORDER BY p.id) as post_ids,
+               GROUP_CONCAT(p.hook_strategy ORDER BY p.id) as strategies,
+               GROUP_CONCAT(COALESCE(pp.clicks_7d, 0) ORDER BY p.id) as clicks,
+               MIN(p.posted_at) as earliest_post
         FROM posts p
         LEFT JOIN post_performance pp ON pp.post_id = p.id
         WHERE p.variant_group != '' AND p.status = 'posted'
@@ -1551,10 +1554,30 @@ def get_undecided_ab_tests(min_days=7):
     conn.close()
     decided = set()
     conn2 = get_db()
-    for r in conn2.execute("SELECT article_id, platform FROM strategy_wins").fetchall():
-        decided.add((r[0], r[1]))
+    for r in conn2.execute("SELECT article_id, platform, winning_strategy, losing_strategy FROM strategy_wins").fetchall():
+        decided.add((r[0], r[1], r[2], r[3]))
     conn2.close()
-    return [r for r in rows if (r["article_id"], r["platform"]) not in decided]
+    result = []
+    for r in rows:
+        strategies = str(r["strategies"]).split(",")
+        if len(strategies) != 2:
+            continue
+        # Check if this exact matchup is already decided
+        key1 = (r["article_id"], r["platform"], strategies[0], strategies[1])
+        key2 = (r["article_id"], r["platform"], strategies[1], strategies[0])
+        if key1 in decided or key2 in decided:
+            continue
+        # Mark expired tests for tie-breaking
+        from datetime import timedelta as _td
+        if r.get("earliest_post"):
+            try:
+                cutoff = (datetime.now() - _td(days=max_days)).isoformat()
+                if r["earliest_post"] <= cutoff:
+                    r["expired"] = True
+            except Exception:
+                pass
+        result.append(r)
+    return result
 
 def record_strategy_win(article_id, platform, winning_strategy, losing_strategy, win_clicks, lose_clicks):
     conn = get_db()

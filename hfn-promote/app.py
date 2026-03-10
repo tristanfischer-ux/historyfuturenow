@@ -1704,10 +1704,10 @@ async function selectArticle(slug){
     }
     if(d.performance&&d.performance.total_posts>0){
       html+=`<div class="lib-analytics-bar" style="margin-top:6px;background:#f0fdf4;border-color:#bbf7d0">
-        <span class="lib-stat" style="color:#166534">${d.performance.clicks_30d}<span class="lib-stat-dim"> post clicks (30d)</span></span>
-        <span class="lib-stat" style="color:#166534">${d.performance.clicks_per_post}<span class="lib-stat-dim"> clicks/post</span></span>
-        <span class="lib-stat" style="color:#166534">${d.performance.total_posts}<span class="lib-stat-dim"> posts</span></span>
-        ${d.lifecycle?'<span class="lib-lifecycle lib-lc-'+d.lifecycle.stage+'">'+d.lifecycle.stage+' ('+d.lifecycle.days_old+'d old)</span>':''}
+        <span class="lib-stat" style="color:#166534">${d.performance.clicks_30d||0}<span class="lib-stat-dim"> post clicks (30d)</span></span>
+        <span class="lib-stat" style="color:#166534">${d.performance.clicks_per_post||0}<span class="lib-stat-dim"> clicks/post</span></span>
+        <span class="lib-stat" style="color:#166534">${d.performance.total_posts||0}<span class="lib-stat-dim"> posts</span></span>
+        ${d.lifecycle?'<span class="lib-lifecycle lib-lc-'+d.lifecycle.stage+'">'+d.lifecycle.stage+' ('+(d.lifecycle.days_old||0)+'d old)</span>':''}
       </div>`;
     }
     if(d.charts.length){
@@ -4066,7 +4066,7 @@ def api_repromotion_opportunities():
     """Articles dormant 30+ days with strong current news matches."""
     opps = db.get_repromotion_opportunities()
     all_perf = db.get_all_article_performance()
-    median_clicks = sorted([a["clicks_30d"] for a in all_perf])[len(all_perf)//2] if all_perf else 0
+    median_clicks = sorted([(a["clicks_30d"] or 0) for a in all_perf])[len(all_perf)//2] if all_perf else 0
     for o in opps:
         o["above_median"] = (o.get("historical_clicks") or 0) > median_clicks
     return jsonify({"opportunities": opps, "median_clicks": median_clicks})
@@ -5482,12 +5482,14 @@ def _start_auto_poster():
             if n: log(f"Synced performance for {n} posts")
             # Evaluate A/B tests (Feature 6)
             try:
-                tests = db.get_undecided_ab_tests(min_days=7)
+                tests = db.get_undecided_ab_tests(min_days=7, max_days=30)
                 for test in tests:
                     post_ids = str(test["post_ids"]).split(",")
                     strategies = str(test["strategies"]).split(",")
                     clicks = [int(c) for c in str(test["clicks"]).split(",")]
-                    if len(post_ids) == 2 and len(strategies) == 2 and clicks[0] != clicks[1]:
+                    if len(post_ids) != 2 or len(strategies) != 2:
+                        continue
+                    if clicks[0] != clicks[1]:
                         winner_idx = 0 if clicks[0] > clicks[1] else 1
                         loser_idx = 1 - winner_idx
                         db.record_strategy_win(
@@ -5495,13 +5497,20 @@ def _start_auto_poster():
                             strategies[winner_idx], strategies[loser_idx],
                             clicks[winner_idx], clicks[loser_idx])
                         log(f"A/B winner: {strategies[winner_idx]} beat {strategies[loser_idx]} ({clicks[winner_idx]} vs {clicks[loser_idx]} clicks)")
+                    elif test.get("expired"):
+                        # Tied after 30 days — pick first alphabetically as arbitrary winner
+                        s = sorted(enumerate(strategies), key=lambda x: x[1])
+                        db.record_strategy_win(
+                            test["article_id"], test["platform"],
+                            s[0][1], s[1][1], clicks[s[0][0]], clicks[s[1][0]])
+                        log(f"A/B tie resolved (expired): {s[0][1]} vs {s[1][1]}")
             except Exception as ex:
                 log(f"A/B evaluation error: {ex}")
             # Re-promotion triggers (Feature 7)
             try:
                 opps = db.get_repromotion_opportunities()
                 all_perf = db.get_all_article_performance()
-                median_clicks = sorted([a["clicks_30d"] for a in all_perf])[len(all_perf)//2] if all_perf else 0
+                median_clicks = sorted([(a["clicks_30d"] or 0) for a in all_perf])[len(all_perf)//2] if all_perf else 0
                 for opp in opps[:1]:  # Max 1 auto re-promotion per sync
                     if (opp.get("historical_clicks") or 0) > median_clicks:
                         from generator import gen_from_chart
