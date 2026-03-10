@@ -1,7 +1,7 @@
 """HFN Promote — Database v3.4. With feedback learning, scheduling, Article Studio, and Strategic Series."""
 import sqlite3, json, re
 from contextlib import contextmanager
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from config import DB_PATH
 
 SCHEMA = """
@@ -1474,8 +1474,8 @@ def get_post_quality_score(post_id):
     perf = get_post_performance(post_id)
     if not perf or not perf.get("clicks_30d"):
         return 0
-    bounce = perf.get("bounce_rate") or 0.5  # default 50% if unknown
-    duration = perf.get("avg_session_duration") or 60  # default 60s
+    bounce = perf.get("bounce_rate") if perf.get("bounce_rate") is not None else 0.5
+    duration = perf.get("avg_session_duration") if perf.get("avg_session_duration") is not None else 60
     return round(perf["clicks_30d"] * (1 - bounce) * min(duration / 120, 1), 1)
 
 # ── Priority scoring (Feature 5) ──
@@ -1570,10 +1570,9 @@ def get_undecided_ab_tests(min_days=7, max_days=30):
         if key1 in decided or key2 in decided:
             continue
         # Mark expired tests for tie-breaking
-        from datetime import timedelta as _td
         if r.get("earliest_post"):
             try:
-                cutoff = (datetime.now() - _td(days=max_days)).isoformat()
+                cutoff = (datetime.now() - timedelta(days=max_days)).isoformat()
                 if r["earliest_post"] <= cutoff:
                     r["expired"] = True
             except Exception:

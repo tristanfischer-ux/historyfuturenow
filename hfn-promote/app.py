@@ -3862,7 +3862,7 @@ def dashboard():
         else:
             a["total_clicks_30d"] = a["clicks_per_post"] = a["total_posts_posted"] = 0
         # Lifecycle stage
-        aid = perf["id"] if perf else None
+        aid = a.get("id")
         if aid:
             lc = db.get_article_lifecycle(aid)
             a["lifecycle_stage"] = lc["stage"]
