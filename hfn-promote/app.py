@@ -4067,7 +4067,7 @@ def api_auto_space():
             conn.commit()
             conn.close()
             occupied.append((best, post["platform"]))
-            available_slots = [(s,dt,pl) for s,dt,pl in available_slots if dt != best]
+            available_slots = [(s,dt,pl) for s,dt,pl in available_slots if not (dt == best and pl == post["platform"])]
             assigned += 1
     return jsonify({"ok": True, "count": assigned, "msg": f"Assigned {assigned} post(s) to time slots"})
 
@@ -5357,6 +5357,8 @@ def _start_auto_poster():
                     log(f"Error #{p['id']} LinkedIn: {err}"); _record("linkedin", p["id"], False, err)
             except Exception as ex:
                 log(f"Error #{p['id']} LinkedIn: {ex}"); _record("linkedin", p["id"], False, str(ex))
+                try: db.record_post_error(p["id"], "unknown", str(ex))
+                except: pass
 
         # Post to X — batch all posts in one Chrome session (one close/reopen cycle)
         x_remaining = MAX_X_PER_DAY - db.posts_today("x")

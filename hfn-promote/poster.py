@@ -83,7 +83,7 @@ def _reopen_chrome():
 
 
 def _post_to_x_single(page, text, image_path):
-    """Post a single tweet using an already-open Playwright page. Returns True on success."""
+    """Post a single tweet using an already-open Playwright page. Returns (ok, error_str)."""
     try:
         page.goto("https://x.com/compose/post", wait_until="domcontentloaded")
         time.sleep(3)
