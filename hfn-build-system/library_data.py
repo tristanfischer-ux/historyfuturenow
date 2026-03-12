@@ -644,6 +644,8 @@ BOOKS = [
     {"title": "How Buildings Learn", "author": "Stewart Brand", "year": 2026, "source": "kindle", "themes": ["science", "economics"]},
     {"title": "Where Good Ideas Come From", "author": "Steven Johnson", "year": 2026, "source": "kindle", "themes": ["science", "economics"]},
 
+    {"title": "The Everything Store", "author": "Brad Stone", "year": 2026, "source": "kindle", "themes": ["economics", "modern"]},
+
 ]
 
 

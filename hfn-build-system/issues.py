@@ -197,6 +197,7 @@ ISSUES = [
             "the-fifteen-minute-factory-why-proximity-still-wins",
             "the-eighteen-month-trap-why-hardware-startups-are-structurally-slow",
             "the-arsenal-and-the-container-how-shared-infrastructure-always-wins",
+            "from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt",
         ],
     },
 ]

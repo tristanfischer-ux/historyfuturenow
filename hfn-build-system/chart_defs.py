@@ -5703,6 +5703,138 @@ y:{...gridOpts.y,title:{display:true,text:'Million TEUs (twenty-foot equivalent 
     }
 ]
 
+
+    # ─── STUDIO: from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt ───
+    charts['from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt'] = [
+    {
+        'id': 'basementCostCollapse', 'figure_num': 1,
+        'title': 'The Toll Abolished: Cost to Launch a Software Startup',
+        'desc': 'Estimated infrastructure cost to reach first users for a software startup, showing the dramatic collapse after AWS (2006) and the App Store (2008).',
+        'source': 'Industry estimates; Brad Stone, The Everything Store (2013)',
+        'position': 'after_para_12',
+        'js': """_regChart('basementCostCollapse',()=>{const ctx=document.getElementById('basementCostCollapse');
+const labels=[2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020,2024];
+const data=[500000,400000,350000,150000,50000,15000,5000,2000,1000,500,500,100];
+new Chart(ctx,{type:'line',data:{labels,
+datasets:[{...ds('Infrastructure cost to first users (£)',data,C.accent),
+fill:true,backgroundColor:C.accent+'22',tension:0.3,pointRadius:4}]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{
+awsLine:{type:'line',xMin:3,xMax:3,borderColor:C.blue,borderDash:[6,4],borderWidth:2,
+label:{..._al,content:'AWS launches (2006)',display:true,color:C.dim}},
+appStoreLine:{type:'line',xMin:4,xMax:4,borderColor:C.green,borderDash:[6,4],borderWidth:2,
+label:{..._al,content:'App Store (2008)',display:true,color:C.dim,position:'start'}}
+}}},
+scales:{x:{...gridOpts.x,ticks:{callback:(v,i)=>String(labels[i]),color:'#8a8479',font:{size:9}}},
+y:{...gridOpts.y,type:'logarithmic',
+ticks:{callback:v=>{if(v>=1000)return'£'+v/1000+'k';return'£'+v},color:'#8a8479',font:{size:9}},
+title:{display:true,text:'Cost (£, log scale)',color:'#8a8479',font:{size:10}}}}
+}});
+});"""
+    },
+    {
+        'id': 'basementTimeGap', 'figure_num': 2,
+        'title': 'Same Idea, Different Physics: Concept to First User',
+        'desc': 'Typical elapsed time from initial concept to first user feedback for software versus hardware startups today.',
+        'source': 'Industry estimates; Flyvbjerg & Gardner, How Big Things Get Done (2023); Huang, The Hardware Hacker (2017)',
+        'position': 'after_para_20',
+        'js': """_regChart('basementTimeGap',()=>{const ctx=document.getElementById('basementTimeGap');
+const stages=['Design','Source\\nparts','Find\\nmanufacturer','Build\\nprototype','Test','Iterate','Reach\\nfirst user'];
+const sw=[1,0,0,0.5,0.5,0.5,0.5];
+const hw=[4,8,12,8,4,12,4];
+new Chart(ctx,{type:'bar',data:{labels:stages,
+datasets:[
+{...ds('Software (weeks)',sw,C.blue),barPercentage:0.7,categoryPercentage:0.8},
+{...ds('Hardware (weeks)',hw,C.accent),barPercentage:0.7,categoryPercentage:0.8}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{
+swTotal:{type:'label',xValue:5.5,yValue:10,
+content:['Software: ~3 weeks total'],color:C.blue,font:{size:11,weight:'bold'}},
+hwTotal:{type:'label',xValue:5.5,yValue:48,
+content:['Hardware: ~52 weeks total'],color:C.accent,font:{size:11,weight:'bold'}}
+}}},
+scales:{x:{...gridOpts.x,ticks:{color:'#8a8479',font:{size:8},maxRotation:0}},
+y:{...gridOpts.y,
+title:{display:true,text:'Weeks',color:'#8a8479',font:{size:10}},
+ticks:{color:'#8a8479',font:{size:9}}}}
+}});
+});"""
+    },
+    {
+        'id': 'basementFertilityDrop', 'figure_num': 3,
+        'title': 'The Clock Is Running: Fertility Rates in Major Economies',
+        'desc': 'Total fertility rates across key economies since 1960, all now below the 2.1 replacement level needed to maintain current workforce sizes.',
+        'source': 'UN World Population Prospects 2024; Statistics Korea; national statistical offices',
+        'position': 'after_para_30',
+        'js': """_regChart('basementFertilityDrop',()=>{const ctx=document.getElementById('basementFertilityDrop');
+const years=[1960,1970,1980,1990,2000,2010,2023];
+const sk=[6.0,4.53,2.82,1.57,1.48,1.23,0.72];
+const jp=[2.0,2.13,1.75,1.54,1.36,1.39,1.20];
+const de=[2.37,2.03,1.56,1.45,1.38,1.39,1.35];
+const cn=[5.76,5.81,2.63,2.17,1.60,1.18,1.00];
+const it=[2.41,2.42,1.64,1.33,1.26,1.41,1.24];
+new Chart(ctx,{type:'line',data:{labels:years,
+datasets:[
+{...dxy('South Korea',years,sk,C.accent),tension:0.3,pointRadius:3},
+{...dxy('Japan',years,jp,C.blue),tension:0.3,pointRadius:3},
+{...dxy('Germany',years,de,C.teal),tension:0.3,pointRadius:3},
+{...dxy('China',years,cn,C.amber),tension:0.3,pointRadius:3},
+{...dxy('Italy',years,it,C.purple),tension:0.3,pointRadius:3}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{
+replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:2,
+label:{..._al,content:'Replacement level (2.1)',display:true,color:C.dim,position:'start'}}
+}}},
+scales:{x:{...gridOpts.x,type:'linear',min:1960,max:2025,ticks:{callback:yearTick,color:'#8a8479',font:{size:9}}},
+y:{...gridOpts.y,min:0,max:7,
+title:{display:true,text:'Total fertility rate',color:'#8a8479',font:{size:10}},
+ticks:{color:'#8a8479',font:{size:9}}}}
+}});
+});"""
+    },
+    {
+        'id': 'basementSupportRatio', 'figure_num': 4,
+        'title': 'The Drawboy Shortage: Workers per Retiree',
+        'desc': 'Ratio of working-age adults (15–64) to those aged 65+, showing the collapsing support base that makes productivity-through-platforms existential. Dashed lines are UN medium-variant projections.',
+        'source': 'UN World Population Prospects 2024; OECD Pensions at a Glance 2023',
+        'position': 'after_para_32',
+        'js': """_regChart('basementSupportRatio',()=>{const ctx=document.getElementById('basementSupportRatio');
+const yrsH=[1950,1970,1990,2000,2010,2020];
+const yrsP=[2020,2030,2040,2050];
+const oecdH=[7.2,5.9,4.8,4.4,4.1,3.4];const oecdP=[3.4,2.7,2.3,2.0];
+const jpH=[12.1,8.5,5.8,3.9,2.8,2.1];const jpP=[2.1,1.8,1.5,1.4];
+const skH=[14.0,11.2,7.4,5.6,5.7,4.5];const skP=[4.5,2.6,1.8,1.3];
+new Chart(ctx,{type:'line',data:{
+datasets:[
+{...dxy('OECD average',yrsH,oecdH,C.blue),tension:0.3,pointRadius:3},
+{...dxy('OECD (projected)',yrsP,oecdP,C.blue),tension:0.3,pointRadius:2,borderDash:[6,4]},
+{...dxy('Japan',yrsH,jpH,C.accent),tension:0.3,pointRadius:3},
+{...dxy('Japan (projected)',yrsP,jpP,C.accent),tension:0.3,pointRadius:2,borderDash:[6,4]},
+{...dxy('South Korea',yrsH,skH,C.teal),tension:0.3,pointRadius:3},
+{...dxy('S. Korea (projected)',yrsP,skP,C.teal),tension:0.3,pointRadius:2,borderDash:[6,4]}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:tooltipStyle,
+annotation:{annotations:{
+crisis:{type:'line',yMin:2,yMax:2,borderColor:C.amber,borderDash:[6,4],borderWidth:2,
+label:{..._al,content:'2:1 crisis threshold',display:true,color:C.amber,position:'end'}},
+now:{type:'line',xMin:2024,xMax:2024,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
+label:{..._al,content:'2024',display:true,color:C.dim}}
+}}},
+scales:{x:{...gridOpts.x,type:'linear',min:1950,max:2050,ticks:{callback:yearTick,color:'#8a8479',font:{size:9}}},
+y:{...gridOpts.y,min:0,max:15,
+title:{display:true,text:'Workers (15–64) per retiree (65+)',color:'#8a8479',font:{size:10}},
+ticks:{color:'#8a8479',font:{size:9}}}}
+}});
+});"""
+    },
+]
+
     return charts
 
 

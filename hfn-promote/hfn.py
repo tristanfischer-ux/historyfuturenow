@@ -15,6 +15,8 @@ def main():
     elif cmd == "generate":
         from generator import generate_from_matches
         generate_from_matches()
+    elif cmd == "review":
+        print("Review mode has been replaced by the dashboard UI (hfn.py dashboard).")
     elif cmd == "login":
         platform = sys.argv[2] if len(sys.argv) > 2 else "x"
         from poster import login_interactive

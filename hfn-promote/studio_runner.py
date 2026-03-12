@@ -5,7 +5,7 @@ from pathlib import Path
 import db
 
 _PYTHON = sys.executable  # Always use the running interpreter, not bare "python"
-from config import HFN_SOURCE_DIR, HFN_SITE_OUTPUT, HFN_CONTENT_DIR, HFN_AUDIO_DIR, HFN_ARTICLE_IMAGES
+from config import HFN_SOURCE_DIR, HFN_SITE_OUTPUT, HFN_CONTENT_DIR, HFN_AUDIO_DIR, HFN_ARTICLE_IMAGES, GEN_MODEL
 
 BUILD_SYSTEM = HFN_SOURCE_DIR
 SCRIPTS_DIR = HFN_SOURCE_DIR.parent / "scripts"
@@ -352,7 +352,7 @@ Title: "{title}"
 Reply with ONLY the subject description. 1-2 sentences. ONE central image."""
 
     result = client.messages.create(
-        model="claude-opus-4-6",
+        model=GEN_MODEL,
         max_tokens=200,
         messages=[{"role": "user", "content": prompt}],
     )
@@ -489,7 +489,7 @@ sys.exit(1)
 """
 
     proc = subprocess.run(
-        ["/opt/homebrew/bin/python3", "-c", gen_script, args_json],
+        [_PYTHON, "-c", gen_script, args_json],
         capture_output=True, text=True, timeout=120
     )
 
@@ -545,7 +545,7 @@ def _run_generate_audio(task_id, draft_id):
 
     # Stream output to update progress in real-time
     proc = subprocess.Popen(
-        ["/opt/homebrew/bin/python3", "-u", str(script), "--article", draft["slug"]],
+        [_PYTHON, "-u", str(script), "--article", draft["slug"]],
         cwd=str(BUILD_SYSTEM), env=env,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
     )
@@ -618,7 +618,7 @@ def _run_build(task_id, draft_id):
     db.update_studio_task(task_id, progress="Building site...")
 
     proc = subprocess.run(
-        ["/opt/homebrew/bin/python3", str(BUILD_SYSTEM / "build.py")],
+        [_PYTHON, str(BUILD_SYSTEM / "build.py")],
         cwd=str(BUILD_SYSTEM),
         capture_output=True, text=True, timeout=300
     )
@@ -715,7 +715,7 @@ def _run_publish(task_id, draft_id):
     # Rebuild site
     db.update_studio_task(task_id, progress="Rebuilding site...")
     proc = subprocess.run(
-        ["/opt/homebrew/bin/python3", str(BUILD_SYSTEM / "build.py")],
+        [_PYTHON, str(BUILD_SYSTEM / "build.py")],
         cwd=str(BUILD_SYSTEM),
         capture_output=True, text=True, timeout=300
     )

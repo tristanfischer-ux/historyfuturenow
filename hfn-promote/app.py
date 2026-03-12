@@ -787,6 +787,7 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
         <span class="sess-indicator" title="X session"><span class="dot off" id="dot-x"></span> 𝕏</span>
         <span class="sess-indicator" title="LinkedIn session"><span class="dot off" id="dot-li"></span> LI</span>
         <span class="sess-indicator" title="Rate limits today" style="margin-left:4px;font-size:.64rem;color:#a8a29e">𝕏 {{xt}}/{{mx}} · LI {{lt}}/{{ml}}</span>
+        <button class="btn sm" onclick="location.reload()" style="font-size:.9rem;padding:4px 8px" title="Refresh (⌘R)">↻</button>
         <button class="btn sm" onclick="toggleDark()" id="dark-btn" style="font-size:.9rem;padding:4px 8px" title="Toggle dark mode">🌙</button>
         <button class="btn sm" onclick="toggleAutoPost()" id="auto-btn"
           style="font-size:.78rem;padding:5px 14px;border-radius:6px;
@@ -1844,6 +1845,7 @@ function updateCountdowns(){
   });
 }
 updateCountdowns();setInterval(updateCountdowns,60000);
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='r'){e.preventDefault();location.reload();}});
 
 function toggleAutoPost(){fetch("/api/act",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({a:"schedule"})}).then(r=>r.json()).then(d=>{alert(d.msg||"Toggled");location.reload()})}
 updateGenButton();

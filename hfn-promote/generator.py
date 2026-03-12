@@ -72,7 +72,7 @@ def _compute_confidence(news, article, chart, hook_strategy=""):
         perf = db.get_article_performance(article["id"])
         if perf and perf.get("total_posts", 0) > 0:
             score += 0.1
-            if perf.get("clicks_30d", 0) > 0:
+            if (perf.get("clicks_30d") or 0) > 0:
                 score += 0.1
     # Hook strategy has won A/B tests (0-0.3)
     if hook_strategy and article and article.get("id"):
@@ -165,7 +165,7 @@ def build_article_feedback_prompt(article_id):
         for plat, scores in plat_perf.items():
             lines.append(f"    {plat}: {sum(scores)/len(scores):.1f} avg quality")
     # Top performing post example
-    top = [f for f in feedback if f.get("clicks_30d", 0) > 0]
+    top = [f for f in feedback if (f.get("clicks_30d") or 0) > 0]
     if top:
         best = top[0]
         lines.append(f"  Best post: {best.get('hook_strategy','?')} on {best['platform']} — {best['clicks_30d']} clicks")
