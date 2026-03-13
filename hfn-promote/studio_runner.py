@@ -247,7 +247,7 @@ def _run_save_to_disk(task_id, draft_id):
 
 
 def _write_chart_defs(task_id, slug, chart_defs):
-    """Append chart definitions for a slug into chart_defs.py (idempotent)."""
+    """Write chart definitions for a slug into chart_defs.py (replaces existing if present)."""
     import re
 
     chart_file = BUILD_SYSTEM / "chart_defs.py"
@@ -257,11 +257,41 @@ def _write_chart_defs(task_id, slug, chart_defs):
 
     existing = chart_file.read_text(encoding="utf-8")
 
-    # Skip if charts for this slug already exist
+    # Remove existing chart block for this slug so we can replace it
     marker = f"charts['{slug}']"
     if marker in existing:
-        db.update_studio_task(task_id, progress=f"Charts for {slug} already in chart_defs.py — skipped")
-        return
+        # Find block start: prefer STUDIO marker comment, fall back to first charts['slug'] line
+        studio_marker = f"# ─── STUDIO: {slug} ───"
+        block_start = existing.find(studio_marker)
+        if block_start == -1:
+            # No studio marker — find the charts['slug'] assignment line start
+            marker_pos = existing.find(marker)
+            # Walk back to start of line (including leading whitespace)
+            block_start = existing.rfind('\n', 0, marker_pos)
+            if block_start == -1:
+                block_start = 0
+            else:
+                block_start += 1  # skip the newline itself
+        else:
+            # Walk back to include the newline before the studio marker comment
+            nl_before = existing.rfind('\n', 0, block_start)
+            if nl_before != -1:
+                block_start = nl_before
+
+        # Find block end: next charts[' assignment or 'return charts'
+        search_from = existing.find(marker, block_start) + len(marker)
+        next_chart = existing.find("\n    charts['", search_from)
+        next_studio = existing.find("\n    # ─── STUDIO:", search_from)
+        return_charts = existing.find("\n    return charts", search_from)
+
+        candidates = [c for c in [next_chart, next_studio, return_charts] if c != -1]
+        if candidates:
+            block_end = min(candidates)
+        else:
+            block_end = search_from  # fallback: don't remove anything beyond marker
+
+        existing = existing[:block_start] + existing[block_end:]
+        db.update_studio_task(task_id, progress=f"Replacing existing charts for {slug} in chart_defs.py")
 
     # Strip comment header lines (# === ...) from AI output
     lines = chart_defs.split('\n')
@@ -294,7 +324,7 @@ def _write_chart_defs(task_id, slug, chart_defs):
 
     updated = existing[:insert_point] + block + "\n" + existing[insert_point:]
     chart_file.write_text(updated, encoding="utf-8")
-    db.update_studio_task(task_id, progress=f"Chart defs appended to chart_defs.py")
+    db.update_studio_task(task_id, progress=f"Chart defs written to chart_defs.py")
 
 
 def _craft_image_subject(title, excerpt=""):
