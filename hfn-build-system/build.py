@@ -945,7 +945,9 @@ def make_chart_html(chart):
     # Auto-size: horizontal bars get explicit height based on label count
     size_class = ''
     inline_style = ''
-    if chart.get('tall'):
+    if chart.get('geo'):
+        inline_style = ' style="aspect-ratio:auto;height:380px;min-height:300px"'
+    elif chart.get('tall'):
         size_class = ' tall'
     elif is_horizontal and n_labels > 0:
         bar_height = 20
@@ -1080,7 +1082,7 @@ def inject_charts_into_body(body_html, charts):
     all_js = '\n'.join(_fix_js_string_newlines(ch['js']) for ch in charts)
     needs_geo = any(ch.get('geo') for ch in charts)
     geo_scripts = '\n<script src="/js/chartjs-chart-geo.umd.min.js"></script>' if needs_geo else ''
-    geo_data = '\nvar _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());' if needs_geo else ''
+    geo_data = '\nvar _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json()).catch(e=>{console.error("[geo]",e);return null;});' if needs_geo else ''
     script_block = f'''
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>{geo_scripts}
@@ -2621,7 +2623,7 @@ def build_charts_page(essays, all_charts):
     # Check if any chart needs the geo library
     needs_geo = any(c.get('geo') for item in articles_with_charts for c in item['charts'])
     geo_script_tag = '\n<script src="/js/chartjs-chart-geo.umd.min.js"></script>' if needs_geo else ''
-    geo_data_var = '\nvar _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());' if needs_geo else ''
+    geo_data_var = '\nvar _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json()).catch(e=>{console.error("[geo]",e);return null;});' if needs_geo else ''
 
     # Build chart cards grouped by section with headers
     deferred_js_lines = []
@@ -2649,7 +2651,9 @@ def build_charts_page(essays, all_charts):
         for idx, c in enumerate(item['charts']):
             orig_id = c['id']
             unique_id = f"chart_{slug}_{orig_id}_{idx}"
-            mod_js = _fix_js_string_newlines(c['js']).replace(f"getElementById('{orig_id}')", f"getElementById('{unique_id}')")
+            mod_js = _fix_js_string_newlines(c['js']).replace(
+                f"getElementById('{orig_id}')", f"getElementById('{unique_id}')").replace(
+                f"_regChart('{orig_id}'", f"_regChart('{unique_id}'")
             safe_js = mod_js.replace("</script>", "<\\/script>")
             deferred_js_lines.append(f"window.__chartInits['{unique_id}'] = function() {{\n{safe_js}\n}};")
 

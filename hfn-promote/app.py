@@ -4688,7 +4688,14 @@ WHEN PRODUCING CHART DEFINITIONS:
 - Use SINGLE quotes for Python keys/strings, triple-double-quotes for js field (no r prefix)
 - js field must use _regChart('chartId',()=>{ ... }) wrapper — NOT raw (()=>{ try { ... })()
 - Color references: use C.accent, C.blue, C.green, C.teal, C.amber, C.purple (NOT COLORS.x)
-- Shared helpers: ds(), dxy(), linX(), gridOpts, legend, tooltipStyle, chartPad, yearTick
+- Shared helpers: ds(), dsBar(), dxy(), linX(), gridOpts, legend, tooltipStyle, chartPad, yearTick
+BAR CHART STYLING (CRITICAL — bars look terrible with ds()):
+- NEVER use ds() or dxy() for bar charts — those are for LINES only
+- Use dsBar(label, data, color) for bar datasets
+- For per-category colouring (one color per bar), override backgroundColor:
+  {...dsBar('Label',[1,2,3],C.accent), backgroundColor:[C.accent,C.blue,C.teal]}
+- For stacked bars: {...dsBar('Label',data,C.blue), stack:'s'}
+- Horizontal bars: set indexAxis:'y' in options
 - Annotation labels must always spread ..._al first: label:{..._al, content:'text', display:true, color:C.dim, ...}
 - Year ticks must use `callback: v => String(v)` (never let Chart.js add commas to years)
 - Target 2-5 charts per article covering historic-present-future arcs

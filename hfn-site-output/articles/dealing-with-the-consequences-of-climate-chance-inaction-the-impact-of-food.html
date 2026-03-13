@@ -181,7 +181,7 @@
       <div class="chart-figure-label">Figure 5</div>
       <h4>The Hunger Map: Global Food Insecurity Index (2024)</h4>
       <p class="chart-desc">Climate change hits hardest where food systems are weakest — the nations least responsible for emissions face the greatest consequences</p>
-      <div class="chart-area"><canvas id="foodMap"></canvas></div>
+      <div class="chart-area" style="aspect-ratio:auto;height:380px;min-height:300px"><canvas id="foodMap"></canvas></div>
       <p class="chart-source">Source: Global Food Security Index (Economist Impact) 2024; FAO</p>
     </div>
 
@@ -286,13 +286,13 @@
   <section class="read-next-section" aria-label="Read next">
     <h2 class="read-next-heading">Read next</h2>
     <div class="read-next-grid">
-      <a href="/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775" class="read-next-card" style="--section-color:#0d9a5a">
-        <div class="read-next-img-wrap"><img src="/images/articles/roots-a-historical-understanding-of-climate-change-denial-creationism-and-slavery-1629-1775/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
+      <a href="/articles/cassandra-time-to-give-up-on-predicting-climate-change" class="read-next-card" style="--section-color:#0d9a5a">
+        <div class="read-next-img-wrap"><img src="/images/articles/cassandra-time-to-give-up-on-predicting-climate-change/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
         <div class="read-next-body">
           <span class="read-next-label">More in Natural Resources</span>
           <span class="read-next-kicker" style="color:#0d9a5a">Natural Resources</span>
-          <h3 class="read-next-title">Roots: A Historical Understanding Of Climate Change Denial, Creationism And Slavery – 1629-1775</h3>
-          <span class="read-next-meta">10 min read <span class="read-next-audio">Audio</span></span>
+          <h3 class="read-next-title">Cassandra: Time To Give Up On Predicting Climate Change?</h3>
+          <span class="read-next-meta">4 min read <span class="read-next-audio">Audio</span></span>
         </div>
       </a>
       <a href="/articles/the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way" class="read-next-card" style="--section-color:#7c3aed">
@@ -411,7 +411,7 @@
 <script src="/js/chartjs-chart-geo.umd.min.js"></script>
 <script>
 (function(){
-var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json());
+var _geoDataPromise=fetch("/js/countries-110m.json").then(r=>r.json()).catch(e=>{console.error("[geo]",e);return null;});
 function _gc(v,fb){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fb;}
 function _refreshC(){C.text=_gc('--text','#1a1815');C.grid=_gc('--border-light','#f2eeea');C.dim=_gc('--text-dim','#8a8479');C.bg=_gc('--bg','#ffffff');}
 const C = {
@@ -421,6 +421,7 @@ const C = {
   text:_gc('--text','#1a1815'), grid:_gc('--border-light','#f2eeea'), bg:_gc('--bg','#ffffff')
 };
 const ds=(l,d,c,da)=>({label:l,data:d,borderColor:c,backgroundColor:c+'18',fill:false,tension:.35,pointRadius:3,pointBackgroundColor:c,borderWidth:2.5,borderDash:da||[]});
+const dsBar=(l,d,c)=>({label:l,data:d,backgroundColor:c,borderColor:c,borderWidth:0,borderRadius:4,borderSkipped:false});
 const yearTick=v=>String(v);
 const gridOpts={x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}}}};
 const legend={display:true,position:'bottom',labels:{padding:16,usePointStyle:true,pointStyle:'circle',font:{size:12},color:C.dim}};
