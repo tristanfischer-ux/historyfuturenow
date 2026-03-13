@@ -258,40 +258,71 @@ def _write_chart_defs(task_id, slug, chart_defs):
     existing = chart_file.read_text(encoding="utf-8")
 
     # Remove existing chart block for this slug so we can replace it
+    assignment_pat = re.compile(r"^    charts\['[^']+'\]\s*=\s*\[", re.MULTILINE)
     marker = f"charts['{slug}']"
     if marker in existing:
-        # Find block start: prefer STUDIO marker comment, fall back to first charts['slug'] line
+        # Find block start: prefer STUDIO marker comment, fall back to assignment line
         studio_marker = f"# ─── STUDIO: {slug} ───"
-        block_start = existing.find(studio_marker)
-        if block_start == -1:
-            # No studio marker — find the charts['slug'] assignment line start
-            marker_pos = existing.find(marker)
-            # Walk back to start of line (including leading whitespace)
-            block_start = existing.rfind('\n', 0, marker_pos)
-            if block_start == -1:
-                block_start = 0
+        studio_pos = existing.find(studio_marker)
+
+        # Find the actual assignment line for this slug
+        assign_pat = re.compile(rf"^    charts\['{re.escape(slug)}'\]\s*=\s*\[", re.MULTILINE)
+        assign_match = assign_pat.search(existing)
+        if not assign_match:
+            db.update_studio_task(task_id, progress=f"Could not find assignment for {slug} — skipping removal")
+        else:
+            assign_pos = assign_match.start()
+
+            # Determine block start position
+            if studio_pos != -1 and studio_pos < assign_pos:
+                raw_start = studio_pos
             else:
-                block_start += 1  # skip the newline itself
-        else:
-            # Walk back to include the newline before the studio marker comment
-            nl_before = existing.rfind('\n', 0, block_start)
-            if nl_before != -1:
-                block_start = nl_before
+                raw_start = assign_pos
 
-        # Find block end: next charts[' assignment or 'return charts'
-        search_from = existing.find(marker, block_start) + len(marker)
-        next_chart = existing.find("\n    charts['", search_from)
-        next_studio = existing.find("\n    # ─── STUDIO:", search_from)
-        return_charts = existing.find("\n    return charts", search_from)
+            # Walk back over blank lines (but not into content lines)
+            block_start = raw_start
+            while block_start > 0 and existing[block_start - 1] == '\n':
+                block_start -= 1
+            # Keep one newline as separator from the previous block
+            if block_start > 0:
+                block_start += 1
 
-        candidates = [c for c in [next_chart, next_studio, return_charts] if c != -1]
-        if candidates:
-            block_end = min(candidates)
-        else:
-            block_end = search_from  # fallback: don't remove anything beyond marker
+            # Find block end: next assignment (with ' = [' to avoid JS false matches) or STUDIO marker or return
+            search_from = assign_match.end()
+            # Look for next real Python assignment, not JS strings
+            next_assign = assignment_pat.search(existing, search_from)
+            next_studio_pos = existing.find("\n    # ─── STUDIO:", search_from)
+            return_pos = existing.find("\n    return charts", search_from)
 
-        existing = existing[:block_start] + existing[block_end:]
-        db.update_studio_task(task_id, progress=f"Replacing existing charts for {slug} in chart_defs.py")
+            candidates = []
+            if next_assign:
+                candidates.append(next_assign.start())
+            if next_studio_pos != -1:
+                candidates.append(next_studio_pos + 1)  # skip the leading \n
+            if return_pos != -1:
+                candidates.append(return_pos + 1)  # skip the leading \n
+
+            if candidates:
+                block_end = min(candidates)
+            else:
+                db.update_studio_task(task_id, progress=f"Could not find block end for {slug} — skipping removal")
+                block_end = block_start  # no-op removal
+
+            existing = existing[:block_start] + existing[block_end:]
+
+            # Safety check: file must still be valid Python with 'return charts'
+            if "return charts" not in existing:
+                existing = chart_file.read_text(encoding="utf-8")
+                db.update_studio_task(task_id, progress=f"Safety check failed — removal would break chart_defs.py, aborting")
+                return
+            try:
+                compile(existing, str(chart_file), "exec")
+            except SyntaxError:
+                existing = chart_file.read_text(encoding="utf-8")
+                db.update_studio_task(task_id, progress=f"Safety check failed — removal produced invalid Python, aborting")
+                return
+
+            db.update_studio_task(task_id, progress=f"Replacing existing charts for {slug} in chart_defs.py")
 
     # Strip comment header lines (# === ...) from AI output
     lines = chart_defs.split('\n')
@@ -313,8 +344,8 @@ def _write_chart_defs(task_id, slug, chart_defs):
             chart_code = f"[\n    {chart_code}\n    ]"
         chart_code = f"charts['{slug}'] = {chart_code}"
 
-    # Build the block to insert
-    block = f"\n    # ─── STUDIO: {slug} ───\n    {chart_code}\n"
+    # Build the block to insert (with consistent double-blank-line spacing)
+    block = f"    # ─── STUDIO: {slug} ───\n    {chart_code}\n"
 
     # Insert before "return charts" line
     insert_point = existing.rfind("    return charts")
@@ -322,7 +353,10 @@ def _write_chart_defs(task_id, slug, chart_defs):
         db.update_studio_task(task_id, progress="Could not find 'return charts' in chart_defs.py — skipping")
         return
 
-    updated = existing[:insert_point] + block + "\n" + existing[insert_point:]
+    # Ensure exactly two blank lines before the new block and before return
+    before = existing[:insert_point].rstrip('\n') + "\n\n\n"
+    after = existing[insert_point:]
+    updated = before + block + "\n\n" + after
     chart_file.write_text(updated, encoding="utf-8")
     db.update_studio_task(task_id, progress=f"Chart defs written to chart_defs.py")
 
