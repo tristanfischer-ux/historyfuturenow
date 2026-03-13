@@ -5711,6 +5711,9 @@ y:{...gridOpts.y,title:{display:true,text:'Million TEUs (twenty-foot equivalent 
     #
 
 
+    #
+
+
     # ─── STUDIO: from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt ───
     charts['from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt'] = [
     {
@@ -5723,7 +5726,7 @@ y:{...gridOpts.y,title:{display:true,text:'Million TEUs (twenty-foot equivalent 
 const labels=[2000,2002,2004,2006,2008,2010,2012,2014,2016,2018,2020,2024];
 const data=[500000,400000,350000,150000,50000,15000,5000,2000,1000,500,500,100];
 new Chart(ctx,{type:'line',data:{labels,
-datasets:[{...ds('Infrastructure cost to first users (£)',data,C.accent),
+datasets:[{...ds('Infrastructure cost to first users (GBP)',data,C.accent),
 fill:true,backgroundColor:C.accent+'22',tension:0.3,pointRadius:4}]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
@@ -5735,8 +5738,8 @@ label:{..._al,content:'App Store (2008)',display:true,color:C.dim,position:'cent
 }}},
 scales:{x:{...gridOpts.x,ticks:{callback:(v,i)=>String(labels[i]),color:'#8a8479',font:{size:9}}},
 y:{...gridOpts.y,type:'logarithmic',
-ticks:{callback:v=>{if(v>=1000)return'£'+v/1000+'k';return'£'+v},color:'#8a8479',font:{size:9}},
-title:{display:true,text:'Cost (£, log scale)',color:'#8a8479',font:{size:10}}}}
+ticks:{callback:v=>{if(v>=1000)return'GBP '+v/1000+'k';return'GBP '+v},color:'#8a8479',font:{size:9}},
+title:{display:true,text:'Cost (GBP, log scale)',color:'#8a8479',font:{size:10}}}}
 }});
 });"""
     },
@@ -5749,10 +5752,10 @@ title:{display:true,text:'Cost (£, log scale)',color:'#8a8479',font:{size:10}}}
         'js': """_regChart('basementTimeGap',()=>{const ctx=document.getElementById('basementTimeGap');
 new Chart(ctx,{type:'bar',data:{labels:['Software startup','Hardware startup'],
 datasets:[
-{...ds('Design',[1,4],C.blue),stack:'s'},
-{...ds('Sourcing & manufacturer',[0,20],C.accent),stack:'s'},
-{...ds('Prototype & test',[1,12],C.teal),stack:'s'},
-{...ds('Iterate & reach users',[1,16],C.amber),stack:'s'}
+{...dsBar('Design',[1,4],C.blue),stack:'s'},
+{...dsBar('Sourcing & manufacturer',[0,20],C.accent),stack:'s'},
+{...dsBar('Prototype & test',[1,12],C.teal),stack:'s'},
+{...dsBar('Iterate & reach users',[1,16],C.amber),stack:'s'}
 ]},
 options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
@@ -5795,7 +5798,7 @@ plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{
 replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:2,
 label:{..._al,content:'Replacement level (2.1)',display:true,color:C.dim,position:'end',
-xAdjust:0,yAdjust:-14,backgroundColor:'rgba(255,255,255,0.85)',padding:3}}
+yAdjust:-14,backgroundColor:'rgba(255,255,255,0.85)',padding:3}}
 }}},
 scales:{x:{...gridOpts.x,type:'linear',min:1960,max:2025,ticks:{callback:yearTick,color:'#8a8479',font:{size:9}}},
 y:{...gridOpts.y,min:0,max:7,
@@ -5807,7 +5810,7 @@ ticks:{color:'#8a8479',font:{size:9}}}}
     {
         'id': 'basementSupportRatio', 'figure_num': 4,
         'title': 'The Drawboy Shortage: Workers per Retiree',
-        'desc': 'Ratio of working-age adults (15–64) to those aged 65+, showing the collapsing support base that makes productivity-through-platforms existential. Dashed lines are UN medium-variant projections.',
+        'desc': 'Ratio of working-age adults (15-64) to those aged 65+, showing the collapsing support base that makes productivity-through-platforms existential. Dashed lines are UN medium-variant projections.',
         'source': 'UN World Population Prospects 2024; OECD Pensions at a Glance 2023',
         'position': 'after_para_32',
         'js': """_regChart('basementSupportRatio',()=>{const ctx=document.getElementById('basementSupportRatio');
@@ -5836,7 +5839,7 @@ label:{..._al,content:'2024',display:true,color:C.dim,position:'start'}}
 }}},
 scales:{x:{...gridOpts.x,type:'linear',min:1950,max:2050,ticks:{callback:yearTick,color:'#8a8479',font:{size:9}}},
 y:{...gridOpts.y,min:0,max:15,
-title:{display:true,text:'Workers (15–64) per retiree (65+)',color:'#8a8479',font:{size:10}},
+title:{display:true,text:'Workers (15-64) per retiree (65+)',color:'#8a8479',font:{size:10}},
 ticks:{color:'#8a8479',font:{size:9}}}}
 }});
 });"""
