@@ -5704,6 +5704,12 @@ y:{...gridOpts.y,title:{display:true,text:'Million TEUs (twenty-foot equivalent 
 ]
 
 
+    #
+
+
+    #
+
+
     # ─── STUDIO: from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt ───
     charts['from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt'] = [
     {
@@ -5722,9 +5728,9 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{
 awsLine:{type:'line',xMin:3,xMax:3,borderColor:C.blue,borderDash:[6,4],borderWidth:2,
-label:{..._al,content:'AWS launches (2006)',display:true,color:C.dim}},
+label:{..._al,content:'AWS (2006)',display:true,color:C.dim,position:'start'}},
 appStoreLine:{type:'line',xMin:4,xMax:4,borderColor:C.green,borderDash:[6,4],borderWidth:2,
-label:{..._al,content:'App Store (2008)',display:true,color:C.dim,position:'start'}}
+label:{..._al,content:'App Store (2008)',display:true,color:C.dim,position:'center'}}
 }}},
 scales:{x:{...gridOpts.x,ticks:{callback:(v,i)=>String(labels[i]),color:'#8a8479',font:{size:9}}},
 y:{...gridOpts.y,type:'logarithmic',
@@ -5736,37 +5742,36 @@ title:{display:true,text:'Cost (£, log scale)',color:'#8a8479',font:{size:10}}}
     {
         'id': 'basementTimeGap', 'figure_num': 2,
         'title': 'Same Idea, Different Physics: Concept to First User',
-        'desc': 'Typical elapsed time from initial concept to first user feedback for software versus hardware startups today.',
+        'desc': 'Total elapsed time from concept to first user feedback for software versus hardware startups, showing the infrastructure gap that hardware founders must cross.',
         'source': 'Industry estimates; Flyvbjerg & Gardner, How Big Things Get Done (2023); Huang, The Hardware Hacker (2017)',
         'position': 'after_para_20',
         'js': """_regChart('basementTimeGap',()=>{const ctx=document.getElementById('basementTimeGap');
-const stages=['Design','Source\\nparts','Find\\nmanufacturer','Build\\nprototype','Test','Iterate','Reach\\nfirst user'];
-const sw=[1,0,0,0.5,0.5,0.5,0.5];
-const hw=[4,8,12,8,4,12,4];
-new Chart(ctx,{type:'bar',data:{labels:stages,
+new Chart(ctx,{type:'bar',data:{labels:['Software startup','Hardware startup'],
 datasets:[
-{...ds('Software (weeks)',sw,C.blue),barPercentage:0.7,categoryPercentage:0.8},
-{...ds('Hardware (weeks)',hw,C.accent),barPercentage:0.7,categoryPercentage:0.8}
+{...ds('Design',[1,4],C.blue),stack:'s'},
+{...ds('Sourcing & manufacturer',[0,20],C.accent),stack:'s'},
+{...ds('Prototype & test',[1,12],C.teal),stack:'s'},
+{...ds('Iterate & reach users',[1,16],C.amber),stack:'s'}
 ]},
-options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{
-swTotal:{type:'label',xValue:5.5,yValue:10,
-content:['Software: ~3 weeks total'],color:C.blue,font:{size:11,weight:'bold'}},
-hwTotal:{type:'label',xValue:5.5,yValue:48,
-content:['Hardware: ~52 weeks total'],color:C.accent,font:{size:11,weight:'bold'}}
+swLabel:{type:'label',xValue:6,yValue:0,
+content:'~3 weeks',color:C.blue,font:{size:12,weight:'bold'}},
+hwLabel:{type:'label',xValue:56,yValue:1,
+content:'~52 weeks',color:C.accent,font:{size:12,weight:'bold'}}
 }}},
-scales:{x:{...gridOpts.x,ticks:{color:'#8a8479',font:{size:8},maxRotation:0}},
-y:{...gridOpts.y,
+scales:{x:{...gridOpts.x,stacked:true,
 title:{display:true,text:'Weeks',color:'#8a8479',font:{size:10}},
-ticks:{color:'#8a8479',font:{size:9}}}}
-}});
+ticks:{color:'#8a8479',font:{size:9}}},
+y:{...gridOpts.y,stacked:true,ticks:{color:'#8a8479',font:{size:11}}}
+}}});
 });"""
     },
     {
         'id': 'basementFertilityDrop', 'figure_num': 3,
         'title': 'The Clock Is Running: Fertility Rates in Major Economies',
-        'desc': 'Total fertility rates across key economies since 1960, all now below the 2.1 replacement level needed to maintain current workforce sizes.',
+        'desc': 'Total fertility rates across key economies since 1960, all now far below the 2.1 replacement level needed to maintain current workforce sizes.',
         'source': 'UN World Population Prospects 2024; Statistics Korea; national statistical offices',
         'position': 'after_para_30',
         'js': """_regChart('basementFertilityDrop',()=>{const ctx=document.getElementById('basementFertilityDrop');
@@ -5788,7 +5793,8 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{
 replacement:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.dim,borderDash:[6,4],borderWidth:2,
-label:{..._al,content:'Replacement level (2.1)',display:true,color:C.dim,position:'start'}}
+label:{..._al,content:'Replacement level (2.1)',display:true,color:C.dim,position:'end',
+xAdjust:0,yAdjust:-14,backgroundColor:'rgba(255,255,255,0.85)',padding:3}}
 }}},
 scales:{x:{...gridOpts.x,type:'linear',min:1960,max:2025,ticks:{callback:yearTick,color:'#8a8479',font:{size:9}}},
 y:{...gridOpts.y,min:0,max:7,
@@ -5822,9 +5828,10 @@ options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend,tooltip:tooltipStyle,
 annotation:{annotations:{
 crisis:{type:'line',yMin:2,yMax:2,borderColor:C.amber,borderDash:[6,4],borderWidth:2,
-label:{..._al,content:'2:1 crisis threshold',display:true,color:C.amber,position:'end'}},
+label:{..._al,content:'2:1 crisis threshold',display:true,color:C.amber,position:'end',
+yAdjust:-14,backgroundColor:'rgba(255,255,255,0.85)',padding:3}},
 now:{type:'line',xMin:2024,xMax:2024,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
-label:{..._al,content:'2024',display:true,color:C.dim}}
+label:{..._al,content:'2024',display:true,color:C.dim,position:'start'}}
 }}},
 scales:{x:{...gridOpts.x,type:'linear',min:1950,max:2050,ticks:{callback:yearTick,color:'#8a8479',font:{size:9}}},
 y:{...gridOpts.y,min:0,max:15,
@@ -5834,6 +5841,7 @@ ticks:{color:'#8a8479',font:{size:9}}}}
 });"""
     },
 ]
+
 
     return charts
 
