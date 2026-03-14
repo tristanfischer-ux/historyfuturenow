@@ -69,7 +69,7 @@ What emerged was not a better gun. The Springfield Model 1842 musket was a perfe
 
 The British, who sent a parliamentary committee to visit U.S. armouries in 1854 and subsequently purchased American machinery for the Royal Small Arms Factory at Enfield Lock, understood immediately what they were looking at. As Suzanne Berger documents in *Making in America*, the British delegation was not impressed by the quality of individual American muskets. They were impressed by the fact that the Americans could produce vast quantities of muskets of *consistent* quality using workers who were not master gunsmiths. The platform had turned manufacturing from a craft into a system — and systems scale in ways that crafts cannot.
 
-The ramifications extended far beyond firearms. The machine tools, gauging systems, and standardised processes developed at Springfield migrated to sewing machines, bicycles, typewriters, and eventually automobiles. The [Fifteen-Minute Advantage](/articles/the-walking-distance-supply-chain) that made Birmingham's pen quarter so productive was a version of this same principle operating at the level of a city — shared, proximate infrastructure enabling small players to achieve the output of large ones. The American system of manufactures was the Springfield version: shared, standardised infrastructure enabling unskilled workers to achieve the output of craftsmen.
+The ramifications extended far beyond firearms. The machine tools, gauging systems, and standardised processes developed at Springfield migrated to sewing machines, bicycles, typewriters, and eventually automobiles. The [Fifteen-Minute Advantage](/articles/the-fifteen-minute-factory-why-proximity-still-wins) that made Birmingham's pen quarter so productive was a version of this same principle operating at the level of a city — shared, proximate infrastructure enabling small players to achieve the output of large ones. The American system of manufactures was the Springfield version: shared, standardised infrastructure enabling unskilled workers to achieve the output of craftsmen.
 
 ## The Box That Ate the World
 
@@ -132,4 +132,3 @@ Venice's Arsenale operated for over seven hundred years. The American system of 
 The pattern is not subtle. It is not ambiguous. It has repeated with such regularity, across such different domains and centuries, that denying its applicability to any given industry requires a specific argument for why *this time is different*. History suggests that "this time is different" is the most expensive sentence in the English language.
 
 The shared infrastructure always wins. The only question is how long the resistance lasts — and how much advantage accrues to those who see it coming before their competitors do.
-```
