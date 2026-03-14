@@ -619,5 +619,124 @@ def _generate_one_post(p, charts):
         return False
 
 
+def gen_carousel_slides(article, charts):
+    """Distil an article into carousel slide content using Claude Opus.
+
+    Args:
+        article: dict with title, slug, part, url, excerpt
+        charts: list of chart dicts with id, title, description, source, image_path
+
+    Returns: list of slide dicts or None on failure
+    """
+    client = get_client()
+    if not client:
+        return None
+
+    slug = article.get("slug", "")
+    full_body, share_summary = _get_full_article_text(slug) if slug else ("", "")
+    if not full_body:
+        print(f"  [!] No article text found for {slug}")
+        return None
+
+    charts_with_images = [c for c in charts if c.get("image_path")]
+    charts_desc = "\n".join(
+        f"CHART_{c['id']}: Fig {c.get('figure_num', '?')} — {c['title']} | {(c.get('description') or '')[:150]} | Source: {c.get('source', 'N/A')}"
+        for c in charts_with_images
+    )
+
+    prompt = f"""{VOICE}
+
+You are creating content for a LinkedIn carousel (swipeable PDF slides) about this article.
+The carousel will have a branded title slide and CTA slide automatically — you only need to provide the CONTENT slides.
+
+ARTICLE: {article['title']} ({article.get('part', '')})
+{full_body[:10000].rsplit('. ', 1)[0] + '.' if len(full_body) > 10000 else full_body}
+
+AVAILABLE CHARTS (with images):
+{charts_desc if charts_desc else '(no charts with images)'}
+
+INSTRUCTIONS:
+1. Extract 4-6 key insights from the article. Each MUST include a specific number, date, or historical fact.
+2. Select 1-3 charts that best support your insights (by chart ID). Only pick charts that have images.
+3. Write headings (max 8 words each) and body text (max 40 words per slide).
+4. Include at least one historical parallel or surprising comparison.
+5. Match HFN voice: British English, confident, specific, no AI filler.
+6. Order slides for narrative flow — each should build on the previous.
+7. Total content slides: 5-8 (mix of insights and charts).
+
+Return JSON array. Two types:
+- Insight: {{"type": "insight", "heading": "Short punchy heading", "body": "1-2 sentence insight with a specific number or date."}}
+- Chart: {{"type": "chart", "chart_id": <id>, "context": "One sentence explaining the 'so what' of this chart."}}
+
+JSON array only, no markdown fences."""
+
+    try:
+        resp = client.messages.create(
+            model=GEN_MODEL, max_tokens=2000,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        text = resp.content[0].text.strip()
+        text = text.replace('```json', '').replace('```', '').strip()
+        m = re.search(r"\[.*\]", text, re.DOTALL)
+        if m:
+            slides = json.loads(m.group())
+            print(f"  ✓ Generated {len(slides)} carousel slides")
+            return slides
+    except Exception as ex:
+        print(f"  [!] Carousel gen error: {ex}")
+    return None
+
+
+def gen_carousel_caption(article, slide_count):
+    """Generate a LinkedIn caption specifically for a carousel post.
+
+    Unlike gen_post(), this knows the post has a swipeable document attached
+    and should invite engagement without including a URL (the CTA slide has it).
+    """
+    client = get_client()
+    if not client:
+        return None
+
+    slug = article.get("slug", "")
+    _, share_summary = _get_full_article_text(slug) if slug else ("", "")
+    share_line = f"\nARTICLE SHARE SUMMARY: {share_summary}" if share_summary else ""
+
+    prompt = f"""{VOICE}
+
+Write a LinkedIn caption for a CAROUSEL POST (swipeable PDF document) about this article.
+
+ARTICLE: {article['title']} ({article.get('part', '')})
+{article.get('excerpt', '')[:500]}
+{share_line}
+
+The carousel has {slide_count} slides with key insights and charts from the article.
+
+RULES:
+1. The carousel is the content — your caption introduces it and invites swiping.
+2. DO NOT include any URL. The article link is on the final slide.
+3. Open with one provocative sentence that makes someone stop scrolling.
+4. Reference what's IN the carousel: "Swipe through..." or "X slides on..." or "The data tells a story..."
+5. Keep it under 500 characters. 2-3 short paragraphs.
+6. End with 2-3 hashtags.
+7. British English. Confident, specific, no AI filler.
+
+Return JSON: {{"caption": "...", "hook_strategy": "..."}}
+JSON only, no markdown fences."""
+
+    try:
+        resp = client.messages.create(
+            model=GEN_MODEL, max_tokens=400,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        text = resp.content[0].text.strip()
+        text = text.replace('```json', '').replace('```', '').strip()
+        m = re.search(r"\{.*\}", text, re.DOTALL)
+        if m:
+            return json.loads(m.group())
+    except Exception as ex:
+        print(f"  [!] Carousel caption gen error: {ex}")
+    return None
+
+
 if __name__ == "__main__":
     generate_from_matches()

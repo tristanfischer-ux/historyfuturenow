@@ -326,6 +326,74 @@ def _li_upload_image(session, image_path, max_retries=3):
     return None, f"Image upload failed after {max_retries} attempts. Last error: {last_err}"
 
 
+def _li_upload_document(session, doc_path, max_retries=3):
+    """Register + upload a PDF document via LinkedIn Voyager API with retries.
+    Returns (media_urn, error_msg). media_urn is None on failure."""
+    doc = Path(doc_path)
+    file_size = doc.stat().st_size
+
+    last_err = None
+    for attempt in range(max_retries):
+        if attempt > 0:
+            time.sleep(2 * attempt)
+            print(f"  Retrying document upload (attempt {attempt + 1}/{max_retries})...")
+
+        try:
+            register_url = "https://www.linkedin.com/voyager/api/voyagerMediaUploadMetadata?action=upload"
+            register_body = {
+                "mediaUploadType": "DOCUMENT_SHARING",
+                "fileSize": file_size,
+                "filename": doc.name,
+            }
+            resp = session.post(register_url, json=register_body)
+            if resp.status_code in (401, 403):
+                return None, "LinkedIn session expired. Run: python3 poster.py linkedin"
+            if resp.status_code != 200:
+                last_err = f"Register HTTP {resp.status_code}: {resp.text[:300]}"
+                print(f"  [!] {last_err}")
+                continue
+
+            raw = resp.json()
+            data = raw.get("data", raw)
+            value = data.get("value", data)
+
+            upload_url = (
+                value.get("singleUploadUrl")
+                or value.get("uploadUrl")
+                or _deep_get(value, "uploadMechanism",
+                             "com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest",
+                             "uploadUrl")
+            )
+            media_urn = (
+                value.get("urn")
+                or value.get("mediaArtifact")
+            )
+
+            if not upload_url or not media_urn:
+                last_err = f"Couldn't parse register response: {json.dumps(raw)[:400]}"
+                print(f"  [!] {last_err}")
+                continue
+
+            with open(doc, "rb") as f:
+                put_resp = session.put(upload_url, data=f, headers={
+                    "Content-Type": "application/pdf",
+                    "accept": "*/*",
+                })
+            if put_resp.status_code not in (200, 201):
+                last_err = f"Upload PUT HTTP {put_resp.status_code}: {put_resp.text[:300]}"
+                print(f"  [!] {last_err}")
+                continue
+
+            print(f"  ✓ Document uploaded via API ({media_urn[:50]}...)")
+            return media_urn, None
+
+        except Exception as ex:
+            last_err = str(ex)
+            print(f"  [!] Upload attempt {attempt + 1} error: {ex}")
+
+    return None, f"Document upload failed after {max_retries} attempts. Last error: {last_err}"
+
+
 def _li_post_playwright(text, image_path):
     """Fallback: post to LinkedIn via Playwright browser automation.
     Used when the Voyager REST API image upload fails."""
@@ -433,8 +501,14 @@ def _li_post_playwright(text, image_path):
             browser.close()
 
 
-def post_to_linkedin(text, image_path=None):
-    """Post to LinkedIn. Tries Voyager REST API first, falls back to Playwright."""
+def post_to_linkedin(text, image_path=None, document_path=None):
+    """Post to LinkedIn. Tries Voyager REST API first, falls back to Playwright.
+
+    Args:
+        text: Post caption text
+        image_path: Optional image to attach (ignored if document_path is set)
+        document_path: Optional PDF document to attach (for carousel posts)
+    """
     if db.posts_today("linkedin") >= MAX_LI_PER_DAY:
         print(f"  [!] LinkedIn daily limit reached ({MAX_LI_PER_DAY})")
         return False, "daily_limit"
@@ -445,7 +519,20 @@ def post_to_linkedin(text, image_path=None):
         return False, "session_expired"
 
     media_urn = None
-    if image_path:
+    media_category = None
+
+    if document_path:
+        # Document (PDF carousel) takes priority over image
+        if not Path(document_path).exists():
+            print(f"  [!] Document file not found: {document_path}")
+            return False, "document_not_found"
+        media_urn, doc_err = _li_upload_document(session, document_path)
+        if doc_err:
+            print(f"  [!] Document upload failed: {doc_err}")
+            print(f"  [!] No Playwright fallback for document posts — API upload is required")
+            return False, f"document_upload_failed: {doc_err}"
+        media_category = "DOCUMENT"
+    elif image_path:
         if not Path(image_path).exists():
             print(f"  [!] Image file not found: {image_path}")
             return False, "image_not_found"
@@ -454,6 +541,7 @@ def post_to_linkedin(text, image_path=None):
             print(f"  [!] API image upload failed: {img_err}")
             print(f"  Falling back to Playwright...")
             return _li_post_playwright(text, image_path)
+        media_category = "IMAGE"
 
     share_url = "https://www.linkedin.com/voyager/api/contentcreation/normShares"
     payload = {
@@ -465,8 +553,8 @@ def post_to_linkedin(text, image_path=None):
         "postState": "PUBLISHED",
     }
 
-    if media_urn:
-        payload["mediaCategory"] = "IMAGE"
+    if media_urn and media_category:
+        payload["mediaCategory"] = media_category
         payload["attachments"] = [{"id": media_urn}]
 
     try:
@@ -478,19 +566,28 @@ def post_to_linkedin(text, image_path=None):
             return True, ""
         if resp.status_code == 429:
             print(f"  [!] LinkedIn rate limited (HTTP 429)")
-            if image_path:
+            if image_path and not document_path:
                 return _li_post_playwright(text, image_path)
             return False, "rate_limit"
-        print(f"  [!] LinkedIn share failed (HTTP {resp.status_code}): {resp.text[:300]}")
-        if image_path:
+        err_body = resp.text[:300]
+        print(f"  [!] LinkedIn share failed (HTTP {resp.status_code}): {err_body}")
+        if document_path and ("mediaCategory" in err_body or "DOCUMENT" in err_body):
+            print(f"  [!] LinkedIn may have rejected DOCUMENT media category — API format may have changed")
+            return False, "document_share_rejected"
+        if image_path and not document_path:
             print(f"  Falling back to Playwright...")
             return _li_post_playwright(text, image_path)
         return False, "post_failed"
     except Exception as ex:
         print(f"  [!] LinkedIn error: {ex}")
-        if image_path:
+        if image_path and not document_path:
             return _li_post_playwright(text, image_path)
         return False, _classify_error(ex)
+
+
+def post_carousel_to_linkedin(caption, pdf_path):
+    """Convenience: post a PDF carousel to LinkedIn."""
+    return post_to_linkedin(caption, document_path=pdf_path)
 
 
 if __name__ == "__main__":

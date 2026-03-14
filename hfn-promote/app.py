@@ -20,10 +20,11 @@ def _strip_urls(text):
     cleaned = re.sub(r'\n{3,}', '\n\n', cleaned)  # collapse triple+ newlines
     return cleaned.strip()
 
-def _build_post_text(caption, article_url, post_id=None, platform=None):
-    """Build final post text: strip any LLM-hallucinated URLs, append the correct article URL with UTM tracking."""
+def _build_post_text(caption, article_url, post_id=None, platform=None, post_type=None):
+    """Build final post text: strip any LLM-hallucinated URLs, append the correct article URL with UTM tracking.
+    For carousel posts, skip the URL — the CTA slide has it and external links hurt reach."""
     clean = _strip_urls(caption)
-    if article_url:
+    if article_url and post_type != "carousel":
         url = article_url
         if post_id:
             sep = '&' if '?' in url else '?'
@@ -947,11 +948,13 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
           </div>
         </div>
         <div class="rq-caption" id="rqcap-{{p.id}}" contenteditable="false" ondblclick="startRqEdit(this,{{p.id}})" oninput="updateCharCount(this,{{p.id}})">{{p.caption if p.caption else '(no text)'}}</div>
-        {% if p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="imgFallback(this)">{% endif %}
+        {% if p.post_type == 'carousel' and p.image_path and p.image_path.endswith('.pdf') %}
+        <iframe src="/carousel_preview/{{p.image_path.split('/articles/')[-1].replace('/carousel.pdf','')}}" style="width:100%;aspect-ratio:4/5;max-height:500px;border:1px solid var(--border);border-radius:8px;margin:8px 0"></iframe>
+        {% elif p.image_path %}<img class="pp-img" src="{{img_url(p.image_path)}}" onerror="imgFallback(this)">{% endif %}
         {% if p.article_url %}<a class="pp-link" href="{{p.article_url}}" target="_blank">{{p.article_url}}</a>{% endif %}
         <div class="pp-charcount" id="rqcc-{{p.id}}">
-          {{(p.caption|length) if p.caption else 0}}/{{280 if p.platform=='x' else 3000}} chars
-          {% if p.caption and ((p.platform=='x' and p.caption|length > 280) or (p.platform=='linkedin' and p.caption|length > 3000)) %}
+          {{(p.caption|length) if p.caption else 0}}/{{280 if p.platform=='x' else (700 if p.post_type=='carousel' else 3000)}} chars
+          {% if p.caption and ((p.platform=='x' and p.caption|length > 280) or (p.platform=='linkedin' and p.post_type=='carousel' and p.caption|length > 700) or (p.platform=='linkedin' and p.post_type!='carousel' and p.caption|length > 3000)) %}
           <span style="color:var(--red)">⚠ Over limit</span>
           {% endif %}
         </div>
@@ -960,8 +963,9 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
       <div class="rq-actions">
         <button class="btn bsv sm" onclick="confirmPost({{p.id}})">✅ Confirm</button>
         <button class="btn sm" onclick="startRqEdit(document.getElementById('rqcap-{{p.id}}'),{{p.id}})">✏️ Edit</button>
-        <button class="btn sm" onclick="regenerateCaption({{p.id}},this)" title="Regenerate caption">🔄</button>
-        <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 Post Now</button>
+        {% if p.post_type != 'carousel' %}<button class="btn sm" onclick="regenerateCaption({{p.id}},this)" title="Regenerate caption">🔄</button>{% endif %}
+        {% if p.post_type == 'carousel' and p.article_slug %}<button class="btn sm" onclick="generateCarousel('{{p.article_slug}}',this)" title="Regenerate slides + caption">🔄📑</button>{% endif %}
+        <button class="btn {{ 'bx' if p.platform=='x' else 'bli' }} sm" onclick="postNow({{p.id}})">📤 {{ 'Post Carousel' if p.post_type == 'carousel' else 'Post Now' }}</button>
         <button class="btn rej sm" onclick="removeReview({{p.id}})">✕ Remove</button>
       </div>
     </div>
@@ -1705,7 +1709,8 @@ async function selectArticle(slug){
       ${d.article.url?'<a class="lib-url" href="'+d.article.url+'" target="_blank">'+d.article.url+'</a>':''}
       <div style="font-size:.7rem;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:10px">
         <span>${d.charts.length} chart(s) · ${d.charts.filter(c=>c.image_path).length} with images · 📤 ${postCount} post(s)${issueNum?' · Issue '+issueNum:''}</span>
-        ${d.charts.some(c=>c.image_path)?'<select id="lib-post-type" style="padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:.68rem;font-family:inherit"><option value="short">Short</option><option value="long">Long</option></select><button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button>':''}
+        ${d.charts.some(c=>c.image_path)?'<select id="lib-post-type" style="padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:.68rem;font-family:inherit"><option value="short">Short</option><option value="long">Long</option></select><button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button><button style="padding:4px 10px;font-size:.68rem;border:1px solid #0a66c2;background:#e8f0fe;color:#0a66c2;border-radius:5px;cursor:pointer;font-family:inherit;font-weight:600" onclick="generateCarousel(\''+slug+'\',this)">📑 Carousel</button>':''}
+        <button style="padding:4px 10px;font-size:.68rem;border:1px solid #0a66c2;background:#fff;color:#0a66c2;border-radius:5px;cursor:pointer;font-family:inherit" onclick="copyForLinkedIn(\''+slug+'\')">📋 Copy for LinkedIn</button>
       </div>
       <div style="margin-top:8px;display:flex;gap:6px">
         ${(d.article.status||'published')==='published'?'<button onclick="archiveArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #d97706;background:#fffbeb;color:#92400e;border-radius:5px;cursor:pointer;font-family:inherit">📦 Archive</button><button onclick="softDeleteArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #dc2626;background:#fef2f2;color:#991b1b;border-radius:5px;cursor:pointer;font-family:inherit">🗑 Delete</button>':'<button onclick="restoreArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #16a34a;background:#f0fdf4;color:#166534;border-radius:5px;cursor:pointer;font-family:inherit">↩ Restore</button><span style="font-size:.65rem;color:var(--dim);padding:4px">'+(d.article.status==='archived'?'📦 Archived':'🗑 Deleted')+'</span>'}
@@ -1765,6 +1770,47 @@ async function promoteArticle(slug,chartId,btn){
   }catch(e){toast('Network error',3000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
 }
 
+async function generateCarousel(slug,btn){
+  if(btn){btn.disabled=true;btn.textContent='⏳ Generating...';}
+  toast('Generating LinkedIn carousel in background...',6000);
+  try{
+    const r=await fetch('/api/carousel',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slug})});
+    const d=await r.json();
+    if(d.ok){
+      toast(d.msg,5000,true);
+      // Poll for completion
+      if(d.post_id){
+        const poll=setInterval(async()=>{
+          try{
+            const sr=await fetch('/api/post_status/'+d.post_id);
+            const sd=await sr.json();
+            if(sd.status==='generated'){
+              clearInterval(poll);
+              toast('Carousel ready — switching to Review',3000,true);
+              if(btn){btn.textContent='📑 Carousel';btn.disabled=false;}
+              document.querySelector('.tab[data-tab="review"]')?.click();
+            }else if(sd.status!=='draft'){
+              clearInterval(poll);
+              if(btn){btn.textContent='📑 Carousel';btn.disabled=false;}
+            }
+          }catch(e){clearInterval(poll);}
+        },3000);
+        setTimeout(()=>{clearInterval(poll);if(btn){btn.textContent='📑 Carousel';btn.disabled=false;}},120000);
+      }
+    }else{toast(d.msg||'Failed',4000);if(btn){btn.disabled=false;btn.textContent='📑 Carousel';}}
+  }catch(e){toast('Network error',3000);if(btn){btn.disabled=false;btn.textContent='📑 Carousel';}}
+}
+async function copyForLinkedIn(slug){
+  toast('Preparing article text...',3000);
+  try{
+    const r=await fetch('/api/linkedin_copy/'+encodeURIComponent(slug));
+    const d=await r.json();
+    if(d.ok){
+      await navigator.clipboard.writeText(d.text);
+      toast('Article copied — paste into LinkedIn article editor',4000,true);
+    }else{toast(d.msg||'Failed to copy',4000);}
+  }catch(e){toast('Network error',3000);}
+}
 // ── Archive / Delete / Restore ──
 function _updateSidebarStatus(slug,status){
   const el=document.querySelector(`.lib-item[data-slug="${slug}"]`);
@@ -3869,7 +3915,8 @@ def dashboard():
                     "image_path": img,
                     "article_url": p.get("article_url","") or p.get("article_url_joined",""),
                     "article_context": p.get("article_context",""),
-                    "article_part": p.get("article_part","")
+                    "article_part": p.get("article_part",""),
+                    "article_slug": p.get("article_slug","") or (p.get("article_url","") or "").rstrip("/").split("/")[-1]
                 })
             except: pass
         for d in days.values():
@@ -4408,6 +4455,59 @@ def api_unqueue_post():
     db.unqueue_post(request.json["id"])
     return jsonify({"ok":True})
 
+@app.route("/api/linkedin_copy/<path:slug>")
+def api_linkedin_copy(slug):
+    """Return article text formatted for LinkedIn article editor."""
+    from generator import _get_full_article_text
+    article = db.get_article_by_slug(slug)
+    if not article:
+        return jsonify({"ok": False, "msg": "Article not found"})
+
+    body, share_summary = _get_full_article_text(slug)
+    if not body:
+        return jsonify({"ok": False, "msg": "Article text not found on disk"})
+
+    title = article["title"]
+    url = article.get("url", "")
+    charts = db.get_charts_for_article(slug)
+
+    # Format for LinkedIn article editor
+    lines = [title, "=" * len(title), ""]
+
+    for line in body.split("\n"):
+        stripped = line.strip()
+        if stripped.startswith("## "):
+            lines.append("")
+            lines.append(stripped[3:].upper())
+            lines.append("")
+        elif stripped.startswith("### "):
+            lines.append("")
+            lines.append(stripped[4:])
+            lines.append("")
+        elif stripped.startswith("# "):
+            continue  # Skip H1 — we already have the title
+        else:
+            lines.append(line)
+
+    # Insert chart placeholders
+    if charts:
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        for c in charts:
+            if c.get("image_path"):
+                lines.append(f"[Chart: Figure {c.get('figure_num', '?')} — {c['title']}]")
+        lines.append("")
+
+    # Footer
+    lines.append("---")
+    lines.append(f"Originally published on History Future Now: {url}")
+
+    formatted = "\n".join(lines)
+
+    return jsonify({"ok": True, "title": title, "text": formatted, "url": url})
+
+
 @app.route("/api/library/<path:slug>")
 def api_library(slug):
     article = db.get_article_by_slug(slug)
@@ -4520,9 +4620,12 @@ def api_post_now():
         return jsonify({"ok":False,"msg":f"Cannot post — status is '{post['status']}'"})
     prev_status = post["status"]
     db.update_post_status(post["id"],"approved")
-    from poster import post_to_x, post_to_linkedin
-    text = _build_post_text(post["caption"], post.get("article_url"), post_id=post["id"], platform=post["platform"])
-    ok, err = (post_to_x if post["platform"]=="x" else post_to_linkedin)(text, post.get("image_path"))
+    from poster import post_to_x, post_to_linkedin, post_carousel_to_linkedin
+    text = _build_post_text(post["caption"], post.get("article_url"), post_id=post["id"], platform=post["platform"], post_type=post.get("post_type"))
+    if post.get("post_type") == "carousel" and post["platform"] == "linkedin":
+        ok, err = post_carousel_to_linkedin(text, post.get("image_path"))
+    else:
+        ok, err = (post_to_x if post["platform"]=="x" else post_to_linkedin)(text, post.get("image_path"))
     if ok:
         db.clear_post_error(post["id"])
         db.update_post_status(post["id"],"posted"); db.log_post(post["platform"],post["id"])
@@ -4530,6 +4633,171 @@ def api_post_now():
     db.record_post_error(post["id"], err, err)
     db.update_post_status(post["id"], prev_status)
     return jsonify({"ok":False,"msg":f"Failed: {err}"})
+
+@app.route("/api/post_status/<int:pid>")
+def api_post_status(pid):
+    """Return current status of a post (used for polling carousel generation)."""
+    post = db.get_post(pid)
+    if not post:
+        return jsonify({"status": "not_found"}), 404
+    return jsonify({"status": post["status"], "caption": (post.get("caption") or "")[:100]})
+
+
+# ── LinkedIn Carousel + Copy APIs ──
+
+_carousel_generating = set()  # slugs currently generating (prevent double-click race)
+
+@app.route("/api/carousel", methods=["POST"])
+def api_carousel():
+    """Generate a LinkedIn PDF carousel for an article. Runs in background thread."""
+    d = request.json
+    slug = d.get("slug")
+    if not slug:
+        return jsonify({"ok": False, "msg": "No article slug"})
+    if slug in _carousel_generating:
+        return jsonify({"ok": False, "msg": "Carousel already generating for this article"})
+    article = db.get_article_by_slug(slug)
+    if not article:
+        return jsonify({"ok": False, "msg": "Article not found"})
+
+    # Clean up any existing carousel posts for this article (fix #6: overwrite without cleanup)
+    conn = db.get_db()
+    old_carousel_posts = conn.execute(
+        "SELECT id FROM posts WHERE article_id=? AND post_type='carousel' AND status IN ('draft','generated')",
+        (article["id"],)).fetchall()
+    for old in old_carousel_posts:
+        conn.execute("DELETE FROM posts WHERE id=?", (old["id"],))
+    if old_carousel_posts:
+        conn.commit()
+    conn.close()
+
+    # Create a placeholder post immediately so the UI can show progress
+    pid = db.insert_post(
+        news_item_id=None, chart_id=None,
+        article_id=article["id"], platform="linkedin",
+        caption="Generating carousel...", article_context="",
+        article_url=article.get("url", ""),
+        image_path="",
+        post_type="carousel", hook_strategy="carousel")
+
+    import threading
+    _carousel_generating.add(slug)
+
+    def _generate_carousel_bg(slug, article_id, post_id):
+        try:
+            art = db.get_article_by_slug(slug)
+            charts = db.get_charts_for_article(slug)
+
+            from generator import gen_carousel_slides, gen_carousel_caption, _get_full_article_text
+            from carousel_builder import build_carousel
+
+            # Generate slide content via Claude
+            slides_raw = gen_carousel_slides(art, charts)
+            if not slides_raw:
+                db.update_post_caption(post_id, "(Carousel generation failed — retry from Library)")
+                db.update_post_status(post_id, "generated")
+                return
+
+            # Resolve chart image paths (fix: int/str chart_id mismatch + validate slide structure)
+            charts_by_id = {c["id"]: c for c in charts}
+            resolved_slides = []
+            for s in slides_raw:
+                if not isinstance(s, dict) or "type" not in s:
+                    continue
+                if s["type"] == "chart":
+                    try:
+                        cid = int(s.get("chart_id", 0))
+                    except (ValueError, TypeError):
+                        continue
+                    chart = charts_by_id.get(cid)
+                    if chart and chart.get("image_path"):
+                        resolved_slides.append({
+                            "type": "chart",
+                            "chart_path": chart["image_path"],
+                            "title": chart.get("title", ""),
+                            "context": s.get("context", ""),
+                            "source": chart.get("source", ""),
+                        })
+                elif s["type"] == "insight" and s.get("heading") and s.get("body"):
+                    resolved_slides.append(s)
+
+            # Get article metadata
+            _, share_summary = _get_full_article_text(slug)
+            hero_path = str(HFN_ARTICLE_IMAGES / slug / "hero.png")
+            if not Path(hero_path).exists():
+                hero_jpg = str(HFN_ARTICLE_IMAGES / slug / "hero.jpg")
+                if Path(hero_jpg).exists():
+                    hero_path = hero_jpg
+
+            # Guard: don't build a useless 2-page PDF with no content slides
+            if not resolved_slides:
+                db.update_post_caption(post_id, "(No valid slides generated — check charts have images)")
+                db.update_post_status(post_id, "generated")
+                return
+
+            slides_data = {
+                "title": art["title"],
+                "section": art.get("part", ""),
+                "share_summary": share_summary,
+                "url": art.get("url", ""),
+                "slides": resolved_slides,
+            }
+
+            # Build PDF
+            pdf_path = build_carousel(slug, slides_data, hero_path)
+            total_slides = len(resolved_slides) + 2
+
+            # Generate carousel-specific caption (knows it's a carousel, no URL)
+            caption_result = gen_carousel_caption(art, total_slides)
+            fallback_caption = f"New from History Future Now: {art['title']}"
+            caption = (caption_result.get("caption") or fallback_caption) if caption_result else fallback_caption
+            hook_strategy = caption_result.get("hook_strategy", "carousel") if caption_result else "carousel"
+
+            # Update the placeholder post with real data
+            best_chart = next((c for c in charts if c.get("image_path")), None)
+            conn = db.get_db()
+            try:
+                conn.execute("""UPDATE posts SET caption=?, image_path=?, chart_id=?,
+                               hook_strategy=?, status='generated', article_context=?,
+                               article_url=?
+                               WHERE id=?""",
+                             (caption, str(pdf_path), best_chart["id"] if best_chart else None,
+                              hook_strategy, f"Carousel: {total_slides} slides",
+                              art.get("url", ""), post_id))
+                conn.commit()
+            finally:
+                conn.close()
+            print(f"  ✓ Carousel ready: {total_slides} slides, post #{post_id}")
+        except Exception as ex:
+            print(f"  [!] Carousel generation error: {ex}")
+            try:
+                db.update_post_caption(post_id, f"(Carousel generation failed: {str(ex)[:100]})")
+                db.update_post_status(post_id, "generated")  # so polling JS detects completion
+            except Exception:
+                pass
+        finally:
+            _carousel_generating.discard(slug)
+
+    t = threading.Thread(target=_generate_carousel_bg, args=(slug, article["id"], pid), daemon=True)
+    t.start()
+
+    return jsonify({"ok": True, "msg": "Carousel generating in background — check Review tab shortly.", "post_id": pid})
+
+
+@app.route("/carousel_preview/<path:slug>")
+def carousel_preview(slug):
+    """Serve carousel PDF for preview."""
+    import re as _re
+    if not _re.match(r'^[a-z0-9][a-z0-9-]*$', slug):
+        abort(400)
+    pdf_path = HFN_ARTICLE_IMAGES / slug / "carousel.pdf"
+    resolved = pdf_path.resolve()
+    if not str(resolved).startswith(str(HFN_ARTICLE_IMAGES.resolve())):
+        abort(403)
+    if not resolved.exists():
+        abort(404)
+    return send_file(str(resolved), mimetype="application/pdf")
+
 
 
 # ── Article Studio APIs ──
@@ -5615,9 +5883,12 @@ def _start_auto_poster():
             if li_remaining <= 0:
                 log(f"Skipping #{p['id']} LinkedIn — daily limit reached"); break
             try:
-                from poster import post_to_linkedin
-                text = _build_post_text(p["caption"], p.get("article_url") or p.get("article_url_joined"), post_id=p["id"], platform="linkedin")
-                ok, err = post_to_linkedin(text, p.get("image_path"))
+                from poster import post_to_linkedin, post_carousel_to_linkedin
+                text = _build_post_text(p["caption"], p.get("article_url") or p.get("article_url_joined"), post_id=p["id"], platform="linkedin", post_type=p.get("post_type"))
+                if p.get("post_type") == "carousel":
+                    ok, err = post_carousel_to_linkedin(text, p.get("image_path"))
+                else:
+                    ok, err = post_to_linkedin(text, p.get("image_path"))
                 if ok:
                     db.clear_post_error(p["id"])
                     db.update_post_status(p["id"],"posted"); db.log_post(p["platform"],p["id"])
@@ -5639,7 +5910,7 @@ def _start_auto_poster():
         for p in x_posts:
             if x_remaining <= 0:
                 log(f"Skipping #{p['id']} X — daily limit reached"); break
-            x_batch.append((p, _build_post_text(p["caption"], p.get("article_url") or p.get("article_url_joined"), post_id=p["id"], platform="x")))
+            x_batch.append((p, _build_post_text(p["caption"], p.get("article_url") or p.get("article_url_joined"), post_id=p["id"], platform="x", post_type=p.get("post_type"))))
             x_remaining -= 1
         if x_batch:
             try:
@@ -5664,9 +5935,12 @@ def _start_auto_poster():
             retries = db.get_retry_candidates(plat)
             for rp in retries[:2]:
                 try:
-                    from poster import post_to_linkedin, post_to_x
-                    text = _build_post_text(rp["caption"], rp.get("article_url") or rp.get("article_url_joined"), post_id=rp["id"], platform=plat)
-                    ok, err = (post_to_x if plat == "x" else post_to_linkedin)(text, rp.get("image_path"))
+                    from poster import post_to_linkedin, post_to_x, post_carousel_to_linkedin
+                    text = _build_post_text(rp["caption"], rp.get("article_url") or rp.get("article_url_joined"), post_id=rp["id"], platform=plat, post_type=rp.get("post_type"))
+                    if rp.get("post_type") == "carousel" and plat == "linkedin":
+                        ok, err = post_carousel_to_linkedin(text, rp.get("image_path"))
+                    else:
+                        ok, err = (post_to_x if plat == "x" else post_to_linkedin)(text, rp.get("image_path"))
                     if ok:
                         db.clear_post_error(rp["id"])
                         db.update_post_status(rp["id"], "posted"); db.log_post(plat, rp["id"])
