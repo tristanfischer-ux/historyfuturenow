@@ -658,14 +658,14 @@ AVAILABLE CHARTS (with images):
 INSTRUCTIONS:
 1. Extract 4-6 key insights from the article. Each MUST include a specific number, date, or historical fact.
 2. Select 1-3 charts that best support your insights (by chart ID). Only pick charts that have images.
-3. Write headings (max 8 words each) and body text (max 40 words per slide).
+3. Write headings (max 8 words each) and body text (60-80 words per slide — enough to fill a portrait slide).
 4. Include at least one historical parallel or surprising comparison.
 5. Match HFN voice: British English, confident, specific, no AI filler.
 6. Order slides for narrative flow — each should build on the previous.
 7. Total content slides: 5-8 (mix of insights and charts).
 
 Return JSON array. Two types:
-- Insight: {{"type": "insight", "heading": "Short punchy heading", "body": "1-2 sentence insight with a specific number or date."}}
+- Insight: {{"type": "insight", "heading": "Short punchy heading", "body": "2-3 sentences. Include a specific number, date, or historical fact. Give enough context that the slide stands alone — each insight should be worth sharing on its own."}}
 - Chart: {{"type": "chart", "chart_id": <id>, "context": "One sentence explaining the 'so what' of this chart."}}
 
 JSON array only, no markdown fences."""

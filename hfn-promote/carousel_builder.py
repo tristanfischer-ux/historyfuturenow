@@ -95,20 +95,20 @@ def _title_slide(pdf, title, section, hero_path, total_slides):
     pdf.set_fill_color(*DARK)
     pdf.rect(0, dark_zone_y, W_MM, dark_zone_h, style="F")
 
-    # Section label in accent
-    text_start_y = dark_zone_y + 8
+    # Section label in accent — larger so it's visible
+    text_start_y = dark_zone_y + 10
     if section:
         _set_color(pdf, ACCENT)
-        pdf.set_font("SourceSans", size=9)
+        pdf.set_font("SourceSans", size=11)
         pdf.set_xy(MARGIN, text_start_y)
         pdf.cell(CONTENT_W, 5, section.upper(), align="L")
-        text_start_y = pdf.get_y() + 7
+        text_start_y = pdf.get_y() + 8
 
-    # Title in white
+    # Title in white — large enough to read on mobile
     _set_color(pdf, WHITE)
-    pdf.set_font("Playfair", size=22)
+    pdf.set_font("Playfair", size=24)
     pdf.set_xy(MARGIN, text_start_y)
-    pdf.multi_cell(CONTENT_W, 10, title, align="L")
+    pdf.multi_cell(CONTENT_W, 11, title, align="L")
 
     # Wordmark + dots
     _draw_wordmark(pdf, WORDMARK_Y)
@@ -116,52 +116,46 @@ def _title_slide(pdf, title, section, hero_path, total_slides):
 
 
 def _insight_slide(pdf, heading, body, slide_num, total_slides):
-    """Insight slide: vertically centred content on warm card bg."""
+    """Insight slide: large text filling the slide. Content should dominate, not whitespace."""
     pdf.add_page()
 
     # Background
     pdf.set_fill_color(*CARD)
     pdf.rect(0, 0, W_MM, H_MM, style="F")
 
-    # Accent stripe at top
+    # Accent bar left edge (vertical, like a pull-quote indicator — stops above wordmark)
     pdf.set_fill_color(*ACCENT)
-    pdf.rect(MARGIN, 0, CONTENT_W, 3, style="F")
+    pdf.rect(MARGIN, 0, 3, WORDMARK_Y - 4, style="F")
 
-    # Measure content height to vertically centre it
-    heading_line_h = 11
-    body_line_h = 7.5
-    gap = 10
+    # Slide number in accent at top-right
+    _set_color(pdf, DIM)
+    pdf.set_font("SourceSans", size=9)
+    pdf.set_xy(MARGIN, 12)
+    pdf.cell(CONTENT_W, 5, f"{slide_num + 1}/{total_slides}", align="R")
 
-    # Estimate heights (chars per line * line height)
-    pdf.set_font("Playfair", size=22)
-    heading_lines = max(1, len(heading) / (CONTENT_W / 4.5))  # rough chars-per-line
-    heading_h = heading_lines * heading_line_h
+    # Heading — large, starting at a fixed position that gives good visual weight
+    heading_start_y = 35
+    heading_size = 28
+    heading_line_h = 13
+    body_size = 16
+    body_line_h = 8.5
+    gap = 14
+    text_x = MARGIN + 8  # indent past accent bar
+    text_w = CONTENT_W - 8
 
-    pdf.set_font("SourceSans", size=14)
-    body_lines = max(1, len(body) / (CONTENT_W / 3.2))
-    body_h = body_lines * body_line_h
-
-    total_content_h = heading_h + gap + body_h
-    usable_h = H_MM - BOTTOM_RESERVED - 6  # 6mm top stripe area
-    start_y = 6 + (usable_h - total_content_h) / 2
-    start_y = max(20, start_y)  # don't overlap the stripe
-
-    # Heading
     _set_color(pdf, TEXT)
-    pdf.set_font("Playfair", size=22)
-    pdf.set_xy(MARGIN, start_y)
-    pdf.multi_cell(CONTENT_W, heading_line_h, heading, align="L")
+    pdf.set_font("Playfair", size=heading_size)
+    pdf.set_xy(text_x, heading_start_y)
+    pdf.multi_cell(text_w, heading_line_h, heading, align="L")
 
-    # Body — clamp to avoid overflow into bottom zone
+    # Body — larger text so content fills the slide
     body_y = pdf.get_y() + gap
     max_body_y = H_MM - BOTTOM_RESERVED - 4
     if body_y < max_body_y:
         _set_color(pdf, TEXT)
-        pdf.set_font("SourceSans", size=14)
-        pdf.set_xy(MARGIN, body_y)
-        pdf.multi_cell(CONTENT_W, body_line_h, body, align="L")
-        # If text overflowed past bottom zone, it's already rendered but dots will overlay
-        # This is acceptable — the prompt enforces max 40 words which fits in practice
+        pdf.set_font("SourceSans", size=body_size)
+        pdf.set_xy(text_x, body_y)
+        pdf.multi_cell(text_w, body_line_h, body, align="L")
 
     # Wordmark + dots
     _draw_wordmark(pdf, WORDMARK_Y, color=DIM)
@@ -179,52 +173,41 @@ def _get_image_aspect(path):
 
 
 def _chart_slide(pdf, chart_path, title, context, source, slide_num, total_slides):
-    """Chart slide: adaptive chart image + title + context. No duplicate source."""
+    """Chart slide: chart image fills most of the slide + 'so what' context below."""
     pdf.add_page()
 
     # White background
     pdf.set_fill_color(*WHITE)
     pdf.rect(0, 0, W_MM, H_MM, style="F")
 
-    # Chart title in accent colour
-    _set_color(pdf, ACCENT)
-    pdf.set_font("Playfair", size=14)
-    pdf.set_xy(MARGIN, 12)
-    pdf.multi_cell(CONTENT_W, 7, title, align="L")
-
-    title_bottom = pdf.get_y() + 4
-
-    # Adaptive chart sizing based on actual image aspect ratio
-    available_h = H_MM - title_bottom - BOTTOM_RESERVED - 30  # 30mm for context below
+    # Chart image — starts near top, fills as much width as possible
+    # No separate title — the chart PNG already contains its own title
+    chart_top = 8
+    context_reserve = 35  # mm for context text below chart
+    available_h = H_MM - chart_top - BOTTOM_RESERVED - context_reserve
     chart_w = CONTENT_W
 
+    chart_h = 0
     if chart_path and Path(chart_path).exists():
         aspect = _get_image_aspect(chart_path)
-        # Size to fit: constrain by width, then check height
         chart_h_from_w = chart_w / aspect
         chart_h = min(chart_h_from_w, available_h)
-        # If height-constrained, shrink width proportionally
         if chart_h < chart_h_from_w:
             chart_w = chart_h * aspect
-        # Centre horizontally if narrower than content width
         chart_x = MARGIN + (CONTENT_W - chart_w) / 2
         try:
-            pdf.image(str(chart_path), x=chart_x, y=title_bottom,
+            pdf.image(str(chart_path), x=chart_x, y=chart_top,
                       w=chart_w, h=chart_h)
         except Exception:
             chart_h = 0
-    else:
-        chart_h = 0
 
-    # "So what" context below chart
-    context_y = title_bottom + chart_h + 6
-    if context_y < H_MM - BOTTOM_RESERVED - 20:
+    # "So what" context below chart — this is the carousel's value-add
+    context_y = chart_top + chart_h + 8
+    if context and context_y < H_MM - BOTTOM_RESERVED - 10:
         _set_color(pdf, TEXT)
-        pdf.set_font("SourceSans", size=11)
+        pdf.set_font("SourceSans", size=13)
         pdf.set_xy(MARGIN, context_y)
-        pdf.multi_cell(CONTENT_W, 6, context, align="L")
-
-    # Source citation omitted — already visible inside the chart PNG itself
+        pdf.multi_cell(CONTENT_W, 7, context, align="L")
 
     _draw_wordmark(pdf, WORDMARK_Y, color=DIM)
     _draw_dots(pdf, slide_num, total_slides)
@@ -262,17 +245,11 @@ def _cta_slide(pdf, title, url, share_summary, total_slides):
         pdf.set_xy(MARGIN, pdf.get_y() + 10)
         pdf.multi_cell(CONTENT_W, 6, share_summary, align="C")
 
-    # URL in accent colour — show domain + first path segment for findability
-    if url:
-        clean = url.replace("https://", "").replace("http://", "").rstrip("/")
-        parts = clean.split("/")
-        display_url = "/".join(parts[:3]) if len(parts) > 1 else parts[0]
-    else:
-        display_url = "historyfuturenow.com"
+    # Domain in accent — just the site name, not the full path
     _set_color(pdf, ACCENT)
-    pdf.set_font("SourceSans", size=10)
+    pdf.set_font("SourceSans", size=11)
     pdf.set_xy(MARGIN, pdf.get_y() + 12)
-    pdf.cell(CONTENT_W, 6, display_url, align="C")
+    pdf.cell(CONTENT_W, 6, "historyfuturenow.com", align="C")
 
     # Wordmark
     _draw_wordmark(pdf, WORDMARK_Y)
