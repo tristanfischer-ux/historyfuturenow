@@ -716,7 +716,7 @@ RULES:
 2. DO NOT include any URL. The article link is on the final slide.
 3. Open with one provocative sentence that makes someone stop scrolling.
 4. Reference what's IN the carousel: "Swipe through..." or "X slides on..." or "The data tells a story..."
-5. Keep it under 500 characters. 2-3 short paragraphs.
+5. Keep it under 700 characters. 2-3 short paragraphs.
 6. End with 2-3 hashtags.
 7. British English. Confident, specific, no AI filler.
 

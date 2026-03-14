@@ -831,6 +831,7 @@ def get_generated_posts():
     rows = _dicts(conn.execute("""
         SELECT p.*, c.title as chart_title, c.description as chart_desc, c.image_path as chart_image,
                a.title as article_title, a.url as article_url_joined, a.part as article_part,
+               a.slug as article_slug,
                n.title as news_title, n.hook
         FROM posts p
         LEFT JOIN charts c ON p.chart_id = c.id
@@ -848,6 +849,7 @@ def get_queued_posts():
     rows = _dicts(conn.execute("""
         SELECT p.*, c.title as chart_title, c.description as chart_desc, c.image_path as chart_image,
                a.title as article_title, a.url as article_url_joined, a.part as article_part,
+               a.slug as article_slug,
                n.title as news_title, n.hook
         FROM posts p
         LEFT JOIN charts c ON p.chart_id = c.id

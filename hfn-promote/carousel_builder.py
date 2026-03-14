@@ -262,8 +262,13 @@ def _cta_slide(pdf, title, url, share_summary, total_slides):
         pdf.set_xy(MARGIN, pdf.get_y() + 10)
         pdf.multi_cell(CONTENT_W, 6, share_summary, align="C")
 
-    # URL in accent colour — show clean domain, not full path
-    display_url = url.replace("https://", "").replace("http://", "").split("/")[0] if url else "historyfuturenow.com"
+    # URL in accent colour — show domain + first path segment for findability
+    if url:
+        clean = url.replace("https://", "").replace("http://", "").rstrip("/")
+        parts = clean.split("/")
+        display_url = "/".join(parts[:3]) if len(parts) > 1 else parts[0]
+    else:
+        display_url = "historyfuturenow.com"
     _set_color(pdf, ACCENT)
     pdf.set_font("SourceSans", size=10)
     pdf.set_xy(MARGIN, pdf.get_y() + 12)

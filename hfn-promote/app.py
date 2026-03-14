@@ -1786,9 +1786,13 @@ async function generateCarousel(slug,btn){
             const sd=await sr.json();
             if(sd.status==='generated'){
               clearInterval(poll);
-              toast('Carousel ready — switching to Review',3000,true);
+              if(sd.caption&&sd.caption.startsWith('(')){
+                toast(sd.caption.slice(1,-1)||'Carousel generation failed',4000);
+              }else{
+                toast('Carousel ready — switching to Review',3000,true);
+                document.querySelector('.tab[data-tab="review"]')?.click();
+              }
               if(btn){btn.textContent='📑 Carousel';btn.disabled=false;}
-              document.querySelector('.tab[data-tab="review"]')?.click();
             }else if(sd.status!=='draft'){
               clearInterval(poll);
               if(btn){btn.textContent='📑 Carousel';btn.disabled=false;}
@@ -4679,6 +4683,11 @@ def api_carousel():
         article_url=article.get("url", ""),
         image_path="",
         post_type="carousel", hook_strategy="carousel")
+    # Set scheduled_at so the post appears in Review tab (build_day_groups skips NULL scheduled_at)
+    conn2 = db.get_db()
+    conn2.execute("UPDATE posts SET scheduled_at=datetime('now') WHERE id=?", (pid,))
+    conn2.commit()
+    conn2.close()
 
     import threading
     _carousel_generating.add(slug)
