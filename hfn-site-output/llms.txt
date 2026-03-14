@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 83
+Total articles: 84
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -14,7 +14,7 @@ Total articles: 83
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (17 articles)
+### Jobs & Economy (18 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
@@ -135,6 +135,12 @@ Total articles: 83
 - Published: 2022-04-01
 - Reading time: 12 min
 - For centuries, war has been a brutal constant in human affairs, with nations locked in cycles of conquest and revenge that have left countless lives shattered. Yet even from the ashes of the most deva
+
+### From Basement Servers to Billion Users: What Software Learned That Hardware Hasn't [4 charts]
+- URL: https://www.historyfuturenow.com/articles/from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt
+- Section: Jobs & Economy
+- Reading time: 11 min
+- In 2000, launching a technology company meant spending a fortune on servers before writing a line of code. By 2014, a small team could serve hundreds of millions of users from rented infrastructure. S
 
 ### Green Is Not Red, But Blue: Environmentalism And The Mystery Of Right Wing Opposition [2 charts]
 - URL: https://www.historyfuturenow.com/articles/green-is-not-red-but-blue-environmentalism-and-the-mystery-of-right-wing-opposition
