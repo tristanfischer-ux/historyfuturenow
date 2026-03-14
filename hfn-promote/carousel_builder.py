@@ -133,13 +133,13 @@ def _insight_slide(pdf, heading, body, slide_num, total_slides):
     pdf.set_xy(MARGIN, 12)
     pdf.cell(CONTENT_W, 5, f"{slide_num + 1}/{total_slides}", align="R")
 
-    # Heading — large, starting at a fixed position that gives good visual weight
-    heading_start_y = 35
-    heading_size = 28
-    heading_line_h = 13
-    body_size = 16
-    body_line_h = 8.5
-    gap = 14
+    # Heading — large, high up so content fills the portrait slide
+    heading_start_y = 25
+    heading_size = 32
+    heading_line_h = 15
+    body_size = 20
+    body_line_h = 10.5
+    gap = 12
     text_x = MARGIN + 8  # indent past accent bar
     text_w = CONTENT_W - 8
 
@@ -148,14 +148,32 @@ def _insight_slide(pdf, heading, body, slide_num, total_slides):
     pdf.set_xy(text_x, heading_start_y)
     pdf.multi_cell(text_w, heading_line_h, heading, align="L")
 
-    # Body — larger text so content fills the slide
+    # Body — large text, clipped to avoid overflowing into wordmark zone
     body_y = pdf.get_y() + gap
-    max_body_y = H_MM - BOTTOM_RESERVED - 4
-    if body_y < max_body_y:
+    max_body_bottom = H_MM - BOTTOM_RESERVED - 6
+    if body_y < max_body_bottom:
         _set_color(pdf, TEXT)
         pdf.set_font("SourceSans", size=body_size)
+        # Render with height limit: split into words, add line by line
+        words = body.split()
+        line = ""
         pdf.set_xy(text_x, body_y)
-        pdf.multi_cell(text_w, body_line_h, body, align="L")
+        for word in words:
+            test = f"{line} {word}".strip() if line else word
+            if pdf.get_string_width(test) > text_w:
+                # Flush current line
+                pdf.cell(text_w, body_line_h, line, align="L")
+                pdf.ln(body_line_h)
+                if pdf.get_y() + body_line_h > max_body_bottom:
+                    break  # stop before overflow
+                pdf.set_x(text_x)
+                line = word
+            else:
+                line = test
+        else:
+            # Print remaining text
+            if line and pdf.get_y() + body_line_h <= max_body_bottom:
+                pdf.cell(text_w, body_line_h, line, align="L")
 
     # Wordmark + dots
     _draw_wordmark(pdf, WORDMARK_Y, color=DIM)

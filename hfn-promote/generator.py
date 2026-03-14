@@ -658,7 +658,7 @@ AVAILABLE CHARTS (with images):
 INSTRUCTIONS:
 1. Extract 4-6 key insights from the article. Each MUST include a specific number, date, or historical fact.
 2. Select 1-3 charts that best support your insights (by chart ID). Only pick charts that have images.
-3. Write headings (max 8 words each) and body text (60-80 words per slide — enough to fill a portrait slide).
+3. Write headings (max 8 words each) and body text (60-75 words per slide — these are large portrait slides with big text).
 4. Include at least one historical parallel or surprising comparison.
 5. Match HFN voice: British English, confident, specific, no AI filler.
 6. Order slides for narrative flow — each should build on the previous.
