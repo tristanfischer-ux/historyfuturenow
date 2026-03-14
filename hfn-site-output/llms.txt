@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 84
+Total articles: 83
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -14,7 +14,7 @@ Total articles: 84
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (18 articles)
+### Jobs & Economy (17 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
@@ -286,12 +286,6 @@ Total articles: 84
 - Published: 2026-02-19
 - Reading time: 15 min
 - Trust in government, media, science, and the judiciary is at historic lows across the Western world. This is not a passing mood. It is the rational response of electorates who have watched their democ
-
-### The Fifteen-Minute Factory: Why Proximity Still Wins [4 charts]
-- URL: https://www.historyfuturenow.com/articles/the-fifteen-minute-factory-why-proximity-still-wins
-- Section: Jobs & Economy
-- Reading time: 13 min
-- Innovation has always clustered where the distance between thinking and making approaches zero. From Florence's silk workshops to Shenzhen's electronics bazaars, the pattern is invariant: compress the
 
 ### The Gates of Nations: How Every Civilisation in History Controlled Immigration — Until the West Stopped [5 charts]
 - URL: https://www.historyfuturenow.com/articles/the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped

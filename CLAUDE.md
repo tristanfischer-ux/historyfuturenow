@@ -26,6 +26,12 @@
 - Target 1,500-3,000 words — no topic needs 4,000
 - Test: Could reader explain core argument + historical fact to a friend at dinner?
 
+### Anti-AI Pattern Rules (CRITICAL)
+- No bold on transition phrases — use bold sparingly, not as systematic signposting
+- Never tell the reader you're about to show them something ("Here is the part that...", "Consider the following") — just show them
+- Vary paragraph length deliberately — uniform ~150-word paragraphs are a dead giveaway
+- Sentence fragment emphasis at most once per section, not once per paragraph
+
 ---
 
 ## Article Creation Workflow (strict order)

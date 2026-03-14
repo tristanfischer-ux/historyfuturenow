@@ -394,6 +394,7 @@ HTML = r"""<!DOCTYPE html>
 .lib-list{flex:1;overflow-y:auto;padding:6px}
 .lib-item{padding:8px 10px;border-radius:7px;cursor:pointer;margin-bottom:3px;transition:all .1s}
 .lib-item:hover{background:#f5f4f2}.lib-item.sel{background:#fef7f6;border-left:3px solid var(--accent)}
+.lib-item.lib-archived{opacity:.55}.lib-item.lib-deleted{opacity:.35;text-decoration:line-through}
 .lib-item-title{font-size:.78rem;font-weight:600;line-height:1.35;margin-bottom:2px}
 .lib-item-meta{font-size:.62rem;color:var(--dim);display:flex;gap:8px;align-items:center}
 .lib-part{background:#ede9fe;color:#5b21b6;padding:1px 5px;border-radius:3px;font-weight:600;font-size:.58rem}
@@ -1078,11 +1079,12 @@ body.dark .sr-fields input,body.dark .sr-fields textarea{background:var(--card);
         <option value="priority">Priority</option>
       </select>
       <button class="btn sm" onclick="toggleHeatmap()" id="heatmap-btn" style="font-size:.6rem">🔥 Heatmap</button>
+      <label style="font-size:.6rem;display:flex;align-items:center;gap:3px;cursor:pointer;white-space:nowrap"><input type="checkbox" id="lib-show-hidden" onchange="filterLibrary()" style="margin:0"> Hidden</label>
     </div>
     <div class="lib-list" id="lib-list">
       {% for a in articles_with_charts %}
-      <div class="lib-item" data-slug="{{a.slug}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}" data-issue="{{a.issue_num}}" data-genre="{{(a.part or '')|lower}}" data-views7d="{{a.views_7d or 0}}" data-views30d="{{a.views_30d or 0}}" data-clicks30d="{{a.total_clicks_30d or 0}}" data-clicksper="{{a.clicks_per_post or 0}}" data-lifecycle="{{a.lifecycle_stage or 'unknown'}}">
-        <div class="lib-item-title">{{a.title}}</div>
+      <div class="lib-item{% if a.status == 'archived' %} lib-archived{% endif %}{% if a.status == 'deleted' %} lib-deleted{% endif %}" data-slug="{{a.slug}}" data-status="{{a.status or 'published'}}" onclick="selectArticle('{{a.slug}}')" data-search="{{a.title|lower}} {{a.slug|lower}} {{(a.excerpt or '')|lower}}" data-issue="{{a.issue_num}}" data-genre="{{(a.part or '')|lower}}" data-views7d="{{a.views_7d or 0}}" data-views30d="{{a.views_30d or 0}}" data-clicks30d="{{a.total_clicks_30d or 0}}" data-clicksper="{{a.clicks_per_post or 0}}" data-lifecycle="{{a.lifecycle_stage or 'unknown'}}">
+        <div class="lib-item-title">{% if a.status == 'archived' %}📦 {% endif %}{% if a.status == 'deleted' %}🗑 {% endif %}{{a.title}}</div>
         <div class="lib-item-meta">
           {% if a.part %}<span class="lib-part">{{a.part}}</span>{% endif %}
           {% if a.lifecycle_stage and a.lifecycle_stage != 'unknown' %}<span class="lib-lifecycle lib-lc-{{a.lifecycle_stage}}">{{a.lifecycle_stage}}</span>{% endif %}
@@ -1666,19 +1668,22 @@ function filterLibrary(){
   const q=(document.getElementById('lib-search').value||'').toLowerCase();
   const issue=document.getElementById('lib-filter-issue').value;
   const genre=document.getElementById('lib-filter-genre').value;
+  const showHidden=document.getElementById('lib-show-hidden')?.checked||false;
   let shown=0;
   document.querySelectorAll('.lib-item').forEach(el=>{
     const matchText=!q||el.dataset.search.includes(q);
     const matchIssue=!issue||el.dataset.issue===issue;
     const matchGenre=!genre||el.dataset.genre===genre;
-    const vis=matchText&&matchIssue&&matchGenre;
+    const status=el.dataset.status||'published';
+    const matchStatus=showHidden||(status!=='deleted'&&status!=='archived');
+    const vis=matchText&&matchIssue&&matchGenre&&matchStatus;
     el.style.display=vis?'':'none';
     if(vis)shown++;
   });
   // Update stats count
   const total=document.querySelectorAll('.lib-item').length;
   const statsEl=document.querySelector('.lib-stats span');
-  if(statsEl&&(q||issue||genre)){
+  if(statsEl&&(q||issue||genre||!showHidden)){
     statsEl.textContent=shown+' of '+total+' articles';
   }
 }
@@ -1701,6 +1706,9 @@ async function selectArticle(slug){
       <div style="font-size:.7rem;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:10px">
         <span>${d.charts.length} chart(s) · ${d.charts.filter(c=>c.image_path).length} with images · 📤 ${postCount} post(s)${issueNum?' · Issue '+issueNum:''}</span>
         ${d.charts.some(c=>c.image_path)?'<select id="lib-post-type" style="padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:.68rem;font-family:inherit"><option value="short">Short</option><option value="long">Long</option></select><button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button>':''}
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px">
+        ${(d.article.status||'published')==='published'?'<button onclick="archiveArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #d97706;background:#fffbeb;color:#92400e;border-radius:5px;cursor:pointer;font-family:inherit">📦 Archive</button><button onclick="softDeleteArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #dc2626;background:#fef2f2;color:#991b1b;border-radius:5px;cursor:pointer;font-family:inherit">🗑 Delete</button>':'<button onclick="restoreArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #16a34a;background:#f0fdf4;color:#166534;border-radius:5px;cursor:pointer;font-family:inherit">↩ Restore</button><span style="font-size:.65rem;color:var(--dim);padding:4px">'+(d.article.status==='archived'?'📦 Archived':'🗑 Deleted')+'</span>'}
       </div>
     </div>`;
     if(d.analytics&&(d.analytics.views_7d||d.analytics.views_30d)){
@@ -1755,6 +1763,43 @@ async function promoteArticle(slug,chartId,btn){
     if(d.ok){toast(d.msg,4000,true);if(btn){btn.textContent='✓ Done';}setTimeout(()=>{document.querySelector('.tab[data-tab="review"]')?.click()},1500);}
     else{toast(d.msg||'Failed',4000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
   }catch(e){toast('Network error',3000);if(btn){btn.disabled=false;btn.textContent='⚡ Promote';}}
+}
+
+// ── Archive / Delete / Restore ──
+function _updateSidebarStatus(slug,status){
+  const el=document.querySelector(`.lib-item[data-slug="${slug}"]`);
+  if(!el)return;
+  el.dataset.status=status;
+  el.classList.remove('lib-archived','lib-deleted');
+  if(status==='archived')el.classList.add('lib-archived');
+  if(status==='deleted')el.classList.add('lib-deleted');
+  const titleEl=el.querySelector('.lib-item-title');
+  if(titleEl){
+    let t=titleEl.textContent.replace(/^[📦🗑]\s*/,'');
+    if(status==='archived')t='📦 '+t;
+    if(status==='deleted')t='🗑 '+t;
+    titleEl.textContent=t;
+  }
+}
+async function archiveArticle(slug){
+  if(!confirm('Archive this article? It will be hidden from the public site but remain in the Library.'))return;
+  const r=await fetch('/api/library/'+encodeURIComponent(slug)+'/archive',{method:'POST'});
+  const d=await r.json();
+  if(d.ok){toast(d.msg,3000,true);_updateSidebarStatus(slug,'archived');selectArticle(slug);filterLibrary();}
+  else{toast(d.msg||'Failed',3000);}
+}
+async function softDeleteArticle(slug){
+  if(!confirm('Delete this article from the Library and public site? The essay file will be kept on disk. This can be undone.'))return;
+  const r=await fetch('/api/library/'+encodeURIComponent(slug)+'/delete',{method:'POST'});
+  const d=await r.json();
+  if(d.ok){toast(d.msg,3000,true);_updateSidebarStatus(slug,'deleted');filterLibrary();selectArticle(slug);}
+  else{toast(d.msg||'Failed',3000);}
+}
+async function restoreArticle(slug){
+  const r=await fetch('/api/library/'+encodeURIComponent(slug)+'/restore',{method:'POST'});
+  const d=await r.json();
+  if(d.ok){toast(d.msg,3000,true);_updateSidebarStatus(slug,'published');selectArticle(slug);filterLibrary();}
+  else{toast(d.msg||'Failed',3000);}
 }
 
 // ── Regenerate caption ──
@@ -2012,6 +2057,9 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='p'&&rqFocusIdx>=0&&cards[rqFocusIdx]){const b=cards[rqFocusIdx].querySelector('.rq-actions .btn.bx,.rq-actions .btn.bli');if(b)b.click()}
 });
 function updateRqFocus(cards){cards.forEach(c=>c.classList.remove('rq-focused'));if(rqFocusIdx>=0&&cards[rqFocusIdx]){cards[rqFocusIdx].classList.add('rq-focused');cards[rqFocusIdx].scrollIntoView({block:'nearest',behavior:'smooth'})}}
+
+// ── Hide archived/deleted on load ──
+document.addEventListener('DOMContentLoaded',()=>{filterLibrary();});
 
 // ── Drag reorder timeline (Item 8) ──
 document.addEventListener('DOMContentLoaded',()=>{
@@ -3848,7 +3896,7 @@ def dashboard():
         cd["queue_slots"] = qslots
 
     # Library data
-    articles_with_charts = db.get_articles_with_chart_counts()
+    articles_with_charts = db.get_articles_with_chart_counts(include_hidden=True)
     total_charts = sum(a.get("chart_count", 0) for a in articles_with_charts)
     total_images = sum(a.get("image_count", 0) for a in articles_with_charts)
 
@@ -4379,6 +4427,72 @@ def api_library(slug):
     lifecycle = db.get_article_lifecycle(article["id"])
     return jsonify({"article": article, "charts": charts, "analytics": analytics,
                      "performance": performance, "lifecycle": lifecycle})
+
+def _update_review_slugs(slug, action="add"):
+    """Add or remove a slug from review_slugs.json. action='add' or 'remove'."""
+    review_file = Path(HFN_SOURCE_DIR) / "review_slugs.json"
+    slugs = set()
+    if review_file.exists():
+        try:
+            slugs = set(json.loads(review_file.read_text()))
+        except (json.JSONDecodeError, TypeError):
+            pass
+    if action == "add":
+        slugs.add(slug)
+    else:
+        slugs.discard(slug)
+    review_file.write_text(json.dumps(sorted(slugs), indent=2))
+
+def _rebuild_and_deploy_bg(slug, action_label):
+    """Rebuild site and deploy in background thread."""
+    import threading, subprocess, os
+    def _run():
+        env = os.environ.copy()
+        homebrew = "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin"
+        env["PATH"] = homebrew + ":" + env.get("PATH", "/usr/bin:/bin")
+        root_dir = str(Path(HFN_SOURCE_DIR).parent)
+        build_dir = str(HFN_SOURCE_DIR)
+        python = sys.executable
+        # Build
+        subprocess.run([python, str(Path(build_dir) / "build.py")],
+                       cwd=build_dir, capture_output=True, text=True, timeout=300)
+        # Deploy
+        deploy_script = Path(root_dir) / "scripts" / "deploy.sh"
+        if deploy_script.exists():
+            subprocess.run(["bash", str(deploy_script), "--skip-build",
+                            f"feat: {action_label} {slug}"],
+                           cwd=root_dir, env=env, capture_output=True, text=True, timeout=600)
+    threading.Thread(target=_run, daemon=True).start()
+
+@app.route("/api/library/<path:slug>/archive", methods=["POST"])
+def api_library_archive(slug):
+    article = db.get_article_by_slug(slug)
+    if not article:
+        return jsonify({"ok": False, "msg": "Article not found"}), 404
+    db.archive_article(slug)
+    _update_review_slugs(slug, "add")
+    _rebuild_and_deploy_bg(slug, "archive")
+    return jsonify({"ok": True, "msg": "Article archived — site rebuilding in background"})
+
+@app.route("/api/library/<path:slug>/delete", methods=["POST"])
+def api_library_delete(slug):
+    article = db.get_article_by_slug(slug)
+    if not article:
+        return jsonify({"ok": False, "msg": "Article not found"}), 404
+    db.soft_delete_article(slug)
+    _update_review_slugs(slug, "add")
+    _rebuild_and_deploy_bg(slug, "delete")
+    return jsonify({"ok": True, "msg": "Article soft-deleted — site rebuilding in background"})
+
+@app.route("/api/library/<path:slug>/restore", methods=["POST"])
+def api_library_restore(slug):
+    article = db.get_article_by_slug(slug)
+    if not article:
+        return jsonify({"ok": False, "msg": "Article not found"}), 404
+    db.restore_article(slug)
+    _update_review_slugs(slug, "remove")
+    _rebuild_and_deploy_bg(slug, "restore")
+    return jsonify({"ok": True, "msg": "Article restored — site rebuilding in background"})
 
 # Curate APIs
 @app.route("/api/edit", methods=["POST"])

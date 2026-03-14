@@ -265,6 +265,18 @@ def init_db():
             conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} REAL DEFAULT {default}")
     # Migrate legacy 'audio' stage to 'images' (audio decoupled from pipeline)
     conn.execute("UPDATE article_drafts SET stage='images' WHERE stage='audio'")
+    # Article archive/soft-delete columns
+    for col, tbl, default in [("status", "articles", "'published'"),
+                               ("archived_at", "articles", "NULL")]:
+        try:
+            conn.execute(f"SELECT {col} FROM {tbl} LIMIT 1")
+        except sqlite3.OperationalError:
+            if "NULL" in default:
+                conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT {default}")
+            else:
+                conn.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} TEXT DEFAULT {default}")
+    # Backfill status for existing articles (one-time)
+    conn.execute("UPDATE articles SET status='published' WHERE status IS NULL OR status=''")
     # Backfill published_at from indexed_at for existing articles (one-time)
     conn.execute("UPDATE articles SET published_at=indexed_at WHERE published_at IS NULL OR published_at=''")
     conn.commit()
@@ -307,6 +319,24 @@ def get_article_by_slug(slug):
     row = _dict(conn.execute("SELECT * FROM articles WHERE slug=?", (slug,)).fetchone())
     conn.close()
     return row
+
+def archive_article(slug):
+    conn = get_db()
+    conn.execute("UPDATE articles SET status='archived', archived_at=datetime('now') WHERE slug=?", (slug,))
+    conn.commit()
+    conn.close()
+
+def soft_delete_article(slug):
+    conn = get_db()
+    conn.execute("UPDATE articles SET status='deleted', archived_at=datetime('now') WHERE slug=?", (slug,))
+    conn.commit()
+    conn.close()
+
+def restore_article(slug):
+    conn = get_db()
+    conn.execute("UPDATE articles SET status='published', archived_at=NULL WHERE slug=?", (slug,))
+    conn.commit()
+    conn.close()
 
 # ── Charts ──
 
@@ -637,13 +667,15 @@ def get_chart(chart_id):
     conn.close()
     return row
 
-def get_articles_with_chart_counts():
+def get_articles_with_chart_counts(include_hidden=False):
     conn = get_db()
-    rows = _dicts(conn.execute("""
+    where = "" if include_hidden else "WHERE COALESCE(a.status, 'published') != 'deleted'"
+    rows = _dicts(conn.execute(f"""
         SELECT a.*, COUNT(c.id) as chart_count,
                SUM(CASE WHEN c.image_path != '' THEN 1 ELSE 0 END) as image_count
         FROM articles a
         LEFT JOIN charts c ON c.article_slug = a.slug
+        {where}
         GROUP BY a.id ORDER BY a.part, a.title
     """).fetchall())
     conn.close()
