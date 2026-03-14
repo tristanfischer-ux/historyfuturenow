@@ -65,7 +65,7 @@ And now AI is automating the next drawboy. A junior developer with an AI coding 
 
 ## The Toll That Remains
 
-Every hardware founder knows the drawboy's experience. They simply call it Tuesday.
+Every hardware founder knows the drawboy's experience. They deal with it every day.
 
 A founder has an idea for a product — a medical device, a sensor, a piece of industrial equipment. They know what it should do. They may even know how it should work. But before they can build it — before they can test whether the idea is any good — they must first construct the infrastructure to make building possible.
 
