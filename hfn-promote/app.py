@@ -1710,7 +1710,8 @@ async function selectArticle(slug){
       <div style="font-size:.7rem;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:10px">
         <span>${d.charts.length} chart(s) · ${d.charts.filter(c=>c.image_path).length} with images · 📤 ${postCount} post(s)${issueNum?' · Issue '+issueNum:''}</span>
         ${d.charts.some(c=>c.image_path)?'<select id="lib-post-type" style="padding:4px 6px;border:1px solid var(--border);border-radius:5px;font-size:.68rem;font-family:inherit"><option value="short">Short</option><option value="long">Long</option></select><button class="lib-promote-btn" onclick="promoteArticle(\''+slug+'\',null,this)">⚡ Promote</button><button style="padding:4px 10px;font-size:.68rem;border:1px solid #0a66c2;background:#e8f0fe;color:#0a66c2;border-radius:5px;cursor:pointer;font-family:inherit;font-weight:600" onclick="generateCarousel(\''+slug+'\',this)">📑 Carousel</button>':''}
-        <button style="padding:4px 10px;font-size:.68rem;border:1px solid #0a66c2;background:#fff;color:#0a66c2;border-radius:5px;cursor:pointer;font-family:inherit" onclick="copyForLinkedIn(\''+slug+'\')">📋 Copy for LinkedIn</button>
+        <button style="padding:4px 10px;font-size:.68rem;border:1px solid #0a66c2;background:#fff;color:#0a66c2;border-radius:5px;cursor:pointer;font-family:inherit;font-weight:600" onclick="copyForLinkedIn(\''+slug+'\')">📋 Copy Article</button>\
+        <button style="padding:4px 10px;font-size:.68rem;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:5px;cursor:pointer;font-family:inherit" onclick="openArticleImages(\''+slug+'\')">🖼 Open Images</button>
       </div>
       <div style="margin-top:8px;display:flex;gap:6px">
         ${(d.article.status||'published')==='published'?'<button onclick="archiveArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #d97706;background:#fffbeb;color:#92400e;border-radius:5px;cursor:pointer;font-family:inherit">📦 Archive</button><button onclick="softDeleteArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #dc2626;background:#fef2f2;color:#991b1b;border-radius:5px;cursor:pointer;font-family:inherit">🗑 Delete</button>':'<button onclick="restoreArticle(\''+slug+'\')" style="padding:4px 10px;font-size:.68rem;border:1px solid #16a34a;background:#f0fdf4;color:#166534;border-radius:5px;cursor:pointer;font-family:inherit">↩ Restore</button><span style="font-size:.65rem;color:var(--dim);padding:4px">'+(d.article.status==='archived'?'📦 Archived':'🗑 Deleted')+'</span>'}
@@ -1811,8 +1812,16 @@ async function copyForLinkedIn(slug){
     const d=await r.json();
     if(d.ok){
       await navigator.clipboard.writeText(d.text);
-      toast('Article copied — paste into LinkedIn article editor',4000,true);
+      toast('Article copied! Paste into LinkedIn → Write article',5000,true);
     }else{toast(d.msg||'Failed to copy',4000);}
+  }catch(e){toast('Network error',3000);}
+}
+async function openArticleImages(slug){
+  try{
+    const r=await fetch('/api/open_images/'+encodeURIComponent(slug));
+    const d=await r.json();
+    if(d.ok){toast('Images folder opened in Finder',3000,true);}
+    else{toast(d.msg||'No images found',3000);}
   }catch(e){toast('Network error',3000);}
 }
 // ── Archive / Delete / Restore ──
@@ -4461,7 +4470,8 @@ def api_unqueue_post():
 
 @app.route("/api/linkedin_copy/<path:slug>")
 def api_linkedin_copy(slug):
-    """Return article text formatted for LinkedIn article editor."""
+    """Return article text formatted for LinkedIn article editor with inline chart placeholders."""
+    import re
     from generator import _get_full_article_text
     article = db.get_article_by_slug(slug)
     if not article:
@@ -4473,43 +4483,82 @@ def api_linkedin_copy(slug):
 
     title = article["title"]
     url = article.get("url", "")
-    charts = db.get_charts_for_article(slug)
+    charts = [c for c in db.get_charts_for_article(slug) if c.get("image_path")]
 
-    # Format for LinkedIn article editor
-    lines = [title, "=" * len(title), ""]
+    # Strip markdown formatting to plain text
+    def _strip_md(text):
+        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)  # [text](url) -> text
+        text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)  # **bold** -> bold
+        text = re.sub(r'\*([^*]+)\*', r'\1', text)  # *italic* -> italic
+        text = re.sub(r'`([^`]+)`', r'\1', text)  # `code` -> code
+        return text
 
+    # Build paragraphs from markdown, track where to insert charts
+    paragraphs = []
     for line in body.split("\n"):
         stripped = line.strip()
-        if stripped.startswith("## "):
-            lines.append("")
-            lines.append(stripped[3:].upper())
-            lines.append("")
-        elif stripped.startswith("### "):
-            lines.append("")
-            lines.append(stripped[4:])
-            lines.append("")
+        if not stripped:
+            paragraphs.append("")
         elif stripped.startswith("# "):
-            continue  # Skip H1 — we already have the title
+            continue  # Skip H1 — title is separate
+        elif stripped.startswith("## "):
+            paragraphs.append("")
+            paragraphs.append(stripped[3:].strip().upper())
+            paragraphs.append("")
+        elif stripped.startswith("### "):
+            paragraphs.append("")
+            paragraphs.append(stripped[4:].strip())
+            paragraphs.append("")
+        elif stripped.startswith("---"):
+            paragraphs.append("—" * 20)
+        elif stripped.startswith("> "):
+            paragraphs.append(f'"{_strip_md(stripped[2:])}"')
         else:
-            lines.append(line)
+            paragraphs.append(_strip_md(stripped))
 
-    # Insert chart placeholders
+    # Insert chart placeholders inline, distributed evenly
     if charts:
-        lines.append("")
-        lines.append("---")
-        lines.append("")
-        for c in charts:
-            if c.get("image_path"):
-                lines.append(f"[Chart: Figure {c.get('figure_num', '?')} — {c['title']}]")
-        lines.append("")
+        # Count non-empty paragraphs for positioning
+        content_paras = [i for i, p in enumerate(paragraphs) if p.strip()]
+        n_charts = len(charts)
+        for ci, chart in enumerate(charts):
+            # Position each chart at (ci+1)/(n_charts+1) through the article
+            target_idx = int(len(content_paras) * (ci + 1) / (n_charts + 1))
+            target_idx = min(target_idx, len(content_paras) - 1)
+            insert_after = content_paras[target_idx]
+            fig = chart.get("figure_num", ci + 1)
+            placeholder = f"\n📊 [INSERT IMAGE: Figure {fig} — {chart['title']}]\n"
+            paragraphs.insert(insert_after + 1 + ci, placeholder)  # +ci offsets prior inserts
 
-    # Footer
-    lines.append("---")
-    lines.append(f"Originally published on History Future Now: {url}")
+    # Assemble final text
+    lines = [title, ""]
+    lines.extend(paragraphs)
+    lines.append("")
+    lines.append("—" * 20)
+    lines.append(f"Originally published on History Future Now")
+    lines.append(url)
 
     formatted = "\n".join(lines)
 
-    return jsonify({"ok": True, "title": title, "text": formatted, "url": url})
+    # Also return the images folder path for the UI
+    from config import HFN_ARTICLE_IMAGES
+    img_dir = str(HFN_ARTICLE_IMAGES / slug)
+
+    return jsonify({"ok": True, "title": title, "text": formatted, "url": url, "images_dir": img_dir})
+
+
+@app.route("/api/open_images/<path:slug>")
+def api_open_images(slug):
+    """Open the article's image folder in Finder."""
+    import subprocess, re
+    from config import HFN_ARTICLE_IMAGES
+    if not re.match(r'^[a-z0-9][a-z0-9-]*$', slug):
+        return jsonify({"ok": False, "msg": "Invalid slug"})
+    img_dir = HFN_ARTICLE_IMAGES / slug
+    if not img_dir.exists():
+        return jsonify({"ok": False, "msg": "No images folder found"})
+    subprocess.Popen(["open", str(img_dir)])
+    return jsonify({"ok": True, "msg": "Opened in Finder"})
 
 
 @app.route("/api/library/<path:slug>")
