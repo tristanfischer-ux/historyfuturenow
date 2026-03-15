@@ -4527,7 +4527,9 @@ def api_linkedin_copy(slug):
             target_idx = min(target_idx, len(content_paras) - 1)
             insert_after = content_paras[target_idx]
             fig = chart.get("figure_num", ci + 1)
-            placeholder = f"\n📊 [INSERT IMAGE: Figure {fig} — {chart['title']}]\n"
+            img_file = Path(chart.get("image_path", "")).name if chart.get("image_path") else ""
+            file_hint = f" (file: {img_file})" if img_file else ""
+            placeholder = f"\n📊 [INSERT IMAGE: Figure {fig} — {chart['title']}{file_hint}]\n"
             paragraphs.insert(insert_after + 1 + ci, placeholder)  # +ci offsets prior inserts
 
     # Assemble final text
