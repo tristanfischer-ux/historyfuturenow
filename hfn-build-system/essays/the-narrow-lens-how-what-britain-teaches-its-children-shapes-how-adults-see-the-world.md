@@ -2,7 +2,7 @@
 title: >-
   The Narrow Lens: How What Britain Teaches Its Children Shapes How Adults
   See the World
-date: "2026-02-21"
+date: "2026-05-07"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world
 image: "/images/articles/the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world/hero.png"

@@ -1,7 +1,7 @@
 ---
 title: >-
   The Empty Throne: Why the West No Longer Believes in Its Own Institutions
-date: "2026-02-19"
+date: "2026-03-28"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions
 image: "/images/articles/the-empty-throne-why-the-west-no-longer-believes-in-its-own-institutions/hero.png"

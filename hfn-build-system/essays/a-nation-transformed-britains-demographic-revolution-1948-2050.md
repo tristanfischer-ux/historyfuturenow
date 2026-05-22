@@ -1,7 +1,7 @@
 ---
 title: >-
   A Nation Transformed: Britain's Demographic Revolution, 1948–2050
-date: "2026-02-18"
+date: "2026-03-10"
 url: >-
   https://www.historyfuturenow.com/part-4-society/a-nation-transformed-britains-demographic-revolution-1948-2050
 image: "/images/articles/a-nation-transformed-britains-demographic-revolution-1948-2050/hero.png"

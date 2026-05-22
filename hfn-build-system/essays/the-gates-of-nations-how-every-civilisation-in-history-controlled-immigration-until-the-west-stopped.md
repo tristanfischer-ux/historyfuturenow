@@ -2,7 +2,7 @@
 title: >-
  The Gates of Nations: How Every Civilisation in History Controlled
  Immigration — Until the West Stopped
-date: "2026-02-16"
+date: "2026-03-04"
 slug: >-
  the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped
 part: Society

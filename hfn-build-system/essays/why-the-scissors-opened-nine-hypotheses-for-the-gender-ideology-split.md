@@ -2,7 +2,7 @@
 title: >-
   Why the Scissors Opened: Nine Hypotheses for the
   Gender Ideology Split
-date: "2026-02-21"
+date: "2026-05-10"
 url: >-
   https://www.historyfuturenow.com/articles/why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split
 image: "/images/articles/why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split/hero.png"

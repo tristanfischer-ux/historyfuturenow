@@ -1,7 +1,7 @@
 ---
 title: "The Eighteen-Month Trap: Why Hardware Startups Are Structurally Slow"
 part: "Jobs & Economy"
-pub_date: "2026-03-06"
+date: "2026-05-17"
 excerpt: "A software founder builds one thing. A hardware founder builds two — the product and the entire infrastructure to make it. That structural double burden, not bad management, is why hardware startups take 12-18 months before they can sell a single unit, and why their designs are often obsolete before the equipment arrives."
 share_summary: "Hardware founders build two things at once — product and factory. That's why they're structurally slow."
 sources:

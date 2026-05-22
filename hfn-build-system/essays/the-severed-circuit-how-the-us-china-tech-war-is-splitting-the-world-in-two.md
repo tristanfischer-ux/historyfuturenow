@@ -1,7 +1,7 @@
 ---
 title: >-
   The Severed Circuit: How the US-China Tech War Is Splitting the World in Two
-date: "2026-02-19"
+date: "2026-04-14"
 url: >-
   https://www.historyfuturenow.com/part-2-balance-of-power/the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two
 image: "/images/articles/the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two/hero.png"

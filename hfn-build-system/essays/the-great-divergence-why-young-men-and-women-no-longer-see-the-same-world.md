@@ -1,7 +1,7 @@
 ---
 title: >-
   The Great Divergence: Why Young Men and Women No Longer See the Same World
-date: "2026-02-19"
+date: "2026-04-01"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world
 image: "/images/articles/the-great-divergence-why-young-men-and-women-no-longer-see-the-same-world/hero.png"

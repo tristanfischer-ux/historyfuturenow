@@ -1,7 +1,7 @@
 ---
 title: "From Basement Servers to Billion Users: What Software Learned That Hardware Hasn't"
 part: "Jobs & Economy"
-pub_date: "2026-03-14"
+date: "2026-05-22"
 excerpt: "In 2000, launching a technology company meant spending a fortune on servers before writing a line of code. By 2014, a small team could serve hundreds of millions of users from rented infrastructure. Software solved the infrastructure problem — just as a French silk weaver solved it two centuries earlier. Hardware hasn't. And with every year, the gap between what software founders experience and what hardware founders endure grows wider."
 share_summary: "Software had its AWS moment. Hardware hasn't. Demographics say it must."
 sources:

@@ -1,7 +1,7 @@
 ---
 title: >-
   The Invisible Judge: Why Guilt and Shame Societies Are Incompatible
-date: "2026-02-20"
+date: "2026-04-21"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible
 image: "/images/articles/the-invisible-judge-why-guilt-and-shame-societies-are-incompatible/hero.png"

@@ -2,7 +2,7 @@
 title: >-
   What Worked: Five Thousand Years of Evidence for How
   Civilisations Flourish
-date: "2026-02-20"
+date: "2026-05-01"
 slug: >-
   what-worked-five-thousand-years-of-evidence-for-how-civilisations-flourish
 part: Society

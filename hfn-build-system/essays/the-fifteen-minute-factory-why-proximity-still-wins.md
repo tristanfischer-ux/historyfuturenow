@@ -2,6 +2,7 @@
 title: "The Fifteen-Minute Factory: Why Proximity Still Wins"
 section: "Economics"
 excerpt: "Innovation has always clustered where the distance between thinking and making approaches zero. From Florence's silk workshops to Shenzhen's electronics bazaars, the pattern is invariant: compress the space between idea and execution, and iteration speed explodes. The question for hardware today is how to recreate that proximity in a distributed world."
+date: "2026-05-15"
 share_summary: "Every innovation cluster in history succeeded because proximity collapsed the gap between idea and execution. Hardware needs that again."
 sources:
   - "The Lunar Men"

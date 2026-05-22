@@ -2,7 +2,7 @@
 title: >-
   The Ladder and the Lie: Why Every Great Economy Was Built on Tariffs and
   Free Trade Only Serves the Already Dominant
-date: "2026-02-20"
+date: "2026-04-24"
 url: >-
   https://www.historyfuturenow.com/part-2-global-balance-of-power/the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant
 image: "/images/articles/the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant/hero.png"

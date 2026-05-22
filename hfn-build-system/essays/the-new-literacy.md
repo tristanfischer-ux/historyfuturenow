@@ -2,7 +2,7 @@
 title: >-
  The New Literacy: How AI Is Killing The Scribes
  And What Happens Next
-date: "2026-02-16"
+date: "2026-03-07"
 url: >-
  https://www.historyfuturenow.com/part-3-jobs-and-the-economy/the-new-literacy
 image: "/images/articles/the-new-literacy/hero.png"

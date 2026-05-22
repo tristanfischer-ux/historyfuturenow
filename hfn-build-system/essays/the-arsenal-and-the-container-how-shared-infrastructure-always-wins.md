@@ -1,7 +1,7 @@
 ---
 title: "The Arsenal and the Container: How Shared Infrastructure Always Wins"
 part: "Jobs & Economy"
-pub_date: "2026-03-07"
+date: "2026-05-20"
 excerpt: "Every era produces the same pattern: fragmented, bespoke, expensive production transformed by shared infrastructure that democratises access to speed and scale. Venice's Arsenale, the Springfield Armory, and Malcolm McLean's shipping container all prove the same point — the breakthrough is never a better product, it is a better platform. Hardware manufacturing today is at the pre-platform stage."
 share_summary: "The breakthrough is never a better product. It is a better platform. Hardware hasn't learned this yet."
 sources:

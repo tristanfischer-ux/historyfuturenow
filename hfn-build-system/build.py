@@ -149,17 +149,17 @@ ARTICLE_DATES = {
     "the-gates-of-nations-how-every-civilisation-in-history-controlled-immigration-until-the-west-stopped": "2024-11-01",
     # 2025–2026
     "the-robot-bargain-how-ai-will-save-ageing-nations-from-the-immigration-trap": "2026-02-01",
-    "the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed": "2026-02-05",
-    "the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun": "2026-02-06",
-    "who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state": "2026-02-07",
-    "the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering": "2026-02-08",
-    "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth": "2026-02-09",
-    "europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence": "2026-02-10",
-    "the-new-literacy": "2026-02-16",
-    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing": "2026-02-16",
-    "a-nation-transformed-britains-demographic-revolution-1948-2050": "2026-02-18",
-    "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible": "2026-02-20",
-    "the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way": "2026-02-28",
+    "the-silence-of-the-scribes-how-every-civilisation-that-controlled-speech-collapsed": "2026-02-08",
+    "the-scramble-for-the-solar-system-why-the-next-colonial-race-has-already-begun": "2026-02-11",
+    "who-guards-the-guards-bureaucracy-empire-and-the-eternal-struggle-to-control-the-state": "2026-02-14",
+    "the-return-of-the-state-factory-why-nations-that-forgot-how-to-make-things-are-remembering": "2026-02-18",
+    "the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth": "2026-02-22",
+    "europe-rearms-why-the-continent-that-invented-total-war-is-spending-800-billion-on-defence": "2026-02-26",
+    "the-new-literacy": "2026-03-07",
+    "the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing": "2026-03-01",
+    "a-nation-transformed-britains-demographic-revolution-1948-2050": "2026-03-10",
+    "the-invisible-judge-why-guilt-and-shame-societies-are-incompatible": "2026-04-21",
+    "the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way": "2026-05-14",
 }
 
 def load_original_slugs():

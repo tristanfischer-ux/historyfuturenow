@@ -1,7 +1,7 @@
 ---
 title: >-
   The New Oil: Why the Race for Critical Minerals Will Define the 21st Century
-date: "2026-02-19"
+date: "2026-04-10"
 url: >-
   https://www.historyfuturenow.com/part-1-natural-resources/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century
 image: "/images/articles/the-new-oil-why-the-race-for-critical-minerals-will-define-the-21st-century/hero.png"

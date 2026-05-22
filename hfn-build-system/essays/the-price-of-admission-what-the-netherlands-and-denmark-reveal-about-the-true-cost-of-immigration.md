@@ -2,7 +2,7 @@
 title: >-
   The Price of Admission: What the Netherlands and Denmark Reveal About
   the True Cost of Immigration
-date: "2026-02-20"
+date: "2026-04-28"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration
 image: "/images/articles/the-price-of-admission-what-the-netherlands-and-denmark-reveal-about-the-true-cost-of-immigration/hero.png"

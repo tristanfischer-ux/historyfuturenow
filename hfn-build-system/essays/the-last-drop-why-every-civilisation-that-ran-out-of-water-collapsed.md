@@ -1,7 +1,7 @@
 ---
 title: >-
   The Last Drop: Why Every Civilisation That Ran Out of Water Collapsed
-date: "2026-02-19"
+date: "2026-04-04"
 url: >-
   https://www.historyfuturenow.com/part-1-natural-resources/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed
 image: "/images/articles/the-last-drop-why-every-civilisation-that-ran-out-of-water-collapsed/hero.png"

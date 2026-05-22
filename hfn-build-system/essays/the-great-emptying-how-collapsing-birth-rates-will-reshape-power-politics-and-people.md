@@ -19,6 +19,7 @@ share_summary: >-
   No country in history has recovered from a sustained fertility rate
   below 1.5. Most of the developed world is already there.
 signal: ''
+date: "2026-02-03"
 ---
 # The Great Emptying: How Collapsing Birth Rates Will Reshape Power, Politics And People
 

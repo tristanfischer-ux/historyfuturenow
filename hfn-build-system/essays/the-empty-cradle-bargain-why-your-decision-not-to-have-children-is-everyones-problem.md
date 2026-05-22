@@ -2,7 +2,7 @@
 title: >-
  The Empty Cradle Bargain: Why Falling Birth Rates Are
  Everyone's Problem
-date: "2026-02-04"
+date: "2026-02-05"
 url: >-
  https://www.historyfuturenow.com/part-4-society/the-empty-cradle-bargain-why-your-decision-not-to-have-children-is-everyones-problem
 image: "/images/empty-cradle.png"

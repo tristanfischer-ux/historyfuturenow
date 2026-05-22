@@ -2,7 +2,7 @@
 title: >-
   The Debasement: Why Every Great Power That Borrowed Its Way to Greatness
   Borrowed Its Way to Ruin
-date: "2026-02-19"
+date: "2026-03-20"
 url: >-
   https://www.historyfuturenow.com/part-3-jobs-and-the-economy/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin
 image: "/images/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin/hero.png"

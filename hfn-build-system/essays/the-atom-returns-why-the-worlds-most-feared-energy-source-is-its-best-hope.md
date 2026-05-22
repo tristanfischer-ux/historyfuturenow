@@ -1,7 +1,7 @@
 ---
 title: >-
   The Atom Returns: Why the World's Most Feared Energy Source Is Its Best Hope
-date: "2026-02-19"
+date: "2026-03-17"
 url: >-
   https://www.historyfuturenow.com/part-1-natural-resources/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope
 image: "/images/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope/hero.png"

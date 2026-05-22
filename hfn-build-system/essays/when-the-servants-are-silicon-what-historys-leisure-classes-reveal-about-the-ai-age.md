@@ -2,7 +2,7 @@
 title: >-
   When the Servants Are Silicon: What History's Leisure Classes
   Reveal About the AI Age
-date: "2026-02-20"
+date: "2026-05-04"
 url: >-
   https://www.historyfuturenow.com/part-4-society/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age
 image: "/images/articles/when-the-servants-are-silicon-what-historys-leisure-classes-reveal-about-the-ai-age/hero.png"

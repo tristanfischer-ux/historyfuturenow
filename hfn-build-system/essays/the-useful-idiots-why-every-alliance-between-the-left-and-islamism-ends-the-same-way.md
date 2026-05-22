@@ -2,7 +2,7 @@
 title: >-
   The Useful Idiots: Why Every Alliance Between the Left and Islamism Ends
   the Same Way
-date: "2026-02-28"
+date: "2026-05-14"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way
 image: "/images/articles/the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way/hero.png"

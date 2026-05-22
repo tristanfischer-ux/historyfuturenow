@@ -2,7 +2,7 @@
 title: >-
   The Death Of The Fourth Estate: What The Collapse Of Newspapers Means
   For Democracy, Power, And Truth
-date: "2026-02-09"
+date: "2026-02-22"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-death-of-the-fourth-estate-what-the-collapse-of-newspapers-means-for-democracy-power-and-truth
 image: "/images/fourth-estate.png"

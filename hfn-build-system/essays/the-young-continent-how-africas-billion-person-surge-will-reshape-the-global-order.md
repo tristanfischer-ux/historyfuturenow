@@ -2,7 +2,7 @@
 title: >-
   The Young Continent: How Africa's Billion-Person Surge Will Reshape the
   Global Order
-date: "2026-02-19"
+date: "2026-04-17"
 url: >-
   https://www.historyfuturenow.com/part-2-balance-of-power/the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order
 image: "/images/articles/the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order/hero.png"

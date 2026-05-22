@@ -2,7 +2,7 @@
 title: >-
   The Elephant Awakens: Why India's Rise Will Reshape the World
   More Than China's Did
-date: "2026-02-19"
+date: "2026-03-24"
 url: >-
   https://www.historyfuturenow.com/part-2-balance-of-power/the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did
 image: "/images/articles/the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did/hero.png"

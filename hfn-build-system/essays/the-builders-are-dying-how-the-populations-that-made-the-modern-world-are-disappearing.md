@@ -2,7 +2,7 @@
 title: >-
   The Builders Are Dying: How the Populations That Made the Modern
   World Are Disappearing — And What Happens Next
-date: "2026-02-16"
+date: "2026-03-01"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing
 image: "/images/builders-dying.png"

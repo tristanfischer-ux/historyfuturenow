@@ -1,7 +1,7 @@
 ---
 title: >-
   The Great Offshoring: How the World's Factory Moved East
-date: "2026-02-18"
+date: "2026-03-14"
 url: >-
   https://www.historyfuturenow.com/global-balance-of-power/the-great-offshoring-how-the-worlds-factory-moved-east
 image: "/images/articles/the-great-offshoring-how-the-worlds-factory-moved-east/hero.png"

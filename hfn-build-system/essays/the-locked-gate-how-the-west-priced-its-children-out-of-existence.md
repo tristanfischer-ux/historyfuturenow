@@ -1,7 +1,7 @@
 ---
 title: >-
   The Locked Gate: How the West Priced Its Children Out of Existence
-date: "2026-02-19"
+date: "2026-04-07"
 url: >-
   https://www.historyfuturenow.com/part-4-society/the-locked-gate-how-the-west-priced-its-children-out-of-existence
 image: "/images/articles/the-locked-gate-how-the-west-priced-its-children-out-of-existence/hero.png"
