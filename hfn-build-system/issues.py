@@ -208,6 +208,14 @@ ISSUES = [
             "from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt",
         ],
     },
+    {
+        "number": 17,
+        "date": "2026-07-01",
+        "label": "Summer 2026",
+        "articles": [
+            "taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it",
+        ],
+    },
 ]
 
 

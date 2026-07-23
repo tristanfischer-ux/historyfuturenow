@@ -43,6 +43,7 @@ RELEASED_FROM_REVIEW = {
     'why-the-scissors-opened-nine-hypotheses-for-the-gender-ideology-split',
     'the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world',
     'the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way',
+    'taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it',
 }
 _released_file = Path(__file__).parent / "released_slugs.json"
 if _released_file.exists():

@@ -2394,6 +2394,13 @@ async function studioSendChat(opts){
   // Show user message
   studioAppendMessage('user',text);
 
+  // Auto-populate editor when user pastes a long article (500+ words) into empty editor
+  const editorEl=document.getElementById('st-md-textarea');
+  if(editorEl&&!editorEl.value.trim()&&text.split(/\s+/).length>500){
+    editorEl.value=text;
+    studioUpdateWc();
+  }
+
   // Create streaming assistant bubble with thinking indicator
   const bubble=studioAppendMessage('assistant','',true);
   const contentEl=bubble.querySelector('.st-msg-content');
@@ -5337,6 +5344,12 @@ def api_studio_chat(did):
         return jsonify({"error": "Empty message"}), 400
 
     model_pref = request.json.get("model", "")  # "sonnet" for edits, default Opus
+
+    # Auto-populate empty editor when user pastes substantial article text
+    existing_md = (draft.get("markdown") or "").strip()
+    word_count = len(user_msg.split())
+    if not existing_md and word_count > 500:
+        db.update_draft(did, markdown=user_msg)
 
     db.add_studio_message(did, "user", user_msg)
 

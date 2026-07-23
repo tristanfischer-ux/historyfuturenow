@@ -5,13 +5,22 @@
     <link>https://www.historyfuturenow.com</link>
     <description>Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.</description>
     <language>en-gb</language>
-    <lastBuildDate>Fri, 22 May 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.historyfuturenow.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://www.historyfuturenow.com/favicon.svg</url>
       <title>History Future Now</title>
       <link>https://www.historyfuturenow.com</link>
     </image>
+    <item>
+      <title>Taxation Without Representation: Britain&#x27;s £3 Trillion Debt and the Generation Being Asked to Pay For It</title>
+      <link>https://www.historyfuturenow.com/articles/taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it</link>
+      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it</guid>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+      <description>Every month the British government takes in around £100 billion and spends around £113 billion. The difference is borrowed. The people who will repay it are, for the most part, too young to vote — or not yet born.</description>
+      <category>Jobs &amp; Economy</category>
+      <enclosure url="https://www.historyfuturenow.com/images/articles/taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it/hero.png" type="image/png" />
+    </item>
     <item>
       <title>From Basement Servers to Billion Users: What Software Learned That Hardware Hasn&#x27;t</title>
       <link>https://www.historyfuturenow.com/articles/from-basement-servers-to-billion-users-what-software-learned-that-hardware-hasnt</link>
@@ -182,15 +191,6 @@
       <description>Microsoft signed a deal to restart Three Mile Island for AI power. France generates 70% of its electricity from nuclear at half Germany&#x27;s carbon intensity. China is building 150 reactors. The atom is back — and the nations that embrace it will thrive.</description>
       <category>Natural Resources</category>
       <enclosure url="https://www.historyfuturenow.com/images/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope/hero.png" type="image/png" />
-    </item>
-    <item>
-      <title>The Great Offshoring: How the World&#x27;s Factory Moved East</title>
-      <link>https://www.historyfuturenow.com/articles/the-great-offshoring-how-the-worlds-factory-moved-east</link>
-      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-great-offshoring-how-the-worlds-factory-moved-east</guid>
-      <pubDate>Sat, 14 Mar 2026 00:00:00 +0000</pubDate>
-      <description>In a single generation, the West gave away the industrial monopoly it had held for two centuries. From the rust belts of the Midlands to the boomtowns of Guangdong, this is the story of the Great Offshoring — told through the data that reveals who won.</description>
-      <category>Global Balance of Power</category>
-      <enclosure url="https://www.historyfuturenow.com/images/articles/the-great-offshoring-how-the-worlds-factory-moved-east/hero.png" type="image/png" />
     </item>
   </channel>
 </rss>

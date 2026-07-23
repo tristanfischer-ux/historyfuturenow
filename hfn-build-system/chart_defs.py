@@ -5856,6 +5856,167 @@ ticks:{color:'#8a8479',font:{size:9}}}}
 ]
 
 
+    # ─── TAXATION WITHOUT REPRESENTATION ───
+    charts['taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it'] = [
+        {
+            'id': 'taxChart1', 'figure_num': 1,
+            'title': 'Where the Money Comes From: UK Government Revenue 2025-26',
+            'desc': 'Four taxes account for roughly two-thirds of everything the government raises',
+            'source': 'ONS, Public sector current receipts: Appendix D',
+            'position': 'after_para_4',
+            'js': """
+_regChart('taxChart1',()=>{const ctx=document.getElementById('taxChart1');
+new Chart(ctx,{type:'bar',data:{labels:['Income\\nTax','National\\nInsurance','VAT','Corporation\\nTax','Council\\nTax','Excise\\nDuties','Business\\nRates','Stamp\\nDuties','Capital\\nGains','Other'],
+datasets:[dsBar('Revenue (£bn)',[330,205,180,100,50,46,35,18,15,253],
+[C.accent,C.accent,C.accent,C.accent,C.blue,C.blue,C.blue,C.blue,C.blue,C.dim])]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw+'bn'}},
+annotation:{annotations:{
+two3:{type:'box',xMin:-0.5,xMax:3.5,backgroundColor:'rgba(196,52,37,0.05)',borderWidth:0,
+label:{..._al,display:true,content:'Two-thirds of all revenue',color:C.accent,font:{size:10},position:{x:'center',y:'start'}}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'bn'},
+title:{display:true,text:'£ billions',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'taxChart2', 'figure_num': 2,
+            'title': 'Where the Money Goes: UK Government Spending 2025-26',
+            'desc': 'Debt interest — in red — now costs more than defence',
+            'source': 'HM Treasury (PESA), ONS',
+            'position': 'after_para_6',
+            'js': """
+_regChart('taxChart2',()=>{const ctx=document.getElementById('taxChart2');
+new Chart(ctx,{type:'bar',data:{labels:['Social\\nProtection','Health','Education','Debt\\nInterest','Defence','Housing &\\nEnvironment','Transport','Public\\nOrder','General\\nGovt','Other'],
+datasets:[dsBar('Spending (£bn)',[333,250,105,98,65,45,45,40,55,324],
+[C.blue,C.blue,C.blue,C.accent,C.blue,C.blue,C.blue,C.blue,C.blue,C.dim])]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw+'bn'}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'bn'},
+title:{display:true,text:'£ billions',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'taxChart3', 'figure_num': 3,
+            'title': 'The Gap That Has to Be Borrowed: UK Annual Deficit 1990-2026',
+            'desc': 'After each crisis the debt ratchets up and never comes back down',
+            'source': 'ONS, HM Treasury',
+            'position': 'after_para_8',
+            'js': """
+_regChart('taxChart3',()=>{const ctx=document.getElementById('taxChart3');
+const yrs=[1990,1993,1995,1997,2000,2003,2005,2007,2008,2009,2010,2012,2014,2016,2018,2020,2021,2022,2023,2024,2025,2026];
+const deficit=[-1,51,34,7,-17,38,42,37,69,158,148,119,97,56,40,317,133,53,122,125,130,140];
+new Chart(ctx,{type:'bar',data:{labels:yrs,
+datasets:[dsBar('Net borrowing (£bn)',deficit,
+deficit.map(v=>v>=100?C.accent:v>=0?C.amber:C.green))]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>(i.raw<0?'Surplus: £'+Math.abs(i.raw)+'bn':'Deficit: £'+i.raw+'bn')}},
+annotation:{annotations:{
+gfc:{type:'box',xMin:7.5,xMax:10.5,backgroundColor:'rgba(196,52,37,0.06)',borderWidth:0,
+label:{..._al,display:true,content:'Financial crisis',color:C.dim,font:{size:9},position:{x:'center',y:'start'}}},
+covid:{type:'box',xMin:14.5,xMax:16.5,backgroundColor:'rgba(196,52,37,0.06)',borderWidth:0,
+label:{..._al,display:true,content:'COVID',color:C.dim,font:{size:9},position:{x:'center',y:'start'}}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10},maxRotation:45}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'bn'},
+title:{display:true,text:'Net borrowing (£ billions)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'taxChart4', 'figure_num': 4,
+            'title': 'The Load Is Carried by a Few: Income Tax by Percentile',
+            'desc': 'One in ten taxpayers provides nearly two-thirds of income tax revenue',
+            'source': 'HMRC, Income Tax liabilities statistics 2023-24',
+            'position': 'after_para_13',
+            'js': """
+_regChart('taxChart4',()=>{const ctx=document.getElementById('taxChart4');
+const vals=[27,32,32,9];
+const bases=[0,0,0,0]; let cum=0;
+for(let i=0;i<vals.length;i++){bases[i]=cum;cum+=vals[i];}
+const cols=[C.accent,C.accent+'99',C.blue,C.dim];
+new Chart(ctx,{type:'bar',data:{labels:['Top 1%','Rest of\\nTop 10%','Middle\\n40%','Bottom\\n50%','Total'],
+datasets:[
+{label:'_base',data:[...bases,0],backgroundColor:'transparent',borderWidth:0,
+barPercentage:0.7,categoryPercentage:0.8},
+{label:'Share',data:[...vals,100],backgroundColor:[...cols,C.accent+'30'],
+borderColor:[...cols,C.accent],borderWidth:[1,1,1,1,2],borderDash:[[],[],[],[],[5,3]],
+barPercentage:0.7,categoryPercentage:0.8}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,filter:i=>i.datasetIndex===1,
+callbacks:{label:i=>{const v=i.raw;const b=bases[i.dataIndex]||0;
+return i.dataIndex<4?v+'% of income tax (cumulative: '+(b+v)+'%)':'100% total';}}},
+datalabels:{display:ctx=>ctx.datasetIndex===1,anchor:'center',align:'center',
+color:'#fff',font:{size:12,weight:'bold'},
+formatter:(v,ctx)=>ctx.dataIndex===4?'100%':v+'%'}},
+scales:{x:{grid:{display:false},stacked:true,ticks:{color:C.dim,font:{size:11},maxRotation:0}},
+y:{grid:{color:C.grid},stacked:true,ticks:{color:C.dim,callback:v=>v+'%'},max:100,
+title:{display:true,text:'Cumulative share of income tax',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'taxChart5', 'figure_num': 5,
+            'title': 'A Century of Debt — and Where It Leads',
+            'desc': 'UK public sector net debt as % of GDP, with OBR 50-year projection',
+            'source': 'ONS, Bank of England, OBR Fiscal Risks & Sustainability 2026',
+            'position': 'after_heading:Part Four: Where We Are Going',
+            'tall': True,
+            'js': """
+_regChart('taxChart5',()=>{const ctx=document.getElementById('taxChart5');
+const hist=[1920,1925,1930,1935,1940,1945,1950,1955,1960,1965,1970,1975,1980,1985,1990,1995,2000,2005,2008,2010,2015,2020,2025,2026];
+const histD=[135,175,170,175,120,250,200,160,130,100,65,50,45,39,28,36,30,36,44,72,83,100,95,95];
+const proj=[2026,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075];
+const projD=[95,100,110,125,145,170,200,230,260,280,300];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Historical',hist,histD,C.accent),
+dxy('OBR projection',proj,projD,C.accent,[6,4])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw.y+'% of GDP'}},
+annotation:{annotations:{
+ww2:{type:'box',xMin:1939,xMax:1945,backgroundColor:'rgba(196,52,37,0.06)',borderWidth:0,
+label:{..._al,display:true,content:'WW2',color:C.dim,font:{size:9},position:{x:'center',y:'start'}}},
+gfc:{type:'line',xMin:2008,xMax:2008,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
+label:{..._al,display:true,content:'Financial crisis',color:C.dim,font:{size:9},position:'start'}},
+today:{type:'line',xMin:2026,xMax:2026,borderColor:C.blue,borderDash:[4,4],borderWidth:1.5,
+label:{..._al,display:true,content:'Today: 95%',color:C.blue,font:{size:10,weight:'bold'},position:'start'}},
+target:{type:'line',yMin:300,yMax:300,borderColor:C.accent,borderDash:[8,4],borderWidth:1,
+label:{..._al,display:true,content:'OBR projection: 300% by 2075',color:C.accent,font:{size:10},position:'end'}}
+}}},
+scales:{x:linX(1920,2075),y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,
+title:{display:true,text:'Public sector net debt (% of GDP)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'taxChart6', 'figure_num': 6,
+            'title': 'The Engine That Stalled: UK Fertility Rate 1960-2024',
+            'desc': 'Britain has been below replacement fertility continuously since 1973',
+            'source': 'ONS, Births in England and Wales; OBR',
+            'position': 'after_heading:Part Five: The Growth Assumption That No Longer Holds',
+            'js': """
+_regChart('taxChart6',()=>{const ctx=document.getElementById('taxChart6');
+const yrs=[1960,1964,1968,1970,1973,1975,1978,1980,1985,1990,1995,2000,2005,2010,2012,2015,2018,2020,2022,2024];
+const tfr=[2.72,2.95,2.58,2.43,2.04,1.81,1.75,1.90,1.79,1.83,1.71,1.64,1.78,1.94,1.94,1.82,1.70,1.58,1.49,1.41];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Total fertility rate',yrs,tfr,C.accent)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw.y+' children per woman'}},
+annotation:{annotations:{
+repl:{type:'line',yMin:2.1,yMax:2.1,borderColor:C.green,borderDash:[8,4],borderWidth:1.5,
+label:{..._al,display:true,content:'Replacement rate (2.1)',color:C.green,font:{size:10},position:'start'}},
+cross:{type:'line',xMin:1973,xMax:1973,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
+label:{..._al,display:true,content:'Below replacement since 1973',color:C.dim,font:{size:9},position:'start'}},
+low:{type:'point',xValue:2024,yValue:1.41,backgroundColor:C.accent,radius:6,borderColor:'#fff',borderWidth:2,
+label:{..._al,display:true,content:'2024: 1.41 — record low',color:C.accent,font:{size:10,weight:'bold'},position:'bottom'}}
+}}},
+scales:{x:linX(1960,2025),y:{grid:{color:C.grid},ticks:{color:C.dim},min:1.0,max:3.2,
+title:{display:true,text:'Children per woman',color:C.dim}}}}});
+});"""
+        },
+    ]
+
     return charts
 
 

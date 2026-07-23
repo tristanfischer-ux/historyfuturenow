@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 84
+Total articles: 85
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -14,7 +14,7 @@ Total articles: 84
 - URL: https://www.historyfuturenow.com/balance-of-power
 - How nations rise, compete, and decline — from colonial empires to modern China.
 
-### Jobs & Economy (18 articles)
+### Jobs & Economy (19 articles)
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
@@ -226,6 +226,13 @@ Total articles: 84
 - Published: 2012-12-01
 - Reading time: 10 min
 - What do black slavery, creationism and climate change denial all have in common? In the US, at least, a biblical justification and a fascinating geographic overlap. We look at the issues and then try 
+
+### Taxation Without Representation: Britain's £3 Trillion Debt and the Generation Being Asked to Pay For It [6 charts]
+- URL: https://www.historyfuturenow.com/articles/taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it
+- Section: Jobs & Economy
+- Published: 2026-07-23
+- Reading time: 17 min
+- Every month the British government takes in around £100 billion and spends around £113 billion. The difference is borrowed. The people who will repay it are, for the most part, too young to vote — or 
 
 ### The 150 Year Life: How Radical Longevity Will Transform Our World [4 charts]
 - URL: https://www.historyfuturenow.com/articles/the-150-year-life-how-radical-longevity-will-transform-our-world
