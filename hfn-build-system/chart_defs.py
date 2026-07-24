@@ -5860,20 +5860,22 @@ ticks:{color:'#8a8479',font:{size:9}}}}
     charts['taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it'] = [
         {
             'id': 'taxChart1', 'figure_num': 1,
-            'title': 'Where the Money Comes From: UK Government Revenue 2025-26',
-            'desc': 'Four taxes account for roughly two-thirds of everything the government raises',
-            'source': 'ONS, Public sector current receipts: Appendix D',
+            'title': 'Where the Money Comes From: UK Government Revenue and Borrowing 2025-26',
+            'desc': 'The government borrows £130 billion a year on top of everything it raises in tax',
+            'source': 'ONS, Public sector current receipts: Appendix D; Public sector finances',
             'position': 'after_para_4',
             'js': """
 _regChart('taxChart1',()=>{const ctx=document.getElementById('taxChart1');
-new Chart(ctx,{type:'bar',data:{labels:['Income\\nTax','National\\nInsurance','VAT','Corporation\\nTax','Council\\nTax','Excise\\nDuties','Business\\nRates','Stamp\\nDuties','Capital\\nGains','Other'],
-datasets:[dsBar('Revenue (£bn)',[330,205,180,100,50,46,35,18,15,253],
-[C.accent,C.accent,C.accent,C.accent,C.blue,C.blue,C.blue,C.blue,C.blue,C.dim])]},
+new Chart(ctx,{type:'bar',data:{labels:['Income\\nTax','National\\nInsurance','VAT','Corporation\\nTax','Council\\nTax','Excise\\nDuties','Business\\nRates','Stamp\\nDuties','Capital\\nGains','Other','Govt\\nBorrowing'],
+datasets:[dsBar('£ billions',[330,205,180,100,50,46,35,18,15,253,130],
+[C.accent,C.accent,C.accent,C.accent,C.blue,C.blue,C.blue,C.blue,C.blue,C.dim,'#D4760A'])]},
 options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
 plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw+'bn'}},
 annotation:{annotations:{
 two3:{type:'box',xMin:-0.5,xMax:3.5,backgroundColor:'rgba(196,52,37,0.05)',borderWidth:0,
-label:{..._al,display:true,content:'Two-thirds of all revenue',color:C.accent,font:{size:10},position:{x:'center',y:'start'}}}
+label:{..._al,display:true,content:'Two-thirds of all revenue',color:C.accent,font:{size:10},position:{x:'center',y:'start'}}},
+borrow:{type:'box',xMin:9.5,xMax:10.5,backgroundColor:'rgba(212,118,10,0.08)',borderWidth:0,
+label:{..._al,display:true,content:'Not revenue — borrowed',color:'#D4760A',font:{size:9,style:'italic'},position:{x:'center',y:'start'}}}
 }}},
 scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:9},maxRotation:0}},
 y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'bn'},
@@ -6013,6 +6015,68 @@ label:{..._al,display:true,content:'2024: 1.41 — record low',color:C.accent,fo
 }}},
 scales:{x:linX(1960,2025),y:{grid:{color:C.grid},ticks:{color:C.dim},min:1.0,max:3.2,
 title:{display:true,text:'Children per woman',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'taxChart7', 'figure_num': 7,
+            'title': 'The Interest Trap: What Rising Debt Costs Each Year',
+            'desc': 'At 300% of GDP, annual interest alone exceeds the entire NHS budget',
+            'source': 'OBR Fiscal Risks & Sustainability 2026; author calculation at 3.5% average gilt yield',
+            'position': 'after_heading:Part Seven: The Debt Trap',
+            'js': """
+_regChart('taxChart7',()=>{const ctx=document.getElementById('taxChart7');
+const debtPct=[95,120,150,180,200,250,300];
+const gdp=3150;
+const yld=0.035;
+const interest=debtPct.map(d=>Math.round(gdp*d/100*yld));
+new Chart(ctx,{type:'bar',data:{labels:debtPct.map(d=>d+'%'),
+datasets:[dsBar('Annual interest (£bn)',interest,
+debtPct.map(d=>d<=95?C.blue:d<=200?C.accent+'99':C.accent))]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:noLegend,
+tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw+'bn per year in interest'}},
+datalabels:{display:true,anchor:'end',align:'top',color:C.text,font:{size:11,weight:'bold'},formatter:v=>'£'+v+'bn'},
+annotation:{annotations:{
+nhs:{type:'line',yMin:250,yMax:250,borderColor:C.green,borderDash:[8,4],borderWidth:1.5,
+label:{..._al,display:true,content:'Current NHS budget (£250bn)',color:C.green,font:{size:10},position:'start'}},
+pen:{type:'line',yMin:146,yMax:146,borderColor:C.blue,borderDash:[6,4],borderWidth:1,
+label:{..._al,display:true,content:'State pension (£146bn)',color:C.blue,font:{size:9},position:'start'}},
+today:{type:'line',yMin:100,yMax:100,borderColor:C.dim,borderDash:[4,4],borderWidth:1,
+label:{..._al,display:true,content:'Interest today (£100bn)',color:C.dim,font:{size:9},position:'end'}}
+}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:11}},
+title:{display:true,text:'Public debt as % of GDP',color:C.dim}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'bn'},max:380,
+title:{display:true,text:'Annual interest cost (£bn)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'taxChart8', 'figure_num': 8,
+            'title': 'The Shrinking State: Where the Money Goes as Debt Rises',
+            'desc': 'Interest crowds out everything else — by 2075, the discretionary state is halved',
+            'source': 'OBR Fiscal Risks & Sustainability 2026; author projections',
+            'position': 'after_heading:Part Eight: The Difficult Decisions',
+            'js': """
+_regChart('taxChart8',()=>{const ctx=document.getElementById('taxChart8');
+const labels=['Today\\n(2026)','2040','2055','2075'];
+const interest=[7,9,11,14];
+const health=[8,10,11,13];
+const pensions=[5,6,7,9];
+const other=[24,20,17,12];
+new Chart(ctx,{type:'bar',data:{labels:labels,
+datasets:[
+{label:'Debt interest',data:interest,backgroundColor:C.accent,barPercentage:0.7,categoryPercentage:0.8},
+{label:'Health & care',data:health,backgroundColor:C.blue,barPercentage:0.7,categoryPercentage:0.8},
+{label:'Pensions',data:pensions,backgroundColor:C.accent+'77',barPercentage:0.7,categoryPercentage:0.8},
+{label:'Everything else',data:other,backgroundColor:C.green,barPercentage:0.7,categoryPercentage:0.8}
+]},
+options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend:{...legend,labels:{...legend.labels,usePointStyle:true,pointStyle:'rect'}},
+tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.raw+'% of GDP'}},
+datalabels:{display:false}},
+scales:{x:{grid:{display:false},stacked:true,ticks:{color:C.dim,font:{size:11},maxRotation:0}},
+y:{grid:{color:C.grid},stacked:true,ticks:{color:C.dim,callback:v=>v+'%'},max:52,
+title:{display:true,text:'% of GDP',color:C.dim}}}}});
 });"""
         },
     ]
