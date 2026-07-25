@@ -20,180 +20,104 @@ related:
     title: "Taxation Without Representation"
 ---
 
-In 1950, the United States had 5.1 workers for every Social Security beneficiary. Today it has 2.7. By 2040, the ratio will fall to roughly 2.1 — two workers supporting each retiree, in a country whose federal government already spends more on debt interest than on national defence.
+In 1960, the United States had 5.1 workers paying into Social Security for every person drawing from it. Today it has 2.7. By 2040, that ratio will be roughly 2.1 — and the federal government already spends more servicing its debts than defending its borders.
 
-This is not a future problem. The arithmetic is already binding.
+The United Nations, in a now-famous 2000 report on "replacement migration," calculated that to maintain its 1995 support ratio, the United States would need to admit 593 million immigrants by 2050. Germany would need 188 million. The numbers were deliberately absurd — constructed as a reductio, not a policy proposal. They demonstrated, with bleak precision, that immigration cannot solve the ageing problem. It can only buy time.
 
-Three forces are converging on the advanced economies simultaneously. First, populations are ageing faster than any society in history has aged. Second, governments carry debt loads that would have been considered emergency-level a generation ago and are now treated as normal. Third, artificial intelligence and robotics are beginning to automate the work that generates the tax revenue which services the debt and funds the pensions.
-
-Each of these forces, taken alone, would constitute a generational challenge. Taken together, they form a squeeze with no painless exit — and the conventional policy responses to each force directly contradict the responses required by the others.
+The question is what you do with the time.
 
 ---
 
-## I. The Grey Tide
+## I. Three Forces, One Pressure Point
 
-Start with demographics, because demographics are destiny in the most literal possible sense: the retirees of 2050 have already been born, and the workers who will support them largely have not.
+Three forces are converging on the advanced economies. Each alone would be a generational challenge. Together they constitute a fiscal vice with no painless exit.
 
-Japan leads the world into this territory and has been leading it for two decades. Its population peaked at 128 million in 2010 and is projected to fall to 97 million by 2050 — a loss of roughly a quarter. By that point, one in three Japanese citizens will be over 65. The old-age dependency ratio, which measures the number of people aged 65 and over per 100 people of working age, stood at around 54 in 2020. By 2050 it will approach 81. The country's combined spending on pensions, healthcare, and social welfare consumed roughly 6 per cent of national income in the early 1970s. By the 1990s it had tripled to 18 per cent. Current projections put it at 28 per cent by the late 2020s.
+The first is demographic. Japan's population peaked at 128 million in 2010 and will fall to roughly 97 million by 2050 — a quarter gone within a single working lifetime. By then, one Japanese citizen in three will be over 65. The old-age dependency ratio, which measures the number of people aged 65 and over per 100 of working age, will approach 81. Italy's will reach 74. The European Union as a whole will move from 34 to nearly 57 — so that for every three workers, there will be nearly two retirees drawing pensions and consuming healthcare (Eurostat, OECD projections, 2024). Across the OECD, public pensions already consume 8.8 per cent of GDP; in Greece and Italy, that figure is roughly 16 per cent, one euro in six going to people who no longer produce anything (OECD, *Pensions at a Glance*, 2025).
 
-Japan is not an anomaly. It is a preview.
+The second force is fiscal. The United States carries approximately $39.3 trillion in gross debt — roughly 124 per cent of GDP — and the interest alone runs at more than $2.8 billion per day (IMF, 2025; Peter G. Peterson Foundation, 2026). In 2024, federal interest payments exceeded both Medicare and national defence spending for the first time (Congressional Budget Office). The United Kingdom's public-sector net debt stands at £2.93 trillion, 95.6 per cent of GDP (ONS, November 2025), with the debt-interest bill consuming roughly 8 per cent of all government spending — a figure that has nearly doubled since 2021, partly because a large share of UK government bonds are index-linked and so inflate alongside the prices they were supposed to hedge against. A neat trick, that.
 
-Italy's old-age dependency ratio is projected to reach 74 by 2050, up from 41 in 2020. Germany's will exceed 55. The European Union as a whole will move from a ratio of roughly 34 to nearly 57 — meaning that for every three workers, there will be nearly two retirees drawing pensions and consuming healthcare (Eurostat, OECD projections, 2024).
+Japan, the demographic pioneer, is also the debt pioneer: 207 per cent of GDP. Italy follows at 137 per cent, France at 116 per cent. Germany, at 63 per cent, looks prudent by comparison — until you notice that its dependency ratio is deteriorating faster than the UK's, and its workforce is shrinking in absolute terms.
 
-The OECD average for public pension expenditure already stands at 8.8 per cent of GDP and is projected to reach 10 per cent by 2050. In Greece and Italy, pensions consume roughly 16 per cent of GDP — one euro in every six produced by the entire economy goes directly to paying people who are no longer producing anything. Across the OECD, pensions account for approximately 18 per cent of all government spending (OECD, *Pensions at a Glance*, 2025).
+The third force is technological. Goldman Sachs (2023) estimates that 300 million jobs globally are exposed to automation by generative AI. McKinsey's pre-generative-AI estimate (2017) put the figure at 400-800 million workers needing to change occupational categories by 2030 across 46 countries — a number that generative AI has likely accelerated rather than reduced. The measured effects are already visible: a study by Brynjolfsson, Li, and Raymond (NBER) found that an AI assistant raised customer-support productivity by 14 per cent on average, with novice workers seeing gains of 34 per cent. Meanwhile, Figure AI's humanoid robot has been deployed at BMW's Spartanburg plant, supporting the manufacture of over 30,000 vehicles — and Unitree, a Chinese manufacturer, shipped over 5,500 humanoid units in 2025 at $16,000 apiece. Goldman Sachs projects the humanoid-robot market at $38 billion by 2035.
 
-The United Kingdom, which will feature prominently in what follows, occupies the uncomfortable middle ground. Its state pension is among the least generous in the developed world, yet the triple lock — which guarantees annual increases by the highest of inflation, average earnings growth, or 2.5 per cent — ensures the cost rises relentlessly regardless of economic conditions. The Office for Budget Responsibility projects that age-related spending will consume an ever-larger share of a fiscal position that is already stretched to its limits.
-
-And those limits are worth examining.
+Each of these forces has its own literature, its own conferences, its own policy proposals. What nobody has adequately addressed is what happens when they collide.
 
 ---
 
-## II. The Interest Trap
+## II. Britain After Waterloo
 
-The United States federal government currently carries approximately $39.3 trillion in gross debt — roughly 124 per cent of GDP (IMF, 2025). The interest on that debt runs at more than $2.8 billion per day, or roughly $1 trillion per year (Peter G. Peterson Foundation, 2026).
+Historians searching for a society that simultaneously faced demographic strain, crushing debt, and technological disruption will search mostly in vain — but not entirely.
 
-To put this in context: in 2024, US federal interest payments exceeded both Medicare and national defence spending for the first time (Congressional Budget Office, 2024). The country now spends more servicing past borrowing than it does defending its borders or treating its elderly sick. Net interest as a share of GDP has risen from 1.3 per cent in 2015 to approximately 3 per cent in 2024 — the highest ratio since 1996, and climbing.
+After the Napoleonic Wars, Britain's national debt exceeded 200 per cent of GDP. The country was the most indebted major power on earth. The interest consumed roughly half of all government revenue. Contemporaries were genuinely uncertain whether the state could survive: David Ricardo argued publicly that the only solution was a one-off capital levy to discharge the debt in a single stroke, a proposal so radical that Parliament recoiled. William Cobbett — journalist, radical, incurable pessimist — predicted that the debt would destroy British prosperity permanently and reduce the labouring classes to penury.
 
-The United Kingdom tells a similar story at a smaller scale. Public sector net debt reached £2.93 trillion at the end of November 2025 — 95.6 per cent of GDP (ONS). The debt-interest bill consumes roughly 8 per cent of all government spending, a figure that has roughly doubled since 2021, largely because a significant portion of UK government debt is index-linked and therefore rises automatically with inflation.
+At the same time, the first Industrial Revolution was displacing workers at a speed that alarmed even its beneficiaries. Handloom weavers, whose numbers had peaked at roughly 250,000, saw their earnings collapse by more than two-thirds between 1800 and 1830 as power looms undercut them. Agricultural labourers, displaced by enclosures and mechanisation, rioted. The Luddites smashed machinery. Swing rioters burned hayricks. Real wages for the bottom third of the income distribution stagnated or fell for forty years.
 
-Japan, the demographic pioneer, is also the debt pioneer: gross government debt stands at 207 per cent of GDP, the highest of any advanced economy. Italy follows at 137 per cent, France at 116 per cent. Germany, at 63 per cent, looks almost prudent by comparison — but Germany's advantage is demographic rather than fiscal, and its demographics are deteriorating rapidly.
+Britain's escape was demographics — but in the opposite direction to today's problem. The population was young and growing explosively: it roughly tripled between 1750 and 1850. That growing, urbanising workforce generated a tax base that eventually outgrew the debt. By the 1860s, the ratio had fallen below 100 per cent without any default, restructuring, or capital levy. Cobbett was wrong. Ricardo was unnecessary. Growth — driven by a young population and relentless technological improvement — solved the problem over half a century.
 
-The historical record is not encouraging. As John Rapley and Peter Heather argue in *Why Empires Fall* (2024), fiscal overextension is the single most reliable precursor to imperial decline. Rome's late-period tax burden — where the cost of maintaining the army and the bureaucracy consumed an ever-larger share of a shrinking economic base — is structurally identical to the modern problem of servicing pension and debt commitments from a shrinking worker base. The mechanism is the same: a fixed and growing set of obligations consuming an increasingly inadequate revenue stream.
-
-The trap is straightforward. Ageing populations require more spending (pensions, healthcare, social care). That spending is funded by borrowing, because raising taxes on a shrinking workforce is both politically suicidal and economically counterproductive. The borrowing generates interest obligations, which consume revenue that might otherwise fund services. The services deteriorate, the workforce shrinks further, the borrowing increases, and the cycle accelerates.
-
-Every advanced economy is somewhere on this spiral. The only question is speed.
+The lesson is instructive and alarming in equal measure. Britain escaped the debt trap through a combination of productivity growth and demographic expansion. Today's advanced economies have the productivity opportunity (AI and automation), but the demographic trajectory runs in precisely the wrong direction. The tax base is not tripling. It is shrinking. The escape route that worked for nineteenth-century Britain is half-blocked.
 
 ---
 
-## III. The Machine in the Room
+## III. The Vice
 
-Into this fiscal vice arrives artificial intelligence, and its physical embodiment: the humanoid robot.
+The mechanism is straightforward enough to sketch on a napkin, which is part of what makes it so difficult to escape.
 
-The scale of potential disruption is genuinely uncertain, but the range of credible estimates is large enough to matter regardless of where reality lands. Goldman Sachs (2023) estimates that 300 million full-time jobs globally are exposed to automation by generative AI, with roughly two-thirds of US occupations at least partially affected and 25-50 per cent of the workload in exposed roles potentially replaceable. McKinsey Global Institute has estimated 400-800 million jobs potentially displaced by automation by 2030 across 46 countries, with developed economies more exposed than developing ones because they have more capital to invest in replacing workers.
+Ageing populations mechanically raise the cost of pensions, healthcare, and social care. These are not discretionary spending lines. The people who will draw these benefits are already alive, and the promises — triple-locked pensions, Medicare entitlements, statutory care obligations — are politically and legally irrevocable. Cutting them requires elected politicians to take benefits away from the demographic cohort that votes most reliably, which is why every country that has tried has changed government at the next election.
 
-The measured effects, as opposed to the projected ones, are already visible. A study by Brynjolfsson, Li, and Raymond published through the National Bureau of Economic Research found that an AI assistant tool raised customer-support productivity by 14 per cent on average across 5,179 agents. The gains were strikingly concentrated: novice and low-skilled workers saw a 34 per cent productivity increase, while experienced workers saw minimal effect. The machine, in other words, compresses the skill distribution — it makes the worst workers much better without making the best workers meaningfully better.
+At the same time, AI and automation are beginning to erode the tax base that funds those commitments. Income tax and payroll contributions are the primary revenue source for every Western government. If fewer people work, or if their wages are compressed by competition with machines, revenue falls. Here is where the picture gets genuinely ambiguous, and where honest analysis must resist the temptation of false certainty: automation might also *raise* aggregate revenue, if the productivity gains are large enough and the tax system is restructured to capture them through capital and corporate levies rather than payroll taxes. The effect depends entirely on policy choices that have not yet been made and, in most countries, have not yet been seriously discussed.
 
-Meanwhile, the physical machines are arriving. Figure AI's Figure 02 humanoid robot was deployed in production at BMW's Spartanburg plant in 2025, supporting the manufacture of over 30,000 vehicles — the first mass industrial deployment of a humanoid robot. Unitree, a Chinese manufacturer, shipped over 5,500 units of its G1 humanoid globally in 2025 at a starting price of $16,000. Goldman Sachs projects the humanoid robot market at $38 billion by 2035.
+Borrowing bridges the gap — and generates interest obligations that consume revenue that might otherwise fund services. The services deteriorate, the borrowing increases, and the cycle accelerates. As Rapley and Heather argue in *Why Empires Fall* (2024), this is the single most reliable precursor to imperial decline: a fixed and growing set of obligations consuming an increasingly inadequate revenue stream. Late Rome taxed a shrinking productive base to fund an army and bureaucracy whose costs only grew. The mechanism is structurally identical. The modern innovation is that democratic states can borrow from the future, which allows them to defer the reckoning — but deferral is not avoidance.
 
-The conventional response to job displacement is retraining. But retraining assumes there are jobs to retrain *for* — and more fundamentally, it assumes that the people being displaced are young enough, mobile enough, and financially secure enough to undertake it. In an ageing society, a significant and growing proportion of displaced workers will be in their fifties and sixties. The idea that a 58-year-old lorry driver or a 55-year-old administrative assistant will retrain as a data scientist is not a policy; it is a fantasy.
+South Korea's birth rate of 0.72 in 2023 — the lowest ever recorded by any country — is the sharpest edge of the demographic blade. Japan, the thirty-year pioneer of this experiment, has so far avoided fiscal crisis partly because its debt is overwhelmingly domestically held and yen-denominated, with the Bank of Japan absorbing much of it. Whether that structural advantage translates to the United States, with its foreign-held, dollar-denominated debt and rising yields, is the trillion-dollar question — and not one to which anyone honest should claim to know the answer.
 
-This is where the three forces begin to interact in ways that no single-force analysis captures.
-
----
-
-## IV. The Scissors
-
-Imagine the problem as two blades of a scissors, closing.
-
-The first blade is expenditure. As populations age, the cost of pensions, healthcare, and social care rises mechanically. This is not a policy choice — it is an actuarial inevitability. The people who will draw these benefits are already alive, and the promises have already been made. In most countries, these promises are legally and politically irrevocable.
-
-The second blade is revenue. As AI and automation displace workers — or reduce the number of hours they work, or compress their wages — the tax base that funds those commitments erodes. Income tax and payroll taxes are the primary revenue source for every Western government. If fewer people work, or if they work less, or if their wages are compressed by competition with machines, revenue falls precisely when expenditure is rising.
-
-The blades close at different speeds in different countries. Japan, where both the demographic decline and the automation of manufacturing are most advanced, is furthest into the squeeze. South Korea, whose birth rate of 0.72 in 2023 was the lowest ever recorded by any country, will enter it next. Europe is a decade behind Japan. The United States, with slightly better demographics and a more dynamic labour market, may be two decades behind — but its debt trajectory is among the worst, which partially offsets the demographic advantage.
-
-The fiscal arithmetic is unforgiving. Consider the United States. Social Security's combined trust funds are projected to be depleted by 2035 (Social Security Administration Trustees, 2024). At that point, incoming payroll taxes will cover only about 83 per cent of scheduled benefits, requiring either a 17 per cent benefit cut or substantial new funding. Meanwhile, the Congressional Budget Office projects that interest on the national debt will consume an ever-growing share of federal revenue, crowding out discretionary spending on everything from infrastructure to defence to the very retraining programmes that are supposed to help displaced workers.
-
-Raising taxes is the instinctive policy response, but it runs into the second blade. If automation is compressing the labour share of national income — if more of the economy's output is generated by capital (machines, software, AI systems) rather than labour — then taxing labour more heavily is both less effective and more damaging than it used to be. You are squeezing a shrinking base.
-
-The alternative — taxing capital — faces its own constraints. Capital is internationally mobile. A country that taxes AI and robotics more heavily than its competitors risks driving the investment to jurisdictions that do not, leaving itself with neither the workers nor the machines. As Daron Acemoglu and Simon Johnson argue in *Power and Progress* (2023), the central question is not whether machines will replace workers but *who captures the gains* when they do — and history suggests that without deliberate policy intervention, the gains accrue overwhelmingly to capital owners.
-
-Thomas Piketty made the same point with different mathematics in *Capital in the Twenty-First Century* (2014): when the rate of return on capital exceeds the rate of economic growth — his famous *r > g* — wealth concentrates inexorably. In a world where AI dramatically increases the productivity of capital while simultaneously displacing the workers whose income would otherwise circulate through the economy, this dynamic intensifies.
+Social Security's combined trust funds are projected to be depleted by 2035 (SSA Trustees, 2024). At that point, incoming payroll taxes will cover only about 83 per cent of scheduled benefits. The gap must be filled by benefit cuts, new taxes, or more borrowing. The first is electorally suicidal, the second runs into the automation problem, and the third deepens the debt trap.
 
 ---
 
-## V. The Paradox of the Care Economy
+## IV. The Care Paradox
 
-There is a particular cruelty in the timing. The sector with the most acute labour shortage in every ageing society is the one most resistant to automation: care.
+There is a particular cruelty in the timing. The sector with the most acute labour shortage in every ageing society is care — and it is also the sector where automation is simultaneously most needed and least advanced.
 
-The mathematics are grim. As populations age, the demand for care workers — in residential homes, in hospitals, in domiciliary services — rises steeply. But the supply of people willing to do the work at prevailing wages is falling. Care work is physically demanding, emotionally draining, and poorly paid. In the United Kingdom, the median hourly wage for a care worker is approximately £12.60 (Skills for Care, 2025) — barely above the minimum wage, and below what a worker could earn stacking shelves at a supermarket with considerably less responsibility.
+Care work is physically demanding, emotionally draining, and badly paid. In the United Kingdom, the median hourly wage for a care worker was approximately £12.60 in 2025 (Skills for Care) — a figure that has since been overtaken by the National Living Wage itself (£12.71 from April 2026). Care workers are, in effect, minimum-wage workers, and the turnover rate in many care homes exceeds a third of the workforce annually. In the United States, the median annual wage for home health aides was $33,530 in 2023 (Bureau of Labor Statistics) — a figure that is mathematically incompatible with renting an apartment in most of the metropolitan areas where care demand is highest.
 
-The vacancy rate in the sector is chronic. Turnover is ruinous: in many care homes, a third or more of the workforce leaves every year, and the cost of recruiting and training replacements consumes resources that might otherwise improve care quality. The situation in the United States is structurally similar. The median annual wage for home health and personal care aides was approximately $33,530 in 2023 (Bureau of Labour Statistics) — a figure that makes it mathematically impossible to live in many of the metropolitan areas where care demand is highest.
+Immigration has been the default solution. But immigration as a fix for ageing is a treadmill: immigrants age too, their birth rates converge toward host-country norms within a generation, and even moderate net migration — the realistic version, not the UN's deliberately extreme replacement-migration hypothetical — eases rather than solves the dependency ratio. It buys a decade or two. What matters is what governments do with that decade.
 
-The conventional solution to care-sector labour shortages has been immigration. But immigration as a solution to ageing is a treadmill: immigrants age too, their birth rates converge toward host-country norms within a generation, and the numbers required to maintain a constant dependency ratio are politically and logistically implausible. The United Nations estimated in 2000 that the United States would need 593 million immigrants by 2050 to maintain its 1995 support ratio. Germany would need 188 million. The numbers are absurd by design: they demonstrate that immigration cannot solve the problem, only delay it.
+Here is the paradox that nobody in the automation debate seems willing to state plainly. AI and robotics threaten to displace millions of workers in logistics, administration, retail, and manufacturing. They are simultaneously the only plausible solution to the care-sector crisis, because no human workforce can sustainably deliver round-the-clock support at the wages society will actually pay. The same technology that eliminates the warehouse worker's job could, deployed as a physical robot in a care home, provide the support that no number of recruitment drives will.
 
-Here is the paradox. AI and robotics threaten to displace millions of workers in sectors like logistics, administration, retail, and manufacturing — but they are simultaneously the only plausible solution to the care-sector labour crisis. The same technology that eliminates the truck driver's job could, deployed as a physical robot in a care home, provide the round-the-clock support that no human workforce can sustainably deliver at the wages society is willing to pay.
+But — and this caveat is load-bearing — no robot on the market in 2026 can provide unsupervised care to a vulnerable adult. The Unitree G1 and Figure 02 do industrial pick-and-place. That is categorically different from managing medication for a dementia patient, helping a frail person bathe, or providing the human companionship that cognitively intact elderly people consistently say matters more to them than task completion. The technology trajectory points in the right direction; the gap between "warehouse logistics" and "dignified elder care" is measured in years, probably decades, not months. Anyone who tells you otherwise is selling something.
 
-The question is whether the transition happens in the right order. If robots arrive in warehouses and factories before they arrive in care homes, the result is mass unemployment among working-age adults combined with critical understaffing in elderly care — the worst of both worlds. If robots arrive in care homes first — or simultaneously — the displaced warehouse workers might plausibly retrain into supervisory and relationship roles in a robot-assisted care system, and the fiscal savings from replacing £52,000-per-year care-home places with £5,000 robots could fund the transition.
-
-The sequencing is not guaranteed. Markets will deploy robots wherever the return on investment is highest, which means manufacturing and logistics first, care second. Government procurement and regulation would need to actively steer deployment toward care — a form of industrial policy that most Western governments have spent four decades dismantling.
+What robots *can* plausibly do by the mid-2030s is the less glamorous but fiscally enormous work: cleaning, cooking, laundry, monitoring, mobility assistance, and basic physiotherapy — the tasks that currently consume most of the labour hours in a care setting. That alone transforms the economics, even if the human-relationship component of care remains irreducibly human.
 
 ---
 
-## VI. The Historical Precedent That Does Not Exist
+## V. The Narrowing Path
 
-Historians searching for a precedent — a society that simultaneously faced demographic decline, fiscal overextension, and rapid technological displacement — will search largely in vain.
+Daron Acemoglu and Simon Johnson, in *Power and Progress* (2023), pose the question that sits beneath all of this: when machines replace workers, who captures the gains? History suggests that without deliberate intervention, the answer is capital owners. Piketty argued the same point with different mathematics: when the return on capital exceeds economic growth — his *r > g* — wealth concentrates. The thesis is contested (Summers challenged the reinvestment assumption; Góes found the opposite trend in 75 per cent of the countries he examined), but the directional worry is sound enough: if AI supercharges capital returns while suppressing wages, the gap widens regardless of the precise mechanism. In a world where AI dramatically increases the productivity of capital while displacing workers whose income would otherwise circulate through the economy, both dynamics intensify.
 
-Late Republican Rome faced demographic stagnation among its citizen class and ruinous military expenditure, but its economy was pre-industrial. The technological disruptions it experienced — the replacement of small farmers by slave-worked latifundia — are analogous in structure (capital replacing labour) but utterly different in scale.
+The honest assessment is that the path through the triple squeeze is narrow but real, and it depends on three things happening roughly simultaneously — none of which is guaranteed.
 
-Late Qing China faced demographic pressure and fiscal crisis simultaneously, but the technological disruption was external (European industrialisation) rather than internal.
+First, AI-driven productivity growth must materialise at something approaching the optimistic estimates. Goldman Sachs projects a $7 trillion boost to global GDP over ten years, with productivity growth increasing by 1.5 percentage points annually. If even half of that arrives, the additional output could in principle cover rising pension and care costs.
 
-The closest analogue may be early nineteenth-century Britain during the first Industrial Revolution, which combined rapid technological displacement (handloom weavers, agricultural labourers) with a national debt that peaked at over 200 per cent of GDP after the Napoleonic Wars. But Britain's demographics were the opposite of the current situation: the population was young and growing explosively, which created both social problems (overcrowded cities, child labour) and a natural solution (a growing tax base that eventually outgrew the debt).
+Second, the tax system must be restructured to capture a meaningful share of those gains. An economy where AI doubles corporate profits but those profits flow to a narrow base of shareholders — many of them foreign — does not solve the fiscal problem. Call it redistribution if you like — the more accurate term is fiscal survival: taxing the productivity of machines to fund the promises made to humans. The OECD's global minimum corporate tax is a prototype. Something far more ambitious will be needed.
 
-No historical society has faced the combination of a *shrinking* workforce, a *growing* dependent population, *rising* debt, and *accelerating* technological displacement simultaneously. This means there are no proven playbooks, no validated policy sequences, and no historical examples of successful navigation.
+Third, governments must actively steer automation toward care and public services, not wait for markets to get there on their own. Markets deploy robots wherever the return on investment is highest, which means manufacturing and logistics first, care second. If robots arrive in warehouses before they arrive in care homes, the result is mass displacement in the private sector combined with chronic understaffing in public care — the worst of both worlds.
 
-The analysis in *Fiscal Regimes and the Political Economy of Premodern States* (Monson & Scheidel, 2026) illustrates a recurring pattern across pre-modern states: when the cost of maintaining the state exceeds the revenue the productive base can generate, the state either contracts its obligations (usually through a combination of service cuts and currency debasement) or it collapses. The modern innovation is that democratic states have an additional tool — borrowing from the future — which allows them to defer the reckoning for longer than any pre-modern state could. But deferral is not avoidance. The reckoning still arrives. It arrives as a debt-interest spiral, or as inflation, or as a sudden loss of market confidence, or as a generational revolt against promises that cannot be kept.
+This is a large institutional ask — arguably harder than cutting pensions, which is the one thing the article has already conceded democracies cannot do. The counterargument is that fiscal survival concentrates minds in ways that benefit cuts do not. Governments restructure their revenue base under existential pressure (wartime taxation, post-crisis reform) even when they cannot touch popular entitlements. The precedent is not "governments acting wisely in advance" — it almost never is — but "governments acting drastically when the alternative is default."
 
----
-
-## VII. The Only Way Through
-
-If the diagnosis is correct — that ageing, debt, and automation are three forces converging on the same fiscal pressure point — then the range of viable responses is surprisingly narrow.
-
-**Option 1: Cut pensions and healthcare.** Politically almost impossible in democracies where the over-65s vote at higher rates than any other demographic. Any government that attempted a meaningful reduction in pension benefits would be removed at the next election. This is not a prediction; it is an observation of what has happened in every country that has tried.
-
-**Option 2: Raise taxes on labour.** Self-defeating in the context of automation. Higher payroll taxes increase the incentive to automate, accelerating the displacement of the workers being taxed. You cannot fund a system for supporting non-workers by making workers more expensive to employ.
-
-**Option 3: Raise taxes on capital.** Possible in principle, necessary in practice, but constrained by capital mobility. A coordinated international minimum tax on AI-generated profits — similar to the OECD's global minimum corporate tax — is the most promising version, but coordinating it across jurisdictions with competing interests is a decades-long project.
-
-**Option 4: Inflate the debt away.** This is the historical default and the most likely actual outcome. Moderate, sustained inflation (3-5 per cent) reduces the real value of existing debt while increasing nominal tax revenues. The losers are savers, pensioners, and anyone on a fixed income — precisely the growing demographic cohort. Index-linked pensions and bonds partially offset this, and in the UK, where a large portion of government debt is index-linked, inflation actually *increases* the debt-servicing burden rather than reducing it.
-
-**Option 5: Grow out of it.** This is the only option that does not merely redistribute pain, and it is the option that depends most directly on AI and automation.
-
-Here is the arithmetic that matters. If AI raises productivity growth by even one percentage point per year — from a baseline of roughly 1 per cent to roughly 2 per cent — the cumulative effect over two decades is transformative. Goldman Sachs estimates that generative AI alone could raise global GDP by $7 trillion over ten years, with productivity growth increasing by 1.5 percentage points annually. If anything close to that materialises, the additional tax revenue — even from a smaller workforce — could be sufficient to cover rising pension and care costs.
-
-But the gains must be captured by the state, not just by shareholders. An economy where AI doubles corporate profits but those profits flow to a narrow base of equity holders — many of them foreign — does not solve the fiscal problem. The tax system must be restructured to capture a share of AI-generated productivity gains that is large enough to fund the obligations the state has already made.
-
-This is not redistribution in the traditional sense. It is fiscal survival. A society that allows AI productivity gains to concentrate entirely in private capital while its public obligations continue to grow has chosen a path that ends in sovereign default or social breakdown. The choice is not whether to tax the machines but how.
+A residential care-home place in England costs an average of roughly £800-1,000 per week — the lower end for council-funded placements, the upper end for self-funders who cross-subsidise the system (LaingBuisson, 2024). At the blended midpoint, that is around £47,000 per year. There are roughly 400,000 people in care homes in England. That figure — the labour-cost share of it, at any rate, since a robot does not eliminate building costs, food, or regulatory compliance — represents the fiscal prize. Not the whole £52,000. But the majority of it is labour. And labour is what robots replace.
 
 ---
 
-## VIII. What Happens If Nothing Changes
+## VI. The Race Against the Calendar
 
-The do-nothing scenario is worth spelling out, because it is the most likely outcome.
+Sweden redesigned its pension system in the 1990s with an automatic balancing mechanism that adjusts benefits when the system's assets fall below its liabilities. Denmark links its retirement age to life expectancy. These are not solutions to the triple squeeze — no country has yet faced all three forces at full strength — but they are evidence that democracies can, under sufficient pressure, reform entitlements before the crisis arrives rather than after.
 
-In the do-nothing scenario, populations continue to age along their already-locked-in trajectories. Governments continue to borrow to fund pension and healthcare commitments that grow faster than revenue. AI and automation continue to deploy wherever private returns are highest — manufacturing, logistics, financial services, professional services — displacing workers and compressing wages in those sectors. The care sector remains chronically understaffed because the wages are too low and the work is too hard, and robots are not deployed there because the regulatory barriers are too high and the profit margins are too low.
+The demographic trajectory is locked: the retirees of 2050 have already been born, and the workers who would support them largely have not. The debt trajectory, absent a dramatic change in fiscal policy, is locked. The only variable with meaningful room for manoeuvre is automation — its speed, its direction, and who captures its gains.
 
-The fiscal position deteriorates until a crisis forces action. The crisis might take the form of a sovereign-debt downgrade, a bond-market sell-off, a currency crisis, or simply the quiet erosion of public services to the point where the social contract visibly breaks. At that point, a government enacts emergency measures under duress — benefit cuts, emergency taxes, capital controls — that would have been less painful and more effective if implemented a decade earlier.
+If automation arrives primarily in the private sector, displacing workers while leaving public services labour-intensive, the vice tightens. Revenue falls, expenditure rises, and the gap widens until a crisis — a sovereign-debt downgrade, a bond-market sell-off, a quiet erosion of public services until the social contract visibly cracks — forces the emergency measures that would have been less painful a decade earlier. This has already happened in Greece. It is happening, in slow motion, in Japan. It is the default trajectory for most of the West.
 
-This is not a catastrophist fantasy. It is a description of what has already happened in Greece (2010-2015), in Argentina (repeatedly), and in a slower, less dramatic form in Japan, where three decades of stagnation, deflation, and accumulating debt have produced a society that functions but does not grow, and whose young people face a future of supporting an ever-heavier dependent population on wages that have not meaningfully risen in their lifetimes.
+If automation arrives in public services alongside the private sector — in care homes, hospitals, schools, and government administration — the arithmetic changes. Expenditure falls as robots assume the costliest labour-intensive tasks. Revenue may fall too, as the private-sector workforce shrinks, but the gap between the two trajectories narrows enough to be bridgeable through capital taxation and modest immigration.
 
-The question for the United States, the United Kingdom, and continental Europe is not whether the squeeze will arrive but whether it will be managed or endured.
+Neither outcome is inevitable. Both are policy choices, even if the second requires a degree of institutional competence that most Western governments have spent four decades dismantling.
 
----
-
-## IX. The Machine as Fiscal Instrument
-
-There is one scenario in which the arithmetic works, and it depends on embracing the very technology that most people fear.
-
-If humanoid robots reach a price point below $10,000 — which Wright's Law cost trajectories suggest will happen by the mid-2030s — then governments have access to a tool that no previous generation of policymakers has possessed: a machine that can directly perform the work that constitutes their largest and fastest-growing expenditure category.
-
-A residential care-home place in the United Kingdom costs local authorities an average of £52,000 per year per resident (LaingBuisson, 2024). There are approximately 400,000 people in care homes in England alone. Total annual cost: roughly £20.8 billion. A humanoid robot capable of providing daily living support — cooking, cleaning, medication management, mobility assistance, companionship — would cost £3,000-£5,000 as a one-time purchase. The payback period is measured in weeks.
-
-The same arithmetic applies to domiciliary care, to hospital portering, to routine physiotherapy, to meal preparation for the housebound, and to dozens of other public services whose costs are driven primarily by labour. A government that deploys robots into its own operations is not cutting services; it is delivering the same services at a fraction of the cost, freeing fiscal capacity to service debt, fund transition programmes for displaced workers, or reduce the tax burden on the remaining workforce.
-
-This is the only path through the triple squeeze that does not require either breaking promises to retirees or breaking the backs of workers. It requires, instead, breaking the assumption that the work of caring for an ageing population must be performed by humans paid from a shrinking tax base — an assumption that is historically contingent, not morally necessary.
-
----
-
-## X. The Race
-
-The squeeze is already tightening. The demographic trajectory is locked. The debt trajectory, absent a dramatic change in fiscal policy, is locked. The only variable with significant room for manoeuvre is the speed and direction of automation.
-
-If automation arrives primarily in the private sector, displacing workers while leaving public services labour-intensive, the squeeze accelerates. Revenue falls, expenditure rises, and the gap widens. This is the default trajectory.
-
-If automation arrives in public services — care, healthcare, education, administration — alongside the private sector, the squeeze is manageable. Expenditure falls as robots replace the costliest labour-intensive services, partially offsetting the revenue loss from private-sector displacement. This requires deliberate policy, because markets alone will not produce this outcome.
-
-The countries that navigate the squeeze successfully will be the ones that understand a counterintuitive truth: in an ageing society drowning in debt, the robot is not the threat. It is the liferaft.
-
-The question is whether any democracy can say that out loud before the water reaches its neck.
+The countries that navigate this will be the ones that grasp a counterintuitive truth: in a society that is ageing, indebted, and running out of workers, the machine is not the problem. It is the only answer that does not require breaking promises to retirees or breaking the people who still work. The question — and it is not a rhetorical one — is whether any democracy can reach that conclusion before the water reaches its neck.

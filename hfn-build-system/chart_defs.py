@@ -6162,7 +6162,7 @@ title:{display:true,text:'Cost ($)',color:C.dim}}}}});
             'title': 'Workers per Retiree: The Shrinking Base',
             'desc': 'The number of working-age adults supporting each person over 65 is falling across every advanced economy',
             'source': 'Social Security Administration; OECD; UN DESA World Population Prospects 2024',
-            'position': 'after_heading:The Grey Tide',
+            'position': 'after_heading:Three Forces, One Pressure Point',
             'js': """_regChart('tripleSqueezeChart1',()=>{const ctx=document.getElementById('tripleSqueezeChart1');new Chart(ctx,{type:'line',data:{datasets:[dxy('United States',[1950,1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[7.1,5.1,3.7,3.2,3.4,3.4,3.0,2.8,2.4,2.1,1.9],C.accent),dxy('Japan',[1950,1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[12.1,10.5,8.5,6.6,5.1,3.6,2.6,2.0,1.7,1.4,1.2],C.blue),dxy('Germany',[1950,1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[6.3,5.5,4.2,3.7,4.1,3.8,3.0,2.9,2.2,1.8,1.6],C.green),dxy('Italy',[1970,1980,1990,2000,2010,2020,2030,2040,2050],[5.1,4.3,3.8,3.4,3.0,2.6,2.1,1.7,1.4],C.amber),dxy('United Kingdom',[1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[4.6,3.9,3.6,3.8,3.6,3.3,2.8,2.5,2.2,2.0],C.purple,[5,5])]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+' workers per retiree'}}},scales:{x:{type:'linear',min:1950,max:2050,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,stepSize:10}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Workers per person 65+',color:C.dim,font:{size:11}},min:0,max:13}}}});});"""
         },
         {
@@ -6171,7 +6171,7 @@ title:{display:true,text:'Cost ($)',color:C.dim}}}}});
             'title': 'Government Debt-to-GDP: The Weight of Promises',
             'desc': 'Gross government debt as a percentage of GDP across major economies (2025)',
             'source': 'IMF World Economic Outlook, April 2025',
-            'position': 'after_heading:The Interest Trap',
+            'position': 'after_heading:Three Forces, One Pressure Point',
             'js': """_regChart('tripleSqueezeChart2',()=>{const ctx=document.getElementById('tripleSqueezeChart2');new Chart(ctx,{type:'bar',data:{labels:['Japan','Italy','United\\nStates','France','United\\nKingdom','Germany'],datasets:[dsBar('Gross debt/GDP (%)',[207,137,124,116,102,63],C.accent)]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of GDP'}},annotation:{annotations:{line100:{type:'line',xMin:100,xMax:100,borderColor:C.dim+'66',borderWidth:1.5,borderDash:[4,4],label:{content:'100% of GDP',display:true,position:'start',..._al,font:{size:10},color:C.dim}}}}},scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},min:0,max:250,title:{display:true,text:'Gross debt (% of GDP)',color:C.dim,font:{size:11}}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:12}}}}}});});"""
         },
         {
@@ -6180,7 +6180,7 @@ title:{display:true,text:'Cost ($)',color:C.dim}}}}});
             'title': 'The Scissors: US Federal Interest vs Defence Spending',
             'desc': 'US net interest payments have overtaken defence spending, consuming an ever-larger share of GDP',
             'source': 'Congressional Budget Office, Budget and Economic Outlook 2024-2025',
-            'position': 'after_heading:The Scissors',
+            'position': 'after_heading:The Vice',
             'js': """_regChart('tripleSqueezeChart3',()=>{const ctx=document.getElementById('tripleSqueezeChart3');new Chart(ctx,{type:'line',data:{datasets:[dxy('Net interest',[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030],[1.3,1.3,1.4,1.6,1.8,1.6,1.5,1.9,2.5,3.0,3.2,3.3,3.4,3.5,3.6,3.7],C.accent),dxy('Defence',[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030],[3.3,3.1,3.1,3.1,3.2,3.4,3.3,3.1,3.1,3.0,3.0,2.9,2.9,2.8,2.8,2.7],C.blue,[5,5])],labels:undefined},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of GDP'}}},scales:{x:{type:'linear',min:2015,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,stepSize:2}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v.toFixed(1)+'%'},title:{display:true,text:'% of GDP',color:C.dim,font:{size:11}},min:0,max:5}}}});});"""
         },
         {

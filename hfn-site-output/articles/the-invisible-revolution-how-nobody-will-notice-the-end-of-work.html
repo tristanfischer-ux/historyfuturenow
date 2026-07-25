@@ -106,6 +106,29 @@
     <img src="/images/articles/the-invisible-revolution-how-nobody-will-notice-the-end-of-work/hero.png" alt="Editorial illustration for The Invisible Revolution: How Nobody Will Notice the End of Work" class="article-hero-img" loading="lazy" width="1200" height="675">
   </div>
 
+  <div class="audio-player" id="audioPlayer">
+    <div class="audio-player-inner">
+      <button class="audio-play-btn" id="audioPlayBtn" aria-label="Play article narration">
+        <svg class="audio-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="audio-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+      </button>
+      <div class="audio-info">
+        <div class="audio-label">Listen to this article <span class="ai-narrated-badge">AI narrated <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4M8 5.5v-.01"/></svg></span></div>
+        <div class="audio-meta">26 min</div>
+      </div>
+      <div class="audio-progress-wrap" id="audioProgressWrap">
+        <div class="audio-progress-track"><div class="audio-progress-bar" id="audioProgressBar"></div></div>
+        <div class="scrub-thumb" id="audioThumb"></div>
+      </div>
+      <div class="audio-time" id="audioTime">0:00</div>
+      <div class="audio-speed" id="audioSpeed" title="Playback speed">1.25&times;</div>
+      <button class="q-add-btn-light" data-queue-slug="the-invisible-revolution-how-nobody-will-notice-the-end-of-work" data-queue-title="The Invisible Revolution: How Nobody Will Notice the End of Work" data-queue-section="Society" data-queue-color="#7c3aed" data-queue-url="/audio/the-invisible-revolution-how-nobody-will-notice-the-end-of-work.mp3" aria-label="Add to queue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        <span class="q-add-label">Add to Queue</span>
+      </button>
+    </div>
+    <audio id="audioElement" preload="none" src="/audio/the-invisible-revolution-how-nobody-will-notice-the-end-of-work.mp3"></audio>
+  </div>
   <div class="share-bar share-bar-top" data-share-url="https://www.historyfuturenow.com/articles/the-invisible-revolution-how-nobody-will-notice-the-end-of-work" data-share-title="The Invisible Revolution: How Nobody Will Notice the End of Work" data-share-text="Every transformative technology arrived without anybody noticing. The robot estate will be no different.">
     <span class="share-label">Share</span>
     <button class="share-btn" data-share="x" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></button>
@@ -166,10 +189,10 @@
 <p>In 1886, Josephine Cochrane patented the first practical dishwashing machine, marketed exclusively to hotels and restaurants. By the 1950s, the price had fallen enough for middle-class American households to buy them. By 2025, roughly 73% of American homes had one (AHAM/EIA, 2024).</p>
 <p>Nobody organised a movement to adopt dishwashers. No government passed a Dishwasher Subsidy Act. Households simply bought them because they were obviously useful and increasingly affordable. The transition took about 70 years from invention to majority adoption, and at no point did anyone describe it as a revolution.</p>
 <p>The same pattern — eccentric luxury, practical tool, standard appliance, invisible utility — has repeated with relentless consistency:</p>
-<p><strong>The electric light.</strong> Edison&rsquo;s Pearl Street Station in 1882 served 85 customers. By 1930, 70% of American homes had electricity. Roosevelt&rsquo;s Rural Electrification Administration (1935) accelerated the rural tail, and by the late 1950s, roughly 95% of American households were connected (US Census, EIA historical data). Urban adoption required no government intervention at all — people simply connected to the grid because electric light was better than kerosene.</p>
-<p><strong>The telephone.</strong> Bell&rsquo;s patent in 1876 served a curiosity market. By 1904, 8% of American households had a telephone. By 1946, roughly 50%. By 1970, approximately 87% (FCC historical data). The transition took 94 years, and nobody remembers it as a disruption.</p>
-<p><strong>The refrigerator.</strong> GE&rsquo;s Monitor Top model in 1927 cost $525 (roughly $9,200 in today&rsquo;s money). By 1944, 85% of American homes had one. Ice delivery — an industry employing tens of thousands of workers in 1930 — simply evaporated, and nobody protested in the streets about the lost livelihoods. Jonathan Rees documented this vanished industry in <em>Refrigeration Nation</em> (2013); it is a case study in how an entire sector can be replaced so gradually that its disappearance registers as a footnote.</p>
-<p><strong>The smartphone.</strong> Apple&rsquo;s iPhone launched in 2007 at $499, dismissed as a luxury toy. By 2025, approximately 90% of American adults had one — including demographics that did not use computers, did not have home broadband, and had never owned a separate camera (Pew Research Center, 2025).</p>
+<p>Take the electric light. Edison&rsquo;s Pearl Street Station in 1882 served 85 customers. By 1930, 70% of American homes had electricity. Roosevelt&rsquo;s Rural Electrification Administration (1935) accelerated the rural tail, and by the late 1950s, roughly 95% of American households were connected (US Census, EIA historical data). Urban adoption required no government intervention at all — people simply connected to the grid because electric light was better than kerosene.</p>
+<p>The telephone followed the same arc. Bell&rsquo;s patent in 1876 served a curiosity market. By 1904, 8% of American households had a telephone. By 1946, roughly 50%. By 1970, approximately 87% (FCC historical data). The transition took 94 years, and nobody remembers it as a disruption.</p>
+<p>The refrigerator is the most instructive. GE&rsquo;s Monitor Top model in 1927 cost $525 (roughly $9,200 in today&rsquo;s money). By 1944, 85% of American homes had one. Ice delivery — an industry employing tens of thousands of workers in 1930 — simply evaporated, and nobody protested in the streets about the lost livelihoods. Jonathan Rees documented this vanished industry in <em>Refrigeration Nation</em> (2013); it is a case study in how an entire sector can be replaced so gradually that its disappearance registers as a footnote.</p>
+<p>And the smartphone. Apple&rsquo;s iPhone launched in 2007 at $499, dismissed as a luxury toy. By 2025, approximately 90% of American adults had one — including demographics that did not use computers, did not have home broadband, and had never owned a separate camera (Pew Research Center, 2025).</p>
 <p>The pattern is so consistent that it constitutes something close to a law: <em>transformative domestic technologies are adopted one household at a time, through individual purchasing decisions, over 15 to 70 years, and the transition is noticed only in retrospect.</em> The speed depends on price, not on policy.</p>
 <p>But Ruth Schwartz Cowan, in her essential study <em>More Work for Mother</em> (1983), documented an important complication. Household appliances did not simply &ldquo;free&rdquo; women from domestic labour. They frequently <em>raised standards</em>. The washing machine did not give the housewife three extra hours of leisure; it created an expectation that clothes be washed more frequently. The vacuum cleaner did not reduce cleaning time; it made visible a level of dust that had previously been accepted. Technology reshapes expectations as efficiently as it reshapes labour.</p>
 <p>The robot will face the same dynamic. A household that acquires a robot will not simply enjoy more leisure. It will discover that a robot-maintained home is cleaner, better-fed, better-repaired, and better-cared-for than any human-maintained home — and the new standard will become the expectation.</p>
@@ -250,17 +273,17 @@
 <p>But the adoption curve for robots is not a single curve. It is three curves braided together: a capability curve, a cost curve, and a <em>permission</em> curve. The first two may move quickly. The third may not. A robot may be cheap enough to clean a kitchen before it is legally permitted to lift a frail person from a bath. It may be technically able to monitor a child before parents, insurers, or regulators trust it to do so. It may be capable of replacing a delivery driver before a city allows autonomous machines on pavements. The question is not only when robots can do the work. It is when institutions allow the work to count.</p>
 <hr />
 <h2>VI. The Household Transition: Nobody Notices</h2>
-<p><strong>Year 0 (say, 2030).</strong> A dual-income family spending $77,280 per year — the American average expenditure, per the Bureau of Labour Statistics Consumer Expenditure Survey 2023 — finances a humanoid robot at $20,000 over five years at roughly 5% APR. Monthly payment: $377. This is less than the average American car payment ($738 in 2024, per Experian). They do not think of themselves as &ldquo;participating in an economic transition.&rdquo; They think of themselves as buying a very useful appliance.</p>
+<p>Say it is 2030. A dual-income family spending $77,280 per year — the American average expenditure, per the Bureau of Labour Statistics Consumer Expenditure Survey 2023 — finances a humanoid robot at $20,000 over five years at roughly 5% APR. Monthly payment: $377. This is less than the average American car payment ($738 in 2024, per Experian). They do not think of themselves as &ldquo;participating in an economic transition.&rdquo; They think of themselves as buying a very useful appliance.</p>
 <p>The robot begins with cleaning, laundry, and basic cooking. These are not glamorous tasks. They are the tasks that currently consume 15-25 hours per week of unpaid household labour (BLS American Time Use Survey, 2023). The family&rsquo;s life improves in exactly the way it improved when their grandparents bought a washing machine: less drudgery, more free time, barely worth mentioning to the neighbours.</p>
-<p><strong>Year 1.</strong> The robot is now preparing 80% of the family&rsquo;s meals from bulk ingredients: 50-pound sacks of flour, bulk cooking oils, seasonal produce boxes, wholesale meat. The family&rsquo;s food spend drops from $9,985 per year (BLS CES 2023 average) to roughly $5,000 — a saving of nearly $5,000 annually. The food is better than before: the robot has access to every recipe ever published, knows the family&rsquo;s preferences, and never burns the pasta.</p>
+<p>A year in, the robot is preparing 80% of the family&rsquo;s meals from bulk ingredients: 50-pound sacks of flour, bulk cooking oils, seasonal produce boxes, wholesale meat. The family&rsquo;s food spend drops from $9,985 per year (BLS CES 2023 average) to roughly $5,000 — a saving of nearly $5,000 annually. The food is better than before: the robot has access to every recipe ever published, knows the family&rsquo;s preferences, and never burns the pasta.</p>
 <p>The family does not think of this as &ldquo;household production displacing the food-processing industry.&rdquo; They think of it as &ldquo;really good home cooking.&rdquo; Two of their friends buy robots.</p>
-<p><strong>Year 2.</strong> The family acquires a CNC router and a 3D printer — tools the robot operates. The early output is modest: shelving, garden planters, household organisers, replacement parts for appliances. Nobody is producing heirloom furniture from a garage CNC in 2032 — but IKEA-grade flatpack from delivered plywood and hardware? Straightforward. Raw materials cost roughly $250 per month. Not everything replaces a market purchase, but enough does that the family stops visiting the hardware shop.</p>
-<p><strong>Year 3.</strong> The robot loan is paid off. All savings now accumulate. The robot begins producing personal-care products — soap, lotion, lip balm — from delivered oils, lye, and beeswax. Simple textiles follow: cushion covers, tea towels, pyjamas. Industrial knitting machines already produce custom garments from a digital pattern; a household-scale version operating overnight is not science fiction but manufacturing miniaturisation — the same trajectory that put a printing press on every desk in the 1990s.</p>
-<p><strong>Year 4.</strong> The family installs solar panels, a battery, and a heat pump. The robot assists with installation. Current installed cost for a 6kW solar system with 13kWh battery after the 30% federal tax credit: approximately $18,000 (EnergySage, 2025). Electricity bill: effectively zero for most of the year, though seasonal storage gaps mean a grid connection remains for cloudy winter weeks. Gas bill: eliminated.</p>
-<p><strong>Year 5.</strong> A second robot — now priced at $12,000 — arrives. One handles precision indoor work: cooking, sewing, CNC. The other handles outdoor and heavy work: garden, exterior maintenance, food preservation.</p>
+<p>By the second year, the family acquires a CNC router and a 3D printer — tools the robot operates. The early output is modest: shelving, garden planters, household organisers, replacement parts for appliances. Nobody is producing heirloom furniture from a garage CNC in 2032 — but IKEA-grade flatpack from delivered plywood and hardware? Straightforward. Raw materials cost roughly $250 per month. Not everything replaces a market purchase, but enough does that the family stops visiting the hardware shop.</p>
+<p>Three years in, the robot loan is paid off. All savings now accumulate. The robot begins producing personal-care products — soap, lotion, lip balm — from delivered oils, lye, and beeswax. Simple textiles follow: cushion covers, tea towels, pyjamas. Industrial knitting machines already produce custom garments from a digital pattern; a household-scale version operating overnight is not science fiction but manufacturing miniaturisation — the same trajectory that put a printing press on every desk in the 1990s.</p>
+<p>The fourth year, the family installs solar panels, a battery, and a heat pump. The robot assists with installation. Current installed cost for a 6kW solar system with 13kWh battery after the 30% federal tax credit: approximately $18,000 (EnergySage, 2025). Electricity bill: effectively zero for most of the year, though seasonal storage gaps mean a grid connection remains for cloudy winter weeks. Gas bill: eliminated.</p>
+<p>By the fifth year, a second robot — now priced at $12,000 — arrives. One handles precision indoor work: cooking, sewing, CNC. The other handles outdoor and heavy work: garden, exterior maintenance, food preservation.</p>
 <p>The family&rsquo;s effective living standard is now equivalent to a household earning perhaps twice their actual income. Their costs have collapsed — not through austerity, but through production.</p>
-<p><strong>Year 7.</strong> The family&rsquo;s elderly parent moves in. The alternative was an assisted-living facility at $70,800 per year (Genworth Cost of Care Survey, 2024). The robot provides 24-hour support: medication reminders, cooking, cleaning, conversation, monitoring. It is not practising medicine in any regulated sense — it does not diagnose or prescribe. But it monitors vital signs, flags anomalies to a GP via telemedicine, manages the daily logistics of ageing, and provides tireless companionship. The parent receives better daily care than the care home provided, at a fraction of the cost.</p>
-<p><strong>Year 10.</strong> One parent goes part-time. With near-zero living costs, a single income easily covers everything. This is the universal high income transition. It happened without a vote, without a policy, without anyone noticing.</p>
+<p>Seven years in, the family&rsquo;s elderly parent moves in. The alternative was an assisted-living facility at $70,800 per year (Genworth Cost of Care Survey, 2024). The robot provides 24-hour support: medication reminders, cooking, cleaning, conversation, monitoring. It is not practising medicine in any regulated sense — it does not diagnose or prescribe. But it monitors vital signs, flags anomalies to a GP via telemedicine, manages the daily logistics of ageing, and provides tireless companionship. The parent receives better daily care than the care home provided, at a fraction of the cost.</p>
+<p>A decade on, one parent goes part-time. With near-zero living costs, a single income easily covers everything. This is the universal high income transition. It happened without a vote, without a policy, without anyone noticing.</p>
 <hr />
 <h2>VII. The Government Robot: A Fiscal Instrument</h2>
 
@@ -281,9 +304,9 @@
     </div>
 
 <p>Here is a number that should make every Treasury official sit up straight.</p>
-<p>A residential care home in the United Kingdom costs the local authority an average of £52,000 per year per resident (LaingBuisson, 2024). There are approximately 400,000 people in care homes in England (CQC, 2024). Total annual cost: approximately £20.8 billion.</p>
+<p>A residential care-home place in England costs roughly £800-1,000 per week — the lower end for council-funded placements, the upper for self-funders who cross-subsidise the system (LaingBuisson, 2024). At the blended midpoint, that is around £47,000 per year. There are approximately 400,000 people in care homes in England (CQC, 2024). Total annual cost: approximately £19 billion.</p>
 <p>A humanoid robot, by the mid-2030s, will cost approximately £3,000-£5,000.</p>
-<p>The payback period for the government is five to six <em>weeks</em>.</p>
+<p>The payback period for the government is measured in weeks, not years.</p>
 <p>This arithmetic applies across government social spending. Unemployment benefit (US: approximately $18,000/yr average): a robot producing food, clothing, and household goods from delivered raw materials provides a higher living standard than the cash benefit. Disability support (US: tens of thousands per year in combined benefits and services): a robot provides 24-hour physical assistance, mobility support, and medication management.</p>
 <p>But there is a subtler fiscal argument, and it concerns food.</p>
 <p>The robot preparing meals for a diabetic does not <em>advise</em> them to reduce sugar. It simply serves meals with appropriate glycaemic load, adjusted to individual insulin sensitivity. Diabetes costs the NHS approximately £10 billion annually and the US healthcare system $413 billion across all payers (ADA, 2023), with Type 2 accounting for roughly 90% of cases. It is overwhelmingly a disease of diet. Cardiovascular disease, obesity, and malnutrition in the elderly — conditions that are substantially preventable through dietary intervention — add hundreds of billions more. The robot that is simultaneously your chef and your health monitor intervenes at the point of food preparation, not after the disease manifests. Prevention at source rather than treatment after the fact.</p>
@@ -299,13 +322,13 @@
 <hr />
 <h2>IX. The Street Fight: What Could Go Wrong</h2>
 <p>The council of sceptics — and there should always be a council of sceptics — raises objections that deserve answers rather than dismissal.</p>
-<p><strong>Regulatory capture.</strong> The medical lobby will not permit a £3,000 robot to practise medicine. The American Medical Association and the British Medical Association will lobby to criminalise algorithmic diagnostics at 1% adoption, citing patient safety. Care-home operators will demand &ldquo;human safeguarding&rdquo; mandates. Food manufacturers will push for safety protocols requiring robots to use only &ldquo;trusted, licensed supply pods&rdquo; — digital rights management for physical goods.</p>
+<p>Start with regulatory capture. The medical lobby will not permit a £3,000 robot to practise medicine. The American Medical Association and the British Medical Association will lobby to criminalise algorithmic diagnostics at 1% adoption, citing patient safety. Care-home operators will demand &ldquo;human safeguarding&rdquo; mandates. Food manufacturers will push for safety protocols requiring robots to use only &ldquo;trusted, licensed supply pods&rdquo; — digital rights management for physical goods.</p>
 <p>This is serious, and it has historical precedent. Telemedicine was technically feasible in the late 1990s but took over 20 years to achieve legal parity — and only because the COVID-19 pandemic forced regulators&rsquo; hands. Nurse practitioners have spent 40 years fighting the AMA for independent prescribing rights. In many American states, they still lack them.</p>
 <p>But regulatory capture has a shelf life. The ice-delivery lobby could not stop the refrigerator. Taxi medallion holders could not stop ride-hailing permanently. In each case, the consumer benefit was so large and so obvious that regulatory barriers eventually crumbled. The key variable is the 0-15% adoption phase — the fragile period when incumbents can strangle the technology before it reaches critical mass. If robots enter the household as cleaning appliances (which require no medical licence) and gradually expand their capabilities through software updates, they may bypass the regulatory gauntlet entirely. The care-home lobby cannot regulate a vacuum cleaner. By the time the vacuum cleaner can also cook, monitor vital signs, and manage medication, 30 million households already have one.</p>
-<p><strong>Ownership concentration.</strong> If five companies own 60-70% of the robot capital stock, the cost floor becomes a negotiated transfer price, not a raw-materials floor. This is the most consequential risk. If households <em>own</em> their robots outright — like a washing machine — the supply chain is contestable. If they <em>lease</em> them — like a smartphone contract — the lessor can extract rents indefinitely through subscription fees, mandatory safety updates, and DRM-locked supply chains.</p>
+<p>Then there is ownership concentration. If five companies own 60-70% of the robot capital stock, the cost floor becomes a negotiated transfer price, not a raw-materials floor. This is the most consequential risk. If households <em>own</em> their robots outright — like a washing machine — the supply chain is contestable. If they <em>lease</em> them — like a smartphone contract — the lessor can extract rents indefinitely through subscription fees, mandatory safety updates, and DRM-locked supply chains.</p>
 <p>The policy fight over robot ownership may be the defining economic-policy question of the 2030s. Governments that wish to capture the fiscal benefits of the domestic robot economy will need aggressive right-to-own legislation: mandating interoperability, banning closed-loop software dependencies, and prohibiting retrospective disabling of hardware. Without such legislation, the cottage economy thesis collapses. The robot manages your life, but at a price point engineered to extract exactly as much disposable income as the current economy does.</p>
-<p><strong>The fiscal state.</strong> If household costs collapse and individuals retreat from the formal labour market, the state&rsquo;s primary revenue stream — income tax and payroll taxes — dries up. How does the government fund the military, infrastructure, or the welfare programmes that subsidised the transition? A 30-50 year timeline gives governments room to pivot their fiscal architecture from taxing labour to taxing land, capital, energy, or resource extraction. But such restructuring requires political will that rarely exists in advance of the crisis that makes it necessary.</p>
-<p><strong>The timeline.</strong> The honest answer is that the transition will probably take 30-50 years from first mass production to near-universal adoption — putting full penetration somewhere in the 2055-2075 range. The smartphone analogy is misleading because smartphones operate in the digital realm, free of building codes, medical licensing, and zoning laws. A humanoid robot interacts with the physical, regulated world at every level. A more honest comparison is household electrification (40-60 years) or the automobile (50 years from Ford Model T to near-universal ownership).</p>
+<p>The fiscal state is a harder problem. If household costs collapse and individuals retreat from the formal labour market, the state&rsquo;s primary revenue stream — income tax and payroll taxes — dries up. How does the government fund the military, infrastructure, or the welfare programmes that subsidised the transition? A 30-50 year timeline gives governments room to pivot their fiscal architecture from taxing labour to taxing land, capital, energy, or resource extraction. But such restructuring requires political will that rarely exists in advance of the crisis that makes it necessary.</p>
+<p>Finally, the timeline. The honest answer is that the transition will probably take 30-50 years from first mass production to near-universal adoption — putting full penetration somewhere in the 2055-2075 range. The smartphone analogy is misleading because smartphones operate in the digital realm, free of building codes, medical licensing, and zoning laws. A humanoid robot interacts with the physical, regulated world at every level. A more honest comparison is household electrification (40-60 years) or the automobile (50 years from Ford Model T to near-universal ownership).</p>
 <p>But 30-50 years is within a single human lifetime. And the transition will feel invisible for the same reason that agricultural mechanisation was invisible to urban consumers: the people experiencing the benefits — individual households saving money, eating better, caring for their parents — will not describe it as a revolution. They will describe it as life getting gradually, unremarkably, better.</p>
 <hr />
 <h2>X. The World After the Transition</h2>
@@ -361,13 +384,13 @@
   <section class="read-next-section" aria-label="Read next">
     <h2 class="read-next-heading">Read next</h2>
     <div class="read-next-grid">
-      <a href="/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing" class="read-next-card" style="--section-color:#7c3aed">
-        <div class="read-next-img-wrap"><img src="/images/articles/the-builders-are-dying-how-the-populations-that-made-the-modern-world-are-disappearing/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
+      <a href="/articles/what-does-it-take-to-get-europeans-to-have-a-revolution" class="read-next-card" style="--section-color:#7c3aed">
+        <div class="read-next-img-wrap"><img src="/images/articles/what-does-it-take-to-get-europeans-to-have-a-revolution/hero.png" alt="" class="read-next-img" loading="lazy" width="600" height="338"></div>
         <div class="read-next-body">
           <span class="read-next-label">More in Society</span>
           <span class="read-next-kicker" style="color:#7c3aed">Society</span>
-          <h3 class="read-next-title">The Builders Are Dying: How the Populations That Made the Modern World Are Disappearing — And What Happens Next</h3>
-          <span class="read-next-meta">16 min read <span class="read-next-audio">Audio</span></span>
+          <h3 class="read-next-title">What Does It Take To Get Europeans To Have A Revolution?</h3>
+          <span class="read-next-meta">48 min read <span class="read-next-audio">Audio</span></span>
         </div>
       </a>
       <a href="/articles/taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it" class="read-next-card" style="--section-color:#b8751a">
@@ -593,7 +616,185 @@ title:{display:true,text:'Cost ($)',color:C.dim}}}}});
 });
 })();
 </script>
+<script>
+(function(){
+  function initPlayer(audioId,btnId,barId,wrapId,timeId,speedId,thumbId){
+    var audio=document.getElementById(audioId);
+    if(!audio)return;
+    var btn=document.getElementById(btnId);
+    var bar=document.getElementById(barId);
+    var wrap=document.getElementById(wrapId);
+    var timeEl=document.getElementById(timeId);
+    var speedEl=document.getElementById(speedId);
+    var thumb=document.getElementById(thumbId);
+    if(!btn)return;
+    var iconPlay=btn.querySelector('.audio-icon-play');
+    var iconPause=btn.querySelector('.audio-icon-pause');
+    var speeds=[1,1.25,1.5,1.75,2];
+    var si=1;
+    var dragging=false;
 
+    var qRouted=false;
+    var qAudio=null;
+    var qMeta=null;
+
+    if(audioId==='audioElement'&&window.HFNQueue&&HFNQueue._getAudio){
+      var qBtn=document.querySelector('.q-add-btn-light[data-queue-slug]');
+      if(qBtn){
+        qMeta={slug:qBtn.dataset.queueSlug,title:qBtn.dataset.queueTitle,
+               section:qBtn.dataset.queueSection||'',color:qBtn.dataset.queueColor||'',
+               url:qBtn.dataset.queueUrl};
+      }
+    }
+
+    function cur(){return qRouted&&qAudio?qAudio:audio;}
+
+    function fmt(s){
+      if(isNaN(s))return'0:00';
+      var m=Math.floor(s/60);
+      var sec=Math.floor(s%60);
+      return m+':'+(sec<10?'0':'')+sec;
+    }
+
+    function updateBar(pct){
+      var p=(pct*100)+'%';
+      bar.style.width=p;
+      if(thumb)thumb.style.left=p;
+    }
+
+    function seekTo(e){
+      var a=cur();if(!a.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+      a.currentTime=pct*a.duration;
+      updateBar(pct);
+    }
+
+    function seekToTouch(e){
+      var a=cur();if(!a.duration)return;
+      var rect=wrap.getBoundingClientRect();
+      var touch=e.touches[0];
+      var pct=Math.max(0,Math.min(1,(touch.clientX-rect.left)/rect.width));
+      a.currentTime=pct*a.duration;
+      updateBar(pct);
+    }
+
+    function syncIcons(playing){
+      iconPlay.style.display=playing?'none':'block';
+      iconPause.style.display=playing?'block':'none';
+    }
+
+    function bindQueueEvents(){
+      qAudio.addEventListener('timeupdate',function(){
+        if(dragging)return;
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()!==qMeta.slug)return;
+        if(!qAudio.duration)return;
+        var pct=qAudio.currentTime/qAudio.duration;
+        updateBar(pct);
+        timeEl.textContent=fmt(qAudio.currentTime)+' / '+fmt(qAudio.duration);
+      });
+      qAudio.addEventListener('play',function(){
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug)syncIcons(true);
+      });
+      qAudio.addEventListener('pause',function(){
+        if(HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug)syncIcons(false);
+      });
+      qAudio.addEventListener('ended',function(){syncIcons(false);updateBar(0);});
+    }
+
+    function routeToQueue(){
+      if(qRouted||!qMeta)return false;
+      HFNQueue.playNow(qMeta.slug,qMeta.title,qMeta.section,qMeta.color,qMeta.url);
+      qAudio=HFNQueue._getAudio();
+      if(!qAudio){return false;}
+      qRouted=true;
+      if(speedEl){qAudio.playbackRate=speeds[si];}
+      syncIcons(true);
+      bindQueueEvents();
+      return true;
+    }
+
+    // On load: if queue is already playing this track, sync to it
+    if(qMeta&&window.HFNQueue&&HFNQueue.getCurrentSlug&&HFNQueue.getCurrentSlug()===qMeta.slug&&HFNQueue._getAudio){
+      qAudio=HFNQueue._getAudio();
+      qRouted=true;
+      syncIcons(!qAudio.paused);
+      bindQueueEvents();
+      if(qAudio.duration){
+        var pct0=qAudio.currentTime/qAudio.duration;
+        updateBar(pct0);
+        timeEl.textContent=fmt(qAudio.currentTime)+' / '+fmt(qAudio.duration);
+      }
+    }
+
+    btn.onclick=function(){
+      if(qMeta&&!qRouted){if(routeToQueue())return;}
+      var a=cur();
+      if(a.paused){a.play().then(function(){syncIcons(true);}).catch(function(){});}
+      else{a.pause();syncIcons(false);}
+    };
+
+    audio.ontimeupdate=function(){
+      if(qRouted||dragging)return;
+      if(audio.duration){
+        updateBar(audio.currentTime/audio.duration);
+        timeEl.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+      }
+    };
+
+    audio.onended=function(){
+      if(qRouted)return;
+      syncIcons(false);updateBar(0);
+    };
+
+    wrap.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekTo(e);
+      function onMove(ev){seekTo(ev);}
+      function onUp(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('mousemove',onMove);
+        document.removeEventListener('mouseup',onUp);
+      }
+      document.addEventListener('mousemove',onMove);
+      document.addEventListener('mouseup',onUp);
+    });
+
+    wrap.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      dragging=true;
+      wrap.classList.add('scrubbing');
+      seekToTouch(e);
+      function onTouchMove(ev){ev.preventDefault();seekToTouch(ev);}
+      function onTouchEnd(){
+        dragging=false;
+        wrap.classList.remove('scrubbing');
+        document.removeEventListener('touchmove',onTouchMove);
+        document.removeEventListener('touchend',onTouchEnd);
+      }
+      document.addEventListener('touchmove',onTouchMove,{passive:false});
+      document.addEventListener('touchend',onTouchEnd);
+    });
+
+    if(speedEl){
+      var a0=cur();a0.playbackRate=speeds[si];
+      speedEl.textContent=speeds[si]+'\u00d7';
+      speedEl.onclick=function(){
+        si=(si+1)%speeds.length;
+        var a=cur();
+        a.playbackRate=speeds[si];
+        speedEl.textContent=speeds[si]+'\u00d7';
+      };
+    }
+  }
+
+  initPlayer('audioElement','audioPlayBtn','audioProgressBar','audioProgressWrap','audioTime','audioSpeed','audioThumb');
+  if(document.getElementById('discussionElement')){initPlayer('discussionElement','discussionPlayBtn','discussionProgressBar','discussionProgressWrap','discussionTime','discussionSpeed','discussionThumb');}
+})();
+</script>
 <script src="/js/share.js?v=93922466"></script>
 <script>(function(){var isUK=false;try{var tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";isUK=tz==="Europe/London"||tz==="Europe/Belfast"||tz==="Europe/Guernsey"||tz==="Europe/Isle_of_Man"||tz==="Europe/Jersey";}catch(e){}if(!isUK){var links=document.querySelectorAll(".further-reading-amazon");for(var i=0;i<links.length;i++){var q=links[i].getAttribute("href").split("?k=")[1];if(q)links[i].href="https://www.amazon.com/s?k="+q;}}})();</script>
 </body>
