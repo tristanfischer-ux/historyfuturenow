@@ -5,13 +5,22 @@
     <link>https://www.historyfuturenow.com</link>
     <description>Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.</description>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 23 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 25 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.historyfuturenow.com/feed.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://www.historyfuturenow.com/favicon.svg</url>
       <title>History Future Now</title>
       <link>https://www.historyfuturenow.com</link>
     </image>
+    <item>
+      <title>The Invisible Revolution: How Nobody Will Notice the End of Work</title>
+      <link>https://www.historyfuturenow.com/articles/the-invisible-revolution-how-nobody-will-notice-the-end-of-work</link>
+      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-invisible-revolution-how-nobody-will-notice-the-end-of-work</guid>
+      <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
+      <description>In July 2026, Elon Musk sat down with the *Economist*&#x27;s editor-in-chief, Zanny Minton Beddoes, and predicted &quot;[an age of amazing abundance](https://www.youtube.com/watch?v=8TjK-s0468w) where anyone can have anything they can think of.&quot; Robots would outnumber humans. Money itself might become irrelev</description>
+      <category>Society</category>
+      <enclosure url="https://www.historyfuturenow.com/images/articles/the-invisible-revolution-how-nobody-will-notice-the-end-of-work/hero.png" type="image/png" />
+    </item>
     <item>
       <title>Taxation Without Representation: Britain&#x27;s £3 Trillion Debt and the Generation Being Asked to Pay For It</title>
       <link>https://www.historyfuturenow.com/articles/taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it</link>
@@ -182,15 +191,6 @@
       <description>The US spent more on interest payments than on defence in 2024 for the first time in history. Spain defaulted six times between 1557 and 1647. France&#x27;s debt triggered the Revolution. The pattern is always the same.</description>
       <category>Jobs &amp; Economy</category>
       <enclosure url="https://www.historyfuturenow.com/images/articles/the-debasement-why-every-great-power-that-borrowed-its-way-to-greatness-borrowed-its-way-to-ruin/hero.png" type="image/png" />
-    </item>
-    <item>
-      <title>The Atom Returns: Why the World&#x27;s Most Feared Energy Source Is Its Best Hope</title>
-      <link>https://www.historyfuturenow.com/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope</link>
-      <guid isPermaLink="true">https://www.historyfuturenow.com/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope</guid>
-      <pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate>
-      <description>Microsoft signed a deal to restart Three Mile Island for AI power. France generates 70% of its electricity from nuclear at half Germany&#x27;s carbon intensity. China is building 150 reactors. The atom is back — and the nations that embrace it will thrive.</description>
-      <category>Natural Resources</category>
-      <enclosure url="https://www.historyfuturenow.com/images/articles/the-atom-returns-why-the-worlds-most-feared-energy-source-is-its-best-hope/hero.png" type="image/png" />
     </item>
   </channel>
 </rss>

@@ -5964,7 +5964,7 @@ title:{display:true,text:'Cumulative share of income tax',color:C.dim}}}}});
             'title': 'A Century of Debt — and Where It Leads',
             'desc': 'UK public sector net debt as % of GDP, with OBR 50-year projection',
             'source': 'ONS, Bank of England, OBR Fiscal Risks & Sustainability 2026',
-            'position': 'after_heading:Part Four: Where We Are Going',
+            'position': 'after_heading:Part Five: The Reckoning',
             'tall': True,
             'js': """
 _regChart('taxChart5',()=>{const ctx=document.getElementById('taxChart5');
@@ -5996,7 +5996,7 @@ title:{display:true,text:'Public sector net debt (% of GDP)',color:C.dim}}}}});
             'title': 'The Engine That Stalled: UK Fertility Rate 1960-2024',
             'desc': 'Britain has been below replacement fertility continuously since 1973',
             'source': 'ONS, Births in England and Wales; OBR',
-            'position': 'after_heading:Part Five: The Growth Assumption That No Longer Holds',
+            'position': 'after_heading:Part Four: Why the Escape Route Is Closed',
             'js': """
 _regChart('taxChart6',()=>{const ctx=document.getElementById('taxChart6');
 const yrs=[1960,1964,1968,1970,1973,1975,1978,1980,1985,1990,1995,2000,2005,2010,2012,2015,2018,2020,2022,2024];
@@ -6022,7 +6022,7 @@ title:{display:true,text:'Children per woman',color:C.dim}}}}});
             'title': 'The Interest Trap: What Rising Debt Costs Each Year',
             'desc': 'At 300% of GDP, annual interest alone exceeds the entire NHS budget',
             'source': 'OBR Fiscal Risks & Sustainability 2026; author calculation at 3.5% average gilt yield',
-            'position': 'after_heading:Part Seven: The Debt Trap',
+            'position': 'after_para_28',
             'js': """
 _regChart('taxChart7',()=>{const ctx=document.getElementById('taxChart7');
 const debtPct=[95,120,150,180,200,250,300];
@@ -6055,7 +6055,7 @@ title:{display:true,text:'Annual interest cost (£bn)',color:C.dim}}}}});
             'title': 'The Shrinking State: Where the Money Goes as Debt Rises',
             'desc': 'Interest crowds out everything else — by 2075, the discretionary state is halved',
             'source': 'OBR Fiscal Risks & Sustainability 2026; author projections',
-            'position': 'after_heading:Part Eight: The Difficult Decisions',
+            'position': 'after_heading:Part Six: The Difficult Decisions',
             'js': """
 _regChart('taxChart8',()=>{const ctx=document.getElementById('taxChart8');
 const labels=['Today\\n(2026)','2040','2055','2075'];
@@ -6078,6 +6078,116 @@ scales:{x:{grid:{display:false},stacked:true,ticks:{color:C.dim,font:{size:11},m
 y:{grid:{color:C.grid},stacked:true,ticks:{color:C.dim,callback:v=>v+'%'},max:52,
 title:{display:true,text:'% of GDP',color:C.dim}}}}});
 });"""
+        },
+    ]
+
+    # ─── THE INVISIBLE REVOLUTION ───
+    charts['the-invisible-revolution-how-nobody-will-notice-the-end-of-work'] = [
+        {
+            'id': 'invisRevChart1', 'figure_num': 1,
+            'title': 'Household Technology Adoption in the United States',
+            'desc': 'How transformative domestic technologies followed the same S-curve — and where the robot sits today',
+            'source': 'US Census, EIA, FCC, AHAM, Pew Research Center; robot projection based on Wright\'s Law cost trajectory',
+            'position': 'after_heading:The Machines Come Home',
+            'js': """
+_regChart('invisRevChart1',()=>{const ctx=document.getElementById('invisRevChart1');
+const yrs=[1880,1890,1900,1910,1920,1930,1940,1950,1960,1970,1980,1990,2000,2010,2020,2030,2040,2050,2060];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Electric light',yrs,[0,0,3,10,35,70,79,94,99,99,99,99,99,99,99,null,null,null,null],C.amber),
+dxy('Telephone',yrs,[0,0,5,8,35,41,37,54,78,87,93,94,94,null,null,null,null,null,null],C.blue),
+dxy('Refrigerator',yrs,[0,0,0,0,0,8,44,85,98,99,99,99,99,99,99,null,null,null,null],C.green),
+dxy('Dishwasher',yrs,[0,0,0,0,0,0,0,0,7,19,37,45,53,62,73,78,null,null,null],C.purple),
+dxy('Smartphone',yrs,[0,0,0,0,0,0,0,0,0,0,0,0,0,30,85,92,null,null,null],C.teal),
+dxy('Humanoid robot (proj.)',yrs,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,25,50,80],C.accent,[6,4])
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y+'%'}}},
+scales:{x:linX(1880,2065,{title:{display:true,text:'Year',color:C.dim}}),
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>v+'%'},min:0,max:100,
+title:{display:true,text:'Household penetration (%)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'invisRevChart2', 'figure_num': 2,
+            'title': 'Projected Humanoid Robot Cost Decline',
+            'desc': 'Wright\'s Law predicts 20-30% cost reduction per doubling of cumulative production',
+            'source': 'Tesla public statements; Nagy et al. (2013); solar and battery cost analogues from BNEF, NREL',
+            'position': 'after_heading:The Robot Arrives',
+            'js': """
+_regChart('invisRevChart2',()=>{const ctx=document.getElementById('invisRevChart2');
+const yrs=[2025,2028,2030,2033,2035,2038,2040,2045,2050];
+new Chart(ctx,{type:'line',data:{datasets:[
+dxy('Humanoid robot (est.)',yrs,[75000,35000,20000,12000,8000,6000,5000,3500,3000],C.accent),
+dxy('Solar panel $/W (×30k)',yrs.map((_,i)=>[2005,2008,2010,2013,2015,2018,2020,2022,2024][i]),[150000,120000,60000,21000,18000,12000,9000,7500,6000],C.amber,[6,4]),
+{label:'Commodity floor',data:yrs.map(y=>({x:y,y:1500})),borderColor:C.dim,backgroundColor:'transparent',fill:false,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[3,5]}
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.parsed.y;return i.dataset.label+': $'+v.toLocaleString()}}}},
+scales:{x:{type:'linear',min:2024,max:2051,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick}},
+y:{type:'logarithmic',grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v.toLocaleString()},
+title:{display:true,text:'Cost per unit (log scale)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'id': 'invisRevChart3', 'figure_num': 3,
+            'title': 'Annual Government Care Costs vs One-Time Robot Cost',
+            'desc': 'A robot pays for itself in weeks, not years',
+            'source': 'LaingBuisson 2023/24, Genworth 2024, BLS, ADA 2023; robot cost projected mid-2030s',
+            'position': 'after_heading:The Government Robot',
+            'js': """
+_regChart('invisRevChart3',()=>{const ctx=document.getElementById('invisRevChart3');
+new Chart(ctx,{type:'bar',data:{
+labels:['UK care\\nhome','US assisted\\nliving','US unemployment\\nbenefit','Robot\\n(one-time)'],
+datasets:[
+dsBar('Annual cost',[52000,70800,18000,null],C.accent),
+dsBar('One-time cost',[null,null,null,5000],C.green)
+]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},
+plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.parsed.y;const cur=i.dataIndex===0?'£':'$';return i.dataset.label+': '+cur+v.toLocaleString()+([3].includes(i.dataIndex)?' (one-time)':'/year')}}}},
+scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},
+y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'$'+v.toLocaleString()},
+title:{display:true,text:'Cost ($)',color:C.dim}}}}});
+});"""
+        },
+        {
+            'data_story': True,
+            'headline': 'A care-home robot pays for itself in 5 weeks',
+            'chart_id': 'heroInvisRev',
+            'js': """_regChart('heroInvisRev',()=>{const ctx=document.getElementById('heroInvisRev');new Chart(ctx,{type:'bar',data:{labels:['UK care\\nhome/yr','US care\\nhome/yr','Robot\\n(one-time)'],datasets:[{data:[52000,70800,5000],backgroundColor:['#c43425','#c43425cc','#0d9a5a'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'$'+i.raw.toLocaleString()}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',callback:v=>'$'+v.toLocaleString(),font:{size:9}}}}}});});"""
+        },
+    ]
+
+    # ── The Triple Squeeze ──────────────────────────────────────────────────
+    charts['the-triple-squeeze-when-ageing-debt-and-robots-collide'] = [
+        {
+            'id': 'tripleSqueezeChart1',
+            'figure_num': 1,
+            'title': 'Workers per Retiree: The Shrinking Base',
+            'desc': 'The number of working-age adults supporting each person over 65 is falling across every advanced economy',
+            'source': 'Social Security Administration; OECD; UN DESA World Population Prospects 2024',
+            'position': 'after_heading:The Grey Tide',
+            'js': """_regChart('tripleSqueezeChart1',()=>{const ctx=document.getElementById('tripleSqueezeChart1');new Chart(ctx,{type:'line',data:{datasets:[dxy('United States',[1950,1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[7.1,5.1,3.7,3.2,3.4,3.4,3.0,2.8,2.4,2.1,1.9],C.accent),dxy('Japan',[1950,1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[12.1,10.5,8.5,6.6,5.1,3.6,2.6,2.0,1.7,1.4,1.2],C.blue),dxy('Germany',[1950,1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[6.3,5.5,4.2,3.7,4.1,3.8,3.0,2.9,2.2,1.8,1.6],C.green),dxy('Italy',[1970,1980,1990,2000,2010,2020,2030,2040,2050],[5.1,4.3,3.8,3.4,3.0,2.6,2.1,1.7,1.4],C.amber),dxy('United Kingdom',[1960,1970,1980,1990,2000,2010,2020,2030,2040,2050],[4.6,3.9,3.6,3.8,3.6,3.3,2.8,2.5,2.2,2.0],C.purple,[5,5])]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+' workers per retiree'}}},scales:{x:{type:'linear',min:1950,max:2050,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,stepSize:10}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11}},title:{display:true,text:'Workers per person 65+',color:C.dim,font:{size:11}},min:0,max:13}}}});});"""
+        },
+        {
+            'id': 'tripleSqueezeChart2',
+            'figure_num': 2,
+            'title': 'Government Debt-to-GDP: The Weight of Promises',
+            'desc': 'Gross government debt as a percentage of GDP across major economies (2025)',
+            'source': 'IMF World Economic Outlook, April 2025',
+            'position': 'after_heading:The Interest Trap',
+            'js': """_regChart('tripleSqueezeChart2',()=>{const ctx=document.getElementById('tripleSqueezeChart2');new Chart(ctx,{type:'bar',data:{labels:['Japan','Italy','United\\nStates','France','United\\nKingdom','Germany'],datasets:[dsBar('Gross debt/GDP (%)',[207,137,124,116,102,63],C.accent)]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.raw+'% of GDP'}},annotation:{annotations:{line100:{type:'line',xMin:100,xMax:100,borderColor:C.dim+'66',borderWidth:1.5,borderDash:[4,4],label:{content:'100% of GDP',display:true,position:'start',..._al,font:{size:10},color:C.dim}}}}},scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v+'%'},min:0,max:250,title:{display:true,text:'Gross debt (% of GDP)',color:C.dim,font:{size:11}}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:12}}}}}});});"""
+        },
+        {
+            'id': 'tripleSqueezeChart3',
+            'figure_num': 3,
+            'title': 'The Scissors: US Federal Interest vs Defence Spending',
+            'desc': 'US net interest payments have overtaken defence spending, consuming an ever-larger share of GDP',
+            'source': 'Congressional Budget Office, Budget and Economic Outlook 2024-2025',
+            'position': 'after_heading:The Scissors',
+            'js': """_regChart('tripleSqueezeChart3',()=>{const ctx=document.getElementById('tripleSqueezeChart3');new Chart(ctx,{type:'line',data:{datasets:[dxy('Net interest',[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030],[1.3,1.3,1.4,1.6,1.8,1.6,1.5,1.9,2.5,3.0,3.2,3.3,3.4,3.5,3.6,3.7],C.accent),dxy('Defence',[2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030],[3.3,3.1,3.1,3.1,3.2,3.4,3.3,3.1,3.1,3.0,3.0,2.9,2.9,2.8,2.8,2.7],C.blue,[5,5])],labels:undefined},options:{responsive:true,maintainAspectRatio:false,plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': '+i.parsed.y.toFixed(1)+'% of GDP'}}},scales:{x:{type:'linear',min:2015,max:2030,grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:yearTick,stepSize:2}},y:{grid:{color:C.grid},ticks:{color:C.dim,font:{size:11},callback:v=>v.toFixed(1)+'%'},title:{display:true,text:'% of GDP',color:C.dim,font:{size:11}},min:0,max:5}}}});});"""
+        },
+        {
+            'data_story': True,
+            'headline': 'By 2040, two US workers will support each retiree',
+            'chart_id': 'heroTripleSqueeze',
+            'js': """_regChart('heroTripleSqueeze',()=>{const ctx=document.getElementById('heroTripleSqueeze');new Chart(ctx,{type:'bar',data:{labels:['1960','2024','2040\\n(proj.)'],datasets:[{data:[5.1,2.7,2.1],backgroundColor:[C.green,C.amber,C.accent],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>i.raw+' workers per retiree'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9}},min:0,max:6}}}});});"""
         },
     ]
 

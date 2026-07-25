@@ -27,6 +27,7 @@ REVIEW_SLUGS = {
     'the-young-continent-how-africas-billion-person-surge-will-reshape-the-global-order',
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
+    'the-triple-squeeze-when-ageing-debt-and-robots-collide',
 }
 _review_file = Path(__file__).parent / "review_slugs.json"
 if _review_file.exists():
@@ -44,6 +45,7 @@ RELEASED_FROM_REVIEW = {
     'the-narrow-lens-how-what-britain-teaches-its-children-shapes-how-adults-see-the-world',
     'the-useful-idiots-why-every-alliance-between-the-left-and-islamism-ends-the-same-way',
     'taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it',
+    'the-invisible-revolution-how-nobody-will-notice-the-end-of-work',
 }
 _released_file = Path(__file__).parent / "released_slugs.json"
 if _released_file.exists():

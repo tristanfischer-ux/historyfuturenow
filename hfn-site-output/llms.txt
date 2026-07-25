@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 85
+Total articles: 86
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -18,7 +18,7 @@ Total articles: 85
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (36 articles)
+### Society (37 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -231,7 +231,7 @@ Total articles: 85
 - URL: https://www.historyfuturenow.com/articles/taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it
 - Section: Jobs & Economy
 - Published: 2026-07-23
-- Reading time: 17 min
+- Reading time: 12 min
 - Every month the British government takes in around £100 billion and spends around £113 billion. The difference is borrowed. The people who will repay it are, for the most part, too young to vote — or 
 
 ### The 150 Year Life: How Radical Longevity Will Transform Our World [4 charts]
@@ -345,6 +345,13 @@ Total articles: 85
 - Published: 2026-04-21
 - Reading time: 11 min
 - Guilt societies are ruled by an internal judge; shame societies by the eye of the crowd. The difference shapes corruption, rule of law, and how civilisations understand each other — when they meet, th
+
+### The Invisible Revolution: How Nobody Will Notice the End of Work [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-invisible-revolution-how-nobody-will-notice-the-end-of-work
+- Section: Society
+- Published: 2026-07-25
+- Reading time: 20 min
+- In July 2026, Elon Musk sat down with the *Economist*'s editor-in-chief, Zanny Minton Beddoes, and predicted "[an age of amazing abundance](https://www.youtube.com/watch?v=8TjK-s0468w) where anyone ca
 
 ### The Ladder and the Lie: Why Every Great Economy Was Built on Tariffs and Free Trade Only Serves the Already Dominant [4 charts]
 - URL: https://www.historyfuturenow.com/articles/the-ladder-and-the-lie-why-every-great-economy-was-built-on-tariffs-and-free-trade-only-serves-the-already-dominant

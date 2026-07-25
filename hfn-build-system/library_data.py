@@ -406,6 +406,11 @@ BOOKS = [
     {"title": "Chip War", "author": "Chris Miller", "year": 2023, "source": "audible", "themes": ["economics", "geopolitics"]},
     {"title": "Breakneck", "author": "Dan Wang", "year": 2025, "source": "audible", "themes": ["economics", "geopolitics"]},
 
+    {"title": "More Work for Mother", "author": "Ruth Schwartz Cowan", "year": 1983, "source": "kindle", "themes": ["economics", "modern"]},
+    {"title": "The Industrious Revolution", "author": "Jan de Vries", "year": 2008, "source": "kindle", "themes": ["economics", "modern"]},
+    {"title": "Before the Industrial Revolution", "author": "Carlo M. Cipolla", "year": 1993, "source": "kindle", "themes": ["economics", "modern"]},
+    {"title": "Refrigeration Nation", "author": "Jonathan Rees", "year": 2013, "source": "kindle", "themes": ["economics", "science"]},
+
     # ═══════════════════════════════════════════════════════════════
     # POLITICS & CULTURE
     # ═══════════════════════════════════════════════════════════════
