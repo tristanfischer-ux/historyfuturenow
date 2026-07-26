@@ -3,7 +3,7 @@
 
 Data-driven analysis of the structural forces — demographic, technological, economic — that will shape the next century.
 Author: Tristan Fischer
-Total articles: 86
+Total articles: 87
 
 ## Sections
 ### Natural Resources (14 articles)
@@ -18,7 +18,7 @@ Total articles: 86
 - URL: https://www.historyfuturenow.com/jobs-economy
 - Automation, trade, debt, and the future of work in an age of intelligent machines.
 
-### Society (37 articles)
+### Society (38 articles)
 - URL: https://www.historyfuturenow.com/society
 - Democracy, religion, migration, identity — the human systems that bind us together.
 
@@ -471,6 +471,13 @@ Total articles: 86
 - Published: 2026-02-08
 - Reading time: 10 min
 - In February 2026, India ordered social media platforms to remove content within three hours of a government request. The EU's Digital Services Act empowers bureaucrats to police online speech across 2
+
+### The Triple Squeeze: When Ageing, Debt, and Robots Collide [4 charts]
+- URL: https://www.historyfuturenow.com/articles/the-triple-squeeze-when-ageing-debt-and-robots-collide
+- Section: Society
+- Published: 2026-07-25
+- Reading time: 12 min
+- In 1960, the United States had 5.1 workers paying into Social Security for every person drawing from it. Today it has 2.7. By 2040, that ratio will be roughly 2.1 — and the federal government already 
 
 ### The Unintended Consequences of War: How the Loss of Young Men Transformed Women's Roles in Society and ushered in the Welfare State [8 charts]
 - URL: https://www.historyfuturenow.com/articles/the-unintended-consequences-of-war-how-the-loss-of-young-men-transformed-womens-roles-in-society-and-ushered-in-the-welfare-state
