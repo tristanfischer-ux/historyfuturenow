@@ -214,6 +214,7 @@ ISSUES = [
         "label": "Summer 2026",
         "articles": [
             "taxation-without-representation-britains-3-trillion-debt-and-the-generation-being-asked-to-pay-for-it",
+            "the-invisible-revolution-how-nobody-will-notice-the-end-of-work",
         ],
     },
 ]
