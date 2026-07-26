@@ -28,6 +28,7 @@ REVIEW_SLUGS = {
     'the-severed-circuit-how-the-us-china-tech-war-is-splitting-the-world-in-two',
     'the-elephant-awakens-why-indias-rise-will-reshape-the-world-more-than-chinas-did',
     'the-triple-squeeze-when-ageing-debt-and-robots-collide',
+    'the-tireless-taxpayer-how-machines-will-pay-the-bills-that-humans-no-longer-can',
 }
 _review_file = Path(__file__).parent / "review_slugs.json"
 if _review_file.exists():

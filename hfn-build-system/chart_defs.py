@@ -6191,6 +6191,43 @@ title:{display:true,text:'Cost ($)',color:C.dim}}}}});
         },
     ]
 
+    # ── The Tireless Taxpayer ───────────────────────────────────────────
+    charts['the-tireless-taxpayer-how-machines-will-pay-the-bills-that-humans-no-longer-can'] = [
+        {
+            'id': 'tirelessTaxChart1',
+            'figure_num': 1,
+            'title': 'Lifetime Net Fiscal Contribution: Immigrants vs Robots',
+            'desc': 'A robot\'s net fiscal contribution dwarfs even high-wage immigrants because it never draws on public services',
+            'source': 'OBR Fiscal Sustainability Report 2024; Migration Advisory Committee; author estimates for robot fiscal profile',
+            'position': 'after_heading:The Immigrant Who Never Ages',
+            'js': """_regChart('tirelessTaxChart1',()=>{const ctx=document.getElementById('tirelessTaxChart1');new Chart(ctx,{type:'bar',data:{labels:['High-wage\\nimmigrant','Median-wage\\nimmigrant','Low-wage\\nimmigrant','Robot\\n(10-yr life)'],datasets:[dsBar('Net lifetime fiscal contribution (£k)',[310,45,-85,520],C.accent)]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>{const v=i.raw;return (v>=0?'+':'')+'£'+v+'k lifetime'}}},annotation:{annotations:{zero:{type:'line',yMin:0,yMax:0,borderColor:C.dim+'66',borderWidth:1.5,borderDash:[4,4]}}}},scales:{x:{grid:{display:false},ticks:{color:C.dim,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>(v>=0?'+':'')+'£'+v+'k'},title:{display:true,text:'Net fiscal contribution (£k)',color:C.dim,font:{size:11}}}}}});});"""
+        },
+        {
+            'id': 'tirelessTaxChart2',
+            'figure_num': 2,
+            'title': 'UK Government Spending: Where the Money Goes',
+            'desc': 'Health, pensions, and care dominate the budget — and all three are deflateable by automation',
+            'source': 'HM Treasury PESA 2026; OBR Economic and Fiscal Outlook March 2026',
+            'position': 'after_heading:The £250 Billion Question',
+            'js': """_regChart('tirelessTaxChart2',()=>{const ctx=document.getElementById('tirelessTaxChart2');new Chart(ctx,{type:'bar',data:{labels:['Health','Pensions','Debt\\ninterest','Defence','Education','Social\\ncare','Other'],datasets:[dsBar('Annual spend (£bn)',[250,146,100,58,115,25,666],C.accent)]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',layout:{padding:chartPad},plugins:{legend:noLegend,tooltip:{...tooltipStyle,callbacks:{label:i=>'£'+i.raw+'bn/year'}},annotation:{annotations:{deflatable:{type:'box',yMin:-0.5,yMax:2.5,backgroundColor:C.green+'15',borderColor:C.green+'44',borderWidth:1,label:{content:'Deflateable by AI/robots',display:true,position:'end',color:C.green,..._al,font:{size:9}}}}}},scales:{x:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'bn'},title:{display:true,text:'Annual spending (£bn)',color:C.dim,font:{size:11}}},y:{grid:{display:false},ticks:{color:C.dim,font:{size:11}}}}}});});"""
+        },
+        {
+            'id': 'tirelessTaxChart3',
+            'figure_num': 3,
+            'title': 'Can AI Revenue Close the Borrowing Gap?',
+            'desc': 'Even modest tax capture of AI-driven productivity gains could eliminate annual borrowing',
+            'source': 'Goldman Sachs (2023) AI GDP projections; OBR borrowing forecasts; author calculations',
+            'position': 'after_heading:Who Pays the Robot',
+            'js': """_regChart('tirelessTaxChart3',()=>{const ctx=document.getElementById('tirelessTaxChart3');const yrs=[2026,2028,2030,2032,2034,2036];new Chart(ctx,{type:'line',data:{datasets:[dxy('UK borrowing gap',yrs,[130,125,118,115,112,108],C.accent),dxy('AI revenue (10% capture)',yrs,[0,3,8,14,19,24],C.dim,[6,4]),dxy('AI revenue (25% capture)',yrs,[0,7,19,35,48,60],C.green),dxy('AI revenue (40% capture)',yrs,[0,11,31,56,77,95],C.blue,[5,5])]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:chartPad},plugins:{legend,tooltip:{...tooltipStyle,callbacks:{label:i=>i.dataset.label+': £'+i.parsed.y+'bn'}}},scales:{x:{type:'linear',min:2026,max:2036,grid:{color:C.grid},ticks:{color:C.dim,callback:yearTick,stepSize:2}},y:{grid:{color:C.grid},ticks:{color:C.dim,callback:v=>'£'+v+'bn'},title:{display:true,text:'£ billion',color:C.dim,font:{size:11}},min:0,max:140}}}});});"""
+        },
+        {
+            'data_story': True,
+            'headline': 'A robot’s lifetime tax contribution is 12× a median-wage immigrant’s',
+            'chart_id': 'heroTirelessTax',
+            'js': """_regChart('heroTirelessTax',()=>{const ctx=document.getElementById('heroTirelessTax');new Chart(ctx,{type:'bar',data:{labels:['Median-wage\\nimmigrant','Robot\\n(10-yr life)'],datasets:[{data:[45,520],backgroundColor:[C.amber,C.green],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1815ee',callbacks:{label:i=>'£'+i.raw+'k net fiscal contribution'}}},scales:{x:{grid:{display:false},ticks:{color:'#8a8479',font:{size:9}}},y:{grid:{color:'#f2eeea'},ticks:{color:'#8a8479',font:{size:9},callback:v=>'£'+v+'k'},min:0,max:600}}}});});"""
+        },
+    ]
+
     return charts
 
 
