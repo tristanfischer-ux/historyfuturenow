@@ -184,6 +184,17 @@ def format_date_human(iso_date):
     dt = datetime.strptime(iso_date, '%Y-%m-%d')
     return dt.strftime('%-d %B %Y')
 
+def strip_markdown(text):
+    """Strip markdown formatting for use in meta tags, JSON-LD, RSS descriptions."""
+    t = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)  # [text](url) → text
+    t = re.sub(r'\*\*([^*]+)\*\*', r'\1', t)            # **bold** → bold
+    t = re.sub(r'\*([^*]+)\*', r'\1', t)                 # *italic* → italic
+    t = re.sub(r'_([^_]+)_', r'\1', t)                   # _italic_ → italic
+    t = re.sub(r'`([^`]+)`', r'\1', t)                   # `code` → code
+    t = re.sub(r'^#+\s+', '', t, flags=re.MULTILINE)     # # heading → heading
+    t = re.sub(r'\s+', ' ', t).strip()
+    return t
+
 def fix_encoding(text):
     replacements = {
         'â€™': "'", 'â€˜': "'", 'â€œ': '"', 'â€\x9d': '"', 'â€"': '—', 'â€"': '–',
@@ -251,6 +262,7 @@ def parse_essay(filepath):
         clean = re.sub(r'#.*?\n', '', body).strip()
         paras = [p.strip() for p in clean.split('\n\n') if p.strip() and not p.strip().startswith('#')]
         if paras: excerpt = paras[0][:300]
+    excerpt = strip_markdown(excerpt)
 
     reading_time = estimate_reading_time(body)
 
@@ -273,10 +285,14 @@ def parse_essay(filepath):
     discussion_file = OUTPUT_DIR / "audio" / "discussions" / f"{slug}.mp3"
     has_discussion = discussion_file.exists() and ENABLE_DISCUSSIONS
 
-    share_summary = meta.get('share_summary', '')
+    share_summary = strip_markdown(meta.get('share_summary', ''))
 
     # Prefer date from frontmatter, fall back to hardcoded mapping
     pub_date = meta.get('date', '') or ARTICLE_DATES.get(slug, '')
+
+    # File modification date for dateModified (ISO format)
+    from datetime import datetime as _dt_cls
+    file_mtime = _dt_cls.fromtimestamp(filepath.stat().st_mtime).strftime('%Y-%m-%d')
 
     # Sources: list of book titles cited in this article
     sources = meta.get('sources', []) or []
@@ -288,6 +304,7 @@ def parse_essay(filepath):
         'has_audio': has_audio, 'has_discussion': has_discussion,
         'share_summary': share_summary,
         'pub_date': pub_date,
+        'file_modified': file_mtime,
         'sources': sources,
     }
 
@@ -353,7 +370,7 @@ def make_card_controls(essay, pi):
     return f'<div class="card-controls">{bookmark_btn}</div>'
 
 
-def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None, pub_date=None, noindex=False):
+def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image=None, pub_date=None, noindex=False, og_type="article"):
     te = html_mod.escape(title)
     de = html_mod.escape(desc[:300]) if desc else ""
     tc = part_color or "#c43425"
@@ -371,7 +388,7 @@ def make_head(title, desc="", og_url="", part_color=None, json_ld=None, og_image
 {canonical}
 <meta property="og:title" content="{te}">
 <meta property="og:description" content="{de}">
-<meta property="og:type" content="article">
+<meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="History Future Now">
 <meta property="og:locale" content="en_GB">
 <meta property="article:author" content="Tristan Fischer">{og_date}
@@ -1293,9 +1310,20 @@ def build_article(essay, all_essays, is_review=False):
     }
     if essay.get('pub_date'):
         json_ld["datePublished"] = essay['pub_date']
-        json_ld["dateModified"] = essay['pub_date']
+        json_ld["dateModified"] = essay.get('file_modified') or essay['pub_date']
     if hero_img:
         json_ld["image"] = f"{SITE_URL}{hero_img}"
+
+    breadcrumb_ld = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL},
+            {"@type": "ListItem", "position": 2, "name": essay['part'], "item": f"{SITE_URL}/{pi['slug']}"},
+            {"@type": "ListItem", "position": 3, "name": essay['title']},
+        ],
+    }
+    json_ld = [json_ld, breadcrumb_ld]
 
     # Breadcrumbs: Home / Section / Article title (truncated)
     truncated_title = essay['title'] if len(essay['title']) <= 50 else essay['title'][:47] + '...'
@@ -1883,6 +1911,11 @@ def build_homepage(essays, new_essays=None):
         "author": {"@type": "Person", "name": "Tristan Fischer"},
         "publisher": {"@type": "Organization", "name": "History Future Now"},
         "inLanguage": "en-GB",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": f"{SITE_URL}/?q={{search_term_string}}",
+            "query-input": "required name=search_term_string",
+        },
     }
 
     home_desc = f"Data-driven analysis of the forces shaping our future — demographics, technology, energy, geopolitics. {total_articles} articles with {total_charts} interactive charts."
@@ -1890,7 +1923,7 @@ def build_homepage(essays, new_essays=None):
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-{make_head("History Future Now", home_desc, "/", json_ld=json_ld)}
+{make_head("History Future Now", home_desc, "/", json_ld=json_ld, og_type="website")}
 <script src="/js/chart.umd.min.js"></script>
 <script src="/js/chartjs-plugin-annotation.min.js"></script>
 </head>
